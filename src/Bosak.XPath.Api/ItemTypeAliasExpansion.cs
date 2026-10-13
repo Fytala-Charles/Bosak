@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.7 | 13-10-2026     | Resolve names in element, attribute and document node type aliases
 //                      | Charles Korthout | 0.8 | 13-10-2026     | Traverse processing-instruction target tests without QName expansion
 //                      | Charles Korthout | 0.9 | 13-10-2026     | Traverse partial wildcards in element and attribute type aliases
+//                      | Charles Korthout | 0.10 | 13-10-2026     | Expand each node-name union alternative using its declaration namespace
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -77,11 +78,19 @@ internal static class ItemTypeAliasExpansion
         var namedNode = Regex.Match(text, @"^(element|attribute)\s*\(\s*(.*?)\s*\)$");
         if (namedNode.Success)
         {
-            var name = namedNode.Groups[2].Value;
-            // Schema annotations and name unions use a separate grammar.
-            if (name != "*" && !Regex.IsMatch(name, @"^(?:\*:[\p{L}_][\p{L}\p{M}\p{N}_.-]*|[\p{L}_][\p{L}\p{M}\p{N}_.-]*:\*|Q\{[^}]*\}\*|(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?)$")) return null;
+            var names = SplitArguments(namedNode.Groups[2].Value, '|');
+            // Schema annotations remain outside this alias traversal grammar.
+            if (SplitArguments(namedNode.Groups[2].Value).Count > 1) return null;
             var kind = namedNode.Groups[1].Value;
-            return kind + "(" + (name == "*" ? name : resolveNodeName?.Invoke(name, kind == "attribute") ?? name) + ")" + suffix;
+            var expandedNames = new List<string>(names.Count);
+            foreach (var name in names)
+            {
+                if (name.Length == 0)
+                    throw new InvalidOperationException("XPST0003: A node-name union requires a name on each side of '|'.");
+                if (name != "*" && !Regex.IsMatch(name, @"^(?:\*:[\p{L}_][\p{L}\p{M}\p{N}_.-]*|[\p{L}_][\p{L}\p{M}\p{N}_.-]*:\*|Q\{[^}]*\}\*|(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?)$")) return null;
+                expandedNames.Add(name == "*" ? name : resolveNodeName?.Invoke(name, kind == "attribute") ?? name);
+            }
+            return kind + "(" + string.Join("|", expandedNames) + ")" + suffix;
         }
         var document = Regex.Match(text, @"^document-node\s*\(\s*(element\s*\(.*\))\s*\)$");
         if (document.Success)

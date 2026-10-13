@@ -293,7 +293,8 @@
         "nodeKindFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_KIND_RESULTS.json",
         "namedNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NAMED_NODE_RESULTS.json",
         "piTargetFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PI_TARGET_RESULTS.json",
-        "nodeWildcardFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_WILDCARD_RESULTS.json"
+        "nodeWildcardFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_WILDCARD_RESULTS.json",
+        "nodeUnionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_UNION_RESULTS.json"
       }
     },
     {
@@ -346,7 +347,8 @@
         "nodeKindFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_KIND_RESULTS.json",
         "namedNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NAMED_NODE_RESULTS.json",
         "piTargetFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PI_TARGET_RESULTS.json",
-        "nodeWildcardFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_WILDCARD_RESULTS.json"
+        "nodeWildcardFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_WILDCARD_RESULTS.json",
+        "nodeUnionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_UNION_RESULTS.json"
       }
     }
   ],

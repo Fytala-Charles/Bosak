@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover named and wildcard node aliases with declaration namespaces
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Verify processing-instruction alias target matching and invalid target diagnostics
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Verify partial node wildcards and the any default namespace
+//                      | Charles Korthout | 0.5 | 13-10-2026     | Verify node-name union alternatives, declaration bindings and separators
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -288,4 +289,85 @@ public class Xslt40NodeKindAliasTests
     public void Declaration_WildcardAndUnknownType()
         => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
             "<xsl:variable name='v' as='(element(*:Root) | t:missing)?' select='()'/>")).ToString());
+
+    /// <summary>Matches every node-name union alternative without changing node identity.</summary>
+    /// <param name="type">The union alias definition.</param>
+    /// <param name="source">A source matching one alternative.</param>
+    [Theory]
+    [InlineData("element(doctor|nurse)", "<doctor/>")]
+    [InlineData("element(doctor|nurse)", "<nurse/>")]
+    [InlineData("attribute(price|cost)", "<root price='x'/>")]
+    [InlineData("attribute(price|cost)", "<root cost='x'/>")]
+    [InlineData("element(p:doctor|q:nurse)", "<nurse xmlns='urn:staff'/>")]
+    [InlineData("element(p:*|*:nurse)", "<nurse xmlns='urn:other'/>")]
+    [InlineData("element(p:*|*:nurse)", "<doctor xmlns='urn:payload'/>")]
+    [InlineData("attribute(p:*|*:cost)", "<root xmlns:a='urn:other' a:cost='x'/>")]
+    [InlineData("document-node(element(doctor|nurse))", "<nurse/>")]
+    [InlineData("element(Q{urn:pipe|comma,part}doctor|nurse)", "<doctor xmlns='urn:pipe|comma,part'/>")]
+    public void Alias_NodeNameUnion(string type, string source)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : type.StartsWith("document") ? "." : "/*";
+        Assert.Equal("true|true", Run($"<xsl:item-type xmlns:p='urn:payload' xmlns:q='urn:staff' name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/' xmlns:p='urn:other' xmlns:q='urn:other'><xsl:variable name='n' as='t:n' select='{select}'/>" +
+            "<out><xsl:value-of separator='|' select='($n instance of t:n,($n treat as t:n) is $n)'/></out></xsl:template>", source));
+    }
+
+    /// <summary>Rejects nodes outside the union, including case and namespace mismatches.</summary>
+    /// <param name="type">The union alias definition.</param>
+    /// <param name="source">A source outside both alternatives.</param>
+    [Theory]
+    [InlineData("element(doctor|nurse)", "<patient/>")]
+    [InlineData("element(doctor|nurse)", "<Nurse/>")]
+    [InlineData("element(p:doctor|q:nurse)", "<nurse xmlns='urn:other'/>")]
+    [InlineData("element(p:*|*:nurse)", "<doctor xmlns='urn:other'/>")]
+    [InlineData("attribute(price|cost)", "<root xmlns:p='urn:other' p:cost='x'/>")]
+    public void Alias_NodeNameUnionMismatch(string type, string source)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : "/*";
+        Assert.Equal("false", Run($"<xsl:item-type xmlns:p='urn:payload' xmlns:q='urn:staff' name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/'><out><xsl:value-of select='{select} instance of t:n'/></out></xsl:template>", source));
+    }
+
+    /// <summary>Reports empty alternatives as malformed node-name unions.</summary>
+    /// <param name="type">The malformed union type.</param>
+    [Theory]
+    [InlineData("element(|nurse)")]
+    [InlineData("attribute(price|)")]
+    [InlineData("element(doctor||nurse)")]
+    public void Alias_EmptyNodeNameUnionAlternative(string type)
+        => Assert.Contains("XPST0003", Assert.ThrowsAny<Exception>(() => Compile(
+            $"<xsl:item-type name='t:n' as='{type}'/>")).ToString());
+
+    /// <summary>Resolves even a later union alternative during registration.</summary>
+    [Fact]
+    public void Alias_NodeNameUnionUnboundPrefix()
+        => Assert.Contains("XPST0081", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:item-type name='t:n' as='element(doctor|absent:nurse)'/>")).ToString());
+
+    /// <summary>Does not hide unknown adjacent type names behind node-name unions.</summary>
+    [Fact]
+    public void Declaration_NodeNameUnionAndUnknownType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='v' as='(element(doctor|nurse) | t:missing)?' select='()'/>")).ToString());
+
+    /// <summary>Traverses unions inside arrays and record fields and in direct tests.</summary>
+    [Fact]
+    public void Alias_NestedNodeNameUnion()
+        => Assert.Equal("true|true|true", Run("""
+            <xsl:item-type name='t:arr' as='array(element(doctor|nurse))'/>
+            <xsl:item-type name='t:record' as='record(staff as element(doctor|nurse))'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(
+              [/*] instance of t:arr,(map{"staff":/*} cast as t:record) instance of t:record,
+              /* instance of element(doctor|nurse))'/></out></xsl:template>
+            """, "<nurse/>"));
+
+    /// <summary>Applies the any default independently to each unprefixed element alternative.</summary>
+    [Fact]
+    public void Alias_NodeNameUnionAnyDefault()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type name='t:e' xpath-default-namespace='##any' as='element(doctor|nurse)'/>
+            <xsl:item-type name='t:a' xpath-default-namespace='##any' as='attribute(price|cost)'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(
+              /* instance of t:e,/*/@* instance of t:a)'/></out></xsl:template>
+            """, "<nurse xmlns='urn:staff' cost='x'/>"));
 }
