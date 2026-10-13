@@ -1,6 +1,6 @@
 # Set-pattern associativity — 2026-10-13
 
-Branch: feat/xslt-set-pattern-associativity; parent 2e72184f. Stacked on PR #242; PRs #223–242 remain open. Earlier sections are historical.
+Branch: feat/xslt-set-pattern-associativity; parent 2e72184f. Stacked on PR #242; PRs #223–243 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: forward-axis operand focus in 4.0 set patterns; distinguish candidate-node axis matching from actual path evaluation, preserving earlier profiles and positional path semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #243](https://github.com/Fytala-Charles/Bosak/pull/243), stacked on #242. Verified implementation revision 17bf95aa; a documentation-only delivery commit follows. PRs #223–243 remain open. CI starts after retargeting to main. Next: forward-axis operand focus in 4.0 set patterns.
 
 # Pattern operator scanning — 2026-10-13
 
