@@ -1,3 +1,21 @@
+# Atomic and array alias bindings — 2026-10-13
+
+Branch: feat/xslt-array-alias-bindings; main baseline 9afa7bfcf32c1b258930bc973c7b82ef3130cc50. PR #209 merged after CI 38342994287 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) supports atomic and array item-type aliases at XSLT declaration and function boundaries. Array member types can use forward aliases, nested arrays, optional member sequences and enumeration aliases. Definition namespace bindings are preserved; outer occurrence indicators apply to arrays rather than their members. Supported direct/indirect recursive aliases raise XTSE4035. XPath 4.0 array coercion converts member sequences without atomizing the outer array; the XPath 3.1 path remains unchanged. Native type-alias-001/002 now pass; the filtered family is 6 pass/26 fail/0 skip, including unchanged contribution cases 023/024. Non-enumeration aliases in XPath instance-of/treat, general map/function/choice aliases, complete recursive validation, schema collisions and package exposure remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.
+
+Stylesheet.GetBindingItemTypes builds a package-local alias dictionary separately from the public enumeration-only XPath compile option. Complete QName tokens and nested array member sequence types are expanded using each defining element's namespace context; forward references are supported and an active-name set detects supported cycles. TransformEngine resolves the dictionary for @as conversions and function signature metadata, restoring it on package exit. VmEngine.ApplyFunctionConversion adds version-gated recursive array member conversion, preserving the outer array and cardinality. Fourteen regressions cover conversion, dynamic calls, namespace rebinding, occurrences, invalid values, cycles, the frozen 3.1 profile and the documented coordinate example. No public API, gate promotion, native test edit, manifest count/outcome change or publication.
+
+Validation: Release build passes with pre-existing warnings; all 6901 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4015/0/0. Thirty focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run 6/26/0; cases 001/002/017 newly pass and original 023/024 still pass. Broader failures are retained, with runner exit 1. Thirteen documentation pages render; native catalog schema, original patches and historical receipt integrity checks pass. No behavioral changes after gate verification.
+
+## Resume here
+
+Check this slice's CI before merging. Next: structural aliases in XPath instance-of/treat and other structural forms, then remaining named-record coercion. Keep 6/26/0 broader family limitations explicit. REQ-126 and N04 remain In Progress. Preserve original patches, expectations, historical receipts/evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review/independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery pending.
+
 # Enumeration declaration bindings — 2026-10-13
 
 Branch: feat/xslt-enum-bindings; main baseline 73920217f7673401d438f34e0d0bd91ad4dc371c. PR #208 merged after CI 38341314078 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.

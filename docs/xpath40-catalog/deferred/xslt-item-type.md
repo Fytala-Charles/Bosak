@@ -1,12 +1,12 @@
 <div align="center">
   <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog: deferred xsl:item-type declaration">
   <br><br><h1>xsl:item-type</h1>
-  <p>Partial source support — enumeration aliases and verified alternatives</p>
+  <p>Partial source support — enumeration and array bindings</p>
 </div>
 
 ## 1. Name and Classification
 
-**xsl:item-type — Partial in source 1.2.0; the broader declaration contract is deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This reference records the historical disposition and the current enumeration-only implementation; no broad type-system tier promotion is claimed. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
+**xsl:item-type — Partial in source 1.2.0; the broader declaration contract is deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This reference records the historical disposition and the current enumeration and atomic/array binding implementation; no broad type-system tier promotion is claimed. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
 External reference: [XSLT 4.0 named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types). Immutable review: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), IDs `named-types` and `named-item-types`. This current pin does not recover historical adopted specification provenance.
 
 ## 2. Intent
@@ -249,3 +249,26 @@ The definition remains package-local. A public function can use its declaring pa
 
 
 **Binding follow-up — 2026-10-13:** Source candidate 1.2.0 (unpublished) now converts named enumeration aliases at XSLT variable, parameter and result boundaries. Namespace/EQName aliases and occurrence indicators resolve from the declaring instruction; atomization and membership use XPath function conversion rules. Direct/dynamic function metadata uses the same definitions; private package aliases are isolated and restored. Sixteen regressions cover valid values, membership/cardinality errors, source attributes, record fields, template/select/function boundaries and mixed-version refusal. The invoice currency fixture now returns EUR; invalid XYZ still raises XTTE0570. Original native type-alias-023/024 still pass; broader filtered family remains 3/29/0, with structural/recursive/schema/package gaps outstanding. N04 and REQ-126 stay In Progress; no complete alias or package-conformance claim. Public release remains 1.1.3. See [separate evidence](../../../contributions/xslt40/item-type-boundaries/BINDING_RESULTS.json).
+
+
+## Atomic and array binding follow-up — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) supports atomic and array item-type aliases at XSLT declaration and function boundaries. Array member types can use forward aliases, nested arrays, optional member sequences and enumeration aliases. Definition namespace bindings are preserved; outer occurrence indicators apply to arrays rather than their members. Supported direct/indirect recursive aliases raise XTSE4035. XPath 4.0 array coercion converts member sequences without atomizing the outer array; the XPath 3.1 path remains unchanged. Native type-alias-001/002 now pass; the filtered family is 6 pass/26 fail/0 skip, including unchanged contribution cases 023/024. Non-enumeration aliases in XPath instance-of/treat, general map/function/choice aliases, complete recursive validation, schema collisions and package exposure remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.
+
+The alias abbreviates a structural type; it does not constrain the array length. For a coordinate pipeline, input `<root x="3" y="4"/>` becomes `<distance>5</distance>` using this complete stylesheet:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:math="http://www.w3.org/2005/xpath-functions/math" exclude-result-prefixes="#all">
+  <xsl:item-type name="t:position" as="array(xs:double)"/>
+  <xsl:template match="/">
+    <xsl:variable name="point" as="t:position" select="[root/@x,root/@y]"/>
+    <distance><xsl:value-of select="math:sqrt($point(1)*$point(1)+$point(2)*$point(2))"/></distance>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+The variable conversion atomizes the attribute members and converts their untyped values to doubles. One-based array access supplies the coordinates to the distance calculation. This example assumes both attributes exist; missing coordinates fail the required member type. `array(xs:double?)` would admit empty member sequences, while `t:position?` permits an absent array. These declarations have different meanings. The example is covered by `ArrayAlias_CoordinateReferenceExample`; it adds no catalogue manifest case or broad conformance claim.
+
+See [array binding evidence](../../../contributions/xslt40/item-type-boundaries/ARRAY_BINDING_RESULTS.json), [named item-type specification](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), and [XPath 4.0 function conversion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-function-conversion-rules). The pinned specification source is recorded in the evidence. Native type-alias-004 still expects the processor-specific `SXTA0001`; Bosak reports the draft's `XTSE4035` for its circular definition. That remains a native failure, with the original expected error preserved.

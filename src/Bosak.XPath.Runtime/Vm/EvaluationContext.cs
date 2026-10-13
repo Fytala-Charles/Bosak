@@ -119,6 +119,7 @@
 //                      | Charles Korthout | 2.41  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
 //                      | Charles Korthout | 2.42  | 13-10-2026     | Store package-local nominative record identities for host type resolution.               |
 //                      | Charles Korthout | 2.43 | 13-10-2026     | Store package-local enumeration aliases for XSLT declaration conversion
+//                      | Charles Korthout | 2.44 | 13-10-2026     | Store structural binding aliases alongside enumeration aliases
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -373,8 +374,8 @@ public sealed class EvaluationContext
     internal IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes { get; set; }
         = new Dictionary<string, XdmRecordType>(StringComparer.Ordinal);
 
-    // Package-local enumeration aliases installed by the XSLT host.
-    internal IReadOnlyDictionary<string, string> EnumerationItemTypes { get; set; }
+    // Package-local item-type binding aliases installed by the XSLT host.
+    internal IReadOnlyDictionary<string, string> BindingItemTypes { get; set; }
         = new Dictionary<string, string>(StringComparer.Ordinal);
 
     internal bool TryResolveNamedRecordType(string name, string? defaultNamespace, out XdmRecordType? type)
