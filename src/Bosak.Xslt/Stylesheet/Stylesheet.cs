@@ -302,6 +302,7 @@
 //                      | Charles Korthout | 2.141 | 13-10-2026     | Preserve declaration namespaces in named node-kind aliases and record fields
 //                      | Charles Korthout | 2.142 | 13-10-2026     | Preserve partial node-name wildcards in declaration namespace resolution
 //                      | Charles Korthout | 2.143 | 13-10-2026     | Register schema-annotated aliases with declaration namespaces and schema scope
+//                      | Charles Korthout | 2.144 | 13-10-2026     | Register schema declaration aliases against imported global components
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -929,7 +930,8 @@ internal sealed class Stylesheet
                     throw new InvalidOperationException($"XPST0051: Unknown item type '{name}' in an item-type definition.");
                 return named.Name.LocalName == "record-type" ? key : Expand(key);
             }, (name, attribute) => ExpandNodeTypeName(name, attribute, declaration),
-                name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, declaration), CompiledSchemaSet));
+                name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, declaration), CompiledSchemaSet),
+                (name, attribute) => ItemTypeAliasExpansion.ValidateSchemaDeclarationName(ExpandSchemaDeclarationName(name, attribute, declaration), attribute, CompiledSchemaSet));
         }
         foreach (var name in declarations.Keys) Expand(name);
         return _bindingItemTypes = result;
@@ -1007,7 +1009,8 @@ internal sealed class Stylesheet
                     if (GetNamedTypeDeclarations().TryGetValue(key, out var named) && named.Name.LocalName == "record-type") return key;
                     return key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal) ? "xs:" + key[(key.IndexOf('}') + 1)..] : lexical;
                 }, (name, attribute) => ExpandNodeTypeName(name, attribute, field),
-                    name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, field), CompiledSchemaSet)) ?? type;
+                    name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, field), CompiledSchemaSet),
+                (name, attribute) => ItemTypeAliasExpansion.ValidateSchemaDeclarationName(ExpandSchemaDeclarationName(name, attribute, field), attribute, CompiledSchemaSet)) ?? type;
                 types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
             }
             var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";
@@ -1026,6 +1029,13 @@ internal sealed class Stylesheet
                 ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
         if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    internal static string ExpandSchemaDeclarationName(string name, bool attribute, XElement element)
+    {
+        if (!attribute && GetXPathDefaultNamespace(element) == "##any" && !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal))
+            return "Q{}" + name;
+        return ExpandNodeTypeName(name, attribute, element);
     }
 
     internal static string ExpandSchemaTypeName(string name, XElement element)

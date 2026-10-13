@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 0.28 | 13-10-2026     | Preserve node-name wildcards and expand the XPath 4.0 any default namespace
 //                      | Charles Korthout | 0.29 | 13-10-2026     | Resolve schema annotations against in-scope schema types
 //                      | Charles Korthout | 0.30 | 13-10-2026     | Normalize documentary function signatures without host alias registrations
+//                      | Charles Korthout | 0.31 | 13-10-2026     | Validate schema declaration types and normalize direct document shorthand
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -458,11 +459,14 @@ public sealed class XPath31Expression
             _ => (null, string.Empty)
         };
         var text = string.IsNullOrEmpty(prefix) ? type : prefix + ":" + type;
-        if (options.NamedRecordTypeNames is null && !text.Contains('$') && !text.Contains("fn(", StringComparison.Ordinal))
+        if (options.NamedRecordTypeNames is null && !text.Contains('$') && !text.Contains("fn(", StringComparison.Ordinal)
+            && !text.Contains("schema-element(", StringComparison.Ordinal) && !text.Contains("schema-attribute(", StringComparison.Ordinal)
+            && !text.Contains("document-node(", StringComparison.Ordinal))
             return resolved;
         var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options),
             (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
-            name => ResolveStaticSchemaTypeName(name, options));
+            name => ResolveStaticSchemaTypeName(name, options),
+            (name, attribute) => ResolveStaticSchemaDeclarationName(name, attribute, options));
         if (expanded is null || expanded == text) return resolved;
         var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + expanded, xpath40: true);
         return resolved switch
@@ -489,6 +493,13 @@ public sealed class XPath31Expression
         }
         if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    private static string ResolveStaticSchemaDeclarationName(string name, bool attribute, CompileOptions options)
+    {
+        var expanded = !attribute && options.DefaultElementNamespace == "##any" && !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal)
+            ? "Q{}" + name : ResolveStaticNodeTypeName(name, attribute, options);
+        return ItemTypeAliasExpansion.ValidateSchemaDeclarationName(expanded, attribute, options.SchemaSet);
     }
 
     private static string ResolveStaticSchemaTypeName(string name, CompileOptions options)

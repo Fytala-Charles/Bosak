@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.10 | 13-10-2026     | Expand each node-name union alternative using its declaration namespace
 //                      | Charles Korthout | 0.11 | 13-10-2026     | Traverse and validate node schema annotations separately from item-type aliases
 //                      | Charles Korthout | 0.12 | 13-10-2026     | Normalize fn signatures and validate documentary parameter names
+//                      | Charles Korthout | 0.13 | 13-10-2026     | Traverse schema declaration tests and normalize document name shorthand
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -33,7 +34,7 @@ namespace Bosak.XPath.Api;
 /// <summary>Expands complete type-name tokens inside supported structural types.</summary>
 internal static class ItemTypeAliasExpansion
 {
-    internal static string? Expand(string type, Func<string, string?> resolveName, Func<string, bool, string>? resolveNodeName = null, Func<string, string>? resolveSchemaType = null)
+    internal static string? Expand(string type, Func<string, string?> resolveName, Func<string, bool, string>? resolveNodeName = null, Func<string, string>? resolveSchemaType = null, Func<string, bool, string>? resolveSchemaDeclaration = null)
     {
         var text = RemoveComments(type).Trim();
         var function = Regex.Match(text, @"^(?:function|fn)\s*\(");
@@ -63,11 +64,11 @@ internal static class ItemTypeAliasExpansion
                     parameterType = parameter[named.Length..];
                 }
                 if (parameterType.Length == 0) throw new InvalidOperationException("XPST0003: Empty function-type parameter.");
-                var expanded = Expand(parameterType, resolveName, resolveNodeName, resolveSchemaType);
+                var expanded = Expand(parameterType, resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
                 if (expanded is null) return null;
                 expandedParameters.Add(expanded);
             }
-            var result = Expand(tail[resultMarker.Length..], resolveName, resolveNodeName, resolveSchemaType);
+            var result = Expand(tail[resultMarker.Length..], resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
             return result is null ? null : "function(" + string.Join(",", expandedParameters) + ") as " + result;
         }
         var suffix = text.Length > 0 && text[^1] is '?' or '*' or '+' ? text[^1].ToString() : string.Empty;
@@ -78,7 +79,7 @@ internal static class ItemTypeAliasExpansion
             var expandedAlternatives = new List<string>(alternatives.Count);
             foreach (var alternative in alternatives)
             {
-                var expanded = Expand(alternative, resolveName, resolveNodeName, resolveSchemaType);
+                var expanded = Expand(alternative, resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
                 if (expanded is null) return null;
                 expandedAlternatives.Add(expanded);
             }
@@ -118,10 +119,23 @@ internal static class ItemTypeAliasExpansion
             }
             return kind + "(" + string.Join("|", expandedNames) + annotation + ")" + suffix;
         }
-        var document = Regex.Match(text, @"^document-node\s*\(\s*(element\s*\(.*\))\s*\)$");
+        var schemaNode = Regex.Match(text, @"^(schema-element|schema-attribute)\s*\(\s*(.*?)\s*\)$");
+        if (schemaNode.Success)
+        {
+            var name = schemaNode.Groups[2].Value;
+            if (!Regex.IsMatch(name, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$"))
+                throw new InvalidOperationException("XPST0003: A schema node test requires one declaration EQName.");
+            var kind = schemaNode.Groups[1].Value;
+            return kind + "(" + (resolveSchemaDeclaration?.Invoke(name, kind == "schema-attribute") ?? name) + ")" + suffix;
+        }
+        var document = Regex.Match(text, @"^document-node\s*\(\s*(.*?)\s*\)$");
         if (document.Success)
         {
-            var inner = Expand(document.Groups[1].Value, resolveName, resolveNodeName, resolveSchemaType);
+            var content = document.Groups[1].Value;
+            var nested = Regex.IsMatch(content, @"^(?:element|schema-element)\s*\(");
+            if (!nested && SplitArguments(content).Count > 1)
+                throw new InvalidOperationException("XPST0003: A document name shorthand cannot include a schema annotation.");
+            var inner = Expand(nested ? content : "element(" + content + ")", resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
             return inner is null ? null : "document-node(" + inner + ")" + suffix;
         }
         var record = Regex.Match(text, @"^record\s*\(");
@@ -151,7 +165,7 @@ internal static class ItemTypeAliasExpansion
                 if (tail.Length == 0) { expandedFields.Add(field); continue; }
                 var marker = Regex.Match(tail, @"^as\s+");
                 if (!marker.Success) return null;
-                var expanded = Expand(tail[marker.Length..], resolveName, resolveNodeName, resolveSchemaType);
+                var expanded = Expand(tail[marker.Length..], resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
                 if (expanded is null) return null;
                 expandedFields.Add(field[..end] + " as " + expanded);
             }
@@ -168,7 +182,7 @@ internal static class ItemTypeAliasExpansion
             var expanded = new List<string>(parts.Count);
             foreach (var part in parts)
             {
-                var value = Expand(part, resolveName, resolveNodeName, resolveSchemaType);
+                var value = Expand(part, resolveName, resolveNodeName, resolveSchemaType, resolveSchemaDeclaration);
                 if (value is null) return null;
                 expanded.Add(value);
             }
@@ -196,6 +210,17 @@ internal static class ItemTypeAliasExpansion
         if (schemas?.GlobalTypes[qualified] is System.Xml.Schema.XmlSchemaType)
             return expandedName;
         throw new InvalidOperationException($"XPST0008: Unknown schema annotation '{expandedName}'.");
+    }
+
+    /// <summary>Validates a schema node test against imported global declarations.</summary>
+    internal static string ValidateSchemaDeclarationName(string expandedName, bool attribute, System.Xml.Schema.XmlSchemaSet? schemas)
+    {
+        var close = expandedName.IndexOf('}');
+        var name = new System.Xml.XmlQualifiedName(expandedName[(close + 1)..], expandedName[2..close]);
+        if (attribute ? schemas?.GlobalAttributes[name] is System.Xml.Schema.XmlSchemaAttribute
+            : schemas?.GlobalElements[name] is System.Xml.Schema.XmlSchemaElement)
+            return expandedName;
+        throw new InvalidOperationException($"XPST0008: Unknown schema {(attribute ? "attribute" : "element")} declaration '{expandedName}'.");
     }
 
     // Unknown QNames remain for schema/name validation; this checks syntactically

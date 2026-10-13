@@ -539,6 +539,7 @@
 //                      | Charles Korthout | 7.23 | 13-10-2026     | Preserve named node test namespaces when resolving binding sequence types
 //                      | Charles Korthout | 7.24 | 13-10-2026     | Preserve schema annotation namespace bindings at runtime declaration boundaries
 //                      | Charles Korthout | 7.25 | 13-10-2026     | Normalize XPath 4.0 binding signatures even without declared aliases
+//                      | Charles Korthout | 7.26 | 13-10-2026     | Preserve schema declaration identities and normalize document bindings
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16677,7 +16678,7 @@ internal sealed class TransformEngine
     {
         if (string.IsNullOrWhiteSpace(sequenceType) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
         if (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0) &&
-            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)fn\s*\("))
+            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)(?:fn|schema-element|schema-attribute|document-node)\s*\("))
             return sequenceType;
         return ItemTypeAliasExpansion.Expand(sequenceType, name =>
         {
@@ -16687,7 +16688,8 @@ internal sealed class TransformEngine
             return aliases.TryGetValue(expandedName, out var definition) ? definition
                 : namedRecords?.ContainsKey(expandedName) == true ? expandedName : name;
         }, (name, attribute) => Stylesheet.Stylesheet.ExpandNodeTypeName(name, attribute, declaration),
-            name => Stylesheet.Stylesheet.ExpandSchemaTypeName(name, declaration)) ?? sequenceType;
+            name => Stylesheet.Stylesheet.ExpandSchemaTypeName(name, declaration),
+            (name, attribute) => Stylesheet.Stylesheet.ExpandSchemaDeclarationName(name, attribute, declaration)) ?? sequenceType;
     }
 
     /// <summary>

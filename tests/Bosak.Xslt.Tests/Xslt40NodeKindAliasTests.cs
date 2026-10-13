@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Verify partial node wildcards and the any default namespace
 //                      | Charles Korthout | 0.5 | 13-10-2026     | Verify node-name union alternatives, declaration bindings and separators
 //                      | Charles Korthout | 0.6 | 13-10-2026     | Verify schema-annotated aliases, namespace bindings and static diagnostics
+//                      | Charles Korthout | 0.7 | 13-10-2026     | Verify schema declarations and document shorthand alias boundaries
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -492,4 +493,150 @@ public class Xslt40NodeKindAliasTests
         Assert.Equal(nilled ? "true|false|false" : "true|true|false", XElement.Parse(Compile(body, true).TransformToString(
             new XDocumentNode(XDocument.Parse(source)))).Value);
     }
+
+    /// <summary>Normalizes document shorthand while preserving union and wildcard namespaces.</summary>
+    /// <param name="type">The document alias definition.</param>
+    /// <param name="source">A matching document.</param>
+    [Theory]
+    [InlineData("document-node(root)", "<root/>")]
+    [InlineData("document-node(root|other)", "<other/>")]
+    [InlineData("document-node(*:root)", "<root xmlns='urn:other'/>")]
+    [InlineData("document-node(p:*)", "<anything xmlns='urn:payload'/>")]
+    [InlineData("document-node(Q{urn:pipe|comma,part}root|other)", "<root xmlns='urn:pipe|comma,part'/>")]
+    public void Alias_DocumentNameShorthand(string type, string source)
+        => Assert.Equal("true|true", Run($"<xsl:item-type xmlns:p='urn:payload' name='t:d' as='{type}'/>" +
+            "<xsl:template match='/' xmlns:p='urn:rebound'><xsl:variable name='d' as='t:d' select='.'/><out>" +
+            "<xsl:value-of separator='|' select='($d instance of t:d,($d treat as t:d) is $d)'/></out></xsl:template>", source));
+
+    /// <summary>Rejects documents whose root name is outside the shorthand contract.</summary>
+    /// <param name="type">The shorthand type.</param>
+    /// <param name="source">A nonmatching document.</param>
+    [Theory]
+    [InlineData("document-node(root|other)", "<wrong/>")]
+    [InlineData("document-node(root)", "<root xmlns='urn:other'/>")]
+    [InlineData("document-node(*:Root)", "<root/>")]
+    public void Alias_DocumentNameShorthandMismatch(string type, string source)
+        => Assert.Equal("false", Run($"<xsl:item-type name='t:d' as='{type}'/>" +
+            "<xsl:template match='/'><out><xsl:value-of select='. instance of t:d'/></out></xsl:template>", source));
+
+    /// <summary>Matches imported declarations, substitution members and typed attributes in declaration namespaces.</summary>
+    /// <param name="type">The schema declaration alias.</param>
+    /// <param name="root">The validated source root.</param>
+    [Theory]
+    [InlineData("schema-element(p:root)", "root")]
+    [InlineData("schema-element(p:root)", "child")]
+    [InlineData("schema-element(Q{urn:schema}root)", "root")]
+    [InlineData("schema-attribute(p:code)", "root")]
+    [InlineData("document-node(schema-element(p:root))", "child")]
+    public void Alias_SchemaDeclaration(string type, string root)
+    {
+        var select = type.StartsWith("schema-attribute") ? "$d/*/@*" : type.StartsWith("document") ? "$d" : "$d/*";
+        var body = """
+            <xsl:import-schema namespace='urn:schema'>
+              <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema' targetNamespace='urn:schema' xmlns:s='urn:schema' elementFormDefault='qualified'>
+                <xs:attribute name='code' type='xs:string'/>
+                <xs:complexType name='Payload'><xs:simpleContent><xs:extension base='xs:string'>
+                  <xs:attribute ref='s:code'/></xs:extension></xs:simpleContent></xs:complexType>
+                <xs:element name='root' type='s:Payload'/>
+                <xs:element name='child' type='s:Payload' substitutionGroup='s:root'/>
+              </xs:schema>
+            </xsl:import-schema>
+            """ + $"<xsl:item-type name='t:n' xmlns:p='urn:schema' as='{type}'/>" +
+            "<xsl:template match='/' xmlns:p='urn:rebound'><xsl:variable name='d' as='document-node()' select='.'/>" +
+            $"<xsl:variable name='n' as='t:n' select='{select}'/><out><xsl:value-of separator='|' " +
+            $"select='($n instance of t:n,($n treat as t:n) is $n)'/></out></xsl:template>";
+        var source = XDocument.Parse($"<{root} xmlns='urn:schema' xmlns:s='urn:schema' s:code='x'>text</{root}>");
+        var schemas = new System.Xml.Schema.XmlSchemaSet();
+        var schemaText = body[body.IndexOf("<xs:schema", StringComparison.Ordinal)..(body.IndexOf("</xs:schema>", StringComparison.Ordinal) + "</xs:schema>".Length)];
+        schemas.Add(System.Xml.Schema.XmlSchema.Read(new StringReader(schemaText), null)!);
+        schemas.Compile();
+        XdmSchemaAnnotator.ValidateSubtree(source.Root!, schemas);
+        var executable = Compile(body, true);
+        Assert.Equal("true|true", XElement.Parse(executable.TransformToString(new XDocumentNode(source))).Value);
+        Assert.Contains("XTTE0570", Assert.ThrowsAny<Exception>(() => executable.TransformToString(new XDocumentNode(
+            XDocument.Parse(source.ToString())))).ToString());
+    }
+
+    /// <summary>Validates schema declarations and document syntax before any evaluation.</summary>
+    /// <param name="type">The invalid alias.</param>
+    /// <param name="code">The expected static error.</param>
+    [Theory]
+    [InlineData("schema-element(t:missing)", "XPST0008")]
+    [InlineData("schema-attribute(t:missing)", "XPST0008")]
+    [InlineData("document-node(schema-element(t:missing))", "XPST0008")]
+    [InlineData("schema-element(absent:root)", "XPST0081")]
+    [InlineData("schema-attribute(absent:code)", "XPST0081")]
+    [InlineData("schema-element(*)", "XPST0003")]
+    [InlineData("schema-element(root|other)", "XPST0003")]
+    [InlineData("schema-attribute()", "XPST0003")]
+    [InlineData("document-node(root,xs:untyped)", "XPST0003")]
+    [InlineData("document-node(root|)", "XPST0003")]
+    public void Alias_InvalidSchemaDeclaration(string type, string code)
+        => Assert.Contains(code, Assert.ThrowsAny<Exception>(() => Compile($"<xsl:item-type name='t:n' as='{type}'/>")).ToString());
+
+    /// <summary>Normalizes direct document bindings and tests without aliases.</summary>
+    [Fact]
+    public void Declaration_DirectDocumentShorthand()
+        => Assert.Equal("true|true", Run("""
+            <xsl:template match='/'><xsl:variable name='d' as='document-node(root|other)' select='.'/>
+              <out><xsl:value-of separator='|' select='($d instance of document-node(other),
+                ($d treat as document-node(*:other)) is $d)'/></out></xsl:template>
+            """, "<other/>"));
+
+    /// <summary>Traverses document shorthand inside arrays and keeps the any default for root names.</summary>
+    [Fact]
+    public void Alias_NestedDocumentShorthandAnyDefault()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type name='t:a' as='array(document-node(*:root))'/>
+            <xsl:item-type name='t:d' xpath-default-namespace='##any' as='document-node(root)'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='([.] instance of t:a,. instance of t:d)'/></out></xsl:template>
+            """, "<root xmlns='urn:other'/>"));
+
+    /// <summary>Checks adjacent unknown names even when a schema declaration is nested.</summary>
+    [Fact]
+    public void Declaration_SchemaDeclarationAndUnknownType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='unused' as='(document-node(root)|t:missing)?' select='()'/>")).ToString());
+
+    /// <summary>Uses no namespace for schema-element under any defaults and for unprefixed schema attributes.</summary>
+    [Fact]
+    public void Alias_SchemaDeclarationDefaultNamespaces()
+    {
+        const string schema = """
+            <xs:schema xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+              <xs:attribute name='code' type='xs:string'/>
+              <xs:complexType name='Payload'><xs:attribute ref='code'/></xs:complexType>
+              <xs:element name='root' type='Payload'/>
+            </xs:schema>
+            """;
+        var body = "<xsl:import-schema>" + schema + "</xsl:import-schema>" + """
+            <xsl:item-type name='t:e' xpath-default-namespace='##any' as='schema-element(root)'/>
+            <xsl:item-type name='t:a' xpath-default-namespace='urn:unrelated' as='schema-attribute(code)'/>
+            <xsl:item-type name='t:arr' xpath-default-namespace='##any' as='array(schema-element(root))'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(
+              /* instance of t:e,/*/@* instance of t:a,[/*] instance of t:arr)'/></out></xsl:template>
+            """;
+        var source = XDocument.Parse("<root code='x'/>");
+        var schemas = new System.Xml.Schema.XmlSchemaSet();
+        schemas.Add(System.Xml.Schema.XmlSchema.Read(new StringReader(schema), null)!);
+        schemas.Compile();
+        XdmSchemaAnnotator.ValidateSubtree(source.Root!, schemas);
+        Assert.Equal("true|true|true", XElement.Parse(Compile(body, true).TransformToString(new XDocumentNode(source))).Value);
+    }
+
+    /// <summary>Normalizes direct host shorthand without a stylesheet or type registry.</summary>
+    [Fact]
+    public void Declaration_DirectHostDocumentShorthand()
+    {
+        var expression = Bosak.XPath.Api.XPath31Expression.Compile(". instance of document-node(root|other)",
+            new Bosak.XPath.Api.CompileOptions { Compatibility = Bosak.XPath.Api.XPathCompatibility.XPath40 });
+        Assert.True(expression.Evaluate(new XDocumentNode(XDocument.Parse("<other/>"))).BooleanValue);
+        Assert.False(expression.Evaluate(new XDocumentNode(new XDocument())).BooleanValue);
+    }
+
+    /// <summary>Validates schema declarations in unused bindings rather than waiting for runtime matching.</summary>
+    [Fact]
+    public void Declaration_UnknownSchemaElementInUnusedBinding()
+        => Assert.Contains("XPST0008", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='unused' as='array(schema-element(t:missing))' select='[]'/>")).ToString());
 }

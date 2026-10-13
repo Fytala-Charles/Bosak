@@ -1,3 +1,21 @@
+# Schema-declaration and document shorthand aliases — 2026-10-13
+
+Branch: feat/xslt-schema-declaration-aliases; parent a8497065. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226, #227 and #228 remain open and this slice is stacked on #228. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema-element(Name), schema-attribute(Name) and document-node(schema-element(Name)) in item-type aliases and supported structural sequence types. Schema declaration names retain their declaration namespace under prefix rebinding and must resolve to imported global elements/attributes; unknown or unavailable declarations raise XPST0008 and undeclared prefixes raise XPST0081. Wildcards, unions and empty declaration names raise XPST0003. Schema-element under ##any uses no namespace for an unprefixed declaration; unprefixed schema attributes always use no namespace. Document shorthand such as document-node(root|other) normalizes to document-node(element(root|other)), including wildcard and EQName alternatives, and reuses single-root matching. Direct host type operands and alias-free XSLT document/schema bindings normalize the new forms. Twenty-nine new regressions cover node identity, namespace mismatches, imported declarations, substitution members, typed attribute matching, rejection of untyped nodes, nested arrays, ##any defaults, empty documents and static validation of unused bindings. Annotated function types, package exposure and broader native type-alias gaps remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker has a schema-declaration callback and normalizes document name shorthand. Static API and stylesheet resolvers verify imported globals; binding resolvers preserve declaration names. Existing runtime schema and document matchers handle the canonical forms. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7248 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4362/0/0 and twenty-nine new regressions. Focused node-alias tests pass 144/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: package type exposure and remaining native type-alias failures; annotated function types remain a separate grammar follow-up. Reassess the five original contribution areas after these implementation boundaries. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Function-type grammar aliases — 2026-10-13
 
 Branch: feat/xslt-function-type-grammar; parent 015dce6f. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 and #227 remain open and this slice is stacked on #227. Earlier sections are historical.
