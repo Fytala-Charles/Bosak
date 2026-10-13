@@ -96,6 +96,7 @@
 //                      | Charles Korthout | 3.24  | 13-10-2026     | Split pattern operators outside quoted content, URI names and nested expressions.
 //                      | Charles Korthout | 3.25  | 13-10-2026     | Evaluate mixed 4.0 intersect/except pattern chains from left to right.
 //                      | Charles Korthout | 3.26  | 13-10-2026     | Match 4.0 set-pattern axis operands against the candidate node.
+//                      | Charles Korthout | 3.27  | 13-10-2026     | Validate 4.0 template pattern prefixes eagerly using lexer tokens.                     |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -3848,6 +3849,38 @@ internal sealed class PatternCompiler
         int close = FindMatchingParen(text, open);
         if (close < 0) return "";
         return text[(open + 1)..close].Trim();
+    }
+
+    /// <summary>Rejects unavailable prefixes in a pattern before runtime compilation.</summary>
+    /// <param name="pattern">The pattern source.</param>
+    /// <param name="namespaces">The declaring applicable static namespace bindings.</param>
+    public static void ValidateNamespacePrefixes(string pattern, IReadOnlyDictionary<string, string> namespaces)
+    {
+        var lexer = new Bosak.XPath.Parser.Lexer.XPathLexer(pattern, xpath40: true);
+        while (true)
+        {
+            var token = lexer.NextToken();
+            if (token.Kind == Bosak.XPath.Parser.Lexer.TokenKind.Eof) return;
+            if (token.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Name) continue;
+            var name = token.Text(pattern);
+            if (name.StartsWith("Q{")) continue;
+            int colon = name.IndexOf(':');
+            if (colon < 0)
+            {
+                // A prefixed wildcard is tokenized as Name, Colon, Star.
+                var lookahead = lexer;
+                var separator = lookahead.NextToken();
+                var wildcard = lookahead.NextToken();
+                if (separator.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Colon
+                    || wildcard.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Star
+                    || separator.Start != token.Start + token.Length
+                    || wildcard.Start != separator.Start + separator.Length) continue;
+                colon = name.Length;
+            }
+            var prefix = name[..colon].ToString();
+            if (!namespaces.ContainsKey(prefix))
+                throw new InvalidOperationException($"XPST0081: No namespace declaration for prefix '{prefix}' in pattern.");
+        }
     }
 
     private (string NamespaceUri, string LocalName) ParseQName(string name) => ParseQName(name, _namespaces);

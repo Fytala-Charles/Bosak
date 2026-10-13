@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 template patterns when a lexical QName or prefixed wildcard uses an unavailable prefix. This includes native prefixes excluded by fixed-namespaces and undeclared prefixes without fixed bindings. A shared XPath-lexer check covers node names, attributes, axes, paths, union/set operands, function/variable references and nested type patterns; string literals, nested comments and EQName URIs remain protected. Earlier-profile loading retains its existing behavior. Thirty-three regressions cover omitted bindings, Unicode and dotted prefixes, protected text, native bindings across 2.0/3.0/4.0 and a direct lexical check distinguishing spaced map-entry delimiters from prefix wildcards; the initial twenty-four-test baseline was 4/20/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. This bounded check does not perform full eager pattern compilation. String-template interpolation checks, non-template authoring/static contexts, broader pattern grammar, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "db953bf68792bf80c76cab1516eb2978a4d71e43",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sections": [
+      "3.6.1 The fixed-namespaces Attribute",
+      "6.3.1 Syntax of Patterns"
+    ],
+    "retrieved": "2026-10-13"
+  },
+  "nativeNextMatch": {
+    "passed": 46,
+    "failed": 8,
+    "skipped": 6
+  },
+  "nativeTypeAlias": {
+    "passed": 22,
+    "failed": 10,
+    "skipped": 0
+  },
+  "initialFocusedBaseline": {
+    "passed": 4,
+    "failed": 20,
+    "skipped": 0
+  },
+  "newlyPassingNativeCases": [],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final incremental Release build succeeds with zero warnings and zero errors. All 7676 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4790/0/0 and thirty-three new regressions; focused prefix-diagnostics regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "74cfd4c56ebecfc97c6a221836b66508e4867df22970b08864c6eea5ee669832",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "e1ee44ac4ba47c1ced522e0eb0e01371d0c1015764a6e8307c5770829b9fc970",
+    "tests/Bosak.Xslt.Tests/Xslt40PatternPrefixDiagnosticTests.cs": "5ce61053e8e36627b8644638ce5bee28f7ad1b05f89f7ec305d9b657b0a11f7a",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeFinalReceipt": ".artifacts/xslt40/20261013T134655969Z.json",
+  "nativeTypeAliasReceipt": ".artifacts/xslt40/20261013T134658575Z.json"
+}

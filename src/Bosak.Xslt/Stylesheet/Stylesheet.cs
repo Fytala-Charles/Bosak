@@ -306,6 +306,7 @@
 //                      | Charles Korthout | 2.145 | 13-10-2026     | Accept and expose package named types using defining-package definitions
 //                      | Charles Korthout | 2.146 | 13-10-2026     | Resolve fixed namespace bindings for named types and XPath static contexts
 //                      | Charles Korthout | 2.147 | 13-10-2026     | Apply effective profiles to static item-pattern validation.
+//                      | Charles Korthout | 2.148 | 13-10-2026     | Reject unavailable template pattern prefixes at 4.0 stylesheet compilation.             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4581,7 +4582,12 @@ internal sealed class Stylesheet
                     {
                         var strippedMatch = PatternCompiler.StripXPathComments(matchAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedMatch))
-                            PatternCompiler.ValidatePatternSyntax(strippedMatch, GetXPathCompatibility(elem));
+                        {
+                            var compatibility = GetXPathCompatibility(elem);
+                            PatternCompiler.ValidatePatternSyntax(strippedMatch, compatibility);
+                            if (localName == "template" && compatibility >= XPathCompatibility.XPath40)
+                                PatternCompiler.ValidateNamespacePrefixes(strippedMatch, GetApplicableStaticNamespaces(elem));
+                        }
                     }
                 }
                 if (localName == "number")

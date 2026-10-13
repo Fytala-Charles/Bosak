@@ -313,7 +313,8 @@
         "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json",
         "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json",
         "setPatternAxisFocusFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_AXIS_FOCUS_RESULTS.json",
-        "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json"
+        "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json",
+        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json"
       }
     },
     {
@@ -386,7 +387,8 @@
         "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json",
         "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json",
         "setPatternAxisFocusFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_AXIS_FOCUS_RESULTS.json",
-        "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json"
+        "patternFixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_FIXED_NAMESPACE_RESULTS.json",
+        "patternPrefixDiagnosticFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_PREFIX_DIAGNOSTIC_RESULTS.json"
       }
     }
   ],
