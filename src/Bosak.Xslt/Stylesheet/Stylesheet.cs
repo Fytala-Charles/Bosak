@@ -297,6 +297,7 @@
 //                      | Charles Korthout | 2.136 | 13-10-2026     | Expand map aliases and nested map/array references with shared token-aware type handling
 //                      | Charles Korthout | 2.137 | 13-10-2026     | Validate outer item occurrence independently of function return sequence cardinality
 //                      | Charles Korthout | 2.138 | 13-10-2026     | Resolve record field aliases and recursive named references without expanding identities
+//                      | Charles Korthout | 2.139 | 13-10-2026     | Validate named alias references and preserve declared record identities
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -919,7 +920,9 @@ internal sealed class Stylesheet
                     XPath31Expression.Compile("() instance of " + atomic, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
                     return atomic;
                 }
-                return Expand(key);
+                if (!declarations.TryGetValue(key, out var named))
+                    throw new InvalidOperationException($"XPST0051: Unknown item type '{name}' in an item-type definition.");
+                return named.Name.LocalName == "record-type" ? key : Expand(key);
             });
         }
         foreach (var name in declarations.Keys) Expand(name);

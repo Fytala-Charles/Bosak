@@ -453,3 +453,14 @@ For a grouped batch, `[('1','2'),()] cast as array(xs:integer*)` retains two mem
 Explicit map casting preserves entry order and fails with XQDY0137 if key conversion introduces duplicates. For example, keys `1` and `01` both cast to integer 1. Failed lexical values and required member cardinalities also fail; castable reports false. Wildcard array/map casts retain their supplied containers. Empty container types accept only empty containers.
 
 See [recursive/container evidence](../../../contributions/xslt40/record-type-boundaries/CONTAINER_RESULTS.json), [XPath array casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-array), [map casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-map), and [recursive record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-recursive-record-tests). The pinned specification and remaining native failures are recorded separately; independent processor confirmation remains outstanding.
+
+
+## Item-type alias casts and declaration validation — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) expands named item-type aliases in XPath 4.0 cast and castable targets, including nested container targets and namespace forms. Atomic, enumeration, array, map and structural/nominative record aliases reuse existing casting. Optional targets preserve empty sequences. Function and generic item/node aliases raise XPST0080 as casting targets. Unknown named references in supported alias definitions raise XPST0051 during stylesheet registration; declared record references preserve nominative identity. Eighteen new regressions pass. Full schema validation, unsupported alias grammar, unknown names outside declarations, choice-target eligibility and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+See [cast and validation evidence](../../../contributions/xslt40/item-type-boundaries/CAST_VALIDATION_RESULTS.json). Native type-alias remains 8/24/0; unchanged contributed cases 023/024 pass. Broader failures and independent processor confirmation remain outstanding.
+
+A telemetry feed can deliver numeric readings as strings. With `<xsl:item-type name="t:reading" as="xs:integer"/>` and `<xsl:item-type name="t:batch" as="array(t:reading)"/>`, `(['42','43'] cast as t:batch)?*` yields the integers `42 43`. `['bad'] castable as t:batch` yields `false`; `() castable as t:batch?` yields `true`. This example assumes an XSLT 4.0 stylesheet with `t` bound to the declaration namespace and `xs` to XML Schema; casting reports invalid data while castable provides a validation decision.
+
+The [XPath 4.0 casting and castable specification](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-cast) defines eligible alias targets and static diagnostics. See the pinned source and hashes in the evidence file for the implementation reference.
