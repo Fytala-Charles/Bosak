@@ -1,3 +1,11 @@
+# Named template QName alignment — 2026-10-13
+
+Branch: fix/xslt40-template-qnames; base main `0043fdba`; implementation `288fade66b0840e9501783a092a4e83a45a115f8`.
+
+Source candidate 1.2.1 (unpublished) aligns named template declarations and call-template name checks with applicable XSLT 4.0 namespaces. Fixed-only prefixes compile and execute; rebound names agree with explicit EQNames. Excluded prefixes report XTSE0280 and malformed names report XTSE0020 in compilation and authoring validation; template reserved-namespace checks use the effective binding (XTSE0080). Earlier profiles, xsl:initial-template, unprefixed names and literal static exclusion retain their behavior. All 14 focused regressions pass (initial 10-case baseline: 1 pass/9 fail). All 7,735 unit tests pass, including XSLT 4,849/0/0; frozen QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Authoring checks syntax and namespace bindings without validating target existence, duplicate expanded component identities or package linkage. Other component-name paths, mixed-version expression contexts and named-type authoring registration remain follow-ups. Published version remains 1.2.0; REQ-125 acceptance and REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged. Evidence: XSLT40-TEMPLATE-QNAME-RESULTS.json.
+
+Delivery: submit against main and merge after CI. Next: triage remaining function/mode/key component-name paths and authoring named-type registration, then reassess a small next XSLT 4.0 contribution batch. Mixed-version expression namespace selection is a separate observed runtime gap; the earlier-profile QName regression uses an explicit EQName reference to isolate declaration binding. Preserve source evidence, compatibility gates and pending upstream acceptance. No publication or external messages in this slice. Earlier records below are historical.
+
 # Variable and parameter QName alignment — 2026-10-13
 
 Branch: fix/xslt40-variable-qname-bindings; base main `444bc724`; implementation `ba2effc092e730042f1f1d8857a7e13d431e71e1`.
