@@ -535,6 +535,7 @@
 //                      | Charles Korthout | 7.19 | 13-10-2026     | Coerce maps to package-local nominative records with defaults and static field protection
 //                      | Charles Korthout | 7.20 | 13-10-2026     | Cast named record fields and resolve nested named references in declaration namespaces
 //                      | Charles Korthout | 7.21 | 13-10-2026     | Reuse shared sequence casting for record fields and nested containers
+//                      | Charles Korthout | 7.22 | 13-10-2026     | Supply known record names for XPath and AVT static named-type validation
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3032,13 +3033,14 @@ internal sealed class TransformEngine
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
         var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
-        if (itemTypeAliases.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
+        if (_stylesheet.GetXPathCompatibility(instruction) >= XPathCompatibility.XPath40 || itemTypeAliases.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
         {
             var options = new CompileOptions
             {
                 Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
                 ItemTypeAliases = itemTypeAliases,
+                NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
                 BaseUri = baseUri,
@@ -10330,13 +10332,14 @@ internal sealed class TransformEngine
                         bool avtBackwards = contextElement != null && IsEffectiveBackwardsCompatible(contextElement);
                         XPath31Expression compiled;
                         var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
-                        if (needsOptions || avtBackwards || itemTypeAliases.Count > 0)
+                        if (compatibility >= XPathCompatibility.XPath40 || needsOptions || avtBackwards || itemTypeAliases.Count > 0)
                         {
                             var options = new CompileOptions
                             {
                                 Compatibility = compatibility,
                                 Namespaces = nsMap,
                                 ItemTypeAliases = itemTypeAliases,
+                                NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri,
