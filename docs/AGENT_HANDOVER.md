@@ -1,6 +1,6 @@
 # Set-pattern axis focus — 2026-10-13
 
-Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–243 remain open. Earlier sections are historical.
+Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–244 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: fixed namespace resolution in 4.0 template pattern names; use the declaring applicable static bindings consistently for nested node/type/predicate patterns and retain earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #244](https://github.com/Fytala-Charles/Bosak/pull/244), stacked on #243. Verified implementation revision 8a80f2ee; a documentation-only delivery commit follows. PRs #223–244 remain open. CI starts after retargeting to main. Next: fixed namespace resolution in 4.0 template pattern names.
 
 # Set-pattern associativity — 2026-10-13
 
