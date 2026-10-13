@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-13",
+  "base": "8b4c317170aa122c75ae8a4fbbbf0f16face3623",
+  "implementation": "a34b0672660dd47a0e47d09c268d971badd6c410",
+  "publishedVersion": "1.2.0",
+  "sourceVersion": "1.2.1 (unpublished)",
+  "scope": "Expression-slot edit preflight using retained applicable namespace bindings and exact-arity all-supplied host keyword signatures.",
+  "baseline": {
+    "initialTests": 30,
+    "passed": 11,
+    "failed": 19,
+    "skipped": 0
+  },
+  "verification": {
+    "newTestsPassed": 39,
+    "focusedPassed": 112,
+    "fullUnitPassed": 8013,
+    "xsltUnitPassed": 5127,
+    "failed": 0,
+    "skipped": 0,
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    },
+    "nativeFamily": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "Release solution: 0 errors, 2 existing warnings"
+  },
+  "behavior": {
+    "namespaces": "Captured applicable bindings for effective XPath 4.0; native bindings for existing earlier-profile authoring policy.",
+    "keywords": "Retained snapshot registry; declaration-local identities, overloads, include/import winners, EQNames, positional mixtures, arrows and inline bindings.",
+    "refusals": "Unavailable prefix: RequiresParentChange with start-tag range; invalid captured namespace context or invalid call: ExpressionParseError; deferred host signature: SlotNotEditable with coverage explanation.",
+    "staticUseWhen": "Ordinary runtime function signatures are not supplied to use-when edits.",
+    "resources": "No resolver requests during preflight or refusal. Successful candidate re-inspection and explicit compilation retain the existing caller-controlled resolver policy.",
+    "ownership": "Only the attribute value is spliced; untouched bytes, native public descriptors, source ranges, correspondence, original snapshots and chained candidate isolation are verified."
+  },
+  "publicApi": "No new members or enum values; existing refusal descriptions clarified.",
+  "knownLimitations": [
+    "A locally downgraded 3.0 expression in a 4.0 module currently uses native bindings in authoring preflight/validation, while execution uses the module fixed set. A prefix omitted from that set can be accepted by authoring and fail XPST0081 at runtime. This slice preserves the existing authoring policy; that specific test covers preflight/candidate validation only. Review module-level binding policy against the pinned specification and align the paths next.",
+    "Optional/default argument execution, conditional/shadow/ambiguous signatures, unresolved/package linkage, pattern/AVT edit support and named-type edit compilation remain outside this slice."
+  ],
+  "nativeSuiteRevision": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+  "nativeReceiptSha256": "bb7ff82e7b25d6a40017ccd2d36509a296021a27becda26b60c221bfdbc5e96d",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xslt-40/src/xslt.xml",
+  "upstream": "No native cases added; original five areas/14 cases and PR #27 three cases remain separate, with acceptance and independent confirmation pending."
+}

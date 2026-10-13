@@ -349,3 +349,8 @@ The unchanged fixed-namespaces family now passes 16/0/0 after support for all-su
 ## Authoring keyword validation follow-up - 2026-10-13
 
 The bounded host keyword contract now validates in authoring expression/AVT slots using an immutable captured registry, with 38 new regressions and 103 focused checks green. The unchanged native namespace family remains 16/0/0; no new contribution cases are added. See [separate verification evidence](XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json). Original N01-N05 and upstream acceptance states are unchanged; next: authoring expression edit contexts, then optional/default and broader keyword boundaries. Candidate 1.2.1 remains unpublished.
+
+
+## Expression edit context follow-up - 2026-10-13
+
+Expression edits now use retained applicable namespaces and bounded host keyword signatures: 39 new regressions, 112 focused checks and unchanged native namespace results 16/0/0. No new contribution cases are added. Next: review and align module fixed bindings versus locally downgraded authoring namespace policy, then optional/default and broader keyword boundaries. Original N01-N05 and upstream acceptance states are unchanged; candidate 1.2.1 remains unpublished. See [verification evidence and limits](XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json).

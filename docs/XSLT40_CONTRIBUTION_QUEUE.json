@@ -479,6 +479,15 @@
         "familyPassed": 16,
         "familyFailed": 0,
         "evidence": "XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json"
+      },
+      "expressionEditFollowUp": {
+        "implementation": "a34b0672660dd47a0e47d09c268d971badd6c410",
+        "newRegressions": 39,
+        "focusedPassed": 112,
+        "familyPassed": 16,
+        "familyFailed": 0,
+        "evidence": "XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json",
+        "next": "Review and align module fixed-binding policy for locally downgraded expressions."
       }
     }
   ]

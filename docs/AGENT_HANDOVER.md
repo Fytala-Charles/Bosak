@@ -1,3 +1,15 @@
+# Expression edit static contexts - 2026-10-13
+
+Branch: fix/xslt40-expression-edit-contexts; base main `8b4c317170aa122c75ae8a4fbbbf0f16face3623` (PR #263 merged); implementation `a34b0672660dd47a0e47d09c268d971badd6c410`.
+
+What was built: ExpressionEditPipeline uses retained applicable namespace bindings for effective XPath 4.0 and snapshot host parameter signatures for non-static exact-arity keyword calls with all arguments supplied. Captured namespace errors refuse before compilation/splicing; invalid calls retain ExpressionParseError, unavailable prefixes RequiresParentChange with start-tag range, and deferred signatures SlotNotEditable with a coverage explanation. Earlier-profile authoring policy and built-in defaults remain unchanged. No new public members or enum values. Only the attribute-value byte range is spliced; chained snapshots retain contexts and original envelopes stay immutable. No preflight/refusal resolver calls; successful re-inspection/explicit compilation follow the existing resolver contract.
+
+Verification: 39 new regressions; initial 30-case baseline 11 pass/19 fail; 112 focused checks; Release solution build 0 errors/two existing warnings; 8,013 full unit tests including XSLT 5,127/0/0; QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged native family 16/0/0 at suite `2c6664329b4951f0122bd4c82e6de78460cc9411`. Evidence: XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json and post-edit-context native log/receipt. No gate membership or upstream case changes. Published version 1.2.0; candidate 1.2.1 remains unpublished.
+
+Known boundary: A locally downgraded 3.0 expression in a 4.0 module currently uses native bindings in authoring preflight/validation, while execution uses the module fixed set. A prefix omitted from that set can be accepted by authoring and fail XPST0081 at runtime. This slice preserves the existing authoring policy; that specific test covers preflight/candidate validation only. Review module-level binding policy against the pinned specification and align the paths next.
+
+Delivery: merge after CI. Next: review module-level fixed bindings versus locally downgraded expression namespace policy against the pinned specification before choosing which path to change. Retain optional/default execution, broader keyword/package linkage, pattern/AVT replacement and named-type edit compilation as separate scopes. Upstream PR #27 review and independent confirmation remain pending. Earlier entries below are historical.
+
 # Authoring XSLT function keyword validation - 2026-10-13
 
 Branch: fix/xslt40-authoring-function-keywords; base main `4932b72440d2bf06deffa8840fbccf19738aa159` (PR #262 merged); implementation `7caa9f4d5f9677fc2700d8e9dc697ff11eb79c95`.

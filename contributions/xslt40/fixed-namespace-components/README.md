@@ -119,3 +119,8 @@ Verification: Release solution build succeeds (0 errors; 88 existing warnings); 
 ## Authoring keyword validation follow-up - 2026-10-13
 
 The unchanged native family remains 16/0/0 at implementation `7caa9f4d`. A separate 38-case authoring slice aligns expression/AVT validation with all-supplied host keyword calls; [verification and limits](../../../docs/XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json), [native log](post-authoring-keyword-result.txt) and [receipt](post-authoring-keyword-receipt.json) retain precise scope. These regressions add no native contribution cases and leave original assertions/receipts unchanged. Candidate 1.2.1 remains unpublished.
+
+
+## Expression edit context follow-up - 2026-10-13
+
+The unchanged native family remains 16/0/0 at implementation `a34b0672`. The separate 39-case expression-edit slice adds no contribution cases. See [verification and boundaries](../../../docs/XSLT40-EXPRESSION-EDIT-CONTEXT-RESULTS.json), [native log](post-edit-context-result.txt) and [receipt](post-edit-context-receipt.json). Original submissions, failure receipts and assertions are retained; candidate 1.2.1 remains unpublished.
