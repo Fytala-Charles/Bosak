@@ -308,6 +308,7 @@
 //                      | Charles Korthout | 2.147 | 13-10-2026     | Apply effective profiles to static item-pattern validation.
 //                      | Charles Korthout | 2.148 | 13-10-2026     | Reject unavailable template pattern prefixes at 4.0 stylesheet compilation.             |
 //                      | Charles Korthout | 2.149 | 13-10-2026     | Allow caller-controlled fixed namespace document resolution                            |
+//                      | Charles Korthout | 2.150 | 13-10-2026     | Use applicable namespaces for variable and parameter QNames                            |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4626,7 +4627,7 @@ internal sealed class Stylesheet
                 {
                     var nameAttr = elem.Attribute("name") ?? elem.Attribute("_name");
                     if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
-                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name");
+                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name", useApplicableNamespaces: true);
                 }
 
                 // xsl:apply-templates/@mode must be a valid mode token (QName or #current/#default/#unnamed/#all).
@@ -5737,7 +5738,7 @@ internal sealed class Stylesheet
     /// Validates that <paramref name="name"/> is a legal XSLT lexical QName or EQName.
     /// Returns the local name and namespace URI if valid; otherwise throws <c>XTSE0020</c>.
     /// </summary>
-    private static (string localName, string namespaceUri) ValidateXsltName(XElement element, string name, string construct)
+    internal static (string localName, string namespaceUri) ValidateXsltName(XElement element, string name, string construct, bool useApplicableNamespaces = false)
     {
         var trimmed = name.Trim();
         if (string.IsNullOrEmpty(trimmed))
@@ -5773,10 +5774,11 @@ internal sealed class Stylesheet
             if (!IsValidNCName(local))
                 throw new InvalidOperationException($"XTSE0020: The local part '{local}' in '{name}' for {construct} is not a valid NCName.");
 
-            var nsDecl = element.GetNamespaceOfPrefix(prefix);
+            var nsDecl = useApplicableNamespaces ? GetComponentNamespace(element, prefix)
+                : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
             if (nsDecl == null)
                 throw new InvalidOperationException($"XTSE0280: The prefix '{prefix}' in '{name}' for {construct} is not declared.");
-            var ns = nsDecl.NamespaceName;
+            var ns = nsDecl;
             return (local, ns);
         }
 
@@ -6069,11 +6071,26 @@ internal sealed class Stylesheet
         return new XDocument(wrapper);
     }
 
-    /// <summary>
-    /// Resolves a lexical variable or parameter name to an expanded QName.
-    /// Handles <c>Q{uri}local</c> EQNames and prefixed QNames using the namespaces
-    /// in scope on the declaring element.
-    /// </summary>
+    /// <summary>Gets whether component QNames use the effective 4.0 namespace context.</summary>
+    private static bool UsesXPath40Namespaces(XElement element)
+    {
+        foreach (var ancestor in element.AncestorsAndSelf())
+        {
+            var version = (ancestor.Name.NamespaceName == XslNamespace ? ancestor.Attribute("version") : null)
+                ?? ancestor.Attribute(XName.Get("version", XslNamespace));
+            if (version is null) continue;
+            return double.TryParse(version.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var effective)
+                && effective >= 4.0;
+        }
+        return false;
+    }
+
+    /// <summary>Resolves component prefixes in applicable static namespaces, preserving earlier profiles.</summary>
+    internal static string? GetComponentNamespace(XElement element, string prefix)
+        => UsesXPath40Namespaces(element) ? GetApplicableStaticNamespaces(element).GetValueOrDefault(prefix)
+            : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+
+    /// <summary>Expands a variable/parameter QName using the applicable declaration context.</summary>
     internal static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
     {
         if (string.IsNullOrEmpty(name))
@@ -6082,6 +6099,8 @@ internal sealed class Stylesheet
         // QName-valued attributes are whitespace-collapsed by the XSLT data model,
         // so leading and trailing space around a lexical or EQName must be ignored.
         name = name.Trim();
+        if (UsesXPath40Namespaces(element))
+            return ValidateXsltName(element, name, "variable/parameter name", useApplicableNamespaces: true);
 
         // The empty URI form Q{}local is permitted and means "no namespace".
         if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
@@ -6105,10 +6124,10 @@ internal sealed class Stylesheet
             if (prefix == "xml")
                 return (local, "http://www.w3.org/XML/1998/namespace");
 
-            var ns = element.GetNamespaceOfPrefix(prefix);
+            var ns = GetComponentNamespace(element, prefix);
             if (ns == null)
                 throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}'");
-            return (local, ns.NamespaceName);
+            return (local, ns);
         }
 
         return (name, "");

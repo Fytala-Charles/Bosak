@@ -23,6 +23,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 //                      | Charles Korthout | 0.5   | 13-10-2026     | Align expression, AVT and pattern static namespace validation                          |
+//                      | Charles Korthout | 0.6   | 13-10-2026     | Align declaration scope and QName errors with fixed bindings                           |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -236,9 +237,27 @@ internal sealed class XsltValidationEngine
         return false;
     }
 
+    /// <summary>Reports applicable QName syntax and binding errors on active 4.0 variable/parameter declarations.</summary>
+    private void CheckVariableQName(ModuleWalkState state, AuthoringNodeDescriptor node)
+    {
+        if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element
+            || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
+            || element.Name.LocalName is not ("variable" or "param" or "with-param")) return;
+        var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
+        if (attribute is null) return;
+        if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
+        try { _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, "variable/parameter name", useApplicableNamespaces: true); }
+        catch (InvalidOperationException ex)
+        {
+            _hasInvalid = true;
+            _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(ex), state.Module.ModuleUri,
+                ex.Message, attribute.ValueRange));
+        }
+    }
+
     /// <summary>
     /// Reads the declared name of an <c>xsl:variable</c>/<c>xsl:param</c> element. The value of the
-    /// <c>name</c> attribute is a QName, resolved here against the namespace declarations in scope
+    /// <c>name</c> attribute is a QName, resolved here against the applicable static namespaces
     /// at the element (via the derived backing node). Unresolvable or malformed names are not
     /// declarations the walk can reason about and simply return <see langword="false"/>.
     /// </summary>
@@ -251,6 +270,18 @@ internal sealed class XsltValidationEngine
             if (attribute.LocalName != "name" || attribute.NamespaceUri.Length != 0)
             {
                 continue;
+            }
+
+            if (GetEffectiveVersion(element) >= 4.0 && element.BackingObject is XElement backing)
+            {
+                if (attribute.DeclarationContext?.StaticNamespaceError is not null) return false;
+                try
+                {
+                    (localName, namespaceUri) = Stylesheet.Stylesheet.ValidateXsltName(backing,
+                        attribute.ExpandedValue, "variable/parameter name", useApplicableNamespaces: true);
+                    return true;
+                }
+                catch (InvalidOperationException) { return false; }
             }
 
             var value = attribute.ExpandedValue.Trim();
@@ -409,6 +440,7 @@ internal sealed class XsltValidationEngine
 
         ReportCoverageGapIfDeferred(state, elementName);
         CheckElementStructure(state, node);
+        CheckVariableQName(state, node);
 
         // Slots on this element's start tag (the use-when slot, when present, was checked above).
         foreach (var attribute in node.Attributes)

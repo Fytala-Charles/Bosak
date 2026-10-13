@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Retain internal declaration contexts without changing public slot metadata             |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -72,7 +73,8 @@ public sealed class AuthoringAttributeDescriptor
         ExpandedValue = expandedValue;
         ValueRange = valueRange;
         FullRange = fullRange;
-        SlotContext = slotContext;
+        SlotContext = slotKind == AuthoringAttributeSlotKind.QName ? null : slotContext;
+        DeclarationContext = slotKind == AuthoringAttributeSlotKind.QName ? slotContext : null;
     }
 
     /// <summary>Gets the attribute name as written in source (including any prefix).</summary>
@@ -114,4 +116,6 @@ public sealed class AuthoringAttributeDescriptor
     /// slots; <see langword="null"/> for other slots.
     /// </summary>
     public ExpressionSlotContext? SlotContext { get; }
+
+    internal ExpressionSlotContext? DeclarationContext { get; }
 }
