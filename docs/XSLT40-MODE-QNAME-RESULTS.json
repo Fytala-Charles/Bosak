@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "7d778c13370239e22d5b84cfce55244d990da9c0",
+  "implementationRevision": "5287cf056b89a28c2c009266d011d58699eb2606",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Applicable namespace alignment for XSLT 4.0 mode declarations, template membership, dispatch and scoped defaults",
+  "baselineFocused": {
+    "passed": 4,
+    "failed": 21,
+    "skipped": 0,
+    "total": 25
+  },
+  "newModeTests": 39,
+  "finalFocused": {
+    "passed": 99,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7875,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4989
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Names use each defining element applicable namespace context; earlier profiles remain native. Authoring retains public metadata and original bytes and performs no resolver calls during repeated snapshot validation. Existing special-token rules are preserved. Key-name alignment, mode-target existence checks, expanded-identity duplicate analysis, broader shadow evaluation and package linkage remain separate follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "00f8e4a47d04605ed9802311ef48e48a330046825305bf1c739f5ba6b5e18c2d",
+    "focused": "86167f49b28eeed26dfe55ef1ac659c25acf136281890289d27f20a004756a00",
+    "build": "b17f24469b0c4f44e0de1a202c998769a52158ed5f3e0e7e90171f038169874a",
+    "unit": "e90a54668960085ecb08021d9e808eadf38b785409f23f35ac01e754867c874f",
+    "qt3": "0985e886a84a164f20ddf31e48852fd590fddf7bd271f4ff6bf18f9a2aeb9171",
+    "qt4": "bc514673cd934c02229bac34047049f8a7eaa68690c8ed9582e12c6937adc26a"
+  }
+}

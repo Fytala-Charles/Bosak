@@ -1,3 +1,13 @@
+# Mode QName alignment - 2026-10-13
+
+Branch: fix/xslt40-mode-qnames; base main `7d778c13`; implementation `5287cf056b89a28c2c009266d011d58699eb2606`.
+
+Source candidate 1.2.1 (unpublished) aligns XSLT 4.0 mode declarations, template mode membership, apply-templates dispatch and scoped default-mode names with applicable fixed namespace bindings. Fixed-only and rebound prefixes agree with explicit EQNames, including consumer initial modes and included/imported modules. Root and scoped defaults use the same mode identity. Authoring checks literal mode names and lists using captured namespace contexts, preserving public metadata, original bytes and validation without resource resolution. Excluded prefixes report XTSE0280; malformed mode names retain XTSE0020 and invalid template lists XTSE0550. Earlier profiles, local earlier versions, literal exclusions and existing special-token behavior are retained. All 39 new regressions and 99 focused checks pass; all 7,875 unit tests pass (XSLT: 4,989). QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Key names, target existence checks, expanded-identity duplicates, broader shadow evaluation and package linkage remain separate follow-ups. Published version remains 1.2.0; REQ-125 acceptance, REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged.
+
+Implementation: shared internal Stylesheet mode expansion; 4.0 declaration/member/runtime/default paths delegate to it. Template list validation runs before member expansion to retain XTSE0550. Used-mode collection and mode exposure lookup use the same expansion. Internal authoring contexts cover QName names, multi-token Plain mode lists and default-mode on XSLT and literal result elements, retaining SlotContext=null. Consumer Clark initial-mode notation is converted to a validated EQName before expansion. Namespace documents use caller-controlled inspection and are not fetched again during validation. Evidence: XSLT40-MODE-QNAME-RESULTS.json. Initial baseline: 4 pass/21 fail over 25 cases. Release build passes with two existing unrelated warnings.
+
+Delivery: submit against main and merge after CI. Next: key declaration/runtime QName alignment, then select the next small upstream contribution batch. Keep target existence, expanded-name duplicate lists and package/shadow linkage separate. Source candidate 1.2.1 remains unpublished. No publication or external messages in this slice. Earlier records below are historical.
+
 # Authoring record-field sequence types - 2026-10-13
 
 Branch: fix/xslt40-authoring-record-fields; base main `ad3099cc`; implementation `04ebe24699447c59a1a06523567c44f29bf0fa11`.
