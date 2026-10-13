@@ -90,6 +90,7 @@
 //                      | Charles Korthout | 3.18  | 13-10-2026     | Match XPath 4.0 wildcard and union names in element/attribute kind-test patterns.
 //                      | Charles Korthout | 3.19  | 13-10-2026     | Preserve 4.0 static context while compiling parenthesized union alternatives.
 //                      | Charles Korthout | 3.20  | 13-10-2026     | Match named processing instructions in 4.0 forward-axis node tests.
+//                      | Charles Korthout | 3.21  | 13-10-2026     | Validate parenthesized 4.0 item patterns and restrict outer patterns to nodes.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -180,7 +181,9 @@ internal sealed class PatternCompiler
     /// May be called directly from the stylesheet loader for early XTSE0340 reporting.
     /// The supplied pattern must already have XPath comments stripped and be trimmed.
     /// </summary>
-    public static void ValidatePatternSyntax(string trimmed)
+    /// <param name="trimmed">The comment-stripped pattern text.</param>
+    /// <param name="compatibility">The declaring expression profile.</param>
+    public static void ValidatePatternSyntax(string trimmed, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {
         // 1.  Disallowed functions at pattern start (XTSE0340).
         //     Node tests (document-node, element, attribute, text, comment,
@@ -263,7 +266,7 @@ internal sealed class PatternCompiler
         // 4.  Invalid predicate patterns (XTSE0340).
         {
             // Parenthesized predicate pattern (.[...])
-            if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.["))
+            if (compatibility < XPathCompatibility.XPath40 && (trimmed.StartsWith("(.[") || trimmed.Contains("|(.[")))
             {
                 throw new InvalidOperationException("XTSE0340: Parenthesized predicate pattern is not a valid pattern.");
             }
@@ -279,6 +282,9 @@ internal sealed class PatternCompiler
         //     b) Predicate patterns (.[...]) are not valid as union operands.
         {
             var branches = SplitTopLevel(trimmed, '|');
+            if (compatibility >= XPathCompatibility.XPath40 && branches.Length > 1 &&
+                branches.Any(branch => branch.TrimStart().StartsWith('~') || branch.TrimStart().StartsWith('.')))
+                throw new InvalidOperationException("XTSE0340: Union operands require node patterns; enclose item patterns in parentheses.");
             if (branches.Length > 1)
             {
                 bool hasNodePattern = false;
@@ -294,11 +300,11 @@ internal sealed class PatternCompiler
                     if (s.StartsWith(".["))
                         hasPredicatePattern = true;
                 }
-                if (hasNodePattern && hasTypePattern)
+                if (compatibility < XPathCompatibility.XPath40 && hasNodePattern && hasTypePattern)
                 {
                     throw new InvalidOperationException("XTSE0340: Union of node pattern and type pattern is not allowed.");
                 }
-                if (hasPredicatePattern)
+                if (compatibility < XPathCompatibility.XPath40 && hasPredicatePattern)
                 {
                     throw new InvalidOperationException("XTSE0340: Predicate pattern is not allowed in a union.");
                 }
@@ -940,7 +946,7 @@ internal sealed class PatternCompiler
                 trimmed = string.Join("|", unionParts);
             }
 
-            ValidatePatternSyntax(trimmed);
+            ValidatePatternSyntax(trimmed, _compatibility);
 
             var branches = SplitTopLevel(trimmed, '|');
             if (branches.Length == 1)
@@ -1007,6 +1013,10 @@ internal sealed class PatternCompiler
     public PatternPredicate? CompileAtomicMatch(string pattern)
     {
         var trimmed = StripXPathComments(pattern).Trim();
+
+        // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.
+        if (_compatibility >= XPathCompatibility.XPath40 && trimmed.StartsWith('('))
+            return null;
 
         // Strip outer parentheses
         if (trimmed.StartsWith('('))
@@ -1346,7 +1356,9 @@ internal sealed class PatternCompiler
                     : Compile(inside);
 
                 if (string.IsNullOrEmpty(after))
-                    return innerPattern;
+                    return _compatibility >= XPathCompatibility.XPath40
+                        ? (item, ctx) => item.IsNode && innerPattern(item, ctx)
+                        : innerPattern;
 
                 // After the parens there might be predicates or path continuations
                 if (after.StartsWith('['))

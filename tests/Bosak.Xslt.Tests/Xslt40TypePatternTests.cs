@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Keep the quoted record-field regression on a standalone item pattern.
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -129,14 +130,14 @@ public class Xslt40TypePatternTests
             """, "fixed-namespaces='#standard t=urn:types'"));
     }
 
-    /// <summary>Matches parenthesized type patterns and record annotations with predicate delimiters in field names.</summary>
+    /// <summary>Matches standalone type patterns and record annotations with predicate delimiters in field names.</summary>
     [Fact]
-    public void ParenthesesAndQuotedFields()
+    public void QuotedFields()
     {
         Assert.Equal("matched", Run("""
             <xsl:template match='/'><out><xsl:variable name='r' as="record('x[y]' as xs:integer)" select="map{'x[y]':7}"/>
               <xsl:apply-templates select='$r'/></out></xsl:template>
-            <xsl:template match="(~record('x[y]' as xs:integer)[?('x[y]')=7])">matched</xsl:template>
+            <xsl:template match="~record('x[y]' as xs:integer)[?('x[y]')=7]">matched</xsl:template>
             """));
     }
 

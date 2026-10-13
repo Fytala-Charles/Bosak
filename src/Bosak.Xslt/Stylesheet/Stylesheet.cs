@@ -305,6 +305,7 @@
 //                      | Charles Korthout | 2.144 | 13-10-2026     | Register schema declaration aliases against imported global components
 //                      | Charles Korthout | 2.145 | 13-10-2026     | Accept and expose package named types using defining-package definitions
 //                      | Charles Korthout | 2.146 | 13-10-2026     | Resolve fixed namespace bindings for named types and XPath static contexts
+//                      | Charles Korthout | 2.147 | 13-10-2026     | Apply effective profiles to static item-pattern validation.
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4580,7 +4581,7 @@ internal sealed class Stylesheet
                     {
                         var strippedMatch = PatternCompiler.StripXPathComments(matchAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedMatch))
-                            PatternCompiler.ValidatePatternSyntax(strippedMatch);
+                            PatternCompiler.ValidatePatternSyntax(strippedMatch, GetXPathCompatibility(elem));
                     }
                 }
                 if (localName == "number")
@@ -4590,14 +4591,14 @@ internal sealed class Stylesheet
                     {
                         var strippedCount = PatternCompiler.StripXPathComments(countAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedCount))
-                            PatternCompiler.ValidatePatternSyntax(strippedCount);
+                            PatternCompiler.ValidatePatternSyntax(strippedCount, GetXPathCompatibility(elem));
                     }
                     var fromAttr = elem.Attribute("from");
                     if (fromAttr != null && !string.IsNullOrWhiteSpace(fromAttr.Value))
                     {
                         var strippedFrom = PatternCompiler.StripXPathComments(fromAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedFrom))
-                            PatternCompiler.ValidatePatternSyntax(strippedFrom);
+                            PatternCompiler.ValidatePatternSyntax(strippedFrom, GetXPathCompatibility(elem));
                     }
 
                     // XTSE0975: @value is mutually exclusive with @select, @level, @count, and @from.

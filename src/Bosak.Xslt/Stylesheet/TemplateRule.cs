@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 2.8   | 13-10-2026     | Keep 4.0 node union patterns as one rule with maximum alternative priority.
 //                      | Charles Korthout | 2.9   | 13-10-2026     | Normalize 4.0 attribute shorthand and forward-axis default priorities.
 //                      | Charles Korthout | 2.10  | 13-10-2026     | Apply first-operand set priorities and 4.0 predicate-pattern priorities.
+//                      | Charles Korthout | 2.11  | 13-10-2026     | Preserve parenthesized item-pattern scopes and expanded type priorities.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -231,7 +232,8 @@ internal sealed class TemplateRule
         }
 
         // Validate union pattern constraints before splitting (XTSE0340)
-        ValidateUnionPattern(trimmed);
+        if (stylesheet.GetXPathCompatibility(element) < XPathCompatibility.XPath40)
+            ValidateUnionPattern(trimmed);
 
         if (stylesheet.GetXPathCompatibility(element) >= XPathCompatibility.XPath40)
         {
@@ -397,7 +399,7 @@ internal sealed class TemplateRule
                 // Resolve namespace prefixes in the pattern to Q{uri}local syntax
                 // so the pattern compiler can match namespaced elements correctly.
                 var normalized = StripXPathComments(Match).Trim();
-                while (normalized.StartsWith('(') && FindMatchingParen(normalized, 0) == normalized.Length - 1)
+                while (compatibility < XPathCompatibility.XPath40 && normalized.StartsWith('(') && FindMatchingParen(normalized, 0) == normalized.Length - 1)
                     normalized = normalized[1..^1].Trim();
                 var typePattern = normalized.StartsWith('~');
                 var resolved = typePattern ? normalized : ResolveNamespacePrefixes(Match);
@@ -426,9 +428,21 @@ internal sealed class TemplateRule
                 }
                 else
                 {
-                    CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
+                    var owner = Stylesheet.OwningPackage ?? Stylesheet;
+                    var aliases = compatibility >= XPathCompatibility.XPath40 ? owner.GetBindingItemTypes() : null;
+                    var namespaces = compatibility >= XPathCompatibility.XPath40 ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
+                    CompiledMatch = compiler.Compile(resolved, defaultNs, namespaces: namespaces, compatibility: compatibility,
+                        itemTypeAliases: aliases, namedRecordTypeNames: compatibility >= XPathCompatibility.XPath40
+                            ? owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal) : null);
+                    string Resolve(string name)
+                    {
+                        var key = Stylesheet.ExpandItemTypeName(name, Element);
+                        if (aliases is not null && aliases.TryGetValue(key, out var alias)) return alias;
+                        const string schema = "Q{http://www.w3.org/2001/XMLSchema}";
+                        return key.StartsWith(schema, StringComparison.Ordinal) ? "xs:" + key[schema.Length..] : key;
+                    }
                     if (compatibility >= XPathCompatibility.XPath40 && Element.Attribute("priority") is null)
-                        Priority = ComputeDefaultPriority(resolved, xpath40: true);
+                        Priority = ComputeDefaultPriority(resolved, xpath40: true, typeResolver: Resolve);
                 }
                 // In a schema-aware stylesheet, also compile the strict/lax typed-mode
                 // variants in which a top-level QName branch means schema-element(QName)
@@ -606,7 +620,7 @@ internal sealed class TemplateRule
     /// <summary>
     /// Computes default priority using the owning profile for supported node kind tests.
     /// </summary>
-    private static double ComputeDefaultPriority(string? match, bool xpath40 = false)
+    private static double ComputeDefaultPriority(string? match, bool xpath40 = false, Func<string, string>? typeResolver = null)
     {
         if (string.IsNullOrEmpty(match))
             return 0.5;
@@ -618,21 +632,27 @@ internal sealed class TemplateRule
         {
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
-                return ComputeDefaultPriority(trimmed[1..close].Trim(), xpath40);
+                return ComputeDefaultPriority(trimmed[1..close].Trim(), xpath40, typeResolver);
         }
 
         // Union patterns: take the maximum priority of all branches
         var branches = xpath40 ? SplitNodeUnion40(trimmed) : SplitUnionBranches(trimmed);
         if (branches.Length > 1)
-            return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true) : ComputeSinglePatternPriority(branch));
+            return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true, typeResolver) : ComputeSinglePatternPriority(branch));
 
         if (xpath40)
         {
             var operands = SplitNodeUnion40(trimmed, setOperators: true);
             if (operands.Length > 1)
-                return ComputeDefaultPriority(operands[0], xpath40: true);
+                return ComputeDefaultPriority(operands[0], xpath40: true, typeResolver: typeResolver);
         }
 
+        if (xpath40 && trimmed.StartsWith('~'))
+        {
+            var (type, predicates) = Patterns.PatternCompiler.GetTypePatternParts(trimmed);
+            var expanded = typeResolver is null ? type : ItemTypeAliasExpansion.Expand(type, typeResolver) ?? type;
+            return predicates.Length > 0 ? 0.5 : ComputeTypePatternPriority(expanded);
+        }
         return ComputeSinglePatternPriority(trimmed, xpath40);
     }
 
