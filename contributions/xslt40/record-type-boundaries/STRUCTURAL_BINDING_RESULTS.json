@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 coerces direct structural record(...) and record(*) XSLT binding contracts through the existing XPath 4.0 converter. Supported direct record fields resolve aliases and node/type namespaces in their declaration context. Local/global variables and template parameters preserve record annotations and numeric field conversion; invalid values retain XTTE0570/XTTE0590 binding diagnostics. Required single-record and record-plus conversion now reject empty sequences in both empty-value representations, while optional/star records retain empty-sequence support. Plain maps still do not match annotated record instance tests; record(*) requires an existing annotation. Seventeen regressions cover local/global/default-parameter bindings, occurrence indicators, field aliases and node contracts, empty records, invalid values/extra fields, parameter diagnostics and required inline function returns. The local inline-record40 invoice example now verifies INV-2048|EUR instead of the previously observed XTTE0570. Native type-alias stays 16/16/0: case 050 now gets past XTTE0570 record coercion but still fails its independent result assertion. Upstream assertions remain unchanged. Type patterns, broader native record outcomes and annotated function types remain follow-ups. N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "c38538713002f19f41c7ad7e543600c9993e2fd2",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-types",
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 16,
+    "failed": 16,
+    "skipped": 0
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T111117330Z.json",
+  "newlyPassingCases": [],
+  "remainingCase050": "Result mismatch after successful direct structural record coercion; upstream assertion preserved",
+  "catalogOutcomeUpdate": {
+    "id": "xslt-type-declarations-inline-record40",
+    "previousError": "XTTE0570",
+    "expected": "INV-2048|EUR",
+    "reason": "Direct binding coercion is implemented and independently covered by positive and negative regression tests"
+  },
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Release build succeeds with zero warnings and zero errors. All 7323 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4437/0/0 and seventeen new regressions. Focused structural record binding tests pass 17/0/0; the updated invoice catalog case passes 1/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 16/16/0, with original 023/024 and case 016 still passing; case 050 now reaches its result assertion after successful record coercion; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "c44de1b292cef1c93177de15fd343f96470c98d54f1a37aa51a8e1b43e8802fb",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "048d2c7bd022e3fbc4db50b95bb5cfe4f5bba7a25047f0403faf5044dc6a63ac",
+    "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordBindingTests.cs": "b4421702e8caa4fbab00ddfd9ec82b4d4d3e4cb52d4f1deeab331aaa873a3bed",
+    "docs/xpath40-catalog/examples/cases.json": "2789616c67e5a23251cb8c272ef50ee166cdfad6931539ab913cd5944e0bb680",
+    "docs/xpath40-catalog/examples/xslt-type-declarations/inline-record40.xsl": "2f623ea924574d659a9e0acf6ff7bea26ae1ffe61c03ff960f04fde8d26b47ac",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

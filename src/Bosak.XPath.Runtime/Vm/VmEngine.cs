@@ -411,6 +411,7 @@
 //                      | Charles Korthout | 2.184 | 13-10-2026     | Match processing-instruction sequence types by their case-sensitive target
 //                      | Charles Korthout | 2.185 | 13-10-2026     | Match element and attribute type tests with partial name wildcards
 //                      | Charles Korthout | 2.186 | 13-10-2026     | Match node-name unions without splitting EQName namespace separators
+//                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -14131,11 +14132,13 @@ internal static class VmEngine
         // syntactic parse of the target below. The occurrence indicator applies to the
         // record item itself: each item of the input is coerced individually.
         var recordTargetText = targetType.Trim();
+        bool recordRequiresSingle = IsRecordTypeText(recordTargetText);
+        if (recordRequiresSingle) recordTargetText += "?";
         bool recordAllowsEmpty = false;
         bool recordAllowsMultiple = false;
         if (recordTargetText.Length > 1 && recordTargetText[^1] is '?' or '*' or '+')
         {
-            recordAllowsEmpty = recordTargetText[^1] is '?' or '*';
+            recordAllowsEmpty = !recordRequiresSingle && recordTargetText[^1] is '?' or '*';
             recordAllowsMultiple = recordTargetText[^1] is '*' or '+';
             var recordBaseText = recordTargetText[..^1].TrimEnd();
             if (IsRecordTypeText(recordBaseText))
@@ -14157,6 +14160,8 @@ internal static class VmEngine
                 {
                     recordItems.Add(value);
                 }
+                if (recordItems.Count == 0 && !recordAllowsEmpty)
+                    throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
                 if (recordItems.Count > 1 && !recordAllowsMultiple)
                     throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
                 var coercedRecords = new List<XdmValue>(recordItems.Count);
@@ -14169,10 +14174,6 @@ internal static class VmEngine
                 return coercedRecords.Count == 1 ? coercedRecords[0]
                     : XdmValue.FromSequence(MaterializedSequence.FromList(coercedRecords));
             }
-        }
-        else if (IsRecordTypeText(recordTargetText))
-        {
-            return ApplyFunctionConversion(value, recordTargetText + "?", context);
         }
 
         // The syntactic parse of the target sequence type depends only on the type string,

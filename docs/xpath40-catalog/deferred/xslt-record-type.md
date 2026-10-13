@@ -36,7 +36,7 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 | Named `as="erp:invoice"` binding | Constructed same-type record and plain-map coercion succeed in source candidate 1.2.0 |
 | Duplicate unused fields | `XTSE4050` in source 1.2.0 |
 | Structural `record(...)` in XPath40 | Explicit casts succeed; plain maps do not match annotated records |
-| Inline structural record in XSLT `@as` | Observed `XTTE0570`; explicit cast in `select` plus `as="map(*)"` works |
+| Inline structural record in XSLT `@as` | Source candidate 1.2.0 coerces a plain map and preserves its record annotation; invalid fields/cardinality raise the binding diagnostic |
 
 ## 7. Applicability
 
@@ -145,7 +145,7 @@ Output:
 INV-2048|EUR
 ```
 
-The companion [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) binds the plain map directly with structural `@as` and observes `XTTE0570`. This is an XSLT conversion boundary, separate from the named-declaration deferral.
+The companion [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) binds the plain map directly with structural `@as` and returns `INV-2048|EUR` in source candidate 1.2.0. Coercion is now supported at this XSLT binding boundary; plain-map instance tests still require a record annotation.
 
 ### Portable XSLT 3.0 alternative
 
@@ -217,7 +217,7 @@ reject
 | [record-no-constructor](../examples/xslt-type-declarations/record-no-constructor.xsl) | xslt40 | `XPST0017` |
 | [record-duplicate-fields-unused-observed](../examples/xslt-type-declarations/record-duplicate-fields-unused-observed.xsl) | xslt40 | `XTSE4050` |
 | [record-named-as-observed](../examples/xslt-type-declarations/record-named-as-observed.xsl) | xslt40 | `INV-2048` |
-| [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) | xslt40 | `XTTE0570` |
+| [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) | xslt40 | `INV-2048\|EUR` |
 | [record-main](../examples/xslt-type-declarations/record-main.xpath) | 40 | `INV-2048\|EUR` |
 | [plain-map-not-record](../examples/xslt-type-declarations/plain-map-not-record.xpath) | 40 | `false` |
 | [cast-record](../examples/xslt-type-declarations/cast-record.xpath) | 40 | `true` |
@@ -343,3 +343,10 @@ Candidate 1.2.0 resolves fixed-namespaces for named item/record type names, supp
 Candidate 1.2.0 expands host named types in inline function parameter and return contracts before IR lowering. Both function(...) and fn(...) retain resolved atomic, array, structural record and nominative record types, including occurrence indicators and nested member aliases. Signature resolution uses the expression static namespace context, including defaults, EQNames, inline namespace declarations and fixed bindings; the existing VM conversion rules apply to arguments and results. Unknown supported signature types are rejected statically even when the function is unused. Public EnumerationItemTypes registrations also resolve in inline signatures and remain restricted to single enum item types. Omitted annotations and XPath 3.1 instructions keep their existing behavior. Twenty-five regressions cover record/date updates, argument and return coercion, cardinality errors, namespaces, array members, record identity, AVTs, public enumeration boundaries and mixed-version refusal. Native type-alias improves from 15/17/0 to 16/16/0: case 016 now passes without changing its assertion; original contribution cases 023/024 remain green. Broader record matching, annotated function types, type patterns and remaining native failures stay outstanding. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
 
 [Verification evidence](../../../contributions/xslt40/item-type-boundaries/INLINE_FUNCTION_RESULTS.json). The [XPath 4.0 inline function rules](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-inline-func) define parameter and result contracts.
+
+
+## Direct structural record bindings — 2026-10-13
+
+Candidate 1.2.0 coerces direct structural record(...) and record(*) XSLT binding contracts through the existing XPath 4.0 converter. Supported direct record fields resolve aliases and node/type namespaces in their declaration context. Local/global variables and template parameters preserve record annotations and numeric field conversion; invalid values retain XTTE0570/XTTE0590 binding diagnostics. Required single-record and record-plus conversion now reject empty sequences in both empty-value representations, while optional/star records retain empty-sequence support. Plain maps still do not match annotated record instance tests; record(*) requires an existing annotation. Seventeen regressions cover local/global/default-parameter bindings, occurrence indicators, field aliases and node contracts, empty records, invalid values/extra fields, parameter diagnostics and required inline function returns. The local inline-record40 invoice example now verifies INV-2048|EUR instead of the previously observed XTTE0570. Native type-alias stays 16/16/0: case 050 now gets past XTTE0570 record coercion but still fails its independent result assertion. Upstream assertions remain unchanged. Type patterns, broader native record outcomes and annotated function types remain follow-ups. N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+[Verification evidence](../../../contributions/xslt40/record-type-boundaries/STRUCTURAL_BINDING_RESULTS.json). The [XPath 4.0 structural record rules](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-types) distinguish coercion from annotated membership.

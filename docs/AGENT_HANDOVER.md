@@ -1,3 +1,19 @@
+# Direct structural record bindings — 2026-10-13
+
+Branch: feat/xslt-structural-record-bindings; parent c3853871. Stacked on PR #232; PRs #223–232 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 coerces direct structural record(...) and record(*) XSLT binding contracts through the existing XPath 4.0 converter. Supported direct record fields resolve aliases and node/type namespaces in their declaration context. Local/global variables and template parameters preserve record annotations and numeric field conversion; invalid values retain XTTE0570/XTTE0590 binding diagnostics. Required single-record and record-plus conversion now reject empty sequences in both empty-value representations, while optional/star records retain empty-sequence support. Plain maps still do not match annotated record instance tests; record(*) requires an existing annotation. Seventeen regressions cover local/global/default-parameter bindings, occurrence indicators, field aliases and node contracts, empty records, invalid values/extra fields, parameter diagnostics and required inline function returns. The local inline-record40 invoice example now verifies INV-2048|EUR instead of the previously observed XTTE0570. Native type-alias stays 16/16/0: case 050 now gets past XTTE0570 record coercion but still fails its independent result assertion. Upstream assertions remain unchanged. Type patterns, broader native record outcomes and annotated function types remain follow-ups. N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7323 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4437/0/0 and seventeen new regressions. Focused structural record binding tests pass 17/0/0; the updated invoice catalog case passes 1/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 16/16/0, with original 023/024 and case 016 still passing; case 050 now reaches its result assertion after successful record coercion; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: type patterns and remaining native record outcomes, including case 050 result handling. Annotated function types and remaining fixed namespace QName/pattern/static contexts stay follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Inline function named type contracts — 2026-10-13
 
 Branch: feat/xslt-inline-function-alias-contracts; parent 1ac473de. Stacked on PR #231; PRs #223–231 remain open. Earlier sections are historical.

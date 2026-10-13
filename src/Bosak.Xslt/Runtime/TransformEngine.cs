@@ -541,6 +541,7 @@
 //                      | Charles Korthout | 7.25 | 13-10-2026     | Normalize XPath 4.0 binding signatures even without declared aliases
 //                      | Charles Korthout | 7.26 | 13-10-2026     | Preserve schema declaration identities and normalize document bindings
 //                      | Charles Korthout | 7.27 | 13-10-2026     | Use fixed namespaces in XPath compilation and named type binding resolution
+//                      | Charles Korthout | 7.28 | 13-10-2026     | Coerce direct structural record bindings through the XPath 4.0 converter
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16679,7 +16680,7 @@ internal sealed class TransformEngine
     {
         if (string.IsNullOrWhiteSpace(sequenceType) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
         if (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0) &&
-            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)(?:fn|schema-element|schema-attribute|document-node)\s*\("))
+            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)(?:fn|record|schema-element|schema-attribute|document-node)\s*\("))
             return sequenceType;
         return ItemTypeAliasExpansion.Expand(sequenceType, name =>
         {
@@ -16872,7 +16873,7 @@ internal sealed class TransformEngine
         {
             var originalBindingType = asType;
             asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes, context.NamedRecordTypes);
-            if (AllowsItemTypeDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal)))
+            if (AllowsItemTypeDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal) || asType.TrimStart().StartsWith("record(", StringComparison.Ordinal)))
             {
                 var savedProfile = context.IsXPath40;
                 context.IsXPath40 = true;
