@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 0.5   | 13-10-2026     | Align expression, AVT and pattern static namespace validation                          |
 //                      | Charles Korthout | 0.6   | 13-10-2026     | Align declaration scope and QName errors with fixed bindings                           |
 //                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
+//                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -238,18 +239,21 @@ internal sealed class XsltValidationEngine
         return false;
     }
 
-    /// <summary>Reports applicable QName syntax and binding errors on active 4.0 variable, parameter, and template names.</summary>
+    /// <summary>Reports applicable QName syntax and binding errors on active 4.0 variable, parameter, template, and function names.</summary>
     private void CheckComponentQName(ModuleWalkState state, AuthoringNodeDescriptor node)
     {
         if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element
             || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
-            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template")) return;
+            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function")) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
         if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
         try
         {
-            _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, $"xsl:{element.Name.LocalName}/@name", useApplicableNamespaces: true);
+            if (element.Name.LocalName == "function")
+                _ = Stylesheet.XsltFunctionDefinition.ValidateFunctionQName(element, attribute.ExpandedValue);
+            else
+                _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, $"xsl:{element.Name.LocalName}/@name", useApplicableNamespaces: true);
             if (element.Name.LocalName == "template")
                 Stylesheet.Stylesheet.ValidateNamedQName(element, attribute.ExpandedValue, "xsl:template");
         }

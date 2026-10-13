@@ -1,3 +1,11 @@
+# Function QName alignment — 2026-10-13
+
+Branch: fix/xslt40-function-qnames; base main `741789bb`; implementation `d3da89dc49740d66467ee56f927da97be8e44e07`.
+
+Source candidate 1.2.1 (unpublished) aligns XSLT 4.0 function declaration names with applicable static namespaces and existing runtime calls. Fixed-only and rebound prefixes agree with explicit EQNames; compiled _name string results use the same function-name resolver. Literal declaration names report XTSE0280 for excluded prefixes, XTSE0020 for malformed names, XTSE0740 for names without a namespace and XTSE0080 for reserved namespaces in both compilation and authoring validation. Legacy valid arity suffixes, earlier host profiles and literal static exclusion are preserved. All 19 focused regressions pass (initial 15-case baseline: 4 pass/11 fail). All 7,754 unit tests pass, including XSLT 4,868/0/0; QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Public QName SlotContext and source metadata contracts are unchanged. Authoring function registration and evaluation of shadow-name results, broader shadow-expression static contexts, package linkage, other component-name paths, mixed-version expression contexts and named-type authoring registration remain follow-ups. Published version remains 1.2.0; REQ-125 acceptance and REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged. Evidence: XSLT40-FUNCTION-QNAME-RESULTS.json.
+
+Delivery: submit against main and merge after CI. Next: authoring named-type registration, then remaining mode/key component-name paths and the next small XSLT 4.0 contribution batch. Keep broader shadow and mixed-version contexts as separate follow-ups. No publication or external messages in this slice. Earlier records below are historical.
+
 # Named template QName alignment — 2026-10-13
 
 Branch: fix/xslt40-template-qnames; base main `0043fdba`; implementation `288fade66b0840e9501783a092a4e83a45a115f8`.
