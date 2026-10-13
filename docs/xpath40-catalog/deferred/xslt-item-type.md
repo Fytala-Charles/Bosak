@@ -311,3 +311,31 @@ The forward references resolve within the declaring package. Each map key must b
 Inline `map(t:sensor,array(t:value?))` is also expanded, preserving optional array members. `instance of`/`treat as` keep existing member types and never perform binding conversion. Converting numeric keys to a narrower type can collapse distinct keys; that fails rather than discarding an entry. A matching map is returned unchanged, retaining a nominative record's identity when no conversion is required. Wildcard-map and XPath 3.1 behavior are preserved.
 
 See [map evidence](../../../contributions/xslt40/item-type-boundaries/MAP_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), and [XPath item coercion rule 9](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). The evidence records the immutable source review. Native expectations and historical results are preserved; broader family remains 6/26/0.
+
+
+## Function and choice aliases — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) now expands function signatures and ordered choice xsl:item-type aliases, including nested references, parameter/result occurrences and outer function-item occurrences. Existing binding conversion wraps function results and tries choice alternatives in declaration order; instance-of/treat checks do not coerce. XPath 4.0 function instance-of now uses cardinality-aware matching, safely rejecting non-functions and handling empty sequences. Nineteen new regressions cover these boundaries, cycles, mixed-version refusal and a calibration example. Structural-record aliases, remaining named-record coercion and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+A sensor pipeline can pass a typed calibration callback to reusable transformation code. Input `<root value="21"/>` produces `<reading>23.1</reading>`:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:item-type name="t:calibration" as="function(t:value) as t:value"/>
+  <xsl:item-type name="t:value" as="xs:double"/>
+  <xsl:template match="/">
+    <xsl:variable name="calibrate" as="t:calibration"
+      select="fn($v as xs:double) as xs:double {$v*1.1}"/>
+    <reading><xsl:value-of select="$calibrate(xs:double(root/@value))"/></reading>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+The alias names the callback contract: one double argument and one double result. Forward references resolve in the declaring package. The example explicitly converts the XML attribute before invoking the callback and assumes that attribute is present and numeric. It is verified by `FunctionAlias_CalibrationReferenceExample`; it adds no catalogue manifest case.
+
+Function binding conversion can wrap a compatible function to convert its results. Return cardinality and function-item cardinality are distinct: `function() as xs:double?` permits an empty result, while an optional alias use permits an absent callback. Wrong arity or non-function bindings fail with the corresponding XSLT type error. Cyclic aliases remain static errors.
+
+An ordered choice such as `(xs:double|xs:string)` is useful for incoming values that can be either numeric readings or textual status labels. Binding conversion tries alternatives in order, so an untyped attribute containing `12` becomes a double with this ordering and a string with the reverse ordering. `instance of` and `treat as` never perform that conversion. Choice aliases also work inside array types and function signatures.
+
+See [function/choice evidence](../../../contributions/xslt40/item-type-boundaries/FUNCTION_CHOICE_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath choice types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types), and [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Immutable specification sources are recorded in the evidence. Native type-alias now reports 7/25/0; broader structural/package gaps and independent processor confirmation remain outstanding.

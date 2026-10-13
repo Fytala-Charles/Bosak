@@ -1,0 +1,49 @@
+{
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "coercionSpecification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml",
+    "section": "id-coercion-rules",
+    "sha256": "38e5cd7b32ff3bac7752dd917259790fd1d101e7b5de58595527cbb7824fbc3d"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
+  "date": "2026-10-13",
+  "candidateParentRevision": "8b9279622f5c5da5eeea08a60570c184cdc789fb",
+  "scope": "Source candidate 1.2.0 (unpublished) now expands function signatures and ordered choice xsl:item-type aliases, including nested references, parameter/result occurrences and outer function-item occurrences. Existing binding conversion wraps function results and tries choice alternatives in declaration order; instance-of/treat checks do not coerce. XPath 4.0 function instance-of now uses cardinality-aware matching, safely rejecting non-functions and handling empty sequences. Nineteen new regressions cover these boundaries, cycles, mixed-version refusal and a calibration example. Structural-record aliases, remaining named-record coercion and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.",
+  "nativeFilteredRun": {
+    "passed": 7,
+    "failed": 25,
+    "skipped": 0,
+    "scope": "Case 011 newly passes; broader structural/package failures retained"
+  },
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json, BINDING_RESULTS.json, ARRAY_BINDING_RESULTS.json, EXPRESSION_RESULTS.json and MAP_RESULTS.json (preserved)",
+  "validation": "Release build passes (12 existing warnings, zero errors); all 6954 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4068/0/0. Focused alias run passes 83 tests, including nineteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native type-alias improves to 7/25/0; case 011 newly passes and original 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.",
+  "nativeReceipt": ".artifacts/xslt40/20261013T043806824Z.json",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs": "c0e30c34475321d67f22c5cbc5f942a8ad3359d0e107ec30595b7cc731177b6a",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "7d0857eff2f5b33bba09dc113d1e03789367ae08bf875a640f5aaa74b4432837",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "239aa036258e4b2b9f04ee83ae6894f4e038d6e229df0761b8d0bdf8b69b8e3a",
+    "tests/Bosak.Xslt.Tests/Xslt40FunctionChoiceAliasTests.cs": "e6f0b29236b01912125d3ce2f0639bc2fa6e05570ec5f4ac6c1000f2efbdf1a5",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "testedImplementationCommit": "34b4bb3e98a4cb1e28a894ff50794b9b4d134ce5",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/213"
+}
