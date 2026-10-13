@@ -313,6 +313,7 @@
 //                      | Charles Korthout | 2.152 | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 2.153 | 13-10-2026     | Preserve parent precedence when collecting included named types.                         |
 //                      | Charles Korthout | 2.154 | 13-10-2026     | Align mode names, membership and defaults with applicable namespaces.                    |
+//                      | Charles Korthout | 2.155 | 13-10-2026     | Use applicable key declaration bindings and share NCName validation.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4589,7 +4590,7 @@ internal sealed class Stylesheet
                             ? StripAritySuffix(nameAttr.Value)
                             : nameAttr.Value;
                         ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
-                            useApplicableNamespaces: localName is "template" or "call-template" or "function");
+                            useApplicableNamespaces: localName is "template" or "call-template" or "function" or "key");
                     }
                 }
 
@@ -5812,7 +5813,7 @@ internal sealed class Stylesheet
     /// Uses the XML 1.0 fifth edition / XML 1.1 name rules, which are more
     /// permissive than <see cref="XmlConvert.VerifyNCName"/>.
     /// </summary>
-    private static bool IsValidNCName(string name)
+    internal static bool IsValidNCName(string name)
     {
         if (string.IsNullOrEmpty(name))
             return false;
