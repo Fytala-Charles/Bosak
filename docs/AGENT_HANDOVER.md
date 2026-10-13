@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior. Other node-pattern priority forms, remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: PR #235 (https://github.com/Fytala-Charles/Bosak/pull/235), stacked on feat/xslt-template-type-patterns / PR #234. Verified implementation revision: 728c7b29. A documentation-only delivery commit follows this recorded revision. PRs #223–235 remain open; main-target CI begins after stack retargeting. Next implementation slice: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior.
 
 # Template type patterns — 2026-10-13
 
