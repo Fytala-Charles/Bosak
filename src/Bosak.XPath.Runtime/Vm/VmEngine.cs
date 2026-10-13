@@ -408,6 +408,7 @@
 //                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
 //                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
 //                      | Charles Korthout | 2.183 | 13-10-2026     | Match explicit empty-namespace element and attribute type names
+//                      | Charles Korthout | 2.184 | 13-10-2026     | Match processing-instruction sequence types by their case-sensitive target
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -12999,6 +13000,14 @@ internal static class VmEngine
 
         if (normalized is "processing-instruction()" or "processing-instruction")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction;
+
+        if (normalized.StartsWith("processing-instruction(", StringComparison.Ordinal))
+        {
+            var text = GetCasePreservedTypeName(typeName);
+            return XPathParser.TryParseProcessingInstructionTypeTarget(text, out var target)
+                && value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction
+                && (target is null || string.Equals(value.NodeValue.LocalName, target, StringComparison.Ordinal));
+        }
 
         if (normalized is "namespace-node()" or "namespace-node")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Namespace;

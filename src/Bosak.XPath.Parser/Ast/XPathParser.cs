@@ -168,6 +168,7 @@
 //                      |                  |       |                | bindings at XPath 4.0                                                                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.75  | 13-10-2026     | Parse XPath 4.0 inline namespace declarations
+//                      | Charles Korthout | 1.76  | 13-10-2026     | Validate targeted processing-instruction sequence types with shared target parsing
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -4825,6 +4826,9 @@ internal sealed class XPathParser
             } while (parenDepth > 0 && Current.Kind != TokenKind.Eof);
             local = sb.ToString();
 
+            if (baseLocal == "processing-instruction" && string.IsNullOrEmpty(prefix))
+                TryParseProcessingInstructionTypeTarget(local, out _);
+
             // XPath 4.0 §3.2.6 EnumerationType: enum("red", "green", ...). 'enum' is
             // contextual — this branch only fires for a type-position Name 'enum'
             // followed by '('; calls to a function named enum(...) never reach here.
@@ -4885,6 +4889,41 @@ internal sealed class XPathParser
         }
 
         return (prefix, annotations.Length > 0 ? annotations + " " + local : local, hasParens);
+    }
+
+    // Shared parsing keeps PI targets as case-sensitive NCNames rather than type QNames.
+    internal static bool TryParseProcessingInstructionTypeTarget(string text, out string? target)
+    {
+        target = null;
+        var opening = text.IndexOf('(');
+        if (opening < 0 || text[..opening].Trim() != "processing-instruction") return false;
+        if (!text.EndsWith(')')) throw new XPathParseException("XPST0003: Unclosed processing-instruction type.", 0);
+        var inner = text[(opening + 1)..^1].Trim();
+        if (inner.Length == 0) return true;
+        if (inner[0] is '\'' or '"')
+        {
+            var quote = inner[0];
+            var decoded = new StringBuilder();
+            int i = 1;
+            bool closed = false;
+            while (i < inner.Length)
+            {
+                var c = inner[i++];
+                if (c != quote) { decoded.Append(c); continue; }
+                if (i < inner.Length && inner[i] == quote) { decoded.Append(quote); i++; continue; }
+                closed = true;
+                break;
+            }
+            if (!closed || i != inner.Length) throw new XPathParseException("XPST0003: A processing-instruction type requires one name or string literal.", 0);
+            target = decoded.ToString().Trim();
+            if (!IsValidNCName(target)) throw new XPathParseException("XPTY0004: A processing-instruction target must be an NCName.", 0);
+        }
+        else
+        {
+            if (!IsValidNCName(inner)) throw new XPathParseException("XPST0003: A processing-instruction type requires an unprefixed NCName or string literal.", 0);
+            target = inner;
+        }
+        return true;
     }
 
     // Validates the inner text of an EnumerationType (enum("a", "b", ...)): a non-empty

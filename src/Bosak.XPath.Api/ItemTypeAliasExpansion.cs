@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.5 | 13-10-2026     | Classify known nominative names as non-atomic choice alternatives
 //                      | Charles Korthout | 0.6 | 13-10-2026     | Traverse name-free node-kind types within aliases and structural sequence types
 //                      | Charles Korthout | 0.7 | 13-10-2026     | Resolve names in element, attribute and document node type aliases
+//                      | Charles Korthout | 0.8 | 13-10-2026     | Traverse processing-instruction target tests without QName expansion
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -70,6 +71,8 @@ internal static class ItemTypeAliasExpansion
         if (enumeration.Success && text.EndsWith(')')) return "enum(" + text[enumeration.Length..] + suffix;
         var emptyTest = Regex.Match(text, @"^(item|node|empty-sequence|element|attribute|text|comment|namespace-node|document-node|processing-instruction)\s*\(\s*\)$");
         if (emptyTest.Success) return emptyTest.Groups[1].Value + "()" + suffix;
+        if (Bosak.XPath.Parser.Ast.XPathParser.TryParseProcessingInstructionTypeTarget(text, out var target))
+            return "processing-instruction(" + (target is null ? string.Empty : "'" + target + "'") + ")" + suffix;
         var namedNode = Regex.Match(text, @"^(element|attribute)\s*\(\s*(.*?)\s*\)$");
         if (namedNode.Success)
         {

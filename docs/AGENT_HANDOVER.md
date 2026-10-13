@@ -1,3 +1,21 @@
+# Processing-instruction target aliases — 2026-10-13
+
+Branch: feat/xslt-pi-target-aliases; parent 3d076aa9. PR #223 CI 38372757169 passed; it remains open, so this slice is stacked on #223. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports processing-instruction targets in item-type aliases and supported structural sequence types. NCName and quoted-string targets retain case, normalize surrounding whitespace and are never expanded as type QNames. The parser validates targeted sequence-type syntax using a shared target reader; runtime matching compares the actual PI target. Malformed targets raise XPST0003 and quoted targets outside the NCName lexical space raise XPTY0004. Twelve new regressions verify identity, target/case mismatch, nesting, optional occurrences and static diagnostics. Partial wildcards, schema-annotated node tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+XPathParser shares target parsing between sequence-type validation, alias traversal and runtime matching. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Final Release build passes with zero warnings/errors. All 7123 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4237/0/0 and twelve new regressions. Focused node-alias tests pass 45/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: partial wildcard/schema node diagnostics and function type grammar, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Named node-type alias grammar — 2026-10-13
 
 Branch: feat/xslt-named-node-aliases; main baseline ef0b156a184d7ed91641d05a879b6f64740e053b. PR #221 merged after passing CI under explicit user authorization; PR #222 merged as ef0b156a after CI 38371939071 passed and the user authorized merging. Earlier sections are historical.

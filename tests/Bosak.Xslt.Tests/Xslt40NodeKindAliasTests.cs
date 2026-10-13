@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover named and wildcard node aliases with declaration namespaces
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Verify processing-instruction alias target matching and invalid target diagnostics
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -161,4 +162,53 @@ public class Xslt40NodeKindAliasTests
     public void Declaration_NamedNodeAndUnknownType()
         => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
             "<xsl:variable name='v' as='(element(Root) | t:missing)?' select='()'/>")).ToString());
+
+    /// <summary>Matches targeted processing instructions without expanding targets as QNames.</summary>
+    /// <param name="type">The processing-instruction alias definition.</param>
+    [Theory]
+    [InlineData("processing-instruction(Target)")]
+    [InlineData("processing-instruction('Target')")]
+    [InlineData("processing-instruction(\"  Target  \")")]
+    [InlineData("processing-instruction (:a (:b:) :) (Target)")]
+    public void Alias_ProcessingInstructionTarget(string type)
+        => Assert.Equal("true|false|true|false", Run(
+            "<xsl:item-type xpath-default-namespace='urn:irrelevant' name='t:pi' as='" +
+            type.Replace("'", "&apos;").Replace("\"", "&quot;") + "'/>" + """
+            <xsl:template match='/'>
+              <xsl:variable name='pi' as='t:pi' select='/*/processing-instruction(Target)'/>
+              <out><xsl:value-of separator='|' select='($pi instance of t:pi,
+                /*/processing-instruction(target) instance of t:pi,($pi treat as t:pi) is $pi,
+                /* instance of t:pi)'/></out>
+            </xsl:template>
+            """, "<root><?Target x?><?target y?></root>"));
+
+    /// <summary>Handles targeted tests inside containers and choice casts.</summary>
+    [Fact]
+    public void Alias_NestedProcessingInstructions()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type name='t:arr' as="array(processing-instruction('target'))"/>
+            <xsl:item-type name='t:pi' as="processing-instruction('target')"/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(
+              [/*/processing-instruction()] instance of t:arr,() instance of t:pi?)'/></out></xsl:template>
+            """));
+
+    /// <summary>Rejects malformed and invalid targets during alias registration.</summary>
+    /// <param name="type">An invalid targeted node type.</param>
+    /// <param name="code">The expected diagnostic.</param>
+    [Theory]
+    [InlineData("processing-instruction(absent:target)", "XPST0003")]
+    [InlineData("processing-instruction(42)", "XPST0003")]
+    [InlineData("processing-instruction(target,other)", "XPST0003")]
+    [InlineData("processing-instruction('')", "XPTY0004")]
+    [InlineData("processing-instruction('a b')", "XPTY0004")]
+    [InlineData("processing-instruction('a:b')", "XPTY0004")]
+    public void Alias_InvalidProcessingInstructionTarget(string type, string code)
+        => Assert.Contains(code, Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:item-type name='t:pi' as='" + type.Replace("'", "&apos;") + "'/>")).ToString());
+
+    /// <summary>Validates unknown type names beside targeted processing-instruction tests.</summary>
+    [Fact]
+    public void Declaration_ProcessingInstructionAndUnknownType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='v' as='(processing-instruction(target) | t:missing)?' select='()'/>")).ToString());
 }
