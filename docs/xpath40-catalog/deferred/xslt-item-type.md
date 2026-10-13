@@ -1,12 +1,12 @@
 <div align="center">
   <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog: deferred xsl:item-type declaration">
   <br><br><h1>xsl:item-type</h1>
-  <p>Partial source support — enumeration and array bindings</p>
+  <p>Partial source support — enumeration, array and typed map aliases</p>
 </div>
 
 ## 1. Name and Classification
 
-**xsl:item-type — Partial in source 1.2.0; the broader declaration contract is deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This reference records the historical disposition and the current enumeration and atomic/array binding implementation; no broad type-system tier promotion is claimed. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
+**xsl:item-type — Partial in source 1.2.0; the broader declaration contract is deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This reference records the historical disposition and the current enumeration, atomic, array and typed map implementation; no broad type-system tier promotion is claimed. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
 External reference: [XSLT 4.0 named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types). Immutable review: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), IDs `named-types` and `named-item-types`. This current pin does not recover historical adopted specification provenance.
 
 ## 2. Intent
@@ -283,3 +283,31 @@ After the coordinate example's `as="t:position"` conversion, `$point instance of
 `Xslt40AliasExpressionTests` verifies these distinctions, optional/repeated alias occurrences, nested array definitions, namespace/EQName/default namespace references, inline namespace declarations, AVTs, package isolation and mixed-version refusal. The standalone public enumeration option remains enum-only. Package-local lookup does not establish public type export/expose support. No catalogue manifest case or expected outcome changed.
 
 See [expression evidence](../../../contributions/xslt40/item-type-boundaries/EXPRESSION_RESULTS.json) and [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types). Original native cases and historical receipts are preserved; the broader filtered family remains 6/26/0.
+
+
+## Typed map aliases and nested references — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) supports typed map xsl:item-type aliases and nested alias references inside array/map types at XSLT binding/function boundaries and XPath instance-of/treat operands. Shared expansion respects declaration/use namespaces, occurrence indicators, quoted enumeration members, EQName URI delimiters, whitespace and nested comments. XPath 4.0 typed-map coercion recursively converts keys and values, rejects converted key collisions, preserves entry order and retains already-matching maps/record identity. The new coercion path excludes wildcard map types; their existing behavior is preserved. Twenty new regressions cover these boundaries and the documented sensor example. Function/choice/structural-record aliases, arbitrary type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+A sensor ingestion pipeline can normalize XML attribute values to doubles while restricting known reading names. Input `<root temperature="21" humidity="55"/>` produces `<reading temperature="21" humidity="55" typed="true"/>` with this stylesheet:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:item-type name="t:readings" as="map(t:sensor,t:value)"/>
+  <xsl:item-type name="t:sensor" as="enum('temperature','humidity')"/>
+  <xsl:item-type name="t:value" as="xs:double"/>
+  <xsl:template match="/">
+    <xsl:variable name="readings" as="t:readings"
+      select="map{'temperature':root/@temperature,'humidity':root/@humidity}"/>
+    <reading temperature="{$readings?temperature}" humidity="{$readings?humidity}"
+      typed="{$readings instance of t:readings}"/>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+The forward references resolve within the declaring package. Each map key must belong to the sensor enumeration; attribute value sequences are atomized and converted to doubles. Both source attributes are assumed present because the required value type is a singleton. This map type limits keys and value types, but does not require exactly those two keys; a required-field record contract remains a separate concern. The example is covered by `MapAlias_SensorReferenceExample` and adds no manifest case.
+
+Inline `map(t:sensor,array(t:value?))` is also expanded, preserving optional array members. `instance of`/`treat as` keep existing member types and never perform binding conversion. Converting numeric keys to a narrower type can collapse distinct keys; that fails rather than discarding an entry. A matching map is returned unchanged, retaining a nominative record's identity when no conversion is required. Wildcard-map and XPath 3.1 behavior are preserved.
+
+See [map evidence](../../../contributions/xslt40/item-type-boundaries/MAP_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), and [XPath item coercion rule 9](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). The evidence records the immutable source review. Native expectations and historical results are preserved; broader family remains 6/26/0.

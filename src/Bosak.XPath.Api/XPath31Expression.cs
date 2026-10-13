@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 0.20  | 12-10-2026     | Resolve enumeration aliases in instance-of and treat AST nodes                           |
 //                      | Charles Korthout | 0.21  | 13-10-2026     | Apply expression namespace context and default wildcard tests
 //                      | Charles Korthout | 0.22 | 13-10-2026     | Expand host atomic and array aliases in XPath instance-of and treat expressions
+//                      | Charles Korthout | 0.23 | 13-10-2026     | Expand nested named types inside XPath array and map instance-of/treat operands
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -369,6 +370,33 @@ public sealed class XPath31Expression
             TreatNode treat => (treat.Prefix, treat.TypeName),
             _ => (null, string.Empty)
         };
+        if (options.ItemTypeAliases is not null && name.Contains('('))
+        {
+            var expanded = ItemTypeAliasExpansion.Expand(name, lexical =>
+            {
+                var expandedName = lexical;
+                if (!lexical.StartsWith("Q{", StringComparison.Ordinal))
+                {
+                    var colon = lexical.IndexOf(':');
+                    var ns = options.DefaultElementNamespace ?? string.Empty;
+                    if (colon >= 0 && (options.Namespaces is null || !options.Namespaces.TryGetValue(lexical[..colon], out ns))) return lexical;
+                    expandedName = $"Q{{{ns}}}{(colon < 0 ? lexical : lexical[(colon + 1)..])}";
+                }
+                return options.ItemTypeAliases.TryGetValue(expandedName, out var definition) ? definition : lexical;
+            });
+            if (expanded is not null && expanded != name)
+            {
+                var parsedType = XPathParser.Parse("() instance of " + expanded, xpath40: true);
+                if (parsedType is InstanceOfNode nested)
+                    return node switch
+                    {
+                        InstanceOfNode instance => instance with { Prefix = nested.Prefix, TypeName = nested.TypeName },
+                        TreatNode treat => treat with { Prefix = nested.Prefix, TypeName = nested.TypeName },
+                        _ => node
+                    };
+            }
+            return node;
+        }
         string key;
         if (name.StartsWith("Q{", StringComparison.Ordinal))
             key = name;

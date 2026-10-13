@@ -294,6 +294,7 @@
 //                      | Charles Korthout | 2.133 | 12-10-2026     | Collect enumeration item-type declarations by expanded name and precedence
 //                      | Charles Korthout | 2.134 | 13-10-2026     | Validate named record/field declarations and shared named-type precedence.               |
 //                      | Charles Korthout | 2.135 | 13-10-2026     | Resolve atomic and array declaration aliases with forward references and cycle detection
+//                      | Charles Korthout | 2.136 | 13-10-2026     | Expand map aliases and nested map/array references with shared token-aware type handling
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -863,8 +864,8 @@ internal sealed class Stylesheet
             if (element.Name.LocalName != "item-type")
                 continue;
             var definition = element.Attribute("as")!.Value.Trim();
-            // This initial slice registers enumeration definitions only. Structural aliases,
-            // recursive alias expansion and package exposure remain separate work.
+            // Keep the public enumeration-only static context separate from the broader
+            // package-local definitions registered by GetBindingItemTypes.
             if (!definition.StartsWith("enum(", StringComparison.Ordinal))
                 continue;
             if (!definition.EndsWith(')'))
@@ -891,7 +892,11 @@ internal sealed class Stylesheet
             try
             {
                 var expanded = ExpandType(declaration.Attribute("as")!.Value.Trim(), declaration, false);
-                if (expanded is not null) result[name] = expanded;
+                if (expanded is not null)
+                {
+                    XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+                    result[name] = expanded;
+                }
                 return expanded;
             }
             finally { active.Remove(name); }
@@ -899,32 +904,19 @@ internal sealed class Stylesheet
         string? ExpandType(string text, XElement declaration, bool sequence)
         {
             text = text.Trim();
-            var suffix = text.Length > 0 && text[^1] is '?' or '*' or '+' ? text[^1].ToString() : string.Empty;
-            if (suffix.Length > 0)
+            if (!sequence && text.Length > 0 && text[^1] is '?' or '*' or '+')
+                throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
+            return ItemTypeAliasExpansion.Expand(text, name =>
             {
-                if (!sequence) throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
-                text = text[..^1].TrimEnd();
-            }
-            if (text.StartsWith("array(", StringComparison.Ordinal) && text.EndsWith(')'))
-            {
-                var inner = text[6..^1].Trim();
-                if (inner == "*") return "array(*)" + suffix;
-                var member = ExpandType(inner, declaration, true);
-                return member is null ? null : "array(" + member + ")" + suffix;
-            }
-            if (text is "item()" or "node()") return text + suffix;
-            // Only complete QName tokens are expanded. Enumeration member strings and
-            // other structural grammars are deliberately left to their existing handlers.
-            if (!System.Text.RegularExpressions.Regex.IsMatch(text, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{N}_.-]*)?$")) return null;
-            var key = ExpandItemTypeName(text, declaration);
-            if (key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal))
-            {
-                var atomic = "xs:" + key[(key.IndexOf('}') + 1)..];
-                XPath31Expression.Compile("() instance of " + atomic, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
-                return atomic + suffix;
-            }
-            var alias = Expand(key);
-            return alias is null ? null : alias + suffix;
+                var key = ExpandItemTypeName(name, declaration);
+                if (key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal))
+                {
+                    var atomic = "xs:" + key[(key.IndexOf('}') + 1)..];
+                    XPath31Expression.Compile("() instance of " + atomic, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+                    return atomic;
+                }
+                return Expand(key);
+            });
         }
         foreach (var name in declarations.Keys) Expand(name);
         return _bindingItemTypes = result;

@@ -1,3 +1,21 @@
+# Typed map aliases and nested references — 2026-10-13
+
+Branch: feat/xslt-map-aliases; main baseline 8e1dfe1f0e659d4d6097de0f68d66871b5a38bb1. PR #211 merged after CI 38345226739 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) supports typed map xsl:item-type aliases and nested alias references inside array/map types at XSLT binding/function boundaries and XPath instance-of/treat operands. Shared expansion respects declaration/use namespaces, occurrence indicators, quoted enumeration members, EQName URI delimiters, whitespace and nested comments. XPath 4.0 typed-map coercion recursively converts keys and values, rejects converted key collisions, preserves entry order and retains already-matching maps/record identity. The new coercion path excludes wildcard map types; their existing behavior is preserved. Twenty new regressions cover these boundaries and the documented sensor example. Function/choice/structural-record aliases, arbitrary type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+New internal API helper ItemTypeAliasExpansion traverses supported map/array sequence-type syntax with a QName-resolution callback, preserving enumeration strings, EQName URI punctuation and nested comments. Stylesheet registration resolves nested forward references and supported cycles and validates concrete definitions. TransformEngine expands nested @as references; XPath31Expression expands nested instance-of/treat operands. VmEngine adds version-gated typed-map key/value conversion, duplicate-key rejection and order retention, with already-matching values returned unchanged. The new path excludes wildcard map types. No new public API, gate promotion, native test edit, catalogue manifest/outcome change or publication. Twenty new regressions include a documented XML sensor normalization example.
+
+Validation: Release build passes; all 6935 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4049/0/0. Focused run passes 2642 checks: 64 alias regressions (twenty new) and 2578 catalogue feature cases. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias remains 6/26/0; original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.
+
+## Resume here
+
+Check this slice's CI before merging. Next: function and choice aliases, then remaining named-record coercion. Keep broader native type-alias 6/26/0 limitations explicit. N04 and REQ-126 remain In Progress. Preserve all original expectations, patches, receipts, prior follow-up evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery pending.
+
 # Atomic and array alias type expressions — 2026-10-13
 
 Branch: feat/xslt-alias-type-expressions; main baseline aa7f7c7be261ad6b255c0d81ab4754d799a4afac. PR #210 merged after CI 38344200518 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
