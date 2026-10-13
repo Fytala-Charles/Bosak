@@ -64,6 +64,7 @@
 //                      | Charles Korthout | 0.30 | 13-10-2026     | Normalize documentary function signatures without host alias registrations
 //                      | Charles Korthout | 0.31 | 13-10-2026     | Validate schema declaration types and normalize direct document shorthand
 //                      | Charles Korthout | 0.32 | 13-10-2026     | Expand host named types in inline function parameter and return contracts
+//                      | Charles Korthout | 0.33 | 13-10-2026     | Recognize xs:anyAtomicType in host-supplied item-type static contexts.
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -567,7 +568,7 @@ public sealed class XPath31Expression
         if (uri == schemaNamespace)
         {
             // XDM/XSD 1.1 additions absent from .NET's XSD 1.0 built-in table.
-            if (local is "untypedAtomic" or "untyped" or "numeric" or "error" or "dayTimeDuration" or "yearMonthDuration" or "dateTimeStamp" ||
+            if (local is "anyAtomicType" or "untypedAtomic" or "untyped" or "numeric" or "error" or "dayTimeDuration" or "yearMonthDuration" or "dateTimeStamp" ||
                 System.Xml.Schema.XmlSchemaType.GetBuiltInSimpleType(qname) is not null ||
                 System.Xml.Schema.XmlSchemaType.GetBuiltInComplexType(qname) is not null)
                 return "xs:" + local;

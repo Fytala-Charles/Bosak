@@ -86,6 +86,7 @@
 //                      |                  |       |                | keep the historical drop-prefix behavior because bindings are never supplied there    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.16  | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
+//                      | Charles Korthout | 3.17  | 13-10-2026     | Compile XPath 4.0 type patterns with declaring type and namespace scopes.                 |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -138,6 +139,8 @@ internal sealed class PatternCompiler
     }
 
     private XPathCompatibility _compatibility = XPathCompatibility.XPath31;
+    private IReadOnlyDictionary<string, string>? _itemTypeAliases;
+    private IReadOnlySet<string>? _namedRecordTypeNames;
 
     /// <summary>
     /// Compiles an XPath expression with the current default element namespace and profile.
@@ -157,6 +160,8 @@ internal sealed class PatternCompiler
             DefaultElementNamespace = _defaultElementNamespace,
             SchemaSet = schemaSet,
             Namespaces = _namespaces,
+            ItemTypeAliases = _itemTypeAliases,
+            NamedRecordTypeNames = _namedRecordTypeNames,
         };
         return XPath31Expression.Compile(expression, options);
     }
@@ -899,18 +904,26 @@ internal sealed class PatternCompiler
     /// slot's real bindings so undeclared prefixes are rejected (XPST0081).
     /// </param>
     /// <param name="compatibility">The owning expression profile; nested compilation inherits it.</param>
+    /// <param name="itemTypeAliases">Expanded types in the declaring package.</param>
+    /// <param name="namedRecordTypeNames">Known nominative record names in that package.</param>
     public PatternPredicate Compile(
         string pattern,
         string? defaultElementNamespace = null,
         ModeTyped? typedMode = null,
         IReadOnlyDictionary<string, string>? namespaces = null,
-        XPathCompatibility? compatibility = null)
+        XPathCompatibility? compatibility = null,
+        IReadOnlyDictionary<string, string>? itemTypeAliases = null,
+        IReadOnlySet<string>? namedRecordTypeNames = null)
     {
         _defaultElementNamespace = defaultElementNamespace;
         var savedCompatibility = _compatibility;
         _compatibility = compatibility ?? _compatibility;
         var savedTypedMode = _typedMode;
         var savedNamespaces = _namespaces;
+        var savedAliases = _itemTypeAliases;
+        var savedRecords = _namedRecordTypeNames;
+        _itemTypeAliases = itemTypeAliases;
+        _namedRecordTypeNames = namedRecordTypeNames;
         _typedMode = typedMode;
         _namespaces = namespaces;
         try
@@ -947,13 +960,47 @@ internal sealed class PatternCompiler
             _compatibility = savedCompatibility;
             _typedMode = savedTypedMode;
             _namespaces = savedNamespaces;
+            _itemTypeAliases = savedAliases;
+            _namedRecordTypeNames = savedRecords;
         }
+    }
+
+    /// <summary>Separates a type from trailing predicates while preserving quoted fields and EQNames.</summary>
+    internal static (string Type, string Predicates) GetTypePatternParts(string pattern)
+    {
+        var text = StripXPathComments(pattern).Trim();
+        if (!text.StartsWith('~')) throw new InvalidOperationException("XTSE0340: Expected a type pattern.");
+        int depth = 0;
+        char quote = '\0';
+        bool eqName = false;
+        for (int i = 1; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (eqName) { if (c == '}') eqName = false; continue; }
+            if (c == '{' && i > 0 && text[i - 1] == 'Q') { eqName = true; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == '[' && depth == 0) return (text[1..i].Trim(), text[i..]);
+        }
+        return (text[1..].Trim(), string.Empty);
     }
 
     /// <summary>
     /// Compiles an atomic-value matcher for predicate patterns (.[expr]).
     /// Returns null if the pattern is not a predicate pattern that can match atomic values.
     /// </summary>
+    /// <param name="pattern">The candidate predicate or type pattern.</param>
+    /// <returns>The matcher, or null when the pattern requires node-path compilation.</returns>
     public PatternPredicate? CompileAtomicMatch(string pattern)
     {
         var trimmed = StripXPathComments(pattern).Trim();
@@ -964,6 +1011,19 @@ internal sealed class PatternCompiler
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
                 trimmed = trimmed[1..close].Trim();
+        }
+
+        bool isTypePattern = trimmed.StartsWith('~');
+        if (isTypePattern)
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Type patterns require XSLT 4.0.");
+            var (type, typePredicates) = GetTypePatternParts(trimmed);
+            // Validate a complete ItemType, rather than admitting an arbitrary XPath expression.
+            var parsed = XPathParser.Parse("() instance of " + type, schemaAware: HasSchemaSet, xpath40: true);
+            if (parsed is not InstanceOfNode instance || instance.Occurrence != OccurrenceIndicator.One || instance.TypeName == "empty-sequence()")
+                throw new InvalidOperationException("XTSE0340: A type pattern requires a single item type.");
+            trimmed = ".[. instance of " + type + "]" + typePredicates;
         }
 
         // Only predicate patterns can match atomic values
@@ -983,7 +1043,10 @@ internal sealed class PatternCompiler
         {
             int close = FindMatchingBracket(rest, 0);
             if (close < 0)
+            {
+                if (isTypePattern) throw new InvalidOperationException("XTSE0340: Unclosed type-pattern predicate.");
                 return null;
+            }
             predicates.Add(rest[1..close].Trim());
             rest = rest[(close + 1)..].TrimStart();
         }
@@ -994,7 +1057,10 @@ internal sealed class PatternCompiler
         // If there's anything after the predicates (e.g. /child::x), atomic values
         // cannot match, so let the normal node-based path handle it.
         if (!string.IsNullOrEmpty(rest))
+        {
+            if (isTypePattern) throw new InvalidOperationException("XTSE0340: Unexpected text after a type pattern.");
             return null;
+        }
 
         // XSLT 3.0 §6.4: numeric predicate 1 always matches; any other numeric value never matches.
         // Pre-compile all predicates; apply numeric semantics at runtime for variable expressions.

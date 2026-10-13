@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 supports standalone XSLT 4.0 template type patterns ~T with zero or more predicates, including parenthesized forms, named item types, structural records and nominative records. The matcher delegates membership to the existing XPath type tests and preserves numeric predicate, singleton focus and dynamic-error-as-nonmatch behavior. Template patterns compile with the declaring package type registry and applicable static namespaces, including fixed-namespaces. Default priorities cover item/node/function/map/array families, built-in atomic derivation depth, enumerations and supported choice types; predicate patterns have priority 0.5 and explicit priorities are retained. xs:anyAtomicType is now recognized in host-supplied static type contexts. Twenty-nine regressions cover these behaviors, invalid syntax, previous-profile rejection, quoted field names, EQName delimiters and package-private alias isolation. Native type-alias advances from 16/16/0 to 18/14/0: cases 008 and 009 now pass with their upstream assertions unchanged. Ordinary wildcard node patterns, full XSLT 4.0 union-pattern priority semantics, schema-defined atomic priority derivation and named-type/fixed-namespace authoring-validation contexts remain follow-ups. Non-template pattern slots have not gained the template declaring-type registry in this slice. Plain maps still do not acquire record annotations through pattern matching; cases 006/010/013 and case 050 result handling remain independent boundaries. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "d9a695f1f53ee0645e5a46c98dad47dda7666979",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sections": [
+      "6.3.3 Type Patterns",
+      "6.4.2 Default Priority for Type Patterns"
+    ],
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 18,
+    "failed": 14,
+    "skipped": 0
+  },
+  "newlyPassingCases": [
+    "type-alias-008",
+    "type-alias-009"
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final incremental Release build succeeds with zero warnings and zero errors. All 7352 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4466/0/0 and twenty-nine new regressions; focused new regressions pass 29/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 18/14/0: cases 008/009 newly pass, while original 023/024 and case 016 remain green; runner exits 1 for the fourteen remaining failures. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "e46adfd7ec7bd3f76d825a4966c2ded0550b7b3ed39601e6f1e358101dfd1eff",
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "ee0f1e44c7c2d50bc49abefdd593d25773a74e4be5d2ce49a06540068ff8be00",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "f751f1a8bfe371d1b245275c5c13c7d269d8d27db5ae954de9f44cd12f6f4075",
+    "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs": "29e3a419797ecc8a71becc30f871fa2572c1aaf4d3b27a3929ac5ca91cd0f3d7",
+    "tests/Bosak.Xslt.Tests/Xslt40PackageTypeTests.cs": "ee192312ab72cf8c87bdb4888cc5e580f6d07a2633cc4f15fffff9459f43d7df",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T112739207Z.json"
+}

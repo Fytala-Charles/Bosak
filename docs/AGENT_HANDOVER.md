@@ -1,3 +1,19 @@
+# Template type patterns — 2026-10-13
+
+Branch: feat/xslt-template-type-patterns; parent d9a695f1. Stacked on PR #233; PRs #223–233 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports standalone XSLT 4.0 template type patterns ~T with zero or more predicates, including parenthesized forms, named item types, structural records and nominative records. The matcher delegates membership to the existing XPath type tests and preserves numeric predicate, singleton focus and dynamic-error-as-nonmatch behavior. Template patterns compile with the declaring package type registry and applicable static namespaces, including fixed-namespaces. Default priorities cover item/node/function/map/array families, built-in atomic derivation depth, enumerations and supported choice types; predicate patterns have priority 0.5 and explicit priorities are retained. xs:anyAtomicType is now recognized in host-supplied static type contexts. Twenty-nine regressions cover these behaviors, invalid syntax, previous-profile rejection, quoted field names, EQName delimiters and package-private alias isolation. Native type-alias advances from 16/16/0 to 18/14/0: cases 008 and 009 now pass with their upstream assertions unchanged. Ordinary wildcard node patterns, full XSLT 4.0 union-pattern priority semantics, schema-defined atomic priority derivation and named-type/fixed-namespace authoring-validation contexts remain follow-ups. Non-template pattern slots have not gained the template declaring-type registry in this slice. Plain maps still do not acquire record annotations through pattern matching; cases 006/010/013 and case 050 result handling remain independent boundaries. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7352 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4466/0/0 and twenty-nine new regressions; focused new regressions pass 29/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 18/14/0: cases 008/009 newly pass, while original 023/024 and case 016 remain green; runner exits 1 for the fourteen remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: ordinary wildcard node patterns and their XSLT 4.0 default priorities (native wildcard-type-003–006). Remaining native record outcomes, including case 050 result handling, and annotated function types remain follow-ups. Full union-pattern priorities, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain bounded gaps. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Direct structural record bindings — 2026-10-13
 
 Branch: feat/xslt-structural-record-bindings; parent c3853871. Stacked on PR #232; PRs #223–232 remain open. Earlier sections are historical.

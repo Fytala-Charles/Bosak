@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Verify imported template patterns keep package-private type dependencies.
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -49,6 +50,21 @@ public class Xslt40PackageTypeTests
                 "<xsl:use-package name='urn:type-package' package-version='1.0'>" + accept + "</xsl:use-package>" + body));
         }
         finally { Api.XsltFunctionLibrary.ClearPackages(); }
+    }
+
+    /// <summary>Compiles used-package template patterns against private package aliases rather than caller redefinitions.</summary>
+    [Fact]
+    public void TemplatePatternKeepsPackageScope()
+    {
+        var executable = Compile("""
+            <xsl:item-type name='t:value' as='xs:integer'/>
+            <xsl:mode name='t:dispatch' visibility='public'/>
+            <xsl:template match='~t:value' mode='t:dispatch'>package</xsl:template>
+            """, "<xsl:accept component='mode' names='t:dispatch' visibility='public'/>", """
+            <xsl:item-type name='t:value' as='xs:string'/>
+            <xsl:template match='/'><out><xsl:apply-templates select='7' mode='t:dispatch'/></out></xsl:template>
+            """);
+        Assert.Equal("package", XElement.Parse(executable.TransformToString(new XDocumentNode(XDocument.Parse("<root/>")))).Value);
     }
 
     /// <summary>Accepts public and exposed aliases without exposing their private dependencies.</summary>

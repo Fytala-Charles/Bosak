@@ -47,6 +47,7 @@
 //                      |                  |       |                | (XTTE3110) wiring; match-218/219/220/221/222/243/244                                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
+//                      | Charles Korthout | 2.6   | 13-10-2026     | Resolve standalone type patterns in their declaring scope and compute type priorities.   |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -79,7 +80,7 @@ internal sealed class TemplateRule
     public bool MatchesAllModes { get; }
 
     /// <summary>The explicit or computed priority.</summary>
-    public double Priority { get; }
+    public double Priority { get; private set; }
 
     /// <summary>The import precedence (0 = main stylesheet, higher = deeper import).</summary>
     public int ImportPrecedence => Stylesheet.ImportPrecedence;
@@ -381,9 +382,35 @@ internal sealed class TemplateRule
             {
                 // Resolve namespace prefixes in the pattern to Q{uri}local syntax
                 // so the pattern compiler can match namespaced elements correctly.
-                var resolved = ResolveNamespacePrefixes(Match);
+                var normalized = StripXPathComments(Match).Trim();
+                while (normalized.StartsWith('(') && FindMatchingParen(normalized, 0) == normalized.Length - 1)
+                    normalized = normalized[1..^1].Trim();
+                var typePattern = normalized.StartsWith('~');
+                var resolved = typePattern ? normalized : ResolveNamespacePrefixes(Match);
                 var defaultNs = GetXPathDefaultNamespace(Element);
-                CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
+                if (typePattern)
+                {
+                    var owner = Stylesheet.OwningPackage ?? Stylesheet;
+                    var namespaces = Stylesheet.GetApplicableStaticNamespaces(Element);
+                    var aliases = owner.GetBindingItemTypes();
+                    CompiledMatch = compiler.Compile(resolved, defaultNs, namespaces: namespaces,
+                        compatibility: compatibility, itemTypeAliases: aliases,
+                        namedRecordTypeNames: owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal));
+                    if (Element.Attribute("priority") is null)
+                    {
+                        var (type, predicates) = Patterns.PatternCompiler.GetTypePatternParts(resolved);
+                        string Resolve(string name)
+                        {
+                            var key = Stylesheet.ExpandItemTypeName(name, Element);
+                            if (aliases.TryGetValue(key, out var alias)) return alias;
+                            const string schema = "Q{http://www.w3.org/2001/XMLSchema}";
+                            return key.StartsWith(schema, StringComparison.Ordinal) ? "xs:" + key[schema.Length..] : key;
+                        }
+                        var expanded = ItemTypeAliasExpansion.Expand(type, Resolve) ?? type;
+                        Priority = predicates.Length > 0 ? 0.5 : ComputeTypePatternPriority(expanded);
+                    }
+                }
+                else CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
                 // In a schema-aware stylesheet, also compile the strict/lax typed-mode
                 // variants in which a top-level QName branch means schema-element(QName)
                 // (XSLT 3.0 §5.5.3). Rules without rewriteable QName branches keep using
@@ -573,6 +600,35 @@ internal sealed class TemplateRule
             return branches.Max(ComputeSinglePatternPriority);
 
         return ComputeSinglePatternPriority(trimmed);
+    }
+
+    private static double ComputeTypePatternPriority(string type)
+    {
+        var text = type.Trim();
+        if (text.StartsWith('(') && FindMatchingParen(text, 0) == text.Length - 1)
+            return SplitUnionBranches(text[1..^1]).Max(ComputeTypePatternPriority);
+        if (text == "item()") return -1;
+        if (text == "node()") return -0.75;
+        if (text == "function(*)" || text == "xs:anyAtomicType") return -0.5;
+        if (text is "array(*)" or "map(*)") return -0.25;
+        if (text.StartsWith("enum(", StringComparison.Ordinal)) return 0.25;
+        if (text is "xs:dayTimeDuration" or "xs:yearMonthDuration" or "xs:dateTimeStamp") return 0.25;
+        if (text.StartsWith("xs:", StringComparison.Ordinal))
+        {
+            var atomic = System.Xml.Schema.XmlSchemaType.GetBuiltInSimpleType(
+                new System.Xml.XmlQualifiedName(text[3..], "http://www.w3.org/2001/XMLSchema"));
+            int depth = 0;
+            for (var current = atomic; current is not null && current.QualifiedName.Name != "anySimpleType";
+                current = current.BaseXmlSchemaType as System.Xml.Schema.XmlSchemaSimpleType)
+                depth++;
+            return depth <= 1 ? 0 : 0.5 - Math.Pow(2, -depth);
+        }
+        if (text.StartsWith("element(") || text.StartsWith("attribute(") ||
+            text.StartsWith("document-node(") || text.StartsWith("schema-element(") ||
+            text.StartsWith("schema-attribute(") || text.StartsWith("processing-instruction(") ||
+            text is "text()" or "comment()" or "namespace-node()")
+            return ComputeSinglePatternPriority(text);
+        return 0;
     }
 
     private static double ComputeSinglePatternPriority(string trimmed)
