@@ -399,6 +399,7 @@
 //                      |                  |         |                | SaveVariables captures direct bindings only (via TryGetDirectVariable) so in-flight
 //                      |                  |         |                | lazy globals are not flagged circular (K2-FunctionProlog-15)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.175 | 13-10-2026     | Match named record types by annotation identity in type tests.                           |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -10667,6 +10668,16 @@ internal static class VmEngine
         if (count == 0)
             return true;
 
+        if (context is not null && context.TryResolveNamedRecordType(typeName, defaultElementNamespace, out var namedRecord))
+        {
+            bool Matches(XdmValue item) => item.IsMap && ReferenceEquals(item.MapValue?.RecordType, namedRecord);
+            if (!value.IsSequence)
+                return Matches(value);
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!Matches(item)) return false;
+            return true;
+        }
+
         // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are structural
         // type texts, not QNames: the QName resolution below does not apply, and the type
         // is matched per item (enum: an xs:string instance whose value is a member;
@@ -12578,6 +12589,9 @@ internal static class VmEngine
     public static bool ValueMatchesType(XdmValue value, string typeName, EvaluationContext? context)
     {
         if (string.IsNullOrEmpty(typeName)) return true;
+
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out var namedRecord))
+            return value.IsMap && ReferenceEquals(value.MapValue?.RecordType, namedRecord);
 
         // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are matched
         // structurally, before QName resolution and case-folding. Enum members compare

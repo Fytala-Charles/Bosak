@@ -1,3 +1,21 @@
+# Named record constructors — 2026-10-13
+
+Branch: feat/xslt-record-constructors; main baseline 7feef01daa36ef21ab84495e12b5a4157605d987. PR #206 merged after CI 38310340341 passed. Source 1.2.0 unpublished; public release 1.1.3. Earlier sections remain historical.
+
+## What was built
+
+Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI.
+
+Shared declaration collection resolves item/record names by expanded identity and import/include precedence; winning cross-kind duplicates raise XTSE4030 and duplicate fields XTSE4050. Record constructors are registered over their required/default arities; field conversions reuse host conversion rules. Static initializers use global focus and cache per transformation; parameter defaults use absent focus. Initializer focus/current item/variables restore in finally; circular initialization is guarded. The existing XdmRecordType annotation instance supplies nominal identity through an internal package-local EvaluationContext registry; VM type tests compare identity. Host named @as bindings validate constructed instances, without plain-map coercion. Package scope snapshots preserve the registry; full exposure/accept/export and constructor signature metadata are not claimed. No public API additions or Core representation changes. Sixteen focused regressions added with headers/XML comments. Two catalog outcomes updated (constructor success and duplicate-field error); examples and canonical docs synchronized.
+
+Validation: final Release build passed, zero errors; 16 focused regressions pass. 6848 unit tests across ten assemblies pass with zero failures/skips, including XSLT 3981/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Two exact native cases pass; broader filtered sweep 12/52/1 retained. Thirteen documentation pages rendered; source hashes, original patch trees and receipts verified. The only post-full-suite source change adds an XML documentation comment to the private package snapshot field; final build and focused tests rerun, no behavioral change. The initial catalog probe exposed two historical outcome rows; source constructor regressions passed. Native checkout is clean on bosak/record-type-boundaries; original committed expectations, branches, patches and receipts remain unchanged. No upstream edits, release or external messages in this slice.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. All 14 first-batch contribution cases have passed individually in their respective prior/current slices, without independent confirmation or acceptance. Prioritize remaining named-type coercion/package gaps and select body namespace declarations; do not classify broader native suites as conformant. Preserve scratch directories and historical receipts. Wider adoption/provenance/metadata limits remain.
+
+Delivery pending.
+
 # Enumeration item-type aliases — 2026-10-12
 
 Branch: feat/xslt-item-type-enumerations; main baseline 0842dc037f00d9939626004cf020d3d8b87c156d. PR #205 merged after CI 38304922055 passed. Source 1.2.0 unpublished; public release 1.1.3.
