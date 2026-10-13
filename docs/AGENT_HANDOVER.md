@@ -1,3 +1,9 @@
+# 1.2.0 published — 2026-10-13
+
+Release revision: `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`; tag `v1.2.0`. The user explicitly authorized publication. [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0); [successful publication workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38416626883), 7,676/0/0 tests. All ten public NuGet packages were downloaded and verified; a fresh-cache package-only consumer restored exclusively from nuget.org passes 45 checks, including all ten assembly versions. Package hashes and publication evidence are in RELEASE-1.2.0-PREPARATION.json. REQ-125 PR #141 merged before tagging; acceptance is included. This publication receipt follows the release revision.
+
+Resume: additional focused implementation slices, starting with authoring/static namespace-context alignment, then reassess a new XSLT 4.0 contribution-area batch for Bosak and W3C. Keep original upstream assertions and acceptance boundaries; REQ-126 and N01–N05 remain at their recorded states. Frozen gates remain QT3 31142/0/679 and qt4 8278/0/1894. Preserve scratch evidence. Earlier publication-pending and slice-queue records below are historical.
+
 # REQ-125 acceptance reconciliation — 2026-10-13
 
 Base: main `9c51e516`. Both acceptance additions from existing PR #141 commit `ba5a30f4` are already present on main through later integration. Refresh the existing PR against main to resolve its stale conflict status and correct the Slice A review summary. Original F1–F4 findings remain historical; corrected Slice A and later whole-request acceptance retain their declared coverage. No engine changes. Validate the documentation PR CI before merging; then present the resulting main revision for publication approval. Publication remains unauthorized. Earlier release and slice records below are historical.
