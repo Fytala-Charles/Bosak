@@ -530,6 +530,7 @@
 //                      | Charles Korthout | 7.14  | 13-10-2026     | Validate select prefixes against inline namespace declarations
 //                      | Charles Korthout | 7.15 | 13-10-2026     | Convert named and inline enumeration bindings with scoped declaration profiles
 //                      | Charles Korthout | 7.16 | 13-10-2026     | Resolve array and atomic aliases at XSLT declaration and function boundaries
+//                      | Charles Korthout | 7.17 | 13-10-2026     | Supply expanded package aliases to XPath expression and AVT compilation
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3026,14 +3027,14 @@ internal sealed class TransformEngine
         var defaultNs = GetXPathDefaultNamespace(instruction);
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
-        var enumerationTypes = CurrentStylesheet.GetEnumerationItemTypes();
-        if (enumerationTypes.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
+        var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
+        if (itemTypeAliases.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
         {
             var options = new CompileOptions
             {
                 Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
-                EnumerationItemTypes = enumerationTypes,
+                ItemTypeAliases = itemTypeAliases,
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
                 BaseUri = baseUri,
@@ -10287,14 +10288,14 @@ internal sealed class TransformEngine
                         // (version-014: string(3 + '2') = '5' under xsl:version="1.0").
                         bool avtBackwards = contextElement != null && IsEffectiveBackwardsCompatible(contextElement);
                         XPath31Expression compiled;
-                        var enumerationTypes = CurrentStylesheet.GetEnumerationItemTypes();
-                        if (needsOptions || avtBackwards || enumerationTypes.Count > 0)
+                        var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
+                        if (needsOptions || avtBackwards || itemTypeAliases.Count > 0)
                         {
                             var options = new CompileOptions
                             {
                                 Compatibility = compatibility,
                                 Namespaces = nsMap,
-                                EnumerationItemTypes = enumerationTypes,
+                                ItemTypeAliases = itemTypeAliases,
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri,

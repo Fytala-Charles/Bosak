@@ -1,3 +1,21 @@
+# Atomic and array alias type expressions — 2026-10-13
+
+Branch: feat/xslt-alias-type-expressions; main baseline aa7f7c7be261ad6b255c0d81ab4754d799a4afac. PR #210 merged after CI 38344200518 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) resolves the supported atomic and array xsl:item-type aliases in XPath instance-of and treat expressions, including AVTs and expression-local namespace declarations. Tests preserve alias occurrences and definition namespaces, distinguish type checking from conversion, and isolate private package definitions from same-named caller aliases. Mixed XPath 3.1 instructions still refuse these aliases. Fourteen new regressions pass; the public EnumerationItemTypes option retains its enum-only contract. General map/function/choice aliases, aliases nested in arbitrary XPath structural type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.
+
+CompileOptions.ItemTypeAliases is an internal host dictionary; Bosak.XPath.Api grants Bosak.Xslt friend access through its project file. XPath31Expression expands supported host alias operands using the existing parser, retaining occurrence indicators, while preserving public EnumerationItemTypes validation. Inline namespace prolog context copies retain the dictionary. TransformEngine supplies Stylesheet.GetBindingItemTypes for ordinary expression and AVT compilation. No new public API, runtime change, gate promotion, upstream/native edit, catalogue count/outcome change or publication. Fourteen regressions include package isolation and the frozen 3.1 boundary.
+
+Validation: Release build passes; all 6915 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4029/0/0. Forty-four focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run remains 6/26/0, original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.
+
+## Resume here
+
+Check this slice's CI before merging. Next: other structural alias forms and references nested in arbitrary type syntax, then remaining named-record coercion. Keep the broader native type-alias 6/26/0 limitations explicit. N04 and REQ-126 remain In Progress. Original expectations, patches and historical receipts/evidence remain unchanged. Native checkout stays clean on bosak/item-type-boundaries; preserve scratch directories. Upstream PRs #22–26 await review and independent confirmation. No second processor available; no release/tag/package publication.
+
+Delivery pending.
+
 # Atomic and array alias bindings — 2026-10-13
 
 Branch: feat/xslt-array-alias-bindings; main baseline 9afa7bfcf32c1b258930bc973c7b82ef3130cc50. PR #209 merged after CI 38342994287 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.

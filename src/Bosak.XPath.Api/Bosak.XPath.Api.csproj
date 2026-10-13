@@ -11,6 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <InternalsVisibleTo Include="Bosak.Xslt" />
     <ProjectReference Include="..\Bosak.XPath.Core\Bosak.XPath.Core.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj" />
     <ProjectReference Include="..\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj" />
