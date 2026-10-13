@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
+//                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -605,6 +606,8 @@ public sealed class AuthoringInspector
                     or AuthoringAttributeSlotKind.Avt
                     || (slotKind == AuthoringAttributeSlotKind.QName && element.Name.Namespace == XsltNs
                         && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template" or "function")
+                    || (slotKind == AuthoringAttributeSlotKind.Plain && split.LocalName == "as" && split.NamespaceUri.Length == 0
+                        && element.Name.Namespace == XsltNs && AttributeSlotClassifier.HasDeclarationSequenceType(element.Name.LocalName))
                     ? BuildSlotContext(element, rawName, elementNameAsWritten)
                     : null;
 

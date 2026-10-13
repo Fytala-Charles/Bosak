@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
+//                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -75,6 +76,7 @@ internal sealed class XsltValidationEngine
     private IReadOnlyList<StaticVariableName> _staticGlobals = Array.Empty<StaticVariableName>();
     private VariableScope _globals = VariableScope.Empty;
     private AuthoringNamedTypes? _namedTypes;
+    private bool _sequenceTypeLinkageDeferred;
 
     public XsltValidationEngine(XsltValidationOptions? options)
     {
@@ -113,6 +115,7 @@ internal sealed class XsltValidationEngine
 
     public XsltValidationResult Validate(AuthoringSnapshot snapshot)
     {
+        _sequenceTypeLinkageDeferred = snapshot.Modules.Count != 1 || snapshot.Modules.Any(m => m.Edges.Count > 0);
         CollectGlobalDeclarations(snapshot);
         foreach (var module in snapshot.Modules)
         {
@@ -239,6 +242,54 @@ internal sealed class XsltValidationEngine
         }
 
         return false;
+    }
+
+    /// <summary>Checks supported declaration sequence types without evaluating their values.</summary>
+    private void CheckDeclarationSequenceType(ModuleWalkState state, AuthoringNodeDescriptor node)
+    {
+        if (GetEffectiveVersion(node) < 4.0 || node.ElementName?.NamespaceUri != AttributeSlotClassifier.XsltNamespace
+            || !AttributeSlotClassifier.HasDeclarationSequenceType(node.ElementName.LocalName)) return;
+        var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "as" && a.NamespaceUri.Length == 0);
+        if (attribute?.DeclarationContext is not { } context || ResolveCompatibility(context) < XPathCompatibility.XPath40) return;
+        if (ReportStaticNamespaceError(state, attribute, context) || _namedTypes?.Error is not null) return;
+        void ReportGap(string description)
+        {
+            if (_recordedGaps.Add(state.Module.ModuleUri.AbsoluteUri + "|sequence-types"))
+                _gaps.Add(new XsltValidationCoverageGap("sequence-types", state.Module.ModuleUri, description));
+        }
+        if (_sequenceTypeLinkageDeferred || _namedTypes?.CoverageGap is not null ||
+            state.Module.Root.Children.Any(n => n.ElementName?.LocalName == "package") ||
+            node.BackingObject is XElement element && element.Ancestors().Last().Elements().Any(e => e.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace && e.Name.LocalName is "use-package" or "import-schema"))
+        {
+            ReportGap("Declaration sequence types across module, package or schema linkage are outside standalone authoring coverage.");
+            return;
+        }
+        var text = attribute.ExpandedValue.Trim();
+        try
+        {
+            if (XPathParser.Parse("() instance of " + text, xpath40: true) is not InstanceOfNode)
+                throw new InvalidOperationException("XPST0003: The as attribute must contain a sequence type.");
+            if (ItemTypeAliasExpansion.Expand(text, name => name) is null)
+            {
+                ReportGap("This declaration sequence-type grammar is outside the shared supported type walker.");
+                return;
+            }
+            var options = new CompileOptions
+            {
+                Namespaces = BuildNamespaceMap(context),
+                DefaultElementNamespace = context.XpathDefaultNamespace,
+                BaseUri = context.BaseUri.AbsoluteUri,
+                Compatibility = XPathCompatibility.XPath40,
+                ItemTypeAliases = _namedTypes?.Aliases,
+                NamedRecordTypeNames = _namedTypes?.Records ?? new HashSet<string>(StringComparer.Ordinal)
+            };
+            XPath31Expression.Compile("() instance of " + text, options);
+        }
+        catch (Exception ex)
+        {
+            _hasInvalid = true;
+            _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(ex), state.Module.ModuleUri, ex.Message, attribute.ValueRange));
+        }
     }
 
     /// <summary>Reports applicable QName syntax and binding errors on active 4.0 variable, parameter, template, and function names.</summary>
@@ -469,6 +520,7 @@ internal sealed class XsltValidationEngine
         ReportCoverageGapIfDeferred(state, elementName);
         CheckElementStructure(state, node);
         CheckComponentQName(state, node);
+        CheckDeclarationSequenceType(state, node);
 
         // Slots on this element's start tag (the use-when slot, when present, was checked above).
         foreach (var attribute in node.Attributes)

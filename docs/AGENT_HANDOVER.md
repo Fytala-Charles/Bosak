@@ -1,3 +1,11 @@
+# Authoring declaration sequence types — 2026-10-13
+
+Branch: fix/xslt40-authoring-sequence-types; base main `dea8c3f6`; implementation `8a0435fe7e599c967e6a50ff4412857babb4004e`.
+
+Source candidate 1.2.1 (unpublished) validates supported XSLT 4.0 as sequence types on variable, param, with-param, template and function declarations during authoring snapshot validation. The checks use captured applicable namespaces, XPath default type namespaces and standalone named-type bindings without evaluating declaration values or resolving resources. Unknown types report XPST0051, omitted prefixes XPST0081 and malformed or expression-shaped values XPST0003 at the original attribute range. Atomic, named, structural and record-identity types retain their supported occurrence indicators. Public as descriptors remain Plain with SlotContext=null; internal declaration contexts carry the bindings, and original bytes are preserved. All 21 focused regressions pass (corrected initial 15-case baseline: 8 pass/7 fail). All 7,797 unit tests pass, including XSLT 4,911/0/0; QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Literal exclusions and earlier host-profile validation boundaries are retained. Module/package/schema linkage and type grammar beyond the shared walker remain deferred with coverage gaps; value/type compatibility, context-item/accumulator/record-field declarations, record constructors and constant cast/castable analysis remain follow-ups. REQ-125 acceptance, REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged. Published version remains 1.2.0. Evidence: XSLT40-AUTHORING-SEQUENCE-TYPE-RESULTS.json.
+
+Delivery: submit against main and merge after CI. Next: named-type linkage across modules, then remaining component-name and record-field declaration checks; reassess the next small upstream contribution batch. Keep value/type compatibility and constant cast/castable analysis separate. No publication or external messages in this slice. Earlier records below are historical.
+
 # Standalone authoring named types — 2026-10-13
 
 Branch: fix/xslt40-authoring-named-types; base main `6856aed2`; implementation `95c0e3cc8e285c7f02a7e631621efbcc173026cf`.
