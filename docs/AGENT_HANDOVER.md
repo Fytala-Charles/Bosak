@@ -1,6 +1,6 @@
 # Host static named-type validation — 2026-10-13
 
-Branch: feat/xslt-static-named-types; baseline PR #219 metadata at 397903ce59c01e81bbce23893d5b87ee68c63a2e. PR #219 CI 38360549109 passed; the PR remains OPEN. Automatic approval review rejected merging it because the user did not explicitly approve that exact merge. Do not bypass the rejection; complete this slice locally and stack its PR on #219. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+Branch: feat/xslt-static-named-types; baseline PR #219 metadata at 397903ce59c01e81bbce23893d5b87ee68c63a2e. PR #219 merged as a76b54e43d8f089c38a512620240d494a9d9a73d after CI 38360549109 passed and the user explicitly approved the merge. PR #220 now targets main. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
 
 ## What was built
 
@@ -12,9 +12,9 @@ Validation: Final Release build passes with zero warnings/errors. All 7064 unit 
 
 ## Resume here
 
-Next: binding/field declaration static names and supported grammar gaps, then package exposure. Check this slice's CI before merging. PR #219 needs explicit user merge approval following automatic review rejection. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+Next: binding/field declaration static names and supported grammar gaps, then package exposure. Check this slice's CI before merging. PR #219 merge is complete; check PR #220 CI before its merge. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
 
-Delivery: tested implementation 31afbbb35d14a23be062109672d47b2690601031 committed and pushed; [Bosak PR #220](https://github.com/Fytala-Charles/Bosak/pull/220) open, stacked on #219, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes. Merge #219 needs explicit user approval following automatic review rejection.
+Delivery: tested implementation 31afbbb35d14a23be062109672d47b2690601031 committed and pushed; [Bosak PR #220](https://github.com/Fytala-Charles/Bosak/pull/220) open against main, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes. PR #219 merge completed after explicit user approval.
 
 # Choice casting target validation — 2026-10-13
 
