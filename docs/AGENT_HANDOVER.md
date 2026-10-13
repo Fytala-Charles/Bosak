@@ -1,6 +1,6 @@
 # Parenthesized item patterns — 2026-10-13
 
-Branch: feat/xslt-parenthesized-item-patterns; parent 6a2151d0. Stacked on PR #238; PRs #223–238 remain open. Earlier sections are historical.
+Branch: feat/xslt-parenthesized-item-patterns; parent 6a2151d0. Stacked on PR #238; PRs #223–239 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: parenthesized outer-filter path classification; distinguish slashes in contained predicates, strings and EQName URIs from actual path operators while preserving positional path filtering. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #239](https://github.com/Fytala-Charles/Bosak/pull/239), stacked on #238. Verified implementation revision c2290f67; a documentation-only delivery commit follows. PRs #223–239 remain open. CI starts after retargeting to main. Next: parenthesized outer-filter path classification. Historical section text is preserved from parent 6a2151d0.
 
 # Set and predicate-pattern priorities — 2026-10-13
 
@@ -182,11 +182,11 @@ Branch: feat/xslt-function-type-grammar; parent 015dce6f. PR #223 CI passed; #22
 
 ## What was built
 
-Candidate 1.2.0 accepts fn(...) as a synonym for function(...) and documentary parameter names in supported function-type aliases, direct XPath type operands and XSLT binding signatures. Names do not affect matching or coercion; duplicate expanded names raise XQST0039, including different prefixes bound to the same namespace and unprefixed names paired with Q{} names. Undeclared documentary prefixes raise XPST0081; malformed named parameters raise XPST0003; unknown parameter/result item types retain XPST0051. Named and unnamed parameters may be mixed, with independent name scopes for nested function types. Nested arrays, records and higher-order signatures retain parameter/result sequence occurrences. XPath 3.1 rejects fn type synonyms and named type parameters. Twenty-seven new regressions cover callback conversion, wildcard maps/arrays, direct bindings without aliases, direct host evaluation, nesting, namespace identity, diagnostics and version boundaries. Annotated function types, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+Candidate 1.2.0 accepts fn(...) as a synonym for function(...) and documentary parameter names in supported function-type aliases, direct XPath type operands and XSLT binding signatures. Names do not affect matching or coercion; duplicate expanded names raise XQST0039, including different prefixes bound to the same namespace and unprefixed names paired with Q{} names. Undeclared documentary prefixes raise XPST0081; malformed named parameters raise XPST0003; unknown parameter/result item types retain XPST0051. Named and unnamed parameters may be mixed, with independent name scopes for nested function types. Nested arrays, records and higher-order signatures retain parameter/result sequence occurrences. XPath 3.1 rejects fn type synonyms and named type parameters. Twenty-six new regressions cover callback conversion, wildcard maps/arrays, direct bindings without aliases, direct host evaluation, nesting, namespace identity, diagnostics and version boundaries. Annotated function types, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
 
 The 4.0 parser reads recursive function signatures. The shared walker validates documentary expanded names and emits name-free function(...) signatures. Direct host operands and XSLT bindings normalize these forms even without alias registrations; runtime matching and coercion reuse existing signature logic. No public API, native assertion changes, gate promotion or publication.
 
-Validation: Release build passes with zero warnings and zero errors. All 7219 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4333/0/0 and twenty-seven new regressions. Focused grammar and catalog-example tests pass 2623/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+Validation: Release build passes with zero warnings and zero errors. All 7219 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4333/0/0 and twenty-six new regressions. Focused grammar and catalog-example tests pass 2623/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
 
 ## Resume here
 
