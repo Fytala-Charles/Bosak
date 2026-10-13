@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "dea8c3f61f07421f93713927fcb7cb12219915e2",
+  "implementationRevision": "8a0435fe7e599c967e6a50ff4412857babb4004e",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Supported as sequence types on variable, param, with-param, template and function declarations in standalone XSLT 4.0 authoring validation",
+  "baselineFocused": {
+    "passed": 8,
+    "failed": 7,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7797,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4911
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Plain public descriptor classification and SlotContext=null are retained. Internal declaration contexts capture namespaces during inspection. Snapshot validation performs no evaluation or resolution and preserves original source bytes. Module/package/schema linkage and unsupported type grammar yield coverage gaps. Value/type compatibility, context-item/accumulator/record-field declarations, constructors and constant cast/castable checks remain follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "f5fc277febe47f41f2f05f5b1b42b062509ebdafdb7768bb76d86fe64d4b87b3",
+    "focused": "02affea5323b750ef5b24d3503a343002629f59942a0688f4689fa36ff9ba500",
+    "unit": "9e2cfd6e1dc900df4a170ffe4cd325d47d50d98c8a4c1b70c71e9d5dad69c6ca",
+    "qt3": "1b03392fe5dc80c5c76ffe6a941069eb8b02f3fc767a360203acf8b1e5b3b4f6",
+    "qt4": "8461d16d4965a69fb54ddbc5d3df8ff9226f6f431a2f86aa3f80908efb44fd62"
+  }
+}
