@@ -1,6 +1,6 @@
 # Item-type alias casts and declaration validation — 2026-10-13
 
-Branch: feat/xslt-alias-casts-validation; baseline PR #217 implementation and metadata at 2b827d1d. PR #217 CI 38355216383 passed; it remains OPEN. Automatic approval review rejected merging it without explicit merge authorization and a check conditioned on passing CI. Continue locally; do not bypass that rejection. Candidate 1.2.0 remains unpublished; public version 1.1.3. Earlier sections are historical.
+Branch: feat/xslt-alias-casts-validation; baseline PR #217 implementation and metadata at 2b827d1d. PR #217 merged as 99f2d1efa567e29a6fe3b26594b9c51e29d8b5ea after CI 38355216383 passed and the user explicitly authorized merging. PR #218 now targets main. Candidate 1.2.0 remains unpublished; public version 1.1.3. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Release build passes (12 existing warnings, zero errors). All 7022 u
 
 Next: remaining static type diagnostics and choice-target eligibility, then package exposure. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation. No local second processor is available.
 
-Delivery: tested implementation 5ba044eb514cfe404c7b6156040be4ec675be11e committed and pushed; [Bosak PR #218](https://github.com/Fytala-Charles/Bosak/pull/218) is open, stacked on #217, CI pending. This documentation-only delivery record follows the tested implementation. Merge #217 requires explicit user approval following automatic review rejection.
+Delivery: tested implementation 5ba044eb514cfe404c7b6156040be4ec675be11e committed and pushed; [Bosak PR #218](https://github.com/Fytala-Charles/Bosak/pull/218) is open against main, CI pending. This documentation-only delivery record follows the tested implementation. PR #217 merge completed after explicit approval; check PR #218 CI before its merge.
 
 # Finite recursive records and container casts — 2026-10-13
 
