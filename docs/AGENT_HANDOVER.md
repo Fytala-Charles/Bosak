@@ -1,3 +1,21 @@
+# Named node-type alias grammar — 2026-10-13
+
+Branch: feat/xslt-named-node-aliases; main baseline ef0b156a184d7ed91641d05a879b6f64740e053b. PR #221 merged after passing CI under explicit user authorization; PR #222 merged as ef0b156a after CI 38371939071 passed and the user authorized merging. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports named element/attribute node tests, the complete * wildcard, and document-node(element(...)) inside package-local aliases and supported structural sequence types. Node names resolve in their declaration namespace and remain stable under use-site prefix/default namespace rebinding; unprefixed attributes retain the empty namespace. The host statically rejects unbound node prefixes and validates unknown type names beside named node tests. Explicit Q{}Name matching now checks both namespace and case-sensitive local name. Seventeen new regressions cover matching/mismatches, node identity, nested types, record fields, namespace defaults and static errors. Schema-annotated node tests, partial wildcards, processing-instruction targets, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker distinguishes node names from type names and passes a namespace callback through structural nesting. Stylesheet and binding paths resolve names at declaration sites; host expression resolution handles direct node tests. Runtime matching corrects the empty-namespace EQName boundary. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7111 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4225/0/0 and seventeen new regressions. Focused node-alias tests pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining node grammar/schema diagnostics and function type grammar, then package exposure. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Node-kind alias grammar — 2026-10-13
 
 Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 merged after CI 38368964609 passed and the user authorized merging the prerequisite. PR #222 now targets main. Earlier sections are historical.

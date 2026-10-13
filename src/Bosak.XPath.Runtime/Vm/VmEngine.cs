@@ -407,6 +407,7 @@
 //                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
 //                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
 //                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
+//                      | Charles Korthout | 2.183 | 13-10-2026     | Match explicit empty-namespace element and attribute type names
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -12837,7 +12838,7 @@ internal static class VmEngine
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
                         if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
@@ -12904,7 +12905,7 @@ internal static class VmEngine
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
                         if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])

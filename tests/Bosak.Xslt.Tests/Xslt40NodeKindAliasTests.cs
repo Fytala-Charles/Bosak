@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Cover named and wildcard node aliases with declaration namespaces
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -29,8 +30,8 @@ public class Xslt40NodeKindAliasTests
           xmlns:t='urn:types' xmlns:xs='http://www.w3.org/2001/XMLSchema' exclude-result-prefixes='#all'>
         """ + body + "</xsl:stylesheet>");
 
-    private static string Run(string body) => XElement.Parse(Compile(body).TransformToString(
-        new XDocumentNode(XDocument.Parse("<root a='value'>text<!--comment--><?target value?></root>")))).Value;
+    private static string Run(string body, string source = "<root a='value'>text<!--comment--><?target value?></root>") => XElement.Parse(Compile(body).TransformToString(
+        new XDocumentNode(XDocument.Parse(source)))).Value;
 
     /// <summary>Matches node-kind aliases and preserves nodes at binding boundaries.</summary>
     /// <param name="type">The node-kind type definition.</param>
@@ -91,4 +92,73 @@ public class Xslt40NodeKindAliasTests
             <xsl:item-type name='t:n' as='element()'/>
             <xsl:template match='/'><xsl:variable name='n' as='t:n' select='42'/><out><xsl:sequence select='$n'/></out></xsl:template>
             """)).ToString());
+
+    /// <summary>Matches named node tests using the namespace of the alias declaration.</summary>
+    /// <param name="type">The declared node type.</param>
+    /// <param name="select">The node expression.</param>
+    /// <param name="source">The source document.</param>
+    [Theory]
+    [InlineData("element(p:Root)", "/*", "<Root xmlns='urn:payload'/>")]
+    [InlineData("element(Q{urn:payload}Root)", "/*", "<Root xmlns='urn:payload'/>")]
+    [InlineData("attribute(p:Code)", "/*/@*", "<root xmlns:p='urn:payload' p:Code='x'/>")]
+    [InlineData("element(*)", "/*", "<Root xmlns='urn:other'/>")]
+    [InlineData("attribute(*)", "/*/@*", "<root Code='x'/>")]
+    [InlineData("document-node(element(p:Root))", ".", "<Root xmlns='urn:payload'/>")]
+    public void Alias_NamedNode(string type, string select, string source)
+        => Assert.Equal("true|true", Run($"<xsl:item-type xmlns:p='urn:payload' name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/' xmlns:p='urn:other'><xsl:variable name='n' as='t:n' select='{select}'/>" +
+            "<out><xsl:value-of separator='|' select='($n instance of t:n,($n treat as t:n) is $n)'/></out></xsl:template>", source));
+
+    /// <summary>Distinguishes case, local names and namespaces for expanded node tests.</summary>
+    /// <param name="type">The alias definition.</param>
+    /// <param name="source">A node that must not match.</param>
+    [Theory]
+    [InlineData("element(Q{}Root)", "<root/>")]
+    [InlineData("element(Q{}Root)", "<Root xmlns='urn:other'/>")]
+    [InlineData("attribute(Q{}Code)", "<root code='x'/>")]
+    [InlineData("attribute(Q{}Code)", "<root xmlns:p='urn:other' p:Code='x'/>")]
+    [InlineData("document-node(element(Q{}Root))", "<root/>")]
+    public void Alias_NamedNodeMismatch(string type, string source)
+        => Assert.Equal("false", Run($"<xsl:item-type name='t:n' as='{type}'/><xsl:template match='/'><out>" +
+            $"<xsl:value-of select='{(type.StartsWith("attribute") ? "/*/@*" : type.StartsWith("document") ? "." : "/*")} instance of t:n'/>" +
+            "</out></xsl:template>", source));
+
+    /// <summary>Applies the declaration default to elements while unprefixed attributes stay unqualified.</summary>
+    [Fact]
+    public void Alias_DefaultNamespaces()
+        => Assert.Equal("true|true|true", Run("""
+            <xsl:item-type name='t:e' xpath-default-namespace='urn:payload' as='element(Root)'/>
+            <xsl:item-type name='t:a' xpath-default-namespace='urn:payload' as='attribute(Code)'/>
+            <xsl:item-type name='t:plain' as='element(root)'/>
+            <xsl:template match='/' xpath-default-namespace='urn:other'><out>
+              <xsl:value-of separator='|' select='(/* instance of t:e,/*/@* instance of t:a,/*/* instance of t:plain)'/>
+            </out></xsl:template>
+            """, "<Root xmlns='urn:payload' Code='x'><root xmlns=''/></Root>"));
+
+    /// <summary>Traverses named node types without confusing node names with type names.</summary>
+    [Fact]
+    public void Alias_NestedNamedNodes()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type xmlns:p='urn:payload' name='t:arr' as='array(element(p:Root))'/>
+            <xsl:record-type name='t:r'><xsl:field xmlns:p='urn:payload' name='body' as='element(p:Root)'/></xsl:record-type>
+            <xsl:template match='/'><xsl:variable name='r' select="map{'body':/*} cast as t:r"/>
+              <out><xsl:value-of separator='|' select='([/*] instance of t:arr,$r?body is /*)'/></out>
+            </xsl:template>
+            """, "<Root xmlns='urn:payload'/>") );
+
+    /// <summary>Rejects undeclared node prefixes at alias registration.</summary>
+    /// <param name="type">A node type with an unknown prefix.</param>
+    [Theory]
+    [InlineData("element(absent:Root)")]
+    [InlineData("attribute(absent:Code)")]
+    [InlineData("document-node(element(absent:Root))")]
+    public void Alias_UnboundNodePrefix(string type)
+        => Assert.Contains("XPST0081", Assert.ThrowsAny<Exception>(() => Compile(
+            $"<xsl:item-type name='t:n' as='{type}'/>")).ToString());
+
+    /// <summary>Validates type names beside named node tests in unused declarations.</summary>
+    [Fact]
+    public void Declaration_NamedNodeAndUnknownType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='v' as='(element(Root) | t:missing)?' select='()'/>")).ToString());
 }

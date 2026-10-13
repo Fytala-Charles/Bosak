@@ -299,6 +299,7 @@
 //                      | Charles Korthout | 2.138 | 13-10-2026     | Resolve record field aliases and recursive named references without expanding identities
 //                      | Charles Korthout | 2.139 | 13-10-2026     | Validate named alias references and preserve declared record identities
 //                      | Charles Korthout | 2.140 | 13-10-2026     | Validate supported binding and field type names at stylesheet registration
+//                      | Charles Korthout | 2.141 | 13-10-2026     | Preserve declaration namespaces in named node-kind aliases and record fields
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -925,7 +926,7 @@ internal sealed class Stylesheet
                 if (!declarations.TryGetValue(key, out var named))
                     throw new InvalidOperationException($"XPST0051: Unknown item type '{name}' in an item-type definition.");
                 return named.Name.LocalName == "record-type" ? key : Expand(key);
-            });
+            }, (name, attribute) => ExpandNodeTypeName(name, attribute, declaration));
         }
         foreach (var name in declarations.Keys) Expand(name);
         return _bindingItemTypes = result;
@@ -1002,13 +1003,24 @@ internal sealed class Stylesheet
                     if (GetBindingItemTypes().TryGetValue(key, out var alias)) return alias;
                     if (GetNamedTypeDeclarations().TryGetValue(key, out var named) && named.Name.LocalName == "record-type") return key;
                     return key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal) ? "xs:" + key[(key.IndexOf('}') + 1)..] : lexical;
-                }) ?? type;
+                }, (name, attribute) => ExpandNodeTypeName(name, attribute, field)) ?? type;
                 types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
             }
             var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";
             result[name] = new NamedRecordDefinition(name, element, new XdmRecordType(types, text), fields, constructor);
         }
         return _namedRecordTypes = result;
+    }
+
+    internal static string ExpandNodeTypeName(string name, bool attribute, XElement element)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal)) return name;
+        var colon = name.IndexOf(':');
+        var local = colon < 0 ? name : name[(colon + 1)..];
+        var ns = colon < 0 ? (attribute ? string.Empty : GetXPathDefaultNamespace(element) ?? string.Empty)
+            : element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
+                ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
+        return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
     }
 
     internal static string ExpandItemTypeName(string name, XElement element)

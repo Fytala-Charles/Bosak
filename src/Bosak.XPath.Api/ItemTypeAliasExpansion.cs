@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.4 | 13-10-2026     | Check choice cast eligibility with quote and EQName-aware type traversal
 //                      | Charles Korthout | 0.5 | 13-10-2026     | Classify known nominative names as non-atomic choice alternatives
 //                      | Charles Korthout | 0.6 | 13-10-2026     | Traverse name-free node-kind types within aliases and structural sequence types
+//                      | Charles Korthout | 0.7 | 13-10-2026     | Resolve names in element, attribute and document node type aliases
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,7 +28,7 @@ namespace Bosak.XPath.Api;
 /// <summary>Expands complete type-name tokens inside supported structural types.</summary>
 internal static class ItemTypeAliasExpansion
 {
-    internal static string? Expand(string type, Func<string, string?> resolveName)
+    internal static string? Expand(string type, Func<string, string?> resolveName, Func<string, bool, string>? resolveNodeName = null)
     {
         var text = RemoveComments(type).Trim();
         var function = Regex.Match(text, @"^function\s*\(");
@@ -44,11 +45,11 @@ internal static class ItemTypeAliasExpansion
             var expandedParameters = new List<string>(parameters.Count);
             foreach (var parameter in parameters)
             {
-                var expanded = Expand(parameter, resolveName);
+                var expanded = Expand(parameter, resolveName, resolveNodeName);
                 if (expanded is null) return null;
                 expandedParameters.Add(expanded);
             }
-            var result = Expand(tail[resultMarker.Length..], resolveName);
+            var result = Expand(tail[resultMarker.Length..], resolveName, resolveNodeName);
             return result is null ? null : "function(" + string.Join(",", expandedParameters) + ") as " + result;
         }
         var suffix = text.Length > 0 && text[^1] is '?' or '*' or '+' ? text[^1].ToString() : string.Empty;
@@ -59,7 +60,7 @@ internal static class ItemTypeAliasExpansion
             var expandedAlternatives = new List<string>(alternatives.Count);
             foreach (var alternative in alternatives)
             {
-                var expanded = Expand(alternative, resolveName);
+                var expanded = Expand(alternative, resolveName, resolveNodeName);
                 if (expanded is null) return null;
                 expandedAlternatives.Add(expanded);
             }
@@ -69,6 +70,21 @@ internal static class ItemTypeAliasExpansion
         if (enumeration.Success && text.EndsWith(')')) return "enum(" + text[enumeration.Length..] + suffix;
         var emptyTest = Regex.Match(text, @"^(item|node|empty-sequence|element|attribute|text|comment|namespace-node|document-node|processing-instruction)\s*\(\s*\)$");
         if (emptyTest.Success) return emptyTest.Groups[1].Value + "()" + suffix;
+        var namedNode = Regex.Match(text, @"^(element|attribute)\s*\(\s*(.*?)\s*\)$");
+        if (namedNode.Success)
+        {
+            var name = namedNode.Groups[2].Value;
+            // Schema annotations and partial name wildcards use a separate grammar.
+            if (name != "*" && !Regex.IsMatch(name, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$")) return null;
+            var kind = namedNode.Groups[1].Value;
+            return kind + "(" + (name == "*" ? name : resolveNodeName?.Invoke(name, kind == "attribute") ?? name) + ")" + suffix;
+        }
+        var document = Regex.Match(text, @"^document-node\s*\(\s*(element\s*\(.*\))\s*\)$");
+        if (document.Success)
+        {
+            var inner = Expand(document.Groups[1].Value, resolveName, resolveNodeName);
+            return inner is null ? null : "document-node(" + inner + ")" + suffix;
+        }
         var record = Regex.Match(text, @"^record\s*\(");
         if (record.Success && MatchingClose(text, record.Length - 1) == text.Length - 1)
         {
@@ -96,7 +112,7 @@ internal static class ItemTypeAliasExpansion
                 if (tail.Length == 0) { expandedFields.Add(field); continue; }
                 var marker = Regex.Match(tail, @"^as\s+");
                 if (!marker.Success) return null;
-                var expanded = Expand(tail[marker.Length..], resolveName);
+                var expanded = Expand(tail[marker.Length..], resolveName, resolveNodeName);
                 if (expanded is null) return null;
                 expandedFields.Add(field[..end] + " as " + expanded);
             }
@@ -113,7 +129,7 @@ internal static class ItemTypeAliasExpansion
             var expanded = new List<string>(parts.Count);
             foreach (var part in parts)
             {
-                var value = Expand(part, resolveName);
+                var value = Expand(part, resolveName, resolveNodeName);
                 if (value is null) return null;
                 expanded.Add(value);
             }

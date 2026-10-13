@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 0.24 | 13-10-2026     | Expand aliases in cast/castable targets and reject ineligible alias targets
 //                      | Charles Korthout | 0.25 | 13-10-2026     | Validate direct and expanded choice casting targets statically in XPath 4.0
 //                      | Charles Korthout | 0.26 | 13-10-2026     | Validate host type names and retain nominative namespace identity in expression targets
+//                      | Charles Korthout | 0.27 | 13-10-2026     | Resolve host element and attribute type-test names in their static namespaces
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -454,7 +455,8 @@ public sealed class XPath31Expression
             _ => (null, string.Empty)
         };
         var text = string.IsNullOrEmpty(prefix) ? type : prefix + ":" + type;
-        var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options));
+        var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options),
+            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options));
         if (expanded is null || expanded == text) return resolved;
         var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + expanded, xpath40: true);
         return resolved switch
@@ -465,6 +467,21 @@ public sealed class XPath31Expression
             TreatNode treat => treat with { Prefix = parsed.Prefix, TypeName = parsed.TypeName },
             _ => resolved
         };
+    }
+
+    private static string ResolveStaticNodeTypeName(string name, bool attribute, CompileOptions options)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal)) return name;
+        var colon = name.IndexOf(':');
+        var local = colon < 0 ? name : name[(colon + 1)..];
+        var ns = attribute ? string.Empty : options.DefaultElementNamespace ?? string.Empty;
+        if (colon >= 0)
+        {
+            if (options.Namespaces?.TryGetValue(name[..colon], out var uri) == true) ns = uri;
+            else if (name[..colon] == "xml") ns = "http://www.w3.org/XML/1998/namespace";
+            else throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
+        }
+        return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
     }
 
     private static string ResolveStaticItemTypeName(string lexical, CompileOptions options)
