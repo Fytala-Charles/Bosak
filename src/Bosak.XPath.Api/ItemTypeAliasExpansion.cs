@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.2 | 13-10-2026     | Expand function signatures and ordered choices while preserving return/outer occurrences
 //                      | Charles Korthout | 0.3 | 13-10-2026     | Expand aliases in structural record fields while preserving literal field names
 //                      | Charles Korthout | 0.4 | 13-10-2026     | Check choice cast eligibility with quote and EQName-aware type traversal
+//                      | Charles Korthout | 0.5 | 13-10-2026     | Classify known nominative names as non-atomic choice alternatives
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -125,14 +126,14 @@ internal static class ItemTypeAliasExpansion
 
     // Unknown QNames remain for schema/name validation; this checks syntactically
     // non-atomic alternatives without interpreting separators inside strings or EQNames.
-    internal static bool HasIneligibleCastTarget(string type, bool choiceAlternative = false)
+    internal static bool HasIneligibleCastTarget(string type, bool choiceAlternative = false, Func<string, bool>? isNonAtomicName = null)
     {
         var text = RemoveComments(type).Trim();
         if (text.StartsWith('(') && MatchingClose(text, 0) == text.Length - 1)
         {
             var alternatives = SplitArguments(text[1..^1], '|');
             return alternatives.Any(alternative => HasIneligibleCastTarget(alternative,
-                choiceAlternative || alternatives.Count > 1));
+                choiceAlternative || alternatives.Count > 1, isNonAtomicName));
         }
         var opening = text.IndexOf('(');
         if (opening >= 0 && !text.StartsWith("Q{", StringComparison.Ordinal))
@@ -142,7 +143,8 @@ internal static class ItemTypeAliasExpansion
             if (kind is "array" or "map" or "record") return choiceAlternative;
             return true;
         }
-        return choiceAlternative && text is "xs:anyAtomicType" or "xs:anySimpleType" or "xs:NOTATION" or "xs:anyType" or "xs:untyped";
+        return choiceAlternative && (isNonAtomicName?.Invoke(text) == true ||
+            text is "xs:anyAtomicType" or "xs:anySimpleType" or "xs:NOTATION" or "xs:anyType" or "xs:untyped");
     }
 
     private static List<string> SplitArguments(string text, char separator = ',')

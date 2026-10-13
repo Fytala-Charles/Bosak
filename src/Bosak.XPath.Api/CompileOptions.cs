@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 0.7   | 12-10-2026     | Expose enumeration alias static context for XPath 4.0 type tests
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Document inline namespaces and XPath 4.0 default namespace wildcard
 //                      | Charles Korthout | 0.9 | 13-10-2026     | Carry expanded XSLT item-type aliases through the internal host static context
+//                      | Charles Korthout | 0.10 | 13-10-2026     | Carry known nominative record names for host static type validation
 // ===========================================================================================================================================================
 using System.Xml.Schema;
 
@@ -53,7 +54,7 @@ public sealed class CompileOptions
     public IReadOnlyDictionary<string, string>? Namespaces { get; init; }
 
     /// <summary>
-    /// XPath 4.0 enumeration aliases for instance-of and treat expressions.
+    /// XPath 4.0 enumeration aliases for type tests, treat and casting expressions.
     /// Keys are expanded names in Q{uri}local form; values are enum(...) item types.
     /// Other named item types and declaration conversion are not supported by this option.
     /// </summary>
@@ -62,6 +63,9 @@ public sealed class CompileOptions
     // Expanded package-local definitions supplied by the XSLT host, independent of
     // the public enumeration-only option. Definitions contain no unresolved aliases.
     internal IReadOnlyDictionary<string, string>? ItemTypeAliases { get; init; }
+
+    // Non-null enables host named-type validation, even when no records are declared.
+    internal IReadOnlySet<string>? NamedRecordTypeNames { get; init; }
 
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names

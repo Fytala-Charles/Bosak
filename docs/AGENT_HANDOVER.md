@@ -1,3 +1,21 @@
+# Host static named-type validation — 2026-10-13
+
+Branch: feat/xslt-static-named-types; baseline PR #219 metadata at 397903ce59c01e81bbce23893d5b87ee68c63a2e. PR #219 merged as a76b54e43d8f089c38a512620240d494a9d9a73d after CI 38360549109 passed and the user explicitly approved the merge. PR #220 now targets main. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) validates package-local named types in supported XPath 4.0 instance-of, treat, cast and castable targets when the XSLT host compiles the expression. Unknown direct/nested names raise XPST0051, including AVT expressions; undeclared prefixes retain XPST0081. Declared nominative record references are canonicalized to their expanded names, and record alternatives in choice cast targets raise XPST0080. Ordinary record-valued type-test choices remain valid. The internal host registry survives inline namespace declarations, recognizes built-in/XDM types and consults in-scope simple schema types. Twenty-one new regressions pass. Binding/field declaration validation, unsupported type grammar, complete schema variety/choice semantics and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+CompileOptions carries known record names internally. XPath31Expression resolves/validates supported host type targets and retains the registry through inline namespace options. The shared helper classifies nominative record alternatives as non-atomic. TransformEngine supplies the host registry to expression and AVT compilation. No public API change, gate promotion, native assertion/catalogue manifest change or publication. Expression compilation can occur on first execution; unused instructions are not all eagerly validated.
+
+Validation: Final Release build passes with zero warnings/errors. All 7064 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4178/0/0 and twenty-one new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0 and record family 12/52/1; unchanged contributed cases 023/024 and 026/027 pass. Broader failures retained (runner exit 1). Fifteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Next: binding/field declaration static names and supported grammar gaps, then package exposure. Check this slice's CI before merging. PR #219 merge is complete; check PR #220 CI before its merge. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: tested implementation 31afbbb35d14a23be062109672d47b2690601031 committed and pushed; [Bosak PR #220](https://github.com/Fytala-Charles/Bosak/pull/220) open against main, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes. PR #219 merge completed after explicit user approval.
+
 # Choice casting target validation — 2026-10-13
 
 Branch: feat/xslt-choice-cast-validation; main baseline 5e85889d4c7a7f9ae67fece95df5b77e612d40c8. PR #218 merged after CI 38357999516 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
