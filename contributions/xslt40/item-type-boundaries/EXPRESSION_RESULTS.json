@@ -39,5 +39,7 @@
   },
   "independentProcessorConfirmation": "Outstanding",
   "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
-  "validation": "Release build passes; all 6915 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4029/0/0. Forty-four focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run remains 6/26/0, original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes."
+  "validation": "Release build passes; all 6915 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4029/0/0. Forty-four focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run remains 6/26/0, original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.",
+  "testedImplementationCommit": "e9aea516e6b925f7d5cb4a5b9c77c5f02a9dc733",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/211"
 }
