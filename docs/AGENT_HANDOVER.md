@@ -14,7 +14,7 @@ Validation: Release build passes with 11 existing warnings and zero errors. All 
 
 Next: schema-annotated alias traversal and diagnostics, then function type grammar and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: implementation df1177ce in PR #226 (https://github.com/Fytala-Charles/Bosak/pull/226), stacked on #225. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
 
 # Partial node wildcard aliases — 2026-10-13
 
