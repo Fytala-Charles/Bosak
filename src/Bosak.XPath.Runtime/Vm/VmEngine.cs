@@ -409,6 +409,7 @@
 //                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
 //                      | Charles Korthout | 2.183 | 13-10-2026     | Match explicit empty-namespace element and attribute type names
 //                      | Charles Korthout | 2.184 | 13-10-2026     | Match processing-instruction sequence types by their case-sensitive target
+//                      | Charles Korthout | 2.185 | 13-10-2026     | Match element and attribute type tests with partial name wildcards
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -12835,13 +12836,17 @@ internal static class VmEngine
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
                     if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12849,7 +12854,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {
@@ -12902,13 +12907,17 @@ internal static class VmEngine
             var namePart = cpInner.Split(',')[0].Trim();
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
                     if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12916,7 +12925,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {

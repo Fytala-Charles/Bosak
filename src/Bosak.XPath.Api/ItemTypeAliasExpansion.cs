@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.6 | 13-10-2026     | Traverse name-free node-kind types within aliases and structural sequence types
 //                      | Charles Korthout | 0.7 | 13-10-2026     | Resolve names in element, attribute and document node type aliases
 //                      | Charles Korthout | 0.8 | 13-10-2026     | Traverse processing-instruction target tests without QName expansion
+//                      | Charles Korthout | 0.9 | 13-10-2026     | Traverse partial wildcards in element and attribute type aliases
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -77,8 +78,8 @@ internal static class ItemTypeAliasExpansion
         if (namedNode.Success)
         {
             var name = namedNode.Groups[2].Value;
-            // Schema annotations and partial name wildcards use a separate grammar.
-            if (name != "*" && !Regex.IsMatch(name, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$")) return null;
+            // Schema annotations and name unions use a separate grammar.
+            if (name != "*" && !Regex.IsMatch(name, @"^(?:\*:[\p{L}_][\p{L}\p{M}\p{N}_.-]*|[\p{L}_][\p{L}\p{M}\p{N}_.-]*:\*|Q\{[^}]*\}\*|(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?)$")) return null;
             var kind = namedNode.Groups[1].Value;
             return kind + "(" + (name == "*" ? name : resolveNodeName?.Invoke(name, kind == "attribute") ?? name) + ")" + suffix;
         }

@@ -300,6 +300,7 @@
 //                      | Charles Korthout | 2.139 | 13-10-2026     | Validate named alias references and preserve declared record identities
 //                      | Charles Korthout | 2.140 | 13-10-2026     | Validate supported binding and field type names at stylesheet registration
 //                      | Charles Korthout | 2.141 | 13-10-2026     | Preserve declaration namespaces in named node-kind aliases and record fields
+//                      | Charles Korthout | 2.142 | 13-10-2026     | Preserve partial node-name wildcards in declaration namespace resolution
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1014,12 +1015,13 @@ internal sealed class Stylesheet
 
     internal static string ExpandNodeTypeName(string name, bool attribute, XElement element)
     {
-        if (name.StartsWith("Q{", StringComparison.Ordinal)) return name;
+        if (name.StartsWith("Q{", StringComparison.Ordinal) || name.StartsWith("*:", StringComparison.Ordinal)) return name;
         var colon = name.IndexOf(':');
         var local = colon < 0 ? name : name[(colon + 1)..];
         var ns = colon < 0 ? (attribute ? string.Empty : GetXPathDefaultNamespace(element) ?? string.Empty)
             : element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
                 ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
+        if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
     }
 

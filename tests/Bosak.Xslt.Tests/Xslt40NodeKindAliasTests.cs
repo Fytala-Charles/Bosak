@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover named and wildcard node aliases with declaration namespaces
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Verify processing-instruction alias target matching and invalid target diagnostics
+//                      | Charles Korthout | 0.4   | 13-10-2026     | Verify partial node wildcards and the any default namespace
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -211,4 +212,80 @@ public class Xslt40NodeKindAliasTests
     public void Declaration_ProcessingInstructionAndUnknownType()
         => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
             "<xsl:variable name='v' as='(processing-instruction(target) | t:missing)?' select='()'/>")).ToString());
+
+    /// <summary>Matches local-name and namespace wildcards while preserving declaration bindings.</summary>
+    /// <param name="type">The wildcard alias definition.</param>
+    /// <param name="source">A source node matching the wildcard.</param>
+    [Theory]
+    [InlineData("element(*:Root)", "<Root xmlns='urn:other'/>")]
+    [InlineData("element(p:*)", "<Anything xmlns='urn:payload'/>")]
+    [InlineData("element(Q{urn:payload}*)", "<Anything xmlns='urn:payload'/>")]
+    [InlineData("element(Q{}*)", "<Anything/>")]
+    [InlineData("attribute(*:Code)", "<root xmlns:p='urn:other' p:Code='x'/>")]
+    [InlineData("attribute(p:*)", "<root xmlns:p='urn:payload' p:Anything='x'/>")]
+    [InlineData("attribute(Q{}*)", "<root Anything='x'/>")]
+    [InlineData("document-node(element(*:Root))", "<Root xmlns='urn:other'/>")]
+    [InlineData("document-node(element(p:*))", "<Anything xmlns='urn:payload'/>")]
+    public void Alias_PartialWildcard(string type, string source)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : type.StartsWith("document") ? "." : "/*";
+        Assert.Equal("true|true", Run($"<xsl:item-type xmlns:p='urn:payload' name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/' xmlns:p='urn:other'><xsl:variable name='n' as='t:n' select='{select}'/>" +
+            "<out><xsl:value-of separator='|' select='($n instance of t:n,($n treat as t:n) is $n)'/></out></xsl:template>", source));
+    }
+
+    /// <summary>Rejects the wrong local name or namespace rather than treating a partial wildcard as any node.</summary>
+    /// <param name="type">The wildcard alias definition.</param>
+    /// <param name="source">A source node that must not match.</param>
+    [Theory]
+    [InlineData("element(*:Root)", "<root/>")]
+    [InlineData("element(p:*)", "<Root xmlns='urn:other'/>")]
+    [InlineData("element(Q{}*)", "<Root xmlns='urn:other'/>")]
+    [InlineData("attribute(*:Code)", "<root code='x'/>")]
+    [InlineData("attribute(p:*)", "<root Code='x'/>")]
+    [InlineData("attribute(Q{}*)", "<root xmlns:p='urn:other' p:Code='x'/>")]
+    public void Alias_PartialWildcardMismatch(string type, string source)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : "/*";
+        Assert.Equal("false", Run($"<xsl:item-type xmlns:p='urn:payload' name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/'><out><xsl:value-of select='{select} instance of t:n'/></out></xsl:template>", source));
+    }
+
+    /// <summary>Reports undeclared namespace wildcard prefixes during alias registration.</summary>
+    /// <param name="type">The invalid wildcard type.</param>
+    [Theory]
+    [InlineData("element(absent:*)")]
+    [InlineData("attribute(absent:*)")]
+    public void Alias_UnboundWildcardPrefix(string type)
+        => Assert.Contains("XPST0081", Assert.ThrowsAny<Exception>(() => Compile(
+            $"<xsl:item-type name='t:n' as='{type}'/>")).ToString());
+
+    /// <summary>Preserves wildcard meaning inside arrays and direct type tests.</summary>
+    [Fact]
+    public void Alias_NestedWildcard()
+        => Assert.Equal("true|true|true", Run("""
+            <xsl:item-type name='t:arr' as='array(element(*:Root))'/>
+            <xsl:template match='/' xmlns:p='urn:payload'><out>
+              <xsl:value-of separator='|' select='([/*] instance of t:arr,
+                /* instance of element(p:*),/* instance of element(*:Root))'/>
+            </out></xsl:template>
+            """, "<Root xmlns='urn:payload'/>") );
+
+    /// <summary>Expands the any default for element names while keeping attributes unqualified.</summary>
+    [Fact]
+    public void Alias_AnyDefaultNamespace()
+        => Assert.Equal("true|true|true", Run("""
+            <xsl:item-type name='t:e' xpath-default-namespace='##any' as='element(Root)'/>
+            <xsl:item-type name='t:a' xpath-default-namespace='##any' as='attribute(Code)'/>
+            <xsl:template match='/' xpath-default-namespace='##any'><out>
+              <xsl:value-of separator='|' select='(/* instance of t:e,/*/@* instance of t:a,
+                /* instance of element(Root))'/>
+            </out></xsl:template>
+            """, "<Root xmlns='urn:payload' Code='x'/>") );
+
+    /// <summary>Does not allow wildcard node tests to hide unknown adjacent type names.</summary>
+    [Fact]
+    public void Declaration_WildcardAndUnknownType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='v' as='(element(*:Root) | t:missing)?' select='()'/>")).ToString());
 }

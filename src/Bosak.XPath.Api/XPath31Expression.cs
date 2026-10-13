@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 0.25 | 13-10-2026     | Validate direct and expanded choice casting targets statically in XPath 4.0
 //                      | Charles Korthout | 0.26 | 13-10-2026     | Validate host type names and retain nominative namespace identity in expression targets
 //                      | Charles Korthout | 0.27 | 13-10-2026     | Resolve host element and attribute type-test names in their static namespaces
+//                      | Charles Korthout | 0.28 | 13-10-2026     | Preserve node-name wildcards and expand the XPath 4.0 any default namespace
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -471,7 +472,7 @@ public sealed class XPath31Expression
 
     private static string ResolveStaticNodeTypeName(string name, bool attribute, CompileOptions options)
     {
-        if (name.StartsWith("Q{", StringComparison.Ordinal)) return name;
+        if (name.StartsWith("Q{", StringComparison.Ordinal) || name.StartsWith("*:", StringComparison.Ordinal)) return name;
         var colon = name.IndexOf(':');
         var local = colon < 0 ? name : name[(colon + 1)..];
         var ns = attribute ? string.Empty : options.DefaultElementNamespace ?? string.Empty;
@@ -481,6 +482,7 @@ public sealed class XPath31Expression
             else if (name[..colon] == "xml") ns = "http://www.w3.org/XML/1998/namespace";
             else throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
         }
+        if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
     }
 

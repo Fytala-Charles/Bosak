@@ -1,3 +1,21 @@
+# Partial node wildcard aliases — 2026-10-13
+
+Branch: feat/xslt-node-wildcard-aliases; parent 7fae0371. PR #223 CI passed and PR #224 is stacked on it; both remain open. This slice will be stacked on #224. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports partial element/attribute name wildcards in aliases and supported structural types: *:Name matches an exact local name in any namespace; prefix:* and Q{uri}* match any local name in the specified namespace. Prefix wildcards retain declaration bindings under use-site rebinding, including document-node(element(...)) nesting. Unbound wildcard prefixes raise XPST0081; adjacent unknown type names retain XPST0051. The ##any declaration default now expands unprefixed element tests to *:Name while unprefixed attributes stay unqualified. Twenty new regressions verify identity, case/namespace mismatches, empty namespaces, nested arrays/documents and diagnostics. Node-name unions, schema-annotated tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker recognizes wildcard node names; host/declaration namespace callbacks preserve wildcard intent. Runtime node tests constrain only the specified name part. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7143 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4257/0/0 and twenty new regressions. Focused node-alias tests pass 65/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 11/21/0: wildcard-type-001/002 newly pass and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: node-name unions/schema diagnostics and function type grammar, then package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Processing-instruction target aliases — 2026-10-13
 
 Branch: feat/xslt-pi-target-aliases; parent 3d076aa9. PR #223 CI 38372757169 passed; it remains open, so this slice is stacked on #223. Earlier sections are historical.
