@@ -1,3 +1,21 @@
+# Node-kind alias grammar — 2026-10-13
+
+Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 merged after CI 38368964609 passed and the user authorized merging the prerequisite. PR #222 now targets main. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports node-kind aliases whose tests have empty parentheses: element(), attribute(), text(), comment(), processing-instruction(), namespace-node() and document-node(). The shared type walker also accepts whitespace and nested comments around empty tests. These types can appear within supported array/map/record/function/choice types; adjacent unknown names now receive static validation instead of being hidden by an unsupported node-kind branch. Sixteen regressions verify node identity, occurrences, structural nesting, unknown names, binding failures and non-atomic choice cast rejection. Named/wildcard/schema-annotated node tests, fn/named-parameter function type grammar, full schema semantics and package type exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version remains 1.1.3; candidate 1.2.0 stays unpublished.
+
+ItemTypeAliasExpansion recognizes empty node-kind tests without treating their names as type QNames. Existing parser/runtime node matching and conversion are reused. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 10 existing warnings and zero errors. All 7094 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4208/0/0 and sixteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; unchanged contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: named/wildcard/schema-annotated node tests and function grammar gaps, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation d456c000 committed and pushed; [Bosak PR #222](https://github.com/Fytala-Charles/Bosak/pull/222) open against main, CI pending. This delivery record changes documentation only. PR #221 is merged; PR #222 is retargeted to main. Wait for its CI before the authorized merge.
+
 # Declaration static named-type validation — 2026-10-13
 
 Branch: feat/xslt-declaration-type-validation; main baseline 4323b1c8. PR #220 merged after CI 38362079480 passed and the user explicitly requested the merge. Earlier sections are historical.
