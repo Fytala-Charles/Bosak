@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: ordinary wildcard node patterns and their XSLT 4.0 default priorities (native wildcard-type-003–006). Remaining native record outcomes, including case 050 result handling, and annotated function types remain follow-ups. Full union-pattern priorities, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain bounded gaps. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: PR #234 (https://github.com/Fytala-Charles/Bosak/pull/234), stacked on feat/xslt-structural-record-bindings / PR #233. Verified implementation revision: 1b4bfafc. A documentation-only delivery commit follows this recorded revision. PRs #223–234 remain open; main-target CI begins after stack retargeting. Next implementation slice: ordinary wildcard node patterns and their XSLT 4.0 priorities.
 
 # Direct structural record bindings — 2026-10-13
 
