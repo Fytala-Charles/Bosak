@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.6   | 24-09-2026     | REQ-104: added SchemaSet — compiled schema set enabling schema-aware kind tests        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 12-10-2026     | Expose enumeration alias static context for XPath 4.0 type tests
+//                      | Charles Korthout | 0.8   | 13-10-2026     | Document inline namespaces and XPath 4.0 default namespace wildcard
 // ===========================================================================================================================================================
 using System.Xml.Schema;
 
@@ -60,6 +61,9 @@ public sealed class CompileOptions
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names
     /// in XPath expressions. When null or empty, unprefixed names match no namespace.
+    /// In XPath 4.0, <c>##any</c> matches unprefixed element axis name tests in any namespace;
+    /// unprefixed item type names use the XML Schema namespace, while kind-test names use no namespace.
+    /// Inline XPath 4.0 namespace declarations override these supplied bindings for that expression.
     /// </summary>
     public string? DefaultElementNamespace { get; init; }
 

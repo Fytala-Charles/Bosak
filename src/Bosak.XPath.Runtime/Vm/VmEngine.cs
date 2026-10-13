@@ -400,6 +400,7 @@
 //                      |                  |         |                | lazy globals are not flagged circular (K2-FunctionProlog-15)
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.175 | 13-10-2026     | Match named record types by annotation identity in type tests.                           |
+//                      | Charles Korthout | 2.176 | 13-10-2026     | Normalize schema EQName cast targets for XPath 4.0 default item types
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -9041,6 +9042,11 @@ internal static class VmEngine
         var (resolvedNs, resolvedLocal) = isStructuralCastTarget
             ? default
             : ResolveTypeQName(typeName, context);
+
+        // XPath 4.0 default ##any item types are resolved to schema EQNames by the compiler.
+        if (context?.IsXPath40 == true && typeName.StartsWith("Q{", StringComparison.Ordinal)
+            && resolvedNs == XmlSchema.Namespace)
+            normalized = resolvedLocal.ToLowerInvariant();
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
         // declarations included). If the prefix is bound to the XML Schema namespace,

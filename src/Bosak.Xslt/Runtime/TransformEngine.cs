@@ -527,6 +527,7 @@
 //                      | Charles Korthout | 7.11  | 12-10-2026     | Evaluate xsl:select body expressions with focus and declared result coercion.              |
 //                      | Charles Korthout | 7.12  | 12-10-2026     | Pass enumeration aliases to XPath and AVT compilation; preserve EQName URIs
 //                      | Charles Korthout | 7.13  | 13-10-2026     | Register record constructors, convert fields and preserve named record bindings.         |
+//                      | Charles Korthout | 7.14  | 13-10-2026     | Validate select prefixes against inline namespace declarations
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3015,7 +3016,11 @@ internal sealed class TransformEngine
     private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
         var nsMap = GetInScopeNamespaces(instruction);
-        ValidateXPathPrefixes(expression, nsMap);
+        var declarations = Bosak.XPath.Parser.Ast.XPathParser.ExtractNamespaceDeclarations(expression, _stylesheet.GetXPathCompatibility(instruction) >= XPathCompatibility.XPath40);
+        var validationNamespaces = new Dictionary<string, string>(nsMap, StringComparer.Ordinal);
+        foreach (var (prefix, uri) in declarations.Namespaces)
+            validationNamespaces[prefix] = uri;
+        ValidateXPathPrefixes(declarations.Expression, validationNamespaces);
         var defaultNs = GetXPathDefaultNamespace(instruction);
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
@@ -3055,6 +3060,21 @@ internal sealed class TransformEngine
         for (int i = 0; i < expression.Length; i++)
         {
             char c = expression[i];
+            if (!inString && c == '(' && i + 1 < expression.Length && expression[i + 1] == ':')
+            {
+                int depth = 1;
+                i += 2;
+                while (i < expression.Length && depth > 0)
+                {
+                    if (i + 1 < expression.Length && expression[i] == '(' && expression[i + 1] == ':')
+                    { depth++; i += 2; }
+                    else if (i + 1 < expression.Length && expression[i] == ':' && expression[i + 1] == ')')
+                    { depth--; i += 2; }
+                    else i++;
+                }
+                i--;
+                continue;
+            }
             if (!inString && c == 'Q' && i + 1 < expression.Length && expression[i + 1] == '{')
             {
                 var close = expression.IndexOf('}', i + 2);

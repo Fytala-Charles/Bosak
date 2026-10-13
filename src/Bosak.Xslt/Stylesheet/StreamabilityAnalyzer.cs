@@ -36,6 +36,7 @@
 //                      |                  |       |                | xsl:switch streamability cases                                                          |
 //                      | Charles Korthout | 0.14  | 12-10-2026     | Analyze xsl:select body text as XPath, with no TVT or fallback traversal.                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.15  | 13-10-2026     | Analyze namespace-prefixed XPath 4.0 select bodies
 // ===========================================================================================================================================================
 
 using System;
@@ -1889,7 +1890,7 @@ internal static class StreamabilityAnalyzer
         {
             try
             {
-                var ast = XPathParser.Parse(expr);
+                var ast = XPathParser.Parse(expr, xpath40: true);
                 _lastParsedText = expr;
                 return ast;
             }

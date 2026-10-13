@@ -1,0 +1,152 @@
+{
+  "date": "2026-10-13",
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "d0d0da20f25f285c884d5a79c0641ba9d21c66b8",
+  "sourceSha256": {
+    "src/Bosak.XPath.Parser/Ast/XPathParser.cs": "50244f53898e4e6e430ed06f35e2304f060bc14635fac5b2d534268995b2ac15",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "5d162e5840395bb367f5c9c976387edef0325c16a8af41349dc9d0a6aafbd2c7",
+    "src/Bosak.XPath.Api/CompileOptions.cs": "cef22cd23e2b2a1bd202b09a30d087f371482ba4f9b352901c1e998aeaac3d52",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "e3552fac579a86668124dff90ad01f0d646eebcca66311d2de16ce919575cdb3",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "f2f6ef8be9c92d64375719391e022989a8bb9aacb4c2f5f7558e6cf479bf8835",
+    "src/Bosak.Xslt/Stylesheet/StreamabilityAnalyzer.cs": "21ccdf18a889adc3a389b9bcfde14aba975ee1590bcaf1327ed75038bba3ed79",
+    "tests/Bosak.XPath.Api.Tests/NamespaceDeclarationTests.cs": "578af49077923450965d4475c98237cf11d29e731547600e88db06f8577be12a",
+    "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs": "8e5b891906830899bd899275a01b24f04bdf7eb7196a7131589cc8173930b3b2",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeSuiteRevision": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+  "nativeNamespaceCases": [
+    {
+      "id": "seqtor-140",
+      "outcome": "pass"
+    },
+    {
+      "id": "seqtor-141",
+      "outcome": "pass"
+    },
+    {
+      "id": "seqtor-142",
+      "outcome": "pass"
+    },
+    {
+      "id": "seqtor-143",
+      "outcome": "pass"
+    },
+    {
+      "id": "seqtor-144",
+      "outcome": "pass"
+    }
+  ],
+  "exactContributionCases": [
+    {
+      "id": "seqtor-145",
+      "outcome": "pass"
+    },
+    {
+      "id": "seqtor-146",
+      "outcome": "pass"
+    }
+  ],
+  "nativeSeqtorFamily": {
+    "passed": 83,
+    "failed": 0,
+    "skipped": 9,
+    "remainingFailures": [],
+    "scope": "Filtered seqtor family; known harness skips retained, not complete XSLT 4.0 conformance"
+  },
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json (unchanged historical source hashes and 78/5/9 result)",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml",
+    "sha256": "38e5cd7b32ff3bac7752dd917259790fd1d101e7b5de58595527cbb7824fbc3d",
+    "section": "namespace-declarations"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/23",
+  "validation": {
+    "releaseBuild": "Pass; zero warnings/errors in final incremental build",
+    "focusedTests": {
+      "api": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      },
+      "xslt": {
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0
+      },
+      "newRegressions": 23
+    },
+    "unitTests": {
+      "passed": 6871,
+      "failed": 0,
+      "skipped": 0,
+      "assemblies": 10
+    },
+    "xsltTests": {
+      "passed": 3985,
+      "failed": 0,
+      "skipped": 0
+    },
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894,
+      "gatedFailures": 0
+    },
+    "documentation": "11 pages rendered; original contribution patch trees/hashes checked; native catalog schema validated; current source hashes verified"
+  },
+  "nativeReceipt": {
+    "timestampUtc": "2026-10-13T03:17:04.9210406Z",
+    "upstream": "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot": "D:\\Development\\Bosak\\.upstream\\xslt40-test",
+    "suiteRevision": "5f3296d12cf7aa5ad76554ea95f95f990629e04f",
+    "suiteStatus": [],
+    "bosakRevision": "d0d0da20f25f285c884d5a79c0641ba9d21c66b8",
+    "bosakStatus": [
+      " M README.md",
+      " M contributions/xslt40/README.md",
+      " M contributions/xslt40/select-boundaries/README.md",
+      " M docs/AGENT_HANDOVER.md",
+      " M docs/ARCHITECTURE.md",
+      " M docs/FEATURE_REQUESTS.md",
+      " M docs/INTEGRATION.md",
+      " M docs/XSLT40_CONTRIBUTION_QUEUE.json",
+      " M docs/XSLT40_CONTRIBUTION_QUEUE.md",
+      " M docs/XSLT40_UPSTREAM_TESTING.md",
+      " M docs/xpath40-catalog/COMPLETENESS-AUDIT.md",
+      " M docs/xpath40-catalog/README.md",
+      " M src/Bosak.XPath.Api/CompileOptions.cs",
+      " M src/Bosak.XPath.Api/XPath31Expression.cs",
+      " M src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+      " M src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      " M src/Bosak.Xslt/Runtime/TransformEngine.cs",
+      " M src/Bosak.Xslt/Stylesheet/StreamabilityAnalyzer.cs",
+      " M tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs",
+      "?? .guard-tmp/",
+      "?? .sweep-baselines/",
+      "?? contributions/xslt40/select-boundaries/NAMESPACE_RESULTS.json",
+      "?? tests/Bosak.XPath.Api.Tests/NamespaceDeclarationTests.cs"
+    ],
+    "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware": false,
+    "testSet": "seqtor",
+    "testCase": "",
+    "runnerExitCode": 0,
+    "counts": {
+      "Failed": 0,
+      "Skipped": 9,
+      "Total": 92,
+      "Passed": 83
+    },
+    "success": true,
+    "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log": "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261013T031703597Z.log"
+  }
+}

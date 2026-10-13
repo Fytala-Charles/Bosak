@@ -1,3 +1,21 @@
+# Select namespace declarations — 2026-10-13
+
+Branch: feat/xslt-select-namespaces; main baseline d0d0da20f25f285c884d5a79c0641ba9d21c66b8. PR #207 merged after CI 38334370685 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now supports expression-local XPath 4.0 namespace declarations in the XPath API and xsl:select bodies. Prefix bindings override host bindings; an optional default element namespace must come first. Default ##any matches unprefixed element axis name tests across namespaces while preserving attribute/kind-test boundaries and XML Schema item type resolution. Namespace contexts restore after success or failure. All unchanged native seqtor-140–146 cases pass; the broader seqtor-filter run is 83 pass/0 fail/9 skip. The nine known harness skips, independent confirmation and upstream PR #23 acceptance remain outstanding, so this does not establish complete XSLT 4.0 conformance. N02 and REQ-126 remain In Progress; public release remains 1.1.3.
+
+Shared lexer/parser extraction implements the XPath 4.0 namespace prolog, preserving offsets, comments and escaped URI literals. The API merges an expression-local static context without mutating options; runtime namespace/default bindings restore in finally. Default ##any axis tests lower to local-name wildcards, simple item types resolve to schema EQNames, and 4.0 casts normalize those schema names. Static errors cover duplicate/reserved bindings and declaration order. XSLT prefix validation accounts for body declarations and skips nested comments. Streamability parses declaration-prefixed bodies so a streamed last() call still raises XTSE3430. No new public API or native contribution edits. Twenty-three new regressions; existing catalogue counts/outcomes unchanged. Queue, integration, catalogue/audit, setup and contribution documentation synchronized; original select POST_FIX_RESULTS and failed receipts preserved.
+
+Validation: final Release build zero warnings/errors; 19 API and 18 select-body regressions pass, with 23 new tests. All 6871 unit tests across ten assemblies pass, zero failures/skips, including XSLT 3985/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. All seven native seqtor-140–146 cases pass; filtered family 83/0/9. Eleven synchronized pages rendered; native catalog schema, original portable patch trees/bytes, preserved receipts and source hashes checked. Final review added an explicit frozen-profile regression: ##any remains a literal namespace in XPath 3.1; complete validation rerun against that final source.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. Next: named item-type conversion and remaining record coercion gaps. N02/REQ-126 remain In Progress pending review/independent confirmation; monitor upstream PRs #22–26. Nine seqtor harness skips remain. Preserve .guard-tmp/, .sweep-baselines/, .upstream/ and historical receipts. Native checkout is clean on bosak/select-boundaries. No release/tag/package publication.
+
+Delivery pending.
+
 # Named record constructors — 2026-10-13
 
 Branch: feat/xslt-record-constructors; main baseline 7feef01daa36ef21ab84495e12b5a4157605d987. PR #206 merged after CI 38310340341 passed. Source 1.2.0 unpublished; public release 1.1.3. Earlier sections remain historical.

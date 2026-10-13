@@ -52,6 +52,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
 //                      | Charles Korthout | 0.20  | 12-10-2026     | Resolve enumeration aliases in instance-of and treat AST nodes                           |
+//                      | Charles Korthout | 0.21  | 13-10-2026     | Apply expression namespace context and default wildcard tests
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -90,12 +91,18 @@ public sealed class XPath31Expression
     /// <summary>
     /// Parses and compiles an XPath 3.1 expression string with default options.
     /// </summary>
+    /// <param name="expression">The XPath source text.</param>
+    /// <returns>The compiled expression.</returns>
     public static XPath31Expression Compile(string expression)
         => Compile(expression, CompileOptions.Default);
 
     /// <summary>
     /// Parses and compiles an XPath expression with the specified options.
     /// </summary>
+    /// <param name="expression">The XPath source text, including optional XPath 4.0 namespace declarations.</param>
+    /// <param name="options">The compatibility profile and host static context.</param>
+    /// <returns>The compiled expression with its expression-local namespace context.</returns>
+    /// <exception cref="XPathParseException">The expression or namespace declaration grammar is invalid.</exception>
     public static XPath31Expression Compile(string expression, CompileOptions options)
     {
         ArgumentNullException.ThrowIfNull(options);
@@ -103,12 +110,35 @@ public sealed class XPath31Expression
         if (string.IsNullOrWhiteSpace(expression))
             throw new XPathParseException("Empty expression is not a valid XPath expression", 0);
 
+        var declarations = XPathParser.ExtractNamespaceDeclarations(expression, options.Compatibility >= XPathCompatibility.XPath40);
+        if (declarations.Namespaces.Count > 0 || declarations.DefaultNamespace is not null)
+        {
+            var namespaces = options.Namespaces is null
+                ? new Dictionary<string, string>(StringComparer.Ordinal)
+                : new Dictionary<string, string>(options.Namespaces, StringComparer.Ordinal);
+            foreach (var (prefix, uri) in declarations.Namespaces)
+                namespaces[prefix] = uri;
+            options = new CompileOptions
+            {
+                Compatibility = options.Compatibility, Namespaces = namespaces,
+                DefaultElementNamespace = declarations.DefaultNamespace ?? options.DefaultElementNamespace,
+                DefiningElementDefaultNamespace = options.DefiningElementDefaultNamespace,
+                EnumerationItemTypes = options.EnumerationItemTypes, SchemaSet = options.SchemaSet,
+                Xml11LineEndings = options.Xml11LineEndings, BaseUri = options.BaseUri,
+                BackwardsCompatible = options.BackwardsCompatible, StaticVariableTypes = options.StaticVariableTypes,
+                StrictStaticTyping = options.StrictStaticTyping, EnableJit = options.EnableJit
+            };
+            expression = declarations.Expression;
+        }
+
         // 1. Lex + Parse -> AST
         var ast = XPathParser.Parse(expression, xml11LineEndings: options.Xml11LineEndings, schemaAware: options.SchemaSet is not null, xpath40: options.Compatibility >= XPathCompatibility.XPath40);
 
         // 2. Resolve function-call namespaces using the supplied static context and
         // report static errors for functions that have been removed from the spec.
         ast = ResolveFunctionNamespaces(ast, options);
+        var defaultElementNamespace = options.Compatibility >= XPathCompatibility.XPath40
+            && options.DefaultElementNamespace == "##any" ? string.Empty : options.DefaultElementNamespace;
 
         // 2b. Static name-test validation against the in-scope namespaces (XPST0081 for
         // undeclared prefixes) and schema-aware kind tests (XPST0008): without a schema
@@ -119,8 +149,8 @@ public sealed class XPath31Expression
         // undeclared schema names).
         if (options.Namespaces is not null)
             Compiler.StaticNameTestValidator.Validate(ast, prefix =>
-                options.Namespaces.TryGetValue(prefix, out var nsUri) ? nsUri : null,
-                options.SchemaSet, options.DefaultElementNamespace);
+                options.Namespaces.TryGetValue(prefix, out var nsUri) && nsUri.Length > 0 ? nsUri : null,
+                options.SchemaSet, defaultElementNamespace);
 
         // 3. Optimize AST
         var optimizer = new XPathOptimizer();
@@ -130,7 +160,7 @@ public sealed class XPath31Expression
         var lowerer = new IrLowerer();
         var module = lowerer.Lower(optimized);
 
-        return new XPath31Expression(module, options.Namespaces, options.DefaultElementNamespace, options.DefiningElementDefaultNamespace, options.BaseUri, options.Compatibility);
+        return new XPath31Expression(module, options.Namespaces, defaultElementNamespace, options.DefiningElementDefaultNamespace, options.BaseUri, options.Compatibility);
     }
 
     private const string DefaultFunctionNamespace = "http://www.w3.org/2005/xpath-functions";
@@ -150,7 +180,11 @@ public sealed class XPath31Expression
             return DefaultFunctionNamespace;
 
         if (options.Namespaces != null && options.Namespaces.TryGetValue(prefix, out var nsUri))
+        {
+            if (nsUri.Length == 0)
+                throw new InvalidOperationException($"XPST0081: Namespace prefix '{prefix}' was undeclared.");
             return nsUri;
+        }
 
         return null;
     }
@@ -233,11 +267,14 @@ public sealed class XPath31Expression
     {
         return node switch
         {
+            VariableReferenceNode variable when variable.NamespaceUri is null && variable.Prefix is not null
+                && options.Namespaces is not null && options.Namespaces.TryGetValue(variable.Prefix, out var variableUri) && variableUri.Length == 0
+                => throw new InvalidOperationException($"XPST0008: Variable '${variable.Prefix}:{variable.LocalName}' uses an undeclared namespace prefix."),
             FunctionCallNode fc => ResolveFunctionCall(fc, options),
             NamedFunctionRefNode nf => ResolveNamedFunctionRef(nf, options),
             ParenthesizedExprNode p => p with { Expression = ResolveFunctionNamespaces(p.Expression, options) },
             PredicateNode pred => pred with { Expression = ResolveFunctionNamespaces(pred.Expression, options) },
-            StepNode step => step with { Predicates = step.Predicates.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
+            StepNode step => step with { NodeTest = ResolveDefaultNamespaceTest(step, options), Predicates = step.Predicates.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             PathExprNode path => path with { Steps = path.Steps.Select(s => ResolveFunctionNamespaces(s, options)).ToList() },
             SequenceExpressionNode seq => seq with { Expressions = seq.Expressions.Select(e => ResolveFunctionNamespaces(e, options)).ToList() },
             RangeExpressionNode range => range with { From = ResolveFunctionNamespaces(range.From, options), To = ResolveFunctionNamespaces(range.To, options) },
@@ -247,10 +284,10 @@ public sealed class XPath31Expression
             QuantifiedExpressionNode qe => qe with { Bindings = qe.Bindings.Select(b => b with { Expression = ResolveFunctionNamespaces(b.Expression, options) }).ToList(), SatisfiesExpression = ResolveFunctionNamespaces(qe.SatisfiesExpression, options) },
             BinaryExpressionNode bin => bin with { Left = ResolveFunctionNamespaces(bin.Left, options), Right = ResolveFunctionNamespaces(bin.Right, options) },
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, options) },
-            CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options) },
-            CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options) },
-            InstanceOfNode io => ResolveEnumerationAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options) }, options),
-            TreatNode treat => ResolveEnumerationAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) }, options),
+            CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) },
+            CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) },
+            InstanceOfNode io => ResolveEnumerationAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options), TypeName = ResolveDefaultItemType(io.TypeName, io.Prefix, options) }, options),
+            TreatNode treat => ResolveEnumerationAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options), TypeName = ResolveDefaultItemType(treat.TypeName, treat.Prefix, options) }, options),
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
             PipelineExprNode pipeline => pipeline with { Source = ResolveFunctionNamespaces(pipeline.Source, options), Target = ResolveFunctionNamespaces(pipeline.Target, options) },
             TryCatchNode tc => tc with
@@ -270,6 +307,27 @@ public sealed class XPath31Expression
             DynamicFunctionCallNode dfc => dfc with { Function = ResolveFunctionNamespaces(dfc.Function, options), Arguments = dfc.Arguments.Select(a => ResolveFunctionNamespaces(a, options)).ToList() },
             _ => node
         };
+    }
+
+    private static NodeTest ResolveDefaultNamespaceTest(StepNode step, CompileOptions options)
+    {
+        if (options.Compatibility >= XPathCompatibility.XPath40 && options.DefaultElementNamespace == "##any"
+            && step.Axis is not (XdmAxis.Attribute or XdmAxis.Namespace) && step.NodeTest.Kind == NameTestKind.LocalName
+            && step.NodeTest.NamespaceUri is null)
+            return step.NodeTest with { Kind = NameTestKind.QName, NamespaceUri = "*" };
+        return step.NodeTest;
+    }
+
+    private static string ResolveDefaultItemType(string name, string? prefix, CompileOptions options, bool castTarget = false)
+    {
+        if (options.Compatibility < XPathCompatibility.XPath40 || options.DefaultElementNamespace != "##any"
+            || !string.IsNullOrEmpty(prefix) || name.Contains('(') || name.Contains(':') || name.StartsWith("Q{", StringComparison.Ordinal))
+            return name;
+        if (castTarget && name is "anyAtomicType" or "anySimpleType" or "NOTATION")
+            throw new InvalidOperationException($"XPST0080: '{name}' is an abstract cast target.");
+        if (castTarget && name is "untyped" or "anyType")
+            throw new InvalidOperationException($"XQST0052: '{name}' is not an atomic cast target.");
+        return "Q{http://www.w3.org/2001/XMLSchema}" + name;
     }
 
     // Resolves a QName literal's lexical prefix against the static context. The braced
@@ -295,7 +353,7 @@ public sealed class XPath31Expression
                 "math" => "http://www.w3.org/2005/xpath-functions/math",
                 _ => null,
             };
-        if (nsUri is null)
+        if (string.IsNullOrEmpty(nsUri))
             throw new InvalidOperationException($"XPST0081: No namespace declaration for prefix '{node.Prefix}' in QName literal.");
         return node with { NamespaceUri = nsUri };
     }

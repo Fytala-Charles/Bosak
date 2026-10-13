@@ -2939,3 +2939,29 @@ This option resolves `instance of` and `treat as` targets only. Use existing inl
 
 
 **Named record constructor slice — 2026-10-13:** Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI.
+
+
+**Select namespace follow-up — 2026-10-13:** Source candidate 1.2.0 (unpublished) now supports expression-local XPath 4.0 namespace declarations in the XPath API and xsl:select bodies. Prefix bindings override host bindings; an optional default element namespace must come first. Default ##any matches unprefixed element axis name tests across namespaces while preserving attribute/kind-test boundaries and XML Schema item type resolution. Namespace contexts restore after success or failure. All unchanged native seqtor-140–146 cases pass; the broader seqtor-filter run is 83 pass/0 fail/9 skip. The nine known harness skips, independent confirmation and upstream PR #23 acceptance remain outstanding, so this does not establish complete XSLT 4.0 conformance. N02 and REQ-126 remain In Progress; public release remains 1.1.3. See [current namespace evidence](../contributions/xslt40/select-boundaries/NAMESPACE_RESULTS.json) and the [pinned XPath namespace declaration source](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml). Twenty-three regressions were added; catalogue entry/check counts are unchanged. Next: named item-type conversion and remaining record coercion gaps, after this slice passes CI. Earlier select counts are historical.
+
+
+### Expression-local namespaces in source 1.2.0
+
+Compile with `CompileOptions.Compatibility = XPathCompatibility.XPath40` to enable namespace declarations. The same syntax works in an XSLT 4.0 `xsl:select` body. Declarations affect only the compiled expression; supplied options and the caller's namespace/default-namespace context are preserved. XPath 3.1 refuses this grammar.
+
+For mixed vocabulary versions such as `<doc><chap xmlns="urn:version1"/><chap xmlns="urn:version2"/></doc>`, use:
+
+```xpath
+declare default element namespace "##any";
+count(//chap)
+```
+
+The result is `2`. `@id` still selects unqualified attributes only, and `element(chap)` still tests a no-namespace element; `##any` expands only element axis **name tests** to `*:chap`. Simple unprefixed item type names denote XML Schema types. Use an explicit namespace URI when unrelated vocabularies could share local names.
+
+Prefix aliases can be declared after the optional default declaration:
+
+```xpath
+declare namespace v = "urn:functions";
+$v:global + $v:local
+```
+
+Variables and functions resolve by expanded namespace identity, independently of their stylesheet prefix. Duplicate prefix declarations raise `XQST0033`; reserved XML namespace bindings raise `XQST0070`; missing semicolons or a later default declaration raise `XPST0003`. Empty URI prefix declarations remove the binding: a reference such as `$v:global` then raises `XPST0008`, while a function/name test using that prefix raises `XPST0081`. This follow-up covers the XPath API and `xsl:select`; other host expression surfaces and complete type/package semantics still require their own review.
