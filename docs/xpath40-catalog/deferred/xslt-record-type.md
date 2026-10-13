@@ -33,7 +33,7 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 | Version 3.0, top-level declaration | `XTSE0010` |
 | Constructor call, `constructor="yes"` | Source 1.2.0 returns a named record; invoice fixture returns `INV-2048` |
 | Constructor call, `constructor="no"` | `XPST0017`; no generated function |
-| Named `as="erp:invoice"` binding | Constructed same-type record succeeds; plain-map fixture still raises `XTTE0570` |
+| Named `as="erp:invoice"` binding | Constructed same-type record and plain-map coercion succeed in source candidate 1.2.0 |
 | Duplicate unused fields | `XTSE4050` in source 1.2.0 |
 | Structural `record(...)` in XPath40 | Explicit casts succeed; plain maps do not match annotated records |
 | Inline structural record in XSLT `@as` | Observed `XTTE0570`; explicit cast in `select` plus `as="map(*)"` works |
@@ -216,7 +216,7 @@ reject
 | [record-constructor](../examples/xslt-type-declarations/record-constructor.xsl) | xslt40 | `INV-2048` |
 | [record-no-constructor](../examples/xslt-type-declarations/record-no-constructor.xsl) | xslt40 | `XPST0017` |
 | [record-duplicate-fields-unused-observed](../examples/xslt-type-declarations/record-duplicate-fields-unused-observed.xsl) | xslt40 | `XTSE4050` |
-| [record-named-as-observed](../examples/xslt-type-declarations/record-named-as-observed.xsl) | xslt40 | `XTTE0570` |
+| [record-named-as-observed](../examples/xslt-type-declarations/record-named-as-observed.xsl) | xslt40 | `INV-2048` |
 | [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) | xslt40 | `XTTE0570` |
 | [record-main](../examples/xslt-type-declarations/record-main.xpath) | 40 | `INV-2048\|EUR` |
 | [plain-map-not-record](../examples/xslt-type-declarations/plain-map-not-record.xpath) | 40 | `false` |
@@ -243,3 +243,6 @@ No named XSLT type declaration gate promotion or full draft conformance is claim
 
 
 **Current source follow-up — 2026-10-13:** Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI.
+
+
+**Nominative coercion follow-up — 2026-10-13:** Direct named bindings and function boundaries now convert maps, apply defaults/static initializers, reject surplus keys/static-field injection and retain declaration identity. The unchanged `record-named-as-observed` fixture now outputs `INV-2048`; its manifest expectation is updated to reflect implemented behavior. Earlier source notes are historical. See [separate evidence](../../../contributions/xslt40/record-type-boundaries/COERCION_RESULTS.json). Named casts, nested/recursive resolution and full package exposure remain follow-ups.

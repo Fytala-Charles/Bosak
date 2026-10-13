@@ -532,6 +532,7 @@
 //                      | Charles Korthout | 7.16 | 13-10-2026     | Resolve array and atomic aliases at XSLT declaration and function boundaries
 //                      | Charles Korthout | 7.17 | 13-10-2026     | Supply expanded package aliases to XPath expression and AVT compilation
 //                      | Charles Korthout | 7.18 | 13-10-2026     | Resolve nested array/map aliases in declaration and function sequence types
+//                      | Charles Korthout | 7.19 | 13-10-2026     | Coerce maps to package-local nominative records with defaults and static field protection
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3225,6 +3226,7 @@ internal sealed class TransformEngine
         var definitions = scope.GetNamedRecordTypes();
         _context.BindingItemTypes = scope.GetBindingItemTypes();
         _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
+        _context.NamedRecordCoercion = (type, map) => CoerceNamedRecord(definitions.Values.Single(d => ReferenceEquals(d.Type, type)), map);
         foreach (var definition in definitions.Values)
         {
             if (!definition.Constructor) continue;
@@ -3246,6 +3248,27 @@ internal sealed class TransformEngine
                 });
             }
         }
+    }
+
+    private XdmMap CoerceNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, XdmMap supplied)
+    {
+        foreach (var key in supplied.Keys)
+            if (key.Kind != XdmValueKind.String || !definition.Type.HasField(key.StringValue))
+                throw new InvalidOperationException("XPTY0004: The map contains a surplus record field.");
+        var result = new XdmMap();
+        foreach (var field in definition.Fields)
+        {
+            var key = XdmValue.FromString(field.Attribute("name")!.Value);
+            var present = supplied.TryGetValue(key, out var value);
+            var isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
+            if (isStatic && present)
+                throw new InvalidOperationException("XPTY0004: A supplied map cannot specify a static record field.");
+            if (!present || isStatic) value = EvaluateRecordFieldInitialValue(field, isStatic);
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context,
+                errorCodeOverride: "XPTY0004", declaration: field);
+            result = result.WithAdded(key, value);
+        }
+        return result.WithRecordType(definition.Type);
     }
 
     private XdmValue ConstructNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, ReadOnlySpan<XdmValue> args)
@@ -4402,6 +4425,8 @@ internal sealed class TransformEngine
         public IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes;
         /// <summary>Package-local item-type binding aliases active before entering the scope.</summary>
         public IReadOnlyDictionary<string, string> BindingItemTypes;
+        /// <summary>Package-local record conversion callback active before entering the scope.</summary>
+        public Func<XdmRecordType, XdmMap, XdmMap>? NamedRecordCoercion;
     }
 
     /// <summary>
@@ -4419,6 +4444,7 @@ internal sealed class TransformEngine
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
         var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
         var namedRecordTypesSnapshot = _context.NamedRecordTypes;
+        var namedRecordCoercionSnapshot = _context.NamedRecordCoercion;
         var enumerationTypesSnapshot = _context.BindingItemTypes;
 
         if (package?.IsPackage == true && package != previousScope)
@@ -4495,6 +4521,7 @@ internal sealed class TransformEngine
         {
             PreviousScope = previousScope,
             NamedRecordTypes = namedRecordTypesSnapshot,
+            NamedRecordCoercion = namedRecordCoercionSnapshot,
             BindingItemTypes = enumerationTypesSnapshot,
             FunctionSnapshot = functionSnapshot,
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
@@ -4511,6 +4538,7 @@ internal sealed class TransformEngine
         _namespaceAliases = state.NamespaceAliasSnapshot;
         _context.RestoreFunctions(state.FunctionSnapshot);
         _context.NamedRecordTypes = state.NamedRecordTypes;
+        _context.NamedRecordCoercion = state.NamedRecordCoercion;
         _context.BindingItemTypes = state.BindingItemTypes;
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
@@ -16836,7 +16864,21 @@ internal sealed class TransformEngine
             var suffix = type.Length > 0 && type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
             var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
             if (context.NamedRecordTypes.Count > 0 && !name.Contains('(') && context.NamedRecordTypes.ContainsKey(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration)))
+            {
                 asType = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration) + suffix;
+                if (AllowsItemTypeDeclarations(declaration))
+                {
+                    var savedProfile = context.IsXPath40;
+                    context.IsXPath40 = true;
+                    try { return VmEngine.ApplyFunctionConversion(value, asType, context); }
+                    catch (InvalidOperationException error)
+                    {
+                        var code = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
+                        throw new InvalidOperationException($"{code}: Value does not match named record {asType}.", error);
+                    }
+                    finally { context.IsXPath40 = savedProfile; }
+                }
+            }
             var defaultNs = GetXPathDefaultNamespace(declaration);
             if (!string.IsNullOrEmpty(defaultNs) && context.DefaultElementNamespace != defaultNs)
             {

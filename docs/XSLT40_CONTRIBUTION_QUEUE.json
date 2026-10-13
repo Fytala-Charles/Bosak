@@ -302,7 +302,7 @@
       "businessScenario": "Typed customer/order records and constructor validation",
       "specSection": "named-record-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
-      "status": "First batch submitted; both record constructors pass in Bosak; broader coercion/type gaps and review pending",
+      "status": "First batch submitted; constructors, identity and direct nominative binding/function coercion pass in Bosak; casts/nested/recursive/package boundaries and independent confirmation pending",
       "candidateScenarios": "Current declarations, required fields/coercion/constructors versus older optional-field and xsl:record scenarios; establish current draft semantics before proposing changes.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "record",
@@ -329,7 +329,8 @@
           "passed": 12,
           "failed": 52,
           "skipped": 1
-        }
+        },
+        "coercionFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/COERCION_RESULTS.json"
       }
     }
   ],

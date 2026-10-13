@@ -120,6 +120,7 @@
 //                      | Charles Korthout | 2.42  | 13-10-2026     | Store package-local nominative record identities for host type resolution.               |
 //                      | Charles Korthout | 2.43 | 13-10-2026     | Store package-local enumeration aliases for XSLT declaration conversion
 //                      | Charles Korthout | 2.44 | 13-10-2026     | Store structural binding aliases alongside enumeration aliases
+//                      | Charles Korthout | 2.45 | 13-10-2026     | Carry a package-local host callback for nominative record coercion
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -373,6 +374,8 @@ public sealed class EvaluationContext
     // Package-local nominative record identities installed by the XSLT host.
     internal IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes { get; set; }
         = new Dictionary<string, XdmRecordType>(StringComparer.Ordinal);
+
+    internal Func<XdmRecordType, XdmMap, XdmMap>? NamedRecordCoercion { get; set; }
 
     // Package-local item-type binding aliases installed by the XSLT host.
     internal IReadOnlyDictionary<string, string> BindingItemTypes { get; set; }
