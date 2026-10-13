@@ -405,6 +405,7 @@
 //                      | Charles Korthout | 2.178 | 13-10-2026     | Coerce XPath 4.0 typed map keys and values with collision checks and entry order
 //                      | Charles Korthout | 2.179 | 13-10-2026     | Use cardinality-aware function type matching for XPath 4.0 instance-of operands
 //                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
+//                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3367,7 +3368,7 @@ internal static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // XPath 4.0 §4.19.2.7: a record-type target takes a map operand,
                         // which must not be atomized (maps otherwise raise FOTY0013).
-                        var value = IsRecordTypeText(typeName)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -3400,7 +3401,7 @@ internal static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // Record-type targets take a map operand (see the Cast case).
-                        var value = IsRecordTypeText(typeName)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -8880,6 +8881,13 @@ internal static class VmEngine
     /// for a lexical failure.</exception>
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out var named))
+        {
+            var inputs = MaterializeSequence(value);
+            if (inputs.Length != 1 || !inputs[0].IsMap || context.NamedRecordCoercion is null)
+                throw new InvalidOperationException("XPTY0004: A named record cast requires one map.");
+            return XdmValue.FromMap(context.NamedRecordCoercion(named!, inputs[0].MapValue, true));
+        }
         try
         {
             if (!TryCast(value, typeName, context, out var result, out var failureKind))
@@ -8924,6 +8932,10 @@ internal static class VmEngine
             return n.ToLowerInvariant();
         }
     }
+
+    /// <summary>Checks an existing field item before the XSLT host applies record casting.</summary>
+    internal static bool RecordFieldItemMatches(XdmValue value, string type, EvaluationContext context)
+        => ValueMatchesType(value, type, context);
 
     /// <summary>
     /// Attempts to cast a value to the named type using the XPath 3.1 §19 cast rules.
@@ -9033,6 +9045,11 @@ internal static class VmEngine
 
     private static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
     {
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _))
+        {
+            try { result = Cast(value, typeName, context); failureKind = CastFailureKind.Lexical; return true; }
+            catch (InvalidOperationException) { result = value; failureKind = CastFailureKind.NotPermitted; return false; }
+        }
         failureKind = CastFailureKind.Lexical;
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
@@ -13974,7 +13991,7 @@ internal static class VmEngine
             {
                 if (!item.IsMap) throw new InvalidOperationException($"XPTY0004: A map is required for {targetType}.");
                 if (ReferenceEquals(item.MapValue.RecordType, nominalType)) nominalConverted.Add(item);
-                else if (context.NamedRecordCoercion is { } coerce) nominalConverted.Add(XdmValue.FromMap(coerce(nominalType!, item.MapValue)));
+                else if (context.NamedRecordCoercion is { } coerce) nominalConverted.Add(XdmValue.FromMap(coerce(nominalType!, item.MapValue, false)));
                 else throw new InvalidOperationException($"XPTY0004: No host coercion is registered for {targetType}.");
             }
             return nominalConverted.Count == 0 ? XdmValue.Undefined : nominalConverted.Count == 1 ? nominalConverted[0]

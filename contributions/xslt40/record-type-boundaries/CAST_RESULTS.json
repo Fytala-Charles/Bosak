@@ -1,0 +1,54 @@
+{
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "coercionSpecification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml",
+    "section": "id-coercion-rules",
+    "sha256": "38e5cd7b32ff3bac7752dd917259790fd1d101e7b5de58595527cbb7824fbc3d"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/26",
+  "exactContributionCases": [
+    {
+      "id": "record-026",
+      "outcome": "pass"
+    },
+    {
+      "id": "record-027",
+      "outcome": "pass"
+    }
+  ],
+  "date": "2026-10-13",
+  "candidateParentRevision": "d4d30be3a369187f8c8561d066b5e06e9e87b913",
+  "scope": "Source candidate 1.2.0 (unpublished) now supports package-local nominative record cast/castable operations. Casts retain map operands, cast each present field sequence, apply defaults to missing fields, discard surplus keys, protect static fields and attach the target declaration identity. Nested named references in binding/function signatures resolve in their declaration namespace, and nested named record fields reuse casting recursively. Fourteen new regressions cover lexical/type failures, empty/optional inputs, field cardinalities and namespace boundaries. General array/map casts, item-type alias cast expansion, recursive definitions, full package exposure and complete static diagnostics remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.",
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json and COERCION_RESULTS.json (preserved)",
+  "validation": "Release build passes (12 existing warnings, zero errors); all 6988 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4102/0/0. Focused record run passes 39 tests, including fourteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.",
+  "nativeFilteredRun": {
+    "passed": 12,
+    "failed": 52,
+    "skipped": 1,
+    "scope": "Record contribution branch; broader failures retained"
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T054656452Z.json",
+  "castingSpecification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xquery-40/src/expressions.xml",
+    "section": "casting-to-record",
+    "sha256": "38e5cd7b32ff3bac7752dd917259790fd1d101e7b5de58595527cbb7824fbc3d"
+  },
+  "correctedVerificationNote": "Initial full verification passed; final review then added missing-required and nonempty-empty-field XPTY0004 regressions and corrected initializer/field error paths. All final tests and gates run against those changes.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "a39499fc61dcb04cf92929ad877db1b33f2680ac78ad2e85a5c7d319ff3c4193",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "a22c00c40923de07e8c8ce0ecef8b8e1ab282d5d78b6f92e1b9e85abeddc3633",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "1c44a62c13db46d9ce5889121badcf072d0bbff811b839ff60e7d8f05f1a0c75",
+    "tests/Bosak.Xslt.Tests/Xslt40NamedRecordCastTests.cs": "e058e67737012c42851d69f89dc746759c5fb54bfd1aae010725126ef1f442db",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}
