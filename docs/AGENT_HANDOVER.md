@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names. Native lower-version fixture processor selection is a separate harness/API boundary; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: PR #236 (https://github.com/Fytala-Charles/Bosak/pull/236), stacked on feat/xslt-wildcard-node-patterns / PR #235. Verified implementation revision: 62fa90dd. A documentation-only delivery commit follows this recorded revision. PRs #223–236 remain open; main-target CI begins after stack retargeting. Next implementation slice: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names.
 
 # Wildcard node patterns — 2026-10-13
 
