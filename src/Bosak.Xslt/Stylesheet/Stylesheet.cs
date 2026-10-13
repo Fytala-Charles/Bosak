@@ -304,6 +304,7 @@
 //                      | Charles Korthout | 2.143 | 13-10-2026     | Register schema-annotated aliases with declaration namespaces and schema scope
 //                      | Charles Korthout | 2.144 | 13-10-2026     | Register schema declaration aliases against imported global components
 //                      | Charles Korthout | 2.145 | 13-10-2026     | Accept and expose package named types using defining-package definitions
+//                      | Charles Korthout | 2.146 | 13-10-2026     | Resolve fixed namespace bindings for named types and XPath static contexts
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -982,10 +983,7 @@ internal sealed class Stylesheet
                 // Leave grammar beyond the shared supported type walker to its existing validator.
                 if (ItemTypeAliasExpansion.Expand(attribute.Value, name => name) is null)
                     continue;
-                var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
-                foreach (var ancestor in element.AncestorsAndSelf().Reverse())
-                    foreach (var ns in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
-                        namespaces[ns.Name.LocalName == "xmlns" ? string.Empty : ns.Name.LocalName] = ns.Value;
+                var namespaces = GetApplicableStaticNamespaces(element);
                 XPath31Expression.Compile("() instance of " + attribute.Value, new CompileOptions
                 {
                     Compatibility = XPathCompatibility.XPath40,
@@ -1052,13 +1050,85 @@ internal sealed class Stylesheet
         return _namedRecordTypes = result;
     }
 
+    private sealed record StaticNamespaceResolver(IXsltUriResolver? Resolver, string? BaseUri);
+    private sealed record FixedNamespaceBindings(Dictionary<string, string> Bindings);
+
+    internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element)
+    {
+        var root = element.AncestorsAndSelf().Last();
+        var fixedAttribute = root.Attribute("fixed-namespaces");
+        if (fixedAttribute is null || (!double.TryParse(root.Attribute("version")?.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var version) || version < 4.0))
+            return NativeNamespaces(element);
+        if (root.Annotation<FixedNamespaceBindings>() is { } cached)
+            return new Dictionary<string, string>(cached.Bindings, StringComparer.Ordinal);
+        const string xmlUri = "http://www.w3.org/XML/1998/namespace";
+        var standard = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["xsl"] = XslNamespace, ["xml"] = xmlUri,
+            ["xs"] = "http://www.w3.org/2001/XMLSchema", ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance",
+            ["fn"] = "http://www.w3.org/2005/xpath-functions", ["math"] = "http://www.w3.org/2005/xpath-functions/math",
+            ["map"] = "http://www.w3.org/2005/xpath-functions/map", ["array"] = "http://www.w3.org/2005/xpath-functions/array",
+            ["err"] = "http://www.w3.org/2005/xqt-errors"
+        };
+        var native = NativeNamespaces(root);
+        var result = new Dictionary<string, string>(StringComparer.Ordinal) { ["xml"] = xmlUri };
+        // Default namespaces remain native: fixed bindings do not change unprefixed names.
+        if (native.TryGetValue(string.Empty, out var defaultUri)) result[string.Empty] = defaultUri;
+        void Add(string prefix, string uri)
+        {
+            try { if (prefix.Length > 0) System.Xml.XmlConvert.VerifyNCName(prefix); }
+            catch (System.Xml.XmlException ex) { throw new InvalidOperationException("XTSE0122: Invalid fixed namespace prefix.", ex); }
+            if (prefix == "xmlns" || uri.Length == 0 || (prefix == "xml") != (uri == xmlUri))
+                throw new InvalidOperationException("XTSE0122: Invalid fixed namespace binding.");
+            if (prefix.Length > 0) result[prefix] = uri;
+        }
+        foreach (var token in fixedAttribute.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (token == "#standard")
+            {
+                foreach (var (prefix, uri) in standard) Add(prefix, native.GetValueOrDefault(prefix, uri));
+            }
+            else if (native.TryGetValue(token, out var nativeUri)) Add(token, nativeUri);
+            else if (standard.TryGetValue(token, out var standardUri)) Add(token, standardUri);
+            else if (token.IndexOf('=') is var equals && equals >= 0)
+            {
+                if (equals == 0) throw new InvalidOperationException("XTSE0122: A fixed namespace prefix is required.");
+                Add(token[..equals], token[(equals + 1)..]);
+            }
+            else
+            {
+                var context = root.Annotation<StaticNamespaceResolver>();
+                try
+                {
+                    var document = context?.Resolver?.Resolve(token, context.BaseUri)
+                        ?? throw new InvalidOperationException("No namespace document resolver.");
+                    if (document.Root is null) throw new InvalidOperationException("Namespace document has no root.");
+                    foreach (var (prefix, uri) in NativeNamespaces(document.Root)) Add(prefix, uri);
+                }
+                catch (Exception ex) { throw new InvalidOperationException("XTSE0122: Cannot resolve fixed namespace document.", ex); }
+            }
+        }
+        root.AddAnnotation(new FixedNamespaceBindings(result));
+        return new Dictionary<string, string>(result, StringComparer.Ordinal);
+    }
+
+    private static Dictionary<string, string> NativeNamespaces(XElement element)
+    {
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var ancestor in element.AncestorsAndSelf().Reverse())
+            foreach (var attribute in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
+                result[attribute.Name.LocalName == "xmlns" ? string.Empty : attribute.Name.LocalName] = attribute.Value;
+        result["xml"] = "http://www.w3.org/XML/1998/namespace";
+        return result;
+    }
+
     internal static string ExpandNodeTypeName(string name, bool attribute, XElement element)
     {
         if (name.StartsWith("Q{", StringComparison.Ordinal) || name.StartsWith("*:", StringComparison.Ordinal)) return name;
         var colon = name.IndexOf(':');
         var local = colon < 0 ? name : name[(colon + 1)..];
         var ns = colon < 0 ? (attribute ? string.Empty : GetXPathDefaultNamespace(element) ?? string.Empty)
-            : element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
+            : GetApplicableStaticNamespaces(element).GetValueOrDefault(name[..colon])
                 ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
         if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
@@ -1095,7 +1165,7 @@ internal sealed class Stylesheet
         if (colon >= 0)
         {
             System.Xml.XmlConvert.VerifyNCName(name[..colon]);
-            ns = element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
+            ns = GetApplicableStaticNamespaces(element).GetValueOrDefault(name[..colon])
                 ?? throw new InvalidOperationException("XTSE0280: Undeclared item-type namespace prefix.");
         }
         else
@@ -1875,6 +1945,8 @@ internal sealed class Stylesheet
         if (root == null)
             throw new InvalidOperationException("Stylesheet document has no root element.");
 
+        root.AddAnnotation(new StaticNamespaceResolver(_resolver, _baseUri));
+        _ = GetApplicableStaticNamespaces(root);
         var rootName = root.Name;
 
         if (rootName.NamespaceName != XslNamespace)

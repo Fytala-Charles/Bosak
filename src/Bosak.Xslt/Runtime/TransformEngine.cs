@@ -540,6 +540,7 @@
 //                      | Charles Korthout | 7.24 | 13-10-2026     | Preserve schema annotation namespace bindings at runtime declaration boundaries
 //                      | Charles Korthout | 7.25 | 13-10-2026     | Normalize XPath 4.0 binding signatures even without declared aliases
 //                      | Charles Korthout | 7.26 | 13-10-2026     | Preserve schema declaration identities and normalize document bindings
+//                      | Charles Korthout | 7.27 | 13-10-2026     | Use fixed namespaces in XPath compilation and named type binding resolution
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3027,7 +3028,7 @@ internal sealed class TransformEngine
 
     private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
-        var nsMap = GetInScopeNamespaces(instruction);
+        var nsMap = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(instruction);
         var declarations = Bosak.XPath.Parser.Ast.XPathParser.ExtractNamespaceDeclarations(expression, _stylesheet.GetXPathCompatibility(instruction) >= XPathCompatibility.XPath40);
         var validationNamespaces = new Dictionary<string, string>(nsMap, StringComparer.Ordinal);
         foreach (var (prefix, uri) in declarations.Namespaces)
@@ -7571,7 +7572,7 @@ internal sealed class TransformEngine
             // Without @namespace-context, the default element/type namespace is taken from
             // the innermost [xsl:]xpath-default-namespace attribute only.
             defaultNs = GetXPathDefaultNamespace(instruction);
-            nsMap = GetInScopeNamespaces(instruction);
+            nsMap = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(instruction);
         }
 
         var compileOptions = new CompileOptions
@@ -10299,7 +10300,7 @@ internal sealed class TransformEngine
         var sb = new System.Text.StringBuilder();
         int i = 0;
         var avtBaseUri = GetEffectiveBaseUri(contextElement);
-        var nsMap = contextElement != null ? GetInScopeNamespaces(contextElement) : null;
+        var nsMap = contextElement != null ? Stylesheet.Stylesheet.GetApplicableStaticNamespaces(contextElement) : null;
         var defaultNs = contextElement != null ? GetXPathDefaultNamespace(contextElement) : null;
         var definingNs = contextElement != null ? contextElement.GetDefaultNamespace().NamespaceName : null;
         var compatibility = _stylesheet.GetXPathCompatibility(contextElement ?? _stylesheet.Root);
@@ -16683,7 +16684,7 @@ internal sealed class TransformEngine
         return ItemTypeAliasExpansion.Expand(sequenceType, name =>
         {
             if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
-                && declaration.GetNamespaceOfPrefix(name[..colon]) is null) return name;
+                && !Stylesheet.Stylesheet.GetApplicableStaticNamespaces(declaration).ContainsKey(name[..colon])) return name;
             var expandedName = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration);
             return aliases.TryGetValue(expandedName, out var definition) ? definition
                 : namedRecords?.ContainsKey(expandedName) == true ? expandedName : name;

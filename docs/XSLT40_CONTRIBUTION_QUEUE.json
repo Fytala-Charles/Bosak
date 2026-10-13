@@ -298,7 +298,8 @@
         "schemaNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_NODE_RESULTS.json",
         "functionGrammarFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FUNCTION_GRAMMAR_RESULTS.json",
         "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json",
-        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json"
+        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json",
+        "fixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FIXED_NAMESPACE_RESULTS.json"
       }
     },
     {
@@ -356,7 +357,8 @@
         "schemaNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_NODE_RESULTS.json",
         "functionGrammarFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FUNCTION_GRAMMAR_RESULTS.json",
         "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json",
-        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json"
+        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json",
+        "fixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FIXED_NAMESPACE_RESULTS.json"
       }
     }
   ],

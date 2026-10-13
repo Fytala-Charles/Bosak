@@ -1,3 +1,19 @@
+# Fixed namespace type contexts — 2026-10-13
+
+Branch: feat/xslt-fixed-type-namespaces; parent c0312a70. Stacked on PR #230; PRs #223–230 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves fixed-namespaces for named item/record type names, supported nested type references, static declaration validation and the main XPath compilation paths. Supported tokens include #standard, selected root-native or conventional prefixes, explicit prefix=URI bindings and namespace-document references through the existing stylesheet resolver. Bindings are module-local, cached at compilation, unaffected by descendant rebinding and applied in token order. Invalid bindings or unavailable namespace documents raise XTSE0122. Unprefixed type/node names retain their existing default-namespace rules; fixed bindings do not create native result namespaces. Sixteen regressions cover standard prefixes, nested node contracts, explicit/repeated bindings, namespace documents, include isolation and invalid/unavailable bindings. Native type-alias remains 15/17/0: case 016 now passes namespace resolution but still fails its independent inline-function record conversion contract with XPTY0004. No upstream assertion changes. Fixed namespace coverage of other QName-bearing XSLT attributes, pattern compilation and shadow/static processing remains a follow-up; this is not complete fixed-namespaces support. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7281 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4395/0/0 and sixteen new regressions. Focused fixed namespace tests pass 16/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 15/17/0, with original 023/024 still passing; case 016 now reaches its independent XPTY0004 record-conversion gap; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: native type-alias record conversion and matching gaps; annotated function types and type patterns remain follow-ups. Extend fixed namespace handling to remaining QName/pattern/static contexts separately. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Package named type exposure — 2026-10-13
 
 Branch: feat/xslt-package-type-exposure; parent f65e01d6. Stacked on PR #229; PRs #223–229 remain open. Earlier sections are historical.
