@@ -95,6 +95,7 @@
 //                      | Charles Korthout | 3.23  | 13-10-2026     | Match delimiters outside strings and EQName URIs in pattern compilation.
 //                      | Charles Korthout | 3.24  | 13-10-2026     | Split pattern operators outside quoted content, URI names and nested expressions.
 //                      | Charles Korthout | 3.25  | 13-10-2026     | Evaluate mixed 4.0 intersect/except pattern chains from left to right.
+//                      | Charles Korthout | 3.26  | 13-10-2026     | Match 4.0 set-pattern axis operands against the candidate node.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1194,7 +1195,7 @@ internal sealed class PatternCompiler
             var operands = SplitPatternTopLevel(trimmed, "intersect", "except", operators);
             if (operands.Length > 1)
             {
-                if (operands.All(operand => operand.Contains("::") || HasPatternPathOperator(operand)))
+                if (operands.All(HasPatternPathOperator))
                     return CompileSetPattern(trimmed);
                 var compiled = operands.Select(CompileSinglePattern).ToArray();
                 return (item, ctx) =>
@@ -1435,6 +1436,8 @@ internal sealed class PatternCompiler
                 break;
             }
         }
+        if (_compatibility >= XPathCompatibility.XPath40)
+            hasPathSlash = HasPatternPathOperator(trimmed);
         if (hasPathSlash && !trimmed.StartsWith("processing-instruction"))
         {
             return CompilePathPattern(trimmed);

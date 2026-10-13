@@ -1,3 +1,19 @@
+# Set-pattern axis focus — 2026-10-13
+
+Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–243 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches supported forward-axis operands in XSLT 4.0 intersect/except patterns against the candidate node instead of forcing axis-only chains into document-root XPath evaluation. Mixed axis/path operands use their respective pattern matchers; all-actual-path chains retain sequence evaluation and positional selection. The 4.0 single-pattern classifier reuses lexical path detection so slashes inside predicates or string literals do not turn an axis pattern into a path. Earlier profiles retain existing dispatch. Twenty-two regressions cover self/child/descendant-style axes, attributes, predicates, mixed actual paths, all-path positions, EQName URIs, first-operand priority and earlier-profile behavior. The baseline was 9/13/0 before the fix; all twenty-two now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Fixed namespace resolution in 4.0 template pattern names, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7622 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4736/0/0 and twenty-two new regressions; focused axis-focus regressions pass 22/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fixed namespace resolution in 4.0 template pattern names; use the declaring applicable static bindings consistently for nested node/type/predicate patterns and retain earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Set-pattern associativity — 2026-10-13
 
 Branch: feat/xslt-set-pattern-associativity; parent 2e72184f. Stacked on PR #242; PRs #223–243 remain open. Earlier sections are historical.
