@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "741789bb0c9089dc2e2a385519316bdfb153eeab",
+  "implementationRevision": "d3da89dc49740d66467ee56f927da97be8e44e07",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Function declaration QName bindings and authoring literal-name diagnostics align with applicable static namespaces",
+  "baselineFocused": {
+    "passed": 4,
+    "failed": 11,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 19,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7754,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4868
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Public source metadata and QName SlotContext=null are preserved. Runtime function registration remains unchanged; declaration identity now uses applicable bindings. Earlier host profiles retain native behavior. Shadow-name string results compile with the shared resolver, while broader shadow-expression contexts and authoring shadow-result evaluation/function registration remain follow-ups. Package linkage, other component names and named-type authoring registration are outside this slice.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "e90213dfca405958bdb11cb2c5989f852009eb45da77ec354c8e201132ec92be",
+    "focused": "2d68f174761ed3484eb1024f1039aa55870329482cda4a5fbbe7e259449a0b13",
+    "unit": "67e1b289e9fbc79c376ce9b9513a1a2051bad77f910c86b0ecac31d77b717485",
+    "qt3": "175400db13d58748609233d31f490c7754afa1a035241a8d70365dca928b2995",
+    "qt4": "b85de7241dd8f04b72f77ec78477863c8d6afeeb96c0dade12dfaebba043198a"
+  }
+}
