@@ -310,7 +310,8 @@
         "parenthesizedItemPatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PARENTHESIZED_ITEM_PATTERN_RESULTS.json",
         "parenthesizedFilterPathFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PARENTHESIZED_FILTER_PATH_RESULTS.json",
         "patternDelimiterFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_DELIMITER_RESULTS.json",
-        "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json"
+        "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json",
+        "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json"
       }
     },
     {
@@ -380,7 +381,8 @@
         "parenthesizedItemPatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PARENTHESIZED_ITEM_PATTERN_RESULTS.json",
         "parenthesizedFilterPathFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PARENTHESIZED_FILTER_PATH_RESULTS.json",
         "patternDelimiterFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_DELIMITER_RESULTS.json",
-        "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json"
+        "patternOperatorFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PATTERN_OPERATOR_RESULTS.json",
+        "setPatternAssociativityFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SET_PATTERN_ASSOCIATIVITY_RESULTS.json"
       }
     }
   ],

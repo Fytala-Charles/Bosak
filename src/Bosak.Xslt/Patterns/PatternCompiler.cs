@@ -94,6 +94,7 @@
 //                      | Charles Korthout | 3.22  | 13-10-2026     | Ignore predicate, string and URI slashes when classifying 4.0 outer filters.
 //                      | Charles Korthout | 3.23  | 13-10-2026     | Match delimiters outside strings and EQName URIs in pattern compilation.
 //                      | Charles Korthout | 3.24  | 13-10-2026     | Split pattern operators outside quoted content, URI names and nested expressions.
+//                      | Charles Korthout | 3.25  | 13-10-2026     | Evaluate mixed 4.0 intersect/except pattern chains from left to right.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1186,6 +1187,28 @@ internal sealed class PatternCompiler
     private PatternPredicate CompileSinglePattern(string pattern)
     {
         var trimmed = pattern.Trim();
+
+        if (_compatibility >= XPathCompatibility.XPath40)
+        {
+            var operators = new List<string>();
+            var operands = SplitPatternTopLevel(trimmed, "intersect", "except", operators);
+            if (operands.Length > 1)
+            {
+                if (operands.All(operand => operand.Contains("::") || HasPatternPathOperator(operand)))
+                    return CompileSetPattern(trimmed);
+                var compiled = operands.Select(CompileSinglePattern).ToArray();
+                return (item, ctx) =>
+                {
+                    if (!item.IsNode || !compiled[0](item, ctx)) return false;
+                    for (int i = 1; i < compiled.Length; i++)
+                    {
+                        bool matches = compiled[i](item, ctx);
+                        if (operators[i - 1] == "intersect" ? !matches : matches) return false;
+                    }
+                    return true;
+                };
+            }
+        }
 
         // Handle top-level except (not inside parentheses/brackets)
         var exceptParts = SplitTopLevel(trimmed, "except");
@@ -3649,7 +3672,7 @@ internal sealed class PatternCompiler
         => SplitPatternTopLevel(text, separator);
 
     /// <summary>Splits top-level operators while preserving strings, EQName URIs and complete name tokens.</summary>
-    internal static string[] SplitPatternTopLevel(string text, string separator)
+    internal static string[] SplitPatternTopLevel(string text, string separator, string? alternative = null, List<string>? operators = null)
     {
         var parts = new List<string>();
         int start = 0, depth = 0;
@@ -3674,20 +3697,26 @@ internal sealed class PatternCompiler
             if (c is '\'' or '"') { quote = c; continue; }
             if (c is '(' or '[' or '{') { depth++; continue; }
             if (c is ')' or ']' or '}') { depth--; continue; }
-            if (depth != 0 || !text.AsSpan(i).StartsWith(separator, StringComparison.Ordinal)) continue;
+            if (depth != 0) continue;
+            string token = text.AsSpan(i).StartsWith(separator, StringComparison.Ordinal) ? separator
+                : alternative is not null && text.AsSpan(i).StartsWith(alternative, StringComparison.Ordinal) ? alternative : string.Empty;
+            if (token.Length == 0) continue;
             if (word)
             {
-                if (i == start || (i > 0 && IsNameCharacter(text[i - 1])) ||
-                    (i + separator.Length < text.Length && IsNameCharacter(text[i + separator.Length]))) continue;
+                if (i == 0 || (i == start && operators is null) || (i > 0 && IsNameCharacter(text[i - 1])) ||
+                    (i + token.Length < text.Length && IsNameCharacter(text[i + token.Length]))) continue;
                 int previous = i - 1;
                 while (previous >= start && char.IsWhiteSpace(text[previous])) previous--;
-                if (previous < start || text[previous] is '/' or '@' or ':') continue;
+                if ((previous < start && operators is null) || (previous >= start && text[previous] is '/' or '@' or ':')) continue;
             }
             parts.Add(text[start..i].Trim());
-            start = i + separator.Length;
-            i += separator.Length - 1;
+            operators?.Add(token);
+            start = i + token.Length;
+            i += token.Length - 1;
         }
         parts.Add(text[start..].Trim());
+        if (operators is not null && operators.Count > 0 && parts.Any(string.IsNullOrEmpty))
+            throw new InvalidOperationException("XTSE0340: A set pattern requires an operand on each side of its operator.");
         return parts.Where(part => !string.IsNullOrEmpty(part)).ToArray();
     }
 
