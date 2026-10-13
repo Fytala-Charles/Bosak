@@ -14,7 +14,7 @@ Validation: Release build passes with 10 existing warnings and zero errors. All 
 
 Next: named/wildcard/schema-annotated node tests and function grammar gaps, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: tested implementation d456c000 committed and pushed; [Bosak PR #222](https://github.com/Fytala-Charles/Bosak/pull/222) open, stacked on #221, CI pending. This delivery record changes documentation only. PR #221 CI passed but it remains open; retarget #222 to main after #221 merges.
 
 # Declaration static named-type validation — 2026-10-13
 
