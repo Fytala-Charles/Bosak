@@ -422,3 +422,34 @@ Static fields cannot be injected by a plain map, even when the supplied value eq
 Nested `array(n:reading)` binding and function signatures resolve n in the declaration's namespace; nested named record fields retain declaration identity and use the cast path recursively. This does not establish general array/map casting or full recursive/static type validation.
 
 See [cast evidence](../../../contributions/xslt40/record-type-boundaries/CAST_RESULTS.json), [XPath record casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-record), and [XPath castable](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-castable). Immutable source review and remaining native failures are recorded separately; independent processor confirmation remains outstanding.
+
+
+## Finite recursive records and container casts — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) now casts XPath 4.0 arrays/maps by casting member/key/value sequences, retaining container shape and checking cardinality. Map-key collisions raise XQDY0137; wildcard casts retain the supplied container and empty container types reject nonempty inputs. Named record field casts reuse the shared sequence caster. Record field metadata resolves aliases and finite self/mutual named references in the declaration namespace without expanding nominative identities. Sixteen new regressions cover finite linked lists, recursive array casts, nested containers, invalid members and collisions. Arbitrary-depth resource handling, full recursive/static diagnostics, item-type alias cast expansion and package exposure remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.
+
+A route-processing stage can normalize a finite linked sequence of stops received as textual values. With source `<root/>`, this stylesheet produces `<route>1|2|true</route>`:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:record-type name="t:list">
+    <xsl:field name="value" as="xs:integer"/>
+    <xsl:field name="next" as="t:list?"/>
+  </xsl:record-type>
+  <xsl:template match="/">
+    <xsl:variable name="routes"
+      select="[map{'value':'1','next':map{'value':'2'}}] cast as array(t:list)"/>
+    <route><xsl:value-of separator="|"
+      select="($routes?1?value,$routes?1?next?value,$routes?1 instance of t:list)"/></route>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+The map represents a small synthetic route payload: value holds the stop order and next links to the following stop. The array models a batch of routes. Casting converts each link's textual order to an integer and assigns the same declaration identity. A missing next field becomes an empty sequence because it is optional; the required value field must be present. `RecursiveRecord_ArrayCast` verifies this contract and output values. This example adds no catalogue manifest case and is not evidence for unlimited nesting depth or cyclic runtime values.
+
+For a grouped batch, `[('1','2'),()] cast as array(xs:integer*)` retains two members rather than flattening the outer array. For counts indexed by textual IDs, `map{'1':('1','2')} cast as map(xs:integer,xs:integer+)` converts both the key and value sequence. Atomic casts of array-valued members still atomize those members where required. Matching function/node members can remain unchanged; general static validation of invalid cast targets is still a follow-up.
+
+Explicit map casting preserves entry order and fails with XQDY0137 if key conversion introduces duplicates. For example, keys `1` and `01` both cast to integer 1. Failed lexical values and required member cardinalities also fail; castable reports false. Wildcard array/map casts retain their supplied containers. Empty container types accept only empty containers.
+
+See [recursive/container evidence](../../../contributions/xslt40/record-type-boundaries/CONTAINER_RESULTS.json), [XPath array casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-array), [map casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-map), and [recursive record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-recursive-record-tests). The pinned specification and remaining native failures are recorded separately; independent processor confirmation remains outstanding.

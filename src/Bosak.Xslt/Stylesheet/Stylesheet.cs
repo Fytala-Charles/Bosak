@@ -296,6 +296,7 @@
 //                      | Charles Korthout | 2.135 | 13-10-2026     | Resolve atomic and array declaration aliases with forward references and cycle detection
 //                      | Charles Korthout | 2.136 | 13-10-2026     | Expand map aliases and nested map/array references with shared token-aware type handling
 //                      | Charles Korthout | 2.137 | 13-10-2026     | Validate outer item occurrence independently of function return sequence cardinality
+//                      | Charles Korthout | 2.138 | 13-10-2026     | Resolve record field aliases and recursive named references without expanding identities
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -956,6 +957,13 @@ internal sealed class Stylesheet
                 if (constructor && defaultSeen && !initial) throw new InvalidOperationException("XTSE0010: Record fields following an initialized field need initial values.");
                 defaultSeen |= initial;
                 var type = field.Attribute("as")?.Value ?? "item()*";
+                type = ItemTypeAliasExpansion.Expand(type, lexical =>
+                {
+                    var key = ExpandItemTypeName(lexical, field);
+                    if (GetBindingItemTypes().TryGetValue(key, out var alias)) return alias;
+                    if (GetNamedTypeDeclarations().TryGetValue(key, out var named) && named.Name.LocalName == "record-type") return key;
+                    return key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal) ? "xs:" + key[(key.IndexOf('}') + 1)..] : lexical;
+                }) ?? type;
                 types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
             }
             var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";

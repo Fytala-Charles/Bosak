@@ -406,6 +406,7 @@
 //                      | Charles Korthout | 2.179 | 13-10-2026     | Use cardinality-aware function type matching for XPath 4.0 instance-of operands
 //                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
 //                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
+//                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3368,7 +3369,7 @@ internal static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // XPath 4.0 §4.19.2.7: a record-type target takes a map operand,
                         // which must not be atomized (maps otherwise raise FOTY0013).
-                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _) || IsContainerCastTarget(typeName, context)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -3401,7 +3402,7 @@ internal static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // Record-type targets take a map operand (see the Cast case).
-                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _) || IsContainerCastTarget(typeName, context)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -8881,6 +8882,7 @@ internal static class VmEngine
     /// for a lexical failure.</exception>
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
+        if (IsContainerCastTarget(typeName, context)) return CastContainer(value, typeName, context!);
         if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out var named))
         {
             var inputs = MaterializeSequence(value);
@@ -8933,9 +8935,71 @@ internal static class VmEngine
         }
     }
 
-    /// <summary>Checks an existing field item before the XSLT host applies record casting.</summary>
-    internal static bool RecordFieldItemMatches(XdmValue value, string type, EvaluationContext context)
-        => ValueMatchesType(value, type, context);
+    private static bool IsContainerCastTarget(string type, EvaluationContext? context)
+        => context?.IsXPath40 == true && (type.StartsWith("array(", StringComparison.Ordinal) || type.StartsWith("map(", StringComparison.Ordinal));
+
+    private static XdmValue CastContainer(XdmValue value, string type, EvaluationContext context)
+    {
+        type = type.Trim();
+        var optional = type.EndsWith('?');
+        if (optional) type = type[..^1].TrimEnd();
+        var inputs = MaterializeSequence(value);
+        if (inputs.Length == 0 && optional) return XdmValue.Undefined;
+        if (inputs.Length != 1) throw new InvalidOperationException("XPTY0004: A container cast requires one item.");
+        var input = inputs[0];
+        if (type.StartsWith("array(", StringComparison.Ordinal))
+        {
+            if (!input.IsArray) throw new InvalidOperationException("XPTY0004: An array cast requires an array.");
+            var memberType = type[6..^1].Trim();
+            if (memberType == "*") return input;
+            if (memberType.Length == 0)
+            {
+                if (input.ArrayValue.Count != 0) throw new InvalidOperationException("XPTY0004: An empty array is required.");
+                return input;
+            }
+            var members = new XdmValue[input.ArrayValue.Count];
+            for (int i = 0; i < members.Length; i++) members[i] = CastSequence(input.ArrayValue.Get(i + 1), memberType, context);
+            return XdmValue.FromArray(new XdmArray(members));
+        }
+        if (!input.IsMap) throw new InvalidOperationException("XPTY0004: A map cast requires a map.");
+        if (type == "map(*)") return input;
+        if (type == "map()")
+        {
+            if (input.MapValue.Count != 0) throw new InvalidOperationException("XPTY0004: An empty map is required.");
+            return input;
+        }
+        if (!TryGetMapTypeParts(type, out var keyType, out var valueType))
+            throw new InvalidOperationException("XPST0003: Invalid map cast type.");
+        var result = new XdmMap();
+        foreach (var key in input.MapValue.Keys)
+        {
+            var castKey = CastSequence(key, keyType, context);
+            if (result.TryGetValue(castKey, out _)) throw new InvalidOperationException("XQDY0137: A map cast produces duplicate keys.");
+            input.MapValue.TryGetValue(key, out var entry);
+            result.Add(castKey, CastSequence(entry, valueType, context));
+        }
+        return XdmValue.FromMap(result);
+    }
+
+    /// <summary>Casts each unmatched sequence item and validates the required cardinality.</summary>
+    internal static XdmValue CastSequence(XdmValue value, string sequenceType, EvaluationContext context)
+    {
+        var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + sequenceType, xpath40: true);
+        var type = string.IsNullOrEmpty(parsed.Prefix) ? parsed.TypeName : parsed.Prefix + ":" + parsed.TypeName;
+        var inputs = MaterializeSequence(value);
+        if (type == "empty-sequence()")
+        {
+            if (inputs.Length != 0) throw new InvalidOperationException("XPTY0004: An empty sequence is required.");
+            return XdmValue.Undefined;
+        }
+        var converted = new List<XdmValue>(inputs.Length);
+        foreach (var item in inputs) converted.Add(ValueMatchesType(item, type, context) ? item : Cast(item, type, context));
+        if ((converted.Count == 0 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.OneOrMore)
+            || (converted.Count > 1 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne))
+            throw new InvalidOperationException("XPTY0004: Cast sequence cardinality does not match its declaration.");
+        return converted.Count == 0 ? XdmValue.Undefined : converted.Count == 1 ? converted[0]
+            : XdmValue.FromSequence(MaterializedSequence.FromList(converted));
+    }
 
     /// <summary>
     /// Attempts to cast a value to the named type using the XPath 3.1 §19 cast rules.
@@ -9019,6 +9083,16 @@ internal static class VmEngine
                 {
                     casted.Add(RecordFieldKey(field.Name), fieldValue);
                 }
+                else if (context?.IsXPath40 == true)
+                {
+                    try { casted.Add(RecordFieldKey(field.Name), CastSequence(fieldValue, field.SequenceTypeText, context)); }
+                    catch (InvalidOperationException error)
+                    {
+                        failureKind = error.Message.StartsWith("XPTY0004", StringComparison.Ordinal)
+                            ? CastFailureKind.NotPermitted : CastFailureKind.Lexical;
+                        return false;
+                    }
+                }
                 else if (TryCast(fieldValue, field.SequenceTypeText, context, out var castField, out _))
                 {
                     casted.Add(RecordFieldKey(field.Name), castField);
@@ -9045,6 +9119,11 @@ internal static class VmEngine
 
     private static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
     {
+        if (IsContainerCastTarget(typeName, context))
+        {
+            try { result = CastContainer(value, typeName, context!); failureKind = CastFailureKind.Lexical; return true; }
+            catch (InvalidOperationException) { result = value; failureKind = CastFailureKind.NotPermitted; return false; }
+        }
         if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _))
         {
             try { result = Cast(value, typeName, context); failureKind = CastFailureKind.Lexical; return true; }
