@@ -14,7 +14,7 @@ Validation: Release build passes with zero warnings and zero errors. All 7248 un
 
 Next: package type exposure and remaining native type-alias failures; annotated function types remain a separate grammar follow-up. Reassess the five original contribution areas after these implementation boundaries. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: implementation f58dc6e7 in PR #229 (https://github.com/Fytala-Charles/Bosak/pull/229), stacked on #228. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
 
 # Function-type grammar aliases — 2026-10-13
 
