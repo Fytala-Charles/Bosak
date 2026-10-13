@@ -91,6 +91,7 @@
 //                      | Charles Korthout | 3.19  | 13-10-2026     | Preserve 4.0 static context while compiling parenthesized union alternatives.
 //                      | Charles Korthout | 3.20  | 13-10-2026     | Match named processing instructions in 4.0 forward-axis node tests.
 //                      | Charles Korthout | 3.21  | 13-10-2026     | Validate parenthesized 4.0 item patterns and restrict outer patterns to nodes.
+//                      | Charles Korthout | 3.22  | 13-10-2026     | Ignore predicate, string and URI slashes when classifying 4.0 outer filters.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -3564,7 +3565,9 @@ internal sealed class PatternCompiler
         // If the inner pattern is a path expression (contains /), the predicate applies
         // to the sequence selected by the path, not to self::node(). For example,
         // (doc/descendant::foo)[2] must match the 2nd foo descendant of doc.
-        bool isPathExpression = inside.Contains('/');
+        bool isPathExpression = _compatibility >= XPathCompatibility.XPath40
+            ? HasPatternPathOperator(inside)
+            : inside.Contains('/');
         if (isPathExpression)
         {
             var compiledPath = CompilePatternXPath($"({inside})[{predicateExpr}]{remaining}");
@@ -3625,6 +3628,34 @@ internal sealed class PatternCompiler
     // ------------------------------------------------------------------
     // Helper methods
     // ------------------------------------------------------------------
+
+    /// <summary>Finds path slashes outside predicates, string literals and EQName namespace URIs.</summary>
+    private static bool HasPatternPathOperator(string text)
+    {
+        int predicateDepth = 0;
+        char quote = '\0';
+        bool uri = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == '[') predicateDepth++;
+            else if (c == ']') predicateDepth--;
+            else if (c == '/' && predicateDepth == 0) return true;
+        }
+        return false;
+    }
 
     /// <summary>
     /// Splits text on separator only at the top level (not inside parentheses, brackets, or braces).
