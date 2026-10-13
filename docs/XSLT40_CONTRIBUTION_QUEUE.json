@@ -224,7 +224,7 @@
         "xsl:item-type"
       ],
       "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
-      "estimatedReach": "Medium\u2013high",
+      "estimatedReach": "Medium–high",
       "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
@@ -326,7 +326,7 @@
         "xsl:field"
       ],
       "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
-      "estimatedReach": "Medium\u2013high",
+      "estimatedReach": "Medium–high",
       "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
       "businessScenario": "Typed customer/order records and constructor validation",
       "specSection": "named-record-types",
@@ -444,6 +444,27 @@
       "passed": 1,
       "failed": 0,
       "skipped": 173
+    }
+  ],
+  "postReleaseContributions": [
+    {
+      "reviewDate": "2026-10-13",
+      "family": "fixed namespace components",
+      "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/27",
+      "suiteBase": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+      "suiteCommit": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+      "specRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "specSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+      "cases": [
+        "fixed-namespaces-013",
+        "fixed-namespaces-014",
+        "fixed-namespaces-015"
+      ],
+      "passed": 3,
+      "failed": 0,
+      "evidence": "../contributions/xslt40/fixed-namespace-components/evidence.json",
+      "status": "Open; upstream acceptance and independent confirmation pending",
+      "lane": "Existing attribute/component boundaries; separate from N01-N05"
     }
   ]
 }

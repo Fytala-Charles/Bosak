@@ -1,6 +1,6 @@
 # Native XSLT 4.0 contributions
 
-**Current status — 2026-10-13:** [Bosak 1.2.0 is published](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0), from revision `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. All 14 new cases across the five first batches pass in Bosak in the recorded evidence below. Upstream PRs #22–26 remain open; upstream acceptance and independent processor confirmation remain pending. The results cover these exact cases, not complete XPath/XSLT 4.0 conformance. Next: respond to upstream reviews, address remaining authoring/static-context gaps and select a new contribution-area batch.
+**Current status — 2026-10-13:** [Bosak 1.2.0 is published](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0), from revision `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. All 14 new cases across the five first batches pass in Bosak in the recorded evidence below. Upstream PRs #22–26 remain open; upstream acceptance and independent processor confirmation remain pending. The results cover these exact cases, not complete XPath/XSLT 4.0 conformance. A second contribution-area batch is submitted as [PR #27](https://github.com/qt4cg/xslt40-test/pull/27): three fixed-namespace component cases pass in unpublished source candidate 1.2.1. Next: respond to upstream reviews and address the recorded keyword-argument failures.
 
 Specification-derived native-suite additions, executed with the Bosak adapter. Upstream acceptance and independent processor confirmation are pending for all five first batches. Counts describe exact new cases; they are not complete family or engine conformance.
 
@@ -13,6 +13,14 @@ Specification-derived native-suite additions, executed with the Bosak adapter. U
 | record-type | [#26](https://github.com/qt4cg/xslt40-test/pull/26) | 2 pass after implementation; original 2 failures retained | [Details](record-type-boundaries/README.md) |
 
 No second processor is installed or required as a local submission prerequisite. Each PR requests reviewer cross-checking. The original six failures are retained as historical Bosak implementation findings; expected outputs remain specification-derived. Bosak 1.2.0 is the current published release; the earlier candidate versions and next-step notes below are historical.
+
+## Second contribution area
+
+| Family | Upstream PR | Exact Bosak outcome | Examples and evidence |
+|---|---|---|---|
+| fixed namespace components | [#27](https://github.com/qt4cg/xslt40-test/pull/27) | 3 pass / 0 fail in unpublished source 1.2.1; wider family 11 pass / 5 fail | [Details](fixed-namespace-components/README.md) |
+
+Three native fixed-namespace component tests are submitted as [xslt40-test PR #27](https://github.com/qt4cg/xslt40-test/pull/27): explicit mode declaration/membership under native rebinding, root/scoped default-mode identity, and fixed-bound key names with QName lookup identity. All three pass with source candidate 1.2.1 (unpublished). The wider fixed-namespaces set is 11 pass/5 fail/0 skip; existing cases 006-009 and 011 fail on user-function keyword parameter metadata (XPST0017). Expected outputs are specification-derived, the native catalog schema validates and the portable patch reconstructs the submitted tree exactly. Upstream acceptance and independent confirmation remain pending. This is a new contribution area separate from the original five batches and fourteen cases; REQ-126/N01-N05 statuses remain unchanged. Published version remains 1.2.0.
 
 ## Historical implementation evidence
 

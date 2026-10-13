@@ -1,0 +1,50 @@
+Bosak XSLT Conformance Harness
+Catalog: D:\Development\Bosak\.upstream\xslt40-test\catalog.xml
+Test sets: 250
+Filter: fixed-namespaces
+Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage
+
+  Starting: fixed-namespaces ...
+  RUN  fixed-namespaces-001
+  PASS fixed-namespaces-001
+  RUN  fixed-namespaces-002
+  PASS fixed-namespaces-002
+  RUN  fixed-namespaces-003
+  PASS fixed-namespaces-003
+  RUN  fixed-namespaces-004
+  PASS fixed-namespaces-004
+  RUN  fixed-namespaces-005
+  PASS fixed-namespaces-005
+  RUN  fixed-namespaces-006
+  FAIL fixed-namespaces-006: XPST0017: Function f does not declare keyword parameters and cannot be called with keyword arguments.
+  RUN  fixed-namespaces-007
+  FAIL fixed-namespaces-007: XPST0017: Function f does not declare keyword parameters and cannot be called with keyword arguments.
+  RUN  fixed-namespaces-008
+  FAIL fixed-namespaces-008: XPST0017: Function f does not declare keyword parameters and cannot be called with keyword arguments.
+  RUN  fixed-namespaces-009
+  FAIL fixed-namespaces-009: XPST0017: Function f does not declare keyword parameters and cannot be called with keyword arguments.
+  RUN  fixed-namespaces-010
+  PASS fixed-namespaces-010
+  RUN  fixed-namespaces-011
+  FAIL fixed-namespaces-011: XPST0017: Function f does not declare keyword parameters and cannot be called with keyword arguments.
+  RUN  fixed-namespaces-012
+  PASS fixed-namespaces-012
+  RUN  fixed-namespaces-013
+  PASS fixed-namespaces-013
+  RUN  fixed-namespaces-014
+  PASS fixed-namespaces-014
+  RUN  fixed-namespaces-015
+  PASS fixed-namespaces-015
+  RUN  fixed-namespaces-901
+  PASS fixed-namespaces-901
+  Done: fixed-namespaces (16 tests, 11 passed, 5 failed, 0 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   16
+Passed:  11
+Failed:  5
+Skipped: 0
+
+Pass rate: 68.8%
