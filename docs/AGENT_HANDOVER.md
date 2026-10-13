@@ -1,3 +1,13 @@
+# Key QName alignment - 2026-10-13
+
+Branch: fix/xslt40-key-qnames; base main `4b54034e`; implementation `09129fe4e5ca4e11e1c0addb6f41f7ef7f251e0c`.
+
+Source candidate 1.2.1 (unpublished) aligns XSLT 4.0 key declarations with applicable fixed namespace bindings and fn:key lookup identities. Fixed-only and rebound prefixes agree with explicit EQNames; QName arguments use their own namespace URI rather than re-expanding their lexical prefix. Both key function arities, included/imported definitions and multiple declarations of one expanded key name are covered. Authoring reports literal declaration-name syntax/binding errors at source ranges, retaining public metadata and original bytes; repeated snapshot validation performs no resolution. Unknown or malformed runtime lookup names retain XTDE1260. Earlier profiles and literal exclusions are preserved. All 33 new regressions and 132 focused checks pass; all 7,908 unit tests pass (XSLT: 5,022). QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Key-value equality, map-for-key, signature introspection, broader shadow evaluation and package linkage remain separate follow-ups. Published version remains 1.2.0; REQ-125 acceptance, REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged.
+
+Implementation: KeyDefinition and compiler key-name checks use applicable namespace validation in 4.0; fn:key normalizes EQName strings to the existing Clark index format and preserves typed QName identity. Runtime lexical checks share Stylesheet.IsValidNCName. Earlier profiles take their existing paths. Internal authoring context capture includes key names; empty names retain compiler XTSE0010 and whitespace-only names XTSE0020. Evidence: XSLT40-KEY-QNAME-RESULTS.json. Initial 24-case baseline: 3 pass/21 fail. Release build passes with two existing unrelated warnings.
+
+Delivery: submit against main and merge after CI. Next: select a small upstream contribution batch from the accumulated static namespace/name evidence, checking existing upstream coverage first. Keep equality semantics, map-for-key and broader component/package/shadow work separate. Source candidate 1.2.1 remains unpublished. No publication or external messages in this slice. Earlier records below are historical.
+
 # Mode QName alignment - 2026-10-13
 
 Branch: fix/xslt40-mode-qnames; base main `7d778c13`; implementation `5287cf056b89a28c2c009266d011d58699eb2606`.
