@@ -5273,3 +5273,8 @@ Expression-slot editing now recognizes the bounded host keyword signatures alrea
 ## Module fixed bindings and local grammar - 2026-10-13
 
 The local-profile namespace follow-up resolves the expression/edit/pattern mismatch recorded in PR #264. All 40 new regressions, 173 focused checks and 8,053 unit tests pass, including XSLT 5,167/0/0; QT3 remains 31,142/0/679, qt4 gate-only 8,278/0/1,894 and native fixed namespaces 16/0/0. REQ-126 remains In Progress for its broader catalog scope; the first five contribution batches and the fixed-namespace batch are now accepted upstream. Candidate 1.2.1 remains unpublished. See [verification evidence and boundaries](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
+
+
+## Local variable and parameter QName identities - 2026-10-13
+
+The locally earlier variable/parameter QName follow-up passes 35 new regressions, 196 focused checks and 8,088 unit tests, including XSLT 5,202/0/0. QT3 remains exactly 31,142/0/679, qt4 gate-only 8,278/0/1,894 and native fixed namespaces 16/0/0. The former local-native expectation is corrected. REQ-126 broader coverage remains In Progress; upstream acceptance of all 17 submitted cases remains recorded, with independent execution confirmation pending. Candidate 1.2.1 remains unpublished. See [verification evidence and boundaries](XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).

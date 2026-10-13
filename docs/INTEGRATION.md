@@ -3295,3 +3295,8 @@ Resolved on 2026-10-13: the expression/edit/pattern local-version namespace boun
 ## Module fixed bindings and local grammar - 2026-10-13
 
 A fixed-namespaces attribute on a 4.0 module controls expression, AVT and pattern bindings even when a local version selects earlier XPath grammar. Fixed-only prefixes remain usable; omitted native prefixes remain unavailable and fixed bindings override local XML rebinding. ProposeExpressionEdit now applies this rule before splicing: unavailable prefixes return RequiresParentChange and captured namespace errors ExpressionParseError, with no resource retries. Earlier keyword syntax remains rejected. Original bytes, public native descriptors, local effective version, default element namespace and base URI are preserved. See [verification evidence and boundaries](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
+
+
+## Local variable and parameter QName identities - 2026-10-13
+
+In a fixed-binding 4.0 module, locally earlier xsl:variable, xsl:param and xsl:with-param names retain module QName identity. Fixed-only prefixes and aliases work across default values, template/apply-templates/tunnel parameter passing and linked declarations. Unprefixed names remain in no namespace; explicit EQNames keep their URI. Unused omitted-prefix names report XTSE0280, malformed names XTSE0020, duplicate supplied identities XTSE0670, and forward references retain XPST0008. Namespace-document refusal is not retried. Captured keyword parameter metadata agrees with execution; earlier keyword grammar remains rejected. See [verification evidence and boundaries](XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).

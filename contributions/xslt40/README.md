@@ -1,6 +1,6 @@
 # Native XSLT 4.0 contributions
 
-**Current status — 2026-10-13:** [Bosak 1.2.0 is published](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0), from revision `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. Michael Kay merged upstream PRs #22–27: all **17 new cases are accepted** (fourteen across the original five batches and three fixed-namespace component cases). The first fourteen pass in the recorded release evidence; the three fixed-namespace cases and wider family 16/0/0 pass in unpublished source candidate 1.2.1. Independent processor execution confirmation remains pending. Authoring expression edits use captured contexts; the local earlier-grammar expression/pattern mismatch is now resolved. Next: audit locally earlier-profile variable/parameter component QNames. [Merge records](UPSTREAM_ACCEPTANCE.json). Results cover these exact cases, not complete XPath/XSLT 4.0 conformance.
+**Current status — 2026-10-13:** [Bosak 1.2.0 is published](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0), from revision `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. Michael Kay merged upstream PRs #22–27: all **17 new cases are accepted** (fourteen across the original five batches and three fixed-namespace component cases). The first fourteen pass in the recorded release evidence; the three fixed-namespace cases and wider family 16/0/0 pass in unpublished source candidate 1.2.1. Independent processor execution confirmation remains pending. Authoring expression edits use captured contexts; the local earlier-grammar expression/pattern mismatch is now resolved. Locally earlier variable/parameter identities now use module fixed bindings. Next: audit named-template QNames under local version changes. [Merge records](UPSTREAM_ACCEPTANCE.json). Results cover these exact cases, not complete XPath/XSLT 4.0 conformance.
 
 Specification-derived native-suite additions, executed with the Bosak adapter and accepted upstream. Independent processor execution confirmation remains pending. Counts describe exact new cases; they are not complete family or engine conformance.
 
@@ -325,3 +325,8 @@ A separate 39-case authoring regression slice aligns expression edits with retai
 ## Module fixed bindings and local grammar - 2026-10-13
 
 The separate 40-case regression slice resolves module bindings across locally earlier expression/AVT/pattern profiles, including source-preserving expression edits and executable template matching. Native fixed namespaces remain 16/0/0; no new contribution cases or assertions are added. See [verification evidence and boundaries](../../docs/XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json). Candidate 1.2.1 remains unpublished.
+
+
+## Local variable and parameter QName identities - 2026-10-13
+
+A separate 35-case regression slice aligns locally earlier variable/parameter identities with module fixed bindings, including authoring scope, parameter passing and keyword metadata. The native namespace family remains 16/0/0; no contribution cases or assertions are added. All 17 submitted cases remain accepted upstream; independent execution confirmation remains pending. Candidate 1.2.1 remains unpublished. See [verification evidence and boundaries](../../docs/XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).

@@ -361,3 +361,8 @@ Expression edits now use retained applicable namespaces and bounded host keyword
 ## Module bindings across locally earlier grammar - 2026-10-13
 
 The expression/edit/pattern mismatch is resolved with 40 new regressions and 173 focused checks; native namespaces remain 16/0/0. No new contribution cases are added. Next: audit locally earlier-profile variable/parameter component QNames, followed by optional/default and broader keyword boundaries. Candidate 1.2.1 remains unpublished. See [verification evidence](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
+
+
+## Locally earlier variable/parameter QName follow-up - 2026-10-13
+
+The module variable/parameter identity follow-up passes 35 new regressions and 196 focused checks; native fixed namespaces remain 16/0/0. No new contribution cases are added. Next: audit named-template declaration/reference QNames under local version changes, then other component and keyword boundaries. Candidate 1.2.1 remains unpublished. See [verification evidence](XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json). Acceptance of all 17 submitted upstream cases remains recorded; independent execution confirmation remains pending.

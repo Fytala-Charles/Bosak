@@ -551,6 +551,15 @@
         "familyFailed": 0,
         "evidence": "XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json",
         "next": "Audit variable/parameter component QNames under local earlier versions."
+      },
+      "localVariableFollowUp": {
+        "implementation": "ab3674be331806b3efca145a4fea0f2d855f5a93",
+        "newRegressions": 35,
+        "focusedPassed": 196,
+        "familyPassed": 16,
+        "familyFailed": 0,
+        "evidence": "XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json",
+        "next": "Audit named-template declaration/reference QNames under local version changes."
       }
     }
   ],
