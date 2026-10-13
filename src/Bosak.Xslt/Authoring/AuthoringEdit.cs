@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle, staleness and sharing remarks                                |
 //                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-124 acceptance F1: candidate compilation routed through the snapshot's resolver      |
+//                      | Charles Korthout | 0.4   | 13-10-2026     | Clarify bounded signature coverage and applicable namespace edit refusals.                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -76,13 +77,13 @@ public enum AuthoringEditFailureKind
     /// <summary>The proposal's node id does not belong to the snapshot it was submitted to.</summary>
     UnknownNode,
 
-    /// <summary>The attribute is missing, or its slot kind is not <see cref="AuthoringAttributeSlotKind.Expression"/>; other slot kinds are a documented capability absence in this version, never an exception.</summary>
+    /// <summary>The attribute is missing, its slot kind is not <see cref="AuthoringAttributeSlotKind.Expression"/>, or a required function signature is outside supported edit coverage; these capability absences are classified refusals.</summary>
     SlotNotEditable,
 
     /// <summary>The new text does not parse or compile as an XPath expression in the slot's static context.</summary>
     ExpressionParseError,
 
-    /// <summary>The edit would require a namespace binding or start-tag change outside the attribute value; the expanded affected ownership (the owning element's start tag) is reported and the edit is refused.</summary>
+    /// <summary>The edit uses a prefix unavailable in the applicable static bindings, requiring a namespace or fixed-binding change outside the attribute value; the owning element's start tag is reported as expanded ownership and the edit is refused.</summary>
     RequiresParentChange,
 
     /// <summary>The escaped edit cannot be encoded in the module's declared encoding.</summary>
@@ -91,7 +92,7 @@ public enum AuthoringEditFailureKind
 
 /// <summary>
 /// An immutable, classified refusal of an <see cref="AuthoringEditProposal"/>. Carries the source
-/// range the failure relates to where available; <see cref="RequiresParentChange"/> additionally
+/// range the failure relates to where available; <see cref="AuthoringEditFailureKind.RequiresParentChange"/> additionally
 /// fills <see cref="ExpandedRange"/> with the owning element's full start-tag range.
 /// </summary>
 /// <remarks>
