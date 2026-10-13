@@ -40,3 +40,5 @@ After publication, resume focused implementation slices and select a new batch o
 ## Publication procedure
 
 After the preparation PR is integrated and main CI is green, the final release revision is ready for approval. Creating the `v1.2.0` tag triggers the existing Trusted Publishing workflow. Publication is followed by downloading all ten public packages, checking their metadata and hashes, and repeating the consumer against nuget.org with a new cache. Publication has not been authorized by the scope-freeze decision alone. The VS Code Marketplace release is a separate workflow and is outside this package release.
+
+REQ-125 acceptance is included: Slice A corrections and acceptance were already integrated before this candidate, and the consumer review summary has been reconciled with that decision. Whole-request acceptance and immutable consumer adoption were recorded for 1.1.0; [delivery evidence](REQ-125-END-TO-END-CONSUMER-REVIEW.md#8-immutable-delivery) defines the accepted coverage.

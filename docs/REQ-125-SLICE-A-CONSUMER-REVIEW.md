@@ -1,6 +1,8 @@
 # REQ-125 Slice A Consumer Review
 
-> Reviewed: 2026-10-10 · Consumer: Bosak.Braid · Decision: corrections required before acceptance
+> Reviewed: 2026-10-10 · Consumer: Bosak.Braid · Decision: corrected Slice A accepted within declared coverage (section 6)
+
+The initial review and findings below are historical; section 6 records the accepted corrections. Subsequent whole-request acceptance and immutable Braid adoption are recorded in [the end-to-end consumer review](REQ-125-END-TO-END-CONSUMER-REVIEW.md#8-immutable-delivery). PR #141's acceptance additions from `ba5a30f4` are already present in the 1.2.0 preparation revision `9c51e516`; its acceptance evidence is included in this release candidate.
 
 ## 1. Reviewed Delivery and Evidence
 

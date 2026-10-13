@@ -1,3 +1,7 @@
+# REQ-125 acceptance reconciliation — 2026-10-13
+
+Base: main `9c51e516`. Both acceptance additions from existing PR #141 commit `ba5a30f4` are already present on main through later integration. Refresh the existing PR against main to resolve its stale conflict status and correct the Slice A review summary. Original F1–F4 findings remain historical; corrected Slice A and later whole-request acceptance retain their declared coverage. No engine changes. Validate the documentation PR CI before merging; then present the resulting main revision for publication approval. Publication remains unauthorized. Earlier release and slice records below are historical.
+
 # 1.2.0 release preparation — 2026-10-13
 
 Branch: main; integrated revision ed785f7979fd04552df7549a0d502d21462e8010 from PR #247, with verified candidate d6316237. This documentation receipt follows the integration. This section supersedes the earlier next-slice queue.
