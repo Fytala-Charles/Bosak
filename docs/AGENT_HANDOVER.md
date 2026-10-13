@@ -1,6 +1,6 @@
 # Set and predicate-pattern priorities — 2026-10-13
 
-Branch: feat/xslt-set-pattern-priorities; parent a3db0f35. Stacked on PR #237; PRs #223–237 remain open. Earlier sections are historical.
+Branch: feat/xslt-set-pattern-priorities; parent a3db0f35. Stacked on PR #237; PRs #223–238 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: parenthesized item-pattern static validation and declaring-scope matching; compare the 4.0 grammar against existing earlier-profile restrictions before implementation. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #238](https://github.com/Fytala-Charles/Bosak/pull/238), stacked on #237. Verified implementation revision b161cdd0; a documentation-only delivery commit follows. PRs #223–238 remain open. CI starts after retargeting to main. Next: parenthesized item-pattern static validation and declaring-scope matching.
 
 # Attribute and forward-axis priorities — 2026-10-13
 
