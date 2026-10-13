@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "0043fdba344bc0efcef446cbfa0baba1eea996cf",
+  "implementationRevision": "288fade66b0840e9501783a092a4e83a45a115f8",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Named template declaration and call QName checks use applicable namespaces, matching existing runtime lookup",
+  "baselineFocused": {
+    "passed": 1,
+    "failed": 9,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 14,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7735,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4849
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Public source descriptors and the QName SlotContext null contract remain unchanged. Internal declaration contexts now also capture template and call namespaces during inspection. Existing runtime expanded-name lookup is reused. Earlier host profiles, EQNames/unprefixed names and literal static exclusions are preserved. Function/mode/key component names, mixed-version expression namespace contexts and authoring named-type registration remain follow-ups. Template target existence, duplicate expanded identities and package linkage are outside this bounded check.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "69a2725145f079ff5c564b9dccd5589947b71420e2dc8a5057a57fbb8aafcfb5",
+    "focused": "91692069b9c902c54b22faf5490fb23c35bb1e401cc31a30b9fead531e37bd19",
+    "unit": "a0e51c0890350fa122901542ece08922fb11248c77b163b8d07ecfb96fb73e1d",
+    "qt3": "913bc06e16f6782543b84bc2549c29881025995a5a17c8eeff465bf8640ec2b4",
+    "qt4": "ddb354d4addc9a0706d52a6ad5283ed0fe9a7ca04b23870893fb07e6b066fb3e"
+  }
+}
