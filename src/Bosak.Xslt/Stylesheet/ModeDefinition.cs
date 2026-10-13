@@ -31,6 +31,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.3   | 01-10-2026     | ConflictsWith takes resolvedAttributes: conflicts on attributes explicitly specified  |
 //                      | Charles Korthout | 1.4   | 13-10-2026     | Resolve XSLT 4.0 mode declarations using fixed namespace bindings.                       |
+//                      | Charles Korthout | 1.5   | 13-10-2026     | Reject explicit empty names while retaining unnamed mode declarations.                  |
 //                      |                  |       |                | by a higher-import-precedence declaration are resolved (mode-1505 vs mode-1506)          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
@@ -374,7 +375,7 @@ internal sealed class ModeDefinition
         if (mode is "#current" or "#default" or "#all" or "#unnamed")
             throw new InvalidOperationException($"XTSE0020: Invalid mode name '{mode}' in xsl:mode/@name.");
 
-        if (Stylesheet.UsesXPath40Namespaces(element) && mode.Length != 0)
+        if (Stylesheet.UsesXPath40Namespaces(element) && (mode.Length != 0 || element.Attribute("name") is not null))
             return Stylesheet.ExpandModeQName(element, mode);
 
         int colon = mode.IndexOf(':');

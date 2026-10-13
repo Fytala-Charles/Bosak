@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Cover empty names and unnamed mode declarations.                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -104,6 +105,7 @@ public class Xslt40ModeQNameTests
     [InlineData("<xsl:template match='/' default-mode='p:m'/>", "XTSE0280")]
     [InlineData("<xsl:template match='/'><out xsl:default-mode='p:m'/></xsl:template>", "XTSE0280")]
     [InlineData("<xsl:mode name='a:b:c'/>", "XTSE0020")]
+    [InlineData("<xsl:mode name=''/>", "XTSE0020")]
     [InlineData("<xsl:template match='/' mode='a:b:c'/>", "XTSE0550")]
     [InlineData("<xsl:template match='/'><xsl:apply-templates mode='a:b:c'/></xsl:template>", "XTSE0020")]
     public void InvalidModeNameIsReported(string body, string code)
@@ -215,6 +217,11 @@ public class Xslt40ModeQNameTests
     [InlineData("{urn:fixed}m")]
     public void ExplicitInitialModeExecutes(string initialMode)
         => AssertExecutes(Sheet("<xsl:mode name='q:m'/><xsl:template match='/' mode='q:m'><out>7</out></xsl:template>"), initialMode: initialMode);
+
+    /// <summary>A declaration without a name continues to define the unnamed mode.</summary>
+    [Fact]
+    public void UnnamedModeDeclarationExecutes()
+        => AssertExecutes(Sheet("<xsl:mode/><xsl:template match='/'><out>7</out></xsl:template>"));
 
     private sealed class Resolver(Dictionary<string, string>? modules = null) : IAuthoringModuleResolver
     {
