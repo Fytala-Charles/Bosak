@@ -1,3 +1,21 @@
+# Structural-record aliases — 2026-10-13
+
+Branch: feat/xslt-structural-record-aliases; main baseline a519a13e14add2bb5ecdc22126a50227e19cdda1. PR #213 merged after CI 38347679974 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now expands structural-record aliases and aliases nested in record fields, arrays, choices and function signatures. Quoted field names, default item()* fields, trailing commas, nested comments and declaration namespaces are preserved. Existing structural record coercion converts field values and annotates records; type checks require record values and do not coerce plain maps. Eleven new regressions cover the documented sensor example, nested contracts, function boundaries, invalid fields and cycles. Nominative record coercion, recursive named records and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+Shared alias expansion now traverses structural record fields, preserving quoted names and resolving field sequence types. Existing parser/VM record conversion and matching are reused. No public API, gate promotion, native assertion change, catalogue manifest change or publication.
+
+Validation: Release build passes (10 existing warnings, zero errors); all 6965 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4079/0/0. Focused alias run passes 94 tests, including eleven new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native type-alias improves to 8/24/0; case 005 newly passes and original 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: nominative record coercion boundaries. N04/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
+
+Delivery pending.
+
 # Function and choice aliases — 2026-10-13
 
 Branch: feat/xslt-function-choice-aliases; main baseline 8b9279622f5c5da5eeea08a60570c184cdc789fb. PR #212 merged after CI 38346556251 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
