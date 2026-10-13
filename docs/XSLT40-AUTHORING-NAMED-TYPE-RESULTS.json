@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "6856aed295406a32bd971568a2fff730bd0b6931",
+  "implementationRevision": "95c0e3cc8e285c7f02a7e631621efbcc173026cf",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Standalone module named-type bindings captured during inspection and supplied to authoring expression, AVT and pattern compilation",
+  "baselineFocused": {
+    "passed": 9,
+    "failed": 5,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 22,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7776,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4890
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "No ordinary stylesheet compilation is used to capture named types. Snapshot validation performs no resolution and public metadata/source bytes remain unchanged. Imported/include-linked, package/schema-linked and conditional or shadow type registration is deferred with coverage gaps. Known record identities are registered; field validation and constructors remain outside this slice. Declaration sequence-type slots, constant cast/castable static checks and broader mixed-version contexts remain follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-types",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "28a354c9cd7398d0d2a1ecaf1db7ead589e73378b4e6e80de39ecde3ffbb9dd2",
+    "focused": "1de7ea1ce165823d5c4cb3b3425165442c7ac89ce81f447037717048c8871373",
+    "unit": "c84db9f72c40d2727e0188d4bda7dbba86987ab106d5c363fbfb92ce0c6e1f41",
+    "qt3": "8e6dbe14c6e4ff18054fffe6b66704e127c04bf5c7baec15a1d17eafa869757f",
+    "qt4": "0cdf909d240a6806b4c85fe291dd5eb0c1b47da05d9b593d27975016c41e4fb8"
+  }
+}

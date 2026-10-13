@@ -1,3 +1,11 @@
+# Standalone authoring named types — 2026-10-13
+
+Branch: fix/xslt40-authoring-named-types; base main `6856aed2`; implementation `95c0e3cc8e285c7f02a7e631621efbcc173026cf`.
+
+Source candidate 1.2.1 (unpublished) captures immutable named-type bindings during authoring inspection of standalone XSLT 4.0 modules without ordinary stylesheet compilation. Expression, AVT and pattern slots receive expanded item-type aliases and known record names. Alias expansion reuses the existing structural type walker; forward references work and declaration errors (unknown definitions, cycles, duplicates, reserved names, visibility and outer occurrences) retain source diagnostics. Modules declaring named types now reject undeclared type references in the registered host context. Namespace documents use caller-controlled resolution during inspection; repeated snapshot validation performs no resolution, refusals are not retried and original bytes are preserved. All 22 focused regressions pass (initial 14-case baseline: 9 pass/5 fail). All 7,776 unit tests pass, including XSLT 4,890/0/0; QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Named-type registration across imports/includes, packages, schemas, shadow declarations or non-literal static exclusion remains deferred with coverage gaps. Record-field validation, constructors, declaration sequence-type slots and constant cast/castable analysis remain follow-ups; this slice registers record identity for type checks. Public metadata contracts, REQ-125 acceptance, REQ-126/N01-N05 statuses, upstream assertions and gate membership are unchanged. Published version remains 1.2.0. Evidence: XSLT40-AUTHORING-NAMED-TYPE-RESULTS.json.
+
+Delivery: submit against main and merge after CI. Next: triage named-type module linkage and declaration sequence-type validation, remaining mode/key component names, then select a small next XSLT 4.0 contribution batch. Observed constant cast/castable expressions bypass the expected compile-time eligibility checks; keep that separate from this registry slice. No publication or external messages in this slice. Earlier records below are historical.
+
 # Function QName alignment — 2026-10-13
 
 Branch: fix/xslt40-function-qnames; base main `741789bb`; implementation `d3da89dc49740d66467ee56f927da97be8e44e07`.

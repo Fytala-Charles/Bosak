@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 0.6   | 13-10-2026     | Align declaration scope and QName errors with fixed bindings                           |
 //                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
+//                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -73,6 +74,7 @@ internal sealed class XsltValidationEngine
     private bool _hasRefusal;
     private IReadOnlyList<StaticVariableName> _staticGlobals = Array.Empty<StaticVariableName>();
     private VariableScope _globals = VariableScope.Empty;
+    private AuthoringNamedTypes? _namedTypes;
 
     public XsltValidationEngine(XsltValidationOptions? options)
     {
@@ -349,6 +351,22 @@ internal sealed class XsltValidationEngine
         var source = snapshot.SourceFor(module.ModuleUri);
         var map = source.CoordinateMap;
         var root = StylesheetRoot(module.Root);
+        _namedTypes = module.NamedTypes;
+        if (_namedTypes?.CoverageGap is { } gap)
+            _gaps.Add(new XsltValidationCoverageGap("named-types", module.ModuleUri, gap));
+        if (_namedTypes?.Error is { } error)
+        {
+            _hasInvalid = true;
+            SourceRange? FindRange(AuthoringNodeDescriptor node)
+            {
+                if (ReferenceEquals(node.BackingObject, _namedTypes.ErrorElement))
+                    return node.Attributes.FirstOrDefault(a => a.LocalName == (error.StartsWith("XTSE0280", StringComparison.Ordinal) || error.StartsWith("XTSE4030", StringComparison.Ordinal) ? "name" : "as"))?.ValueRange ?? node.Range;
+                foreach (var child in node.Children)
+                    if (FindRange(child) is { } range) return range;
+                return null;
+            }
+            _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(new InvalidOperationException(error)), module.ModuleUri, error, FindRange(module.Root)));
+        }
 
         if (module.IsPrincipal && (root is null || !IsStylesheetElement(root)))
         {
@@ -971,7 +989,9 @@ internal sealed class XsltValidationEngine
             if (ResolveCompatibility(context) >= XPathCompatibility.XPath40)
                 PatternCompiler.ValidateNamespacePrefixes(text, BuildNamespaceMap(context));
             _ = new PatternCompiler().Compile(
-                text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context), compatibility: ResolveCompatibility(context));
+                text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context), compatibility: ResolveCompatibility(context),
+                itemTypeAliases: ResolveCompatibility(context) >= XPathCompatibility.XPath40 ? _namedTypes?.Aliases : null,
+                namedRecordTypeNames: ResolveCompatibility(context) >= XPathCompatibility.XPath40 ? _namedTypes?.Records : null);
         }
         catch (Exception ex)
         {
@@ -1173,12 +1193,14 @@ internal sealed class XsltValidationEngine
         return Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion);
     }
 
-    private static CompileOptions BuildCompileOptions(
+    private CompileOptions BuildCompileOptions(
         ExpressionSlotContext context, XPathCompatibility compatibility, bool isAvt)
     {
         return new CompileOptions
         {
             Namespaces = BuildNamespaceMap(context),
+            ItemTypeAliases = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Aliases : null,
+            NamedRecordTypeNames = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Records : null,
             DefaultElementNamespace = context.XpathDefaultNamespace,
             BaseUri = context.BaseUri.AbsoluteUri,
             Compatibility = compatibility,
