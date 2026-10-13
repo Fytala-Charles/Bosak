@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 Slice A: grow the vocabulary (evaluate/@xpath, for-each-group grouping attrs,    |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 //                      |                  |       |                | merge-source for-each attrs, xsl:number AVTs) so validation covers all XPath-bearing     |
 //                      |                  |       |                | attributes of the XSLT 3.0 instruction set                                               |
 //                      |==================|=======|================|=========================================================================================
@@ -130,6 +131,10 @@ internal static class AttributeSlotClassifier
 
         return AuthoringAttributeSlotKind.Plain;
     }
+
+    /// <summary>Identifies the declaration types checked by authoring validation.</summary>
+    internal static bool HasDeclarationSequenceType(string localName)
+        => localName is "variable" or "param" or "with-param" or "template" or "function";
 
     private static bool IsQNameToken(string raw)
     {
