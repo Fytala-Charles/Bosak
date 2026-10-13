@@ -1,3 +1,19 @@
+# Package named type exposure — 2026-10-13
+
+Branch: feat/xslt-package-type-exposure; parent f65e01d6. Stacked on PR #229; PRs #223–229 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts item-type and record-type components in xsl:expose and xsl:accept. Public or exposed named types enter using-package type registries unless accepted as hidden; private dependencies retain the defining package's resolved alias definitions and record metadata. Accept names resolve namespaces on the accept element. Missing component names, incompatible acceptance, invalid declaration visibility and collisions with local types produce static errors. Seventeen regressions cover public declarations, explicit and wildcard exposure, private and hidden names, prefix scope, record constructors, private alias dependencies rejected collisions and public/private visibility through an intermediate package. Native type-alias improves from 11/21/0 to 15/17/0; newly passing cases are 018, 020, 021 and 022. Original contribution cases 023/024 remain green. Broader native failures and independent processor confirmation remain outstanding; N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7265 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4379/0/0 and seventeen new regressions. Focused package type tests pass 17/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 15/17/0, with 018/020/021/022 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining native type-alias failures, including annotated function types and record boundaries. Reassess the five original contribution areas after these implementation slices. No gate promotion or publication. CI runs when the PR targets main; retarget stacked PRs after prerequisites merge. Preserve upstream assertions, original contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Schema-declaration and document shorthand aliases — 2026-10-13
 
 Branch: feat/xslt-schema-declaration-aliases; parent a8497065. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226, #227 and #228 remain open and this slice is stacked on #228. Earlier sections are historical.

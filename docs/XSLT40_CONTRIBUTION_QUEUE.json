@@ -297,7 +297,8 @@
         "nodeUnionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_UNION_RESULTS.json",
         "schemaNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_NODE_RESULTS.json",
         "functionGrammarFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FUNCTION_GRAMMAR_RESULTS.json",
-        "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json"
+        "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json",
+        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json"
       }
     },
     {
@@ -354,7 +355,8 @@
         "nodeUnionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/NODE_UNION_RESULTS.json",
         "schemaNodeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_NODE_RESULTS.json",
         "functionGrammarFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FUNCTION_GRAMMAR_RESULTS.json",
-        "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json"
+        "schemaDeclarationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/SCHEMA_DECLARATION_RESULTS.json",
+        "packageExposureFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/PACKAGE_EXPOSURE_RESULTS.json"
       }
     }
   ],

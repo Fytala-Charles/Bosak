@@ -303,6 +303,7 @@
 //                      | Charles Korthout | 2.142 | 13-10-2026     | Preserve partial node-name wildcards in declaration namespace resolution
 //                      | Charles Korthout | 2.143 | 13-10-2026     | Register schema-annotated aliases with declaration namespaces and schema scope
 //                      | Charles Korthout | 2.144 | 13-10-2026     | Register schema declaration aliases against imported global components
+//                      | Charles Korthout | 2.145 | 13-10-2026     | Accept and expose package named types using defining-package definitions
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -823,6 +824,7 @@ internal sealed class Stylesheet
     private IReadOnlyDictionary<string, string>? _enumerationItemTypes;
     private IReadOnlyDictionary<string, XElement>? _namedTypeDeclarations;
     private IReadOnlyDictionary<string, NamedRecordDefinition>? _namedRecordTypes;
+    private readonly Dictionary<string, Stylesheet> _acceptedTypeOwners = new(StringComparer.Ordinal);
 
     private IReadOnlyDictionary<string, XElement> GetNamedTypeDeclarations()
     {
@@ -841,6 +843,8 @@ internal sealed class Stylesheet
                 var type = element.Attribute("as")?.Value.Trim();
                 if (string.IsNullOrEmpty(name) || (element.Name.LocalName == "item-type" && string.IsNullOrEmpty(type)))
                     throw new InvalidOperationException("XTSE0010: Named types require a name; item-type also requires as.");
+                if (element.Attribute("visibility") is { } visibility && visibility.Value is not "public" and not "private")
+                    throw new InvalidOperationException("XTSE0020: Named type visibility must be public or private.");
                 var key = ExpandItemTypeName(name, element);
                 var uri = key[2..key.IndexOf('}')];
                 if (uri is XslNamespace or "http://www.w3.org/2001/XMLSchema" or "http://www.w3.org/2005/xpath-functions")
@@ -859,6 +863,25 @@ internal sealed class Stylesheet
             if (winners.Count != 1)
                 throw new InvalidOperationException("XTSE4030: Duplicate item-type declarations at the same import precedence.");
             result[name] = winners[0].Element;
+        }
+        foreach (var (package, options) in GetSameLevelUsedPackageOptions())
+        {
+            foreach (var (name, declaration) in package.GetNamedTypeDeclarations())
+            {
+                var close = name.IndexOf('}');
+                var ns = name[2..close];
+                var local = name[(close + 1)..];
+                var kind = declaration.Name.LocalName;
+                var visibility = package.GetExposedVisibility(kind, local, ns, -1, declaration.Attribute("visibility") is not null)
+                    ?? package.GetNamedTypeVisibility(name, declaration);
+                if (visibility is not "public" and not "final") continue;
+                var accepted = options is null ? null : GetEffectiveAcceptRule(options, kind, local, ns, -1, visibility);
+                if (accepted?.Visibility == "hidden") continue;
+                if (result.ContainsKey(name))
+                    throw new InvalidOperationException("XTSE3050: Conflicting accepted named types.");
+                result[name] = declaration;
+                _acceptedTypeOwners[name] = package;
+            }
         }
         return _namedTypeDeclarations = result;
     }
@@ -897,6 +920,11 @@ internal sealed class Stylesheet
         {
             if (result.TryGetValue(name, out var cached)) return cached;
             if (!declarations.TryGetValue(name, out var declaration) || declaration.Name.LocalName != "item-type") return null;
+            if (_acceptedTypeOwners.TryGetValue(name, out var owner))
+            {
+                if (owner.GetBindingItemTypes().TryGetValue(name, out var imported)) return result[name] = imported;
+                return null;
+            }
             if (!active.Add(name)) throw new InvalidOperationException("XTSE4035: Circular item-type alias definition.");
             try
             {
@@ -981,6 +1009,11 @@ internal sealed class Stylesheet
         foreach (var (name, element) in GetNamedTypeDeclarations())
         {
             if (element.Name.LocalName != "record-type") continue;
+            if (_acceptedTypeOwners.TryGetValue(name, out var owner))
+            {
+                result[name] = owner.GetNamedRecordTypes()[name];
+                continue;
+            }
             var constructor = element.Attribute("constructor")?.Value is "yes" or "true" or "1";
             var fields = element.Elements(XName.Get("field", XslNamespace)).ToList();
             var names = new HashSet<string>(StringComparer.Ordinal);
@@ -6473,14 +6506,14 @@ internal sealed class Stylesheet
 
                 var validAcceptComponents = new HashSet<string>(StringComparer.Ordinal)
                 {
-                    "template", "function", "variable", "mode", "attribute-set",
+                    "template", "function", "variable", "mode", "attribute-set", "item-type", "record-type",
                     "key", "decimal-format", "namespace-alias", "character-map",
                     "output", "strip-space", "preserve-space", "global-context-item", "*"
                 };
                 if (!validAcceptComponents.Contains(component))
                     throw new InvalidOperationException($"XTSE0020: Invalid component '{component}' for xsl:accept.");
 
-                var names = ParseAcceptNames(usePackageElement, namesAttr, component).ToList();
+                var names = ParseAcceptNames(child, namesAttr, component).ToList();
                 if (component == "*" && !names.All(n => n.IsWildcard || n.IsNamespaceWildcard || n.LocalName == "*"))
                     throw new InvalidOperationException("XTSE3032: xsl:accept with component=\"*\" must use wildcard names.");
 
@@ -6591,7 +6624,7 @@ internal sealed class Stylesheet
 
         var validComponents = new HashSet<string>(StringComparer.Ordinal)
         {
-            "template", "function", "variable", "mode", "attribute-set",
+            "template", "function", "variable", "mode", "attribute-set", "item-type", "record-type",
             "key", "decimal-format", "namespace-alias", "character-map",
             "output", "strip-space", "preserve-space", "global-context-item", "*"
         };
@@ -7367,6 +7400,7 @@ internal sealed class Stylesheet
     {
         return componentType switch
         {
+            "item-type" or "record-type" => FindExposedNamedType(componentType, name),
             "template" => FindExposedTemplate(name),
             "function" => FindExposedFunction(name),
             "variable" => FindExposedVariable(name),
@@ -7382,6 +7416,29 @@ internal sealed class Stylesheet
             "global-context-item" => FindExposedGlobalContextItem(name),
             _ => null
         };
+    }
+
+    private (string, bool, string)? FindExposedNamedType(string kind, ExposeName name)
+    {
+        var key = $"Q{{{name.NamespaceUri}}}{name.LocalName}";
+        if (!GetNamedTypeDeclarations().TryGetValue(key, out var declaration) || declaration.Name.LocalName != kind)
+            return null;
+        return (GetNamedTypeVisibility(key, declaration), declaration.Attribute("visibility") is not null, kind);
+    }
+
+    private string GetNamedTypeVisibility(string name, XElement declaration)
+    {
+        if (!_acceptedTypeOwners.TryGetValue(name, out var owner))
+            return declaration.Attribute("visibility")?.Value ?? "private";
+        var close = name.IndexOf('}');
+        var ns = name[2..close];
+        var local = name[(close + 1)..];
+        var kind = declaration.Name.LocalName;
+        var visibility = owner.GetExposedVisibility(kind, local, ns, -1, declaration.Attribute("visibility") is not null)
+            ?? owner.GetNamedTypeVisibility(name, declaration);
+        var options = GetSameLevelUsedPackageOptions().First(pair => pair.Package == owner).Options;
+        return (options is null ? null : GetEffectiveAcceptRule(options, kind, local, ns, -1, visibility)?.Visibility)
+            ?? visibility;
     }
 
     private (string, bool, string)? FindExposedTemplate(ExposeName name)
@@ -7475,6 +7532,17 @@ internal sealed class Stylesheet
 
     private IEnumerable<(string DeclaredVisibility, bool IsExplicit, string ComponentType, string? LocalName, string? NamespaceUri, int Arity)> GetAllExposableComponents(string componentType)
     {
+        if (componentType is "item-type" or "record-type" or "*")
+        {
+            foreach (var (name, declaration) in GetNamedTypeDeclarations())
+            {
+                var kind = declaration.Name.LocalName;
+                if (componentType != "*" && componentType != kind) continue;
+                var close = name.IndexOf('}');
+                yield return (GetNamedTypeVisibility(name, declaration), declaration.Attribute("visibility") is not null,
+                    kind, name[(close + 1)..], name[2..close], -1);
+            }
+        }
         if (componentType is "template" or "*")
         {
             foreach (var rule in GetAllNamedTemplatesForExpose())
