@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
+//                      | Charles Korthout | 0.12  | 13-10-2026     | Capture internal contexts for mode names, lists and default-mode references.             |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -636,7 +637,11 @@ public sealed class AuthoringInspector
                     or AuthoringAttributeSlotKind.Pattern
                     or AuthoringAttributeSlotKind.Avt
                     || (slotKind == AuthoringAttributeSlotKind.QName && element.Name.Namespace == XsltNs
-                        && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template" or "function")
+                        && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode")
+                    || (split.LocalName == "mode" && split.NamespaceUri.Length == 0 && element.Name.Namespace == XsltNs
+                        && element.Name.LocalName is "template" or "apply-templates")
+                    || (split.LocalName == "default-mode" && (element.Name.Namespace == XsltNs
+                        ? split.NamespaceUri.Length == 0 : split.NamespaceUri == XsltNs.NamespaceName))
                     || (slotKind == AuthoringAttributeSlotKind.Plain && split.LocalName == "as" && split.NamespaceUri.Length == 0
                         && element.Name.Namespace == XsltNs && AttributeSlotClassifier.HasDeclarationSequenceType(element.Name.LocalName))
                     ? BuildSlotContext(element, rawName, elementNameAsWritten)

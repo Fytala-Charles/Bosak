@@ -56,6 +56,7 @@
 //                      | Charles Korthout | 2.12  | 13-10-2026     | Use lexical delimiter matching for pattern normalization and priority.
 //                      | Charles Korthout | 2.13  | 13-10-2026     | Share lexical union splitting for earlier-profile rule expansion and type choices.
 //                      | Charles Korthout | 2.14  | 13-10-2026     | Resolve 4.0 pattern prefixes using applicable static namespace bindings                |
+//                      | Charles Korthout | 2.15  | 13-10-2026     | Resolve XSLT 4.0 template mode membership using applicable namespaces.                   |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -311,6 +312,9 @@ internal sealed class TemplateRule
 
     internal static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
     {
+        if (modeAttr is not null && Stylesheet.UsesXPath40Namespaces(element))
+            Stylesheet.ValidateTemplateModeAttribute(element, modeAttr);
+
         if (string.IsNullOrEmpty(modeAttr))
         {
             // If the template has default-mode, use that; otherwise use stylesheet's default-mode
@@ -351,6 +355,9 @@ internal sealed class TemplateRule
     /// </summary>
     private static string ExpandModeName(string mode, XElement element)
     {
+        if (Stylesheet.UsesXPath40Namespaces(element))
+            return mode == "#unnamed" ? "" : Stylesheet.ExpandModeName(mode, element);
+
         int colon = mode.IndexOf(':');
         if (colon < 0)
             return ModeDefinition.NormalizeModeName(mode); // no prefix

@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
+//                      | Charles Korthout | 0.12  | 13-10-2026     | Validate mode names, lists and default references in captured authoring contexts.        |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -293,12 +294,12 @@ internal sealed class XsltValidationEngine
         }
     }
 
-    /// <summary>Reports applicable QName syntax and binding errors on active 4.0 variable, parameter, template, and function names.</summary>
+    /// <summary>Reports applicable QName syntax and binding errors on active 4.0 component names.</summary>
     private void CheckComponentQName(ModuleWalkState state, AuthoringNodeDescriptor node)
     {
         if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element
             || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
-            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function")) return;
+            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode")) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
         if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
@@ -316,6 +317,31 @@ internal sealed class XsltValidationEngine
             _hasInvalid = true;
             _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(ex), state.Module.ModuleUri,
                 ex.Message, attribute.ValueRange));
+        }
+    }
+
+    /// <summary>Checks literal mode references using their captured applicable namespace context.</summary>
+    private void CheckModeReferences(ModuleWalkState state, AuthoringNodeDescriptor node)
+    {
+        if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element) return;
+        bool xslt = element.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace;
+        foreach (var attribute in node.Attributes)
+        {
+            bool mode = xslt && element.Name.LocalName is ("template" or "apply-templates")
+                && attribute.LocalName == "mode" && attribute.NamespaceUri.Length == 0;
+            bool defaultMode = attribute.LocalName == "default-mode"
+                && (xslt ? attribute.NamespaceUri.Length == 0 : attribute.NamespaceUri == AttributeSlotClassifier.XsltNamespace);
+            if ((!mode && !defaultMode) || attribute.DeclarationContext is not { } context
+                || ReportStaticNamespaceError(state, attribute, context)) continue;
+            try
+            {
+                Stylesheet.Stylesheet.ValidateModeReference(element, attribute.LocalName, attribute.ExpandedValue);
+            }
+            catch (InvalidOperationException ex)
+            {
+                _hasInvalid = true;
+                _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(ex), state.Module.ModuleUri, ex.Message, attribute.ValueRange));
+            }
         }
     }
 
@@ -522,6 +548,7 @@ internal sealed class XsltValidationEngine
         ReportCoverageGapIfDeferred(state, elementName);
         CheckElementStructure(state, node);
         CheckComponentQName(state, node);
+        CheckModeReferences(state, node);
         CheckDeclarationSequenceType(state, node);
 
         // Slots on this element's start tag (the use-when slot, when present, was checked above).
