@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "ad3099cc25123bd4a71208ba54cbbe7e13984f49",
+  "implementationRevision": "04ebe24699447c59a1a06523567c44f29bf0fa11",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Supported as sequence types on XSLT 4.0 record fields in authoring snapshots",
+  "baselineFocused": {
+    "passed": 12,
+    "failed": 8,
+    "skipped": 0,
+    "total": 20
+  },
+  "newRecordFieldTests": 21,
+  "finalFocused": {
+    "passed": 82,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7836,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4950
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Reuses existing internal declaration-context capture and supported type checks; no new ordinary compilation, evaluation or snapshot-time resolution. Public field as descriptors remain Plain with SlotContext=null; source bytes are preserved. Constructor rules, field structure and value/type compatibility remain follow-ups. Existing module/package/schema and unsupported grammar coverage boundaries remain unchanged.",
+  "diagnosticDifference": "The compiler declaration-name expander reports XTSE0280 for unbound field-type prefixes; authoring XPath sequence-type compilation reports XPST0081. Existing behavior is retained and explicitly tested.",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "9c684cf2d70d1d4cf12d75d77fe705ab51c1d36a6301a4cb8f4ea07de0b84ac5",
+    "focused": "76b946fffe05dbe0237da5341c4439a0fa8bff6f187890270ba2a81a6b7ff6be",
+    "build": "404846d2e2b81bf30ad82dc67f72c3614134e18b3a7a710c3bc5e5fab5458974",
+    "unit": "04d594438b70537a86fd67fbe776a1b5ac69914e9f541c09bbc151712bfb801e",
+    "qt3": "60aff94fabd22cca61d6f14fc75d93433bc6a66621f60602dfa90e9e2870a826",
+    "qt4": "f3d1e878147b6f557a6f199365e0dbf3590cbed87605ec6965a9d40e19e55619"
+  }
+}
