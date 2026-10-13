@@ -17,6 +17,7 @@
 //                      |                  |       |                | merge-source for-each attrs, xsl:number AVTs) so validation covers all XPath-bearing     |
 //                      |                  |       |                | attributes of the XSLT 3.0 instruction set                                               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 13-10-2026     | Capture record-field sequence-type contexts for authoring checks.                        |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -134,7 +135,7 @@ internal static class AttributeSlotClassifier
 
     /// <summary>Identifies the declaration types checked by authoring validation.</summary>
     internal static bool HasDeclarationSequenceType(string localName)
-        => localName is "variable" or "param" or "with-param" or "template" or "function";
+        => localName is "variable" or "param" or "with-param" or "template" or "function" or "field";
 
     private static bool IsQNameToken(string raw)
     {
