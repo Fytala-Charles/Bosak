@@ -46,7 +46,7 @@
     "failed": 0,
     "skipped": 1894
   },
-  "validation": "Ten coordinated packages verified; 45 fresh-cache package-only consumer checks passed. Full solution tests and cumulative main-based CI pending.",
+  "validation": "Release build and pack succeed; all 7676 unit tests across ten assemblies pass without failures/skips. All ten packages pass metadata/content/hash checks. Package-only fresh-cache consumer passes 45 checks, verifies ten assembly versions and confirms all Bosak packages came from the local candidate feed. Frozen engine gates remain unchanged on the identical engine source. Cumulative main-based PR CI must pass before integration.",
   "publicationAuthorized": false,
   "postReleasePlan": "Additional focused implementation slices and a new XSLT 4.0 contribution-area batch",
   "packageVerification": [
@@ -278,5 +278,10 @@
     "warnings": 71,
     "note": "Documentation generation reveals existing XML comment warnings; no runtime source change in preparation"
   },
-  "packagingConfigurationSha256": "dcd588b4e7a54e5246f878e292d8f3e4863707281458315ecab26055ac40b191"
+  "packagingConfigurationSha256": "dcd588b4e7a54e5246f878e292d8f3e4863707281458315ecab26055ac40b191",
+  "preparationParentRevision": "90de1878524d4d88deff9ce88c72563a1560916e",
+  "integrationPullRequest": "https://github.com/Fytala-Charles/Bosak/pull/247",
+  "ciStatus": "https://github.com/Fytala-Charles/Bosak/pull/247/checks",
+  "publicationStatus": "Requires explicit approval after integration; no tag or package publication",
+  "unitLogSha256": "a010101625efd14d33624b2a9d536baa94a5a68151af0eae5f454cd58c5f1df3"
 }

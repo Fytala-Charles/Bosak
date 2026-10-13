@@ -6,13 +6,13 @@ The user froze the 1.2.0 scope on 2026-10-13 and authorized release preparation.
 
 ## What was built
 
-Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. Full unit rerun and cumulative main-based CI/integration pending. No tag, publication or external messaging.
+Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. All 7,676 unit tests pass, including 4,790 XSLT tests, with zero failures/skips. Frozen gates retain their verified totals on unchanged engine source. PR #247 CI must pass before integration. No tag, publication or external messaging.
 
 ## Resume here
 
-Complete cumulative candidate CI, package metadata/hash verification and fresh-cache package consumer checks; integrate the candidate and record the exact main revision. Present the verified release for publication approval. After publication, authoring-context alignment and a new batch of XSLT 4.0 contribution areas resume. Preserve scratch and receipts; do not close REQ-126 or change gate membership.
+Local verification is complete. Check the latest head of PR #247, integrate it after main-based CI passes, and retire the included #223–246 stack. Present the exact merged revision for explicit tag/NuGet publication approval. Confirm integration using GitHub state before repeating any merge. The PR checks provide live CI evidence. After publication, authoring-context alignment and a new batch of XSLT 4.0 contribution areas resume. Preserve scratch and receipts; do not close REQ-126 or change gate membership.
 
-Delivery pending.
+Delivery: [PR #247](https://github.com/Fytala-Charles/Bosak/pull/247), a cumulative preparation PR against main; preparation implementation 90de1878 follows frozen source tip 8a5164b4. The verified package and consumer results are in docs/RELEASE-1.2.0-PREPARATION.json. Integration requires passing CI; publication requires explicit approval. Historical slice notes below remain unchanged.
 
 # Pattern prefix diagnostics — 2026-10-13
 
