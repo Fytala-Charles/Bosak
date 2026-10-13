@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 2.10  | 13-10-2026     | Apply first-operand set priorities and 4.0 predicate-pattern priorities.
 //                      | Charles Korthout | 2.11  | 13-10-2026     | Preserve parenthesized item-pattern scopes and expanded type priorities.
 //                      | Charles Korthout | 2.12  | 13-10-2026     | Use lexical delimiter matching for pattern normalization and priority.
+//                      | Charles Korthout | 2.13  | 13-10-2026     | Share lexical union splitting for earlier-profile rule expansion and type choices.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -1071,24 +1072,7 @@ internal sealed class TemplateRule
     }
 
     private static string[] SplitUnionBranches(string pattern)
-    {
-        var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
-        for (int i = 0; i < pattern.Length; i++)
-        {
-            char c = pattern[i];
-            if (c == '(' || c == '[') depth++;
-            else if (c == ')' || c == ']') depth--;
-            else if (c == '|' && depth == 0)
-            {
-                parts.Add(pattern[start..i].Trim());
-                start = i + 1;
-            }
-        }
-        parts.Add(pattern[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
-    }
+        => Patterns.PatternCompiler.SplitPatternTopLevel(pattern, "|");
 
     /// <summary>
     /// Removes XPath comments (: ... :) from the text, preserving string literals.

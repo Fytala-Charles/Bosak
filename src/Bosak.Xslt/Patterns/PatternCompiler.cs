@@ -93,6 +93,7 @@
 //                      | Charles Korthout | 3.21  | 13-10-2026     | Validate parenthesized 4.0 item patterns and restrict outer patterns to nodes.
 //                      | Charles Korthout | 3.22  | 13-10-2026     | Ignore predicate, string and URI slashes when classifying 4.0 outer filters.
 //                      | Charles Korthout | 3.23  | 13-10-2026     | Match delimiters outside strings and EQName URIs in pattern compilation.
+//                      | Charles Korthout | 3.24  | 13-10-2026     | Split pattern operators outside quoted content, URI names and nested expressions.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -3641,60 +3642,53 @@ internal sealed class PatternCompiler
     /// Splits text on separator only at the top level (not inside parentheses, brackets, or braces).
     /// </summary>
     private static string[] SplitTopLevel(string text, char separator)
+        => SplitPatternTopLevel(text, separator.ToString());
+
+    /// <summary>Splits word operators outside nested syntax without interpreting node names as operators.</summary>
+    private static string[] SplitTopLevel(string text, string separator)
+        => SplitPatternTopLevel(text, separator);
+
+    /// <summary>Splits top-level operators while preserving strings, EQName URIs and complete name tokens.</summary>
+    internal static string[] SplitPatternTopLevel(string text, string separator)
     {
         var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
+        int start = 0, depth = 0;
+        char quote = '\0';
+        bool uri = false;
+        bool word = separator.Length > 1;
+        static bool IsNameCharacter(char c) => char.IsLetterOrDigit(c) || c is '_' or '-' or '.' or ':';
         for (int i = 0; i < text.Length; i++)
         {
             char c = text[i];
-            if (c == '(' || c == '[' || c == '{') depth++;
-            else if (c == ')' || c == ']' || c == '}') depth--;
-            else if (c == separator && depth == 0)
+            if (quote != '\0')
             {
-                parts.Add(text[start..i].Trim());
-                start = i + 1;
-            }
-        }
-        parts.Add(text[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
-    }
-
-    /// <summary>
-    /// Splits text on a word separator (like "except" or "intersect") only at the top level.
-    /// The separator must be surrounded by non-word characters or string boundaries.
-    /// A word directly preceded by '/', '@', or ':' is a NameTest, not an operator —
-    /// match-038: '/ union /*' is a rooted path over the element named "union".
-    /// </summary>
-    private static string[] SplitTopLevel(string text, string separator)
-    {
-        var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
-        for (int i = 0; i <= text.Length - separator.Length; i++)
-        {
-            char c = text[i];
-            if (c == '(' || c == '[' || c == '{') depth++;
-            else if (c == ')' || c == ']' || c == '}') depth--;
-            else if (depth == 0 && text.AsSpan(i, separator.Length).Equals(separator.AsSpan(), StringComparison.OrdinalIgnoreCase))
-            {
-                // Check word boundaries
-                bool leftBoundary = i == 0 || !char.IsLetterOrDigit(text[i - 1]);
-                bool rightBoundary = i + separator.Length == text.Length || !char.IsLetterOrDigit(text[i + separator.Length]);
-                if (leftBoundary && rightBoundary)
+                if (c == quote)
                 {
-                    int prev = i - 1;
-                    while (prev >= 0 && char.IsWhiteSpace(text[prev])) prev--;
-                    if (prev >= 0 && (text[prev] == '/' || text[prev] == '@' || text[prev] == ':'))
-                        continue;
-                    parts.Add(text[start..i].Trim());
-                    start = i + separator.Length;
-                    i += separator.Length - 1;
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
                 }
+                continue;
             }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c is '(' or '[' or '{') { depth++; continue; }
+            if (c is ')' or ']' or '}') { depth--; continue; }
+            if (depth != 0 || !text.AsSpan(i).StartsWith(separator, StringComparison.Ordinal)) continue;
+            if (word)
+            {
+                if (i == start || (i > 0 && IsNameCharacter(text[i - 1])) ||
+                    (i + separator.Length < text.Length && IsNameCharacter(text[i + separator.Length]))) continue;
+                int previous = i - 1;
+                while (previous >= start && char.IsWhiteSpace(text[previous])) previous--;
+                if (previous < start || text[previous] is '/' or '@' or ':') continue;
+            }
+            parts.Add(text[start..i].Trim());
+            start = i + separator.Length;
+            i += separator.Length - 1;
         }
         parts.Add(text[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+        return parts.Where(part => !string.IsNullOrEmpty(part)).ToArray();
     }
 
     /// <summary>

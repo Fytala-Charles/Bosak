@@ -1,3 +1,19 @@
+# Pattern operator scanning — 2026-10-13
+
+Branch: feat/xslt-pattern-operator-scanning; parent c6ae3f5b. Stacked on PR #241; PRs #223–241 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 splits supported top-level pattern operators outside string literals, doubled quote escapes, EQName namespace URIs and nested expressions. The shared scanner handles pipe unions and union/intersect/except keywords without splitting complete node-name tokens such as pre-except-post, pre_intersect_post or pre.union.post. Earlier-profile union rule expansion and type-choice priority splitting reuse the lexical scanner; existing profile-specific priority and grammar rules remain intact. Twenty-three regressions cover quoted delimiters/operator text, nested predicates, escaped quotes, URI punctuation, complete operator-like names, nonmatches and earlier-profile unions. The baseline was 17/6/0 before the fix; all twenty-three now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Mixed intersect/except associativity, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7582 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4696/0/0 and twenty-three new regressions; focused operator regressions pass 23/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: mixed intersect/except associativity in the effective 4.0 profile; operators have equal precedence and evaluate left to right. Preserve earlier-profile behavior and frozen gates. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Pattern delimiter scanning — 2026-10-13
 
 Branch: feat/xslt-pattern-delimiter-scanning; parent 123bed16. Stacked on PR #240; PRs #223–241 remain open. Earlier sections are historical.
