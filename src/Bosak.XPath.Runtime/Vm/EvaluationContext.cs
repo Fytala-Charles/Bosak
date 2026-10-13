@@ -117,6 +117,7 @@
 //                      | Charles Korthout | 2.40  | 10-10-2026     | REQ-125 Slice D: internal ExecutionGate (token/deadline/operation-budget checkpoints)     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.41  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
+//                      | Charles Korthout | 2.42  | 13-10-2026     | Store package-local nominative record identities for host type resolution.               |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -366,6 +367,31 @@ public sealed class EvaluationContext
     /// version gate, slice 4.0-S0).
     /// </summary>
     internal bool IsXPath40 { get; set; }
+
+    // Package-local nominative record identities installed by the XSLT host.
+    internal IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes { get; set; }
+        = new Dictionary<string, XdmRecordType>(StringComparer.Ordinal);
+
+    internal bool TryResolveNamedRecordType(string name, string? defaultNamespace, out XdmRecordType? type)
+    {
+        type = null;
+        if (!IsXPath40)
+            return false;
+        var key = name.Trim();
+        if (!key.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var colon = key.IndexOf(':');
+            var ns = defaultNamespace ?? string.Empty;
+            if (colon >= 0)
+            {
+                if (!TryResolveNamespace(key[..colon], out ns))
+                    return false;
+                key = key[(colon + 1)..];
+            }
+            key = $"Q{{{ns}}}{key}";
+        }
+        return NamedRecordTypes.TryGetValue(key, out type);
+    }
 
     /// <summary>
     /// When true, the standard function table may additionally expose

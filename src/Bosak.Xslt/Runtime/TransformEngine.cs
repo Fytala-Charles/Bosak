@@ -526,6 +526,7 @@
 //                      | Charles Korthout | 7.10  | 12-10-2026     | Preserve array-member JNodes and enforce for-each XTTE4060 before unwrapping.             |
 //                      | Charles Korthout | 7.11  | 12-10-2026     | Evaluate xsl:select body expressions with focus and declared result coercion.              |
 //                      | Charles Korthout | 7.12  | 12-10-2026     | Pass enumeration aliases to XPath and AVT compilation; preserve EQName URIs
+//                      | Charles Korthout | 7.13  | 13-10-2026     | Register record constructors, convert fields and preserve named record bindings.         |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -1166,6 +1167,8 @@ internal sealed class TransformEngine
     /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
     {
+        _staticRecordFieldValues.Clear();
+        _evaluatingRecordFields.Clear();
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
         _context.DocumentLoadPolicy = null;
@@ -3161,6 +3164,7 @@ internal sealed class TransformEngine
     private void RegisterXsltFunctions()
     {
         var allFuncs = _stylesheet.GetAllFunctionDefinitions();
+        RegisterRecordConstructors(CurrentStylesheet, allFuncs.Keys.Select(k => (k.ns, k.name, k.arity)).ToHashSet());
         foreach (var (key, def) in allFuncs)
         {
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -3187,6 +3191,89 @@ internal sealed class TransformEngine
             _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
         }
         RegisterXslOriginalFunctions(allFuncs.Values);
+    }
+
+    private readonly Dictionary<XElement, XdmValue> _staticRecordFieldValues = new();
+    private readonly HashSet<XElement> _evaluatingRecordFields = new();
+
+    private void RegisterRecordConstructors(Stylesheet.Stylesheet scope, HashSet<(string ns, string name, int arity)> functionKeys)
+    {
+        var definitions = scope.GetNamedRecordTypes();
+        _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
+        foreach (var definition in definitions.Values)
+        {
+            if (!definition.Constructor) continue;
+            var close = definition.ExpandedName.IndexOf('}');
+            var ns = definition.ExpandedName[2..close];
+            var local = definition.ExpandedName[(close + 1)..];
+            var parameters = definition.Fields.Where(f => f.Attribute("static")?.Value is not ("yes" or "true" or "1")).ToList();
+            var minArity = parameters.Count(f => f.Attribute("select") is null && !f.Nodes().Any(n => n is XElement || n is XText t && !string.IsNullOrWhiteSpace(t.Value)));
+            for (var arity = minArity; arity <= parameters.Count; arity++)
+            {
+                if (functionKeys.Contains((ns, local, arity)))
+                    throw new InvalidOperationException("XTSE0770: Record constructor conflicts with an explicit function.");
+                _context.RegisterFunction(new FunctionSignature
+                {
+                    NamespaceUri = ns, LocalName = local, Arity = arity,
+                    ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, arity).ToList(),
+                    ReturnType = XdmValueKind.Map,
+                    Implementation = (ctx, args) => ConstructNamedRecord(definition, args)
+                });
+            }
+        }
+    }
+
+    private XdmValue ConstructNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, ReadOnlySpan<XdmValue> args)
+    {
+        var map = new XdmMap();
+        int parameter = 0;
+        foreach (var field in definition.Fields)
+        {
+            bool isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
+            XdmValue value;
+            if (isStatic)
+                value = EvaluateRecordFieldInitialValue(field, true);
+            else
+            {
+                value = parameter < args.Length ? args[parameter] : EvaluateRecordFieldInitialValue(field, false);
+                parameter++;
+            }
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: "XPTY0004", declaration: field);
+            map = map.WithAdded(XdmValue.FromString(field.Attribute("name")!.Value), value);
+        }
+        return XdmValue.FromMap(map.WithRecordType(definition.Type));
+    }
+
+    private XdmValue EvaluateRecordFieldInitialValue(XElement field, bool isStatic)
+    {
+        if (isStatic && _staticRecordFieldValues.TryGetValue(field, out var cached)) return cached;
+        if (!_evaluatingRecordFields.Add(field))
+            throw new InvalidOperationException("XTDE0640: Circular record field initialization.");
+        var focus = _context.ContextItem;
+        var position = _context.ContextPosition;
+        var size = _context.ContextSize;
+        var variables = _context.SnapshotVariables();
+        var currentItem = _context.CurrentItem;
+        try
+        {
+            var initialFocus = isStatic ? _globalContextItem : XdmValue.Undefined;
+            _context.WithFocus(initialFocus, 1, 1);
+            _context.WithCurrentItem(initialFocus);
+            _context.RestoreVariables(new Dictionary<(string, string), XdmValue>());
+            var value = field.Attribute("select") is { } select
+                ? CompileXPath(select.Value, field).Evaluate(_context)
+                : EvaluateSequenceConstructor(field, initialFocus, wrapInDocumentNode: false);
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: "XTTE0570", declaration: field);
+            if (isStatic) _staticRecordFieldValues[field] = value;
+            return value;
+        }
+        finally
+        {
+            _context.WithFocus(focus, position, size);
+            _context.WithCurrentItem(currentItem);
+            _context.RestoreVariables(variables);
+            _evaluatingRecordFields.Remove(field);
+        }
     }
 
     /// <summary>
@@ -4286,6 +4373,8 @@ internal sealed class TransformEngine
         public IDisposable? LazyGlobalsSnapshot;
         /// <summary>The function-lookup interceptor that was installed before the package scope was entered.</summary>
         public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
+        /// <summary>Package-local named record identities active before entering the scope.</summary>
+        public IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes;
     }
 
     /// <summary>
@@ -4302,6 +4391,7 @@ internal sealed class TransformEngine
         var defaultDecimalSnapshot = _context.DefaultDecimalFormat;
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
         var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
+        var namedRecordTypesSnapshot = _context.NamedRecordTypes;
 
         if (package?.IsPackage == true && package != previousScope)
         {
@@ -4363,6 +4453,7 @@ internal sealed class TransformEngine
                     });
                 }
             }
+            RegisterRecordConstructors(package, scopeFunctions.Keys.Select(k => (k.ns, k.name, k.arity)).ToHashSet());
             RegisterXslOriginalFunctions(scopeFunctions.Values);
 
             // Within a package, fn:function-lookup returns the package's own declarations,
@@ -4375,6 +4466,7 @@ internal sealed class TransformEngine
         return new PackageScopeState
         {
             PreviousScope = previousScope,
+            NamedRecordTypes = namedRecordTypesSnapshot,
             FunctionSnapshot = functionSnapshot,
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
             NamedDecimalFormatSnapshot = namedDecimalSnapshot,
@@ -4389,6 +4481,7 @@ internal sealed class TransformEngine
         _currentPackageScope = state.PreviousScope;
         _namespaceAliases = state.NamespaceAliasSnapshot;
         _context.RestoreFunctions(state.FunctionSnapshot);
+        _context.NamedRecordTypes = state.NamedRecordTypes;
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
         _context.FunctionLookupInterceptor = state.PreviousFunctionLookupInterceptor;
@@ -16668,6 +16761,11 @@ internal sealed class TransformEngine
 
         if (declaration is not null && context is not null)
         {
+            var type = asType.Trim();
+            var suffix = type.Length > 0 && type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
+            var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
+            if (context.NamedRecordTypes.Count > 0 && !name.Contains('(') && context.NamedRecordTypes.ContainsKey(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration)))
+                asType = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration) + suffix;
             var defaultNs = GetXPathDefaultNamespace(declaration);
             if (!string.IsNullOrEmpty(defaultNs) && context.DefaultElementNamespace != defaultNs)
             {
@@ -16743,6 +16841,14 @@ internal sealed class TransformEngine
         }
         if (items.Count > 1 && !allowsMultiple)
             throw new InvalidOperationException($"{errorCode}: Sequence of more than one item not allowed for type {originalType}");
+
+        if (context is not null && context.NamedRecordTypes.TryGetValue(type, out var namedRecord))
+        {
+            foreach (var item in items)
+                if (!item.IsMap || !ReferenceEquals(item.MapValue?.RecordType, namedRecord))
+                    throw new InvalidOperationException($"{errorCode}: Value is not an instance of the declared named record type.");
+            return value;
+        }
 
         // Function types: XPath 3.1 function conversion rules — a function item is
         // coercible to any function type of the same arity; parameter/return type

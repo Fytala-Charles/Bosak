@@ -3881,7 +3881,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/record-constructor.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "error": "XPST0017"
+    "expected": "INV-2048"
   },
   {
     "id": "xslt-type-declarations-record-no-constructor",
@@ -3897,7 +3897,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/record-duplicate-fields-unused-observed.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "expected": "ready"
+    "error": "XTSE4050"
   },
   {
     "id": "xslt-type-declarations-record-named-as-observed",

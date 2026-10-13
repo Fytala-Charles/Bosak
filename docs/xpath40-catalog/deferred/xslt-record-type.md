@@ -1,12 +1,12 @@
 <div align="center">
   <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog: deferred xsl:record-type declaration">
   <br><br><h1>xsl:record-type</h1>
-  <p>Deferred — named XSLT declarations and verified alternatives</p>
+  <p>Partial source implementation — constructors and verified alternatives</p>
 </div>
 
 ## 1. Name and Classification
 
-**xsl:record-type — Deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This is a disposition reference, not a type implementation or tier promotion. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
+**xsl:record-type — Partially implemented in source 1.2.0; broader contract deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the historical named-declaration deferral. The unreleased source now implements constructors and constructed-value nominal checks; this does not promote the complete feature. Historical baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
 External reference: [XSLT 4.0 named record types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types). Immutable review: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), IDs `named-types` and `named-record-types`. This current pin does not recover historical adopted specification provenance.
 
 ## 2. Intent
@@ -29,11 +29,12 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 
 | Context | Verified outcome |
 |---|---|
-| Version 4.0, unused declaration | Ignored; `ready` output does not prove named identity or fields |
+| Version 4.0, unused declaration | Validated in source 1.2.0; `ready` alone does not test identity |
 | Version 3.0, top-level declaration | `XTSE0010` |
-| Constructor call, yes or no declaration option | `XPST0017`; no generated function registered |
-| Named `as="erp:invoice"` binding | `XTTE0570` |
-| Duplicate unused fields | Ignored; does not implement draft `XTSE4050` checking |
+| Constructor call, `constructor="yes"` | Source 1.2.0 returns a named record; invoice fixture returns `INV-2048` |
+| Constructor call, `constructor="no"` | `XPST0017`; no generated function |
+| Named `as="erp:invoice"` binding | Constructed same-type record succeeds; plain-map fixture still raises `XTTE0570` |
+| Duplicate unused fields | `XTSE4050` in source 1.2.0 |
 | Structural `record(...)` in XPath40 | Explicit casts succeed; plain maps do not match annotated records |
 | Inline structural record in XSLT `@as` | Observed `XTTE0570`; explicit cast in `select` plus `as="map(*)"` works |
 
@@ -59,7 +60,7 @@ Anonymous structural records remain a separate shipped XPath feature. A cast dro
 
 ## 12. Implementation
 
-Neither declaration is registered in `KnownXsltElementNames`, `AllowedTopLevelDeclarations` or the named-type static context. `IsForwardsCompatibleElement` uses effective version greater than 3.0, so the tested unused 4.0 declarations are tolerated without implementation. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. No engine changes or conformance gate promotions are included.
+The historical released baseline registered neither declaration. Source 1.2.0 recognizes record/field declarations, registers generated constructors and installs package-local nominal identities for type tests and constructed-value bindings. `IsForwardsCompatibleElement` uses effective version greater than 3.0, so the tested unused 4.0 declarations are tolerated without implementation. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. The constructor follow-up changes the engine; no conformance gate promotion is claimed.
 
 ## 13. Sample Code
 
@@ -95,7 +96,7 @@ These fixtures do not publish an actual named type API or perform external I/O.
 </xsl:stylesheet>
 ```
 
-Observed outcome: `XPST0017`; no invoice record/report is returned. Changing the constructor option to `no` does not register a function either. An unused declaration produces `ready`, which is tolerance evidence only.
+Current source 1.2.0 output: `INV-2048`. Changing the constructor option to `no` still produces `XPST0017`. An unused declaration produces `ready`, while constructor and nominal-identity regressions establish the supported behavior.
 
 ### XPath40 structural alternative
 
@@ -212,9 +213,9 @@ reject
 |---|---|---|
 | [record-unused40](../examples/xslt-type-declarations/record-unused40.xsl) | xslt40 | `ready` |
 | [record-unused30](../examples/xslt-type-declarations/record-unused30.xsl) | xslt31 | `XTSE0010` |
-| [record-constructor](../examples/xslt-type-declarations/record-constructor.xsl) | xslt40 | `XPST0017` |
+| [record-constructor](../examples/xslt-type-declarations/record-constructor.xsl) | xslt40 | `INV-2048` |
 | [record-no-constructor](../examples/xslt-type-declarations/record-no-constructor.xsl) | xslt40 | `XPST0017` |
-| [record-duplicate-fields-unused-observed](../examples/xslt-type-declarations/record-duplicate-fields-unused-observed.xsl) | xslt40 | `ready` |
+| [record-duplicate-fields-unused-observed](../examples/xslt-type-declarations/record-duplicate-fields-unused-observed.xsl) | xslt40 | `XTSE4050` |
 | [record-named-as-observed](../examples/xslt-type-declarations/record-named-as-observed.xsl) | xslt40 | `XTTE0570` |
 | [inline-record40](../examples/xslt-type-declarations/inline-record40.xsl) | xslt40 | `XTTE0570` |
 | [record-main](../examples/xslt-type-declarations/record-main.xpath) | 40 | `INV-2048\|EUR` |
@@ -239,3 +240,6 @@ No named XSLT type declaration gate promotion or full draft conformance is claim
 ## 16. Related Features
 
 [Named item-type declarations](xslt-item-type.md), [structural records](../type-system/structural-records.md), [nominative record disposition](../type-system/nominative-records.md), [completeness audit](../COMPLETENESS-AUDIT.md) and [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md).
+
+
+**Current source follow-up — 2026-10-13:** Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI.

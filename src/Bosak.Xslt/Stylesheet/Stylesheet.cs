@@ -292,6 +292,7 @@
 //                      | Charles Korthout | 2.131 | 11-10-2026     | Apply effective-version XPath profiles to static expression compilation.                |
 //                      | Charles Korthout | 2.132 | 12-10-2026     | Recognize xsl:select and validate expression-text/fallback structure.                     |
 //                      | Charles Korthout | 2.133 | 12-10-2026     | Collect enumeration item-type declarations by expanded name and precedence
+//                      | Charles Korthout | 2.134 | 13-10-2026     | Validate named record/field declarations and shared named-type precedence.               |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -799,31 +800,36 @@ internal sealed class Stylesheet
         // owns itself; imports and includes inherit the package of the module that contains them.
         OwningPackage = IsPackage ? this : owningPackage;
         if (ReferenceEquals(_rootStylesheet, this))
+        {
             GetEnumerationItemTypes();
+            GetNamedRecordTypes();
+        }
     }
 
     /// <summary>The root element of the stylesheet (xsl:stylesheet or xsl:transform).</summary>
     public XElement Root => _document.Root!;
 
     private IReadOnlyDictionary<string, string>? _enumerationItemTypes;
+    private IReadOnlyDictionary<string, XElement>? _namedTypeDeclarations;
+    private IReadOnlyDictionary<string, NamedRecordDefinition>? _namedRecordTypes;
 
-    internal IReadOnlyDictionary<string, string> GetEnumerationItemTypes()
+    private IReadOnlyDictionary<string, XElement> GetNamedTypeDeclarations()
     {
-        if (_enumerationItemTypes is not null)
-            return _enumerationItemTypes;
+        if (_namedTypeDeclarations is not null)
+            return _namedTypeDeclarations;
         var declarations = new Dictionary<string, List<(int Precedence, XElement Element)>>(StringComparer.Ordinal);
         void Collect(Stylesheet module)
         {
             foreach (var child in module.Imports.Concat(module.Includes))
                 Collect(child);
-            foreach (var element in module.Root.Elements(XName.Get("item-type", XslNamespace)))
+            foreach (var element in module.Root.Elements().Where(e => e.Name.NamespaceName == XslNamespace && e.Name.LocalName is "item-type" or "record-type"))
             {
                 if (GetXPathCompatibility(element) < XPathCompatibility.XPath40)
                     continue;
                 var name = element.Attribute("name")?.Value.Trim();
                 var type = element.Attribute("as")?.Value.Trim();
-                if (string.IsNullOrEmpty(name) || string.IsNullOrEmpty(type))
-                    throw new InvalidOperationException("XTSE0010: xsl:item-type requires name and as attributes.");
+                if (string.IsNullOrEmpty(name) || (element.Name.LocalName == "item-type" && string.IsNullOrEmpty(type)))
+                    throw new InvalidOperationException("XTSE0010: Named types require a name; item-type also requires as.");
                 var key = ExpandItemTypeName(name, element);
                 var uri = key[2..key.IndexOf('}')];
                 if (uri is XslNamespace or "http://www.w3.org/2001/XMLSchema" or "http://www.w3.org/2005/xpath-functions")
@@ -834,14 +840,28 @@ internal sealed class Stylesheet
             }
         }
         Collect(this);
-        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        var result = new Dictionary<string, XElement>(StringComparer.Ordinal);
         foreach (var (name, definitions) in declarations)
         {
             var precedence = definitions.Min(d => d.Precedence);
             var winners = definitions.Where(d => d.Precedence == precedence).ToList();
             if (winners.Count != 1)
                 throw new InvalidOperationException("XTSE4030: Duplicate item-type declarations at the same import precedence.");
-            var definition = winners[0].Element.Attribute("as")!.Value.Trim();
+            result[name] = winners[0].Element;
+        }
+        return _namedTypeDeclarations = result;
+    }
+
+    internal IReadOnlyDictionary<string, string> GetEnumerationItemTypes()
+    {
+        if (_enumerationItemTypes is not null)
+            return _enumerationItemTypes;
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var (name, element) in GetNamedTypeDeclarations())
+        {
+            if (element.Name.LocalName != "item-type")
+                continue;
+            var definition = element.Attribute("as")!.Value.Trim();
             // This initial slice registers enumeration definitions only. Structural aliases,
             // recursive alias expansion and package exposure remain separate work.
             if (!definition.StartsWith("enum(", StringComparison.Ordinal))
@@ -854,7 +874,46 @@ internal sealed class Stylesheet
         return _enumerationItemTypes = result;
     }
 
-    private static string ExpandItemTypeName(string name, XElement element)
+    internal sealed record NamedRecordDefinition(string ExpandedName, XElement Element, XdmRecordType Type, IReadOnlyList<XElement> Fields, bool Constructor);
+
+    internal IReadOnlyDictionary<string, NamedRecordDefinition> GetNamedRecordTypes()
+    {
+        if (_namedRecordTypes is not null)
+            return _namedRecordTypes;
+        var result = new Dictionary<string, NamedRecordDefinition>(StringComparer.Ordinal);
+        foreach (var (name, element) in GetNamedTypeDeclarations())
+        {
+            if (element.Name.LocalName != "record-type") continue;
+            var constructor = element.Attribute("constructor")?.Value is "yes" or "true" or "1";
+            var fields = element.Elements(XName.Get("field", XslNamespace)).ToList();
+            var names = new HashSet<string>(StringComparer.Ordinal);
+            var types = new List<XdmRecordField>();
+            bool defaultSeen = false;
+            foreach (var field in fields)
+            {
+                var fieldName = field.Attribute("name")?.Value ?? string.Empty;
+                if (fieldName.Length == 0) throw new InvalidOperationException("XTSE0020: A record field name must not be empty.");
+                if (!names.Add(fieldName)) throw new InvalidOperationException("XTSE4050: Duplicate record field names.");
+                if (constructor)
+                {
+                    try { System.Xml.XmlConvert.VerifyNCName(fieldName); }
+                    catch (System.Xml.XmlException ex) { throw new InvalidOperationException("XTSE0020: Constructor field names must be NCNames.", ex); }
+                }
+                var initial = field.Attribute("select") is not null || field.Nodes().Any(n => n is XElement || n is XText t && !string.IsNullOrWhiteSpace(t.Value));
+                var isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
+                if (isStatic && !initial) throw new InvalidOperationException("XTSE0010: Static record fields require an initial value.");
+                if (constructor && defaultSeen && !initial) throw new InvalidOperationException("XTSE0010: Record fields following an initialized field need initial values.");
+                defaultSeen |= initial;
+                var type = field.Attribute("as")?.Value ?? "item()*";
+                types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
+            }
+            var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";
+            result[name] = new NamedRecordDefinition(name, element, new XdmRecordType(types, text), fields, constructor);
+        }
+        return _namedRecordTypes = result;
+    }
+
+    internal static string ExpandItemTypeName(string name, XElement element)
     {
         if (name.StartsWith("Q{", StringComparison.Ordinal))
         {
@@ -3882,6 +3941,30 @@ internal sealed class Stylesheet
                     }
                 }
 
+                if (localName == "record-type")
+                {
+                    if (GetEffectiveVersion(elem) < 4.0)
+                        throw new InvalidOperationException("XTSE0010: xsl:record-type requires XSLT 4.0.");
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("name", "constructor", "visibility"), IsForwardsCompatibleElement(elem));
+                    if (elem.Attribute("name") is null)
+                        throw new InvalidOperationException("XTSE0010: xsl:record-type requires a name.");
+                    if (elem.Nodes().Any(n => n is XElement e && e.Name != XName.Get("field", XslNamespace) || n is XText t && !string.IsNullOrWhiteSpace(t.Value)))
+                        throw new InvalidOperationException("XTSE0010: xsl:record-type accepts xsl:field children only.");
+                    if (elem.Attribute("constructor") is { } constructor && constructor.Value is not ("yes" or "no" or "true" or "false" or "1" or "0"))
+                        throw new InvalidOperationException("XTSE0020: Invalid constructor boolean.");
+                }
+                if (localName == "field")
+                {
+                    if (elem.Parent?.Name != XName.Get("record-type", XslNamespace))
+                        throw new InvalidOperationException("XTSE0010: xsl:field must be a child of xsl:record-type.");
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("name", "as", "select", "static"), IsForwardsCompatibleElement(elem));
+                    if (elem.Attribute("name") is null)
+                        throw new InvalidOperationException("XTSE0010: xsl:field requires a name.");
+                    if (elem.Attribute("static") is { } flag && flag.Value is not ("yes" or "no" or "true" or "false" or "1" or "0"))
+                        throw new InvalidOperationException("XTSE0020: Invalid static boolean.");
+                    if (elem.Attribute("select") is not null && elem.Nodes().Any(n => n is XElement || n is XText t && !string.IsNullOrWhiteSpace(t.Value)))
+                        throw new InvalidOperationException("XTSE0620: A field cannot have both select and sequence constructor content.");
+                }
                 if (localName == "item-type")
                 {
                     if (GetEffectiveVersion(elem) < 4.0)
@@ -5373,7 +5456,7 @@ internal sealed class Stylesheet
         "stylesheet", "transform", "package",
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "decimal-format", "key", "mode", "accumulator", "template", "function",
-        "global-context-item", "import-schema", "item-type",
+        "global-context-item", "import-schema", "item-type", "record-type",
         "use-package", "expose", "accept", "override"
     };
 
@@ -5387,7 +5470,7 @@ internal sealed class Stylesheet
         "import", "include", "strip-space", "preserve-space", "output", "namespace-alias",
         "attribute-set", "character-map", "decimal-format", "key", "mode", "accumulator", "param", "variable",
         "template", "function", "global-context-item", "use-package", "package", "expose",
-        "import-schema", "item-type"
+        "import-schema", "item-type", "record-type"
     };
 
     private static bool IsValidMergeSourceName(string name)
@@ -9551,7 +9634,7 @@ internal sealed class Stylesheet
         "output", "namespace-alias", "attribute-set", "decimal-format", "key", "mode",
         "accumulator", "accumulator-rule", "variable", "param", "with-param", "template", "function",
         "global-context-item", "context-item", "use-package", "package", "expose", "accept", "override",
-        "import-schema", "note", "item-type",
+        "import-schema", "note", "item-type", "record-type", "field",
         "apply-templates", "apply-imports", "call-template", "next-match",
         "value-of", "text", "element", "attribute", "namespace", "copy", "copy-of",
         "comment", "processing-instruction", "document", "result-document",

@@ -1,6 +1,6 @@
 # Native record-type boundary batch
 
-Submitted as [xslt40-test PR #26](https://github.com/qt4cg/xslt40-test/pull/26). Two native cases, 0 pass / 2 fail with Bosak. Acceptance and independent processor confirmation are pending.
+Submitted as [xslt40-test PR #26](https://github.com/qt4cg/xslt40-test/pull/26). Both native cases now pass with Bosak source 1.2.0; the original 0 pass / 2 fail receipts below remain historical. Acceptance and independent processor confirmation are pending.
 
 ## Source and existing coverage
 
@@ -76,3 +76,6 @@ Build Bosak first if the local binary is absent. Failed cases exit 1; retain the
 ## Follow-up
 
 Monitor the upstream review and requested independent cross-check. Record Bosak engine gaps separately; this contribution does not fix them or claim they are upstream defects. Source 1.1.4 remains unpublished, public release 1.1.3.
+
+
+**Post-implementation — 2026-10-13:** Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI. See [post-fix results](POST_FIX_RESULTS.json).
