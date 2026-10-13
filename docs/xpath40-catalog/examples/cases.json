@@ -3833,7 +3833,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/item-used-valid.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "error": "XTTE0570"
+    "expected": "EUR"
   },
   {
     "id": "xslt-type-declarations-item-used-invalid-observed",

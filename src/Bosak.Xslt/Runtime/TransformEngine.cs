@@ -528,6 +528,7 @@
 //                      | Charles Korthout | 7.12  | 12-10-2026     | Pass enumeration aliases to XPath and AVT compilation; preserve EQName URIs
 //                      | Charles Korthout | 7.13  | 13-10-2026     | Register record constructors, convert fields and preserve named record bindings.         |
 //                      | Charles Korthout | 7.14  | 13-10-2026     | Validate select prefixes against inline namespace declarations
+//                      | Charles Korthout | 7.15 | 13-10-2026     | Convert named and inline enumeration bindings with scoped declaration profiles
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3202,9 +3203,9 @@ internal sealed class TransformEngine
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
                 ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                    .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                    .Select(i => i < paramElements.Count ? ResolveEnumerationSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()) : null)
                     .ToList(),
-                ReturnTypeName = def.ReturnType,
+                ReturnTypeName = ResolveEnumerationSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()),
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
@@ -3219,6 +3220,7 @@ internal sealed class TransformEngine
     private void RegisterRecordConstructors(Stylesheet.Stylesheet scope, HashSet<(string ns, string name, int arity)> functionKeys)
     {
         var definitions = scope.GetNamedRecordTypes();
+        _context.EnumerationItemTypes = scope.GetEnumerationItemTypes();
         _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
         foreach (var definition in definitions.Values)
         {
@@ -4395,6 +4397,8 @@ internal sealed class TransformEngine
         public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
         /// <summary>Package-local named record identities active before entering the scope.</summary>
         public IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes;
+        /// <summary>Package-local enumeration aliases active before entering the scope.</summary>
+        public IReadOnlyDictionary<string, string> EnumerationItemTypes;
     }
 
     /// <summary>
@@ -4412,6 +4416,7 @@ internal sealed class TransformEngine
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
         var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
         var namedRecordTypesSnapshot = _context.NamedRecordTypes;
+        var enumerationTypesSnapshot = _context.EnumerationItemTypes;
 
         if (package?.IsPackage == true && package != previousScope)
         {
@@ -4449,9 +4454,9 @@ internal sealed class TransformEngine
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
                     ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                        .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                        .Select(i => i < paramElements.Count ? ResolveEnumerationSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()) : null)
                         .ToList(),
-                    ReturnTypeName = def.ReturnType,
+                    ReturnTypeName = ResolveEnumerationSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()),
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
                 _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
@@ -4487,6 +4492,7 @@ internal sealed class TransformEngine
         {
             PreviousScope = previousScope,
             NamedRecordTypes = namedRecordTypesSnapshot,
+            EnumerationItemTypes = enumerationTypesSnapshot,
             FunctionSnapshot = functionSnapshot,
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
             NamedDecimalFormatSnapshot = namedDecimalSnapshot,
@@ -4502,6 +4508,7 @@ internal sealed class TransformEngine
         _namespaceAliases = state.NamespaceAliasSnapshot;
         _context.RestoreFunctions(state.FunctionSnapshot);
         _context.NamedRecordTypes = state.NamedRecordTypes;
+        _context.EnumerationItemTypes = state.EnumerationItemTypes;
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
         _context.FunctionLookupInterceptor = state.PreviousFunctionLookupInterceptor;
@@ -4599,7 +4606,7 @@ internal sealed class TransformEngine
                 if (isAbsorbing && raw.IsSequence && raw.SequenceValue is ISinglePassSequence)
                     raw = MaterializeAbsorbedArgument(raw);
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
-                var converted = ConvertFunctionArgument(raw, asType, _context);
+                var converted = ConvertFunctionArgument(raw, asType, _context, i < paramElements.Count ? paramElements[i] : def.Element);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
@@ -16604,6 +16611,32 @@ internal sealed class TransformEngine
         return (callParams, tunnelParams);
     }
 
+    private static bool AllowsEnumerationDeclarations(XElement declaration)
+    {
+        foreach (var element in declaration.AncestorsAndSelf())
+        {
+            var version = element.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                ? element.Attribute("version") : element.Attribute(XName.Get("version", Stylesheet.Stylesheet.XslNamespace));
+            if (version is not null)
+                return double.TryParse(version.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsed) && parsed >= 4.0;
+        }
+        return false;
+    }
+
+    private static string? ResolveEnumerationSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases)
+    {
+        if (string.IsNullOrWhiteSpace(sequenceType) || aliases.Count == 0 || !AllowsEnumerationDeclarations(declaration)) return sequenceType;
+        var type = sequenceType.Trim();
+        var suffix = type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
+        var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
+        if (name.Contains('(')) return sequenceType;
+        if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
+            && declaration.GetNamespaceOfPrefix(name[..colon]) is null)
+            return sequenceType;
+        return aliases.TryGetValue(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration), out var definition)
+            ? definition + suffix : sequenceType;
+    }
+
     /// <summary>
     /// Applies type conversion and validation for the <c>as</c> attribute on
     /// <c>xsl:variable</c> / <c>xsl:param</c> / <c>xsl:with-param</c>.
@@ -16617,14 +16650,14 @@ internal sealed class TransformEngine
     /// Converts a function call argument to the required type of an <c>xsl:param</c>,
     /// using the XPath function conversion rules and reporting failures as XPTY0004.
     /// </summary>
-    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType, EvaluationContext? context = null)
+    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType, EvaluationContext? context = null, XElement? declaration = null)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
 
         try
         {
-            return ConvertVariableValue(value, asType, isParam: true, context);
+            return ConvertVariableValue(value, asType, isParam: true, context, declaration: declaration);
         }
         catch (InvalidOperationException ex)
         {
@@ -16781,7 +16814,23 @@ internal sealed class TransformEngine
 
         if (declaration is not null && context is not null)
         {
-            var type = asType.Trim();
+            asType = ResolveEnumerationSequenceType(asType, declaration, context.EnumerationItemTypes);
+            if (AllowsEnumerationDeclarations(declaration) && asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+            {
+                var savedProfile = context.IsXPath40;
+                context.IsXPath40 = true;
+                try
+                {
+                    return VmEngine.ApplyFunctionConversion(value, asType, context);
+                }
+                catch (InvalidOperationException error)
+                {
+                    var code = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
+                    throw new InvalidOperationException($"{code}: Value does not match declared enumeration type {asType}.", error);
+                }
+                finally { context.IsXPath40 = savedProfile; }
+            }
+            var type = asType!.Trim();
             var suffix = type.Length > 0 && type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
             var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
             if (context.NamedRecordTypes.Count > 0 && !name.Contains('(') && context.NamedRecordTypes.ContainsKey(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration)))
