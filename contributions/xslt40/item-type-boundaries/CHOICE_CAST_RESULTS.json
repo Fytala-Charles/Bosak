@@ -40,5 +40,7 @@
     "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs": "e43369a7e826c9722feb24dd352252c4e60d18f9a6545bbc349d3b3edcb909a2",
     "tests/Bosak.Xslt.Tests/Xslt40ChoiceCastValidationTests.cs": "f129187ca4e5c2eb06ae93a833f9954f3a5a33e259cf369ecc789cef842da761",
     "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
-  }
+  },
+  "testedImplementationCommit": "5081e6ff3b6337675397904933c2ed20cdf6dfca",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/219"
 }

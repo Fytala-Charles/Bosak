@@ -14,7 +14,7 @@ Validation: Release build passes (12 existing warnings, zero errors). All 7043 u
 
 Check this slice's CI before merging. Next: static named-type classification/unknown expression names, followed by package exposure. Keep schema-defined/nominative QName classification explicitly deferred; the choice predicate conservatively leaves unknown QNames for name/schema validation. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
 
-Delivery pending.
+Delivery: tested implementation 5081e6ff3b6337675397904933c2ed20cdf6dfca committed and pushed; [Bosak PR #219](https://github.com/Fytala-Charles/Bosak/pull/219) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
 
 # Item-type alias casts and declaration validation — 2026-10-13
 
