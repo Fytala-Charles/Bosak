@@ -54,5 +54,7 @@
     "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "ae1ca22c807318a279c5ee2428a4b6f982762dbabcb0a5d18300c0e25b21ce9a",
     "tests/Bosak.Xslt.Tests/Xslt40RecursiveContainerCastTests.cs": "9e3021b492eca375ae9717667ba64483cdedc527794d671c60a90c8a2d08ceba",
     "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
-  }
+  },
+  "testedImplementationCommit": "8c67d3e6e91299305c89f946f979908dc7ea8c6e",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/217"
 }
