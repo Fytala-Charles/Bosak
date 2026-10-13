@@ -1,6 +1,6 @@
 # Pattern delimiter scanning — 2026-10-13
 
-Branch: feat/xslt-pattern-delimiter-scanning; parent 123bed16. Stacked on PR #240; PRs #223–240 remain open. Earlier sections are historical.
+Branch: feat/xslt-pattern-delimiter-scanning; parent 123bed16. Stacked on PR #240; PRs #223–241 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: top-level pattern operator splitting around quoted delimiters and EQName URIs, preserving grammar/profile boundaries and operator precedence. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #241](https://github.com/Fytala-Charles/Bosak/pull/241), stacked on #240. Verified implementation revision 1bae8fb7; a documentation-only delivery commit follows. PRs #223–241 remain open. CI starts after retargeting to main. Next: top-level pattern operator splitting around quoted delimiters and EQName URIs.
 
 # Parenthesized outer-filter paths — 2026-10-13
 
