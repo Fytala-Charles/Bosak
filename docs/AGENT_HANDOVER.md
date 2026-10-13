@@ -14,7 +14,7 @@ Validation: Final Release build passes with zero warnings/errors. All 7123 unit 
 
 Next: partial wildcard/schema node diagnostics and function type grammar, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: tested implementation 97c77996 committed and pushed; [Bosak PR #224](https://github.com/Fytala-Charles/Bosak/pull/224) open, stacked on #223. PR #223 CI passed but it remains open; retarget #224 to main after #223 merges, then wait for CI (the workflow targets main PRs only). This delivery record changes documentation only.
 
 # Named node-type alias grammar — 2026-10-13
 
