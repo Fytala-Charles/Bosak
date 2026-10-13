@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.6   | 13-10-2026     | Capture static context for variable and parameter name slots                           |
 //                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
+//                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -176,7 +177,7 @@ public sealed class AuthoringInspector
             for (var i = 0; i < ordered.Count; i++)
             {
                 var state = ordered[i];
-                var builder = new DescriptorBuilder(state, nodeIds, resolver);
+                var builder = new DescriptorBuilder(state, nodeIds, resolver, ordered.Count == 1 && state.Edges.Count == 0);
                 var root = builder.BuildDocument(state.Document);
                 var version = DetectVersion(state.Document);
                 var descriptor = new AuthoringModuleDescriptor(
@@ -187,7 +188,7 @@ public sealed class AuthoringInspector
                     version,
                     state.Edges,
                     root,
-                    precedence: i);
+                    precedence: i, namedTypes: builder.NamedTypes);
                 descriptors.Add(descriptor);
                 modulesByUri[state.Source.BaseUri] = descriptor;
                 sourcesByUri[state.Source.BaseUri] = state.Source;
@@ -463,14 +464,19 @@ public sealed class AuthoringInspector
         private readonly AuthoringModuleUriResolverBridge _namespaceResolver;
         private string? _staticNamespaceError;
 
-        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds, IAuthoringModuleResolver resolver)
+        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds, IAuthoringModuleResolver resolver, bool standalone)
         {
             _namespaceResolver = new AuthoringModuleUriResolverBridge(resolver);
+            NamedTypes = AuthoringNamedTypes.Capture(state.Document.Root, _namespaceResolver, state.Source.BaseUri.AbsoluteUri, standalone);
+            if (NamedTypes.Error?.StartsWith("XTSE0122", StringComparison.Ordinal) == true)
+                _staticNamespaceError = NamedTypes.Error;
             _state = state;
             _map = state.Source.CoordinateMap;
             _text = _map.Text;
             _nodeIds = nodeIds;
         }
+
+        internal AuthoringNamedTypes NamedTypes { get; }
 
         public AuthoringNodeDescriptor BuildDocument(XDocument document)
         {

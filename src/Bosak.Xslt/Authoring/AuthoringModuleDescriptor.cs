@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -101,7 +102,7 @@ public sealed class AuthoringModuleDescriptor
         string? version,
         IReadOnlyList<AuthoringModuleEdge> edges,
         AuthoringNodeDescriptor root,
-        int precedence)
+        int precedence, AuthoringNamedTypes? namedTypes = null)
     {
         ModuleUri = moduleUri;
         IsPrincipal = isPrincipal;
@@ -111,7 +112,10 @@ public sealed class AuthoringModuleDescriptor
         Edges = edges;
         Root = root;
         Precedence = precedence;
+        NamedTypes = namedTypes;
     }
+
+    internal AuthoringNamedTypes? NamedTypes { get; }
 
     /// <summary>Gets the absolute URI identifying this module.</summary>
     public Uri ModuleUri { get; }
