@@ -301,6 +301,7 @@
 //                      | Charles Korthout | 2.140 | 13-10-2026     | Validate supported binding and field type names at stylesheet registration
 //                      | Charles Korthout | 2.141 | 13-10-2026     | Preserve declaration namespaces in named node-kind aliases and record fields
 //                      | Charles Korthout | 2.142 | 13-10-2026     | Preserve partial node-name wildcards in declaration namespace resolution
+//                      | Charles Korthout | 2.143 | 13-10-2026     | Register schema-annotated aliases with declaration namespaces and schema scope
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -904,7 +905,7 @@ internal sealed class Stylesheet
                     var parsed = Bosak.XPath.Parser.Ast.XPathParser.Parse("() instance of " + expanded, xpath40: true);
                     if (parsed is not Bosak.XPath.Parser.Ast.InstanceOfNode { Occurrence: OccurrenceIndicator.One })
                         throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
-                    XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+                    XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40, SchemaSet = CompiledSchemaSet });
                     result[name] = expanded;
                 }
                 return expanded;
@@ -927,7 +928,8 @@ internal sealed class Stylesheet
                 if (!declarations.TryGetValue(key, out var named))
                     throw new InvalidOperationException($"XPST0051: Unknown item type '{name}' in an item-type definition.");
                 return named.Name.LocalName == "record-type" ? key : Expand(key);
-            }, (name, attribute) => ExpandNodeTypeName(name, attribute, declaration));
+            }, (name, attribute) => ExpandNodeTypeName(name, attribute, declaration),
+                name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, declaration), CompiledSchemaSet));
         }
         foreach (var name in declarations.Keys) Expand(name);
         return _bindingItemTypes = result;
@@ -1004,7 +1006,8 @@ internal sealed class Stylesheet
                     if (GetBindingItemTypes().TryGetValue(key, out var alias)) return alias;
                     if (GetNamedTypeDeclarations().TryGetValue(key, out var named) && named.Name.LocalName == "record-type") return key;
                     return key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal) ? "xs:" + key[(key.IndexOf('}') + 1)..] : lexical;
-                }, (name, attribute) => ExpandNodeTypeName(name, attribute, field)) ?? type;
+                }, (name, attribute) => ExpandNodeTypeName(name, attribute, field),
+                    name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, field), CompiledSchemaSet)) ?? type;
                 types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
             }
             var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";
@@ -1023,6 +1026,13 @@ internal sealed class Stylesheet
                 ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
         if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    internal static string ExpandSchemaTypeName(string name, XElement element)
+    {
+        if (!name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal) && GetXPathDefaultNamespace(element) == "##any")
+            return $"Q{{{System.Xml.Schema.XmlSchema.Namespace}}}{name}";
+        return ExpandNodeTypeName(name, false, element);
     }
 
     internal static string ExpandItemTypeName(string name, XElement element)

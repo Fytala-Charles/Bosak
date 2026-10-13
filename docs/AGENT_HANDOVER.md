@@ -1,3 +1,21 @@
+# Schema-annotated node aliases — 2026-10-13
+
+Branch: feat/xslt-schema-node-aliases; parent eaabf8ad. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 remains open and this slice is stacked on it. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema annotations in element/attribute item-type aliases and supported structural sequence types, including node-name unions, nested documents, arrays and record fields. The annotation resolves independently against in-scope schema types and retains declaration namespaces under prefix rebinding; item-type aliases are not substituted into the schema annotation. Built-in and imported simple/complex schema types are accepted. Unknown annotations raise XPST0008; undeclared annotation prefixes raise XPST0081; malformed or empty annotations raise XPST0003. Only element annotations permit the nillable ? marker. The ##any default maps unprefixed schema annotations to the XML Schema namespace. Twenty-eight new regressions cover matching untyped and validated nodes, non-coercion, imported simple/complex types, nillability, namespace identity, nested contracts and unused declarations. fn/named-parameter function grammar, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared alias walker has a separate schema-annotation callback. API and declaration resolvers validate in-scope schema types; runtime binding resolution preserves annotation namespace identity. Existing runtime type-compatibility checks evaluate nodes without content coercion. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with one existing warning and zero errors. All 7193 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4307/0/0 and twenty-eight new regressions. Focused node-alias tests pass 115/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fn/named-parameter function type grammar, then remaining schema-declaration/document shorthand traversal and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Node-name union aliases — 2026-10-13
 
 Branch: feat/xslt-node-name-unions; parent 41a61ca1. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. This slice is stacked on #225. Earlier sections are historical.

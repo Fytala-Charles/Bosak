@@ -537,6 +537,7 @@
 //                      | Charles Korthout | 7.21 | 13-10-2026     | Reuse shared sequence casting for record fields and nested containers
 //                      | Charles Korthout | 7.22 | 13-10-2026     | Supply known record names for XPath and AVT static named-type validation
 //                      | Charles Korthout | 7.23 | 13-10-2026     | Preserve named node test namespaces when resolving binding sequence types
+//                      | Charles Korthout | 7.24 | 13-10-2026     | Preserve schema annotation namespace bindings at runtime declaration boundaries
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16681,7 +16682,8 @@ internal sealed class TransformEngine
             var expandedName = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration);
             return aliases.TryGetValue(expandedName, out var definition) ? definition
                 : namedRecords?.ContainsKey(expandedName) == true ? expandedName : name;
-        }, (name, attribute) => Stylesheet.Stylesheet.ExpandNodeTypeName(name, attribute, declaration)) ?? sequenceType;
+        }, (name, attribute) => Stylesheet.Stylesheet.ExpandNodeTypeName(name, attribute, declaration),
+            name => Stylesheet.Stylesheet.ExpandSchemaTypeName(name, declaration)) ?? sequenceType;
     }
 
     /// <summary>

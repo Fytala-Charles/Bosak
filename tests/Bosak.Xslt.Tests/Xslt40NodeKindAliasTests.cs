@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Verify processing-instruction alias target matching and invalid target diagnostics
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Verify partial node wildcards and the any default namespace
 //                      | Charles Korthout | 0.5 | 13-10-2026     | Verify node-name union alternatives, declaration bindings and separators
+//                      | Charles Korthout | 0.6 | 13-10-2026     | Verify schema-annotated aliases, namespace bindings and static diagnostics
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -28,7 +29,7 @@ namespace Bosak.Xslt.Tests;
 /// <summary>Verifies node-kind aliases and nested static type diagnostics.</summary>
 public class Xslt40NodeKindAliasTests
 {
-    private static Api.XsltExecutable Compile(string body) => new Api.XsltCompiler().Compile("""
+    private static Api.XsltExecutable Compile(string body, bool schemaAware = false) => new Api.XsltCompiler { SchemaAware = schemaAware }.Compile("""
         <xsl:stylesheet version='4.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
           xmlns:t='urn:types' xmlns:xs='http://www.w3.org/2001/XMLSchema' exclude-result-prefixes='#all'>
         """ + body + "</xsl:stylesheet>");
@@ -370,4 +371,125 @@ public class Xslt40NodeKindAliasTests
             <xsl:template match='/'><out><xsl:value-of separator='|' select='(
               /* instance of t:e,/*/@* instance of t:a)'/></out></xsl:template>
             """, "<nurse xmlns='urn:staff' cost='x'/>"));
+
+    /// <summary>Matches untyped nodes using the declared schema annotation and node name.</summary>
+    /// <param name="type">The schema-annotated alias definition.</param>
+    /// <param name="source">A matching untyped source.</param>
+    [Theory]
+    [InlineData("element(root,xs:untyped)", "<root/>")]
+    [InlineData("element(root,xs:anyType)", "<root/>")]
+    [InlineData("element(root,xs:untyped?)", "<root/>")]
+    [InlineData("element(root|other,xs:untyped)", "<other/>")]
+    [InlineData("element(*:root,Q{http://www.w3.org/2001/XMLSchema}untyped)", "<root xmlns='urn:other'/>")]
+    [InlineData("attribute(code,xs:untypedAtomic)", "<root code='x'/>")]
+    [InlineData("attribute(code|other,xs:anySimpleType)", "<root other='x'/>")]
+    [InlineData("document-node(element(root,xs:untyped))", "<root/>")]
+    public void Alias_SchemaAnnotation(string type, string source)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : type.StartsWith("document") ? "." : "/*";
+        Assert.Equal("true|true", Run($"<xsl:item-type name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/'><xsl:variable name='n' as='t:n' select='{select}'/>" +
+            "<out><xsl:value-of separator='|' select='($n instance of t:n,($n treat as t:n) is $n)'/></out></xsl:template>", source));
+    }
+
+    /// <summary>Does not treat a schema annotation as permission to coerce a node's content.</summary>
+    /// <param name="type">The schema-annotated alias definition.</param>
+    [Theory]
+    [InlineData("element(root,xs:string)")]
+    [InlineData("element(root,xs:integer)")]
+    [InlineData("attribute(code,xs:string)")]
+    public void Alias_SchemaAnnotationMismatch(string type)
+    {
+        var select = type.StartsWith("attribute") ? "/*/@*" : "/*";
+        Assert.Equal("false", Run($"<xsl:item-type name='t:n' as='{type}'/>" +
+            $"<xsl:template match='/'><out><xsl:value-of select='{select} instance of t:n'/></out></xsl:template>", "<root code='42'>42</root>"));
+    }
+
+    /// <summary>Rejects unknown schema annotations and malformed annotation syntax statically.</summary>
+    /// <param name="type">The invalid node alias definition.</param>
+    /// <param name="code">The expected static error.</param>
+    [Theory]
+    [InlineData("element(root,xs:missing)", "XPST0008")]
+    [InlineData("attribute(code,t:missing)", "XPST0008")]
+    [InlineData("element(root,absent:Type)", "XPST0081")]
+    [InlineData("document-node(element(root,absent:Type))", "XPST0081")]
+    [InlineData("element(root,)", "XPST0003")]
+    [InlineData("element(root,xs:string,xs:integer)", "XPST0003")]
+    [InlineData("element(root,xs:string*)", "XPST0003")]
+    [InlineData("element(root,*)", "XPST0003")]
+    [InlineData("attribute(code,xs:string?)", "XPST0003")]
+    public void Alias_InvalidSchemaAnnotation(string type, string code)
+        => Assert.Contains(code, Assert.ThrowsAny<Exception>(() => Compile(
+            $"<xsl:item-type name='t:n' as='{type}'/>")).ToString());
+
+    /// <summary>Preserves a schema prefix binding when the same prefix is rebound at the use site.</summary>
+    [Fact]
+    public void Alias_SchemaAnnotationDeclarationNamespace()
+        => Assert.Equal("true", Run("""
+            <xsl:item-type name='t:n' xmlns:s='http://www.w3.org/2001/XMLSchema' as='element(root,s:untyped)'/>
+            <xsl:template match='/' xmlns:s='urn:other'><out><xsl:value-of select='/* instance of t:n'/></out></xsl:template>
+            """, "<root/>"));
+
+    /// <summary>Uses the schema namespace for unprefixed annotations under the any default.</summary>
+    [Fact]
+    public void Alias_SchemaAnnotationAnyDefault()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type name='t:e' xpath-default-namespace='##any' as='element(root,untyped)'/>
+            <xsl:item-type name='t:a' xpath-default-namespace='##any' as='attribute(code,untypedAtomic)'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(/* instance of t:e,/*/@* instance of t:a)'/></out></xsl:template>
+            """, "<root xmlns='urn:payload' code='x'/>"));
+
+    /// <summary>Rejects an item-type alias used as a schema annotation even when it expands to an atomic type.</summary>
+    [Fact]
+    public void Alias_SchemaAnnotationDoesNotExpandItemAlias()
+        => Assert.Contains("XPST0008", Assert.ThrowsAny<Exception>(() => Compile("""
+            <xsl:item-type name='t:string' as='xs:string'/>
+            <xsl:item-type name='t:n' as='element(root,t:string)'/>
+            """)).ToString());
+
+    /// <summary>Traverses schema annotations in structural containers and checks unused declarations.</summary>
+    [Fact]
+    public void Alias_NestedSchemaAnnotation()
+        => Assert.Equal("true|true", Run("""
+            <xsl:item-type name='t:arr' as='array(element(root,xs:untyped))'/>
+            <xsl:item-type name='t:r' as='record(body as element(root,xs:untyped))'/>
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='(
+              [/*] instance of t:arr,(map{"body":/*} cast as t:r) instance of t:r)'/></out></xsl:template>
+            """, "<root/>"));
+
+    /// <summary>Rejects an unknown schema type in an unused binding during compilation.</summary>
+    [Fact]
+    public void Declaration_UnknownSchemaAnnotation()
+        => Assert.Contains("XPST0008", Assert.ThrowsAny<Exception>(() => Compile(
+            "<xsl:variable name='unused' as='array(element(root,xs:missing))' select='[]'/>")).ToString());
+
+    /// <summary>Matches imported simple and complex schema types and preserves element nillability.</summary>
+    /// <param name="type">The imported schema type.</param>
+    /// <param name="nilled">Whether the validated source is nilled.</param>
+    [Theory]
+    [InlineData("Label", false)]
+    [InlineData("Box", false)]
+    [InlineData("Label", true)]
+    public void Alias_ImportedSchemaAnnotation(string type, bool nilled)
+    {
+        var body = $$"""
+            <xsl:import-schema namespace='urn:schema'>
+              <xs:schema targetNamespace='urn:schema' xmlns:s='urn:schema' elementFormDefault='qualified'>
+                <xs:simpleType name='Label'><xs:restriction base='xs:string'/></xs:simpleType>
+                <xs:complexType name='Box'><xs:simpleContent><xs:extension base='s:Label'/></xs:simpleContent></xs:complexType>
+                <xs:element name='root' type='s:{{type}}' nillable='true'/>
+              </xs:schema>
+            </xsl:import-schema>
+            <xsl:item-type name='t:n' xmlns:s='urn:schema' as='element(*:root,s:{{type}}?)'/>
+            <xsl:template match='/' xmlns:s='urn:rebound'>
+              <xsl:variable name='v' as='t:n'><xsl:copy-of select='/*' validation='strict'/></xsl:variable>
+              <out><xsl:value-of separator='|' select='($v instance of t:n,
+                $v instance of element(*:root,Q{urn:schema}{{type}}),/* instance of t:n)'/></out>
+            </xsl:template>
+            """;
+        var source = nilled ? "<root xmlns='urn:schema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'/>"
+            : "<root xmlns='urn:schema'>value</root>";
+        Assert.Equal(nilled ? "true|false|false" : "true|true|false", XElement.Parse(Compile(body, true).TransformToString(
+            new XDocumentNode(XDocument.Parse(source)))).Value);
+    }
 }

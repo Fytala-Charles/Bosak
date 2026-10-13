@@ -60,6 +60,7 @@
 //                      | Charles Korthout | 0.26 | 13-10-2026     | Validate host type names and retain nominative namespace identity in expression targets
 //                      | Charles Korthout | 0.27 | 13-10-2026     | Resolve host element and attribute type-test names in their static namespaces
 //                      | Charles Korthout | 0.28 | 13-10-2026     | Preserve node-name wildcards and expand the XPath 4.0 any default namespace
+//                      | Charles Korthout | 0.29 | 13-10-2026     | Resolve schema annotations against in-scope schema types
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -457,7 +458,8 @@ public sealed class XPath31Expression
         };
         var text = string.IsNullOrEmpty(prefix) ? type : prefix + ":" + type;
         var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options),
-            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options));
+            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
+            name => ResolveStaticSchemaTypeName(name, options));
         if (expanded is null || expanded == text) return resolved;
         var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + expanded, xpath40: true);
         return resolved switch
@@ -484,6 +486,17 @@ public sealed class XPath31Expression
         }
         if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
         return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    private static string ResolveStaticSchemaTypeName(string name, CompileOptions options)
+    {
+        const string schemaNamespace = "http://www.w3.org/2001/XMLSchema";
+        var expanded = !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal) && options.DefaultElementNamespace == "##any"
+            ? $"Q{{{schemaNamespace}}}{name}"
+            : name.StartsWith("xs:", StringComparison.Ordinal) && options.Namespaces?.ContainsKey("xs") != true
+                ? $"Q{{{schemaNamespace}}}{name[3..]}"
+                : ResolveStaticNodeTypeName(name, false, options);
+        return ItemTypeAliasExpansion.ValidateSchemaTypeName(expanded, options.SchemaSet);
     }
 
     private static string ResolveStaticItemTypeName(string lexical, CompileOptions options)
