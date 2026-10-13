@@ -24,6 +24,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.7   | 12-10-2026     | Expose enumeration alias static context for XPath 4.0 type tests
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Document inline namespaces and XPath 4.0 default namespace wildcard
+//                      | Charles Korthout | 0.9 | 13-10-2026     | Carry expanded XSLT item-type aliases through the internal host static context
 // ===========================================================================================================================================================
 using System.Xml.Schema;
 
@@ -57,6 +58,10 @@ public sealed class CompileOptions
     /// Other named item types and declaration conversion are not supported by this option.
     /// </summary>
     public IReadOnlyDictionary<string, string>? EnumerationItemTypes { get; init; }
+
+    // Expanded package-local definitions supplied by the XSLT host, independent of
+    // the public enumeration-only option. Definitions contain no unresolved aliases.
+    internal IReadOnlyDictionary<string, string>? ItemTypeAliases { get; init; }
 
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names

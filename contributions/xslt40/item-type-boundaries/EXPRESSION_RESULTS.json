@@ -1,0 +1,45 @@
+{
+  "date": "2026-10-13",
+  "candidateParentRevision": "aa7f7c7be261ad6b255c0d81ab4754d799a4afac",
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "scope": "Source candidate 1.2.0 (unpublished) resolves the supported atomic and array xsl:item-type aliases in XPath instance-of and treat expressions, including AVTs and expression-local namespace declarations. Tests preserve alias occurrences and definition namespaces, distinguish type checking from conversion, and isolate private package definitions from same-named caller aliases. Mixed XPath 3.1 instructions still refuse these aliases. Fourteen new regressions pass; the public EnumerationItemTypes option retains its enum-only contract. General map/function/choice aliases, aliases nested in arbitrary XPath structural type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/Bosak.XPath.Api.csproj": "2a886c37c2107b8da2e9ad16b04b795d83375abf4602aea29dd2db2a2063b45f",
+    "src/Bosak.XPath.Api/CompileOptions.cs": "67e3c134e49e3097e9eeaa38d052fa6ca0fe959a83d84d7a5972b8d7a89a14a0",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "dfa0101c502c4565e92934d8b135f09d9d29febe7824c94e36b164976f879c9e",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "4c4a47e42e4f46920f06fe3c2143306064d7af8982101100b3073ea8f3b1a57e",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "4bde38141fd027a6330dfce87648c10c51c6d4942828a5268ad434415d0ec102",
+    "tests/Bosak.Xslt.Tests/Xslt40AliasExpressionTests.cs": "615ee4ba0d3cb03aaf6feb8018eaeff792179d650112bef0fd8f0d53cb730364",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "nativeFilteredRun": {
+    "passed": 6,
+    "failed": 26,
+    "skipped": 0,
+    "scope": "Broader inherited structural/package cases remain failing"
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T040728069Z.json",
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json, BINDING_RESULTS.json and ARRAY_BINDING_RESULTS.json (preserved)",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
+  "validation": "Release build passes; all 6915 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4029/0/0. Forty-four focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run remains 6/26/0, original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.",
+  "testedImplementationCommit": "e9aea516e6b925f7d5cb4a5b9c77c5f02a9dc733",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/211"
+}

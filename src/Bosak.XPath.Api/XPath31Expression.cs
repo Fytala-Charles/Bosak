@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 0.19  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
 //                      | Charles Korthout | 0.20  | 12-10-2026     | Resolve enumeration aliases in instance-of and treat AST nodes                           |
 //                      | Charles Korthout | 0.21  | 13-10-2026     | Apply expression namespace context and default wildcard tests
+//                      | Charles Korthout | 0.22 | 13-10-2026     | Expand host atomic and array aliases in XPath instance-of and treat expressions
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -123,7 +124,7 @@ public sealed class XPath31Expression
                 Compatibility = options.Compatibility, Namespaces = namespaces,
                 DefaultElementNamespace = declarations.DefaultNamespace ?? options.DefaultElementNamespace,
                 DefiningElementDefaultNamespace = options.DefiningElementDefaultNamespace,
-                EnumerationItemTypes = options.EnumerationItemTypes, SchemaSet = options.SchemaSet,
+                EnumerationItemTypes = options.EnumerationItemTypes, ItemTypeAliases = options.ItemTypeAliases, SchemaSet = options.SchemaSet,
                 Xml11LineEndings = options.Xml11LineEndings, BaseUri = options.BaseUri,
                 BackwardsCompatible = options.BackwardsCompatible, StaticVariableTypes = options.StaticVariableTypes,
                 StrictStaticTyping = options.StrictStaticTyping, EnableJit = options.EnableJit
@@ -286,8 +287,8 @@ public sealed class XPath31Expression
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, options) },
             CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) },
             CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) },
-            InstanceOfNode io => ResolveEnumerationAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options), TypeName = ResolveDefaultItemType(io.TypeName, io.Prefix, options) }, options),
-            TreatNode treat => ResolveEnumerationAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options), TypeName = ResolveDefaultItemType(treat.TypeName, treat.Prefix, options) }, options),
+            InstanceOfNode io => ResolveItemTypeAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options), TypeName = ResolveDefaultItemType(io.TypeName, io.Prefix, options) }, options),
+            TreatNode treat => ResolveItemTypeAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options), TypeName = ResolveDefaultItemType(treat.TypeName, treat.Prefix, options) }, options),
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
             PipelineExprNode pipeline => pipeline with { Source = ResolveFunctionNamespaces(pipeline.Source, options), Target = ResolveFunctionNamespaces(pipeline.Target, options) },
             TryCatchNode tc => tc with
@@ -358,9 +359,9 @@ public sealed class XPath31Expression
         return node with { NamespaceUri = nsUri };
     }
 
-    private static XPathAstNode ResolveEnumerationAlias(XPathAstNode node, CompileOptions options)
+    private static XPathAstNode ResolveItemTypeAlias(XPathAstNode node, CompileOptions options)
     {
-        if (options.Compatibility < XPathCompatibility.XPath40 || options.EnumerationItemTypes is null)
+        if (options.Compatibility < XPathCompatibility.XPath40 || (options.EnumerationItemTypes is null && options.ItemTypeAliases is null))
             return node;
         var (prefix, name) = node switch
         {
@@ -381,13 +382,15 @@ public sealed class XPath31Expression
             }
             key = $"Q{{{ns}}}{name}";
         }
-        if (!options.EnumerationItemTypes.TryGetValue(key, out var definition))
-            return node;
-        if (!definition.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+        var hostAlias = options.ItemTypeAliases is not null && options.ItemTypeAliases.TryGetValue(key, out _);
+        string? definition;
+        if (hostAlias) definition = options.ItemTypeAliases![key];
+        else if (options.EnumerationItemTypes is null || !options.EnumerationItemTypes.TryGetValue(key, out definition)) return node;
+        if (!hostAlias && !definition.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
             throw new ArgumentException("Enumeration aliases must contain enum(...) item types.");
         var parsed = XPathParser.Parse("() instance of " + definition, xpath40: true);
         if (parsed is not InstanceOfNode { Occurrence: OccurrenceIndicator.One } alias)
-            throw new ArgumentException("An enumeration alias must denote one item type.");
+            throw new ArgumentException("An item-type alias must denote one item type.");
         return node switch
         {
             InstanceOfNode instance => instance with { Prefix = alias.Prefix, TypeName = alias.TypeName },
