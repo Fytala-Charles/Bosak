@@ -14,7 +14,7 @@ Validation: Release build passes with pre-existing warnings; all 6901 unit tests
 
 Check this slice's CI before merging. Next: structural aliases in XPath instance-of/treat and other structural forms, then remaining named-record coercion. Keep 6/26/0 broader family limitations explicit. REQ-126 and N04 remain In Progress. Preserve original patches, expectations, historical receipts/evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review/independent confirmation; no second processor available. No release/tag/package publication.
 
-Delivery pending.
+Delivery: 84df762206468d2a6a8976e5f7cdbbe6ffdc74f3, [Bosak PR #210](https://github.com/Fytala-Charles/Bosak/pull/210), pushed on feat/xslt-array-alias-bindings. CI pending; check the latest run before merging. This metadata commit records delivery. No release/tag/package publication.
 
 # Enumeration declaration bindings — 2026-10-13
 

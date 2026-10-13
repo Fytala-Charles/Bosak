@@ -46,5 +46,7 @@
   ],
   "remainingNativeNotes": {
     "type-alias-004": "Expected processor-specific SXTA0001; actual normative XTSE4035. Original assertion retained."
-  }
+  },
+  "testedImplementationCommit": "84df762206468d2a6a8976e5f7cdbbe6ffdc74f3",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/210"
 }
