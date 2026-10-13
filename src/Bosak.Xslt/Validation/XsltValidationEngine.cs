@@ -28,6 +28,7 @@
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
+//                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -115,7 +116,7 @@ internal sealed class XsltValidationEngine
 
     public XsltValidationResult Validate(AuthoringSnapshot snapshot)
     {
-        _sequenceTypeLinkageDeferred = snapshot.Modules.Count != 1 || snapshot.Modules.Any(m => m.Edges.Count > 0);
+        _sequenceTypeLinkageDeferred = snapshot.Modules.Any(m => m.NamedTypes?.ModuleLinkageSupported != true);
         CollectGlobalDeclarations(snapshot);
         foreach (var module in snapshot.Modules)
         {
@@ -405,7 +406,8 @@ internal sealed class XsltValidationEngine
         _namedTypes = module.NamedTypes;
         if (_namedTypes?.CoverageGap is { } gap)
             _gaps.Add(new XsltValidationCoverageGap("named-types", module.ModuleUri, gap));
-        if (_namedTypes?.Error is { } error)
+        if (_namedTypes?.Error is { } error && _namedTypes.ErrorElement?.Document?.Root is { } errorRoot
+            && ReferenceEquals(root?.BackingObject, errorRoot))
         {
             _hasInvalid = true;
             SourceRange? FindRange(AuthoringNodeDescriptor node)

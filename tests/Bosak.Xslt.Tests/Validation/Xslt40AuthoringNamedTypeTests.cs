@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -159,17 +160,17 @@ public class Xslt40AuthoringNamedTypeTests
     }
 
 
-    /// <summary>Include-linked named types retain an explicit coverage boundary.</summary>
+    /// <summary>Include-linked named types share the captured registry.</summary>
     [Fact]
-    public void IncludedTypesAreDeferred()
+    public void IncludedTypesAreRegistered()
     {
         var text = Sheet("<xsl:include href='types.xsl'/>", "<xsl:template match='/'><out/></xsl:template>");
         Assert.True(AuthoringSource.TryCreate(Encoding.UTF8.GetBytes(text), MainUri, out var source, out _));
         var result = XsltAuthoring.Inspect(source!, new IncludeResolver(), new AuthoringInspectionOptions { AttemptCompilation = false });
         Assert.True(result.IsSuccess);
         var validation = XsltValidation.Validate(result.Snapshot!);
-        Assert.Equal(XsltValidationOutcome.UnsupportedCoverage, validation.Outcome);
-        Assert.Contains(validation.UnsupportedCoverage, g => g.Construct == "named-types");
+        Assert.Equal(XsltValidationOutcome.Valid, validation.Outcome);
+        Assert.DoesNotContain(validation.UnsupportedCoverage, g => g.Construct == "named-types");
     }
 
     private sealed class IncludeResolver : IAuthoringModuleResolver

@@ -22,6 +22,7 @@
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      | Charles Korthout | 0.9   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
+//                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -169,6 +170,36 @@ public sealed class AuthoringInspector
             }
         }
 
+        var linkedModules = new List<(XElement Root, string BaseUri, int Precedence)>();
+        string? graphGap = null;
+        int importRank = 0;
+        void CaptureModuleOrder(ModuleState state, int precedence)
+        {
+            if (graphGap is not null || state.Document.Root is not { } moduleRoot) return;
+            if (linkedModules.Count >= 10000)
+            {
+                graphGap = "Named-type module occurrence limit reached; linkage is deferred.";
+                return;
+            }
+            if (moduleRoot.Attribute("use-when")?.Value.Trim() is "false" or "false()") return;
+            linkedModules.Add((moduleRoot, state.Source.BaseUri.AbsoluteUri, precedence));
+            var references = state.Document.Descendants().Where(e => e.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace
+                && e.Name.LocalName is "import" or "include").ToList();
+            foreach (var reference in moduleRoot.Elements().Reverse().Where(references.Contains))
+            {
+                var edge = state.Edges[references.IndexOf(reference)];
+                if (reference.Attribute("use-when") is not null || reference.Attribute("_href") is not null ||
+                    edge.Diagnostic is not null || edge.ResolvedUri is null || !visited.TryGetValue(IdentityKey(edge.ResolvedUri), out var child))
+                {
+                    graphGap = "Conditional, shadow, unresolved or cyclic module edges are outside named-type linkage coverage.";
+                    return;
+                }
+                CaptureModuleOrder(child, edge.Kind == AuthoringModuleEdgeKind.Import ? ++importRank : precedence);
+            }
+        }
+        CaptureModuleOrder(principalState, 0);
+        var namedTypes = AuthoringNamedTypes.Capture(linkedModules, new AuthoringModuleUriResolverBridge(resolver), graphGap);
+
         var nodeIds = new Dictionary<XObject, int>();
         var descriptors = new List<AuthoringModuleDescriptor>(ordered.Count);
         var modulesByUri = new Dictionary<Uri, AuthoringModuleDescriptor>();
@@ -178,7 +209,7 @@ public sealed class AuthoringInspector
             for (var i = 0; i < ordered.Count; i++)
             {
                 var state = ordered[i];
-                var builder = new DescriptorBuilder(state, nodeIds, resolver, ordered.Count == 1 && state.Edges.Count == 0);
+                var builder = new DescriptorBuilder(state, nodeIds, resolver, namedTypes);
                 var root = builder.BuildDocument(state.Document);
                 var version = DetectVersion(state.Document);
                 var descriptor = new AuthoringModuleDescriptor(
@@ -465,11 +496,11 @@ public sealed class AuthoringInspector
         private readonly AuthoringModuleUriResolverBridge _namespaceResolver;
         private string? _staticNamespaceError;
 
-        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds, IAuthoringModuleResolver resolver, bool standalone)
+        public DescriptorBuilder(ModuleState state, Dictionary<XObject, int> nodeIds, IAuthoringModuleResolver resolver, AuthoringNamedTypes namedTypes)
         {
             _namespaceResolver = new AuthoringModuleUriResolverBridge(resolver);
-            NamedTypes = AuthoringNamedTypes.Capture(state.Document.Root, _namespaceResolver, state.Source.BaseUri.AbsoluteUri, standalone);
-            if (NamedTypes.Error?.StartsWith("XTSE0122", StringComparison.Ordinal) == true)
+            NamedTypes = namedTypes;
+            if (NamedTypes.Error?.StartsWith("XTSE0122", StringComparison.Ordinal) == true && NamedTypes.ErrorElement?.Document == state.Document)
                 _staticNamespaceError = NamedTypes.Error;
             _state = state;
             _map = state.Source.CoordinateMap;
