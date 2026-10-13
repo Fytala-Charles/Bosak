@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 13 October 2026
-// PURPOSE              : Capture standalone named types for source-preserving authoring validation.
+// PURPOSE              : Capture linked named types for source-preserving authoring validation.
 // SPECIAL NOTES        : Part of the source-preserving XSLT authoring pipeline.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -35,33 +36,41 @@ internal sealed class AuthoringNamedTypes
     internal XElement? ErrorElement { get; private init; }
     internal string? CoverageGap { get; private init; }
 
-    internal static AuthoringNamedTypes Capture(XElement? root, IXsltUriResolver resolver, string baseUri, bool standalone)
+    internal bool ModuleLinkageSupported { get; private init; }
+
+    internal static AuthoringNamedTypes Capture(
+        IReadOnlyList<(XElement Root, string BaseUri, int Precedence)> modules,
+        IXsltUriResolver resolver, string? graphGap)
     {
-        if (root is null || !XsltStylesheet.UsesXPath40Namespaces(root)) return new();
-        var rootUseWhen = root.Attribute("use-when")?.Value.Trim();
-        if (rootUseWhen is "false()" or "false") return new();
-        var elements = root.Elements().Where(e => e.Name.NamespaceName == XsltStylesheet.XslNamespace
-            && e.Name.LocalName is "item-type" or "record-type").ToList();
-        if (elements.Count == 0) return new();
-        if (rootUseWhen is not null && rootUseWhen is not ("true()" or "true"))
-            return new() { CoverageGap = "Named types under non-literal root use-when are outside standalone authoring coverage." };
-        if (!standalone || root.Name.LocalName == "package" || root.Elements().Any(e => e.Name.NamespaceName == XsltStylesheet.XslNamespace && e.Name.LocalName is "use-package" or "import-schema"))
-            return new() { CoverageGap = "Named-type registration across imports, includes, packages or schema imports is outside standalone authoring coverage." };
+        if (graphGap is not null) return new() { CoverageGap = modules.Any(m => m.Root.Elements().Any(e => e.Name.NamespaceName == XsltStylesheet.XslNamespace && e.Name.LocalName is "item-type" or "record-type")) ? graphGap : null };
+        if (modules.Count == 0) return new() { ModuleLinkageSupported = true };
+        var elements = modules.SelectMany(m => m.Root.Elements().Where(e => e.Name.NamespaceName == XsltStylesheet.XslNamespace
+            && e.Name.LocalName is "item-type" or "record-type").Select(e => (Element: e, m.BaseUri, m.Precedence))).ToList();
+        if (elements.Count == 0) return new() { ModuleLinkageSupported = true };
+        foreach (var module in modules)
+        {
+            var rootUseWhen = module.Root.Attribute("use-when")?.Value.Trim();
+            if (rootUseWhen is not null && rootUseWhen is not ("true()" or "true"))
+                return new() { CoverageGap = "Non-literal module-root static exclusion remains outside linked named-type capture." };
+            if (module.Root.Name.LocalName == "package" || module.Root.Elements().Any(e => e.Name.NamespaceName == XsltStylesheet.XslNamespace && e.Name.LocalName is "use-package" or "import-schema"))
+                return new() { CoverageGap = "Named-type package and schema linkage remains outside authoring coverage." };
+        }
         var declarations = new Dictionary<string, XElement>(StringComparer.Ordinal);
+        var candidates = new Dictionary<string, List<(int Precedence, XElement Element)>>(StringComparer.Ordinal);
         var aliases = new Dictionary<string, string>(StringComparer.Ordinal);
         var records = new HashSet<string>(StringComparer.Ordinal);
         var active = new HashSet<string>(StringComparer.Ordinal);
-        XElement current = root;
+        XElement current = modules[0].Root;
         try
         {
-            foreach (var element in elements)
+            foreach (var (element, baseUri, precedence) in elements)
             {
                 current = element;
                 if (!XsltStylesheet.UsesXPath40Namespaces(element)) continue;
                 var useWhen = element.Attribute("use-when")?.Value.Trim();
                 if (useWhen is "false()" or "false") continue;
                 if (useWhen is not null && useWhen is not ("true()" or "true"))
-                    return new() { CoverageGap = "Named-type registration with non-literal use-when is outside standalone authoring coverage." };
+                    return new() { CoverageGap = "Named-type registration with non-literal use-when is outside authoring coverage." };
                 if (element.Attributes().Any(a => a.Name.NamespaceName.Length == 0 && a.Name.LocalName.StartsWith('_')))
                     return new() { CoverageGap = "Shadow named-type declarations are not evaluated during authoring inspection." };
                 _ = XsltStylesheet.GetApplicableStaticNamespaces(element, resolver, baseUri);
@@ -74,9 +83,18 @@ internal sealed class AuthoringNamedTypes
                 var uri = key[2..key.IndexOf('}')];
                 if (uri is XsltStylesheet.XslNamespace or "http://www.w3.org/2001/XMLSchema" or "http://www.w3.org/2005/xpath-functions")
                     throw new InvalidOperationException("XTSE4030: Reserved namespace in item-type name.");
-                if (!declarations.TryAdd(key, element))
+                if (!candidates.TryGetValue(key, out var definitions)) candidates[key] = definitions = new();
+                definitions.Add((precedence, element));
+            }
+            foreach (var (name, definitions) in candidates)
+            {
+                int precedence = definitions.Min(d => d.Precedence);
+                var winners = definitions.Where(d => d.Precedence == precedence).ToList();
+                current = winners[0].Element;
+                if (winners.Count != 1)
                     throw new InvalidOperationException("XTSE4030: Duplicate item-type declarations at the same import precedence.");
-                if (element.Name.LocalName == "record-type") records.Add(key);
+                declarations[name] = current;
+                if (current.Name.LocalName == "record-type") records.Add(name);
             }
             string? Expand(string name)
             {
@@ -96,7 +114,7 @@ internal sealed class AuthoringNamedTypes
                         schemaName => ItemTypeAliasExpansion.ValidateSchemaTypeName(XsltStylesheet.ExpandSchemaTypeName(schemaName, declaration), null),
                         (schemaName, attribute) => ItemTypeAliasExpansion.ValidateSchemaDeclarationName(XsltStylesheet.ExpandSchemaDeclarationName(schemaName, attribute, declaration), attribute, null));
                     current = declaration;
-                    if (expanded is null) throw new NotSupportedException("The item-type grammar is outside standalone authoring registration coverage.");
+                    if (expanded is null) throw new NotSupportedException("The item-type grammar is outside authoring registration coverage.");
                     if (XPathParser.Parse("() instance of " + expanded, xpath40: true) is not InstanceOfNode { Occurrence: OccurrenceIndicator.One })
                         throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
                     XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40, NamedRecordTypeNames = records });
@@ -105,7 +123,7 @@ internal sealed class AuthoringNamedTypes
                 finally { active.Remove(name); }
             }
             foreach (var name in declarations.Keys) Expand(name);
-            return new() { Aliases = new ReadOnlyDictionary<string, string>(aliases), Records = records.ToFrozenSet(StringComparer.Ordinal) };
+            return new() { Aliases = new ReadOnlyDictionary<string, string>(aliases), Records = records.ToFrozenSet(StringComparer.Ordinal), ModuleLinkageSupported = true };
         }
         catch (NotSupportedException ex) { return new() { CoverageGap = ex.Message }; }
         catch (Exception ex)

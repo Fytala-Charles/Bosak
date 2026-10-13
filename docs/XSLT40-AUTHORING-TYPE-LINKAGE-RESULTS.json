@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "0f1696744d7419b1c08818ccd0e1bcb9b0dd1d59",
+  "implementationRevision": "1386cc8dbdc1b3130307672290a2d5fe9593aaa4",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Named-type include/import linkage with compiler-compatible precedence across inspected module graphs",
+  "baselineFocused": {
+    "passed": 0,
+    "failed": 11,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 61,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7815,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4929
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "No ordinary stylesheet compilation or snapshot-time resolution. Namespaces and type bindings are captured during caller-controlled inspection; public source metadata and bytes remain unchanged. Conditional/shadow edges, unresolved or cyclic module graphs, package/schema linkage and unsupported type grammar remain deferred. Module occurrences are capped at 10,000. Record fields/constructors, value/type compatibility and constant cast/castable checks remain follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "5cb08312156c1bbadf45b3f7be805ad92b9960024cd1c1d90246f0964573a303",
+    "focused": "e5a0da74e6fbaaa4969eab43a954a69c25759bee55f68bf45ebd42ca25b7412d",
+    "unit": "6c095bee50e7cea0f3029f6871cbae888f3e18b4a3e044b0cdde30f71e307d6b",
+    "qt3": "fd5170ea0b4d5bbd1ab71894f976f780d562bcf5c57d096488aa491c4374131a",
+    "qt4": "f6c5fd887564e0314cf1a19be849b395c9f8d0301578ee5d202443e9403371b4",
+    "compilerRegressionBaseline": "9a14e3d1548f88f25ca32cce386811213c7d0cc8c821354bbc556cc3f543d960"
+  },
+  "newLinkageTests": 18,
+  "existingFocusedChecks": 43,
+  "compilerRegressionBaseline": {
+    "passed": 0,
+    "failed": 1,
+    "case": "ImportedIncludeKeepsItsParentRank",
+    "reason": "False XTSE4030 from stale include precedence in the compiler named-type collector"
+  }
+}

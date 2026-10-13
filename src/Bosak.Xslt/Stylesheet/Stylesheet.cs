@@ -311,6 +311,7 @@
 //                      | Charles Korthout | 2.150 | 13-10-2026     | Use applicable namespaces for variable and parameter QNames                            |
 //                      | Charles Korthout | 2.151 | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 //                      | Charles Korthout | 2.152 | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
+//                      | Charles Korthout | 2.153 | 13-10-2026     | Preserve parent precedence when collecting included named types.                         |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -838,10 +839,12 @@ internal sealed class Stylesheet
         if (_namedTypeDeclarations is not null)
             return _namedTypeDeclarations;
         var declarations = new Dictionary<string, List<(int Precedence, XElement Element)>>(StringComparer.Ordinal);
-        void Collect(Stylesheet module)
+        void Collect(Stylesheet module, int precedence)
         {
-            foreach (var child in module.Imports.Concat(module.Includes))
-                Collect(child);
+            foreach (var child in module.Imports)
+                Collect(child, child.ImportPrecedence);
+            foreach (var child in module.Includes)
+                Collect(child, precedence);
             foreach (var element in module.Root.Elements().Where(e => e.Name.NamespaceName == XslNamespace && e.Name.LocalName is "item-type" or "record-type"))
             {
                 if (GetXPathCompatibility(element) < XPathCompatibility.XPath40)
@@ -858,10 +861,10 @@ internal sealed class Stylesheet
                     throw new InvalidOperationException("XTSE4030: Reserved namespace in item-type name.");
                 if (!declarations.TryGetValue(key, out var definitions))
                     declarations[key] = definitions = new();
-                definitions.Add((module.ImportPrecedence, element));
+                definitions.Add((precedence, element));
             }
         }
-        Collect(this);
+        Collect(this, ImportPrecedence);
         var result = new Dictionary<string, XElement>(StringComparer.Ordinal);
         foreach (var (name, definitions) in declarations)
         {

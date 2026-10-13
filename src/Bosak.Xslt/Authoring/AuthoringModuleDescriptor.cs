@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
+//                      | Charles Korthout | 0.4   | 13-10-2026     | Clarify discovery-order metadata versus module occurrence precedence.                     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -141,9 +142,9 @@ public sealed class AuthoringModuleDescriptor
 
     /// <summary>
     /// Gets the module processing order within the snapshot: 0 is the principal module, later numbers
-    /// are modules discovered later through include/import references in document order. Because
-    /// <c>xsl:import</c> must precede <c>xsl:include</c> in document order, lower numbers also imply
-    /// lower import precedence.
+    /// are modules discovered later through include/import references in document order. XSLT import
+    /// precedence is computed separately for each module occurrence; includes share their parent
+    /// rank and one retained module can occur at multiple ranks.
     /// </summary>
     public int Precedence { get; }
 
