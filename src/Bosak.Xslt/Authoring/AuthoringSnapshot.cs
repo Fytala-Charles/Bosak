@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: edit proposals (resolver/options retention, node lookup, entry point)   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Retain immutable captured function keyword signatures.                                   |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -44,7 +45,8 @@ public sealed class AuthoringSnapshot
         bool isCompilable,
         IReadOnlyList<string> compilationDiagnostics,
         IAuthoringModuleResolver moduleResolver,
-        AuthoringInspectionOptions inspectionOptions)
+        AuthoringInspectionOptions inspectionOptions,
+        AuthoringFunctionSignatures? functionSignatures = null)
     {
         _modules = modules;
         _modulesByUri = modulesByUri;
@@ -54,7 +56,10 @@ public sealed class AuthoringSnapshot
         CompilationDiagnostics = compilationDiagnostics;
         ModuleResolver = moduleResolver;
         InspectionOptions = inspectionOptions;
+        FunctionSignatures = functionSignatures;
     }
+
+    internal AuthoringFunctionSignatures? FunctionSignatures { get; }
 
     /// <summary>Gets the effective module resolver of this snapshot's inspection.</summary>
     internal IAuthoringModuleResolver ModuleResolver { get; }

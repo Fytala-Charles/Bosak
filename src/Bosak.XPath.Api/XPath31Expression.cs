@@ -66,6 +66,7 @@
 //                      | Charles Korthout | 0.32 | 13-10-2026     | Expand host named types in inline function parameter and return contracts
 //                      | Charles Korthout | 0.33 | 13-10-2026     | Recognize xs:anyAtomicType in host-supplied item-type static contexts.
 //                      | Charles Korthout | 0.34  | 13-10-2026     | Expand XSLT host keyword calls using declared parameter QName identities.
+//                      | Charles Korthout | 0.35  | 13-10-2026     | Reject undeclared prefixes in host function keyword names.                               |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -703,7 +704,9 @@ public sealed class XPath31Expression
             // the default function namespace).
             string kwNamespace = kwNs ?? (string.IsNullOrEmpty(kwPrefix)
                 ? string.Empty
-                : (ResolvePrefix(kwPrefix, options) ?? string.Empty));
+                : (ResolvePrefix(kwPrefix, options) ?? (hostNames is not null
+                    ? throw new InvalidOperationException($"XPST0081: Namespace prefix '{kwPrefix}' has not been declared.")
+                    : string.Empty)));
             string keywordName = hostNames is null ? kwLocal : $"Q{{{kwNamespace}}}{kwLocal}";
             bool comparable = hostNames is not null || kwNamespace.Length == 0;
             int match = -1;
