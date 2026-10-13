@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2 | 13-10-2026     | Expand function signatures and ordered choices while preserving return/outer occurrences
 //                      | Charles Korthout | 0.3 | 13-10-2026     | Expand aliases in structural record fields while preserving literal field names
+//                      | Charles Korthout | 0.4 | 13-10-2026     | Check choice cast eligibility with quote and EQName-aware type traversal
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -120,6 +121,28 @@ internal static class ItemTypeAliasExpansion
         if (!Regex.IsMatch(text, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$")) return null;
         var replacement = resolveName(text);
         return replacement is null ? null : (replacement.StartsWith("function(", StringComparison.Ordinal) ? "(" + replacement + ")" : replacement) + suffix;
+    }
+
+    // Unknown QNames remain for schema/name validation; this checks syntactically
+    // non-atomic alternatives without interpreting separators inside strings or EQNames.
+    internal static bool HasIneligibleCastTarget(string type, bool choiceAlternative = false)
+    {
+        var text = RemoveComments(type).Trim();
+        if (text.StartsWith('(') && MatchingClose(text, 0) == text.Length - 1)
+        {
+            var alternatives = SplitArguments(text[1..^1], '|');
+            return alternatives.Any(alternative => HasIneligibleCastTarget(alternative,
+                choiceAlternative || alternatives.Count > 1));
+        }
+        var opening = text.IndexOf('(');
+        if (opening >= 0 && !text.StartsWith("Q{", StringComparison.Ordinal))
+        {
+            var kind = text[..opening].Trim();
+            if (kind == "enum") return false;
+            if (kind is "array" or "map" or "record") return choiceAlternative;
+            return true;
+        }
+        return choiceAlternative && text is "xs:anyAtomicType" or "xs:anySimpleType" or "xs:NOTATION" or "xs:anyType" or "xs:untyped";
     }
 
     private static List<string> SplitArguments(string text, char separator = ',')
