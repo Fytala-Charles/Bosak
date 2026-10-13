@@ -1,3 +1,7 @@
+# XSLT 4.0 contribution status correction — 2026-10-13
+
+Base: main `5b9f043f`. The user requested correction of the contribution overview, followed by posting the drafted reply to w3c/xslt30-test issue #90. The index now identifies published 1.2.0, all 14 passing first-batch cases and pending upstream/independent acceptance; older candidate and next-step notes are explicitly historical. Merge this documentation change after CI, then post the authorized reply linking the corrected index and feature catalog. Do not claim complete 4.0 conformance or upstream acceptance. The post-release implementation plan below remains current.
+
 # 1.2.0 published — 2026-10-13
 
 Release revision: `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`; tag `v1.2.0`. The user explicitly authorized publication. [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0); [successful publication workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38416626883), 7,676/0/0 tests. All ten public NuGet packages were downloaded and verified; a fresh-cache package-only consumer restored exclusively from nuget.org passes 45 checks, including all ten assembly versions. Package hashes and publication evidence are in RELEASE-1.2.0-PREPARATION.json. REQ-125 PR #141 merged before tagging; acceptance is included. This publication receipt follows the release revision.
