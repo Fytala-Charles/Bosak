@@ -12,7 +12,7 @@ Validation: Release build succeeds with zero errors and ten existing test-projec
 
 Next: remaining native type-alias failures, including annotated function types and record boundaries. Reassess the five original contribution areas after these implementation slices. No gate promotion or publication. CI runs when the PR targets main; retarget stacked PRs after prerequisites merge. Preserve upstream assertions, original contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: [PR #230](https://github.com/Fytala-Charles/Bosak/pull/230), stacked on #229. Verified implementation commit ad660282; final handover bookkeeping follows in this branch. PR #230 remains open; CI runs once retargeted to main.
 
 # Schema-declaration and document shorthand aliases — 2026-10-13
 
