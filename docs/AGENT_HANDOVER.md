@@ -12,7 +12,7 @@ Validation: Release build succeeds with zero warnings and zero errors. All 7281 
 
 Next: native type-alias record conversion and matching gaps; annotated function types and type patterns remain follow-ups. Extend fixed namespace handling to remaining QName/pattern/static contexts separately. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: [PR #231](https://github.com/Fytala-Charles/Bosak/pull/231), stacked on #230. Verified implementation commit 4c93a5ea; final handover bookkeeping follows in this branch. PR #231 remains open; CI runs once retargeted to main.
 
 # Package named type exposure — 2026-10-13
 
