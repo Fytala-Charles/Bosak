@@ -14,7 +14,7 @@ Validation: final Release build passed, zero errors; 16 focused regressions pass
 
 Check latest Bosak PR CI before merging. All 14 first-batch contribution cases have passed individually in their respective prior/current slices, without independent confirmation or acceptance. Prioritize remaining named-type coercion/package gaps and select body namespace declarations; do not classify broader native suites as conformant. Preserve scratch directories and historical receipts. Wider adoption/provenance/metadata limits remain.
 
-Delivery pending.
+Delivery: 47b20a52709af92430afa441ec209207f1d2fc55, [Bosak PR #207](https://github.com/Fytala-Charles/Bosak/pull/207), pushed on feat/xslt-record-constructors. CI pending; check latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
 
 # Enumeration item-type aliases — 2026-10-12
 
