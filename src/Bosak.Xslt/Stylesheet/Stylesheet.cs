@@ -310,6 +310,7 @@
 //                      | Charles Korthout | 2.149 | 13-10-2026     | Allow caller-controlled fixed namespace document resolution                            |
 //                      | Charles Korthout | 2.150 | 13-10-2026     | Use applicable namespaces for variable and parameter QNames                            |
 //                      | Charles Korthout | 2.151 | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
+//                      | Charles Korthout | 2.152 | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4572,7 +4573,7 @@ internal sealed class Stylesheet
                             ? StripAritySuffix(nameAttr.Value)
                             : nameAttr.Value;
                         ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
-                            useApplicableNamespaces: localName is "template" or "call-template");
+                            useApplicableNamespaces: localName is "template" or "call-template" or "function");
                     }
                 }
 
@@ -6074,7 +6075,7 @@ internal sealed class Stylesheet
     }
 
     /// <summary>Gets whether component QNames use the effective 4.0 namespace context.</summary>
-    private static bool UsesXPath40Namespaces(XElement element)
+    internal static bool UsesXPath40Namespaces(XElement element)
     {
         foreach (var ancestor in element.AncestorsAndSelf())
         {
@@ -6834,7 +6835,7 @@ internal sealed class Stylesheet
     /// without a valid suffix is returned unchanged so the existing XTSE0020 paths
     /// still apply.
     /// </summary>
-    private static string StripAritySuffix(string token)
+    internal static string StripAritySuffix(string token)
     {
         var hash = token.LastIndexOf('#');
         if (hash > 0 &&
