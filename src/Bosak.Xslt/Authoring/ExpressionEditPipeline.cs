@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 11-10-2026     | Align captured expression version profiles with runtime frozen-version selection.       |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Compile edits with retained applicable bindings and host keyword signatures.              |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -31,6 +32,10 @@ namespace Bosak.Xslt.Authoring;
 /// </summary>
 internal static class ExpressionEditPipeline
 {
+    /// <summary>Validates and splices one expression proposal against its retained snapshot.</summary>
+    /// <param name="snapshot">The snapshot owning the editable slot.</param>
+    /// <param name="proposal">The attribute-value replacement proposal.</param>
+    /// <returns>A source-preserving candidate or a classified refusal.</returns>
     public static AuthoringEditResult Run(AuthoringSnapshot snapshot, AuthoringEditProposal proposal)
     {
         // Resolve the owning node together with its module: ids are unique per snapshot, and the module
@@ -77,7 +82,7 @@ internal static class ExpressionEditPipeline
         var map = source.CoordinateMap;
         var text = map.Text;
 
-        var compileOutcome = ValidateInStaticContext(proposal.NewExpressionText, attribute, node, map);
+        var compileOutcome = ValidateInStaticContext(snapshot, proposal.NewExpressionText, attribute, node, map);
         if (compileOutcome is not null)
         {
             return compileOutcome;
@@ -160,29 +165,45 @@ internal static class ExpressionEditPipeline
     }
 
     private static AuthoringEditResult? ValidateInStaticContext(
+        AuthoringSnapshot snapshot,
         string newExpressionText,
         AuthoringAttributeDescriptor attribute,
         AuthoringNodeDescriptor node,
         SourceCoordinateMap map)
     {
         var context = attribute.SlotContext!;
-        var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
-        foreach (var binding in context.InScopeNamespaces)
+        var compatibility = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion);
+        if (compatibility >= XPathCompatibility.XPath40 && context.StaticNamespaceError is { } error)
         {
-            // The default (prefixless) declaration is the XPath default element namespace, not a prefix
-            // binding; the nearest declaration wins, which the outermost-first ordering makes "last".
-            if (binding.Prefix.Length != 0)
+            return AuthoringEditResult.FailureResult(new AuthoringEditFailure(
+                AuthoringEditFailureKind.ExpressionParseError,
+                $"The captured static namespace context is invalid: {error}",
+                attribute.ValueRange));
+        }
+
+        var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (compatibility >= XPathCompatibility.XPath40 && context.StaticNamespaces is not null)
+        {
+            foreach (var binding in context.StaticNamespaces) namespaces[binding.Key] = binding.Value;
+        }
+        else
+        {
+            foreach (var binding in context.InScopeNamespaces)
             {
-                namespaces[binding.Prefix] = binding.Uri;
+                // Native bindings are outermost first; the nearest declaration wins.
+                if (binding.Prefix.Length != 0) namespaces[binding.Prefix] = binding.Uri;
             }
         }
 
         var options = new CompileOptions
         {
             Namespaces = namespaces,
+            FunctionParameterNames = compatibility >= XPathCompatibility.XPath40
+                && attribute.LocalName != "use-when" && snapshot.FunctionSignatures is not null
+                ? snapshot.FunctionSignatures.Resolve : null,
             DefaultElementNamespace = context.XpathDefaultNamespace,
             BaseUri = context.BaseUri.AbsoluteUri,
-            Compatibility = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion),
+            Compatibility = compatibility,
         };
 
         try
@@ -190,12 +211,19 @@ internal static class ExpressionEditPipeline
             _ = XPath31Expression.Compile(newExpressionText, options);
             return null;
         }
+        catch (AuthoringFunctionSignatureCoverageException ex)
+        {
+            return AuthoringEditResult.FailureResult(new AuthoringEditFailure(
+                AuthoringEditFailureKind.SlotNotEditable,
+                $"The expression depends on a function signature outside expression edit coverage: {ex.Message}",
+                attribute.ValueRange));
+        }
         catch (Exception ex) when (IsUndeclaredPrefixError(ex))
         {
             return AuthoringEditResult.FailureResult(new AuthoringEditFailure(
                 AuthoringEditFailureKind.RequiresParentChange,
-                $"The expression uses a namespace prefix that is not declared in scope at the slot: {ex.Message} " +
-                "Declaring it would change the owning element's start tag, which is outside this edit's ownership.",
+                $"The expression uses a namespace prefix unavailable in the slot's applicable static bindings: {ex.Message} " +
+                "Changing namespace declarations or fixed bindings is outside this attribute-value edit's ownership.",
                 attribute.ValueRange,
                 StartTagRange(map, node)));
         }
