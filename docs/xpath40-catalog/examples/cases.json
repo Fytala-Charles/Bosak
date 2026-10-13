@@ -3849,7 +3849,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/item-duplicate-unused-observed.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "expected": "ready"
+    "error": "XTSE4030"
   },
   {
     "id": "xslt-type-declarations-item-instance",
@@ -3857,7 +3857,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/item-instance.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "error": "XPST0051"
+    "expected": "true"
   },
   {
     "id": "xslt-type-declarations-record-unused40",

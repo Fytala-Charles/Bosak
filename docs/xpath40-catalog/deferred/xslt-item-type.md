@@ -19,7 +19,7 @@ Named item-type aliases and reusable enumeration/choice/function type abbreviati
 
 ## 4. History / Supersedes
 
-The reviewed draft lets `xsl:item-type` name an existing item type. The name acts as an abbreviation within the package, with visibility/import-precedence rules; it does not establish a generated record constructor. Recursive aliases are not permitted. Bosak's adoption dossier defers this declaration. Shipped XPath structural records, enums and choices do not supersede that decision or register named stylesheet types.
+The reviewed draft lets `xsl:item-type` name an existing item type. The name acts as an abbreviation within the package, with visibility/import-precedence rules; it does not establish a generated record constructor. Recursive aliases are not permitted. Bosak's adoption dossier defers this declaration. The released baseline does not register named stylesheet types. Source candidate 1.2.0 adds enumeration aliases for XPath instance-of and treat expressions; the broader declaration contract remains deferred.
 
 ## 5. Motivation
 
@@ -29,11 +29,11 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 
 | Context | Verified outcome |
 |---|---|
-| Version 4.0, unused declaration | Ignored; `ready` output does not prove alias registration |
+| Version 4.0, unused enumeration declaration | Validated and registered in source 1.2.0; `ready` alone does not test membership |
 | Version 3.0, top-level declaration | `XTSE0010` |
 | Named `as="erp:currency"`, EUR or XYZ input | `XTTE0570`; neither uses a registered alias |
-| `instance of erp:currency` | `XPST0051` |
-| Duplicate unused declarations | Ignored; does not implement draft `XTSE4030` checking |
+| `instance of erp:currency` | `true` for EUR in source 1.2.0 |
+| Duplicate unused declarations | `XTSE4030` in source 1.2.0 |
 | Inline `enum('EUR','USD')` in XSLT 4.0 `@as` | EUR succeeds; XYZ produces `XTTE0570` |
 | XPath31 enum syntax | `XPST0003` |
 
@@ -59,7 +59,7 @@ For a small currency set, use an inline enumeration only in a verified 4.0 bindi
 
 ## 12. Implementation
 
-Neither declaration is registered in `KnownXsltElementNames`, `AllowedTopLevelDeclarations` or the named-type static context. `IsForwardsCompatibleElement` uses effective version greater than 3.0, so the tested unused 4.0 declarations are tolerated without implementation. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. No engine changes or conformance gate promotions are included.
+The historical released baseline registered neither declaration. Source 1.2.0 recognizes xsl:item-type and supplies enumeration aliases to XPath instance-of/treat compilation; xsl:record-type remains separate work. `IsForwardsCompatibleElement` uses effective version greater than 3.0, so the tested unused 4.0 declarations are tolerated without implementation. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. The enumeration follow-up changes the engine; no conformance gate promotion is claimed.
 
 ## 13. Sample Code
 
@@ -201,8 +201,8 @@ reject
 | [item-unused30](../examples/xslt-type-declarations/item-unused30.xsl) | xslt31 | `XTSE0010` |
 | [item-used-valid](../examples/xslt-type-declarations/item-used-valid.xsl) | xslt40 | `XTTE0570` |
 | [item-used-invalid-observed](../examples/xslt-type-declarations/item-used-invalid-observed.xsl) | xslt40 | `XTTE0570` |
-| [item-duplicate-unused-observed](../examples/xslt-type-declarations/item-duplicate-unused-observed.xsl) | xslt40 | `ready` |
-| [item-instance](../examples/xslt-type-declarations/item-instance.xsl) | xslt40 | `XPST0051` |
+| [item-duplicate-unused-observed](../examples/xslt-type-declarations/item-duplicate-unused-observed.xsl) | xslt40 | `XTSE4030` |
+| [item-instance](../examples/xslt-type-declarations/item-instance.xsl) | xslt40 | `true` |
 | [portable-valid](../examples/xslt-type-declarations/portable-valid.xsl) | xslt31 | `INV-2048\|EUR` |
 | [portable-invalid](../examples/xslt-type-declarations/portable-invalid.xsl) | xslt31 | `reject` |
 | [portable-empty-id](../examples/xslt-type-declarations/portable-empty-id.xsl) | xslt31 | `reject` |
@@ -226,3 +226,6 @@ No named XSLT type declaration gate promotion or full draft conformance is claim
 ## 16. Related Features
 
 [Named record declarations](xslt-record-type.md), [structural records](../type-system/structural-records.md), [nominative record disposition](../type-system/nominative-records.md), [completeness audit](../COMPLETENESS-AUDIT.md) and [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md).
+
+
+**Current source follow-up — 2026-10-12:** Bosak source candidate 1.2.0 (unpublished) now resolves xsl:item-type enumeration aliases in XPath instance-of and treat expressions, including AVTs, namespace rebinding, EQNames and occurrence indicators. Both unchanged native cases type-alias-023/024 pass; broader type-alias-filter run is 3 pass/29 fail/0 skip (includes inherited related cases). Other alias types, named XSLT @as conversion, package exposure and complete recursive/schema-collision validation remain unsupported. Duplicate winning declarations raise XTSE4030; lower-precedence definitions remain overridable. Original failure receipts are preserved; upstream PR #25 review and independent confirmation are pending. N04 and REQ-126 remain In Progress; public release remains 1.1.3. Next: generated nominative record constructors, with wider alias support and select namespace declarations tracked separately.

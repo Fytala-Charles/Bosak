@@ -2916,3 +2916,23 @@ The [sequence selection/repetition review](xpath40-catalog/SEQUENCE-CONTRACT-REV
 
 
 **Select body evaluation — 2026-10-12:** Bosak now recognizes and evaluates xsl:select body XPath in template, function, simple-content and accumulator-rule paths, preserving literal newlines/CDATA and current focus without TVT expansion. Declared result coercion, collation restoration, fallback/content validation and streamed-body analysis are covered by 14 focused regressions. Both unchanged native contribution cases pass; [post-fix evidence](../contributions/xslt40/select-boundaries/POST_FIX_RESULTS.json) retains the broader seqtor result 78/5/9. The five remaining failures concern expression-body namespace declarations, so complete select conformance is not claimed. Original failed receipts and upstream PR #23 remain unchanged; independent confirmation/acceptance are pending. Source candidate is 1.2.0 under the Minor-for-new-features convention, unpublished; public release remains 1.1.3. N02 and REQ-126 stay In Progress.
+
+
+**Enumeration alias slice — 2026-10-12:** Bosak source candidate 1.2.0 (unpublished) now resolves xsl:item-type enumeration aliases in XPath instance-of and treat expressions, including AVTs, namespace rebinding, EQNames and occurrence indicators. Both unchanged native cases type-alias-023/024 pass; broader type-alias-filter run is 3 pass/29 fail/0 skip (includes inherited related cases). Other alias types, named XSLT @as conversion, package exposure and complete recursive/schema-collision validation remain unsupported. Duplicate winning declarations raise XTSE4030; lower-precedence definitions remain overridable. Original failure receipts are preserved; upstream PR #25 review and independent confirmation are pending. N04 and REQ-126 remain In Progress; public release remains 1.1.3. Next: generated nominative record constructors, with wider alias support and select namespace declarations tracked separately.
+
+For standalone XPath 4.0 type tests, provide `CompileOptions.EnumerationItemTypes` with keys in `Q{uri}local` form and `enum(...)` definitions. Namespace bindings resolve the type names used in the expression:
+
+```csharp
+var expression = XPath31Expression.Compile("'ready' instance of t:status", new CompileOptions
+{
+    Compatibility = XPathCompatibility.XPath40,
+    Namespaces = new Dictionary<string, string> { ["t"] = "urn:status" },
+    EnumerationItemTypes = new Dictionary<string, string>
+    {
+        ["Q{urn:status}status"] = "enum('ready','queued')"
+    }
+});
+// expression.Evaluate(new EvaluationContext()) returns true.
+```
+
+This option resolves `instance of` and `treat as` targets only. Use existing inline types or explicit membership checks for XSLT variable and parameter `as` declarations until named declaration conversion is implemented.

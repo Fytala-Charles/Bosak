@@ -51,6 +51,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.19  | 11-10-2026     | Preserve and enforce frozen profile boundaries in mixed-version XSLT execution.        |
+//                      | Charles Korthout | 0.20  | 12-10-2026     | Resolve enumeration aliases in instance-of and treat AST nodes                           |
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -248,8 +249,8 @@ public sealed class XPath31Expression
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, options) },
             CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options) },
             CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options) },
-            InstanceOfNode io => io with { Expression = ResolveFunctionNamespaces(io.Expression, options) },
-            TreatNode treat => treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) },
+            InstanceOfNode io => ResolveEnumerationAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options) }, options),
+            TreatNode treat => ResolveEnumerationAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options) }, options),
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
             PipelineExprNode pipeline => pipeline with { Source = ResolveFunctionNamespaces(pipeline.Source, options), Target = ResolveFunctionNamespaces(pipeline.Target, options) },
             TryCatchNode tc => tc with
@@ -297,6 +298,44 @@ public sealed class XPath31Expression
         if (nsUri is null)
             throw new InvalidOperationException($"XPST0081: No namespace declaration for prefix '{node.Prefix}' in QName literal.");
         return node with { NamespaceUri = nsUri };
+    }
+
+    private static XPathAstNode ResolveEnumerationAlias(XPathAstNode node, CompileOptions options)
+    {
+        if (options.Compatibility < XPathCompatibility.XPath40 || options.EnumerationItemTypes is null)
+            return node;
+        var (prefix, name) = node switch
+        {
+            InstanceOfNode instance => (instance.Prefix, instance.TypeName),
+            TreatNode treat => (treat.Prefix, treat.TypeName),
+            _ => (null, string.Empty)
+        };
+        string key;
+        if (name.StartsWith("Q{", StringComparison.Ordinal))
+            key = name;
+        else
+        {
+            var ns = options.DefaultElementNamespace ?? string.Empty;
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                if (options.Namespaces is null || !options.Namespaces.TryGetValue(prefix, out ns))
+                    return node;
+            }
+            key = $"Q{{{ns}}}{name}";
+        }
+        if (!options.EnumerationItemTypes.TryGetValue(key, out var definition))
+            return node;
+        if (!definition.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+            throw new ArgumentException("Enumeration aliases must contain enum(...) item types.");
+        var parsed = XPathParser.Parse("() instance of " + definition, xpath40: true);
+        if (parsed is not InstanceOfNode { Occurrence: OccurrenceIndicator.One } alias)
+            throw new ArgumentException("An enumeration alias must denote one item type.");
+        return node switch
+        {
+            InstanceOfNode instance => instance with { Prefix = alias.Prefix, TypeName = alias.TypeName },
+            TreatNode treat => treat with { Prefix = alias.Prefix, TypeName = alias.TypeName },
+            _ => node
+        };
     }
 
     // An arrow target that is a static function call receives the arrow source as its

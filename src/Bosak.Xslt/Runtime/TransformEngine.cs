@@ -525,6 +525,7 @@
 //                      | Charles Korthout | 7.09  | 11-10-2026     | Apply effective-version XPath profiles to expression compilation.                       |
 //                      | Charles Korthout | 7.10  | 12-10-2026     | Preserve array-member JNodes and enforce for-each XTTE4060 before unwrapping.             |
 //                      | Charles Korthout | 7.11  | 12-10-2026     | Evaluate xsl:select body expressions with focus and declared result coercion.              |
+//                      | Charles Korthout | 7.12  | 12-10-2026     | Pass enumeration aliases to XPath and AVT compilation; preserve EQName URIs
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3015,12 +3016,14 @@ internal sealed class TransformEngine
         var defaultNs = GetXPathDefaultNamespace(instruction);
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
-        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
+        var enumerationTypes = CurrentStylesheet.GetEnumerationItemTypes();
+        if (enumerationTypes.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
         {
             var options = new CompileOptions
             {
                 Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
+                EnumerationItemTypes = enumerationTypes,
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
                 BaseUri = baseUri,
@@ -3049,6 +3052,15 @@ internal sealed class TransformEngine
         for (int i = 0; i < expression.Length; i++)
         {
             char c = expression[i];
+            if (!inString && c == 'Q' && i + 1 < expression.Length && expression[i + 1] == '{')
+            {
+                var close = expression.IndexOf('}', i + 2);
+                if (close >= 0)
+                {
+                    i = close;
+                    continue;
+                }
+            }
             if (!inString && (c == '\'' || c == '"'))
             {
                 inString = true;
@@ -10154,12 +10166,14 @@ internal sealed class TransformEngine
                         // (version-014: string(3 + '2') = '5' under xsl:version="1.0").
                         bool avtBackwards = contextElement != null && IsEffectiveBackwardsCompatible(contextElement);
                         XPath31Expression compiled;
-                        if (needsOptions || avtBackwards)
+                        var enumerationTypes = CurrentStylesheet.GetEnumerationItemTypes();
+                        if (needsOptions || avtBackwards || enumerationTypes.Count > 0)
                         {
                             var options = new CompileOptions
                             {
                                 Compatibility = compatibility,
                                 Namespaces = nsMap,
+                                EnumerationItemTypes = enumerationTypes,
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri,

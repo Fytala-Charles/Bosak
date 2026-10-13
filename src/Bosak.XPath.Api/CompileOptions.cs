@@ -22,6 +22,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 24-09-2026     | REQ-104: added SchemaSet — compiled schema set enabling schema-aware kind tests        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 12-10-2026     | Expose enumeration alias static context for XPath 4.0 type tests
 // ===========================================================================================================================================================
 using System.Xml.Schema;
 
@@ -48,6 +49,13 @@ public sealed class CompileOptions
     /// Key = prefix, Value = namespace URI.
     /// </summary>
     public IReadOnlyDictionary<string, string>? Namespaces { get; init; }
+
+    /// <summary>
+    /// XPath 4.0 enumeration aliases for instance-of and treat expressions.
+    /// Keys are expanded names in Q{uri}local form; values are enum(...) item types.
+    /// Other named item types and declaration conversion are not supported by this option.
+    /// </summary>
+    public IReadOnlyDictionary<string, string>? EnumerationItemTypes { get; init; }
 
     /// <summary>
     /// The default element namespace URI for unprefixed element and type names
