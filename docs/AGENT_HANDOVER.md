@@ -14,7 +14,7 @@ Validation: Release build passes (10 existing warnings, zero errors); all 6965 u
 
 Check this slice's CI before merging. Next: nominative record coercion boundaries. N04/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
 
-Delivery pending.
+Delivery: tested implementation 669c862a42963b98c2d7bb90385e9a8227a23b00 committed and pushed; [Bosak PR #214](https://github.com/Fytala-Charles/Bosak/pull/214) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
 
 # Function and choice aliases — 2026-10-13
 
