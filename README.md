@@ -835,3 +835,8 @@ Unpublished source candidate 1.2.1 accepts supported XSLT 4.0 function keyword c
 ## Module fixed bindings and local grammar - 2026-10-13
 
 Unpublished source candidate 1.2.1 retains module fixed bindings when local versions select earlier XPath grammar. Authoring validation, expression edits and template match execution now agree for the verified expression/AVT/pattern cases. The 40 new regressions and all 8,053 unit tests pass; conformance gates retain their counts. Published version remains 1.2.0. See [verification evidence and boundaries](docs/XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
+
+
+## Local variable and parameter QName identities - 2026-10-13
+
+Unpublished source candidate 1.2.1 retains module fixed identities for variable and parameter names when local versions select earlier grammar. Declaration binding, authoring scope, parameter passing and captured keyword metadata now agree in the verified cases. All 35 new regressions and 8,088 unit tests pass; conformance gates retain their counts. Published version remains 1.2.0. See [verification evidence and boundaries](docs/XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).

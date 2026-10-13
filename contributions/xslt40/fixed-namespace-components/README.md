@@ -133,3 +133,8 @@ The unchanged native family remains 16/0/0 at implementation `a34b0672`. The sep
 ## Local grammar namespace follow-up - 2026-10-13
 
 The unchanged native family remains 16/0/0 at implementation `022303ae`. A separate 40-case slice aligns expression/AVT/pattern validation, edits and template matching with module fixed bindings under local earlier grammar. See [verification and boundaries](../../../docs/XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json), [native log](post-local-profile-result.txt) and [receipt](post-local-profile-receipt.json). No native cases or assertions change; candidate 1.2.1 remains unpublished.
+
+
+## Locally earlier variable/parameter QName follow-up - 2026-10-13
+
+The unchanged native namespace family remains 16/0/0 at implementation `ab3674be`. A separate 35-case slice aligns variable/parameter identities, authoring scope and captured keyword metadata. See [verification and boundaries](../../../docs/XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json), [native log](post-local-variable-result.txt) and [receipt](post-local-variable-receipt.json). No native cases or assertions change; candidate 1.2.1 remains unpublished.

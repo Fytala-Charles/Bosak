@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-13",
+  "base": "62bf89a4c5211370f727d56932f66c095c188fb4",
+  "implementation": "ab3674be331806b3efca145a4fea0f2d855f5a93",
+  "publishedVersion": "1.2.0",
+  "sourceVersion": "1.2.1 (unpublished)",
+  "scope": "Module fixed QName identity for variable, param and with-param declarations under local earlier versions; retained function parameter keyword metadata.",
+  "baseline": {
+    "initialTests": 28,
+    "passed": 7,
+    "failed": 21,
+    "skipped": 0
+  },
+  "verification": {
+    "newTestsPassed": 35,
+    "focusedPassed": 196,
+    "fullUnitPassed": 8088,
+    "xsltUnitPassed": 5202,
+    "failed": 0,
+    "skipped": 0,
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    },
+    "nativeFamily": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "Release solution: 0 errors, 2 existing warnings"
+  },
+  "architecture": "UsesModuleFixedVariableNamespaces limits the binding change to xsl:variable/param/with-param. Shared QName validation accepts an internal explicit namespace map. Registration/execution use the module map; authoring declaration diagnostics and scope use retained maps; captured keyword parameter names use retained declaration bindings independently of local grammar.",
+  "behavior": "Fixed-only prefixes, native rebinding, aliases, no-namespace/EQName identities, global/local defaults, named-template/apply-templates/tunnel parameter passing, linked modules, namespace documents, keyword parameter metadata and expression edits are verified. Unused omitted-prefix names retain XTSE0280, malformed names XTSE0020, duplicate supplied identities XTSE0670, wrong keyword identity XPST0017 and forward references XPST0008.",
+  "ownership": "Original bytes and public descriptor code are unchanged. Expression edits change only the value span. Repeated validation and namespace-document refusal make no additional resolver requests; successful compilation retains the caller-controlled resolver.",
+  "publicApi": "No public members or gate membership changes; explicit namespace-map parameter and binding predicate are internal.",
+  "boundaries": [
+    "Named-template/function/mode/key and other component QName paths under local versions require separate audits; next: named templates.",
+    "Optional/default function execution, broader keyword/package linkage, named-type edit compilation and pattern/AVT edit support remain separate."
+  ],
+  "nativeSuiteRevision": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+  "nativeReceiptSha256": "0252bb6ae2739fa838463ff82a8dd45d8a53748a946af7f60f543f64932ffa4a",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xslt-40/src/xslt.xml",
+  "upstream": "All 17 contributed cases were accepted in PRs #22-27; independent execution confirmation remains pending. No native cases or assertions changed in this slice."
+}

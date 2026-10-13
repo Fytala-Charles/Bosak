@@ -1216,3 +1216,8 @@ Resolved on 2026-10-13: the expression/edit/pattern local-version namespace boun
 ## Module fixed bindings and local grammar - 2026-10-13
 
 The shared HasModuleFixedNamespaces helper separates module binding policy from local grammar selection. Inspection captures module bindings/errors for locally earlier slots; validation and edit preflight use those retained contexts and check lexical prefixes after lower-profile compilation. TemplateRule expands and compiles lower-profile match patterns with the declaring module fixed set. XPath compatibility and 4.0 type/keyword feature gates remain local. No public API or gate membership changes. See [verification evidence and boundaries](XSLT40-LOCAL-PROFILE-NAMESPACE-RESULTS.json).
+
+
+## Local variable and parameter QName identities - 2026-10-13
+
+UsesModuleFixedVariableNamespaces restricts module-level name binding to variable, param and with-param elements. Shared QName validation accepts an internal explicit namespace map, enabling registration/execution to use the module fixed set and validation to use retained inspection contexts. Authoring scope includes locally earlier declarations with their fixed identities. Captured function parameter keywords use each parameter retained map independently of local grammar. Other component QName policy remains a separate audit; no public API or gate membership changes. See [verification evidence and boundaries](XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).

@@ -1,3 +1,13 @@
+# Local variable and parameter QName identities - 2026-10-13
+
+Branch: fix/xslt40-local-variable-qnames; base main `62bf89a4c5211370f727d56932f66c095c188fb4` (PR #265 merged); implementation `ab3674be331806b3efca145a4fea0f2d855f5a93`.
+
+What was built: UsesModuleFixedVariableNamespaces scopes module fixed QName binding to xsl:variable/param/with-param. ValidateXsltName accepts an internal explicit namespace map. Registration and runtime variable expansion use the module fixed set across local earlier profiles; authoring name diagnostics and scope use retained maps. Function parameter keyword capture also retains parameter-local maps independently of grammar. Fixed-only/rebound prefixes, aliases, explicit/no-namespace names, global/local defaults, template/apply-templates/tunnel parameter passing, include/import declarations, namespace documents and source-preserving expression edits are verified. Unused omitted-prefix names report XTSE0280; malformed names XTSE0020; duplicates XTSE0670; wrong keywords XPST0017; forward references XPST0008. The old local-native expectation is corrected. No public API or gate membership changes; original descriptor code and bytes are unchanged, with no validation/refusal resolver retries.
+
+Verification: 35 new regressions; initial 28-case baseline 7 pass/21 fail; 196 focused checks; Release solution build 0 errors/two existing warnings; 8,088 full unit tests including XSLT 5,202/0/0; QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged native fixed namespace family 16/0/0 at suite `2c6664329b4951f0122bd4c82e6de78460cc9411`. Evidence: XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json and post-local-variable native log/receipt. Published version remains 1.2.0; candidate 1.2.1 remains unpublished. Upstream PRs #22–27 remain accepted (17 cases); independent execution confirmation remains pending. Original assertion/submission/acceptance receipts are preserved; no external message sent.
+
+Delivery: merge after CI. Next: audit named-template declaration/reference QNames under local version changes. Function/mode/key and other component QName paths, optional/default function execution, broader keyword/package linkage, named-type edit compilation and pattern/AVT replacement remain separate scopes. Earlier records below are historical.
+
 # Module fixed bindings across local grammar - 2026-10-13
 
 Branch: fix/xslt40-local-profile-namespace-contexts; base main `ba35a02fe79b1548d2316997c3618fa72194d821` (PR #264 merged); implementation `022303aeac0d6f4821ab95e788dd2aada98338ad`.
