@@ -14,7 +14,7 @@ Validation: Release build passes (12 existing warnings, zero errors); all 6954 u
 
 Check this slice's CI before merging. Next: structural-record alias boundaries and remaining named-record coercion. Native type-alias is now 7/25/0; original 023/024 pass and case 011 newly passes. N04 and REQ-126 remain In Progress. Preserve original expectations, patches, receipts, historical evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
 
-Delivery pending.
+Delivery: tested implementation 34b4bb3e98a4cb1e28a894ff50794b9b4d134ce5 committed and pushed; [Bosak PR #213](https://github.com/Fytala-Charles/Bosak/pull/213) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
 
 # Typed map aliases and nested references — 2026-10-13
 
