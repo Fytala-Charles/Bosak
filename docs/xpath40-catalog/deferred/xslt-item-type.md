@@ -464,3 +464,14 @@ See [cast and validation evidence](../../../contributions/xslt40/item-type-bound
 A telemetry feed can deliver numeric readings as strings. With `<xsl:item-type name="t:reading" as="xs:integer"/>` and `<xsl:item-type name="t:batch" as="array(t:reading)"/>`, `(['42','43'] cast as t:batch)?*` yields the integers `42 43`. `['bad'] castable as t:batch` yields `false`; `() castable as t:batch?` yields `true`. This example assumes an XSLT 4.0 stylesheet with `t` bound to the declaration namespace and `xs` to XML Schema; casting reports invalid data while castable provides a validation decision.
 
 The [XPath 4.0 casting and castable specification](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-cast) defines eligible alias targets and static diagnostics. See the pinned source and hashes in the evidence file for the implementation reference.
+
+
+## Choice casting target validation — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) statically rejects XPath 4.0 cast/castable choices containing syntactically non-atomic alternatives, including arrays, maps, records, functions and node tests. Validation covers direct targets and expanded aliases, follows nested parentheses and preserves quoted separators and EQName text. Atomic/enumeration choices, optional inputs, ordinary container-valued instance-of choices and standalone container casts remain supported. Twenty-one new regressions pass. Schema-defined and nominative QName classification, unknown expression type names, broader alias grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+See [choice casting evidence](../../../contributions/xslt40/item-type-boundaries/CHOICE_CAST_RESULTS.json). Native type-alias remains 8/24/0; unchanged contributed cases 023/024 pass. Broader failures and independent processor confirmation remain outstanding.
+
+A logistics event feed may supply either a calendar date or a precise timestamp. Declare `<xsl:item-type name="t:event-time" as="(xs:date | xs:dateTime)"/>`, then cast the supplied string with `$raw cast as t:event-time`. Input `2026-10-13` yields an `xs:date`; input `2026-10-13T09:30:00` yields an `xs:dateTime`. The declaration order is retained. `'invalid' castable as t:event-time` yields `false`, and `() castable as t:event-time?` yields `true` when an absent time is allowed. This assumes XSLT 4.0 and the usual XML Schema/type namespaces. A mixed payload choice such as `(map(*) | array(*))` remains useful for an `instance of` test, but it raises static XPST0080 if used as a cast/castable target.
+
+The [choice item type specification](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types) and [casting specification](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-cast) define the generalized atomic requirement. Pinned source revision and hashes are recorded in the separate evidence file.

@@ -1,3 +1,21 @@
+# Choice casting target validation — 2026-10-13
+
+Branch: feat/xslt-choice-cast-validation; main baseline 5e85889d4c7a7f9ae67fece95df5b77e612d40c8. PR #218 merged after CI 38357999516 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) statically rejects XPath 4.0 cast/castable choices containing syntactically non-atomic alternatives, including arrays, maps, records, functions and node tests. Validation covers direct targets and expanded aliases, follows nested parentheses and preserves quoted separators and EQName text. Atomic/enumeration choices, optional inputs, ordinary container-valued instance-of choices and standalone container casts remain supported. Twenty-one new regressions pass. Schema-defined and nominative QName classification, unknown expression type names, broader alias grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+The shared type helper traverses parenthesized choices without splitting strings or EQNames. XPath31Expression validates direct and expanded targets only in the 4.0 profile. No public API change, gate promotion, native assertion/catalogue manifest change or publication.
+
+Validation: Release build passes (12 existing warnings, zero errors). All 7043 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4157/0/0 and twenty-one focused new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0, unchanged contributed cases 023/024 pass, broader failures retained (runner exit 1). Thirteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: static named-type classification/unknown expression names, followed by package exposure. Keep schema-defined/nominative QName classification explicitly deferred; the choice predicate conservatively leaves unknown QNames for name/schema validation. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: tested implementation 5081e6ff3b6337675397904933c2ed20cdf6dfca committed and pushed; [Bosak PR #219](https://github.com/Fytala-Charles/Bosak/pull/219) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
 # Item-type alias casts and declaration validation — 2026-10-13
 
 Branch: feat/xslt-alias-casts-validation; baseline PR #217 implementation and metadata at 2b827d1d. PR #217 merged as 99f2d1efa567e29a6fe3b26594b9c51e29d8b5ea after CI 38355216383 passed and the user explicitly authorized merging. PR #218 now targets main. Candidate 1.2.0 remains unpublished; public version 1.1.3. Earlier sections are historical.

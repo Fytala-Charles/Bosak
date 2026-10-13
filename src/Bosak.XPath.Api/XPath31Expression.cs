@@ -56,6 +56,7 @@
 //                      | Charles Korthout | 0.22 | 13-10-2026     | Expand host atomic and array aliases in XPath instance-of and treat expressions
 //                      | Charles Korthout | 0.23 | 13-10-2026     | Expand nested named types inside XPath array and map instance-of/treat operands
 //                      | Charles Korthout | 0.24 | 13-10-2026     | Expand aliases in cast/castable targets and reject ineligible alias targets
+//                      | Charles Korthout | 0.25 | 13-10-2026     | Validate direct and expanded choice casting targets statically in XPath 4.0
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -287,8 +288,8 @@ public sealed class XPath31Expression
             QuantifiedExpressionNode qe => qe with { Bindings = qe.Bindings.Select(b => b with { Expression = ResolveFunctionNamespaces(b.Expression, options) }).ToList(), SatisfiesExpression = ResolveFunctionNamespaces(qe.SatisfiesExpression, options) },
             BinaryExpressionNode bin => bin with { Left = ResolveFunctionNamespaces(bin.Left, options), Right = ResolveFunctionNamespaces(bin.Right, options) },
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, options) },
-            CastNode cast => ResolveItemTypeAlias(cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) }, options),
-            CastableNode castable => ResolveItemTypeAlias(castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) }, options),
+            CastNode cast => ResolveCastTypeAlias(cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) }, options),
+            CastableNode castable => ResolveCastTypeAlias(castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) }, options),
             InstanceOfNode io => ResolveItemTypeAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options), TypeName = ResolveDefaultItemType(io.TypeName, io.Prefix, options) }, options),
             TreatNode treat => ResolveItemTypeAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options), TypeName = ResolveDefaultItemType(treat.TypeName, treat.Prefix, options) }, options),
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
@@ -438,22 +439,25 @@ public sealed class XPath31Expression
         };
     }
 
+    private static XPathAstNode ResolveCastTypeAlias(XPathAstNode node, CompileOptions options)
+    {
+        var resolved = ResolveItemTypeAlias(node, options);
+        if (options.Compatibility < XPathCompatibility.XPath40) return resolved;
+        var target = resolved switch
+        {
+            CastNode cast => cast.TypeName,
+            CastableNode castable => castable.TypeName,
+            _ => string.Empty
+        };
+        if (ItemTypeAliasExpansion.HasIneligibleCastTarget(target))
+            throw new InvalidOperationException("XPST0080: The target is not an eligible cast type; choice alternatives must be generalized atomic types.");
+        return resolved;
+    }
+
     private static void ValidateAliasCastTarget(XPathAstNode node, InstanceOfNode alias)
     {
-        if (node is not (CastNode or CastableNode)) return;
-        var type = alias.TypeName.Trim();
-        while (type.StartsWith('(') && type.EndsWith(')') && !type.Contains('|'))
-            type = type[1..^1].Trim();
-        if (type.StartsWith("function(", StringComparison.Ordinal) ||
-            type is "item()" or "node()" or "empty-sequence()" ||
-            type.StartsWith("element(", StringComparison.Ordinal) ||
-            type.StartsWith("attribute(", StringComparison.Ordinal) ||
-            type.StartsWith("document-node(", StringComparison.Ordinal) ||
-            type.StartsWith("text(", StringComparison.Ordinal) ||
-            type.StartsWith("comment(", StringComparison.Ordinal) ||
-            type.StartsWith("processing-instruction(", StringComparison.Ordinal) ||
-            type.StartsWith("namespace-node(", StringComparison.Ordinal))
-            throw new InvalidOperationException("XPST0080: An item-type alias does not resolve to an eligible cast target.");
+        if (node is (CastNode or CastableNode) && ItemTypeAliasExpansion.HasIneligibleCastTarget(alias.TypeName))
+            throw new InvalidOperationException("XPST0080: The alias is not an eligible cast type; choice alternatives must be generalized atomic types.");
     }
 
     // An arrow target that is a static function call receives the arrow source as its
