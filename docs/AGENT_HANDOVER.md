@@ -14,7 +14,7 @@ Validation: Release build passes with 12 existing analyzer warnings and zero err
 
 Next: supported type grammar gaps, then package exposure. Preserve original upstream assertions, contribution patches, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation. No release/tag/package publication.
 
-Delivery pending.
+Delivery: tested implementation fcb866e6 committed and pushed; [Bosak PR #221](https://github.com/Fytala-Charles/Bosak/pull/221) open against main, CI pending. This delivery record changes documentation only. Check CI before merging; next implementation work is supported type grammar gaps, then package exposure.
 
 # Host static named-type validation — 2026-10-13
 
