@@ -57,6 +57,7 @@
 //                      | Charles Korthout | 2.13  | 13-10-2026     | Share lexical union splitting for earlier-profile rule expansion and type choices.
 //                      | Charles Korthout | 2.14  | 13-10-2026     | Resolve 4.0 pattern prefixes using applicable static namespace bindings                |
 //                      | Charles Korthout | 2.15  | 13-10-2026     | Resolve XSLT 4.0 template mode membership using applicable namespaces.                   |
+//                      | Charles Korthout | 2.16  | 13-10-2026     | Preserve module fixed bindings in locally earlier template match patterns.                 |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -440,7 +441,9 @@ internal sealed class TemplateRule
                 {
                     var owner = Stylesheet.OwningPackage ?? Stylesheet;
                     var aliases = compatibility >= XPathCompatibility.XPath40 ? owner.GetBindingItemTypes() : null;
-                    var namespaces = compatibility >= XPathCompatibility.XPath40 ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
+                    var namespaces = compatibility >= XPathCompatibility.XPath40 || Stylesheet.HasModuleFixedNamespaces(Element)
+                        ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
+                    if (namespaces is not null) Patterns.PatternCompiler.ValidateNamespacePrefixes(Match, namespaces);
                     CompiledMatch = compiler.Compile(resolved, defaultNs, namespaces: namespaces, compatibility: compatibility,
                         itemTypeAliases: aliases, namedRecordTypeNames: compatibility >= XPathCompatibility.XPath40
                             ? owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal) : null);
@@ -544,7 +547,7 @@ internal sealed class TemplateRule
         if (!pattern.Contains(':'))
             return pattern;
 
-        var staticNamespaces = Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40
+        var staticNamespaces = Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40 || Stylesheet.HasModuleFixedNamespaces(Element)
             ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
         var sb = new System.Text.StringBuilder();
         int i = 0;

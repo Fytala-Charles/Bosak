@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice C: lifecycle and sharing remarks                                           |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain internal applicable namespace bindings and static errors                        |
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Document applicable namespace capture for validation and expression edits.               |
+//                      | Charles Korthout | 0.5   | 13-10-2026     | Distinguish module fixed bindings from the local expression grammar profile.               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -55,7 +56,8 @@ public sealed record AuthoringNamespaceBinding(string Prefix, string Uri);
 /// holds no unmanaged resources, needs no disposal and is safe to share across threads.
 /// <para>Native XML bindings remain available through <see cref="InScopeNamespaces"/>.
 /// Validation and expression editing additionally use applicable XSLT 4.0 namespace bindings retained internally,
-/// including caller-resolved namespace documents captured during inspection.</para>
+/// including caller-resolved namespace documents captured during inspection. Module fixed bindings
+/// remain applicable when a local version selects an earlier expression grammar.</para>
 /// </remarks>
 public sealed class ExpressionSlotContext
 {

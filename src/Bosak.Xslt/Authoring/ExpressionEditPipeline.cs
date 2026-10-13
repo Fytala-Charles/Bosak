@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 11-10-2026     | Align captured expression version profiles with runtime frozen-version selection.       |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Compile edits with retained applicable bindings and host keyword signatures.              |
+//                      | Charles Korthout | 0.4   | 13-10-2026     | Keep module fixed bindings independent of local expression grammar.                       |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -173,7 +174,7 @@ internal static class ExpressionEditPipeline
     {
         var context = attribute.SlotContext!;
         var compatibility = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion);
-        if (compatibility >= XPathCompatibility.XPath40 && context.StaticNamespaceError is { } error)
+        if (context.StaticNamespaceError is { } error)
         {
             return AuthoringEditResult.FailureResult(new AuthoringEditFailure(
                 AuthoringEditFailureKind.ExpressionParseError,
@@ -182,7 +183,7 @@ internal static class ExpressionEditPipeline
         }
 
         var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
-        if (compatibility >= XPathCompatibility.XPath40 && context.StaticNamespaces is not null)
+        if (context.StaticNamespaces is not null)
         {
             foreach (var binding in context.StaticNamespaces) namespaces[binding.Key] = binding.Value;
         }
@@ -209,6 +210,8 @@ internal static class ExpressionEditPipeline
         try
         {
             _ = XPath31Expression.Compile(newExpressionText, options);
+            if (compatibility < XPathCompatibility.XPath40 && context.StaticNamespaces is not null)
+                Patterns.PatternCompiler.ValidateNamespacePrefixes(newExpressionText, namespaces);
             return null;
         }
         catch (AuthoringFunctionSignatureCoverageException ex)

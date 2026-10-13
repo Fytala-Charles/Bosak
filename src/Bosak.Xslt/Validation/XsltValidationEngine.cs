@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Validate mode names, lists and default references in captured authoring contexts.        |
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Report key declaration QName syntax and applicable namespace errors.                     |
 //                      | Charles Korthout | 0.14  | 13-10-2026     | Use captured function keyword signatures and report deferred coverage.                   |
+//                      | Charles Korthout | 0.15  | 13-10-2026     | Apply retained module fixed bindings to locally earlier expression and pattern slots.     |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1036,6 +1037,8 @@ internal sealed class XsltValidationEngine
         try
         {
             XPath31Expression.Compile(text, BuildCompileOptions(context, compatibility, isAvt: false, isStatic: isUseWhen));
+            if (compatibility < XPathCompatibility.XPath40 && context.StaticNamespaces is not null)
+                PatternCompiler.ValidateNamespacePrefixes(text, BuildNamespaceMap(context));
         }
         catch (Exception ex)
         {
@@ -1073,7 +1076,7 @@ internal sealed class XsltValidationEngine
             // and the prefix bindings of pattern predicates must resolve in the module-local
             // static context, so an undeclared prefix is rejected (XPST0081) instead of being
             // silently read as a no-namespace name.
-            if (ResolveCompatibility(context) >= XPathCompatibility.XPath40)
+            if (context.StaticNamespaces is not null)
                 PatternCompiler.ValidateNamespacePrefixes(text, BuildNamespaceMap(context));
             _ = new PatternCompiler().Compile(
                 text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context), compatibility: ResolveCompatibility(context),
@@ -1146,6 +1149,8 @@ internal sealed class XsltValidationEngine
                 try
                 {
                     XPath31Expression.Compile(expression, options);
+                    if (compatibility < XPathCompatibility.XPath40 && context.StaticNamespaces is not null)
+                        PatternCompiler.ValidateNamespacePrefixes(expression, options.Namespaces!);
                 }
                 catch (Exception ex)
                 {
@@ -1308,7 +1313,7 @@ internal sealed class XsltValidationEngine
     private bool ReportStaticNamespaceError(ModuleWalkState state,
         AuthoringAttributeDescriptor attribute, ExpressionSlotContext context)
     {
-        if (context.StaticNamespaceError is not { } error || ResolveCompatibility(context) < XPathCompatibility.XPath40)
+        if (context.StaticNamespaceError is not { } error)
             return false;
         _hasInvalid = true;
         _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(new InvalidOperationException(error)),

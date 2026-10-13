@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Correct local earlier-profile expectation for module fixed bindings.                      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -117,10 +118,14 @@ public class Xslt40AuthoringNamespaceTests
         Assert.Equal(Encoding.UTF8.GetBytes(text), result.Snapshot.ExportOriginal(MainUri));
     }
 
-    /// <summary>A local earlier version keeps its native namespace bindings.</summary>
+    /// <summary>A local earlier version cannot restore native prefixes omitted from module fixed bindings.</summary>
     [Fact]
-    public void LocalEarlierVersionKeepsNativeBindings() =>
-        Assert.Equal(XsltValidationOutcome.Valid, Validate(Sheet("#standard", "<xsl:template match='/' version='3.0'><xsl:value-of select='n:root'/></xsl:template>")).Outcome);
+    public void LocalEarlierVersionRetainsModuleFixedBindings()
+    {
+        var result = Validate(Sheet("#standard", "<xsl:template match='/' version='3.0'><xsl:value-of select='n:root'/></xsl:template>"));
+        Assert.Equal(XsltValidationOutcome.Invalid, result.Outcome);
+        Assert.Contains(result.Diagnostics, d => d.Code == "XPST0081");
+    }
 
     /// <summary>A refused namespace document is a static diagnostic with no resolver fallback.</summary>
     [Fact]
