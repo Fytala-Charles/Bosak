@@ -87,6 +87,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.16  | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 //                      | Charles Korthout | 3.17  | 13-10-2026     | Compile XPath 4.0 type patterns with declaring type and namespace scopes.                 |
+//                      | Charles Korthout | 3.18  | 13-10-2026     | Match XPath 4.0 wildcard and union names in element/attribute kind-test patterns.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -2269,6 +2270,12 @@ internal sealed class PatternCompiler
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
                 };
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: true);
+                return (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Element
+                    && nameCheck(item.NodeValue) && (typeCheck is null || typeCheck(item.NodeValue));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2339,6 +2346,12 @@ internal sealed class PatternCompiler
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
                 };
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: false);
+                return (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Attribute
+                    && nameCheck(item.NodeValue) && (typeCheck is null || typeCheck(item.NodeValue));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2655,6 +2668,12 @@ internal sealed class PatternCompiler
             var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: true);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return node => node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: true);
+                return node => node.NodeKind == XdmNodeKind.Element && nameCheck(node)
+                    && (typeCheck is null || typeCheck(node));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2721,6 +2740,12 @@ internal sealed class PatternCompiler
             var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: false);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return node => node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: false);
+                return node => node.NodeKind == XdmNodeKind.Attribute && nameCheck(node)
+                    && (typeCheck is null || typeCheck(node));
+            }
             var (attrNs, attrLocal) = ParseQName(nameArg);
             // Unprefixed attribute names have no namespace (XPath default element namespace does not apply).
             if (string.IsNullOrEmpty(attrNs))
@@ -3034,6 +3059,26 @@ internal sealed class PatternCompiler
             ? ResolveSchemaType(context, a.NamespaceUri, a.LocalName)
             : null;
 
+    /// <summary>Compiles 4.0 kind-test name alternatives with independent namespace and local wildcards.</summary>
+    private Func<IXdmNode, bool> CompileKindTestNameCheck(string name, bool isElement)
+    {
+        // Validate NameTestUnion grammar before interpreting the individual alternatives.
+        if (ItemTypeAliasExpansion.Expand((isElement ? "element(" : "attribute(") + name + ")", value => value) is null)
+            throw new InvalidOperationException("XPST0003: Invalid wildcard or union name in a node kind test.");
+        var alternatives = SplitTopLevel(name, '|').Select(part =>
+        {
+            var text = part.Trim();
+            if (text == "*") return (Namespace: (string?)null, Local: "*");
+            if (text.StartsWith("*:", StringComparison.Ordinal)) return (Namespace: (string?)null, Local: text[2..]);
+            var (ns, local) = ParseQName(text);
+            if (ns.Length == 0 && !text.StartsWith("Q{", StringComparison.Ordinal) && !text.Contains(':'))
+                ns = isElement ? _defaultElementNamespace ?? string.Empty : string.Empty;
+            return (Namespace: (string?)ns, Local: local);
+        }).ToArray();
+        return node => alternatives.Any(test => (test.Namespace is null || node.NamespaceUri == test.Namespace)
+            && (test.Local == "*" || node.LocalName == test.Local));
+    }
+
     /// <summary>
     /// Splits the argument of an <c>element(...)</c> / <c>attribute(...)</c> kind test into
     /// the name part and the optional schema type part, e.g. <c>element(N, T)</c> yields
@@ -3041,9 +3086,9 @@ internal sealed class PatternCompiler
     /// </summary>
     /// <param name="arg">The raw kind-test argument text.</param>
     /// <returns>The name (or wildcard) part, and the type part when a comma is present.</returns>
-    private static (string NameArg, string? TypeArg) SplitKindTestArgs(string arg)
+    private (string NameArg, string? TypeArg) SplitKindTestArgs(string arg)
     {
-        int comma = FindTopLevelComma(arg);
+        int comma = FindTopLevelComma(_compatibility >= XPathCompatibility.XPath40 ? MaskEQNameUris(arg) : arg);
         if (comma < 0)
             return (arg.Trim(), null);
         return (arg[..comma].Trim(), arg[(comma + 1)..].Trim());

@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 0.11 | 13-10-2026     | Traverse and validate node schema annotations separately from item-type aliases
 //                      | Charles Korthout | 0.12 | 13-10-2026     | Normalize fn signatures and validate documentary parameter names
 //                      | Charles Korthout | 0.13 | 13-10-2026     | Traverse schema declaration tests and normalize document name shorthand
+//                      | Charles Korthout | 0.14 | 13-10-2026     | Trim optional schema annotation names in node kind-test types.
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -110,7 +111,7 @@ internal static class ItemTypeAliasExpansion
             var annotation = string.Empty;
             if (parts.Count == 2)
             {
-                var schemaName = parts[1];
+                var schemaName = parts[1].Trim();
                 var nillable = kind == "element" && schemaName.EndsWith('?');
                 if (nillable) schemaName = schemaName[..^1].TrimEnd();
                 if (!Regex.IsMatch(schemaName, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$"))

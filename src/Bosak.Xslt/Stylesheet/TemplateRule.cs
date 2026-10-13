@@ -48,6 +48,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 //                      | Charles Korthout | 2.6   | 13-10-2026     | Resolve standalone type patterns in their declaring scope and compute type priorities.   |
+//                      | Charles Korthout | 2.7   | 13-10-2026     | Apply profile-specific XPath 4.0 kind-test wildcard/type priorities.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -410,7 +411,12 @@ internal sealed class TemplateRule
                         Priority = predicates.Length > 0 ? 0.5 : ComputeTypePatternPriority(expanded);
                     }
                 }
-                else CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
+                else
+                {
+                    CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
+                    if (compatibility >= XPathCompatibility.XPath40 && Element.Attribute("priority") is null)
+                        Priority = ComputeDefaultPriority(resolved, xpath40: true);
+                }
                 // In a schema-aware stylesheet, also compile the strict/lax typed-mode
                 // variants in which a top-level QName branch means schema-element(QName)
                 // (XSLT 3.0 §5.5.3). Rules without rewriteable QName branches keep using
@@ -527,6 +533,14 @@ internal sealed class TemplateRule
             // Check for Q{…} syntax — already resolved, copy through
             if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
             {
+                if (Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40)
+                {
+                    int close = pattern.IndexOf('}', i + 2);
+                    if (close < 0) throw new InvalidOperationException("XPST0003: Unclosed EQName URI in a pattern.");
+                    sb.Append(pattern, i, close - i + 1);
+                    i = close + 1;
+                    continue;
+                }
                 sb.Append(c);
                 i++;
                 continue;
@@ -577,9 +591,9 @@ internal sealed class TemplateRule
     }
 
     /// <summary>
-    /// Computes the default priority for a match pattern per the XSLT 2.0/3.0 spec.
+    /// Computes default priority using the owning profile for supported node kind tests.
     /// </summary>
-    private static double ComputeDefaultPriority(string? match)
+    private static double ComputeDefaultPriority(string? match, bool xpath40 = false)
     {
         if (string.IsNullOrEmpty(match))
             return 0.5;
@@ -591,15 +605,15 @@ internal sealed class TemplateRule
         {
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
-                return ComputeDefaultPriority(trimmed[1..close].Trim());
+                return ComputeDefaultPriority(trimmed[1..close].Trim(), xpath40);
         }
 
         // Union patterns: take the maximum priority of all branches
         var branches = SplitUnionBranches(trimmed);
         if (branches.Length > 1)
-            return branches.Max(ComputeSinglePatternPriority);
+            return branches.Max(branch => ComputeSinglePatternPriority(branch, xpath40));
 
-        return ComputeSinglePatternPriority(trimmed);
+        return ComputeSinglePatternPriority(trimmed, xpath40);
     }
 
     private static double ComputeTypePatternPriority(string type)
@@ -627,11 +641,11 @@ internal sealed class TemplateRule
             text.StartsWith("document-node(") || text.StartsWith("schema-element(") ||
             text.StartsWith("schema-attribute(") || text.StartsWith("processing-instruction(") ||
             text is "text()" or "comment()" or "namespace-node()")
-            return ComputeSinglePatternPriority(text);
+            return ComputeSinglePatternPriority(text, xpath40: true);
         return 0;
     }
 
-    private static double ComputeSinglePatternPriority(string trimmed)
+    private static double ComputeSinglePatternPriority(string trimmed, bool xpath40 = false)
     {
         trimmed = StripXPathComments(trimmed).Trim();
 
@@ -640,7 +654,7 @@ internal sealed class TemplateRule
         {
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
-                return ComputeSinglePatternPriority(trimmed[1..close].Trim());
+                return ComputeSinglePatternPriority(trimmed[1..close].Trim(), xpath40);
         }
 
         // Root pattern
@@ -678,6 +692,9 @@ internal sealed class TemplateRule
         if (trimmed.StartsWith("."))
             return trimmed.Contains('[') ? 1.0 : -0.5;
 
+        // A predicate increases node-pattern priority, including explicit-axis kind tests.
+        if (xpath40 && MaskPatternUris(trimmed).Contains('[')) return 0.5;
+
         // Explicit axis step
         if (trimmed.Contains("::"))
         {
@@ -693,7 +710,7 @@ internal sealed class TemplateRule
             // axis-free form (XSLT 3.0 §6.4): wildcard name → -0.5, name only → 0.0,
             // a type argument → 0.25 (match-167/171).
             if (nodeTest.StartsWith("element(") || nodeTest.StartsWith("attribute("))
-                return ElementOrAttributeTestPriority(nodeTest);
+                return ElementOrAttributeTestPriority(nodeTest, xpath40);
 
             // Namespace wildcards: NCName:*, *:NCName, or Q{uri}* → -0.25
             if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:") ||
@@ -728,10 +745,10 @@ internal sealed class TemplateRule
 
         // ElementTest and AttributeTest with arguments
         if (trimmed.StartsWith("element(") && trimmed.EndsWith(")"))
-            return ElementOrAttributeTestPriority(trimmed);
+            return ElementOrAttributeTestPriority(trimmed, xpath40);
 
         if (trimmed.StartsWith("attribute(") && trimmed.EndsWith(")"))
-            return ElementOrAttributeTestPriority(trimmed);
+            return ElementOrAttributeTestPriority(trimmed, xpath40);
 
         // processing-instruction("name") or processing-instruction(name) → 0
         if (trimmed.StartsWith("processing-instruction(") && trimmed.EndsWith(")"))
@@ -744,7 +761,7 @@ internal sealed class TemplateRule
         if (trimmed.StartsWith("document-node(") && trimmed.EndsWith(")"))
         {
             var arg = ExtractFunctionArg(trimmed);
-            return string.IsNullOrEmpty(arg) ? -0.5 : ComputeSinglePatternPriority(arg);
+            return string.IsNullOrEmpty(arg) ? -0.5 : ComputeSinglePatternPriority(arg, xpath40);
         }
 
         // schema-element and schema-attribute have priority 0.25
@@ -795,16 +812,74 @@ internal sealed class TemplateRule
     /// <summary>
     /// Computes the default priority of an <c>element(...)</c> or <c>attribute(...)</c>
     /// kind test per XSLT 3.0 §6.4: no argument or a wildcard name only → -0.5; a name
-    /// only → 0.0; a type argument after a top-level comma → 0.25.
+    /// only → 0.0; a type argument after a top-level comma → 0.25. XSLT 4.0 instead
+    /// assigns partial wildcards -0.25 and combines name/type priority as 0.25 + 0.5 * name priority.
     /// </summary>
-    private static double ElementOrAttributeTestPriority(string nodeTest)
+    private static double ElementOrAttributeTestPriority(string nodeTest, bool xpath40 = false)
     {
         var arg = ExtractFunctionArg(nodeTest);
+        if (xpath40)
+        {
+            int comma = FindKindTestComma(arg);
+            var names = comma < 0 ? arg : arg[..comma];
+            double namePriority = SplitKindTestNames(names).Max(name =>
+            {
+                var test = name.Trim();
+                if (test.Length == 0 || test == "*") return -0.5;
+                if (test.StartsWith("*:", StringComparison.Ordinal) || test.EndsWith(":*", StringComparison.Ordinal)
+                    || (test.StartsWith("Q{", StringComparison.Ordinal) && test.EndsWith("}*", StringComparison.Ordinal))) return -0.25;
+                return 0;
+            });
+            return comma < 0 ? namePriority : 0.25 + 0.5 * namePriority;
+        }
         if (string.IsNullOrEmpty(arg) || arg == "*")
             return -0.5;                    // element() / element(*) / attribute() / attribute(*)
         if (HasTopLevelComma(arg))
             return 0.25;                    // element(*, T) / element(E, T) / attribute(*, T) / attribute(A, T)
         return 0.0;                         // element(E) / attribute(A)
+    }
+
+    private static string MaskPatternUris(string text)
+    {
+        var chars = text.ToCharArray();
+        for (int i = 0; i + 1 < text.Length; i++)
+        {
+            if (text[i] != 'Q' || text[i + 1] != '{') continue;
+            int close = text.IndexOf('}', i + 2);
+            if (close < 0) break;
+            Array.Fill(chars, ' ', i + 2, close - i - 2);
+            i = close;
+        }
+        return new string(chars);
+    }
+
+    private static IEnumerable<string> SplitKindTestNames(string text)
+    {
+        int start = 0;
+        bool eqName = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (eqName) { if (text[i] == '}') eqName = false; continue; }
+            if (text[i] == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { eqName = true; i++; continue; }
+            if (text[i] == '|') { yield return text[start..i]; start = i + 1; }
+        }
+        yield return text[start..];
+    }
+
+    private static int FindKindTestComma(string text)
+    {
+        int depth = 0;
+        bool eqName = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (eqName) { if (c == '}') eqName = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { eqName = true; i++; continue; }
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == ',' && depth == 0) return i;
+        }
+        return -1;
     }
 
     /// <summary>

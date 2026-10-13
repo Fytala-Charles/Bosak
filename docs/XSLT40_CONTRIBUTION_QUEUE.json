@@ -302,7 +302,8 @@
         "fixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FIXED_NAMESPACE_RESULTS.json",
         "inlineFunctionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/INLINE_FUNCTION_RESULTS.json",
         "structuralBindingFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/STRUCTURAL_BINDING_RESULTS.json",
-        "typePatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/TYPE_PATTERN_RESULTS.json"
+        "typePatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/TYPE_PATTERN_RESULTS.json",
+        "wildcardPatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/WILDCARD_PATTERN_RESULTS.json"
       }
     },
     {
@@ -364,7 +365,8 @@
         "fixedNamespaceFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/FIXED_NAMESPACE_RESULTS.json",
         "inlineFunctionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/INLINE_FUNCTION_RESULTS.json",
         "structuralBindingFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/STRUCTURAL_BINDING_RESULTS.json",
-        "typePatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/TYPE_PATTERN_RESULTS.json"
+        "typePatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/TYPE_PATTERN_RESULTS.json",
+        "wildcardPatternFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/WILDCARD_PATTERN_RESULTS.json"
       }
     }
   ],
