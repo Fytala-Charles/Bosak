@@ -65,7 +65,9 @@
 //                      | Charles Korthout | 0.31 | 13-10-2026     | Validate schema declaration types and normalize direct document shorthand
 //                      | Charles Korthout | 0.32 | 13-10-2026     | Expand host named types in inline function parameter and return contracts
 //                      | Charles Korthout | 0.33 | 13-10-2026     | Recognize xs:anyAtomicType in host-supplied item-type static contexts.
+//                      | Charles Korthout | 0.34  | 13-10-2026     | Expand XSLT host keyword calls using declared parameter QName identities.
 // ===========================================================================================================================================================
+
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Compiler.Optimizer;
@@ -133,6 +135,7 @@ public sealed class XPath31Expression
             options = new CompileOptions
             {
                 Compatibility = options.Compatibility, Namespaces = namespaces,
+                FunctionParameterNames = options.FunctionParameterNames,
                 DefaultElementNamespace = declarations.DefaultNamespace ?? options.DefaultElementNamespace,
                 DefiningElementDefaultNamespace = options.DefiningElementDefaultNamespace,
                 EnumerationItemTypes = options.EnumerationItemTypes, ItemTypeAliases = options.ItemTypeAliases, NamedRecordTypeNames = options.NamedRecordTypeNames, SchemaSet = options.SchemaSet,
@@ -655,13 +658,24 @@ public sealed class XPath31Expression
                 _ => null,
             };
         }
-        if (string.IsNullOrEmpty(nsUri) ||
-            !FunctionLibrary.TryGetKeywordSignature(nsUri, node.LocalName, out var sig))
+        var suppliedArity = node.Arguments.Count + node.KeywordArguments!.Count + (arrowInsertsFirst ? 1 : 0);
+        var hostNames = string.IsNullOrEmpty(nsUri) ? null
+            : options.FunctionParameterNames?.Invoke(nsUri, node.LocalName, suppliedArity);
+        IReadOnlyList<string> names;
+        IReadOnlyList<string?> defaults;
+        if (hostNames is not null)
+        {
+            names = hostNames;
+            defaults = new string?[names.Count]; // This host path requires every argument.
+        }
+        else if (!string.IsNullOrEmpty(nsUri) && FunctionLibrary.TryGetKeywordSignature(nsUri, node.LocalName, out var sig))
+        {
+            names = sig.ParameterNames;
+            defaults = sig.ParameterDefaults;
+        }
+        else
             throw new InvalidOperationException(
                 $"XPST0017: Function {node.LocalName} does not declare keyword parameters and cannot be called with keyword arguments.");
-
-        var names = sig.ParameterNames;
-        var defaults = sig.ParameterDefaults;
         // With 'E => f(...)', the first parameter is filled by the arrow source at
         // lowering time: it counts as positionally filled and stays out of the
         // rewritten argument list.
@@ -690,10 +704,12 @@ public sealed class XPath31Expression
             string kwNamespace = kwNs ?? (string.IsNullOrEmpty(kwPrefix)
                 ? string.Empty
                 : (ResolvePrefix(kwPrefix, options) ?? string.Empty));
+            string keywordName = hostNames is null ? kwLocal : $"Q{{{kwNamespace}}}{kwLocal}";
+            bool comparable = hostNames is not null || kwNamespace.Length == 0;
             int match = -1;
             for (int i = 0; i < names.Count; i++)
             {
-                if (!used[i] && kwNamespace.Length == 0 && names[i] == kwLocal)
+                if (!used[i] && comparable && names[i] == keywordName)
                 {
                     match = i;
                     break;
@@ -701,7 +717,7 @@ public sealed class XPath31Expression
             }
             if (match < 0)
             {
-                bool known = kwNamespace.Length == 0 && names.Any(n => n == kwLocal);
+                bool known = comparable && names.Any(n => n == keywordName);
                 throw new InvalidOperationException(known
                     ? $"XPST0017: Keyword argument '{kw.Name}' in call of {node.LocalName} matches a parameter that is already filled."
                     : $"XPST0017: Unknown keyword argument '{kw.Name}' in call of {node.LocalName}.");

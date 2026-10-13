@@ -545,7 +545,9 @@
 //                      | Charles Korthout | 7.29  | 13-10-2026     | Share variable QName expansion with stylesheet compilation                             |
 //                      | Charles Korthout | 7.30  | 13-10-2026     | Share XSLT 4.0 mode QName expansion for dispatch and scoped defaults.                    |
 //                      | Charles Korthout | 7.31  | 13-10-2026     | Align 4.0 key EQName and QName arguments with declaration identities.                    |
+//                      | Charles Korthout | 7.32  | 13-10-2026     | Supply XSLT function keyword signatures with declaration namespace identities.
 // ===========================================================================================================================================================
+
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -3048,6 +3050,7 @@ internal sealed class TransformEngine
             {
                 Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
+                FunctionParameterNames = ResolveFunctionParameterNames,
                 ItemTypeAliases = itemTypeAliases,
                 NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                 DefaultElementNamespace = defaultNs,
@@ -3059,6 +3062,25 @@ internal sealed class TransformEngine
             return XPath31Expression.Compile(expression, options);
         }
         return CompileWithSchemaContext(expression, instruction);
+    }
+
+    private IReadOnlyList<string>? ResolveFunctionParameterNames(string namespaceUri, string localName, int arity)
+    {
+        var functions = _currentPackageScope is null
+            ? _stylesheet.GetAllFunctionDefinitions()
+            : CurrentStylesheet.GetPackageScopeFunctionDefinitions();
+        if (!functions.TryGetValue((namespaceUri, localName, arity), out var definition))
+            return null;
+        // Override calls retain the original public parameter names; execution binds
+        // reordered values to the implementation's own parameter names.
+        definition = definition.OverriddenFunction ?? definition;
+        var parameters = definition.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToArray();
+        return definition.ParameterNames.Select((name, index) =>
+        {
+            var declaration = index < parameters.Length ? parameters[index] : definition.Element;
+            var (local, uri) = ExpandVariableName(declaration, name);
+            return $"Q{{{uri}}}{local}";
+        }).ToArray();
     }
 
     private static readonly HashSet<string> XPathAxisNames = new(StringComparer.Ordinal)
@@ -4661,7 +4683,9 @@ internal sealed class TransformEngine
                     raw = MaterializeAbsorbedArgument(raw);
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
                 var converted = ConvertFunctionArgument(raw, asType, _context, i < paramElements.Count ? paramElements[i] : def.Element);
-                var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
+                var parameterDeclaration = def.Stylesheet.GetXPathCompatibility(def.Element) >= XPathCompatibility.XPath40 && i < paramElements.Count
+                    ? paramElements[i] : def.Element;
+                var (fpLocal, fpNs) = ExpandVariableName(parameterDeclaration, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
 
@@ -10355,6 +10379,7 @@ internal sealed class TransformEngine
                             {
                                 Compatibility = compatibility,
                                 Namespaces = nsMap,
+                                FunctionParameterNames = ResolveFunctionParameterNames,
                                 ItemTypeAliases = itemTypeAliases,
                                 NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                                 DefaultElementNamespace = defaultNs,
