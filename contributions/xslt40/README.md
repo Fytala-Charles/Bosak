@@ -1,5 +1,7 @@
 # Native XSLT 4.0 contributions
 
+**Current status — 2026-10-13:** [Bosak 1.2.0 is published](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0), from revision `56486e96cda3d5c8e63fcba1bb84e5e43a2c3a67`. All 14 new cases across the five first batches pass in Bosak in the recorded evidence below. Upstream PRs #22–26 remain open; upstream acceptance and independent processor confirmation remain pending. The results cover these exact cases, not complete XPath/XSLT 4.0 conformance. Next: respond to upstream reviews, address remaining authoring/static-context gaps and select a new contribution-area batch.
+
 Specification-derived native-suite additions, executed with the Bosak adapter. Upstream acceptance and independent processor confirmation are pending for all five first batches. Counts describe exact new cases; they are not complete family or engine conformance.
 
 | Family | Upstream PR | Exact Bosak outcome | Examples and evidence |
@@ -10,8 +12,11 @@ Specification-derived native-suite additions, executed with the Bosak adapter. U
 | item-type | [#25](https://github.com/qt4cg/xslt40-test/pull/25) | 2 pass after fix; original 2 failures retained | [Details](item-type-boundaries/README.md) |
 | record-type | [#26](https://github.com/qt4cg/xslt40-test/pull/26) | 2 pass after implementation; original 2 failures retained | [Details](record-type-boundaries/README.md) |
 
-No second processor is installed or required as a local submission prerequisite. Each PR requests reviewer cross-checking. The original six failures are retained as historical Bosak implementation findings; expected outputs remain specification-derived. Source candidate 1.1.4 is unpublished; public release remains 1.1.3. Next: respond to upstream reviews and triage select first, then enumeration aliases and named-record constructors.
+No second processor is installed or required as a local submission prerequisite. Each PR requests reviewer cross-checking. The original six failures are retained as historical Bosak implementation findings; expected outputs remain specification-derived. Bosak 1.2.0 is the current published release; the earlier candidate versions and next-step notes below are historical.
 
+## Historical implementation evidence
+
+The following entries record each slice at the time it was verified. Their candidate/publication labels, family counts and next-step queues are historical snapshots; the current status above supersedes them. Original failures and verification receipts remain preserved.
 
 Select correction: source candidate is now 1.2.0 (unpublished). Two select cases pass; broader seqtor 78/5/9 retains five namespace-declaration failures. Next: enumeration alias triage, then named-record constructors; expression-body namespace support remains a separate follow-up.
 
