@@ -14,7 +14,7 @@ Validation: Release build passes with 12 existing warnings and zero errors. All 
 
 Next: node-name unions/schema diagnostics and function type grammar, then package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: tested implementation 7c71f657 committed and pushed; [Bosak PR #225](https://github.com/Fytala-Charles/Bosak/pull/225) open, stacked on #224 (itself stacked on #223). PR #223 CI passed; prerequisites remain open. Retarget each slice to main after its prerequisite merges, then wait for CI. This delivery record changes documentation only.
 
 # Processing-instruction target aliases — 2026-10-13
 
