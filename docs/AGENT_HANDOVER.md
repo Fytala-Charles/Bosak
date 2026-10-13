@@ -12,7 +12,7 @@ Validation: Release build passes (12 existing warnings, zero errors). All 7022 u
 
 Next: remaining static type diagnostics and choice-target eligibility, then package exposure. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation. No local second processor is available.
 
-Delivery: local changes pending commit. Merge #217 requires explicit user approval following automatic review rejection.
+Delivery: tested implementation 5ba044eb514cfe404c7b6156040be4ec675be11e committed and pushed; [Bosak PR #218](https://github.com/Fytala-Charles/Bosak/pull/218) is open, stacked on #217, CI pending. This documentation-only delivery record follows the tested implementation. Merge #217 requires explicit user approval following automatic review rejection.
 
 # Finite recursive records and container casts — 2026-10-13
 

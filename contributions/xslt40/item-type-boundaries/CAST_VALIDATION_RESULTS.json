@@ -40,5 +40,7 @@
     "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "f91a11d9025169962e00aa77bb641a0645ac018b56260919c976ff5cdab853e8",
     "tests/Bosak.Xslt.Tests/Xslt40AliasCastTests.cs": "fef70f693762978a753edbfe52b85269b62d46a42ebbcceb03e68cc0dd6f07f8",
     "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
-  }
+  },
+  "testedImplementationCommit": "5ba044eb514cfe404c7b6156040be4ec675be11e",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/218"
 }
