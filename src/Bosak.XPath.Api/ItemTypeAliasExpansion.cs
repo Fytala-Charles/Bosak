@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2 | 13-10-2026     | Expand function signatures and ordered choices while preserving return/outer occurrences
+//                      | Charles Korthout | 0.3 | 13-10-2026     | Expand aliases in structural record fields while preserving literal field names
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -64,6 +65,39 @@ internal static class ItemTypeAliasExpansion
         var enumeration = Regex.Match(text, @"^enum\s*\(");
         if (enumeration.Success && text.EndsWith(')')) return "enum(" + text[enumeration.Length..] + suffix;
         if (text is "item()" or "node()" or "empty-sequence()") return text + suffix;
+        var record = Regex.Match(text, @"^record\s*\(");
+        if (record.Success && MatchingClose(text, record.Length - 1) == text.Length - 1)
+        {
+            var inner = text[record.Length..^1].Trim();
+            if (inner is "" or "*") return "record(" + inner + ")" + suffix;
+            var fields = SplitArguments(inner);
+            var expandedFields = new List<string>();
+            foreach (var raw in fields)
+            {
+                var field = raw.Trim();
+                if (field.Length == 0) { expandedFields.Add(field); continue; }
+                int end = 0;
+                if (field[0] is '\'' or '"')
+                {
+                    var quote = field[end++];
+                    while (end < field.Length)
+                    {
+                        if (field[end++] != quote) continue;
+                        if (end < field.Length && field[end] == quote) { end++; continue; }
+                        break;
+                    }
+                }
+                else while (end < field.Length && !char.IsWhiteSpace(field[end])) end++;
+                var tail = field[end..].TrimStart();
+                if (tail.Length == 0) { expandedFields.Add(field); continue; }
+                var marker = Regex.Match(tail, @"^as\s+");
+                if (!marker.Success) return null;
+                var expanded = Expand(tail[marker.Length..], resolveName);
+                if (expanded is null) return null;
+                expandedFields.Add(field[..end] + " as " + expanded);
+            }
+            return "record(" + string.Join(",", expandedFields) + ")" + suffix;
+        }
         foreach (var kind in new[] { "array", "map" })
         {
             var opening = Regex.Match(text, "^" + kind + @"\s*\(");

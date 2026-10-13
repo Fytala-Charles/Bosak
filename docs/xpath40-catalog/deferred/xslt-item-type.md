@@ -339,3 +339,28 @@ Function binding conversion can wrap a compatible function to convert its result
 An ordered choice such as `(xs:double|xs:string)` is useful for incoming values that can be either numeric readings or textual status labels. Binding conversion tries alternatives in order, so an untyped attribute containing `12` becomes a double with this ordering and a string with the reverse ordering. `instance of` and `treat as` never perform that conversion. Choice aliases also work inside array types and function signatures.
 
 See [function/choice evidence](../../../contributions/xslt40/item-type-boundaries/FUNCTION_CHOICE_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath choice types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types), and [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Immutable specification sources are recorded in the evidence. Native type-alias now reports 7/25/0; broader structural/package gaps and independent processor confirmation remain outstanding.
+
+
+## Structural-record aliases — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) now expands structural-record aliases and aliases nested in record fields, arrays, choices and function signatures. Quoted field names, default item()* fields, trailing commas, nested comments and declaration namespaces are preserved. Existing structural record coercion converts field values and annotates records; type checks require record values and do not coerce plain maps. Eleven new regressions cover the documented sensor example, nested contracts, function boundaries, invalid fields and cycles. Nominative record coercion, recursive named records and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+A sensor ingestion contract can require a numeric reading while accepting an optional text label. Input `<root value="21"/>` produces `<reading value="21" typed="true"/>`:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:item-type name="t:reading" as="record(value as t:number,label as xs:string?)"/>
+  <xsl:item-type name="t:number" as="xs:double"/>
+  <xsl:template match="/">
+    <xsl:variable name="r" as="t:reading" select="map{'value':root/@value}"/>
+    <reading value="{$r?value}" typed="{$r instance of t:reading}"/>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+Binding conversion atomizes the XML attribute, converts it to a double and creates a structural record annotation. The source attribute is assumed present and numeric. Missing required fields, extra keys and incompatible field values fail; a missing optional label is accepted. `RecordAlias_SensorExample` verifies the value and type check. This example adds no catalogue manifest case.
+
+Aliases also work in inline `record(value as t:number)`, nested record fields and callback signatures. Type tests do not convert maps: the original plain map fails a record type test. Structural records describe field contracts; a nominative `xsl:record-type` additionally has named identity and constructors, whose remaining coercion work is separate.
+
+See [structural-record alias evidence](../../../contributions/xslt40/item-type-boundaries/RECORD_ALIAS_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-types), and [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Pinned specification sources and native results are recorded in the evidence; independent processor confirmation remains outstanding.
