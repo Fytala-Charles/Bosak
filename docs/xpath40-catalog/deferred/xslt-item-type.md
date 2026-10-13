@@ -392,3 +392,33 @@ Conversion atomizes the required XML attribute and promotes it to a double. Miss
 The resulting record has the declaration's identity. An original plain map does not match the named type, and a record created for another same-shaped declaration does not match it without explicit conversion. Surplus fields, non-maps, missing required values and invalid cardinalities fail binding conversion. Function parameters/results and named function references use the same path. Defaults do not imply that arbitrary string values are cast to numbers.
 
 See [coercion evidence](../../../contributions/xslt40/record-type-boundaries/COERCION_RESULTS.json), [XSLT named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types), [XPath nominative record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-nominative-record-types), and [item coercion rule 11](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules). Independent processor confirmation remains outstanding.
+
+
+## Named record casts and nested references — 2026-10-13
+
+Source candidate 1.2.0 (unpublished) now supports package-local nominative record cast/castable operations. Casts retain map operands, cast each present field sequence, apply defaults to missing fields, discard surplus keys, protect static fields and attach the target declaration identity. Nested named references in binding/function signatures resolve in their declaration namespace, and nested named record fields reuse casting recursively. Fourteen new regressions cover lexical/type failures, empty/optional inputs, field cardinalities and namespace boundaries. General array/map casts, item-type alias cast expansion, recursive definitions, full package exposure and complete static diagnostics remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.
+
+Explicit projection is useful when a sensor message carries extra metadata or typed textual values. Input `<root value="21"/>` produces `<reading value="21" label="sensor" kind="reading" typed="true"/>`:
+
+```xml
+<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:t="urn:types" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
+  <xsl:record-type name="t:reading">
+    <xsl:field name="value" as="xs:double"/>
+    <xsl:field name="label" as="xs:string" select="'sensor'"/>
+    <xsl:field name="kind" static="yes" as="xs:string" select="'reading'"/>
+  </xsl:record-type>
+  <xsl:template match="/">
+    <xsl:variable name="r" select="map{'value':string(root/@value),'extra':99} cast as t:reading"/>
+    <reading value="{$r?value}" label="{$r?label}" kind="{$r?kind}" typed="{$r instance of t:reading}"/>
+  </xsl:template>
+</xsl:stylesheet>
+```
+
+The cast turns the textual value into a double, discards extra and initializes missing metadata. Binding conversion instead rejects surplus keys and does not generally cast typed strings to numbers. The example assumes a present numeric attribute; `NamedCast_SensorProjection` verifies the same map-to-record projection and defaults. It adds no catalogue manifest case.
+
+Static fields cannot be injected by a plain map, even when the supplied value equals the initializer. Existing instances of the target declaration can retain their static fields when cast. Missing required fields and invalid field cardinalities raise type errors; invalid numeric lexical forms raise casting errors. `castable` reports false for these failures. Optional casts accept empty input. Each member of a declared field sequence is checked/cast individually before its cardinality is validated.
+
+Nested `array(n:reading)` binding and function signatures resolve n in the declaration's namespace; nested named record fields retain declaration identity and use the cast path recursively. This does not establish general array/map casting or full recursive/static type validation.
+
+See [cast evidence](../../../contributions/xslt40/record-type-boundaries/CAST_RESULTS.json), [XPath record casts](https://qt4cg.org/specifications/xquery-40/xpath-40.html#casting-to-record), and [XPath castable](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-castable). Immutable source review and remaining native failures are recorded separately; independent processor confirmation remains outstanding.

@@ -533,6 +533,7 @@
 //                      | Charles Korthout | 7.17 | 13-10-2026     | Supply expanded package aliases to XPath expression and AVT compilation
 //                      | Charles Korthout | 7.18 | 13-10-2026     | Resolve nested array/map aliases in declaration and function sequence types
 //                      | Charles Korthout | 7.19 | 13-10-2026     | Coerce maps to package-local nominative records with defaults and static field protection
+//                      | Charles Korthout | 7.20 | 13-10-2026     | Cast named record fields and resolve nested named references in declaration namespaces
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3207,9 +3208,11 @@ internal sealed class TransformEngine
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
                 ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                    .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()) : null)
+                    .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                     .ToList(),
-                ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()),
+                ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)),
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
@@ -3226,7 +3229,7 @@ internal sealed class TransformEngine
         var definitions = scope.GetNamedRecordTypes();
         _context.BindingItemTypes = scope.GetBindingItemTypes();
         _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
-        _context.NamedRecordCoercion = (type, map) => CoerceNamedRecord(definitions.Values.Single(d => ReferenceEquals(d.Type, type)), map);
+        _context.NamedRecordCoercion = (type, map, casting) => CoerceNamedRecord(definitions.Values.Single(d => ReferenceEquals(d.Type, type)), map, casting);
         foreach (var definition in definitions.Values)
         {
             if (!definition.Constructor) continue;
@@ -3250,10 +3253,10 @@ internal sealed class TransformEngine
         }
     }
 
-    private XdmMap CoerceNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, XdmMap supplied)
+    private XdmMap CoerceNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, XdmMap supplied, bool casting)
     {
         foreach (var key in supplied.Keys)
-            if (key.Kind != XdmValueKind.String || !definition.Type.HasField(key.StringValue))
+            if (!casting && (key.Kind != XdmValueKind.String || !definition.Type.HasField(key.StringValue)))
                 throw new InvalidOperationException("XPTY0004: The map contains a surplus record field.");
         var result = new XdmMap();
         foreach (var field in definition.Fields)
@@ -3261,14 +3264,45 @@ internal sealed class TransformEngine
             var key = XdmValue.FromString(field.Attribute("name")!.Value);
             var present = supplied.TryGetValue(key, out var value);
             var isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
-            if (isStatic && present)
+            if (isStatic && present && !ReferenceEquals(supplied.RecordType, definition.Type))
                 throw new InvalidOperationException("XPTY0004: A supplied map cannot specify a static record field.");
-            if (!present || isStatic) value = EvaluateRecordFieldInitialValue(field, isStatic);
-            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context,
+            if (!present || (isStatic && !casting)) value = EvaluateRecordFieldInitialValue(field, isStatic, "XPTY0004");
+            if (casting && present)
+            {
+                var sequenceType = ResolveBindingSequenceType(field.Attribute("as")?.Value ?? "item()*", field,
+                    _context.BindingItemTypes, _context.NamedRecordTypes)!;
+                value = CastRecordFieldSequence(value, sequenceType);
+            }
+            else value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context,
                 errorCodeOverride: "XPTY0004", declaration: field);
             result = result.WithAdded(key, value);
         }
         return result.WithRecordType(definition.Type);
+    }
+
+    private XdmValue CastRecordFieldSequence(XdmValue value, string sequenceType)
+    {
+        var parsed = (Bosak.XPath.Parser.Ast.InstanceOfNode)Bosak.XPath.Parser.Ast.XPathParser.Parse("() instance of " + sequenceType, xpath40: true);
+        var type = string.IsNullOrEmpty(parsed.Prefix) ? parsed.TypeName : parsed.Prefix + ":" + parsed.TypeName;
+        var converted = new List<XdmValue>();
+        void Add(XdmValue item)
+        {
+            if (type == "empty-sequence()") throw new InvalidOperationException("XPTY0004: The record field must be empty.");
+            if (VmEngine.RecordFieldItemMatches(item, type, _context)) converted.Add(item);
+            else converted.Add(VmEngine.Cast(item, type, _context));
+        }
+        if (value.IsSequence) { foreach (var item in XdmSequence.FromSource(value.SequenceValue!)) Add(item); }
+        else if (!value.IsUndefined) Add(value);
+        if (type == "empty-sequence()")
+        {
+            if (converted.Count != 0) throw new InvalidOperationException("XPTY0004: The record field must be empty.");
+            return XdmValue.Undefined;
+        }
+        if ((converted.Count == 0 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.OneOrMore)
+            || (converted.Count > 1 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne))
+            throw new InvalidOperationException("XPTY0004: Cast record field cardinality does not match its declaration.");
+        return converted.Count == 0 ? XdmValue.Undefined : converted.Count == 1 ? converted[0]
+            : XdmValue.FromSequence(MaterializedSequence.FromList(converted));
     }
 
     private XdmValue ConstructNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, ReadOnlySpan<XdmValue> args)
@@ -3292,7 +3326,7 @@ internal sealed class TransformEngine
         return XdmValue.FromMap(map.WithRecordType(definition.Type));
     }
 
-    private XdmValue EvaluateRecordFieldInitialValue(XElement field, bool isStatic)
+    private XdmValue EvaluateRecordFieldInitialValue(XElement field, bool isStatic, string errorCode = "XTTE0570")
     {
         if (isStatic && _staticRecordFieldValues.TryGetValue(field, out var cached)) return cached;
         if (!_evaluatingRecordFields.Add(field))
@@ -3311,7 +3345,7 @@ internal sealed class TransformEngine
             var value = field.Attribute("select") is { } select
                 ? CompileXPath(select.Value, field).Evaluate(_context)
                 : EvaluateSequenceConstructor(field, initialFocus, wrapInDocumentNode: false);
-            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: "XTTE0570", declaration: field);
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: errorCode, declaration: field);
             if (isStatic) _staticRecordFieldValues[field] = value;
             return value;
         }
@@ -4426,7 +4460,7 @@ internal sealed class TransformEngine
         /// <summary>Package-local item-type binding aliases active before entering the scope.</summary>
         public IReadOnlyDictionary<string, string> BindingItemTypes;
         /// <summary>Package-local record conversion callback active before entering the scope.</summary>
-        public Func<XdmRecordType, XdmMap, XdmMap>? NamedRecordCoercion;
+        public Func<XdmRecordType, XdmMap, bool, XdmMap>? NamedRecordCoercion;
     }
 
     /// <summary>
@@ -4483,9 +4517,11 @@ internal sealed class TransformEngine
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
                     ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                        .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()) : null)
+                        .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                         .ToList(),
-                    ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()),
+                    ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)),
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
                 _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
@@ -16654,15 +16690,17 @@ internal sealed class TransformEngine
         return false;
     }
 
-    private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases)
+    private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases,
+        IReadOnlyDictionary<string, XdmRecordType>? namedRecords = null)
     {
-        if (string.IsNullOrWhiteSpace(sequenceType) || aliases.Count == 0 || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
+        if (string.IsNullOrWhiteSpace(sequenceType) || (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0)) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
         return ItemTypeAliasExpansion.Expand(sequenceType, name =>
         {
             if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
                 && declaration.GetNamespaceOfPrefix(name[..colon]) is null) return name;
-            return aliases.TryGetValue(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration), out var definition)
-                ? definition : name;
+            var expandedName = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration);
+            return aliases.TryGetValue(expandedName, out var definition) ? definition
+                : namedRecords?.ContainsKey(expandedName) == true ? expandedName : name;
         }) ?? sequenceType;
     }
 
@@ -16844,7 +16882,7 @@ internal sealed class TransformEngine
         if (declaration is not null && context is not null)
         {
             var originalBindingType = asType;
-            asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes);
+            asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes, context.NamedRecordTypes);
             if (AllowsItemTypeDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal)))
             {
                 var savedProfile = context.IsXPath40;
