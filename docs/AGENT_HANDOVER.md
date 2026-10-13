@@ -14,7 +14,7 @@ Validation: Release build passes with one existing warning and zero errors. All 
 
 Next: fn/named-parameter function type grammar, then remaining schema-declaration/document shorthand traversal and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: implementation 15ffc171 in PR #227 (https://github.com/Fytala-Charles/Bosak/pull/227), stacked on #226. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
 
 # Node-name union aliases — 2026-10-13
 
