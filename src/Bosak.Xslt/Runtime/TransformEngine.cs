@@ -531,6 +531,7 @@
 //                      | Charles Korthout | 7.15 | 13-10-2026     | Convert named and inline enumeration bindings with scoped declaration profiles
 //                      | Charles Korthout | 7.16 | 13-10-2026     | Resolve array and atomic aliases at XSLT declaration and function boundaries
 //                      | Charles Korthout | 7.17 | 13-10-2026     | Supply expanded package aliases to XPath expression and AVT compilation
+//                      | Charles Korthout | 7.18 | 13-10-2026     | Resolve nested array/map aliases in declaration and function sequence types
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16613,7 +16614,7 @@ internal sealed class TransformEngine
         return (callParams, tunnelParams);
     }
 
-    private static bool AllowsEnumerationDeclarations(XElement declaration)
+    private static bool AllowsItemTypeDeclarations(XElement declaration)
     {
         foreach (var element in declaration.AncestorsAndSelf())
         {
@@ -16627,16 +16628,14 @@ internal sealed class TransformEngine
 
     private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases)
     {
-        if (string.IsNullOrWhiteSpace(sequenceType) || aliases.Count == 0 || !AllowsEnumerationDeclarations(declaration)) return sequenceType;
-        var type = sequenceType.Trim();
-        var suffix = type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
-        var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
-        if (name.Contains('(')) return sequenceType;
-        if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
-            && declaration.GetNamespaceOfPrefix(name[..colon]) is null)
-            return sequenceType;
-        return aliases.TryGetValue(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration), out var definition)
-            ? definition + suffix : sequenceType;
+        if (string.IsNullOrWhiteSpace(sequenceType) || aliases.Count == 0 || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
+        return ItemTypeAliasExpansion.Expand(sequenceType, name =>
+        {
+            if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
+                && declaration.GetNamespaceOfPrefix(name[..colon]) is null) return name;
+            return aliases.TryGetValue(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration), out var definition)
+                ? definition : name;
+        }) ?? sequenceType;
     }
 
     /// <summary>
@@ -16818,7 +16817,7 @@ internal sealed class TransformEngine
         {
             var originalBindingType = asType;
             asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes);
-            if (AllowsEnumerationDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal)))
+            if (AllowsItemTypeDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal)))
             {
                 var savedProfile = context.IsXPath40;
                 context.IsXPath40 = true;

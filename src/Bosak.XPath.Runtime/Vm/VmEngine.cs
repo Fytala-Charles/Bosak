@@ -402,6 +402,7 @@
 //                      | Charles Korthout | 2.175 | 13-10-2026     | Match named record types by annotation identity in type tests.                           |
 //                      | Charles Korthout | 2.176 | 13-10-2026     | Normalize schema EQName cast targets for XPath 4.0 default item types
 //                      | Charles Korthout | 2.177 | 13-10-2026     | Apply XPath 4.0 array member coercion without atomizing the outer array
+//                      | Charles Korthout | 2.178 | 13-10-2026     | Coerce XPath 4.0 typed map keys and values with collision checks and entry order
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -14042,6 +14043,48 @@ internal static class VmEngine
                 arrays.Add(XdmValue.FromArray(new XdmArray(members)));
             }
             return arrays.Count == 1 ? arrays[0] : XdmValue.FromSequence(MaterializedSequence.FromList(arrays));
+        }
+
+        // XPath 4.0 §3.4.2 rule 9: coerce both keys and value sequences,
+        // rejecting key collisions after conversion and retaining entry order.
+        if (context?.IsXPath40 == true && type.StartsWith("map(", StringComparison.Ordinal) && type.EndsWith(')')
+            && type is not ("map(*)" or "map()"))
+        {
+            if (value.IsJNode) return ApplyFunctionConversion(value.JNodeValue.Value, targetType, context);
+            if (ValueMatchesType(value, targetType, context)) return value;
+            if (value.IsUndefined)
+            {
+                if (allowsEmpty) return value;
+                throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+            }
+            var mapItems = new List<XdmValue>();
+            if (value.IsSequence && value.SequenceValue is not null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue)) mapItems.Add(item);
+            }
+            else mapItems.Add(value);
+            if (mapItems.Count == 0 && !allowsEmpty || mapItems.Count > 1 && !allowsMultiple)
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}");
+            var inner = type[4..^1].Trim();
+            var parts = inner is "" or "*" ? Array.Empty<string>() : SplitTopLevel(inner, ',');
+            if (parts.Length is not (0 or 2)) throw new InvalidOperationException("XPST0003: A map type requires a key and value type.");
+            if (parts.Length == 2 && (string.IsNullOrWhiteSpace(parts[0]) || parts[0].TrimEnd()[^1] is '?' or '*' or '+'))
+                throw new InvalidOperationException("XPST0003: A map key type cannot have an occurrence indicator.");
+            var maps = new List<XdmValue>(mapItems.Count);
+            foreach (var item in mapItems)
+            {
+                if (!item.IsMap) throw new InvalidOperationException($"XPTY0004: Cannot convert {item.Kind} to {targetType}");
+                if (parts.Length == 0) { maps.Add(item); continue; }
+                var map = new XdmMap();
+                foreach (var entry in item.MapValue.Entries)
+                {
+                    var key = ApplyFunctionConversion(entry.Key, parts[0].Trim(), context);
+                    if (map.ContainsKey(key)) throw new InvalidOperationException("XPTY0004: Map key coercion produced duplicate keys.");
+                    map = map.WithAdded(key, ApplyFunctionConversion(entry.Value, parts[1].Trim(), context));
+                }
+                maps.Add(XdmValue.FromMap(map));
+            }
+            return maps.Count == 1 ? maps[0] : XdmValue.FromSequence(MaterializedSequence.FromList(maps));
         }
 
         // XPath 4.0 §17.7: a JNode coerces to a map/array/function-typed parameter by

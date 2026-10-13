@@ -229,7 +229,7 @@
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
-      "status": "First batch submitted; enumeration and atomic/array bindings and type expressions pass in Bosak; other structural/package gaps and independent confirmation pending",
+      "status": "First batch submitted; enumeration/atomic/array/typed-map aliases and nested array/map references pass in Bosak; remaining structural/package gaps and independent confirmation pending",
       "candidateScenarios": "Named type visibility, reuse, unknown names and type mismatches; avoid duplicating the type-alias test set.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "type-alias",
@@ -282,7 +282,8 @@
         },
         "bindingFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/BINDING_RESULTS.json",
         "arrayBindingFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/ARRAY_BINDING_RESULTS.json",
-        "expressionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/EXPRESSION_RESULTS.json"
+        "expressionFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/EXPRESSION_RESULTS.json",
+        "mapFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/MAP_RESULTS.json"
       }
     },
     {
