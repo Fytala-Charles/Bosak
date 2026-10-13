@@ -1,6 +1,6 @@
 # Attribute and forward-axis priorities — 2026-10-13
 
-Branch: feat/xslt-forward-axis-priorities; parent 030533e4. Stacked on PR #236; PRs #223–236 remain open. Earlier sections are historical.
+Branch: feat/xslt-forward-axis-priorities; parent 030533e4. Stacked on PR #236; PRs #223–237 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: intersect/except and bare predicate-pattern default priorities. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #237](https://github.com/Fytala-Charles/Bosak/pull/237), stacked on #236. Verified implementation revision b3e22b0f; a documentation-only delivery commit follows. PRs #223–237 remain open. CI starts after retargeting to main. Next: intersect/except and bare predicate-pattern default priorities.
 
 # Node union patterns — 2026-10-13
 
