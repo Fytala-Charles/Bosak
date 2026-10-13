@@ -542,6 +542,7 @@
 //                      | Charles Korthout | 7.26 | 13-10-2026     | Preserve schema declaration identities and normalize document bindings
 //                      | Charles Korthout | 7.27 | 13-10-2026     | Use fixed namespaces in XPath compilation and named type binding resolution
 //                      | Charles Korthout | 7.28 | 13-10-2026     | Coerce direct structural record bindings through the XPath 4.0 converter
+//                      | Charles Korthout | 7.29  | 13-10-2026     | Share variable QName expansion with stylesheet compilation                             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16257,47 +16258,11 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Resolves a variable or parameter name from its lexical form to an expanded QName.
-    /// Handles <c>Q{uri}local</c> EQNames and prefixed QNames using the namespaces in scope
-    /// on the declaring element.
+    /// Handles <c>Q{uri}local</c> EQNames and prefixed QNames using the applicable
+    /// static namespaces on the declaring element.
     /// </summary>
     private static (string LocalName, string NamespaceUri) ExpandVariableName(XElement element, string name)
-    {
-        name = name?.Trim() ?? "";
-        if (string.IsNullOrEmpty(name))
-            return ("", "");
-
-        // EQName syntax: Q{uri}local or Q{uri}prefix:local
-        // The empty URI form Q{}local is permitted and means "no namespace".
-        if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
-        {
-            int closeBrace = name.IndexOf('}');
-            if (closeBrace >= 2)
-            {
-                string uri = name[2..closeBrace];
-                string rest = name[(closeBrace + 1)..];
-                int restColon = rest.IndexOf(':');
-                string local = restColon < 0 ? rest : rest[(restColon + 1)..];
-                return (local, uri);
-            }
-        }
-
-        int colon = name.IndexOf(':');
-        if (colon >= 0)
-        {
-            string prefix = name[..colon];
-            string local = name[(colon + 1)..];
-            if (prefix == "xml")
-                return (local, "http://www.w3.org/XML/1998/namespace");
-
-            var ns = element.GetNamespaceOfPrefix(prefix);
-            if (ns == null)
-                throw new InvalidOperationException($"XPST0081: Undefined namespace prefix '{prefix}'");
-            return (local, ns.NamespaceName);
-        }
-
-        // Unprefixed name is in no namespace for variables/parameters
-        return (name, "");
-    }
+        => Stylesheet.Stylesheet.ExpandVariableName(element, name);
 
     /// <summary>
     /// Returns a dictionary key for an expanded variable QName, using Clark notation.
