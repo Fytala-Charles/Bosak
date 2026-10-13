@@ -47,6 +47,15 @@
 //                      |                  |       |                | (XTTE3110) wiring; match-218/219/220/221/222/243/244                                  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.5   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
+//                      | Charles Korthout | 2.6   | 13-10-2026     | Resolve standalone type patterns in their declaring scope and compute type priorities.   |
+//                      | Charles Korthout | 2.7   | 13-10-2026     | Apply profile-specific XPath 4.0 kind-test wildcard/type priorities.
+//                      | Charles Korthout | 2.8   | 13-10-2026     | Keep 4.0 node union patterns as one rule with maximum alternative priority.
+//                      | Charles Korthout | 2.9   | 13-10-2026     | Normalize 4.0 attribute shorthand and forward-axis default priorities.
+//                      | Charles Korthout | 2.10  | 13-10-2026     | Apply first-operand set priorities and 4.0 predicate-pattern priorities.
+//                      | Charles Korthout | 2.11  | 13-10-2026     | Preserve parenthesized item-pattern scopes and expanded type priorities.
+//                      | Charles Korthout | 2.12  | 13-10-2026     | Use lexical delimiter matching for pattern normalization and priority.
+//                      | Charles Korthout | 2.13  | 13-10-2026     | Share lexical union splitting for earlier-profile rule expansion and type choices.
+//                      | Charles Korthout | 2.14  | 13-10-2026     | Resolve 4.0 pattern prefixes using applicable static namespace bindings                |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -79,7 +88,7 @@ internal sealed class TemplateRule
     public bool MatchesAllModes { get; }
 
     /// <summary>The explicit or computed priority.</summary>
-    public double Priority { get; }
+    public double Priority { get; private set; }
 
     /// <summary>The import precedence (0 = main stylesheet, higher = deeper import).</summary>
     public int ImportPrecedence => Stylesheet.ImportPrecedence;
@@ -204,6 +213,9 @@ internal sealed class TemplateRule
             return new[] { new TemplateRule(element, match, name, modes, 0.5, stylesheet, contextItem) };
         }
 
+        if (stylesheet.GetXPathCompatibility(element) >= XPathCompatibility.XPath40)
+            _ = SplitNodeUnion40(StripXPathComments(match).Trim());
+
         // When an explicit priority is given, the entire union is a single template rule.
         // Splitting only happens when priorities are computed per-branch, so that
         // xsl:next-match can continue to other branches with different priorities.
@@ -223,7 +235,15 @@ internal sealed class TemplateRule
         }
 
         // Validate union pattern constraints before splitting (XTSE0340)
-        ValidateUnionPattern(trimmed);
+        if (stylesheet.GetXPathCompatibility(element) < XPathCompatibility.XPath40)
+            ValidateUnionPattern(trimmed);
+
+        if (stylesheet.GetXPathCompatibility(element) >= XPathCompatibility.XPath40)
+        {
+            // A 4.0 union is one rule: next-match must not revisit another alternative.
+            return new[] { new TemplateRule(element, match, name, modes,
+                ComputeDefaultPriority(match, xpath40: true), stylesheet, contextItem) };
+        }
 
         var branches = SplitUnionBranches(trimmed);
         if (branches.Length <= 1)
@@ -381,9 +401,52 @@ internal sealed class TemplateRule
             {
                 // Resolve namespace prefixes in the pattern to Q{uri}local syntax
                 // so the pattern compiler can match namespaced elements correctly.
-                var resolved = ResolveNamespacePrefixes(Match);
+                var normalized = StripXPathComments(Match).Trim();
+                while (compatibility < XPathCompatibility.XPath40 && normalized.StartsWith('(') && FindMatchingParen(normalized, 0) == normalized.Length - 1)
+                    normalized = normalized[1..^1].Trim();
+                var typePattern = normalized.StartsWith('~');
+                var resolved = typePattern ? normalized : ResolveNamespacePrefixes(Match);
                 var defaultNs = GetXPathDefaultNamespace(Element);
-                CompiledMatch = compiler.Compile(resolved, defaultNs, compatibility: compatibility);
+                if (typePattern)
+                {
+                    var owner = Stylesheet.OwningPackage ?? Stylesheet;
+                    var namespaces = Stylesheet.GetApplicableStaticNamespaces(Element);
+                    var aliases = owner.GetBindingItemTypes();
+                    CompiledMatch = compiler.Compile(resolved, defaultNs, namespaces: namespaces,
+                        compatibility: compatibility, itemTypeAliases: aliases,
+                        namedRecordTypeNames: owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal));
+                    if (Element.Attribute("priority") is null)
+                    {
+                        var (type, predicates) = Patterns.PatternCompiler.GetTypePatternParts(resolved);
+                        string Resolve(string name)
+                        {
+                            var key = Stylesheet.ExpandItemTypeName(name, Element);
+                            if (aliases.TryGetValue(key, out var alias)) return alias;
+                            const string schema = "Q{http://www.w3.org/2001/XMLSchema}";
+                            return key.StartsWith(schema, StringComparison.Ordinal) ? "xs:" + key[schema.Length..] : key;
+                        }
+                        var expanded = ItemTypeAliasExpansion.Expand(type, Resolve) ?? type;
+                        Priority = predicates.Length > 0 ? 0.5 : ComputeTypePatternPriority(expanded);
+                    }
+                }
+                else
+                {
+                    var owner = Stylesheet.OwningPackage ?? Stylesheet;
+                    var aliases = compatibility >= XPathCompatibility.XPath40 ? owner.GetBindingItemTypes() : null;
+                    var namespaces = compatibility >= XPathCompatibility.XPath40 ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
+                    CompiledMatch = compiler.Compile(resolved, defaultNs, namespaces: namespaces, compatibility: compatibility,
+                        itemTypeAliases: aliases, namedRecordTypeNames: compatibility >= XPathCompatibility.XPath40
+                            ? owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal) : null);
+                    string Resolve(string name)
+                    {
+                        var key = Stylesheet.ExpandItemTypeName(name, Element);
+                        if (aliases is not null && aliases.TryGetValue(key, out var alias)) return alias;
+                        const string schema = "Q{http://www.w3.org/2001/XMLSchema}";
+                        return key.StartsWith(schema, StringComparison.Ordinal) ? "xs:" + key[schema.Length..] : key;
+                    }
+                    if (compatibility >= XPathCompatibility.XPath40 && Element.Attribute("priority") is null)
+                        Priority = ComputeDefaultPriority(resolved, xpath40: true, typeResolver: Resolve);
+                }
                 // In a schema-aware stylesheet, also compile the strict/lax typed-mode
                 // variants in which a top-level QName branch means schema-element(QName)
                 // (XSLT 3.0 §5.5.3). Rules without rewriteable QName branches keep using
@@ -465,8 +528,8 @@ internal sealed class TemplateRule
 
     /// <summary>
     /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
-    /// resolving prefixes using the namespace declarations in scope on the
-    /// xsl:template element.
+    /// resolving prefixes using applicable static namespaces in 4.0 and native
+    /// declarations in earlier profiles.
     /// </summary>
     private string ResolveNamespacePrefixes(string pattern)
     {
@@ -474,6 +537,8 @@ internal sealed class TemplateRule
         if (!pattern.Contains(':'))
             return pattern;
 
+        var staticNamespaces = Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40
+            ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
         var sb = new System.Text.StringBuilder();
         int i = 0;
         while (i < pattern.Length)
@@ -500,6 +565,14 @@ internal sealed class TemplateRule
             // Check for Q{…} syntax — already resolved, copy through
             if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
             {
+                if (Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40)
+                {
+                    int close = pattern.IndexOf('}', i + 2);
+                    if (close < 0) throw new InvalidOperationException("XPST0003: Unclosed EQName URI in a pattern.");
+                    sb.Append(pattern, i, close - i + 1);
+                    i = close + 1;
+                    continue;
+                }
                 sb.Append(c);
                 i++;
                 continue;
@@ -524,8 +597,10 @@ internal sealed class TemplateRule
                     while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
                         i++;
                     var local = pattern[localStart..i];
-                    // Resolve prefix; if not found, keep original (will fail to match, which is correct)
-                    var nsUri = Element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                    // Preserve unresolved prefixes for the pattern compiler to diagnose.
+                    var nsUri = staticNamespaces is null
+                        ? Element.GetNamespaceOfPrefix(prefix)?.NamespaceName
+                        : staticNamespaces.GetValueOrDefault(prefix);
                     if (!string.IsNullOrEmpty(nsUri))
                     {
                         sb.Append($"Q{{{nsUri}}}{local}");
@@ -550,9 +625,9 @@ internal sealed class TemplateRule
     }
 
     /// <summary>
-    /// Computes the default priority for a match pattern per the XSLT 2.0/3.0 spec.
+    /// Computes default priority using the owning profile for supported node kind tests.
     /// </summary>
-    private static double ComputeDefaultPriority(string? match)
+    private static double ComputeDefaultPriority(string? match, bool xpath40 = false, Func<string, string>? typeResolver = null)
     {
         if (string.IsNullOrEmpty(match))
             return 0.5;
@@ -564,18 +639,60 @@ internal sealed class TemplateRule
         {
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
-                return ComputeDefaultPriority(trimmed[1..close].Trim());
+                return ComputeDefaultPriority(trimmed[1..close].Trim(), xpath40, typeResolver);
         }
 
         // Union patterns: take the maximum priority of all branches
-        var branches = SplitUnionBranches(trimmed);
+        var branches = xpath40 ? SplitNodeUnion40(trimmed) : SplitUnionBranches(trimmed);
         if (branches.Length > 1)
-            return branches.Max(ComputeSinglePatternPriority);
+            return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true, typeResolver) : ComputeSinglePatternPriority(branch));
 
-        return ComputeSinglePatternPriority(trimmed);
+        if (xpath40)
+        {
+            var operands = SplitNodeUnion40(trimmed, setOperators: true);
+            if (operands.Length > 1)
+                return ComputeDefaultPriority(operands[0], xpath40: true, typeResolver: typeResolver);
+        }
+
+        if (xpath40 && trimmed.StartsWith('~'))
+        {
+            var (type, predicates) = Patterns.PatternCompiler.GetTypePatternParts(trimmed);
+            var expanded = typeResolver is null ? type : ItemTypeAliasExpansion.Expand(type, typeResolver) ?? type;
+            return predicates.Length > 0 ? 0.5 : ComputeTypePatternPriority(expanded);
+        }
+        return ComputeSinglePatternPriority(trimmed, xpath40);
     }
 
-    private static double ComputeSinglePatternPriority(string trimmed)
+    private static double ComputeTypePatternPriority(string type)
+    {
+        var text = type.Trim();
+        if (text.StartsWith('(') && FindMatchingParen(text, 0) == text.Length - 1)
+            return SplitUnionBranches(text[1..^1]).Max(ComputeTypePatternPriority);
+        if (text == "item()") return -1;
+        if (text == "node()") return -0.75;
+        if (text == "function(*)" || text == "xs:anyAtomicType") return -0.5;
+        if (text is "array(*)" or "map(*)") return -0.25;
+        if (text.StartsWith("enum(", StringComparison.Ordinal)) return 0.25;
+        if (text is "xs:dayTimeDuration" or "xs:yearMonthDuration" or "xs:dateTimeStamp") return 0.25;
+        if (text.StartsWith("xs:", StringComparison.Ordinal))
+        {
+            var atomic = System.Xml.Schema.XmlSchemaType.GetBuiltInSimpleType(
+                new System.Xml.XmlQualifiedName(text[3..], "http://www.w3.org/2001/XMLSchema"));
+            int depth = 0;
+            for (var current = atomic; current is not null && current.QualifiedName.Name != "anySimpleType";
+                current = current.BaseXmlSchemaType as System.Xml.Schema.XmlSchemaSimpleType)
+                depth++;
+            return depth <= 1 ? 0 : 0.5 - Math.Pow(2, -depth);
+        }
+        if (text.StartsWith("element(") || text.StartsWith("attribute(") ||
+            text.StartsWith("document-node(") || text.StartsWith("schema-element(") ||
+            text.StartsWith("schema-attribute(") || text.StartsWith("processing-instruction(") ||
+            text is "text()" or "comment()" or "namespace-node()")
+            return ComputeSinglePatternPriority(text, xpath40: true);
+        return 0;
+    }
+
+    private static double ComputeSinglePatternPriority(string trimmed, bool xpath40 = false)
     {
         trimmed = StripXPathComments(trimmed).Trim();
 
@@ -584,8 +701,13 @@ internal sealed class TemplateRule
         {
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
-                return ComputeSinglePatternPriority(trimmed[1..close].Trim());
+                return ComputeSinglePatternPriority(trimmed[1..close].Trim(), xpath40);
         }
+
+        // Predicate patterns precede path classification: slashes inside their predicates are expressions.
+        if (xpath40 && (trimmed == "." ||
+            (trimmed.StartsWith('.') && trimmed[1..].TrimStart().StartsWith('['))))
+            return trimmed == "." ? -1 : 1;
 
         // Root pattern
         if (trimmed == "/")
@@ -622,10 +744,26 @@ internal sealed class TemplateRule
         if (trimmed.StartsWith("."))
             return trimmed.Contains('[') ? 1.0 : -0.5;
 
-        // Explicit axis step
-        if (trimmed.Contains("::"))
+        // A predicate increases node-pattern priority, including explicit-axis kind tests.
+        if (xpath40 && MaskPatternUris(trimmed).Contains('[')) return 0.5;
+
+        if (xpath40 && trimmed.StartsWith('@'))
+            return ComputeSinglePatternPriority(trimmed[1..].Trim(), xpath40: true);
+
+        // EQName URI punctuation must not be interpreted as an axis separator.
+        var axisText = xpath40 ? MaskPatternUris(trimmed) : trimmed;
+        int axisSeparator = axisText.IndexOf("::", StringComparison.Ordinal);
+        if (xpath40 && axisSeparator >= 0)
         {
-            int colonIdx = trimmed.IndexOf("::");
+            var forwardAxis = trimmed[..axisSeparator].Trim();
+            if (forwardAxis is "child" or "descendant" or "attribute" or "self" or "descendant-or-self" or "namespace")
+                return ComputeSinglePatternPriority(trimmed[(axisSeparator + 2)..].Trim(), xpath40: true);
+        }
+
+        // Explicit axis step in earlier profiles.
+        if (axisSeparator >= 0)
+        {
+            int colonIdx = axisSeparator;
             string axis = trimmed[..colonIdx].Trim().ToLowerInvariant();
             string nodeTest = trimmed[(colonIdx + 2)..].Trim();
 
@@ -637,7 +775,7 @@ internal sealed class TemplateRule
             // axis-free form (XSLT 3.0 §6.4): wildcard name → -0.5, name only → 0.0,
             // a type argument → 0.25 (match-167/171).
             if (nodeTest.StartsWith("element(") || nodeTest.StartsWith("attribute("))
-                return ElementOrAttributeTestPriority(nodeTest);
+                return ElementOrAttributeTestPriority(nodeTest, xpath40);
 
             // Namespace wildcards: NCName:*, *:NCName, or Q{uri}* → -0.25
             if (nodeTest.EndsWith(":*") || nodeTest.StartsWith("*:") ||
@@ -672,10 +810,10 @@ internal sealed class TemplateRule
 
         // ElementTest and AttributeTest with arguments
         if (trimmed.StartsWith("element(") && trimmed.EndsWith(")"))
-            return ElementOrAttributeTestPriority(trimmed);
+            return ElementOrAttributeTestPriority(trimmed, xpath40);
 
         if (trimmed.StartsWith("attribute(") && trimmed.EndsWith(")"))
-            return ElementOrAttributeTestPriority(trimmed);
+            return ElementOrAttributeTestPriority(trimmed, xpath40);
 
         // processing-instruction("name") or processing-instruction(name) → 0
         if (trimmed.StartsWith("processing-instruction(") && trimmed.EndsWith(")"))
@@ -688,7 +826,7 @@ internal sealed class TemplateRule
         if (trimmed.StartsWith("document-node(") && trimmed.EndsWith(")"))
         {
             var arg = ExtractFunctionArg(trimmed);
-            return string.IsNullOrEmpty(arg) ? -0.5 : ComputeSinglePatternPriority(arg);
+            return string.IsNullOrEmpty(arg) ? -0.5 : ComputeSinglePatternPriority(arg, xpath40);
         }
 
         // schema-element and schema-attribute have priority 0.25
@@ -739,16 +877,74 @@ internal sealed class TemplateRule
     /// <summary>
     /// Computes the default priority of an <c>element(...)</c> or <c>attribute(...)</c>
     /// kind test per XSLT 3.0 §6.4: no argument or a wildcard name only → -0.5; a name
-    /// only → 0.0; a type argument after a top-level comma → 0.25.
+    /// only → 0.0; a type argument after a top-level comma → 0.25. XSLT 4.0 instead
+    /// assigns partial wildcards -0.25 and combines name/type priority as 0.25 + 0.5 * name priority.
     /// </summary>
-    private static double ElementOrAttributeTestPriority(string nodeTest)
+    private static double ElementOrAttributeTestPriority(string nodeTest, bool xpath40 = false)
     {
         var arg = ExtractFunctionArg(nodeTest);
+        if (xpath40)
+        {
+            int comma = FindKindTestComma(arg);
+            var names = comma < 0 ? arg : arg[..comma];
+            double namePriority = SplitKindTestNames(names).Max(name =>
+            {
+                var test = name.Trim();
+                if (test.Length == 0 || test == "*") return -0.5;
+                if (test.StartsWith("*:", StringComparison.Ordinal) || test.EndsWith(":*", StringComparison.Ordinal)
+                    || (test.StartsWith("Q{", StringComparison.Ordinal) && test.EndsWith("}*", StringComparison.Ordinal))) return -0.25;
+                return 0;
+            });
+            return comma < 0 ? namePriority : 0.25 + 0.5 * namePriority;
+        }
         if (string.IsNullOrEmpty(arg) || arg == "*")
             return -0.5;                    // element() / element(*) / attribute() / attribute(*)
         if (HasTopLevelComma(arg))
             return 0.25;                    // element(*, T) / element(E, T) / attribute(*, T) / attribute(A, T)
         return 0.0;                         // element(E) / attribute(A)
+    }
+
+    private static string MaskPatternUris(string text)
+    {
+        var chars = text.ToCharArray();
+        for (int i = 0; i + 1 < text.Length; i++)
+        {
+            if (text[i] != 'Q' || text[i + 1] != '{') continue;
+            int close = text.IndexOf('}', i + 2);
+            if (close < 0) break;
+            Array.Fill(chars, ' ', i + 2, close - i - 2);
+            i = close;
+        }
+        return new string(chars);
+    }
+
+    private static IEnumerable<string> SplitKindTestNames(string text)
+    {
+        int start = 0;
+        bool eqName = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (eqName) { if (text[i] == '}') eqName = false; continue; }
+            if (text[i] == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { eqName = true; i++; continue; }
+            if (text[i] == '|') { yield return text[start..i]; start = i + 1; }
+        }
+        yield return text[start..];
+    }
+
+    private static int FindKindTestComma(string text)
+    {
+        int depth = 0;
+        bool eqName = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (eqName) { if (c == '}') eqName = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { eqName = true; i++; continue; }
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == ',' && depth == 0) return i;
+        }
+        return -1;
     }
 
     /// <summary>
@@ -830,25 +1026,58 @@ internal sealed class TemplateRule
         return false;
     }
 
-    private static string[] SplitUnionBranches(string pattern)
+    /// <summary>Splits 4.0 union or intersect/except operands without treating nested content as operators.</summary>
+    private static string[] SplitNodeUnion40(string pattern, bool setOperators = false)
     {
         var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
+        int start = 0, depth = 0;
+        char quote = '\0';
+        bool uri = false;
         for (int i = 0; i < pattern.Length; i++)
         {
             char c = pattern[i];
-            if (c == '(' || c == '[') depth++;
-            else if (c == ')' || c == ']') depth--;
-            else if (c == '|' && depth == 0)
+            if (quote != '\0')
             {
-                parts.Add(pattern[start..i].Trim());
-                start = i + 1;
+                if (c == quote)
+                {
+                    if (i + 1 < pattern.Length && pattern[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
             }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c is '(' or '[') { depth++; continue; }
+            if (c is ')' or ']') { depth--; continue; }
+            if (depth != 0) continue;
+            int width = !setOperators && c == '|' ? 1 : 0;
+            string? word = setOperators
+                ? (pattern.AsSpan(i).StartsWith("intersect", StringComparison.Ordinal) ? "intersect"
+                    : pattern.AsSpan(i).StartsWith("except", StringComparison.Ordinal) ? "except" : null)
+                : "union";
+            if (width == 0 && word is not null && i > start && pattern.AsSpan(i).StartsWith(word, StringComparison.Ordinal)
+                && (char.IsWhiteSpace(pattern[i - 1]) || (setOperators && pattern[i - 1] is ')' or ']' or '*'))
+                && (i + word.Length == pattern.Length || char.IsWhiteSpace(pattern[i + word.Length]) ||
+                    (setOperators && pattern[i + word.Length] is '(' or '/' or '@' or '*')))
+            {
+                int previous = i - 1;
+                while (previous >= start && char.IsWhiteSpace(pattern[previous])) previous--;
+                if (previous >= start && pattern[previous] is not '/' and not '@' and not ':' and not '|') width = word.Length;
+            }
+            if (width == 0) continue;
+            parts.Add(pattern[start..i].Trim());
+            start = i + width;
+            i += width - 1;
         }
         parts.Add(pattern[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+        if (parts.Count > 1 && parts.Any(string.IsNullOrEmpty))
+            throw new InvalidOperationException("XTSE0340: A node set pattern requires an operand on each side of its operator.");
+        return parts.ToArray();
     }
+
+    private static string[] SplitUnionBranches(string pattern)
+        => Patterns.PatternCompiler.SplitPatternTopLevel(pattern, "|");
 
     /// <summary>
     /// Removes XPath comments (: ... :) from the text, preserving string literals.
@@ -925,17 +1154,7 @@ internal sealed class TemplateRule
     /// Returns -1 if not found.
     /// </summary>
     private static int FindMatchingParen(string text, int startIndex)
-    {
-        if (text[startIndex] != '(') return -1;
-        int depth = 1;
-        for (int i = startIndex + 1; i < text.Length; i++)
-        {
-            if (text[i] == '(') depth++;
-            else if (text[i] == ')') depth--;
-            if (depth == 0) return i;
-        }
-        return -1;
-    }
+        => Patterns.PatternCompiler.FindMatchingDelimiter(text, startIndex, '(', ')');
 
     /// <summary>
     /// Returns true if the attribute value contains an unescaped AVT expression delimiter.

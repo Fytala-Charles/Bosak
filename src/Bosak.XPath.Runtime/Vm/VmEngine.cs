@@ -407,6 +407,11 @@
 //                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
 //                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
 //                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
+//                      | Charles Korthout | 2.183 | 13-10-2026     | Match explicit empty-namespace element and attribute type names
+//                      | Charles Korthout | 2.184 | 13-10-2026     | Match processing-instruction sequence types by their case-sensitive target
+//                      | Charles Korthout | 2.185 | 13-10-2026     | Match element and attribute type tests with partial name wildcards
+//                      | Charles Korthout | 2.186 | 13-10-2026     | Match node-name unions without splitting EQName namespace separators
+//                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -12443,10 +12448,10 @@ internal static class VmEngine
         if (open < 0 || close <= open)
             return;
         var inner = s.Substring(open + 1, close - open - 1);
-        int comma = inner.IndexOf(',');
-        if (comma < 0)
+        var parts = SplitNodeTestParts(inner, ',');
+        if (parts.Length < 2)
             return;
-        var typePart = inner[(comma + 1)..].Trim();
+        var typePart = parts[1];
         if (typePart.EndsWith('?'))
             typePart = typePart[..^1].TrimEnd();
         if (typePart.Length == 0 || typePart == "*")
@@ -12830,16 +12835,25 @@ internal static class VmEngine
                 var typePart = cpInner.Substring(3).Trim();
                 return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
-            var namePart = cpInner.Split(',')[0].Trim();
+            var nodeParts = SplitNodeTestParts(cpInner, ',');
+            var names = SplitNodeTestParts(nodeParts[0], '|');
+            if (names.Length > 1)
+                return names.Any(name => ValueMatchesType(value, "element(" + name +
+                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            var namePart = nodeParts[0];
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12847,7 +12861,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {
@@ -12871,9 +12885,9 @@ internal static class VmEngine
                     }
                 }
             }
-            if (cpInner.Contains(','))
+            if (nodeParts.Length > 1)
             {
-                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
+                var typePart = nodeParts[1];
                 return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -12897,16 +12911,25 @@ internal static class VmEngine
                 var typePart = cpInner.Substring(3).Trim();
                 return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
-            var namePart = cpInner.Split(',')[0].Trim();
+            var nodeParts = SplitNodeTestParts(cpInner, ',');
+            var names = SplitNodeTestParts(nodeParts[0], '|');
+            if (names.Length > 1)
+                return names.Any(name => ValueMatchesType(value, "attribute(" + name +
+                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            var namePart = nodeParts[0];
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12914,7 +12937,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {
@@ -12936,9 +12959,9 @@ internal static class VmEngine
                     }
                 }
             }
-            if (cpInner.Contains(','))
+            if (nodeParts.Length > 1)
             {
-                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
+                var typePart = nodeParts[1];
                 return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -12998,6 +13021,14 @@ internal static class VmEngine
 
         if (normalized is "processing-instruction()" or "processing-instruction")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction;
+
+        if (normalized.StartsWith("processing-instruction(", StringComparison.Ordinal))
+        {
+            var text = GetCasePreservedTypeName(typeName);
+            return XPathParser.TryParseProcessingInstructionTypeTarget(text, out var target)
+                && value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction
+                && (target is null || string.Equals(value.NodeValue.LocalName, target, StringComparison.Ordinal));
+        }
 
         if (normalized is "namespace-node()" or "namespace-node")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Namespace;
@@ -13255,6 +13286,26 @@ internal static class VmEngine
             if (depth == 0) return i;
         }
         return -1;
+    }
+
+    /// <summary>Splits node-test names and annotations without dividing EQName namespace URIs.</summary>
+    private static string[] SplitNodeTestParts(string text, char delimiter)
+    {
+        var parts = new List<string>();
+        int start = 0;
+        bool inUri = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == '{') inUri = true;
+            else if (text[i] == '}') inUri = false;
+            else if (text[i] == delimiter && !inUri)
+            {
+                parts.Add(text[start..i].Trim());
+                start = i + 1;
+            }
+        }
+        parts.Add(text[start..].Trim());
+        return parts.ToArray();
     }
 
     /// <summary>
@@ -14081,11 +14132,13 @@ internal static class VmEngine
         // syntactic parse of the target below. The occurrence indicator applies to the
         // record item itself: each item of the input is coerced individually.
         var recordTargetText = targetType.Trim();
+        bool recordRequiresSingle = IsRecordTypeText(recordTargetText);
+        if (recordRequiresSingle) recordTargetText += "?";
         bool recordAllowsEmpty = false;
         bool recordAllowsMultiple = false;
         if (recordTargetText.Length > 1 && recordTargetText[^1] is '?' or '*' or '+')
         {
-            recordAllowsEmpty = recordTargetText[^1] is '?' or '*';
+            recordAllowsEmpty = !recordRequiresSingle && recordTargetText[^1] is '?' or '*';
             recordAllowsMultiple = recordTargetText[^1] is '*' or '+';
             var recordBaseText = recordTargetText[..^1].TrimEnd();
             if (IsRecordTypeText(recordBaseText))
@@ -14107,6 +14160,8 @@ internal static class VmEngine
                 {
                     recordItems.Add(value);
                 }
+                if (recordItems.Count == 0 && !recordAllowsEmpty)
+                    throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
                 if (recordItems.Count > 1 && !recordAllowsMultiple)
                     throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
                 var coercedRecords = new List<XdmValue>(recordItems.Count);
@@ -14119,10 +14174,6 @@ internal static class VmEngine
                 return coercedRecords.Count == 1 ? coercedRecords[0]
                     : XdmValue.FromSequence(MaterializedSequence.FromList(coercedRecords));
             }
-        }
-        else if (IsRecordTypeText(recordTargetText))
-        {
-            return ApplyFunctionConversion(value, recordTargetText + "?", context);
         }
 
         // The syntactic parse of the target sequence type depends only on the type string,

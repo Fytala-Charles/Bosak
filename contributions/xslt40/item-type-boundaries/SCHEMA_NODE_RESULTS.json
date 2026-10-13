@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 supports schema annotations in element/attribute item-type aliases and supported structural sequence types, including node-name unions, nested documents, arrays and record fields. The annotation resolves independently against in-scope schema types and retains declaration namespaces under prefix rebinding; item-type aliases are not substituted into the schema annotation. Built-in and imported simple/complex schema types are accepted. Unknown annotations raise XPST0008; undeclared annotation prefixes raise XPST0081; malformed or empty annotations raise XPST0003. Only element annotations permit the nillable ? marker. The ##any default maps unprefixed schema annotations to the XML Schema namespace. Twenty-eight new regressions cover matching untyped and validated nodes, non-coercion, imported simple/complex types, nillability, namespace identity, nested contracts and unused declarations. fn/named-parameter function grammar, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "eaabf8ad1fcdebe2426e819eb70b06c6e59ee3f8",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-element-test",
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 11,
+    "failed": 21,
+    "skipped": 0
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T093834958Z.json",
+  "newlyPassingCases": [],
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Release build passes with one existing warning and zero errors. All 7193 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4307/0/0 and twenty-eight new regressions. Focused node-alias tests pass 115/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs": "9eb7d1c709baf3ae1ba022bb0596f56bc144520864394051790a9744bc344d55",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "a9e33a337cbf182eee3141d8136d31517107c31ddbd6b815d52bb0cf0621cd2c",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "666d74d32c3dd85f766b695d782273aa81d74459426aa60632d50c6a548d5a79",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "e42fd8efb152fc64bd6c2dcf3fd2bc2f7c4c27b58e185a0d3b89ed08585bdbce",
+    "tests/Bosak.Xslt.Tests/Xslt40NodeKindAliasTests.cs": "231679dc0af570259852d51a2d12d75a6b1b11c8f6967edef6f7e5e1dee20633",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

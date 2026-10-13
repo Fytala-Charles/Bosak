@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 supports processing-instruction targets in item-type aliases and supported structural sequence types. NCName and quoted-string targets retain case, normalize surrounding whitespace and are never expanded as type QNames. The parser validates targeted sequence-type syntax using a shared target reader; runtime matching compares the actual PI target. Malformed targets raise XPST0003 and quoted targets outside the NCName lexical space raise XPTY0004. Twelve new regressions verify identity, target/case mismatch, nesting, optional occurrences and static diagnostics. Partial wildcards, schema-annotated node tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "3d076aa9e548dcefc5616d61f6728582fffe5d0e",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-kind-tests",
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 9,
+    "failed": 23,
+    "skipped": 0
+  },
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final Release build passes with zero warnings/errors. All 7123 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4237/0/0 and twelve new regressions. Focused node-alias tests pass 45/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Parser/Ast/XPathParser.cs": "1dd943de55506fcf112311ab6bde912cd7966237c58d721a2ffeb04dd7122f07",
+    "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs": "b5abd04ba86ac0a61774220bf32a683d941307994d79fc3ea6957e4be1d1a8eb",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "b8dc280400934b41f13b7285a31b558f3fa4462cbcf530017e94264754082bb4",
+    "tests/Bosak.Xslt.Tests/Xslt40NodeKindAliasTests.cs": "6d74ff66b46548aad0dc345d6a004e89d6ca48ae64b2f8457b4655ee27fb0dea",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T090629985Z.json"
+}

@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 10 October 2026
-// PURPOSE              : Contract tests for REQ-125 Slice D: cooperative cancellation, execution limits, nested inheritance and run isolation (AC-08, AC-09).
+// PURPOSE              : Verifies cancellation, execution limits, nested inheritance and run isolation.
 // SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
 //
 // COPYRIGHT            : Fytala
@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice D)                                                               |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Make mid-walk validation cancellation deterministic without timer scheduling.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -20,6 +21,7 @@ using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.Xslt.Api;
+using Bosak.Xslt.Authoring;
 using Bosak.Xslt.Capture;
 using Bosak.Xslt.Validation;
 using Xunit;
@@ -407,33 +409,71 @@ public class SliceDExecutionControlTests
     [Fact]
     public void D_ValidationCancelMidWalk_CancelledDespiteValidStylesheet()
     {
-        // A large stylesheet keeps the walk busy long enough for a CancelAfter token to fire
-        // mid-walk; cancellation classifies the whole run as Cancelled with the XV0013
-        // diagnostic, never as Valid and never as a throw. The same stylesheet without a
-        // token validates clean, proving the outcome is driven by cancellation.
-        var builder = new StringBuilder();
-        builder.Append("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'>");
-        for (var i = 0; i < 3000; i++)
-        {
-            builder.Append($"<xsl:template name='t{i}'><xsl:value-of select='{i} + 1'/></xsl:template>");
-        }
-
-        builder.Append("</xsl:stylesheet>");
-        var stylesheet = builder.ToString();
-        var bytes = Utf8.GetBytes(stylesheet);
-
-        var uncancelled = XsltValidation.Validate(bytes, ValidationMainUri);
-        Assert.Equal(XsltValidationOutcome.Valid, uncancelled.Outcome);
+        // Cancel while enumerating the second child of a template, after the first
+        // child has been validated. Descriptor instrumentation stays in the test;
+        // no timer, worker scheduling or production checkpoint hook is involved.
+        var bytes = Utf8.GetBytes("<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='3.0'><xsl:template match='/'><xsl:value-of select='1 + 1'/><xsl:value-of select='2 + 1'/></xsl:template></xsl:stylesheet>");
+        Assert.True(AuthoringSource.TryCreate(bytes, ValidationMainUri, out var source, out _));
+        var inspection = XsltAuthoring.Inspect(source!, options: new AuthoringInspectionOptions { AttemptCompilation = false });
+        Assert.True(inspection.IsSuccess);
+        var original = inspection.Snapshot!;
+        Assert.Equal(XsltValidationOutcome.Valid, XsltValidation.Validate(original).Outcome);
 
         using var cts = new CancellationTokenSource();
-        cts.CancelAfter(TimeSpan.FromMilliseconds(1));
-        var cancelled = XsltValidation.Validate(
-            bytes,
-            ValidationMainUri,
-            options: new XsltValidationOptions { CancellationToken = cts.Token });
+        var reachedMidWalk = false;
+        var ids = new Dictionary<XObject, int>();
+        AuthoringNodeDescriptor Clone(AuthoringNodeDescriptor node)
+        {
+            IReadOnlyList<AuthoringNodeDescriptor> children = node.Children.Select(Clone).ToArray();
+            if (node.ElementName?.LocalName == "template")
+                children = new CancellingChildren(children, () => { reachedMidWalk = true; cts.Cancel(); });
+            if (node.BackingObject is { } backing) ids[backing] = node.Id;
+            return new AuthoringNodeDescriptor(node.Id, node.Kind, node.ElementName, node.Text,
+                node.Range, node.Attributes, children, node.BackingObject);
+        }
+        var module = original.PrincipalModule;
+        var instrumented = new AuthoringModuleDescriptor(module.ModuleUri, module.IsPrincipal,
+            module.EncodingName, module.OriginalByteLength, module.Version, module.Edges, Clone(module.Root), module.Precedence);
+        var snapshot = new AuthoringSnapshot(new[] { instrumented },
+            new Dictionary<Uri, AuthoringModuleDescriptor> { [ValidationMainUri] = instrumented },
+            new Dictionary<Uri, AuthoringSource> { [ValidationMainUri] = source! }, ids,
+            original.IsCompilable, original.CompilationDiagnostics, original.ModuleResolver, original.InspectionOptions);
+        Assert.False(cts.IsCancellationRequested);
+        var cancelled = XsltValidation.Validate(snapshot,
+            new XsltValidationOptions { CancellationToken = cts.Token });
 
+        Assert.True(reachedMidWalk);
+        Assert.True(cts.IsCancellationRequested);
         Assert.Equal(XsltValidationOutcome.Cancelled, cancelled.Outcome);
         Assert.NotEqual(XsltValidationOutcome.Valid, cancelled.Outcome);
-        Assert.Contains(cancelled.Diagnostics, d => d.Code == "XV0013");
+        var diagnostic = Assert.Single(cancelled.Diagnostics);
+        Assert.Equal("XV0013", diagnostic.Code);
+        Assert.Equal(ValidationMainUri, diagnostic.ModuleUri);
+        Assert.Equal(bytes, snapshot.ExportOriginal(ValidationMainUri));
+        Assert.Equal(bytes, original.ExportOriginal(ValidationMainUri));
+    }
+
+    private sealed class CancellingChildren(IReadOnlyList<AuthoringNodeDescriptor> children, Action cancel)
+        : IReadOnlyList<AuthoringNodeDescriptor>
+    {
+        /// <summary>Gets the number of children.</summary>
+        public int Count => children.Count;
+
+        /// <summary>Gets a child without triggering enumeration instrumentation.</summary>
+        /// <param name="index">The child index.</param>
+        public AuthoringNodeDescriptor this[int index] => children[index];
+
+        /// <summary>Cancels before the second child's validation boundary.</summary>
+        /// <returns>The children in their original order.</returns>
+        public IEnumerator<AuthoringNodeDescriptor> GetEnumerator()
+        {
+            for (var i = 0; i < children.Count; i++)
+            {
+                if (i == 1) cancel();
+                yield return children[i];
+            }
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }

@@ -299,6 +299,14 @@
 //                      | Charles Korthout | 2.138 | 13-10-2026     | Resolve record field aliases and recursive named references without expanding identities
 //                      | Charles Korthout | 2.139 | 13-10-2026     | Validate named alias references and preserve declared record identities
 //                      | Charles Korthout | 2.140 | 13-10-2026     | Validate supported binding and field type names at stylesheet registration
+//                      | Charles Korthout | 2.141 | 13-10-2026     | Preserve declaration namespaces in named node-kind aliases and record fields
+//                      | Charles Korthout | 2.142 | 13-10-2026     | Preserve partial node-name wildcards in declaration namespace resolution
+//                      | Charles Korthout | 2.143 | 13-10-2026     | Register schema-annotated aliases with declaration namespaces and schema scope
+//                      | Charles Korthout | 2.144 | 13-10-2026     | Register schema declaration aliases against imported global components
+//                      | Charles Korthout | 2.145 | 13-10-2026     | Accept and expose package named types using defining-package definitions
+//                      | Charles Korthout | 2.146 | 13-10-2026     | Resolve fixed namespace bindings for named types and XPath static contexts
+//                      | Charles Korthout | 2.147 | 13-10-2026     | Apply effective profiles to static item-pattern validation.
+//                      | Charles Korthout | 2.148 | 13-10-2026     | Reject unavailable template pattern prefixes at 4.0 stylesheet compilation.             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -819,6 +827,7 @@ internal sealed class Stylesheet
     private IReadOnlyDictionary<string, string>? _enumerationItemTypes;
     private IReadOnlyDictionary<string, XElement>? _namedTypeDeclarations;
     private IReadOnlyDictionary<string, NamedRecordDefinition>? _namedRecordTypes;
+    private readonly Dictionary<string, Stylesheet> _acceptedTypeOwners = new(StringComparer.Ordinal);
 
     private IReadOnlyDictionary<string, XElement> GetNamedTypeDeclarations()
     {
@@ -837,6 +846,8 @@ internal sealed class Stylesheet
                 var type = element.Attribute("as")?.Value.Trim();
                 if (string.IsNullOrEmpty(name) || (element.Name.LocalName == "item-type" && string.IsNullOrEmpty(type)))
                     throw new InvalidOperationException("XTSE0010: Named types require a name; item-type also requires as.");
+                if (element.Attribute("visibility") is { } visibility && visibility.Value is not "public" and not "private")
+                    throw new InvalidOperationException("XTSE0020: Named type visibility must be public or private.");
                 var key = ExpandItemTypeName(name, element);
                 var uri = key[2..key.IndexOf('}')];
                 if (uri is XslNamespace or "http://www.w3.org/2001/XMLSchema" or "http://www.w3.org/2005/xpath-functions")
@@ -855,6 +866,25 @@ internal sealed class Stylesheet
             if (winners.Count != 1)
                 throw new InvalidOperationException("XTSE4030: Duplicate item-type declarations at the same import precedence.");
             result[name] = winners[0].Element;
+        }
+        foreach (var (package, options) in GetSameLevelUsedPackageOptions())
+        {
+            foreach (var (name, declaration) in package.GetNamedTypeDeclarations())
+            {
+                var close = name.IndexOf('}');
+                var ns = name[2..close];
+                var local = name[(close + 1)..];
+                var kind = declaration.Name.LocalName;
+                var visibility = package.GetExposedVisibility(kind, local, ns, -1, declaration.Attribute("visibility") is not null)
+                    ?? package.GetNamedTypeVisibility(name, declaration);
+                if (visibility is not "public" and not "final") continue;
+                var accepted = options is null ? null : GetEffectiveAcceptRule(options, kind, local, ns, -1, visibility);
+                if (accepted?.Visibility == "hidden") continue;
+                if (result.ContainsKey(name))
+                    throw new InvalidOperationException("XTSE3050: Conflicting accepted named types.");
+                result[name] = declaration;
+                _acceptedTypeOwners[name] = package;
+            }
         }
         return _namedTypeDeclarations = result;
     }
@@ -893,6 +923,11 @@ internal sealed class Stylesheet
         {
             if (result.TryGetValue(name, out var cached)) return cached;
             if (!declarations.TryGetValue(name, out var declaration) || declaration.Name.LocalName != "item-type") return null;
+            if (_acceptedTypeOwners.TryGetValue(name, out var owner))
+            {
+                if (owner.GetBindingItemTypes().TryGetValue(name, out var imported)) return result[name] = imported;
+                return null;
+            }
             if (!active.Add(name)) throw new InvalidOperationException("XTSE4035: Circular item-type alias definition.");
             try
             {
@@ -902,7 +937,7 @@ internal sealed class Stylesheet
                     var parsed = Bosak.XPath.Parser.Ast.XPathParser.Parse("() instance of " + expanded, xpath40: true);
                     if (parsed is not Bosak.XPath.Parser.Ast.InstanceOfNode { Occurrence: OccurrenceIndicator.One })
                         throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
-                    XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+                    XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40, SchemaSet = CompiledSchemaSet });
                     result[name] = expanded;
                 }
                 return expanded;
@@ -925,7 +960,9 @@ internal sealed class Stylesheet
                 if (!declarations.TryGetValue(key, out var named))
                     throw new InvalidOperationException($"XPST0051: Unknown item type '{name}' in an item-type definition.");
                 return named.Name.LocalName == "record-type" ? key : Expand(key);
-            });
+            }, (name, attribute) => ExpandNodeTypeName(name, attribute, declaration),
+                name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, declaration), CompiledSchemaSet),
+                (name, attribute) => ItemTypeAliasExpansion.ValidateSchemaDeclarationName(ExpandSchemaDeclarationName(name, attribute, declaration), attribute, CompiledSchemaSet));
         }
         foreach (var name in declarations.Keys) Expand(name);
         return _bindingItemTypes = result;
@@ -948,10 +985,7 @@ internal sealed class Stylesheet
                 // Leave grammar beyond the shared supported type walker to its existing validator.
                 if (ItemTypeAliasExpansion.Expand(attribute.Value, name => name) is null)
                     continue;
-                var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
-                foreach (var ancestor in element.AncestorsAndSelf().Reverse())
-                    foreach (var ns in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
-                        namespaces[ns.Name.LocalName == "xmlns" ? string.Empty : ns.Name.LocalName] = ns.Value;
+                var namespaces = GetApplicableStaticNamespaces(element);
                 XPath31Expression.Compile("() instance of " + attribute.Value, new CompileOptions
                 {
                     Compatibility = XPathCompatibility.XPath40,
@@ -975,6 +1009,11 @@ internal sealed class Stylesheet
         foreach (var (name, element) in GetNamedTypeDeclarations())
         {
             if (element.Name.LocalName != "record-type") continue;
+            if (_acceptedTypeOwners.TryGetValue(name, out var owner))
+            {
+                result[name] = owner.GetNamedRecordTypes()[name];
+                continue;
+            }
             var constructor = element.Attribute("constructor")?.Value is "yes" or "true" or "1";
             var fields = element.Elements(XName.Get("field", XslNamespace)).ToList();
             var names = new HashSet<string>(StringComparer.Ordinal);
@@ -1002,13 +1041,113 @@ internal sealed class Stylesheet
                     if (GetBindingItemTypes().TryGetValue(key, out var alias)) return alias;
                     if (GetNamedTypeDeclarations().TryGetValue(key, out var named) && named.Name.LocalName == "record-type") return key;
                     return key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal) ? "xs:" + key[(key.IndexOf('}') + 1)..] : lexical;
-                }) ?? type;
+                }, (name, attribute) => ExpandNodeTypeName(name, attribute, field),
+                    name => ItemTypeAliasExpansion.ValidateSchemaTypeName(ExpandSchemaTypeName(name, field), CompiledSchemaSet),
+                (name, attribute) => ItemTypeAliasExpansion.ValidateSchemaDeclarationName(ExpandSchemaDeclarationName(name, attribute, field), attribute, CompiledSchemaSet)) ?? type;
                 types.Add(new XdmRecordField(fieldName, type, type.EndsWith('?') || type.EndsWith('*')));
             }
             var text = "record(" + string.Join(",", types.Select(f => "'" + f.Name.Replace("'", "''") + "' as " + f.SequenceTypeText)) + ")";
             result[name] = new NamedRecordDefinition(name, element, new XdmRecordType(types, text), fields, constructor);
         }
         return _namedRecordTypes = result;
+    }
+
+    private sealed record StaticNamespaceResolver(IXsltUriResolver? Resolver, string? BaseUri);
+    private sealed record FixedNamespaceBindings(Dictionary<string, string> Bindings);
+
+    internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element)
+    {
+        var root = element.AncestorsAndSelf().Last();
+        var fixedAttribute = root.Attribute("fixed-namespaces");
+        if (fixedAttribute is null || (!double.TryParse(root.Attribute("version")?.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var version) || version < 4.0))
+            return NativeNamespaces(element);
+        if (root.Annotation<FixedNamespaceBindings>() is { } cached)
+            return new Dictionary<string, string>(cached.Bindings, StringComparer.Ordinal);
+        const string xmlUri = "http://www.w3.org/XML/1998/namespace";
+        var standard = new Dictionary<string, string>(StringComparer.Ordinal)
+        {
+            ["xsl"] = XslNamespace, ["xml"] = xmlUri,
+            ["xs"] = "http://www.w3.org/2001/XMLSchema", ["xsi"] = "http://www.w3.org/2001/XMLSchema-instance",
+            ["fn"] = "http://www.w3.org/2005/xpath-functions", ["math"] = "http://www.w3.org/2005/xpath-functions/math",
+            ["map"] = "http://www.w3.org/2005/xpath-functions/map", ["array"] = "http://www.w3.org/2005/xpath-functions/array",
+            ["err"] = "http://www.w3.org/2005/xqt-errors"
+        };
+        var native = NativeNamespaces(root);
+        var result = new Dictionary<string, string>(StringComparer.Ordinal) { ["xml"] = xmlUri };
+        // Default namespaces remain native: fixed bindings do not change unprefixed names.
+        if (native.TryGetValue(string.Empty, out var defaultUri)) result[string.Empty] = defaultUri;
+        void Add(string prefix, string uri)
+        {
+            try { if (prefix.Length > 0) System.Xml.XmlConvert.VerifyNCName(prefix); }
+            catch (System.Xml.XmlException ex) { throw new InvalidOperationException("XTSE0122: Invalid fixed namespace prefix.", ex); }
+            if (prefix == "xmlns" || uri.Length == 0 || (prefix == "xml") != (uri == xmlUri))
+                throw new InvalidOperationException("XTSE0122: Invalid fixed namespace binding.");
+            if (prefix.Length > 0) result[prefix] = uri;
+        }
+        foreach (var token in fixedAttribute.Value.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (token == "#standard")
+            {
+                foreach (var (prefix, uri) in standard) Add(prefix, native.GetValueOrDefault(prefix, uri));
+            }
+            else if (native.TryGetValue(token, out var nativeUri)) Add(token, nativeUri);
+            else if (standard.TryGetValue(token, out var standardUri)) Add(token, standardUri);
+            else if (token.IndexOf('=') is var equals && equals >= 0)
+            {
+                if (equals == 0) throw new InvalidOperationException("XTSE0122: A fixed namespace prefix is required.");
+                Add(token[..equals], token[(equals + 1)..]);
+            }
+            else
+            {
+                var context = root.Annotation<StaticNamespaceResolver>();
+                try
+                {
+                    var document = context?.Resolver?.Resolve(token, context.BaseUri)
+                        ?? throw new InvalidOperationException("No namespace document resolver.");
+                    if (document.Root is null) throw new InvalidOperationException("Namespace document has no root.");
+                    foreach (var (prefix, uri) in NativeNamespaces(document.Root)) Add(prefix, uri);
+                }
+                catch (Exception ex) { throw new InvalidOperationException("XTSE0122: Cannot resolve fixed namespace document.", ex); }
+            }
+        }
+        root.AddAnnotation(new FixedNamespaceBindings(result));
+        return new Dictionary<string, string>(result, StringComparer.Ordinal);
+    }
+
+    private static Dictionary<string, string> NativeNamespaces(XElement element)
+    {
+        var result = new Dictionary<string, string>(StringComparer.Ordinal);
+        foreach (var ancestor in element.AncestorsAndSelf().Reverse())
+            foreach (var attribute in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
+                result[attribute.Name.LocalName == "xmlns" ? string.Empty : attribute.Name.LocalName] = attribute.Value;
+        result["xml"] = "http://www.w3.org/XML/1998/namespace";
+        return result;
+    }
+
+    internal static string ExpandNodeTypeName(string name, bool attribute, XElement element)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal) || name.StartsWith("*:", StringComparison.Ordinal)) return name;
+        var colon = name.IndexOf(':');
+        var local = colon < 0 ? name : name[(colon + 1)..];
+        var ns = colon < 0 ? (attribute ? string.Empty : GetXPathDefaultNamespace(element) ?? string.Empty)
+            : GetApplicableStaticNamespaces(element).GetValueOrDefault(name[..colon])
+                ?? throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
+        if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
+        return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    internal static string ExpandSchemaDeclarationName(string name, bool attribute, XElement element)
+    {
+        if (!attribute && GetXPathDefaultNamespace(element) == "##any" && !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal))
+            return "Q{}" + name;
+        return ExpandNodeTypeName(name, attribute, element);
+    }
+
+    internal static string ExpandSchemaTypeName(string name, XElement element)
+    {
+        if (!name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal) && GetXPathDefaultNamespace(element) == "##any")
+            return $"Q{{{System.Xml.Schema.XmlSchema.Namespace}}}{name}";
+        return ExpandNodeTypeName(name, false, element);
     }
 
     internal static string ExpandItemTypeName(string name, XElement element)
@@ -1028,7 +1167,7 @@ internal sealed class Stylesheet
         if (colon >= 0)
         {
             System.Xml.XmlConvert.VerifyNCName(name[..colon]);
-            ns = element.GetNamespaceOfPrefix(name[..colon])?.NamespaceName
+            ns = GetApplicableStaticNamespaces(element).GetValueOrDefault(name[..colon])
                 ?? throw new InvalidOperationException("XTSE0280: Undeclared item-type namespace prefix.");
         }
         else
@@ -1808,6 +1947,8 @@ internal sealed class Stylesheet
         if (root == null)
             throw new InvalidOperationException("Stylesheet document has no root element.");
 
+        root.AddAnnotation(new StaticNamespaceResolver(_resolver, _baseUri));
+        _ = GetApplicableStaticNamespaces(root);
         var rootName = root.Name;
 
         if (rootName.NamespaceName != XslNamespace)
@@ -4441,7 +4582,12 @@ internal sealed class Stylesheet
                     {
                         var strippedMatch = PatternCompiler.StripXPathComments(matchAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedMatch))
-                            PatternCompiler.ValidatePatternSyntax(strippedMatch);
+                        {
+                            var compatibility = GetXPathCompatibility(elem);
+                            PatternCompiler.ValidatePatternSyntax(strippedMatch, compatibility);
+                            if (localName == "template" && compatibility >= XPathCompatibility.XPath40)
+                                PatternCompiler.ValidateNamespacePrefixes(strippedMatch, GetApplicableStaticNamespaces(elem));
+                        }
                     }
                 }
                 if (localName == "number")
@@ -4451,14 +4597,14 @@ internal sealed class Stylesheet
                     {
                         var strippedCount = PatternCompiler.StripXPathComments(countAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedCount))
-                            PatternCompiler.ValidatePatternSyntax(strippedCount);
+                            PatternCompiler.ValidatePatternSyntax(strippedCount, GetXPathCompatibility(elem));
                     }
                     var fromAttr = elem.Attribute("from");
                     if (fromAttr != null && !string.IsNullOrWhiteSpace(fromAttr.Value))
                     {
                         var strippedFrom = PatternCompiler.StripXPathComments(fromAttr.Value).Trim();
                         if (!string.IsNullOrEmpty(strippedFrom))
-                            PatternCompiler.ValidatePatternSyntax(strippedFrom);
+                            PatternCompiler.ValidatePatternSyntax(strippedFrom, GetXPathCompatibility(elem));
                     }
 
                     // XTSE0975: @value is mutually exclusive with @select, @level, @count, and @from.
@@ -6439,14 +6585,14 @@ internal sealed class Stylesheet
 
                 var validAcceptComponents = new HashSet<string>(StringComparer.Ordinal)
                 {
-                    "template", "function", "variable", "mode", "attribute-set",
+                    "template", "function", "variable", "mode", "attribute-set", "item-type", "record-type",
                     "key", "decimal-format", "namespace-alias", "character-map",
                     "output", "strip-space", "preserve-space", "global-context-item", "*"
                 };
                 if (!validAcceptComponents.Contains(component))
                     throw new InvalidOperationException($"XTSE0020: Invalid component '{component}' for xsl:accept.");
 
-                var names = ParseAcceptNames(usePackageElement, namesAttr, component).ToList();
+                var names = ParseAcceptNames(child, namesAttr, component).ToList();
                 if (component == "*" && !names.All(n => n.IsWildcard || n.IsNamespaceWildcard || n.LocalName == "*"))
                     throw new InvalidOperationException("XTSE3032: xsl:accept with component=\"*\" must use wildcard names.");
 
@@ -6557,7 +6703,7 @@ internal sealed class Stylesheet
 
         var validComponents = new HashSet<string>(StringComparer.Ordinal)
         {
-            "template", "function", "variable", "mode", "attribute-set",
+            "template", "function", "variable", "mode", "attribute-set", "item-type", "record-type",
             "key", "decimal-format", "namespace-alias", "character-map",
             "output", "strip-space", "preserve-space", "global-context-item", "*"
         };
@@ -7333,6 +7479,7 @@ internal sealed class Stylesheet
     {
         return componentType switch
         {
+            "item-type" or "record-type" => FindExposedNamedType(componentType, name),
             "template" => FindExposedTemplate(name),
             "function" => FindExposedFunction(name),
             "variable" => FindExposedVariable(name),
@@ -7348,6 +7495,29 @@ internal sealed class Stylesheet
             "global-context-item" => FindExposedGlobalContextItem(name),
             _ => null
         };
+    }
+
+    private (string, bool, string)? FindExposedNamedType(string kind, ExposeName name)
+    {
+        var key = $"Q{{{name.NamespaceUri}}}{name.LocalName}";
+        if (!GetNamedTypeDeclarations().TryGetValue(key, out var declaration) || declaration.Name.LocalName != kind)
+            return null;
+        return (GetNamedTypeVisibility(key, declaration), declaration.Attribute("visibility") is not null, kind);
+    }
+
+    private string GetNamedTypeVisibility(string name, XElement declaration)
+    {
+        if (!_acceptedTypeOwners.TryGetValue(name, out var owner))
+            return declaration.Attribute("visibility")?.Value ?? "private";
+        var close = name.IndexOf('}');
+        var ns = name[2..close];
+        var local = name[(close + 1)..];
+        var kind = declaration.Name.LocalName;
+        var visibility = owner.GetExposedVisibility(kind, local, ns, -1, declaration.Attribute("visibility") is not null)
+            ?? owner.GetNamedTypeVisibility(name, declaration);
+        var options = GetSameLevelUsedPackageOptions().First(pair => pair.Package == owner).Options;
+        return (options is null ? null : GetEffectiveAcceptRule(options, kind, local, ns, -1, visibility)?.Visibility)
+            ?? visibility;
     }
 
     private (string, bool, string)? FindExposedTemplate(ExposeName name)
@@ -7441,6 +7611,17 @@ internal sealed class Stylesheet
 
     private IEnumerable<(string DeclaredVisibility, bool IsExplicit, string ComponentType, string? LocalName, string? NamespaceUri, int Arity)> GetAllExposableComponents(string componentType)
     {
+        if (componentType is "item-type" or "record-type" or "*")
+        {
+            foreach (var (name, declaration) in GetNamedTypeDeclarations())
+            {
+                var kind = declaration.Name.LocalName;
+                if (componentType != "*" && componentType != kind) continue;
+                var close = name.IndexOf('}');
+                yield return (GetNamedTypeVisibility(name, declaration), declaration.Attribute("visibility") is not null,
+                    kind, name[(close + 1)..], name[2..close], -1);
+            }
+        }
         if (componentType is "template" or "*")
         {
             foreach (var rule in GetAllNamedTemplatesForExpose())

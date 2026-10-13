@@ -1,3 +1,419 @@
+# 1.2.0 release preparation — 2026-10-13
+
+Branch: release/1.2.0-preparation; source parent 8a5164b4. This section supersedes the earlier next-slice queue.
+
+The user froze the 1.2.0 scope on 2026-10-13 and authorized release preparation. The candidate includes the completed XSLT 4.0 array/member, select-body, switch, named item/record type, namespace and template-pattern slices through PR #246 (source tip 8a5164b4). Additional slices, authoring-context alignment and a new upstream test-area batch move after this release. REQ-126 and N01–N05 retain their recorded review/acceptance states; this release does not claim complete XPath/XSLT 4.0 conformance. A cumulative preparation PR against main will integrate the linear #223–246 stack after candidate CI passes. Release notes, ten coordinated 1.2.0 packages and a package-only fresh-cache consumer are verified before publication. The published version remains 1.1.3 until the final tag/publication action is authorized and completed.
+
+## What was built
+
+Release verification exposed a timing-dependent REQ-125 cancellation test on Linux CI: CancelAfter(1 ms) could fire after validation completed. The test now cancels deterministically between two template child validation boundaries using test-only descriptor enumeration instrumentation. It verifies XV0013, Cancelled classification and unchanged original bytes, with an uncancelled Valid control; no runtime/API hook or cancellation behavior changes. All twelve execution-control regressions pass. The full suite is rerun before final integration.
+
+Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. All 7,676 unit tests pass, including 4,790 XSLT tests, with zero failures/skips. Frozen gates retain their verified totals on unchanged engine source. PR #247 CI must pass before integration. No tag, publication or external messaging.
+
+## Resume here
+
+Local verification is complete. Check the latest head of PR #247, integrate it after main-based CI passes, and retire the included #223–246 stack. Present the exact merged revision for explicit tag/NuGet publication approval. Confirm integration using GitHub state before repeating any merge. The PR checks provide live CI evidence. After publication, authoring-context alignment and a new batch of XSLT 4.0 contribution areas resume. Preserve scratch and receipts; do not close REQ-126 or change gate membership.
+
+Delivery: [PR #247](https://github.com/Fytala-Charles/Bosak/pull/247), a cumulative preparation PR against main; preparation implementation 90de1878 follows frozen source tip 8a5164b4. The verified package and consumer results are in docs/RELEASE-1.2.0-PREPARATION.json. Integration requires passing CI; publication requires explicit approval. Historical slice notes below remain unchanged.
+
+# Pattern prefix diagnostics — 2026-10-13
+
+Branch: feat/xslt-pattern-prefix-diagnostics; parent db953bf6. Stacked on PR #245; PRs #223–245 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 template patterns when a lexical QName or prefixed wildcard uses an unavailable prefix. This includes native prefixes excluded by fixed-namespaces and undeclared prefixes without fixed bindings. A shared XPath-lexer check covers node names, attributes, axes, paths, union/set operands, function/variable references and nested type patterns; string literals, nested comments and EQName URIs remain protected. Earlier-profile loading retains its existing behavior. Thirty-three regressions cover omitted bindings, Unicode and dotted prefixes, protected text, native bindings across 2.0/3.0/4.0 and a direct lexical check distinguishing spaced map-entry delimiters from prefix wildcards; the initial twenty-four-test baseline was 4/20/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. This bounded check does not perform full eager pattern compilation. String-template interpolation checks, non-template authoring/static contexts, broader pattern grammar, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7676 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4790/0/0 and thirty-three new regressions; focused prefix-diagnostics regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: applicable static namespace bindings in XSLT 4.0 authoring validation; inspect pattern and expression slot contexts and keep runtime/static diagnostics consistent. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #246](https://github.com/Fytala-Charles/Bosak/pull/246), stacked on #245. Verified implementation commit 54c20221; this delivery-note commit follows it. PRs #223–246 remain open; CI starts after retargeting to main. Next: applicable static namespace bindings in XSLT 4.0 authoring validation. No merge or publication.
+
+# Pattern fixed namespaces — 2026-10-13
+
+Branch: feat/xslt-pattern-fixed-namespaces; parent b273ab5e. Stacked on PR #244; PRs #223–244 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves prefixes in effective XSLT 4.0 template patterns using the declaring applicable static namespace bindings. Fixed bindings now survive native rebinding in node names, attributes, axes, unions, set operands, nested type tests and predicates. Existing EQNames and quoted text are preserved. Without fixed bindings, native declarations remain applicable; earlier profiles retain their native lookup. Twenty-one regressions cover these boundaries; the initial nineteen-test baseline was 3/16/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. Broader pattern grammar, omitted-prefix diagnostics, non-template authoring/static contexts, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7643 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4757/0/0 and twenty-one new regressions; focused pattern-fixed regressions pass 21/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: omitted-prefix static diagnostics in 4.0 template patterns; inspect fixed bindings that exclude a native prefix and preserve earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #245](https://github.com/Fytala-Charles/Bosak/pull/245), stacked on #244. Verified implementation commit 5708d9cd; this delivery-note commit follows it. PRs #223–245 remain open; CI starts after retargeting to main. Next: omitted-prefix static diagnostics in 4.0 template patterns. No merge or publication.
+
+# Set-pattern axis focus — 2026-10-13
+
+Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–244 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches supported forward-axis operands in XSLT 4.0 intersect/except patterns against the candidate node instead of forcing axis-only chains into document-root XPath evaluation. Mixed axis/path operands use their respective pattern matchers; all-actual-path chains retain sequence evaluation and positional selection. The 4.0 single-pattern classifier reuses lexical path detection so slashes inside predicates or string literals do not turn an axis pattern into a path. Earlier profiles retain existing dispatch. Twenty-two regressions cover self/child/descendant-style axes, attributes, predicates, mixed actual paths, all-path positions, EQName URIs, first-operand priority and earlier-profile behavior. The baseline was 9/13/0 before the fix; all twenty-two now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Fixed namespace resolution in 4.0 template pattern names, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7622 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4736/0/0 and twenty-two new regressions; focused axis-focus regressions pass 22/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fixed namespace resolution in 4.0 template pattern names; use the declaring applicable static bindings consistently for nested node/type/predicate patterns and retain earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #244](https://github.com/Fytala-Charles/Bosak/pull/244), stacked on #243. Verified implementation revision 8a80f2ee; a documentation-only delivery commit follows. PRs #223–244 remain open. CI starts after retargeting to main. Next: fixed namespace resolution in 4.0 template pattern names.
+
+# Set-pattern associativity — 2026-10-13
+
+Branch: feat/xslt-set-pattern-associativity; parent 2e72184f. Stacked on PR #242; PRs #223–243 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 evaluates supported mixed intersect/except pattern chains from left to right in the effective XSLT 4.0 profile. Both operators have equal precedence: `root except missing intersect missing` does not match root, while `root except (missing intersect missing)` does. The matcher preserves parenthesized grouping, union precedence, quoted/URI operator text and existing all-path/all-axis expression evaluation. Missing operands in mixed chains raise XTSE0340. Earlier profiles retain their existing dispatch behavior. Eighteen new regressions cover membership, nonmatches, grouping, union precedence, URI/quoted punctuation, path/axis negatives and earlier-profile behavior. The baseline was 10/8/0 before the fix; focused new plus prior operator checks pass 41/0/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Forward-axis operand focus in 4.0 set patterns, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7600 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4714/0/0 and eighteen new regressions; focused associativity/operator regressions pass 41/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: forward-axis operand focus in 4.0 set patterns; distinguish candidate-node axis matching from actual path evaluation, preserving earlier profiles and positional path semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #243](https://github.com/Fytala-Charles/Bosak/pull/243), stacked on #242. Verified implementation revision 17bf95aa; a documentation-only delivery commit follows. PRs #223–243 remain open. CI starts after retargeting to main. Next: forward-axis operand focus in 4.0 set patterns.
+
+# Pattern operator scanning — 2026-10-13
+
+Branch: feat/xslt-pattern-operator-scanning; parent c6ae3f5b. Stacked on PR #241; PRs #223–242 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 splits supported top-level pattern operators outside string literals, doubled quote escapes, EQName namespace URIs and nested expressions. The shared scanner handles pipe unions and union/intersect/except keywords without splitting complete node-name tokens such as pre-except-post, pre_intersect_post or pre.union.post. Earlier-profile union rule expansion and type-choice priority splitting reuse the lexical scanner; existing profile-specific priority and grammar rules remain intact. Twenty-three regressions cover quoted delimiters/operator text, nested predicates, escaped quotes, URI punctuation, complete operator-like names, nonmatches and earlier-profile unions. The baseline was 17/6/0 before the fix; all twenty-three now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Mixed intersect/except associativity, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7582 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4696/0/0 and twenty-three new regressions; focused operator regressions pass 23/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: mixed intersect/except associativity in the effective 4.0 profile; operators have equal precedence and evaluate left to right. Preserve earlier-profile behavior and frozen gates. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #242](https://github.com/Fytala-Charles/Bosak/pull/242), stacked on #241. Verified implementation revision 32a0b4a2; a documentation-only delivery commit follows. PRs #223–242 remain open. CI starts after retargeting to main. Next: mixed intersect/except associativity in the effective 4.0 profile.
+
+# Pattern delimiter scanning — 2026-10-13
+
+Branch: feat/xslt-pattern-delimiter-scanning; parent 123bed16. Stacked on PR #240; PRs #223–241 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches pattern parentheses and brackets outside string literals and EQName namespace URIs, including doubled quote escapes. Predicate extraction, parenthesized compilation and template normalization/priority share the same lexical delimiter matcher. Static function-call validation ignores parentheses inside EQName URIs. Nineteen regressions cover quoted opening/closing delimiters, nested predicates, escaped single/double quotes, URI parentheses, contained priority, false outer predicates and ordinary earlier-profile node patterns. The baseline was 6/13/0 before the fix; all nineteen now pass. Lexical corrections apply to supported patterns across profiles; existing profile-specific grammar and priority rules remain intact. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Top-level operator splitting around quoted delimiters, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7559 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4673/0/0 and nineteen new regressions; focused delimiter regressions pass 19/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: top-level pattern operator splitting around quoted delimiters and EQName URIs, preserving grammar/profile boundaries and operator precedence. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #241](https://github.com/Fytala-Charles/Bosak/pull/241), stacked on #240. Verified implementation revision 1bae8fb7; a documentation-only delivery commit follows. PRs #223–241 remain open. CI starts after retargeting to main. Next: top-level pattern operator splitting around quoted delimiters and EQName URIs.
+
+# Parenthesized outer-filter paths — 2026-10-13
+
+Branch: feat/xslt-parenthesized-filter-paths; parent 6f863e0d. Stacked on PR #239; PRs #223–240 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 classifies supported XSLT 4.0 parenthesized outer filters using path slashes outside predicates, string literals and EQName namespace URIs. Patterns such as `(.[child/..])[true()]` keep candidate-node focus instead of incorrectly evaluating from the document root. Actual path patterns retain sequence-based positional filtering, including nested parentheses, descendant paths and paths whose EQName URIs contain slashes. Earlier effective profiles retain their existing classification. Twenty-five regressions cover candidate predicates, nested predicates, escaped quotes, URI slashes, aliases, real path positions and nonmatches. The initial twenty-one-case baseline had six failures before the fix; all final twenty-five cases pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Pattern delimiter scanning around quoted parentheses/brackets, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7540 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4654/0/0 and twenty-five new regressions; focused outer-filter regressions pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs, retaining earlier profiles and existing positional semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #240](https://github.com/Fytala-Charles/Bosak/pull/240), stacked on #239. Verified implementation revision 0d80ec2a; a documentation-only delivery commit follows. PRs #223–240 remain open. CI starts after retargeting to main. Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs.
+
+# Parenthesized item patterns — 2026-10-13
+
+Branch: feat/xslt-parenthesized-item-patterns; parent 6a2151d0. Stacked on PR #238; PRs #223–239 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 admits supported parenthesized predicate and type patterns in the effective XSLT 4.0 profile and restricts those outer XNode patterns to nodes. Atomic values, maps and records therefore do not match a parenthesized item pattern; standalone predicate/type patterns retain their item matching. A prior local quoted-record-field regression incorrectly used a parenthesized type pattern for a map; it now uses the standalone type pattern, and new negative regressions verify the node boundary. Nested compilation retains declaring-package aliases, nominative type registries and applicable namespaces. Contained type priorities are recomputed after alias expansion, including wrapped union operands. Earlier profiles retain parenthesized-predicate rejection. Twenty-seven new regressions cover nesting, predicates, node-only membership, atomic/map negatives, aliases, default namespaces, contained priority and invalid direct item unions. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Parenthesized outer-filter path classification, broader pattern grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7515 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4629/0/0 and twenty-seven new regressions; focused parenthesized/type/union regressions pass 83/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: parenthesized outer-filter path classification; distinguish slashes in contained predicates, strings and EQName URIs from actual path operators while preserving positional path filtering. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #239](https://github.com/Fytala-Charles/Bosak/pull/239), stacked on #238. Verified implementation revision c2290f67; a documentation-only delivery commit follows. PRs #223–239 remain open. CI starts after retargeting to main. Next: parenthesized outer-filter path classification. Historical section text is preserved from parent 6a2151d0.
+
+# Set and predicate-pattern priorities — 2026-10-13
+
+Branch: feat/xslt-set-pattern-priorities; parent a3db0f35. Stacked on PR #237; PRs #223–238 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 computes supported XSLT 4.0 intersect/except pattern default priorities from the first operand, including mixed operators, parenthesized operands and union precedence. Bare predicate pattern `.` has priority -1; predicate patterns with one or more predicates have priority +1 even when their expressions contain path slashes or slash string literals. Earlier effective profiles retain their existing behavior. Thirty-four regressions compare explicit competitors, check excluded-node and false-predicate nonmatches, atomic bare-dot matching, comments, adjacent punctuation, operator-name elements and EQName URI operator text. This is a priority calculation slice; broader pattern grammar and set-matching semantics remain separate follow-ups. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Parenthesized item-pattern static validation, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7488 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4602/0/0 and thirty-four new regressions; focused set/predicate-priority regressions pass 34/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: parenthesized item-pattern static validation and declaring-scope matching; compare the 4.0 grammar against existing earlier-profile restrictions before implementation. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #238](https://github.com/Fytala-Charles/Bosak/pull/238), stacked on #237. Verified implementation revision b161cdd0; a documentation-only delivery commit follows. PRs #223–238 remain open. CI starts after retargeting to main. Next: parenthesized item-pattern static validation and declaring-scope matching.
+
+# Attribute and forward-axis priorities — 2026-10-13
+
+Branch: feat/xslt-forward-axis-priorities; parent 030533e4. Stacked on PR #236; PRs #223–237 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 computes supported XSLT 4.0 attribute shorthand and forward-axis pattern priorities from the underlying node test. Named attributes (@A and attribute::A) and named element axis tests have priority 0; namespace/local wildcards retain -0.25 and untargeted kind tests retain -0.5. Named processing-instruction axis tests have priority 0 and now match their target in 4.0 child/self/descendant-style node-test compilation. Existing 4.0 typed kind-test priorities, explicit priorities, predicate priority 0.5 and single-rule union behavior are retained. Earlier effective profiles keep their original behavior. Axis recognition for priority and 4.0 matching ignores :: inside EQName URIs. Thirty-three regressions compare default priorities against explicit competitors, verify earlier-profile differences, target nonmatches, attribute-union next-match chains and positive/negative EQName URI cases. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Intersect/except and bare predicate-pattern priorities, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7454 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4568/0/0 and thirty-three new regressions; focused forward-axis regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: intersect/except and bare predicate-pattern default priorities. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #237](https://github.com/Fytala-Charles/Bosak/pull/237), stacked on #236. Verified implementation revision b3e22b0f; a documentation-only delivery commit follows. PRs #223–237 remain open. CI starts after retargeting to main. Next: intersect/except and bare predicate-pattern default priorities.
+
+# Node union patterns — 2026-10-13
+
+Branch: feat/xslt-union-pattern-priorities; parent c93926a3. Stacked on PR #235; PRs #223–235 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 keeps supported XSLT 4.0 node union patterns as one template rule, using the highest default priority of their alternatives even when a lower-priority alternative is the one that matches. xsl:next-match visits that rule once, and overlapping alternatives do not create competing rule identities. Earlier effective profiles retain separate rules and their original per-alternative next-match behavior. Explicit priorities remain unchanged. Priority calculation recognizes pipe and union keyword operators, recursively computes nested alternatives, and preserves strings, predicates and EQName URIs; parenthesized 4.0 matching retains the declaring static namespace/type context. Empty top-level alternatives are rejected with XTSE0340. Twenty-eight regressions verify maximum priority, single visits, duplicate alternatives, failing ambiguity modes, nested/default namespaces, explicit priorities, version overrides, delimiters and invalid alternatives. Native next-match (including si-next-match) remains 46/8/6, and type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Four next-match 4.0 assertions (021a/023a/025a/039a) reference version-2.0 stylesheets and therefore still select the earlier effective profile; their fixtures and assertions remain unchanged. Processor-level selection for those lower-version native fixtures is a separate harness/API boundary. Other node-pattern priority forms, broader pattern grammar, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7421 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4535/0/0 and twenty-eight new regressions; focused union-pattern regressions pass 28/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names. Native lower-version fixture processor selection is a separate harness/API boundary; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #236 (https://github.com/Fytala-Charles/Bosak/pull/236), stacked on feat/xslt-wildcard-node-patterns / PR #235. Verified implementation revision: 62fa90dd. A documentation-only delivery commit follows this recorded revision. PRs #223–236 remain open; main-target CI begins after stack retargeting. Next implementation slice: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names.
+
+# Wildcard node patterns — 2026-10-13
+
+Branch: feat/xslt-wildcard-node-patterns; parent d84a154c. Stacked on PR #234; PRs #223–234 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches XSLT 4.0 element(...) and attribute(...) kind-test patterns using namespace wildcards (p:* and Q{uri}*), local-name wildcards (*:local), and supported name unions. Matching applies in standalone, explicit-axis and path steps while retaining schema type checks and distinct element/attribute default namespaces. The 4.0 priority table gives untyped partial wildcards -0.25, typed all-name wildcards 0, typed partial wildcards 0.125 and typed exact names 0.25; name unions use their highest member priority. Supported node type patterns and document-node wrappers reuse those priorities. Explicit priorities are retained, and predicates raise node-pattern priority to 0.5, including explicit-axis kind tests. Earlier profiles retain their existing matching and priority behavior. Node-type schema annotations now tolerate surrounding whitespace; 4.0 pattern EQName URI rewriting and kind-test argument splitting preserve embedded delimiters. Forty-one regressions cover matching/nonmatching namespaces and types, axes/paths, unions, priorities, malformed names, prior-profile compatibility and EQName delimiters. Native type-alias advances from 18/14/0 to 22/10/0: wildcard-type-003–006 newly pass with upstream assertions unchanged. Full XSLT 4.0 union-pattern priority/next-match semantics, other node-pattern priority forms, schema-defined atomic priorities, authoring-validation named-type/fixed-namespace contexts and non-template declaring-type registries remain follow-ups. Remaining record/result cases and annotated function types remain independent boundaries; plain maps do not gain record annotations through pattern matching. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7393 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4507/0/0 and forty-one new regressions; focused wildcard-pattern regressions pass 41/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 22/10/0: wildcard-type-003–006 newly pass, all six wildcard cases are green, and original 023/024 and record-pattern 008/009 remain green; runner exits 1 for the ten remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior. Other node-pattern priority forms, remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #235 (https://github.com/Fytala-Charles/Bosak/pull/235), stacked on feat/xslt-template-type-patterns / PR #234. Verified implementation revision: 728c7b29. A documentation-only delivery commit follows this recorded revision. PRs #223–235 remain open; main-target CI begins after stack retargeting. Next implementation slice: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior.
+
+# Template type patterns — 2026-10-13
+
+Branch: feat/xslt-template-type-patterns; parent d9a695f1. Stacked on PR #233; PRs #223–233 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports standalone XSLT 4.0 template type patterns ~T with zero or more predicates, including parenthesized forms, named item types, structural records and nominative records. The matcher delegates membership to the existing XPath type tests and preserves numeric predicate, singleton focus and dynamic-error-as-nonmatch behavior. Template patterns compile with the declaring package type registry and applicable static namespaces, including fixed-namespaces. Default priorities cover item/node/function/map/array families, built-in atomic derivation depth, enumerations and supported choice types; predicate patterns have priority 0.5 and explicit priorities are retained. xs:anyAtomicType is now recognized in host-supplied static type contexts. Twenty-nine regressions cover these behaviors, invalid syntax, previous-profile rejection, quoted field names, EQName delimiters and package-private alias isolation. Native type-alias advances from 16/16/0 to 18/14/0: cases 008 and 009 now pass with their upstream assertions unchanged. Ordinary wildcard node patterns, full XSLT 4.0 union-pattern priority semantics, schema-defined atomic priority derivation and named-type/fixed-namespace authoring-validation contexts remain follow-ups. Non-template pattern slots have not gained the template declaring-type registry in this slice. Plain maps still do not acquire record annotations through pattern matching; cases 006/010/013 and case 050 result handling remain independent boundaries. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7352 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4466/0/0 and twenty-nine new regressions; focused new regressions pass 29/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 18/14/0: cases 008/009 newly pass, while original 023/024 and case 016 remain green; runner exits 1 for the fourteen remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: ordinary wildcard node patterns and their XSLT 4.0 default priorities (native wildcard-type-003–006). Remaining native record outcomes, including case 050 result handling, and annotated function types remain follow-ups. Full union-pattern priorities, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain bounded gaps. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #234 (https://github.com/Fytala-Charles/Bosak/pull/234), stacked on feat/xslt-structural-record-bindings / PR #233. Verified implementation revision: 1b4bfafc. A documentation-only delivery commit follows this recorded revision. PRs #223–234 remain open; main-target CI begins after stack retargeting. Next implementation slice: ordinary wildcard node patterns and their XSLT 4.0 priorities.
+
+# Direct structural record bindings — 2026-10-13
+
+Branch: feat/xslt-structural-record-bindings; parent c3853871. Stacked on PR #232; PRs #223–232 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 coerces direct structural record(...) and record(*) XSLT binding contracts through the existing XPath 4.0 converter. Supported direct record fields resolve aliases and node/type namespaces in their declaration context. Local/global variables and template parameters preserve record annotations and numeric field conversion; invalid values retain XTTE0570/XTTE0590 binding diagnostics. Required single-record and record-plus conversion now reject empty sequences in both empty-value representations, while optional/star records retain empty-sequence support. Plain maps still do not match annotated record instance tests; record(*) requires an existing annotation. Seventeen regressions cover local/global/default-parameter bindings, occurrence indicators, field aliases and node contracts, empty records, invalid values/extra fields, parameter diagnostics and required inline function returns. The local inline-record40 invoice example now verifies INV-2048|EUR instead of the previously observed XTTE0570. Native type-alias stays 16/16/0: case 050 now gets past XTTE0570 record coercion but still fails its independent result assertion. Upstream assertions remain unchanged. Type patterns, broader native record outcomes and annotated function types remain follow-ups. N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7323 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4437/0/0 and seventeen new regressions. Focused structural record binding tests pass 17/0/0; the updated invoice catalog case passes 1/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 16/16/0, with original 023/024 and case 016 still passing; case 050 now reaches its result assertion after successful record coercion; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: type patterns and remaining native record outcomes, including case 050 result handling. Annotated function types and remaining fixed namespace QName/pattern/static contexts stay follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #233](https://github.com/Fytala-Charles/Bosak/pull/233), stacked on #232. Verified implementation commit ef942c75; final handover bookkeeping follows in this branch. PR #233 remains open; CI runs once retargeted to main.
+
+# Inline function named type contracts — 2026-10-13
+
+Branch: feat/xslt-inline-function-alias-contracts; parent 1ac473de. Stacked on PR #231; PRs #223–231 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 expands host named types in inline function parameter and return contracts before IR lowering. Both function(...) and fn(...) retain resolved atomic, array, structural record and nominative record types, including occurrence indicators and nested member aliases. Signature resolution uses the expression static namespace context, including defaults, EQNames, inline namespace declarations and fixed bindings; the existing VM conversion rules apply to arguments and results. Unknown supported signature types are rejected statically even when the function is unused. Public EnumerationItemTypes registrations also resolve in inline signatures and remain restricted to single enum item types. Omitted annotations and XPath 3.1 instructions keep their existing behavior. Twenty-five regressions cover record/date updates, argument and return coercion, cardinality errors, namespaces, array members, record identity, AVTs, public enumeration boundaries and mixed-version refusal. Native type-alias improves from 15/17/0 to 16/16/0: case 016 now passes without changing its assertion; original contribution cases 023/024 remain green. Broader record matching, annotated function types, type patterns and remaining native failures stay outstanding. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7306 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4420/0/0 and twenty-five new regressions. Focused inline contract tests pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 16/16/0, with case 016 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: broader native type-alias record matching and conversion boundaries; type patterns and annotated function types remain follow-ups. Fixed namespaces still need remaining QName/pattern/static contexts. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #232](https://github.com/Fytala-Charles/Bosak/pull/232), stacked on #231. Verified implementation commit 760b9174; final handover bookkeeping follows in this branch. PR #232 remains open; CI runs once retargeted to main.
+
+# Fixed namespace type contexts — 2026-10-13
+
+Branch: feat/xslt-fixed-type-namespaces; parent c0312a70. Stacked on PR #230; PRs #223–230 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves fixed-namespaces for named item/record type names, supported nested type references, static declaration validation and the main XPath compilation paths. Supported tokens include #standard, selected root-native or conventional prefixes, explicit prefix=URI bindings and namespace-document references through the existing stylesheet resolver. Bindings are module-local, cached at compilation, unaffected by descendant rebinding and applied in token order. Invalid bindings or unavailable namespace documents raise XTSE0122. Unprefixed type/node names retain their existing default-namespace rules; fixed bindings do not create native result namespaces. Sixteen regressions cover standard prefixes, nested node contracts, explicit/repeated bindings, namespace documents, include isolation and invalid/unavailable bindings. Native type-alias remains 15/17/0: case 016 now passes namespace resolution but still fails its independent inline-function record conversion contract with XPTY0004. No upstream assertion changes. Fixed namespace coverage of other QName-bearing XSLT attributes, pattern compilation and shadow/static processing remains a follow-up; this is not complete fixed-namespaces support. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7281 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4395/0/0 and sixteen new regressions. Focused fixed namespace tests pass 16/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 15/17/0, with original 023/024 still passing; case 016 now reaches its independent XPTY0004 record-conversion gap; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: native type-alias record conversion and matching gaps; annotated function types and type patterns remain follow-ups. Extend fixed namespace handling to remaining QName/pattern/static contexts separately. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #231](https://github.com/Fytala-Charles/Bosak/pull/231), stacked on #230. Verified implementation commit 4c93a5ea; final handover bookkeeping follows in this branch. PR #231 remains open; CI runs once retargeted to main.
+
+# Package named type exposure — 2026-10-13
+
+Branch: feat/xslt-package-type-exposure; parent f65e01d6. Stacked on PR #229; PRs #223–229 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts item-type and record-type components in xsl:expose and xsl:accept. Public or exposed named types enter using-package type registries unless accepted as hidden; private dependencies retain the defining package's resolved alias definitions and record metadata. Accept names resolve namespaces on the accept element. Missing component names, incompatible acceptance, invalid declaration visibility and collisions with local types produce static errors. Seventeen regressions cover public declarations, explicit and wildcard exposure, private and hidden names, prefix scope, record constructors, private alias dependencies rejected collisions and public/private visibility through an intermediate package. Native type-alias improves from 11/21/0 to 15/17/0; newly passing cases are 018, 020, 021 and 022. Original contribution cases 023/024 remain green. Broader native failures and independent processor confirmation remain outstanding; N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7265 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4379/0/0 and seventeen new regressions. Focused package type tests pass 17/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 15/17/0, with 018/020/021/022 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining native type-alias failures, including annotated function types and record boundaries. Reassess the five original contribution areas after these implementation slices. No gate promotion or publication. CI runs when the PR targets main; retarget stacked PRs after prerequisites merge. Preserve upstream assertions, original contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #230](https://github.com/Fytala-Charles/Bosak/pull/230), stacked on #229. Verified implementation commit ad660282; final handover bookkeeping follows in this branch. PR #230 remains open; CI runs once retargeted to main.
+
+# Schema-declaration and document shorthand aliases — 2026-10-13
+
+Branch: feat/xslt-schema-declaration-aliases; parent a8497065. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226, #227 and #228 remain open and this slice is stacked on #228. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema-element(Name), schema-attribute(Name) and document-node(schema-element(Name)) in item-type aliases and supported structural sequence types. Schema declaration names retain their declaration namespace under prefix rebinding and must resolve to imported global elements/attributes; unknown or unavailable declarations raise XPST0008 and undeclared prefixes raise XPST0081. Wildcards, unions and empty declaration names raise XPST0003. Schema-element under ##any uses no namespace for an unprefixed declaration; unprefixed schema attributes always use no namespace. Document shorthand such as document-node(root|other) normalizes to document-node(element(root|other)), including wildcard and EQName alternatives, and reuses single-root matching. Direct host type operands and alias-free XSLT document/schema bindings normalize the new forms. Twenty-nine new regressions cover node identity, namespace mismatches, imported declarations, substitution members, typed attribute matching, rejection of untyped nodes, nested arrays, ##any defaults, empty documents and static validation of unused bindings. Annotated function types, package exposure and broader native type-alias gaps remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker has a schema-declaration callback and normalizes document name shorthand. Static API and stylesheet resolvers verify imported globals; binding resolvers preserve declaration names. Existing runtime schema and document matchers handle the canonical forms. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7248 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4362/0/0 and twenty-nine new regressions. Focused node-alias tests pass 144/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: package type exposure and remaining native type-alias failures; annotated function types remain a separate grammar follow-up. Reassess the five original contribution areas after these implementation boundaries. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation f58dc6e7 in PR #229 (https://github.com/Fytala-Charles/Bosak/pull/229), stacked on #228. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Function-type grammar aliases — 2026-10-13
+
+Branch: feat/xslt-function-type-grammar; parent 015dce6f. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 and #227 remain open and this slice is stacked on #227. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts fn(...) as a synonym for function(...) and documentary parameter names in supported function-type aliases, direct XPath type operands and XSLT binding signatures. Names do not affect matching or coercion; duplicate expanded names raise XQST0039, including different prefixes bound to the same namespace and unprefixed names paired with Q{} names. Undeclared documentary prefixes raise XPST0081; malformed named parameters raise XPST0003; unknown parameter/result item types retain XPST0051. Named and unnamed parameters may be mixed, with independent name scopes for nested function types. Nested arrays, records and higher-order signatures retain parameter/result sequence occurrences. XPath 3.1 rejects fn type synonyms and named type parameters. Twenty-six new regressions cover callback conversion, wildcard maps/arrays, direct bindings without aliases, direct host evaluation, nesting, namespace identity, diagnostics and version boundaries. Annotated function types, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The 4.0 parser reads recursive function signatures. The shared walker validates documentary expanded names and emits name-free function(...) signatures. Direct host operands and XSLT bindings normalize these forms even without alias registrations; runtime matching and coercion reuse existing signature logic. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7219 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4333/0/0 and twenty-six new regressions. Focused grammar and catalog-example tests pass 2623/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining schema-element/schema-attribute and document shorthand alias traversal, then package exposure and broader native type-alias failures. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation 68945389 in PR #228 (https://github.com/Fytala-Charles/Bosak/pull/228), stacked on #227. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Schema-annotated node aliases — 2026-10-13
+
+Branch: feat/xslt-schema-node-aliases; parent eaabf8ad. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 remains open and this slice is stacked on it. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema annotations in element/attribute item-type aliases and supported structural sequence types, including node-name unions, nested documents, arrays and record fields. The annotation resolves independently against in-scope schema types and retains declaration namespaces under prefix rebinding; item-type aliases are not substituted into the schema annotation. Built-in and imported simple/complex schema types are accepted. Unknown annotations raise XPST0008; undeclared annotation prefixes raise XPST0081; malformed or empty annotations raise XPST0003. Only element annotations permit the nillable ? marker. The ##any default maps unprefixed schema annotations to the XML Schema namespace. Twenty-eight new regressions cover matching untyped and validated nodes, non-coercion, imported simple/complex types, nillability, namespace identity, nested contracts and unused declarations. fn/named-parameter function grammar, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared alias walker has a separate schema-annotation callback. API and declaration resolvers validate in-scope schema types; runtime binding resolution preserves annotation namespace identity. Existing runtime type-compatibility checks evaluate nodes without content coercion. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with one existing warning and zero errors. All 7193 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4307/0/0 and twenty-eight new regressions. Focused node-alias tests pass 115/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fn/named-parameter function type grammar, then remaining schema-declaration/document shorthand traversal and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation 15ffc171 in PR #227 (https://github.com/Fytala-Charles/Bosak/pull/227), stacked on #226. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Node-name union aliases — 2026-10-13
+
+Branch: feat/xslt-node-name-unions; parent 41a61ca1. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. This slice is stacked on #225. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports node-name unions in element/attribute item-type aliases and supported structural sequence types: element(doctor|nurse) and attribute(price|cost) match any listed name. Each alternative retains declaration namespaces and may use a partial wildcard, including nested document-node(element(...)), arrays and record fields. EQName namespace URIs containing pipe or comma characters remain intact. Empty alternatives raise XPST0003; an undeclared prefix in any alternative raises XPST0081; adjacent unknown type names retain XPST0051. Twenty-two new regressions cover positive/negative matching, identity, declaration prefix rebinding, wildcard combinations, nested types and ##any defaults. Schema-annotated alias traversal, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared alias walker expands each alternative through the existing namespace callback. Runtime node tests split unions outside EQName braces and reuse single-name matching for each alternative. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with 11 existing warnings and zero errors. All 7165 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4279/0/0 and twenty-two new regressions. Focused node-alias tests pass 87/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: schema-annotated alias traversal and diagnostics, then function type grammar and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation df1177ce in PR #226 (https://github.com/Fytala-Charles/Bosak/pull/226), stacked on #225. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Partial node wildcard aliases — 2026-10-13
+
+Branch: feat/xslt-node-wildcard-aliases; parent 7fae0371. PR #223 CI passed and PR #224 is stacked on it; both remain open. This slice will be stacked on #224. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports partial element/attribute name wildcards in aliases and supported structural types: *:Name matches an exact local name in any namespace; prefix:* and Q{uri}* match any local name in the specified namespace. Prefix wildcards retain declaration bindings under use-site rebinding, including document-node(element(...)) nesting. Unbound wildcard prefixes raise XPST0081; adjacent unknown type names retain XPST0051. The ##any declaration default now expands unprefixed element tests to *:Name while unprefixed attributes stay unqualified. Twenty new regressions verify identity, case/namespace mismatches, empty namespaces, nested arrays/documents and diagnostics. Node-name unions, schema-annotated tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker recognizes wildcard node names; host/declaration namespace callbacks preserve wildcard intent. Runtime node tests constrain only the specified name part. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7143 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4257/0/0 and twenty new regressions. Focused node-alias tests pass 65/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 11/21/0: wildcard-type-001/002 newly pass and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: node-name unions/schema diagnostics and function type grammar, then package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation 7c71f657 committed and pushed; [Bosak PR #225](https://github.com/Fytala-Charles/Bosak/pull/225) open, stacked on #224 (itself stacked on #223). PR #223 CI passed; prerequisites remain open. Retarget each slice to main after its prerequisite merges, then wait for CI. This delivery record changes documentation only.
+
+# Processing-instruction target aliases — 2026-10-13
+
+Branch: feat/xslt-pi-target-aliases; parent 3d076aa9. PR #223 CI 38372757169 passed; it remains open, so this slice is stacked on #223. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports processing-instruction targets in item-type aliases and supported structural sequence types. NCName and quoted-string targets retain case, normalize surrounding whitespace and are never expanded as type QNames. The parser validates targeted sequence-type syntax using a shared target reader; runtime matching compares the actual PI target. Malformed targets raise XPST0003 and quoted targets outside the NCName lexical space raise XPTY0004. Twelve new regressions verify identity, target/case mismatch, nesting, optional occurrences and static diagnostics. Partial wildcards, schema-annotated node tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+XPathParser shares target parsing between sequence-type validation, alias traversal and runtime matching. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Final Release build passes with zero warnings/errors. All 7123 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4237/0/0 and twelve new regressions. Focused node-alias tests pass 45/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: partial wildcard/schema node diagnostics and function type grammar, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation 97c77996 committed and pushed; [Bosak PR #224](https://github.com/Fytala-Charles/Bosak/pull/224) open, stacked on #223. PR #223 CI passed but it remains open; retarget #224 to main after #223 merges, then wait for CI (the workflow targets main PRs only). This delivery record changes documentation only.
+
+# Named node-type alias grammar — 2026-10-13
+
+Branch: feat/xslt-named-node-aliases; main baseline ef0b156a184d7ed91641d05a879b6f64740e053b. PR #221 merged after passing CI under explicit user authorization; PR #222 merged as ef0b156a after CI 38371939071 passed and the user authorized merging. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports named element/attribute node tests, the complete * wildcard, and document-node(element(...)) inside package-local aliases and supported structural sequence types. Node names resolve in their declaration namespace and remain stable under use-site prefix/default namespace rebinding; unprefixed attributes retain the empty namespace. The host statically rejects unbound node prefixes and validates unknown type names beside named node tests. Explicit Q{}Name matching now checks both namespace and case-sensitive local name. Seventeen new regressions cover matching/mismatches, node identity, nested types, record fields, namespace defaults and static errors. Schema-annotated node tests, partial wildcards, processing-instruction targets, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker distinguishes node names from type names and passes a namespace callback through structural nesting. Stylesheet and binding paths resolve names at declaration sites; host expression resolution handles direct node tests. Runtime matching corrects the empty-namespace EQName boundary. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7111 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4225/0/0 and seventeen new regressions. Focused node-alias tests pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining node grammar/schema diagnostics and function type grammar, then package exposure. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation e745cbbd committed and pushed; [Bosak PR #223](https://github.com/Fytala-Charles/Bosak/pull/223) open against main, CI pending. PRs #221 and #222 are merged. This delivery record changes documentation only. Check #223 CI before its merge; next work is remaining node grammar/schema diagnostics and function type grammar, then package exposure.
+
 # Node-kind alias grammar — 2026-10-13
 
 Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 merged after CI 38368964609 passed and the user authorized merging the prerequisite. PR #222 now targets main. Earlier sections are historical.

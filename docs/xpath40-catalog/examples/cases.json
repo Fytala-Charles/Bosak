@@ -3953,7 +3953,7 @@
     "mode": "xslt40",
     "file": "xslt-type-declarations/inline-record40.xsl",
     "input": "xslt-type-declarations/input.xml",
-    "error": "XTTE0570"
+    "expected": "INV-2048|EUR"
   },
   {
     "id": "xslt-type-declarations-record-main",

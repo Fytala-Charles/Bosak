@@ -58,6 +58,13 @@
 //                      | Charles Korthout | 0.24 | 13-10-2026     | Expand aliases in cast/castable targets and reject ineligible alias targets
 //                      | Charles Korthout | 0.25 | 13-10-2026     | Validate direct and expanded choice casting targets statically in XPath 4.0
 //                      | Charles Korthout | 0.26 | 13-10-2026     | Validate host type names and retain nominative namespace identity in expression targets
+//                      | Charles Korthout | 0.27 | 13-10-2026     | Resolve host element and attribute type-test names in their static namespaces
+//                      | Charles Korthout | 0.28 | 13-10-2026     | Preserve node-name wildcards and expand the XPath 4.0 any default namespace
+//                      | Charles Korthout | 0.29 | 13-10-2026     | Resolve schema annotations against in-scope schema types
+//                      | Charles Korthout | 0.30 | 13-10-2026     | Normalize documentary function signatures without host alias registrations
+//                      | Charles Korthout | 0.31 | 13-10-2026     | Validate schema declaration types and normalize direct document shorthand
+//                      | Charles Korthout | 0.32 | 13-10-2026     | Expand host named types in inline function parameter and return contracts
+//                      | Charles Korthout | 0.33 | 13-10-2026     | Recognize xs:anyAtomicType in host-supplied item-type static contexts.
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -305,7 +312,12 @@ public sealed class XPath31Expression
             StringTemplateNode st => st with { Parts = st.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
-            InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, options) },
+            InlineFunctionNode inf => inf with
+            {
+                Parameters = inf.Parameters.Select(parameter => parameter with { TypeName = ResolveInlineFunctionType(parameter.TypeName, options) }).ToList(),
+                ReturnType = ResolveInlineFunctionType(inf.ReturnType, options),
+                Body = ResolveFunctionNamespaces(inf.Body, options)
+            },
             MapConstructorNode mc => mc with { Entries = mc.Entries.Select(e => e with { Key = ResolveFunctionNamespaces(e.Key, options), Value = ResolveFunctionNamespaces(e.Value, options) }).ToList() },
             ArrayConstructorNode ac => ac with { Items = ac.Items.Select(i => ResolveFunctionNamespaces(i, options)).ToList() },
             PostfixPredicateNode pp => pp with { Expression = ResolveFunctionNamespaces(pp.Expression, options), Predicate = ResolveFunctionNamespaces(pp.Predicate, options) },
@@ -440,10 +452,21 @@ public sealed class XPath31Expression
         };
     }
 
+    private static string? ResolveInlineFunctionType(string? type, CompileOptions options)
+    {
+        if (type is null || options.Compatibility < XPathCompatibility.XPath40 ||
+            (options.ItemTypeAliases is null && options.EnumerationItemTypes is null && options.NamedRecordTypeNames is null))
+            return type;
+        return ItemTypeAliasExpansion.Expand(type, lexical => ResolveStaticItemTypeName(lexical, options),
+            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
+            name => ResolveStaticSchemaTypeName(name, options),
+            (name, attribute) => ResolveStaticSchemaDeclarationName(name, attribute, options)) ?? type;
+    }
+
     private static XPathAstNode ResolveSequenceTypeAlias(XPathAstNode node, CompileOptions options)
     {
         var resolved = ResolveItemTypeAlias(node, options);
-        if (options.Compatibility < XPathCompatibility.XPath40 || options.NamedRecordTypeNames is null)
+        if (options.Compatibility < XPathCompatibility.XPath40)
             return resolved;
         var (prefix, type) = resolved switch
         {
@@ -454,7 +477,14 @@ public sealed class XPath31Expression
             _ => (null, string.Empty)
         };
         var text = string.IsNullOrEmpty(prefix) ? type : prefix + ":" + type;
-        var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options));
+        if (options.NamedRecordTypeNames is null && !text.Contains('$') && !text.Contains("fn(", StringComparison.Ordinal)
+            && !text.Contains("schema-element(", StringComparison.Ordinal) && !text.Contains("schema-attribute(", StringComparison.Ordinal)
+            && !text.Contains("document-node(", StringComparison.Ordinal))
+            return resolved;
+        var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options),
+            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
+            name => ResolveStaticSchemaTypeName(name, options),
+            (name, attribute) => ResolveStaticSchemaDeclarationName(name, attribute, options));
         if (expanded is null || expanded == text) return resolved;
         var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + expanded, xpath40: true);
         return resolved switch
@@ -465,6 +495,40 @@ public sealed class XPath31Expression
             TreatNode treat => treat with { Prefix = parsed.Prefix, TypeName = parsed.TypeName },
             _ => resolved
         };
+    }
+
+    private static string ResolveStaticNodeTypeName(string name, bool attribute, CompileOptions options)
+    {
+        if (name.StartsWith("Q{", StringComparison.Ordinal) || name.StartsWith("*:", StringComparison.Ordinal)) return name;
+        var colon = name.IndexOf(':');
+        var local = colon < 0 ? name : name[(colon + 1)..];
+        var ns = attribute ? string.Empty : options.DefaultElementNamespace ?? string.Empty;
+        if (colon >= 0)
+        {
+            if (options.Namespaces?.TryGetValue(name[..colon], out var uri) == true) ns = uri;
+            else if (name[..colon] == "xml") ns = "http://www.w3.org/XML/1998/namespace";
+            else throw new InvalidOperationException($"XPST0081: Undeclared node type prefix in '{name}'.");
+        }
+        if (colon < 0 && !attribute && ns == "##any") return "*:" + local;
+        return $"Q{{{(ns == "##any" ? string.Empty : ns)}}}{local}";
+    }
+
+    private static string ResolveStaticSchemaDeclarationName(string name, bool attribute, CompileOptions options)
+    {
+        var expanded = !attribute && options.DefaultElementNamespace == "##any" && !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal)
+            ? "Q{}" + name : ResolveStaticNodeTypeName(name, attribute, options);
+        return ItemTypeAliasExpansion.ValidateSchemaDeclarationName(expanded, attribute, options.SchemaSet);
+    }
+
+    private static string ResolveStaticSchemaTypeName(string name, CompileOptions options)
+    {
+        const string schemaNamespace = "http://www.w3.org/2001/XMLSchema";
+        var expanded = !name.Contains(':') && !name.StartsWith("Q{", StringComparison.Ordinal) && options.DefaultElementNamespace == "##any"
+            ? $"Q{{{schemaNamespace}}}{name}"
+            : name.StartsWith("xs:", StringComparison.Ordinal) && options.Namespaces?.ContainsKey("xs") != true
+                ? $"Q{{{schemaNamespace}}}{name[3..]}"
+                : ResolveStaticNodeTypeName(name, false, options);
+        return ItemTypeAliasExpansion.ValidateSchemaTypeName(expanded, options.SchemaSet);
     }
 
     private static string ResolveStaticItemTypeName(string lexical, CompileOptions options)
@@ -491,12 +555,20 @@ public sealed class XPath31Expression
         }
         var key = $"Q{{{uri}}}{local}";
         if (options.ItemTypeAliases?.TryGetValue(key, out var definition) == true) return definition;
-        if (options.NamedRecordTypeNames!.Contains(key)) return key;
+        if (options.EnumerationItemTypes?.TryGetValue(key, out var enumeration) == true)
+        {
+            if (!enumeration.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+                throw new ArgumentException("Enumeration aliases must contain enum(...) item types.");
+            if (XPathParser.Parse("() instance of " + enumeration, xpath40: true) is not InstanceOfNode { Occurrence: OccurrenceIndicator.One })
+                throw new ArgumentException("An item-type alias must denote one item type.");
+            return enumeration;
+        }
+        if (options.NamedRecordTypeNames?.Contains(key) == true) return key;
         var qname = new System.Xml.XmlQualifiedName(local, uri);
         if (uri == schemaNamespace)
         {
             // XDM/XSD 1.1 additions absent from .NET's XSD 1.0 built-in table.
-            if (local is "untypedAtomic" or "untyped" or "numeric" or "error" or "dayTimeDuration" or "yearMonthDuration" or "dateTimeStamp" ||
+            if (local is "anyAtomicType" or "untypedAtomic" or "untyped" or "numeric" or "error" or "dayTimeDuration" or "yearMonthDuration" or "dateTimeStamp" ||
                 System.Xml.Schema.XmlSchemaType.GetBuiltInSimpleType(qname) is not null ||
                 System.Xml.Schema.XmlSchemaType.GetBuiltInComplexType(qname) is not null)
                 return "xs:" + local;

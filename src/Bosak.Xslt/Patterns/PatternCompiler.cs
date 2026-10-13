@@ -86,6 +86,17 @@
 //                      |                  |       |                | keep the historical drop-prefix behavior because bindings are never supplied there    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.16  | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
+//                      | Charles Korthout | 3.17  | 13-10-2026     | Compile XPath 4.0 type patterns with declaring type and namespace scopes.                 |
+//                      | Charles Korthout | 3.18  | 13-10-2026     | Match XPath 4.0 wildcard and union names in element/attribute kind-test patterns.
+//                      | Charles Korthout | 3.19  | 13-10-2026     | Preserve 4.0 static context while compiling parenthesized union alternatives.
+//                      | Charles Korthout | 3.20  | 13-10-2026     | Match named processing instructions in 4.0 forward-axis node tests.
+//                      | Charles Korthout | 3.21  | 13-10-2026     | Validate parenthesized 4.0 item patterns and restrict outer patterns to nodes.
+//                      | Charles Korthout | 3.22  | 13-10-2026     | Ignore predicate, string and URI slashes when classifying 4.0 outer filters.
+//                      | Charles Korthout | 3.23  | 13-10-2026     | Match delimiters outside strings and EQName URIs in pattern compilation.
+//                      | Charles Korthout | 3.24  | 13-10-2026     | Split pattern operators outside quoted content, URI names and nested expressions.
+//                      | Charles Korthout | 3.25  | 13-10-2026     | Evaluate mixed 4.0 intersect/except pattern chains from left to right.
+//                      | Charles Korthout | 3.26  | 13-10-2026     | Match 4.0 set-pattern axis operands against the candidate node.
+//                      | Charles Korthout | 3.27  | 13-10-2026     | Validate 4.0 template pattern prefixes eagerly using lexer tokens.                     |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -138,6 +149,8 @@ internal sealed class PatternCompiler
     }
 
     private XPathCompatibility _compatibility = XPathCompatibility.XPath31;
+    private IReadOnlyDictionary<string, string>? _itemTypeAliases;
+    private IReadOnlySet<string>? _namedRecordTypeNames;
 
     /// <summary>
     /// Compiles an XPath expression with the current default element namespace and profile.
@@ -157,6 +170,8 @@ internal sealed class PatternCompiler
             DefaultElementNamespace = _defaultElementNamespace,
             SchemaSet = schemaSet,
             Namespaces = _namespaces,
+            ItemTypeAliases = _itemTypeAliases,
+            NamedRecordTypeNames = _namedRecordTypeNames,
         };
         return XPath31Expression.Compile(expression, options);
     }
@@ -172,7 +187,9 @@ internal sealed class PatternCompiler
     /// May be called directly from the stylesheet loader for early XTSE0340 reporting.
     /// The supplied pattern must already have XPath comments stripped and be trimmed.
     /// </summary>
-    public static void ValidatePatternSyntax(string trimmed)
+    /// <param name="trimmed">The comment-stripped pattern text.</param>
+    /// <param name="compatibility">The declaring expression profile.</param>
+    public static void ValidatePatternSyntax(string trimmed, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {
         // 1.  Disallowed functions at pattern start (XTSE0340).
         //     Node tests (document-node, element, attribute, text, comment,
@@ -206,10 +223,11 @@ internal sealed class PatternCompiler
             // Match:  name(...) at the very start
             if (afterSlash.Length > 0 && char.IsLetter(afterSlash[0]))
             {
-                var paren = afterSlash.IndexOf('(');
+                var lexicalStart = MaskEQNameUris(afterSlash);
+                var paren = lexicalStart.IndexOf('(');
                 if (paren > 0)
                 {
-                    var firstSpecial = afterSlash.IndexOfAny(new[] { ' ', '/', '|', '[', '@' });
+                    var firstSpecial = lexicalStart.IndexOfAny(new[] { ' ', '/', '|', '[', '@' });
                     if (firstSpecial < 0 || firstSpecial > paren)
                     {
                         var funcName = afterSlash[..paren];
@@ -255,7 +273,7 @@ internal sealed class PatternCompiler
         // 4.  Invalid predicate patterns (XTSE0340).
         {
             // Parenthesized predicate pattern (.[...])
-            if (trimmed.StartsWith("(.[") || trimmed.Contains("|(.["))
+            if (compatibility < XPathCompatibility.XPath40 && (trimmed.StartsWith("(.[") || trimmed.Contains("|(.[")))
             {
                 throw new InvalidOperationException("XTSE0340: Parenthesized predicate pattern is not a valid pattern.");
             }
@@ -271,6 +289,9 @@ internal sealed class PatternCompiler
         //     b) Predicate patterns (.[...]) are not valid as union operands.
         {
             var branches = SplitTopLevel(trimmed, '|');
+            if (compatibility >= XPathCompatibility.XPath40 && branches.Length > 1 &&
+                branches.Any(branch => branch.TrimStart().StartsWith('~') || branch.TrimStart().StartsWith('.')))
+                throw new InvalidOperationException("XTSE0340: Union operands require node patterns; enclose item patterns in parentheses.");
             if (branches.Length > 1)
             {
                 bool hasNodePattern = false;
@@ -286,11 +307,11 @@ internal sealed class PatternCompiler
                     if (s.StartsWith(".["))
                         hasPredicatePattern = true;
                 }
-                if (hasNodePattern && hasTypePattern)
+                if (compatibility < XPathCompatibility.XPath40 && hasNodePattern && hasTypePattern)
                 {
                     throw new InvalidOperationException("XTSE0340: Union of node pattern and type pattern is not allowed.");
                 }
-                if (hasPredicatePattern)
+                if (compatibility < XPathCompatibility.XPath40 && hasPredicatePattern)
                 {
                     throw new InvalidOperationException("XTSE0340: Predicate pattern is not allowed in a union.");
                 }
@@ -899,18 +920,26 @@ internal sealed class PatternCompiler
     /// slot's real bindings so undeclared prefixes are rejected (XPST0081).
     /// </param>
     /// <param name="compatibility">The owning expression profile; nested compilation inherits it.</param>
+    /// <param name="itemTypeAliases">Expanded types in the declaring package.</param>
+    /// <param name="namedRecordTypeNames">Known nominative record names in that package.</param>
     public PatternPredicate Compile(
         string pattern,
         string? defaultElementNamespace = null,
         ModeTyped? typedMode = null,
         IReadOnlyDictionary<string, string>? namespaces = null,
-        XPathCompatibility? compatibility = null)
+        XPathCompatibility? compatibility = null,
+        IReadOnlyDictionary<string, string>? itemTypeAliases = null,
+        IReadOnlySet<string>? namedRecordTypeNames = null)
     {
         _defaultElementNamespace = defaultElementNamespace;
         var savedCompatibility = _compatibility;
         _compatibility = compatibility ?? _compatibility;
         var savedTypedMode = _typedMode;
         var savedNamespaces = _namespaces;
+        var savedAliases = _itemTypeAliases;
+        var savedRecords = _namedRecordTypeNames;
+        _itemTypeAliases = itemTypeAliases;
+        _namedRecordTypeNames = namedRecordTypeNames;
         _typedMode = typedMode;
         _namespaces = namespaces;
         try
@@ -924,7 +953,7 @@ internal sealed class PatternCompiler
                 trimmed = string.Join("|", unionParts);
             }
 
-            ValidatePatternSyntax(trimmed);
+            ValidatePatternSyntax(trimmed, _compatibility);
 
             var branches = SplitTopLevel(trimmed, '|');
             if (branches.Length == 1)
@@ -947,16 +976,54 @@ internal sealed class PatternCompiler
             _compatibility = savedCompatibility;
             _typedMode = savedTypedMode;
             _namespaces = savedNamespaces;
+            _itemTypeAliases = savedAliases;
+            _namedRecordTypeNames = savedRecords;
         }
+    }
+
+    /// <summary>Separates a type from trailing predicates while preserving quoted fields and EQNames.</summary>
+    internal static (string Type, string Predicates) GetTypePatternParts(string pattern)
+    {
+        var text = StripXPathComments(pattern).Trim();
+        if (!text.StartsWith('~')) throw new InvalidOperationException("XTSE0340: Expected a type pattern.");
+        int depth = 0;
+        char quote = '\0';
+        bool eqName = false;
+        for (int i = 1; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (eqName) { if (c == '}') eqName = false; continue; }
+            if (c == '{' && i > 0 && text[i - 1] == 'Q') { eqName = true; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == '(') depth++;
+            else if (c == ')') depth--;
+            else if (c == '[' && depth == 0) return (text[1..i].Trim(), text[i..]);
+        }
+        return (text[1..].Trim(), string.Empty);
     }
 
     /// <summary>
     /// Compiles an atomic-value matcher for predicate patterns (.[expr]).
     /// Returns null if the pattern is not a predicate pattern that can match atomic values.
     /// </summary>
+    /// <param name="pattern">The candidate predicate or type pattern.</param>
+    /// <returns>The matcher, or null when the pattern requires node-path compilation.</returns>
     public PatternPredicate? CompileAtomicMatch(string pattern)
     {
         var trimmed = StripXPathComments(pattern).Trim();
+
+        // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.
+        if (_compatibility >= XPathCompatibility.XPath40 && trimmed.StartsWith('('))
+            return null;
 
         // Strip outer parentheses
         if (trimmed.StartsWith('('))
@@ -964,6 +1031,19 @@ internal sealed class PatternCompiler
             int close = FindMatchingParen(trimmed, 0);
             if (close == trimmed.Length - 1)
                 trimmed = trimmed[1..close].Trim();
+        }
+
+        bool isTypePattern = trimmed.StartsWith('~');
+        if (isTypePattern)
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Type patterns require XSLT 4.0.");
+            var (type, typePredicates) = GetTypePatternParts(trimmed);
+            // Validate a complete ItemType, rather than admitting an arbitrary XPath expression.
+            var parsed = XPathParser.Parse("() instance of " + type, schemaAware: HasSchemaSet, xpath40: true);
+            if (parsed is not InstanceOfNode instance || instance.Occurrence != OccurrenceIndicator.One || instance.TypeName == "empty-sequence()")
+                throw new InvalidOperationException("XTSE0340: A type pattern requires a single item type.");
+            trimmed = ".[. instance of " + type + "]" + typePredicates;
         }
 
         // Only predicate patterns can match atomic values
@@ -983,7 +1063,10 @@ internal sealed class PatternCompiler
         {
             int close = FindMatchingBracket(rest, 0);
             if (close < 0)
+            {
+                if (isTypePattern) throw new InvalidOperationException("XTSE0340: Unclosed type-pattern predicate.");
                 return null;
+            }
             predicates.Add(rest[1..close].Trim());
             rest = rest[(close + 1)..].TrimStart();
         }
@@ -994,7 +1077,10 @@ internal sealed class PatternCompiler
         // If there's anything after the predicates (e.g. /child::x), atomic values
         // cannot match, so let the normal node-based path handle it.
         if (!string.IsNullOrEmpty(rest))
+        {
+            if (isTypePattern) throw new InvalidOperationException("XTSE0340: Unexpected text after a type pattern.");
             return null;
+        }
 
         // XSLT 3.0 §6.4: numeric predicate 1 always matches; any other numeric value never matches.
         // Pre-compile all predicates; apply numeric semantics at runtime for variable expressions.
@@ -1103,6 +1189,28 @@ internal sealed class PatternCompiler
     private PatternPredicate CompileSinglePattern(string pattern)
     {
         var trimmed = pattern.Trim();
+
+        if (_compatibility >= XPathCompatibility.XPath40)
+        {
+            var operators = new List<string>();
+            var operands = SplitPatternTopLevel(trimmed, "intersect", "except", operators);
+            if (operands.Length > 1)
+            {
+                if (operands.All(HasPatternPathOperator))
+                    return CompileSetPattern(trimmed);
+                var compiled = operands.Select(CompileSinglePattern).ToArray();
+                return (item, ctx) =>
+                {
+                    if (!item.IsNode || !compiled[0](item, ctx)) return false;
+                    for (int i = 1; i < compiled.Length; i++)
+                    {
+                        bool matches = compiled[i](item, ctx);
+                        if (operators[i - 1] == "intersect" ? !matches : matches) return false;
+                    }
+                    return true;
+                };
+            }
+        }
 
         // Handle top-level except (not inside parentheses/brackets)
         var exceptParts = SplitTopLevel(trimmed, "except");
@@ -1271,10 +1379,15 @@ internal sealed class PatternCompiler
                 string inside = trimmed[1..closeParen].Trim();
                 string after = closeParen + 1 < trimmed.Length ? trimmed[(closeParen + 1)..].Trim() : "";
 
-                var innerPattern = Compile(inside);
+                var innerPattern = _compatibility >= XPathCompatibility.XPath40
+                    ? Compile(inside, _defaultElementNamespace, _typedMode, _namespaces, _compatibility,
+                        _itemTypeAliases, _namedRecordTypeNames)
+                    : Compile(inside);
 
                 if (string.IsNullOrEmpty(after))
-                    return innerPattern;
+                    return _compatibility >= XPathCompatibility.XPath40
+                        ? (item, ctx) => item.IsNode && innerPattern(item, ctx)
+                        : innerPattern;
 
                 // After the parens there might be predicates or path continuations
                 if (after.StartsWith('['))
@@ -1324,6 +1437,8 @@ internal sealed class PatternCompiler
                 break;
             }
         }
+        if (_compatibility >= XPathCompatibility.XPath40)
+            hasPathSlash = HasPatternPathOperator(trimmed);
         if (hasPathSlash && !trimmed.StartsWith("processing-instruction"))
         {
             return CompilePathPattern(trimmed);
@@ -2014,9 +2129,10 @@ internal sealed class PatternCompiler
     private PatternPredicate CompileElementPattern(string name)
     {
         // Handle axis steps: axis::nodetest
-        if (name.Contains("::"))
+        var axisText = _compatibility >= XPathCompatibility.XPath40 ? MaskEQNameUris(name) : name;
+        if (axisText.Contains("::", StringComparison.Ordinal))
         {
-            int colonIdx = name.IndexOf("::");
+            int colonIdx = axisText.IndexOf("::", StringComparison.Ordinal);
             string axis = name[..colonIdx].Trim();
             string nodeTest = name[(colonIdx + 2)..].Trim();
             return CompileAxisStep(axis, nodeTest);
@@ -2203,6 +2319,12 @@ internal sealed class PatternCompiler
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
                 };
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: true);
+                return (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Element
+                    && nameCheck(item.NodeValue) && (typeCheck is null || typeCheck(item.NodeValue));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2273,6 +2395,12 @@ internal sealed class PatternCompiler
                     if (node == null) return false;
                     return node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
                 };
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: false);
+                return (item, ctx) => item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Attribute
+                    && nameCheck(item.NodeValue) && (typeCheck is null || typeCheck(item.NodeValue));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2575,6 +2703,13 @@ internal sealed class PatternCompiler
             return node => node.NodeKind == XdmNodeKind.Comment;
         if (nodeTest == "processing-instruction()")
             return node => node.NodeKind == XdmNodeKind.ProcessingInstruction;
+        if (_compatibility >= XPathCompatibility.XPath40 && nodeTest.StartsWith("processing-instruction(", StringComparison.Ordinal))
+        {
+            var target = ExtractFunctionArg(nodeTest).Trim();
+            if (target.Length >= 2 && target[0] is '\'' or '"')
+                target = target[1..^1];
+            return node => node.NodeKind == XdmNodeKind.ProcessingInstruction && node.LocalName == target;
+        }
         if (nodeTest == "element()")
             return node => node.NodeKind == XdmNodeKind.Element;
         if (nodeTest == "document-node()")
@@ -2589,6 +2724,12 @@ internal sealed class PatternCompiler
             var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: true);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return node => node.NodeKind == XdmNodeKind.Element && (typeCheck is null || typeCheck(node));
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: true);
+                return node => node.NodeKind == XdmNodeKind.Element && nameCheck(node)
+                    && (typeCheck is null || typeCheck(node));
+            }
             var (ns, local) = ParseQName(nameArg);
             if (string.IsNullOrEmpty(ns))
             {
@@ -2655,6 +2796,12 @@ internal sealed class PatternCompiler
             var typeCheck = CompileKindTestTypeCheck(typeArg, isElement: false);
             if (string.IsNullOrEmpty(nameArg) || nameArg == "*")
                 return node => node.NodeKind == XdmNodeKind.Attribute && (typeCheck is null || typeCheck(node));
+            if (_compatibility >= XPathCompatibility.XPath40)
+            {
+                var nameCheck = CompileKindTestNameCheck(nameArg, isElement: false);
+                return node => node.NodeKind == XdmNodeKind.Attribute && nameCheck(node)
+                    && (typeCheck is null || typeCheck(node));
+            }
             var (attrNs, attrLocal) = ParseQName(nameArg);
             // Unprefixed attribute names have no namespace (XPath default element namespace does not apply).
             if (string.IsNullOrEmpty(attrNs))
@@ -2968,6 +3115,26 @@ internal sealed class PatternCompiler
             ? ResolveSchemaType(context, a.NamespaceUri, a.LocalName)
             : null;
 
+    /// <summary>Compiles 4.0 kind-test name alternatives with independent namespace and local wildcards.</summary>
+    private Func<IXdmNode, bool> CompileKindTestNameCheck(string name, bool isElement)
+    {
+        // Validate NameTestUnion grammar before interpreting the individual alternatives.
+        if (ItemTypeAliasExpansion.Expand((isElement ? "element(" : "attribute(") + name + ")", value => value) is null)
+            throw new InvalidOperationException("XPST0003: Invalid wildcard or union name in a node kind test.");
+        var alternatives = SplitTopLevel(name, '|').Select(part =>
+        {
+            var text = part.Trim();
+            if (text == "*") return (Namespace: (string?)null, Local: "*");
+            if (text.StartsWith("*:", StringComparison.Ordinal)) return (Namespace: (string?)null, Local: text[2..]);
+            var (ns, local) = ParseQName(text);
+            if (ns.Length == 0 && !text.StartsWith("Q{", StringComparison.Ordinal) && !text.Contains(':'))
+                ns = isElement ? _defaultElementNamespace ?? string.Empty : string.Empty;
+            return (Namespace: (string?)ns, Local: local);
+        }).ToArray();
+        return node => alternatives.Any(test => (test.Namespace is null || node.NamespaceUri == test.Namespace)
+            && (test.Local == "*" || node.LocalName == test.Local));
+    }
+
     /// <summary>
     /// Splits the argument of an <c>element(...)</c> / <c>attribute(...)</c> kind test into
     /// the name part and the optional schema type part, e.g. <c>element(N, T)</c> yields
@@ -2975,9 +3142,9 @@ internal sealed class PatternCompiler
     /// </summary>
     /// <param name="arg">The raw kind-test argument text.</param>
     /// <returns>The name (or wildcard) part, and the type part when a comma is present.</returns>
-    private static (string NameArg, string? TypeArg) SplitKindTestArgs(string arg)
+    private (string NameArg, string? TypeArg) SplitKindTestArgs(string arg)
     {
-        int comma = FindTopLevelComma(arg);
+        int comma = FindTopLevelComma(_compatibility >= XPathCompatibility.XPath40 ? MaskEQNameUris(arg) : arg);
         if (comma < 0)
             return (arg.Trim(), null);
         return (arg[..comma].Trim(), arg[(comma + 1)..].Trim());
@@ -3152,18 +3319,7 @@ internal sealed class PatternCompiler
             return CompileSinglePattern(pattern);
 
         // Find matching close bracket
-        int bracketClose = -1;
-        int depth = 0;
-        for (int i = bracketOpen; i < pattern.Length; i++)
-        {
-            if (pattern[i] == '[') depth++;
-            else if (pattern[i] == ']') depth--;
-            if (depth == 0)
-            {
-                bracketClose = i;
-                break;
-            }
-        }
+        int bracketClose = FindMatchingBracket(pattern, bracketOpen);
         if (bracketClose < 0 || bracketClose < bracketOpen)
             throw new InvalidOperationException($"Invalid pattern: {pattern}");
 
@@ -3407,18 +3563,7 @@ internal sealed class PatternCompiler
         if (bracketOpen < 0)
             return innerPattern;
 
-        int bracketClose = -1;
-        int depth = 0;
-        for (int i = bracketOpen; i < after.Length; i++)
-        {
-            if (after[i] == '[') depth++;
-            else if (after[i] == ']') depth--;
-            if (depth == 0)
-            {
-                bracketClose = i;
-                break;
-            }
-        }
+        int bracketClose = FindMatchingBracket(after, bracketOpen);
         if (bracketClose < 0)
             return innerPattern;
 
@@ -3428,7 +3573,9 @@ internal sealed class PatternCompiler
         // If the inner pattern is a path expression (contains /), the predicate applies
         // to the sequence selected by the path, not to self::node(). For example,
         // (doc/descendant::foo)[2] must match the 2nd foo descendant of doc.
-        bool isPathExpression = inside.Contains('/');
+        bool isPathExpression = _compatibility >= XPathCompatibility.XPath40
+            ? HasPatternPathOperator(inside)
+            : inside.Contains('/');
         if (isPathExpression)
         {
             var compiledPath = CompilePatternXPath($"({inside})[{predicateExpr}]{remaining}");
@@ -3490,64 +3637,91 @@ internal sealed class PatternCompiler
     // Helper methods
     // ------------------------------------------------------------------
 
+    /// <summary>Finds path slashes outside predicates, string literals and EQName namespace URIs.</summary>
+    private static bool HasPatternPathOperator(string text)
+    {
+        int predicateDepth = 0;
+        char quote = '\0';
+        bool uri = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == '[') predicateDepth++;
+            else if (c == ']') predicateDepth--;
+            else if (c == '/' && predicateDepth == 0) return true;
+        }
+        return false;
+    }
+
     /// <summary>
     /// Splits text on separator only at the top level (not inside parentheses, brackets, or braces).
     /// </summary>
     private static string[] SplitTopLevel(string text, char separator)
+        => SplitPatternTopLevel(text, separator.ToString());
+
+    /// <summary>Splits word operators outside nested syntax without interpreting node names as operators.</summary>
+    private static string[] SplitTopLevel(string text, string separator)
+        => SplitPatternTopLevel(text, separator);
+
+    /// <summary>Splits top-level operators while preserving strings, EQName URIs and complete name tokens.</summary>
+    internal static string[] SplitPatternTopLevel(string text, string separator, string? alternative = null, List<string>? operators = null)
     {
         var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
+        int start = 0, depth = 0;
+        char quote = '\0';
+        bool uri = false;
+        bool word = separator.Length > 1;
+        static bool IsNameCharacter(char c) => char.IsLetterOrDigit(c) || c is '_' or '-' or '.' or ':';
         for (int i = 0; i < text.Length; i++)
         {
             char c = text[i];
-            if (c == '(' || c == '[' || c == '{') depth++;
-            else if (c == ')' || c == ']' || c == '}') depth--;
-            else if (c == separator && depth == 0)
+            if (quote != '\0')
             {
-                parts.Add(text[start..i].Trim());
-                start = i + 1;
-            }
-        }
-        parts.Add(text[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
-    }
-
-    /// <summary>
-    /// Splits text on a word separator (like "except" or "intersect") only at the top level.
-    /// The separator must be surrounded by non-word characters or string boundaries.
-    /// A word directly preceded by '/', '@', or ':' is a NameTest, not an operator —
-    /// match-038: '/ union /*' is a rooted path over the element named "union".
-    /// </summary>
-    private static string[] SplitTopLevel(string text, string separator)
-    {
-        var parts = new List<string>();
-        int start = 0;
-        int depth = 0;
-        for (int i = 0; i <= text.Length - separator.Length; i++)
-        {
-            char c = text[i];
-            if (c == '(' || c == '[' || c == '{') depth++;
-            else if (c == ')' || c == ']' || c == '}') depth--;
-            else if (depth == 0 && text.AsSpan(i, separator.Length).Equals(separator.AsSpan(), StringComparison.OrdinalIgnoreCase))
-            {
-                // Check word boundaries
-                bool leftBoundary = i == 0 || !char.IsLetterOrDigit(text[i - 1]);
-                bool rightBoundary = i + separator.Length == text.Length || !char.IsLetterOrDigit(text[i + separator.Length]);
-                if (leftBoundary && rightBoundary)
+                if (c == quote)
                 {
-                    int prev = i - 1;
-                    while (prev >= 0 && char.IsWhiteSpace(text[prev])) prev--;
-                    if (prev >= 0 && (text[prev] == '/' || text[prev] == '@' || text[prev] == ':'))
-                        continue;
-                    parts.Add(text[start..i].Trim());
-                    start = i + separator.Length;
-                    i += separator.Length - 1;
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
                 }
+                continue;
             }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c is '(' or '[' or '{') { depth++; continue; }
+            if (c is ')' or ']' or '}') { depth--; continue; }
+            if (depth != 0) continue;
+            string token = text.AsSpan(i).StartsWith(separator, StringComparison.Ordinal) ? separator
+                : alternative is not null && text.AsSpan(i).StartsWith(alternative, StringComparison.Ordinal) ? alternative : string.Empty;
+            if (token.Length == 0) continue;
+            if (word)
+            {
+                if (i == 0 || (i == start && operators is null) || (i > 0 && IsNameCharacter(text[i - 1])) ||
+                    (i + token.Length < text.Length && IsNameCharacter(text[i + token.Length]))) continue;
+                int previous = i - 1;
+                while (previous >= start && char.IsWhiteSpace(text[previous])) previous--;
+                if ((previous < start && operators is null) || (previous >= start && text[previous] is '/' or '@' or ':')) continue;
+            }
+            parts.Add(text[start..i].Trim());
+            operators?.Add(token);
+            start = i + token.Length;
+            i += token.Length - 1;
         }
         parts.Add(text[start..].Trim());
-        return parts.Where(p => !string.IsNullOrEmpty(p)).ToArray();
+        if (operators is not null && operators.Count > 0 && parts.Any(string.IsNullOrEmpty))
+            throw new InvalidOperationException("XTSE0340: A set pattern requires an operand on each side of its operator.");
+        return parts.Where(part => !string.IsNullOrEmpty(part)).ToArray();
     }
 
     /// <summary>
@@ -3555,31 +3729,36 @@ internal sealed class PatternCompiler
     /// Returns -1 if not found.
     /// </summary>
     private static int FindMatchingParen(string text, int startIndex)
-    {
-        if (text[startIndex] != '(') return -1;
-        int depth = 1;
-        for (int i = startIndex + 1; i < text.Length; i++)
-        {
-            if (text[i] == '(') depth++;
-            else if (text[i] == ')') depth--;
-            if (depth == 0) return i;
-        }
-        return -1;
-    }
+        => FindMatchingDelimiter(text, startIndex, '(', ')');
 
-    /// <summary>
-    /// Finds the index of the matching closing bracket for the bracket at startIndex.
-    /// Returns -1 if not found.
-    /// </summary>
+    /// <summary>Finds a closing bracket outside string literals and EQName namespace URIs.</summary>
     private static int FindMatchingBracket(string text, int startIndex)
+        => FindMatchingDelimiter(text, startIndex, '[', ']');
+
+    /// <summary>Matches nested delimiters without interpreting quoted or URI characters as syntax.</summary>
+    internal static int FindMatchingDelimiter(string text, int startIndex, char opening, char closing)
     {
-        if (text[startIndex] != '[') return -1;
+        if (startIndex < 0 || startIndex >= text.Length || text[startIndex] != opening) return -1;
         int depth = 1;
+        char quote = '\0';
+        bool uri = false;
         for (int i = startIndex + 1; i < text.Length; i++)
         {
-            if (text[i] == '[') depth++;
-            else if (text[i] == ']') depth--;
-            if (depth == 0) return i;
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == opening) depth++;
+            else if (c == closing && --depth == 0) return i;
         }
         return -1;
     }
@@ -3670,6 +3849,38 @@ internal sealed class PatternCompiler
         int close = FindMatchingParen(text, open);
         if (close < 0) return "";
         return text[(open + 1)..close].Trim();
+    }
+
+    /// <summary>Rejects unavailable prefixes in a pattern before runtime compilation.</summary>
+    /// <param name="pattern">The pattern source.</param>
+    /// <param name="namespaces">The declaring applicable static namespace bindings.</param>
+    public static void ValidateNamespacePrefixes(string pattern, IReadOnlyDictionary<string, string> namespaces)
+    {
+        var lexer = new Bosak.XPath.Parser.Lexer.XPathLexer(pattern, xpath40: true);
+        while (true)
+        {
+            var token = lexer.NextToken();
+            if (token.Kind == Bosak.XPath.Parser.Lexer.TokenKind.Eof) return;
+            if (token.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Name) continue;
+            var name = token.Text(pattern);
+            if (name.StartsWith("Q{")) continue;
+            int colon = name.IndexOf(':');
+            if (colon < 0)
+            {
+                // A prefixed wildcard is tokenized as Name, Colon, Star.
+                var lookahead = lexer;
+                var separator = lookahead.NextToken();
+                var wildcard = lookahead.NextToken();
+                if (separator.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Colon
+                    || wildcard.Kind != Bosak.XPath.Parser.Lexer.TokenKind.Star
+                    || separator.Start != token.Start + token.Length
+                    || wildcard.Start != separator.Start + separator.Length) continue;
+                colon = name.Length;
+            }
+            var prefix = name[..colon].ToString();
+            if (!namespaces.ContainsKey(prefix))
+                throw new InvalidOperationException($"XPST0081: No namespace declaration for prefix '{prefix}' in pattern.");
+        }
     }
 
     private (string NamespaceUri, string LocalName) ParseQName(string name) => ParseQName(name, _namespaces);

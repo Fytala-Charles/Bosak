@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 admits supported parenthesized predicate and type patterns in the effective XSLT 4.0 profile and restricts those outer XNode patterns to nodes. Atomic values, maps and records therefore do not match a parenthesized item pattern; standalone predicate/type patterns retain their item matching. A prior local quoted-record-field regression incorrectly used a parenthesized type pattern for a map; it now uses the standalone type pattern, and new negative regressions verify the node boundary. Nested compilation retains declaring-package aliases, nominative type registries and applicable namespaces. Contained type priorities are recomputed after alias expansion, including wrapped union operands. Earlier profiles retain parenthesized-predicate rejection. Twenty-seven new regressions cover nesting, predicates, node-only membership, atomic/map negatives, aliases, default namespaces, contained priority and invalid direct item unions. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Parenthesized outer-filter path classification, broader pattern grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "6a2151d0280077f3a87689386158e5f845ff814a",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sections": [
+      "6.3.4 XNode Patterns",
+      "6.4.3 Default Priority for XNode Patterns"
+    ],
+    "retrieved": "2026-10-13"
+  },
+  "nativeNextMatch": {
+    "passed": 46,
+    "failed": 8,
+    "skipped": 6
+  },
+  "nativeTypeAlias": {
+    "passed": 22,
+    "failed": 10,
+    "skipped": 0
+  },
+  "newlyPassingNativeCases": [],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final incremental Release build succeeds with zero warnings and zero errors. All 7515 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4629/0/0 and twenty-seven new regressions; focused parenthesized/type/union regressions pass 83/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "e243c3e5bfc9a7745f082048cdc44801ffa80324279fa42c7123a31dca80eb30",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "4a633800c9a6d8804a05fce5c934729cc35a3f6ad4d2a5f419578a0d0ca12810",
+    "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs": "dbd9448238e06fcfb5c64766e6220bccae93313007942a8a47c307a2cc7e4b25",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "376912e8c4fe1c999459e07b7cd63443adb3424520eedf623773e9f52aafb213",
+    "tests/Bosak.Xslt.Tests/Xslt40ParenthesizedItemPatternTests.cs": "f16dfe89748a4864dbfe380606c1e11f09d2aa65c966f77798af181fbc38095f",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeFinalReceipt": ".artifacts/xslt40/20261013T122344116Z.json",
+  "nativeTypeAliasReceipt": ".artifacts/xslt40/20261013T122344334Z.json"
+}
