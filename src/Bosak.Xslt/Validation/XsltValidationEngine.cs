@@ -22,6 +22,7 @@
 //                      |                  |       |                | Cancelled result with retained diagnostics plus an XV0013 cancellation diagnostic        |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
+//                      | Charles Korthout | 0.5   | 13-10-2026     | Align expression, AVT and pattern static namespace validation                          |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -878,6 +879,8 @@ internal sealed class XsltValidationEngine
         VariableScope scope,
         bool isUseWhen)
     {
+        if (ReportStaticNamespaceError(state, attribute, context)) return false;
+
         var text = attribute.ExpandedValue;
         var positionsExact = attribute.RawLiteral == text;
         var compatibility = ResolveCompatibility(context);
@@ -909,6 +912,8 @@ internal sealed class XsltValidationEngine
         AuthoringAttributeDescriptor attribute,
         ExpressionSlotContext context)
     {
+        if (ReportStaticNamespaceError(state, attribute, context)) return;
+
         var text = attribute.ExpandedValue.Trim();
         if (text.Length == 0)
         {
@@ -921,6 +926,8 @@ internal sealed class XsltValidationEngine
             // and the prefix bindings of pattern predicates must resolve in the module-local
             // static context, so an undeclared prefix is rejected (XPST0081) instead of being
             // silently read as a no-namespace name.
+            if (ResolveCompatibility(context) >= XPathCompatibility.XPath40)
+                PatternCompiler.ValidateNamespacePrefixes(text, BuildNamespaceMap(context));
             _ = new PatternCompiler().Compile(
                 text, context.XpathDefaultNamespace, namespaces: BuildNamespaceMap(context), compatibility: ResolveCompatibility(context));
         }
@@ -941,6 +948,8 @@ internal sealed class XsltValidationEngine
         ExpressionSlotContext context,
         VariableScope scope)
     {
+        if (ReportStaticNamespaceError(state, attribute, context)) return;
+
         var text = attribute.ExpandedValue;
         var positionsExact = attribute.RawLiteral == text;
         var compatibility = ResolveCompatibility(context);
@@ -1136,11 +1145,24 @@ internal sealed class XsltValidationEngine
     }
 
     /// <summary>
-    /// The slot's in-scope prefix bindings as a map, nearest declaration winning (the binding
-    /// list is outermost first, so later entries overwrite earlier ones).
+    /// Reports a fixed namespace error captured during caller-controlled inspection.
     /// </summary>
+    private bool ReportStaticNamespaceError(ModuleWalkState state,
+        AuthoringAttributeDescriptor attribute, ExpressionSlotContext context)
+    {
+        if (context.StaticNamespaceError is not { } error || ResolveCompatibility(context) < XPathCompatibility.XPath40)
+            return false;
+        _hasInvalid = true;
+        _diagnostics.Add(new XsltValidationDiagnostic(ExtractCode(new InvalidOperationException(error)),
+            state.Module.ModuleUri, error, attribute.ValueRange));
+        return true;
+    }
+
+    /// <summary>Gets applicable static bindings, retaining native bindings for earlier profiles.</summary>
     private static Dictionary<string, string> BuildNamespaceMap(ExpressionSlotContext context)
     {
+        if (context.StaticNamespaces is not null)
+            return new Dictionary<string, string>(context.StaticNamespaces, StringComparer.Ordinal);
         var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var binding in context.InScopeNamespaces)
         {
@@ -1155,6 +1177,8 @@ internal sealed class XsltValidationEngine
 
     private static string? ResolvePrefix(ExpressionSlotContext context, string prefix)
     {
+        if (context.StaticNamespaces is not null)
+            return context.StaticNamespaces.GetValueOrDefault(prefix);
         // Outermost-first ordering: the nearest declaration wins, which is the last match.
         for (var i = context.InScopeNamespaces.Count - 1; i >= 0; i--)
         {

@@ -307,6 +307,7 @@
 //                      | Charles Korthout | 2.146 | 13-10-2026     | Resolve fixed namespace bindings for named types and XPath static contexts
 //                      | Charles Korthout | 2.147 | 13-10-2026     | Apply effective profiles to static item-pattern validation.
 //                      | Charles Korthout | 2.148 | 13-10-2026     | Reject unavailable template pattern prefixes at 4.0 stylesheet compilation.             |
+//                      | Charles Korthout | 2.149 | 13-10-2026     | Allow caller-controlled fixed namespace document resolution                            |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1055,7 +1056,7 @@ internal sealed class Stylesheet
     private sealed record StaticNamespaceResolver(IXsltUriResolver? Resolver, string? BaseUri);
     private sealed record FixedNamespaceBindings(Dictionary<string, string> Bindings);
 
-    internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element)
+    internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
     {
         var root = element.AncestorsAndSelf().Last();
         var fixedAttribute = root.Attribute("fixed-namespaces");
@@ -1102,7 +1103,7 @@ internal sealed class Stylesheet
                 var context = root.Annotation<StaticNamespaceResolver>();
                 try
                 {
-                    var document = context?.Resolver?.Resolve(token, context.BaseUri)
+                    var document = (context?.Resolver ?? resolver)?.Resolve(token, context?.BaseUri ?? baseUri)
                         ?? throw new InvalidOperationException("No namespace document resolver.");
                     if (document.Root is null) throw new InvalidOperationException("Namespace document has no root.");
                     foreach (var (prefix, uri) in NativeNamespaces(document.Root)) Add(prefix, uri);
