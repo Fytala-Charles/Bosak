@@ -534,6 +534,7 @@
 //                      | Charles Korthout | 7.18 | 13-10-2026     | Resolve nested array/map aliases in declaration and function sequence types
 //                      | Charles Korthout | 7.19 | 13-10-2026     | Coerce maps to package-local nominative records with defaults and static field protection
 //                      | Charles Korthout | 7.20 | 13-10-2026     | Cast named record fields and resolve nested named references in declaration namespaces
+//                      | Charles Korthout | 7.21 | 13-10-2026     | Reuse shared sequence casting for record fields and nested containers
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3271,38 +3272,13 @@ internal sealed class TransformEngine
             {
                 var sequenceType = ResolveBindingSequenceType(field.Attribute("as")?.Value ?? "item()*", field,
                     _context.BindingItemTypes, _context.NamedRecordTypes)!;
-                value = CastRecordFieldSequence(value, sequenceType);
+                value = VmEngine.CastSequence(value, sequenceType, _context);
             }
             else value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context,
                 errorCodeOverride: "XPTY0004", declaration: field);
             result = result.WithAdded(key, value);
         }
         return result.WithRecordType(definition.Type);
-    }
-
-    private XdmValue CastRecordFieldSequence(XdmValue value, string sequenceType)
-    {
-        var parsed = (Bosak.XPath.Parser.Ast.InstanceOfNode)Bosak.XPath.Parser.Ast.XPathParser.Parse("() instance of " + sequenceType, xpath40: true);
-        var type = string.IsNullOrEmpty(parsed.Prefix) ? parsed.TypeName : parsed.Prefix + ":" + parsed.TypeName;
-        var converted = new List<XdmValue>();
-        void Add(XdmValue item)
-        {
-            if (type == "empty-sequence()") throw new InvalidOperationException("XPTY0004: The record field must be empty.");
-            if (VmEngine.RecordFieldItemMatches(item, type, _context)) converted.Add(item);
-            else converted.Add(VmEngine.Cast(item, type, _context));
-        }
-        if (value.IsSequence) { foreach (var item in XdmSequence.FromSource(value.SequenceValue!)) Add(item); }
-        else if (!value.IsUndefined) Add(value);
-        if (type == "empty-sequence()")
-        {
-            if (converted.Count != 0) throw new InvalidOperationException("XPTY0004: The record field must be empty.");
-            return XdmValue.Undefined;
-        }
-        if ((converted.Count == 0 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.OneOrMore)
-            || (converted.Count > 1 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne))
-            throw new InvalidOperationException("XPTY0004: Cast record field cardinality does not match its declaration.");
-        return converted.Count == 0 ? XdmValue.Undefined : converted.Count == 1 ? converted[0]
-            : XdmValue.FromSequence(MaterializedSequence.FromList(converted));
     }
 
     private XdmValue ConstructNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, ReadOnlySpan<XdmValue> args)

@@ -1,3 +1,21 @@
+# Finite recursive records and container casts — 2026-10-13
+
+Branch: feat/xslt-recursive-container-casts; main baseline 0991f6f320092a3611822dc3ef05fe3e842a3adb. PR #216 merged after CI 38353496629 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now casts XPath 4.0 arrays/maps by casting member/key/value sequences, retaining container shape and checking cardinality. Map-key collisions raise XQDY0137; wildcard casts retain the supplied container and empty container types reject nonempty inputs. Named record field casts reuse the shared sequence caster. Record field metadata resolves aliases and finite self/mutual named references in the declaration namespace without expanding nominative identities. Sixteen new regressions cover finite linked lists, recursive array casts, nested containers, invalid members and collisions. Arbitrary-depth resource handling, full recursive/static diagnostics, item-type alias cast expansion and package exposure remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.
+
+VmEngine adds shared sequence casting and version-gated array/map casting with shape/cardinality checks and key collisions. TransformEngine reuses it for named fields. Stylesheet resolves aliases and recursive named field references without expanding identities. No public API, gate promotion, native assertion/catalogue manifest change or publication.
+
+Validation: Release build passes (10 existing warnings, zero errors); all 7004 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4118/0/0. Focused record run passes 55 tests, including sixteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: item-type alias cast expansion and static named-type validation. N05/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+Delivery pending.
+
 # Named record casts and nested references — 2026-10-13
 
 Branch: feat/xslt-named-record-casts; main baseline d4d30be3a369187f8c8561d066b5e06e9e87b913. PR #215 merged after CI 38352230728 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
