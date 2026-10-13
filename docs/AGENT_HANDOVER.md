@@ -14,7 +14,7 @@ Validation: Release build passes; all 6935 unit tests across ten assemblies pass
 
 Check this slice's CI before merging. Next: function and choice aliases, then remaining named-record coercion. Keep broader native type-alias 6/26/0 limitations explicit. N04 and REQ-126 remain In Progress. Preserve all original expectations, patches, receipts, prior follow-up evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
 
-Delivery pending.
+Delivery: ffaf19ffba05af3747fd341e8bd480994df110b9, [Bosak PR #212](https://github.com/Fytala-Charles/Bosak/pull/212), pushed on feat/xslt-map-aliases. CI pending; check the latest run before merging. This metadata commit records delivery. No release/tag/package publication.
 
 # Atomic and array alias type expressions — 2026-10-13
 

@@ -47,5 +47,7 @@
   "independentProcessorConfirmation": "Outstanding",
   "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
   "validation": "Release build passes; all 6935 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4049/0/0. Focused run passes 2642 checks: 64 alias regressions (twenty new) and 2578 catalogue feature cases. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias remains 6/26/0; original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.",
-  "correctedVerificationNote": "An initial broader run exposed wildcard-map routing outside the typed-map rule. The path was narrowed to typed maps; all original catalogue expectations pass unchanged in final verification."
+  "correctedVerificationNote": "An initial broader run exposed wildcard-map routing outside the typed-map rule. The path was narrowed to typed maps; all original catalogue expectations pass unchanged in final verification.",
+  "testedImplementationCommit": "ffaf19ffba05af3747fd341e8bd480994df110b9",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/212"
 }
