@@ -47,5 +47,7 @@
     "docs/xpath40-catalog/examples/cases.json": "f8b6fe6f6d9db28ffc788e1c87e4264f12f0398cd0c79acc50d9991f01ad9249",
     "docs/xpath40-catalog/examples/xslt-type-declarations/record-named-as-observed.xsl": "7d986a78fe3ae54f0a07565f799f725a91e3fc926ac743fdc1bcfab7afe2b761",
     "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
-  }
+  },
+  "testedImplementationCommit": "eec8d0b56f74b218867ac6fe5c00ba7211331838",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/215"
 }
