@@ -1,3 +1,21 @@
+# Enumeration declaration bindings — 2026-10-13
+
+Branch: feat/xslt-enum-bindings; main baseline 73920217f7673401d438f34e0d0bd91ad4dc371c. PR #208 merged after CI 38341314078 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now converts named enumeration aliases at XSLT variable, parameter and result boundaries. Namespace/EQName aliases and occurrence indicators resolve from the declaring instruction; atomization and membership use XPath function conversion rules. Direct/dynamic function metadata uses the same definitions; private package aliases are isolated and restored. Sixteen regressions cover valid values, membership/cardinality errors, source attributes, record fields, template/select/function boundaries and mixed-version refusal. The invoice currency fixture now returns EUR; invalid XYZ still raises XTTE0570. Original native type-alias-023/024 still pass; broader filtered family remains 3/29/0, with structural/recursive/schema/package gaps outstanding. N04 and REQ-126 stay In Progress; no complete alias or package-conformance claim. Public release remains 1.1.3.
+
+EvaluationContext stores a package-local enumeration alias dictionary; package entry/exit snapshots restore it beside named record identities. Function parameter/result metadata expands enumeration aliases in the declaring package; function argument binding receives its declaration element. Named and inline enumeration conversion reuses VmEngine.ApplyFunctionConversion with a temporary 4.0 profile, restoring it in finally and remapping failures to the host boundary error code. Other type converters are unchanged. No new public API, upstream edits or gate promotions. One catalogue expected outcome updated (item-used-valid -> EUR); invalid cases, counts and original receipts remain intact. Source example comments and catalogue explanation synchronized; wider structural aliases/recursive definitions/schema collisions/full package type semantics remain follow-ups.
+
+Validation: final Release build zero warnings/errors; 16 focused regressions pass. All 6887 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4001/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Exact native type-alias-023/024 pass; broader filtered family remains 3/29/0, with native runner exit 1 from retained broader failures. Thirteen synchronized pages rendered; native catalog schema, original patch trees/bytes, original receipts, current source hashes and changed catalogue outcome checked. No post-validation engine changes.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. Next: structural item-type aliases, then remaining named-record conversion/coercion. Keep broader type-alias 3/29/0 limitations explicit; N04/REQ-126 remain In Progress. Monitor upstream PRs #22–26, pending review and independent confirmation. Preserve scratch dirs, native commits/expectations, original patches and before-fix receipts. Native checkout clean on bosak/item-type-boundaries. No release/tag/package publication.
+
+Delivery: c91184eeb2e6f83272b0b8f7e82808f780e5ca0c, [Bosak review PR](https://github.com/Fytala-Charles/Bosak/pull/209), pushed on feat/xslt-enum-bindings. CI pending; check the latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
+
 # Select namespace declarations — 2026-10-13
 
 Branch: feat/xslt-select-namespaces; main baseline d0d0da20f25f285c884d5a79c0641ba9d21c66b8. PR #207 merged after CI 38334370685 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.

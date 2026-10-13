@@ -2,12 +2,13 @@
 <!--
 AUTHOR: Charles Korthout
 CREATE DATE: 12 October 2026
-PURPOSE: Verify deferred XSLT named type declarations or portable invoice validation.
-SPECIAL NOTES: Synthetic invoice projection; observed ignored declarations do not establish support.
+PURPOSE: Validate an invoice currency against a named enumeration.
+SPECIAL NOTES: Named enumeration binding is verified in source 1.2.0; broader aliases remain partial.
 COPYRIGHT: Fytala
 LICENSE: license.md (Apache-2.0)
 SPDX-License-Identifier: Apache-2.0
 Change History: Charles Korthout | 0.1 | 12-10-2026 | Creation
+                Charles Korthout | 0.2 | 13-10-2026 | Named currency binding verified; EUR succeeds, invalid members refuse
 Input: invoice attributes id, currency and amount. Output: text report or declared error.
 These fixtures do not publish an actual named type API or perform external I/O.
 -->

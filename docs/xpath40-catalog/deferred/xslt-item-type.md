@@ -1,12 +1,12 @@
 <div align="center">
   <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog: deferred xsl:item-type declaration">
   <br><br><h1>xsl:item-type</h1>
-  <p>Deferred — named XSLT declarations and verified alternatives</p>
+  <p>Partial source support — enumeration aliases and verified alternatives</p>
 </div>
 
 ## 1. Name and Classification
 
-**xsl:item-type — Deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This is a disposition reference, not a type implementation or tier promotion. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
+**xsl:item-type — Partial in source 1.2.0; the broader declaration contract is deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the named-declaration deferral. This reference records the historical disposition and the current enumeration-only implementation; no broad type-system tier promotion is claimed. Bosak baseline reviewed 2026-10-12: [revision 0d199878](https://github.com/Fytala-Charles/Bosak/commit/0d199878a9cdc1fe689c63664d8aafb7632b83aa), engine version 1.1.2.
 External reference: [XSLT 4.0 named item types](https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types). Immutable review: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), IDs `named-types` and `named-item-types`. This current pin does not recover historical adopted specification provenance.
 
 ## 2. Intent
@@ -19,7 +19,7 @@ Named item-type aliases and reusable enumeration/choice/function type abbreviati
 
 ## 4. History / Supersedes
 
-The reviewed draft lets `xsl:item-type` name an existing item type. The name acts as an abbreviation within the package, with visibility/import-precedence rules; it does not establish a generated record constructor. Recursive aliases are not permitted. Bosak's adoption dossier defers this declaration. The released baseline does not register named stylesheet types. Source candidate 1.2.0 adds enumeration aliases for XPath instance-of and treat expressions; the broader declaration contract remains deferred.
+The reviewed draft lets `xsl:item-type` name an existing item type. The name acts as an abbreviation within the package, with visibility/import-precedence rules; it does not establish a generated record constructor. Recursive aliases are not permitted. Bosak's adoption dossier defers this declaration. The released baseline does not register named stylesheet types. Source candidate 1.2.0 adds enumeration aliases for XPath instance-of/treat and XSLT variable/parameter/result conversion; the broader declaration contract remains deferred.
 
 ## 5. Motivation
 
@@ -31,7 +31,8 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 |---|---|
 | Version 4.0, unused enumeration declaration | Validated and registered in source 1.2.0; `ready` alone does not test membership |
 | Version 3.0, top-level declaration | `XTSE0010` |
-| Named `as="erp:currency"`, EUR or XYZ input | `XTTE0570`; neither uses a registered alias |
+| Named `as="erp:currency"`, EUR input | `EUR` in source 1.2.0 |
+| Named `as="erp:currency"`, XYZ input | `XTTE0570`; alias membership rejects XYZ |
 | `instance of erp:currency` | `true` for EUR in source 1.2.0 |
 | Duplicate unused declarations | `XTSE4030` in source 1.2.0 |
 | Inline `enum('EUR','USD')` in XSLT 4.0 `@as` | EUR succeeds; XYZ produces `XTTE0570` |
@@ -39,11 +40,11 @@ An ERP invoice interface needs a stable contract for identifiers and currencies.
 
 ## 7. Applicability
 
-Use this record when deciding how to express invoice field contracts. Keep named declarations out of a supported production interface until their semantics are implemented and verified. The alternatives here use existing inline types or explicit predicates; they do not provide named package APIs.
+Use this record when deciding how to express invoice field contracts. Named enumeration bindings are verified in the unpublished source candidate; wider alias definitions and package contracts still require implementation and verification. The alternatives here use existing inline types or explicit predicates; they do not provide named package APIs.
 
 ## 8. Structure
 
-Invoice XML → project id/currency map → explicit field validation or inline anonymous type → text report. Named-declaration use is a separate failing probe, not a step required by the alternative.
+Invoice XML → project id/currency map → explicit field validation or inline anonymous type → text report. The named-enumeration fixture now validates the currency binding; portable alternatives remain available for XSLT 3.0.
 
 ## 9. Participants
 
@@ -55,11 +56,11 @@ Invoice XML → project id/currency map → explicit field validation or inline 
 
 ## 11. Consequences
 
-For a small currency set, use an inline enumeration only in a verified 4.0 binding, or an explicit membership check in portable 3.0. The portable report rejects XYZ and empty IDs. It projects selected input attributes; it does not validate every source attribute or the monetary amount. An unused declaration cannot enforce currency membership, and named-type conversion failure is not successful alias validation.
+For a small currency set, use an inline enumeration only in a verified 4.0 binding, or an explicit membership check in portable 3.0. The portable report rejects XYZ and empty IDs. It projects selected input attributes; it does not validate every source attribute or the monetary amount. An unused declaration cannot enforce currency membership, and broader named-type conversion failures are not successful alias validation.
 
 ## 12. Implementation
 
-The historical released baseline registered neither declaration. Source 1.2.0 recognizes xsl:item-type and supplies enumeration aliases to XPath instance-of/treat compilation; Source 1.2.0 also supplies the separate [named-record constructor slice](xslt-record-type.md), with broader record coercion and package semantics still unfinished. `IsForwardsCompatibleElement` uses effective version greater than 3.0, so the tested unused 4.0 declarations are tolerated without implementation. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. The enumeration follow-up changes the engine; no conformance gate promotion is claimed.
+The historical released baseline registered neither declaration. Source 1.2.0 recognizes xsl:item-type and supplies enumeration aliases to XPath instance-of/treat compilation and declaration conversion; Source 1.2.0 also supplies the separate [named-record constructor slice](xslt-record-type.md), with broader record coercion and package semantics still unfinished. The earlier unused-declaration outputs alone were tolerance evidence. Current enumeration declarations are validated and registered; binding and membership regressions establish the supported source behavior. Version 3.0 probes refuse top-level placement. The validation path has its own tolerance rules; these fixtures test compile/capture, not authoring-validation completeness. The enumeration follow-up changes the engine; no conformance gate promotion is claimed.
 
 ## 13. Sample Code
 
@@ -76,12 +77,13 @@ Complete [named alias-use fixture](../examples/xslt-type-declarations/item-used-
 <!--
 AUTHOR: Charles Korthout
 CREATE DATE: 12 October 2026
-PURPOSE: Verify deferred XSLT named type declarations or portable invoice validation.
-SPECIAL NOTES: Synthetic invoice projection; observed ignored declarations do not establish support.
+PURPOSE: Validate an invoice currency against a named enumeration.
+SPECIAL NOTES: Named enumeration binding is verified in source 1.2.0; broader aliases remain partial.
 COPYRIGHT: Fytala
 LICENSE: license.md (Apache-2.0)
 SPDX-License-Identifier: Apache-2.0
 Change History: Charles Korthout | 0.1 | 12-10-2026 | Creation
+                Charles Korthout | 0.2 | 13-10-2026 | Named currency binding verified; EUR succeeds, invalid members refuse
 Input: invoice attributes id, currency and amount. Output: text report or declared error.
 These fixtures do not publish an actual named type API or perform external I/O.
 -->
@@ -95,7 +97,7 @@ These fixtures do not publish an actual named type API or perform external I/O.
 </xsl:stylesheet>
 ```
 
-Observed outcome: `XTTE0570`; even the EUR input does not bind through the named alias. The XYZ input has the same error. The unused-declaration fixture returns `ready`; the missing alias is exposed only by actual use.
+Current source 1.2.0 outcome: `EUR` for the supplied invoice. An otherwise identical invoice with currency `XYZ` raises `XTTE0570`. The unchanged output `ready` from an unused declaration is not membership evidence.
 
 ### Inline enumeration alternative
 
@@ -199,7 +201,7 @@ reject
 |---|---|---|
 | [item-unused40](../examples/xslt-type-declarations/item-unused40.xsl) | xslt40 | `ready` |
 | [item-unused30](../examples/xslt-type-declarations/item-unused30.xsl) | xslt31 | `XTSE0010` |
-| [item-used-valid](../examples/xslt-type-declarations/item-used-valid.xsl) | xslt40 | `XTTE0570` |
+| [item-used-valid](../examples/xslt-type-declarations/item-used-valid.xsl) | xslt40 | `EUR` |
 | [item-used-invalid-observed](../examples/xslt-type-declarations/item-used-invalid-observed.xsl) | xslt40 | `XTTE0570` |
 | [item-duplicate-unused-observed](../examples/xslt-type-declarations/item-duplicate-unused-observed.xsl) | xslt40 | `XTSE4030` |
 | [item-instance](../examples/xslt-type-declarations/item-instance.xsl) | xslt40 | `true` |
@@ -212,7 +214,7 @@ reject
 | [enum-invalid](../examples/xslt-type-declarations/enum-invalid.xpath) | 40 | `false` |
 | [enum-default-refusal](../examples/xslt-type-declarations/enum-default-refusal.xpath) | 31 | `XPST0003` |
 
-The shared [manifest](../examples/cases.json) runs 28 cases for these two references. `error` asserts the marker from either compiler failure or failed capture; it does not promise every error is detected before transformation. Observed unused/duplicate declarations freeze tolerance, not draft conformance.
+The shared [manifest](../examples/cases.json) runs 28 cases for these two references. `error` asserts the marker from either compiler failure or failed capture; it does not promise every error is detected before transformation. Historical unused outputs alone were tolerance evidence; duplicate declarations and named bindings now have separate current regressions.
 
 ## 14. Performance
 
@@ -220,7 +222,7 @@ The portable example projects two strings and checks the resulting map. Inline c
 
 ## 15. Known Uses
 
-The invoice interface is synthetic integration evidence. [VersionGateTests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) includes `Compile_EnumType_31Mode_ThrowsXpst0003`, `Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive`, `Evaluate_Enum_Cast_MemberSucceedsAsPlainString` and `Evaluate_Enum_Cast_NonMemberFailsForg0001`. These are anonymous XPath enumeration evidence, not named XSLT alias evidence.
+The invoice interface is synthetic integration evidence. [VersionGateTests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) includes `Compile_EnumType_31Mode_ThrowsXpst0003`, `Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive`, `Evaluate_Enum_Cast_MemberSucceedsAsPlainString` and `Evaluate_Enum_Cast_NonMemberFailsForg0001`. The anonymous XPath evidence is complemented by [named binding regressions](../../../tests/Bosak.Xslt.Tests/Xslt40EnumerationBindingTests.cs).
 No named XSLT type declaration gate promotion or full draft conformance is claimed. These published manifest cases are separate evidence from the engine tests and [4.0 gate runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs).
 
 ## 16. Related Features
@@ -229,3 +231,21 @@ No named XSLT type declaration gate promotion or full draft conformance is claim
 
 
 **Current source follow-up — 2026-10-12:** Bosak source candidate 1.2.0 (unpublished) now resolves xsl:item-type enumeration aliases in XPath instance-of and treat expressions, including AVTs, namespace rebinding, EQNames and occurrence indicators. Both unchanged native cases type-alias-023/024 pass; broader type-alias-filter run is 3 pass/29 fail/0 skip (includes inherited related cases). Other alias types, named XSLT @as conversion, package exposure and complete recursive/schema-collision validation remain unsupported. Duplicate winning declarations raise XTSE4030; lower-precedence definitions remain overridable. Original failure receipts are preserved; upstream PR #25 review and independent confirmation are pending. N04 and REQ-126 remain In Progress; public release remains 1.1.3. Next: generated nominative record constructors, with wider alias support and select namespace declarations tracked separately.
+
+
+### Verified declaration boundaries in source 1.2.0
+
+Named enumerations abbreviate the same literal member set throughout the package. They produce ordinary string values, with no new record-like nominal identity. Optional/multiple occurrence indicators still constrain the result sequence. Source attributes are atomized and untyped atomic values converted before checking membership; an arbitrary typed integer is not accepted merely because it can be printed as a member string.
+
+| Declaration boundary | Membership/cardinality error |
+|---|---|
+| Variable | `XTTE0570` |
+| Template parameter | `XTTE0590` |
+| Function parameter | `XPTY0004` |
+| Function result | `XTTE0780` |
+| xsl:select result | `XPTY0004` |
+
+The definition remains package-local. A public function can use its declaring package's private enumeration internally; the caller's same-named enumeration is restored afterwards. This is isolation evidence, not implementation of export/expose/imported type visibility. Structural aliases, alias recursion checks, schema collisions and complete package type semantics remain deferred.
+
+
+**Binding follow-up — 2026-10-13:** Source candidate 1.2.0 (unpublished) now converts named enumeration aliases at XSLT variable, parameter and result boundaries. Namespace/EQName aliases and occurrence indicators resolve from the declaring instruction; atomization and membership use XPath function conversion rules. Direct/dynamic function metadata uses the same definitions; private package aliases are isolated and restored. Sixteen regressions cover valid values, membership/cardinality errors, source attributes, record fields, template/select/function boundaries and mixed-version refusal. The invoice currency fixture now returns EUR; invalid XYZ still raises XTTE0570. Original native type-alias-023/024 still pass; broader filtered family remains 3/29/0, with structural/recursive/schema/package gaps outstanding. N04 and REQ-126 stay In Progress; no complete alias or package-conformance claim. Public release remains 1.1.3. See [separate evidence](../../../contributions/xslt40/item-type-boundaries/BINDING_RESULTS.json).
