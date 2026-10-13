@@ -1,3 +1,19 @@
+# 1.2.0 release preparation — 2026-10-13
+
+Branch: release/1.2.0-preparation; source parent 8a5164b4. This section supersedes the earlier next-slice queue.
+
+The user froze the 1.2.0 scope on 2026-10-13 and authorized release preparation. The candidate includes the completed XSLT 4.0 array/member, select-body, switch, named item/record type, namespace and template-pattern slices through PR #246 (source tip 8a5164b4). Additional slices, authoring-context alignment and a new upstream test-area batch move after this release. REQ-126 and N01–N05 retain their recorded review/acceptance states; this release does not claim complete XPath/XSLT 4.0 conformance. A cumulative preparation PR against main will integrate the linear #223–246 stack after candidate CI passes. Release notes, ten coordinated 1.2.0 packages and a package-only fresh-cache consumer are verified before publication. The published version remains 1.1.3 until the final tag/publication action is authorized and completed.
+
+## What was built
+
+Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. Full unit rerun and cumulative main-based CI/integration pending. No tag, publication or external messaging.
+
+## Resume here
+
+Complete cumulative candidate CI, package metadata/hash verification and fresh-cache package consumer checks; integrate the candidate and record the exact main revision. Present the verified release for publication approval. After publication, authoring-context alignment and a new batch of XSLT 4.0 contribution areas resume. Preserve scratch and receipts; do not close REQ-126 or change gate membership.
+
+Delivery pending.
+
 # Pattern prefix diagnostics — 2026-10-13
 
 Branch: feat/xslt-pattern-prefix-diagnostics; parent db953bf6. Stacked on PR #245; PRs #223–245 remain open. Earlier sections are historical.
