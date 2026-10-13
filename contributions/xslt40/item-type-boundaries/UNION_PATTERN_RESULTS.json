@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 keeps supported XSLT 4.0 node union patterns as one template rule, using the highest default priority of their alternatives even when a lower-priority alternative is the one that matches. xsl:next-match visits that rule once, and overlapping alternatives do not create competing rule identities. Earlier effective profiles retain separate rules and their original per-alternative next-match behavior. Explicit priorities remain unchanged. Priority calculation recognizes pipe and union keyword operators, recursively computes nested alternatives, and preserves strings, predicates and EQName URIs; parenthesized 4.0 matching retains the declaring static namespace/type context. Empty top-level alternatives are rejected with XTSE0340. Twenty-eight regressions verify maximum priority, single visits, duplicate alternatives, failing ambiguity modes, nested/default namespaces, explicit priorities, version overrides, delimiters and invalid alternatives. Native next-match (including si-next-match) remains 46/8/6, and type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Four next-match 4.0 assertions (021a/023a/025a/039a) reference version-2.0 stylesheets and therefore still select the earlier effective profile; their fixtures and assertions remain unchanged. Processor-level selection for those lower-version native fixtures is a separate harness/API boundary. Other node-pattern priority forms, broader pattern grammar, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "c93926a394736ab42100031dddaba66ea4c5e776",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sections": [
+      "6.4.3 Default Priority for XNode Patterns"
+    ],
+    "retrieved": "2026-10-13"
+  },
+  "nativeNextMatchBaseline": {
+    "passed": 46,
+    "failed": 8,
+    "skipped": 6
+  },
+  "nativeNextMatchFinal": {
+    "passed": 46,
+    "failed": 8,
+    "skipped": 6
+  },
+  "nativeTypeAlias": {
+    "passed": 22,
+    "failed": 10,
+    "skipped": 0
+  },
+  "newlyPassingNativeCases": [],
+  "nativeProfileBoundary": {
+    "cases": [
+      "next-match-021a",
+      "next-match-023a",
+      "next-match-025a",
+      "next-match-039a"
+    ],
+    "reason": "4.0 assertions reference version-2.0 stylesheets; the effective-version selector retains earlier-profile rule splitting. Fixtures and assertions unchanged."
+  },
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final incremental Release build succeeds with zero warnings and zero errors. All 7421 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4535/0/0 and twenty-eight new regressions; focused union-pattern regressions pass 28/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "517b95174f6e5f4a211351f84c61f84a37573f0bc51724f533d3893814593b4d",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "744904ec68826d37b15d5c9867df5910aa1b18ebc24c0b3e00e9951888f59155",
+    "tests/Bosak.Xslt.Tests/Xslt40UnionPatternTests.cs": "02e509d42eb9da0b881e9ac48063b64c3dc67187bb1ef5b9f4ca22d435f7e41e",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeBaselineReceipt": ".artifacts/xslt40/20261013T114807839Z.json",
+  "nativeFinalReceipt": ".artifacts/xslt40/20261013T115320661Z.json",
+  "nativeTypeAliasReceipt": ".artifacts/xslt40/20261013T115320631Z.json"
+}

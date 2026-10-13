@@ -88,6 +88,7 @@
 //                      | Charles Korthout | 3.16  | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 //                      | Charles Korthout | 3.17  | 13-10-2026     | Compile XPath 4.0 type patterns with declaring type and namespace scopes.                 |
 //                      | Charles Korthout | 3.18  | 13-10-2026     | Match XPath 4.0 wildcard and union names in element/attribute kind-test patterns.
+//                      | Charles Korthout | 3.19  | 13-10-2026     | Preserve 4.0 static context while compiling parenthesized union alternatives.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1338,7 +1339,10 @@ internal sealed class PatternCompiler
                 string inside = trimmed[1..closeParen].Trim();
                 string after = closeParen + 1 < trimmed.Length ? trimmed[(closeParen + 1)..].Trim() : "";
 
-                var innerPattern = Compile(inside);
+                var innerPattern = _compatibility >= XPathCompatibility.XPath40
+                    ? Compile(inside, _defaultElementNamespace, _typedMode, _namespaces, _compatibility,
+                        _itemTypeAliases, _namedRecordTypeNames)
+                    : Compile(inside);
 
                 if (string.IsNullOrEmpty(after))
                     return innerPattern;

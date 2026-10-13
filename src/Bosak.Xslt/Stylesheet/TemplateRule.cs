@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 2.5   | 11-10-2026     | Carry effective XPath profiles into pattern predicate compilation.                      |
 //                      | Charles Korthout | 2.6   | 13-10-2026     | Resolve standalone type patterns in their declaring scope and compute type priorities.   |
 //                      | Charles Korthout | 2.7   | 13-10-2026     | Apply profile-specific XPath 4.0 kind-test wildcard/type priorities.
+//                      | Charles Korthout | 2.8   | 13-10-2026     | Keep 4.0 node union patterns as one rule with maximum alternative priority.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -206,6 +207,9 @@ internal sealed class TemplateRule
             return new[] { new TemplateRule(element, match, name, modes, 0.5, stylesheet, contextItem) };
         }
 
+        if (stylesheet.GetXPathCompatibility(element) >= XPathCompatibility.XPath40)
+            _ = SplitNodeUnion40(StripXPathComments(match).Trim());
+
         // When an explicit priority is given, the entire union is a single template rule.
         // Splitting only happens when priorities are computed per-branch, so that
         // xsl:next-match can continue to other branches with different priorities.
@@ -226,6 +230,13 @@ internal sealed class TemplateRule
 
         // Validate union pattern constraints before splitting (XTSE0340)
         ValidateUnionPattern(trimmed);
+
+        if (stylesheet.GetXPathCompatibility(element) >= XPathCompatibility.XPath40)
+        {
+            // A 4.0 union is one rule: next-match must not revisit another alternative.
+            return new[] { new TemplateRule(element, match, name, modes,
+                ComputeDefaultPriority(match, xpath40: true), stylesheet, contextItem) };
+        }
 
         var branches = SplitUnionBranches(trimmed);
         if (branches.Length <= 1)
@@ -609,9 +620,9 @@ internal sealed class TemplateRule
         }
 
         // Union patterns: take the maximum priority of all branches
-        var branches = SplitUnionBranches(trimmed);
+        var branches = xpath40 ? SplitNodeUnion40(trimmed) : SplitUnionBranches(trimmed);
         if (branches.Length > 1)
-            return branches.Max(branch => ComputeSinglePatternPriority(branch, xpath40));
+            return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true) : ComputeSinglePatternPriority(branch));
 
         return ComputeSinglePatternPriority(trimmed, xpath40);
     }
@@ -959,6 +970,51 @@ internal sealed class TemplateRule
         if (s.Contains("instance of"))
             return true;
         return false;
+    }
+
+    /// <summary>Splits 4.0 node unions without interpreting strings, predicates or EQName URIs as operators.</summary>
+    private static string[] SplitNodeUnion40(string pattern)
+    {
+        var parts = new List<string>();
+        int start = 0, depth = 0;
+        char quote = '\0';
+        bool uri = false;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < pattern.Length && pattern[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c is '(' or '[') { depth++; continue; }
+            if (c is ')' or ']') { depth--; continue; }
+            if (depth != 0) continue;
+            int width = c == '|' ? 1 : 0;
+            if (width == 0 && i > start && pattern.AsSpan(i).StartsWith("union", StringComparison.Ordinal)
+                && char.IsWhiteSpace(pattern[i - 1])
+                && (i + 5 == pattern.Length || char.IsWhiteSpace(pattern[i + 5])))
+            {
+                int previous = i - 1;
+                while (previous >= start && char.IsWhiteSpace(pattern[previous])) previous--;
+                if (previous >= start && pattern[previous] is not '/' and not '@' and not ':' and not '|') width = 5;
+            }
+            if (width == 0) continue;
+            parts.Add(pattern[start..i].Trim());
+            start = i + width;
+            i += width - 1;
+        }
+        parts.Add(pattern[start..].Trim());
+        if (parts.Count > 1 && parts.Any(string.IsNullOrEmpty))
+            throw new InvalidOperationException("XTSE0340: A union pattern requires an alternative on each side of its operator.");
+        return parts.ToArray();
     }
 
     private static string[] SplitUnionBranches(string pattern)
