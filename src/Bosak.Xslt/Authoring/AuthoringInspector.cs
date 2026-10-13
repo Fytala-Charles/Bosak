@@ -25,6 +25,7 @@
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Capture internal contexts for mode names, lists and default-mode references.             |
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Capture key declaration namespaces without changing public metadata.                     |
+//                      | Charles Korthout | 0.14  | 13-10-2026     | Capture keyword signatures from retained declaration contexts.                           |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -235,6 +236,8 @@ public sealed class AuthoringInspector
                 new AuthoringFailure(AuthoringFailureKind.Structure, ex.Message, principal.BaseUri));
         }
 
+        var functionSignatures = AuthoringFunctionSignatures.Capture(linkedModules, descriptors, graphGap);
+
         var isCompilable = false;
         var compilationDiagnostics = Array.Empty<string>();
         if (options.AttemptCompilation)
@@ -267,7 +270,7 @@ public sealed class AuthoringInspector
             isCompilable,
             compilationDiagnostics,
             resolver,
-            options);
+            options, functionSignatures);
         return AuthoringInspectionResult.SuccessResult(snapshot);
     }
 

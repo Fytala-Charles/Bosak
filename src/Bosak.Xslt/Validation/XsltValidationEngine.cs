@@ -31,6 +31,7 @@
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Validate mode names, lists and default references in captured authoring contexts.        |
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Report key declaration QName syntax and applicable namespace errors.                     |
+//                      | Charles Korthout | 0.14  | 13-10-2026     | Use captured function keyword signatures and report deferred coverage.                   |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -79,6 +80,7 @@ internal sealed class XsltValidationEngine
     private IReadOnlyList<StaticVariableName> _staticGlobals = Array.Empty<StaticVariableName>();
     private VariableScope _globals = VariableScope.Empty;
     private AuthoringNamedTypes? _namedTypes;
+    private AuthoringFunctionSignatures? _functionSignatures;
     private bool _sequenceTypeLinkageDeferred;
 
     public XsltValidationEngine(XsltValidationOptions? options)
@@ -118,6 +120,7 @@ internal sealed class XsltValidationEngine
 
     public XsltValidationResult Validate(AuthoringSnapshot snapshot)
     {
+        _functionSignatures = snapshot.FunctionSignatures;
         _sequenceTypeLinkageDeferred = snapshot.Modules.Any(m => m.NamedTypes?.ModuleLinkageSupported != true);
         CollectGlobalDeclarations(snapshot);
         foreach (var module in snapshot.Modules)
@@ -1032,7 +1035,7 @@ internal sealed class XsltValidationEngine
 
         try
         {
-            XPath31Expression.Compile(text, BuildCompileOptions(context, compatibility, isAvt: false));
+            XPath31Expression.Compile(text, BuildCompileOptions(context, compatibility, isAvt: false, isStatic: isUseWhen));
         }
         catch (Exception ex)
         {
@@ -1251,6 +1254,11 @@ internal sealed class XsltValidationEngine
         Exception ex,
         bool positionsExact)
     {
+        if (ex is AuthoringFunctionSignatureCoverageException)
+        {
+            _gaps.Add(new XsltValidationCoverageGap("function-keywords", state.Module.ModuleUri, ex.Message));
+            return;
+        }
         _hasInvalid = true;
         SourceRange? range = attribute.ValueRange;
         if (positionsExact && ex is XPathParseException parseException &&
@@ -1278,11 +1286,13 @@ internal sealed class XsltValidationEngine
     }
 
     private CompileOptions BuildCompileOptions(
-        ExpressionSlotContext context, XPathCompatibility compatibility, bool isAvt)
+        ExpressionSlotContext context, XPathCompatibility compatibility, bool isAvt, bool isStatic = false)
     {
         return new CompileOptions
         {
             Namespaces = BuildNamespaceMap(context),
+            FunctionParameterNames = !isStatic && compatibility >= XPathCompatibility.XPath40 && _functionSignatures is not null
+                ? _functionSignatures.Resolve : null,
             ItemTypeAliases = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Aliases : null,
             NamedRecordTypeNames = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Records : null,
             DefaultElementNamespace = context.XpathDefaultNamespace,

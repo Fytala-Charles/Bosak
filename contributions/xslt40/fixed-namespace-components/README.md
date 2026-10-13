@@ -114,3 +114,8 @@ pwsh -File ./run-xslt40-tests.ps1 -TestSet fixed-namespaces -TestCase fixed-name
 Build the Release adapter first if needed. Initial family evidence retains the five failures; the current keyword-fixed source passes all sixteen unchanged cases. [Manifest](evidence.json) records stylesheet, patch and exact receipt SHA-256 values. Receipts retain original checkout paths and statuses for provenance. [Upstream PR text](UPSTREAM_PR_BODY.md) records the requested independent cross-check.
 
 Verification: Release solution build succeeds (0 errors; 88 existing warnings); all 7,908 unit tests pass, including 5,022 XSLT tests, with zero failures/skips. No engine source changed; conformance gate results are retained from merged PR #260. Contribution and canonical Markdown render checks pass.
+
+
+## Authoring keyword validation follow-up - 2026-10-13
+
+The unchanged native family remains 16/0/0 at implementation `7caa9f4d`. A separate 38-case authoring slice aligns expression/AVT validation with all-supplied host keyword calls; [verification and limits](../../../docs/XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json), [native log](post-authoring-keyword-result.txt) and [receipt](post-authoring-keyword-receipt.json) retain precise scope. These regressions add no native contribution cases and leave original assertions/receipts unchanged. Candidate 1.2.1 remains unpublished.

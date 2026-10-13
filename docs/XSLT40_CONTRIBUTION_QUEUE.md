@@ -344,3 +344,8 @@ Three native fixed-namespace component tests are submitted as [xslt40-test PR #2
 ## Fixed namespace keyword follow-up - 2026-10-13
 
 The unchanged fixed-namespaces family now passes 16/0/0 after support for all-supplied XSLT function keyword calls (initial 11/5/0 preserved). The three new PR #27 cases remain green. See [separate implementation evidence](XSLT40-FUNCTION-KEYWORD-RESULTS.json). Original N01-N05 and upstream acceptance states are unchanged; next host-signature work is authoring validation, with optional/default arguments and broader package coverage separate. Version 1.2.1 remains unpublished.
+
+
+## Authoring keyword validation follow-up - 2026-10-13
+
+The bounded host keyword contract now validates in authoring expression/AVT slots using an immutable captured registry, with 38 new regressions and 103 focused checks green. The unchanged native namespace family remains 16/0/0; no new contribution cases are added. See [separate verification evidence](XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json). Original N01-N05 and upstream acceptance states are unchanged; next: authoring expression edit contexts, then optional/default and broader keyword boundaries. Candidate 1.2.1 remains unpublished.
