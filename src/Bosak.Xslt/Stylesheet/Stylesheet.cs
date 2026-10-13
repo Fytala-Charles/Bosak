@@ -295,6 +295,7 @@
 //                      | Charles Korthout | 2.134 | 13-10-2026     | Validate named record/field declarations and shared named-type precedence.               |
 //                      | Charles Korthout | 2.135 | 13-10-2026     | Resolve atomic and array declaration aliases with forward references and cycle detection
 //                      | Charles Korthout | 2.136 | 13-10-2026     | Expand map aliases and nested map/array references with shared token-aware type handling
+//                      | Charles Korthout | 2.137 | 13-10-2026     | Validate outer item occurrence independently of function return sequence cardinality
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -891,9 +892,12 @@ internal sealed class Stylesheet
             if (!active.Add(name)) throw new InvalidOperationException("XTSE4035: Circular item-type alias definition.");
             try
             {
-                var expanded = ExpandType(declaration.Attribute("as")!.Value.Trim(), declaration, false);
+                var expanded = ExpandType(declaration.Attribute("as")!.Value.Trim(), declaration);
                 if (expanded is not null)
                 {
+                    var parsed = Bosak.XPath.Parser.Ast.XPathParser.Parse("() instance of " + expanded, xpath40: true);
+                    if (parsed is not Bosak.XPath.Parser.Ast.InstanceOfNode { Occurrence: OccurrenceIndicator.One })
+                        throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
                     XPath31Expression.Compile("() instance of " + expanded, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
                     result[name] = expanded;
                 }
@@ -901,11 +905,10 @@ internal sealed class Stylesheet
             }
             finally { active.Remove(name); }
         }
-        string? ExpandType(string text, XElement declaration, bool sequence)
+        string? ExpandType(string text, XElement declaration)
         {
             text = text.Trim();
-            if (!sequence && text.Length > 0 && text[^1] is '?' or '*' or '+')
-                throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
+
             return ItemTypeAliasExpansion.Expand(text, name =>
             {
                 var key = ExpandItemTypeName(name, declaration);

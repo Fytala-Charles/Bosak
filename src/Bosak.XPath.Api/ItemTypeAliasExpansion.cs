@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 13 October 2026
-// PURPOSE              : Expand aliases within supported array and map sequence-type syntax
+// PURPOSE              : Expand aliases within supported structural sequence-type syntax
 // SPECIAL NOTES        : Public surface API for compiling and evaluating XPath 3.1 expressions.
 //
 // COPYRIGHT            : Fytala
@@ -13,20 +13,54 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2 | 13-10-2026     | Expand function signatures and ordered choices while preserving return/outer occurrences
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Bosak.XPath.Api;
 
-/// <summary>Expands complete type-name tokens inside supported map and array types.</summary>
+/// <summary>Expands complete type-name tokens inside supported structural types.</summary>
 internal static class ItemTypeAliasExpansion
 {
     internal static string? Expand(string type, Func<string, string?> resolveName)
     {
         var text = RemoveComments(type).Trim();
+        var function = Regex.Match(text, @"^function\s*\(");
+        if (function.Success)
+        {
+            var close = MatchingClose(text, function.Length - 1);
+            if (close < 0) throw new InvalidOperationException("XPST0003: Unclosed function type.");
+            var arguments = text[function.Length..close].Trim();
+            var tail = text[(close + 1)..].Trim();
+            if (arguments == "*" && tail is "" or "?" or "*" or "+") return "function(*)" + tail;
+            var resultMarker = Regex.Match(tail, @"^as\s+");
+            if (!resultMarker.Success) throw new InvalidOperationException("XPST0003: A typed function requires an as return type.");
+            var parameters = arguments.Length == 0 ? new List<string>() : SplitArguments(arguments);
+            var expandedParameters = new List<string>(parameters.Count);
+            foreach (var parameter in parameters)
+            {
+                var expanded = Expand(parameter, resolveName);
+                if (expanded is null) return null;
+                expandedParameters.Add(expanded);
+            }
+            var result = Expand(tail[resultMarker.Length..], resolveName);
+            return result is null ? null : "function(" + string.Join(",", expandedParameters) + ") as " + result;
+        }
         var suffix = text.Length > 0 && text[^1] is '?' or '*' or '+' ? text[^1].ToString() : string.Empty;
         if (suffix.Length > 0) text = text[..^1].TrimEnd();
+        if (text.StartsWith('(') && MatchingClose(text, 0) == text.Length - 1)
+        {
+            var alternatives = SplitArguments(text[1..^1], '|');
+            var expandedAlternatives = new List<string>(alternatives.Count);
+            foreach (var alternative in alternatives)
+            {
+                var expanded = Expand(alternative, resolveName);
+                if (expanded is null) return null;
+                expandedAlternatives.Add(expanded);
+            }
+            return "(" + string.Join("|", expandedAlternatives) + ")" + suffix;
+        }
         var enumeration = Regex.Match(text, @"^enum\s*\(");
         if (enumeration.Success && text.EndsWith(')')) return "enum(" + text[enumeration.Length..] + suffix;
         if (text is "item()" or "node()" or "empty-sequence()") return text + suffix;
@@ -51,10 +85,10 @@ internal static class ItemTypeAliasExpansion
         }
         if (!Regex.IsMatch(text, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?$")) return null;
         var replacement = resolveName(text);
-        return replacement is null ? null : replacement + suffix;
+        return replacement is null ? null : (replacement.StartsWith("function(", StringComparison.Ordinal) ? "(" + replacement + ")" : replacement) + suffix;
     }
 
-    private static List<string> SplitArguments(string text)
+    private static List<string> SplitArguments(string text, char separator = ',')
     {
         var result = new List<string>();
         int depth = 0, braces = 0, start = 0;
@@ -76,10 +110,35 @@ internal static class ItemTypeAliasExpansion
             else if (c == '{') braces++;
             else if (c == '(') depth++;
             else if (c == ')') depth--;
-            else if (c == ',' && depth == 0) { result.Add(text[start..i]); start = i + 1; }
+            else if (c == separator && depth == 0) { result.Add(text[start..i]); start = i + 1; }
         }
         result.Add(text[start..]);
         return result;
+    }
+
+    private static int MatchingClose(string text, int opening)
+    {
+        int depth = 0, braces = 0;
+        char quote = '\0';
+        for (int i = opening; i < text.Length; i++)
+        {
+            var c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (braces > 0) { if (c == '}') braces--; continue; }
+            if (c is '\'' or '"') quote = c;
+            else if (c == '{') braces++;
+            else if (c == '(') depth++;
+            else if (c == ')' && --depth == 0) return i;
+        }
+        return -1;
     }
 
     private static string RemoveComments(string text)

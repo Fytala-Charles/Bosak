@@ -403,6 +403,7 @@
 //                      | Charles Korthout | 2.176 | 13-10-2026     | Normalize schema EQName cast targets for XPath 4.0 default item types
 //                      | Charles Korthout | 2.177 | 13-10-2026     | Apply XPath 4.0 array member coercion without atomizing the outer array
 //                      | Charles Korthout | 2.178 | 13-10-2026     | Coerce XPath 4.0 typed map keys and values with collision checks and entry order
+//                      | Charles Korthout | 2.179 | 13-10-2026     | Use cardinality-aware function type matching for XPath 4.0 instance-of operands
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3440,7 +3441,11 @@ internal static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var instanceValue = registers[instr.RegisterB];
                         bool instance;
-                        if (typeName.TrimStart().StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+                        if (context.IsXPath40)
+                        {
+                            instance = InstanceOf(instanceValue, typeName, occurrence, context.DefaultElementNamespace, context);
+                        }
+                        else if (typeName.TrimStart().StartsWith("function(", StringComparison.OrdinalIgnoreCase))
                         {
                             // Function type tests on named function items need the
                             // registered signature, which requires the evaluation context.

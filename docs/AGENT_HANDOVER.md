@@ -1,3 +1,21 @@
+# Function and choice aliases — 2026-10-13
+
+Branch: feat/xslt-function-choice-aliases; main baseline 8b9279622f5c5da5eeea08a60570c184cdc789fb. PR #212 merged after CI 38346556251 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now expands function signatures and ordered choice xsl:item-type aliases, including nested references, parameter/result occurrences and outer function-item occurrences. Existing binding conversion wraps function results and tries choice alternatives in declaration order; instance-of/treat checks do not coerce. XPath 4.0 function instance-of now uses cardinality-aware matching, safely rejecting non-functions and handling empty sequences. Nineteen new regressions cover these boundaries, cycles, mixed-version refusal and a calibration example. Structural-record aliases, remaining named-record coercion and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+ItemTypeAliasExpansion traverses function parameters/results and ordered choices, groups expanded function alias uses and retains return occurrences. Stylesheet registration checks parsed outer cardinality. VmEngine uses cardinality-aware function matching only for XPath 4.0. Nineteen new regressions include the documented sensor calibration example. No new public API, gate promotion, native assertion change, catalogue manifest change or publication.
+
+Validation: Release build passes (12 existing warnings, zero errors); all 6954 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4068/0/0. Focused alias run passes 83 tests, including nineteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native type-alias improves to 7/25/0; case 011 newly passes and original 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: structural-record alias boundaries and remaining named-record coercion. Native type-alias is now 7/25/0; original 023/024 pass and case 011 newly passes. N04 and REQ-126 remain In Progress. Preserve original expectations, patches, receipts, historical evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery pending.
+
 # Typed map aliases and nested references — 2026-10-13
 
 Branch: feat/xslt-map-aliases; main baseline 8e1dfe1f0e659d4d6097de0f68d66871b5a38bb1. PR #211 merged after CI 38345226739 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
