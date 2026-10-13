@@ -37,6 +37,8 @@
 //                      |                  |       |                | substring fns), keyword rows (collation-key/contains-token/node-name), fn:collation-    |
 //                      |                  |       |                | available, # QName literals (PR1976/PR2227, XPST0154), min/max QName ordering (PR2256)  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.9     | 11-10-2026     | Align map:entries and map:items assertions with reviewed sequence contracts.             |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
@@ -1068,12 +1070,13 @@ public class XPath40FunctionTests
     // map:entries (F+O 4.0 §14.2.2)
     // ------------------------------------------------------------------
 
+    /// <summary>Returns one sequence item per map entry, retaining entry order.</summary>
     [Fact]
     public void MapEntries_ReturnsSingleEntryMapsInOrder()
     {
-        Assert.Equal("2", Eval40("map:entries(map{'a':1, 'b':2})?2?b").ToString());
-        Assert.Equal("3", Eval40("array:size(map:entries(map{'a':1, 'b':2, 'c':3}))").ToString());
-        Assert.Equal("0", Eval40("array:size(map:entries(map{}))").ToString());
+        Assert.Equal("2", Eval40("map:entries(map{'a':1, 'b':2})[2]?b").ToString());
+        Assert.Equal("3", Eval40("count(map:entries(map{'a':1, 'b':2, 'c':3}))").ToString());
+        Assert.Equal("0", Eval40("count(map:entries(map{}))").ToString());
     }
 
     // ------------------------------------------------------------------
@@ -1100,12 +1103,13 @@ public class XPath40FunctionTests
     // map:items (F+O 4.0 §14.4.6)
     // ------------------------------------------------------------------
 
+    /// <summary>Concatenates map values as ordinary sequence items in entry order.</summary>
     [Fact]
     public void MapItems_ReturnsValuesInEntryOrder()
     {
         Assert.Equal("x,y", Eval40(
             "string-join(map:items(map{'a':'x', 'b':'y'}), ',')").ToString());
-        Assert.Equal("2", Eval40("count(map:items(map{'a':1, 'b':(2, 3)}))").ToString());
+        Assert.Equal("3", Eval40("count(map:items(map{'a':1, 'b':(2, 3)}))").ToString());
     }
 
     // ------------------------------------------------------------------

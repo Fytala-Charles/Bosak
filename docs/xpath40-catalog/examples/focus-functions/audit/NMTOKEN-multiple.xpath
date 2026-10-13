@@ -1,0 +1,1 @@
+count(('PART_A', 'PART_A') ! xs:NMTOKEN())

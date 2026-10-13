@@ -45,6 +45,13 @@
 //                      | Charles Korthout | 1.15  | 23-09-2026     | REQ-103: RunWithStack rethrows via ExceptionDispatchInfo (original stack preserved;   |
 //                      |                  |       |                | `throw exception` reset it, hiding engine stacks from conformance diagnostics)        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.16  | 10-10-2026     | REQ-125 Slice C: CaptureTransform — IO-free captured output contract over the         |
+//                      |                  |       |                | result-document capture machinery (identities, bytes, bounds, classified failures)    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 10-10-2026     | REQ-125 Slice D: CaptureTransform builds/stamps the ExecutionGate (token, TimeLimit,  |
+//                      |                  |       |                | MaxEngineOperations), pre-run cancellation check, gate cleared in finally             |
+//                      | Charles Korthout | 1.18  | 11-10-2026     | C-F1/D-F1: document bounded profiles and unconditional terminal observations.            |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -52,7 +59,9 @@ using System.Threading;
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Providers.Streaming;
 using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime;
 using Bosak.XPath.Runtime.Vm;
+using Bosak.Xslt.Capture;
 
 namespace Bosak.Xslt.Api;
 
@@ -211,6 +220,134 @@ public sealed class XsltExecutable
             LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
             return result;
         }, DefaultTransformStackSize);
+    }
+
+    /// <summary>
+    /// Runs a transformation with output capture (REQ-125 Slice C): the principal output and every
+    /// secondary <c>xsl:result-document</c> output are serialized to bytes in memory — with their
+    /// resolved identities and effective output properties — and returned as a classified, immutable
+    /// result. No output definition is written to the file system or the network.
+    /// </summary>
+    /// <param name="source">The source document or node to transform. May be null for named-template entry points with no initial context item.</param>
+    /// <param name="options">Optional capture controls (base output URI, entry point, bounds, cancellation and execution limits). <see langword="null"/> captures every output with no bounds.</param>
+    /// <returns>
+    /// The immutable capture result; never <see langword="null"/>. Expected error conditions —
+    /// engine/spec errors raised by the stylesheet, duplicate output URIs (XTDE1490), configured
+    /// bound breaches, message overflow, cancellation and execution-limit exhaustion — are classified
+    /// on the result (see <see cref="XsltCaptureResult.Outcome"/> and
+    /// <see cref="XsltCaptureResult.Failures"/>), never thrown.
+    /// </returns>
+    /// <remarks>
+    /// <para>
+    /// Identity: the principal output's resolved identity is the base output URI (from
+    /// <see cref="XsltCaptureOptions.BaseOutputUri"/>), even when the stylesheet never names it; when
+    /// no base output URI is supplied the identity is the empty string. Secondary identities are the
+    /// <c>xsl:result-document</c> hrefs resolved against that base.
+    /// </para>
+    /// <para>
+    /// Byte fidelity: each output's bytes are produced by the engine's serializer under its effective
+    /// output properties (method, encoding, byte-order mark and all other overrides, including
+    /// <c>xsl:result-document</c> attributes and named output definitions), matching the
+    /// <c>fn:transform</c> serialized-delivery contract. Bounds are enforced during production: a
+    /// secondary output is serialized as soon as its instruction completes, and the transformation is
+    /// terminated at the first output that breaches a configured bound; outputs completed earlier are
+    /// retained and the breach is a classified failure.
+    /// </para>
+    /// <para>
+    /// Cancellation and limits (REQ-125 Slice D): the run and its nested <c>fn:transform</c> calls
+    /// share one execution gate built from <see cref="XsltCaptureOptions.CancellationToken"/>,
+    /// <see cref="XsltCaptureOptions.TimeLimit"/> and
+    /// <see cref="XsltCaptureOptions.MaxEngineOperations"/>. Checkpoints fire at every XSLT
+    /// instruction dispatch, template invocation, secondary result-document production,
+    /// <c>xsl:message</c> emission and output serialization. Cancellation classifies as
+    /// <see cref="XsltCaptureOutcome.Cancelled"/>; the two limits classify as <c>XV0011</c>/<c>XV0012</c>
+    /// failures on a partial/failed outcome. Cancellation/deadlines are observed unconditionally
+    /// before and after serialization and before result publication; bounded serialization also
+    /// observes controls between encoding chunks. These observations do not consume engine
+    /// operations or alter the 64-checkpoint hot-loop batch. The gate is stamped on the run's evaluation context for
+    /// the duration of the run and cleared afterwards, and nested transforms inherit the same gate
+    /// instance — so the remaining budget and deadline are shared across nesting, and sequential or
+    /// concurrent runs never observe another run's controls (a gate is only ever used from its own
+    /// transformation thread). A stylesheet <c>xsl:try</c>/<c>xsl:catch</c> can swallow the internal
+    /// termination signal; the recorded cancellation/limit failure still downgrades the outcome.
+    /// </para>
+    /// <para>
+    /// Coverage and exclusions: capture covers the principal output and all secondary outputs,
+    /// including raw outputs when byte limits are absent. With byte limits, JSON/adaptive,
+    /// text Unicode normalization, non-text character maps and non-XDocument markup provider
+    /// fallbacks are refused as UnsupportedSerializationProfile/XV0014 before serialization.
+    /// Text (including character maps) and supported XML/HTML/XHTML profiles use incremental
+    /// encoding sinks; encoding/BOM bytes count against both budgets. The sink retains no more
+    /// than the permitted output bytes, with fixed-size encoding/markup lookahead. Result-tree
+    /// construction, normalization and XPath working memory are separate from serialization
+    /// budgets; capture is not an OS memory sandbox. There is no initial-match-selection or raw-result delivery variant on this entry
+    /// point; <c>xsl:message</c> texts travel the separate bounded channel
+    /// <see cref="XsltCaptureResult.Messages"/>. A single XPath expression between checkpoints (for
+    /// example a long loop inside one <c>select</c> attribute) is not interrupted mid-evaluation;
+    /// the wall-clock and operation limits are cooperative, deterministic bounds — Braid's process
+    /// termination remains the hard wall-clock control. When this method is not used, the existing
+    /// <c>Transform</c>/<c>TransformToString</c> family is unchanged — including its current disk
+    /// behavior for secondary result documents.
+    /// </para>
+    /// </remarks>
+    public XsltCaptureResult CaptureTransform(IXdmNode? source, XsltCaptureOptions? options = null)
+    {
+        options ??= new XsltCaptureOptions();
+        var context = options.Context ?? new EvaluationContext();
+
+        // REQ-125 Slice D: one execution gate per controlled run. A gate already on the context
+        // (a nested controlled run) is inherited — its remaining budget and deadline are shared —
+        // and the options' controls apply only when no gate is present yet.
+        var gate = context.ExecutionGate;
+        var stamped = false;
+        if (gate is null &&
+            (options.CancellationToken.HasValue || options.TimeLimit.HasValue || options.MaxEngineOperations.HasValue))
+        {
+            gate = ExecutionGate.Create(
+                options.CancellationToken ?? default,
+                options.TimeLimit,
+                options.MaxEngineOperations);
+            context.ExecutionGate = gate;
+            stamped = true;
+        }
+
+        var session = new XsltCaptureSession(options, _messageListener, gate);
+        Exception? failure = null;
+        try
+        {
+            // A token triggered before the run starts cancels immediately, before any output is
+            // produced and before the transformation thread starts.
+            gate?.Checkpoint();
+
+            RunWithStack<object?>(() =>
+            {
+                var engine = new Runtime.TransformEngine(_stylesheet, context, session.MessageListener, _treatRecoverableAmbiguousMatchAsError);
+                engine.ResultDocumentCaptureObserver = session.ObserveResultDocument;
+                var result = engine.Transform(source, options.InitialTemplate, options.InitialMode,
+                    rawResult: false, baseOutputUri: options.BaseOutputUri, captureResultDocuments: true);
+                LastResultDocumentProperties = engine.PrincipalResultDocumentProperties;
+
+                // A principal xsl:result-document (no href) supplies the effective output properties,
+                // overriding the stylesheet-level xsl:output defaults. Clone before stamping
+                // run-specific inference state so concurrent captures never share mutable state.
+                var principalProps = (engine.PrincipalResultDocumentProperties ?? OutputProperties).Clone();
+                principalProps.EffectiveVersion ??= _stylesheet.Version;
+                principalProps.ImplicitResultTree = engine.PrincipalResultDocumentProperties == null;
+                session.CapturePrincipal(result, principalProps);
+                return null;
+            }, DefaultTransformStackSize);
+        }
+        catch (Exception ex)
+        {
+            failure = ex;
+        }
+        finally
+        {
+            if (stamped)
+                context.ExecutionGate = null;
+        }
+
+        return session.BuildResult(failure);
     }
 
     /// <summary>

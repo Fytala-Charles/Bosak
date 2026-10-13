@@ -39,6 +39,15 @@ Recommendation and no formal at-risk markers** — the commitment recorded in RE
 
 ### 1.2 Stability tiers (from the change-history blocks)
 
+> **Current disposition reconciliation (2026-10-11):** the following stability
+> assessment is the original planning snapshot. S4 subsequently shipped iteration
+> over sequences of arrays/maps; REQ-123 adopted scan experimentally and JNode
+> navigation at the frozen level. The full model/template boundary stays separate.
+> Record casts discard surplus entries, while delivered record coercion rejects
+> them with XPTY0004. See the [current decision audit](xpath40-catalog/COMPLETENESS-AUDIT.md#deferred-and-rejected-decisions)
+> and [provenance ledger](xpath40-catalog/PROVENANCE.md) for deliveries and evidence.
+
+
 **Looks stable** (unchanged 1.5–3 years, each with a dedicated qt4tests set):
 - Operators: pipeline `->` (§4.20), mapping arrow `=!>` (§4.22.2 — *renamed from `=>>`*),
   otherwise `??` (§4.17), guarded-expression semantics (§2.6.5).
@@ -126,6 +135,13 @@ independent commits.
 - **Deferred within tier**: method-call `=?>` (June 2026 churn), computed node
   constructors in XPath (§4.13 — Feb 2026, overlaps XQuery-only territory).
 
+  **Constructor review (2026-10-12):** The pinned current draft includes computed
+  XPath constructors, while Bosak retains this deferral. The
+  [constructor disposition record](xpath40-catalog/deferred/computed-node-constructors.md)
+  verifies refusal in XPath31, XPath40 and XPath40Experimental, separates existing
+  XQuery 3.1 support, and supplies a complete portable XSLT receipt alternative.
+  This review documents the boundary; it does not promote the feature.
+
 ### Tier 3 — Item-type system: enums, choices, (structural) records
 
 `Xdm` type representation + `ItemType` parsing + function-signature coercion. Records
@@ -147,20 +163,48 @@ Enum and choice types are small and stable — can precede records.
 - **Deferred**: `xsl:item-type`/`xsl:record-type` declarations, enclosing modes,
   capturing accumulators, `fn:apply-templates`, Serialization 4.0 parameters.
 
+  **Named declaration review (2026-10-12):** Dedicated
+  [item-type](xpath40-catalog/deferred/xslt-item-type.md) and
+  [record-type](xpath40-catalog/deferred/xslt-record-type.md) disposition records
+  distinguish ignored unused 4.0 declarations from actual named type/constructor
+  support. Portable map validation and anonymous type alternatives are verified.
+  Structural-record XSLT `@as` conversion remains an observed boundary; explicit
+  XPath cast in `select` plus `as="map(*)"` is the verified workaround.
+  The declarations remain Deferred; no tier promotion is included.
+
+  **Enclosing-mode review (2026-10-12):** The
+  [enclosing-mode disposition](xpath40-catalog/deferred/enclosing-modes.md)
+  verifies generic XTSE0260 refusal for nested templates, and supplies complete
+  named-mode export/audit alternatives. Explicit mode, dynamic `#current` and
+  lexical default-mode are distinguished. Ordinary top-level modes do not supply
+  the deferred enclosure/isolation contract; the tier decision is unchanged.
+
+  **Capturing-accumulator review (2026-10-12):** The
+  [capture disposition](xpath40-catalog/deferred/capturing-accumulators.md)
+  verifies that accepted capture attributes retain source-node identity, rather
+  than creating the draft-required copy. Complete in-memory ordinary accumulator,
+  snapshot and projection alternatives are supplied. Streaming and the capture
+  rule's special annotation-copy behavior remain separate, unverified contracts;
+  the feature remains Deferred.
+
 ### Out of scope (recorded, not scheduled)
 
-- **XDM 4.0 GNode/JNode model** (`xnode()`/`jnode()`, `fn:jtree`/`fn:jkey`/`fn:jvalue`,
-  JSONPath comparisons §4.7.9) — a parallel node model touching every layer; revisit
-  only if the drafts freeze and a customer need appears.
+- **Full XDM 4.0 GNode/JNode remainder** — the original exclusion was partly superseded
+  by REQ-123's shipped JNode wrappers, jtree/jkey/jvalue, jnode type tests and navigation.
+  The [reconciled model boundary](xpath40-catalog/data-model/jnode-template-boundary.md)
+  records node()/xnode()/identity gaps and uncertified generic-model/XSLT contracts.
+  The remainder stays outside this implementation schedule; shipped navigation remains available.
 - **`fn:parse-html` / `fn:html-doc`** (17.3) — requires an HTML5 parser dependency;
   the known Cloudflare-challenge environment lesson applies. Owner decision needed.
 - **`fn:invisible-xml`** (17.6), **`fn:unparsed-binary`**, **`fn:xsd-validator`** —
   external dependency or schema-validator machinery.
-- **XQuery 4.0-only deltas** (direct constructors already exist; full FLWOR `where`/
-  `order by`/`group by` in XPath is *not* in the grammar — XQuery-only, tracked under
-  the XQuery project's own REQ if ever requested).
-- **XSLT Streaming 4.0** deltas until the streaming conformance tail (REQ-087
-  residuals) is closed.
+- **XQuery 4.0-only deltas** — existing XQuery 3.1 already supports full FLWOR.
+  The [language scope review](xpath40-catalog/deferred/language-streaming-scope.md)
+  verifies rejection of a 4.0 version declaration. XPath accepts the tested simple
+  where extension but rejects tested order-by/group-by forms; blanket where exclusion is stale.
+- **XSLT Streaming 4.0 deltas** — existing streamed XML APIs are available.
+  REQ-087 Phase D is Done; its residual reports are dated historical evidence, not
+  a current failure count. Complete Streaming 4.0 contracts require a separate scope/gate review.
 
 ## 3. Version gating (design decision, needs owner sign-off)
 
@@ -246,3 +290,9 @@ gathering window; 4.0-S1 scheduling is an owner call after that soak reads out.
 against the live QT4CG drafts (section numbers as of the 15 Sept 2026 WG Review
 Draft); stability tiers from the per-section change-history blocks, not memory.
 Next action: owner decisions §5.1–§5.2, then sub-REQ 4.0-S1 after the v1.0.0 tag.*
+
+**REQ-126 review (2026-10-12):** The tier-4 fn:apply-templates deferral now has a [dedicated catalog disposition](xpath40-catalog/deferred/fn-apply-templates.md), with 28 refusal/availability and supported invoice alternative fixtures. This supplies evidence and consumer guidance without promoting the function to implemented.
+
+**REQ-126 serialization review (2026-10-12):** The [nine-parameter catalog disposition](xpath40-catalog/deferred/serialization-parameters.md) supplies pinned draft/source evidence and 52 checks. Existing XSLT JSON solidus control is supported in the verified paths; the wider Serialization 4.0 additions remain deferred. This does not promote the tier-4 item or claim complete Serialization 4.0 conformance.
+
+**REQ-126 external-input review (2026-10-12):** The [five-function scope record](xpath40-catalog/deferred/external-input-functions.md) verifies absent registrations and call/lookup behavior, with pinned contracts and 55 executable checks. Narrow normalized-XML, fixed-record, binary-value and business-guard alternatives do not change the original out-of-scope decision. Existing schema-aware layers remain distinct from the missing xsd-validator factory.

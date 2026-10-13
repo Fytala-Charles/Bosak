@@ -1,0 +1,1 @@
+decode-from-uri(encode-for-uri('INV/2048 + VAT'))

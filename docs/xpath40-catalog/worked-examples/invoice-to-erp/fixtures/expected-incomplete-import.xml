@@ -1,0 +1,9 @@
+<erp:import xmlns:erp="urn:example:erp:import">
+  <erp:invoice id="INV-2026-1043" supplier="SUP-0042" currency="EUR" issue-date="2026-10-12" status="review-required">
+    <erp:lines>
+      <erp:line id="1" sku="FILTER-A" quantity="2" unit-price="12.50" net="25.00"/>
+    </erp:lines>
+    <erp:tax-summary><erp:tax rate="9" net="25.00" amount="2.25"/></erp:tax-summary>
+    <erp:totals accepted-lines="1" rejected-lines="3" net="25.00" tax="2.25" gross="27.25"/>
+  </erp:invoice>
+</erp:import>

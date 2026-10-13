@@ -1,0 +1,1 @@
+name(highest(parse-xml('<r a="10" b="2"/>')/r/@*, (), string#1))

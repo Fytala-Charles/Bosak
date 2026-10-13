@@ -1,0 +1,1 @@
+days-in-month(value := xs:date('2024-02-01'))

@@ -1,0 +1,259 @@
+From e72f1b0e8511f78478e66c112201317cfe7b7ad1 Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Mon, 12 Oct 2026 20:49:48 +0200
+Subject: [PATCH] Add array member empty, container, identity and mixed-item
+ tests
+
+---
+ tests/insn/array/_array-test-set.xml     | 54 ++++++++++++++++++++++++
+ tests/insn/array/array-027.xsl           | 25 +++++++++++
+ tests/insn/array/array-028.xsl           | 20 +++++++++
+ tests/insn/array/array-029.xsl           | 21 +++++++++
+ tests/insn/array/array-030.xsl           | 20 +++++++++
+ tests/insn/array/array-031.xsl           | 15 +++++++
+ tests/insn/array/array-032.xsl           | 16 +++++++
+ tests/insn/array/array-member-orders.xml |  2 +
+ 8 files changed, 173 insertions(+)
+ create mode 100644 tests/insn/array/array-027.xsl
+ create mode 100644 tests/insn/array/array-028.xsl
+ create mode 100644 tests/insn/array/array-029.xsl
+ create mode 100644 tests/insn/array/array-030.xsl
+ create mode 100644 tests/insn/array/array-031.xsl
+ create mode 100644 tests/insn/array/array-032.xsl
+ create mode 100644 tests/insn/array/array-member-orders.xml
+
+diff --git a/tests/insn/array/_array-test-set.xml b/tests/insn/array/_array-test-set.xml
+index 39e0b4d1..65b25f71 100644
+--- a/tests/insn/array/_array-test-set.xml
++++ b/tests/insn/array/_array-test-set.xml
+@@ -8,6 +8,10 @@
+       <source role="." file="../../strm/docs/transactions.xml"/>
+    </environment>
+    
++   <environment name="array-member-orders">
++      <source role="." file="array-member-orders.xml"/>
++   </environment>
++
+    <dependencies>
+       <spec value="XSLT40+"/>
+    </dependencies>
+@@ -506,4 +510,54 @@
+    
+ 
+    
++   <test-case name="array-027">
++      <description>An explicit empty member occupies a slot, while an empty sequence emits no member.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-027.xsl"/></test>
++      <result><assert-xml>&lt;out members="3" empty="true" last="B" emitted="2" second="B"/&gt;</assert-xml></result>
++   </test-case>
++
++   <test-case name="array-028">
++      <description>An array-member sequence constructor returning no items still creates an empty member.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-028.xsl"/></test>
++      <result><assert-xml>&lt;out members="3" empty="true" grouped="2" values="after|tail"/&gt;</assert-xml></result>
++   </test-case>
++
++   <test-case name="array-029">
++      <description>Nested map and empty/nonempty array values remain singleton members without flattening.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-029.xsl"/></test>
++      <result><assert-xml>&lt;out members="3" map="true" sku="A" lots="0" nested="true" nested-size="2" nested-second="C" empty-array="0" empty-array-is-item="1"/&gt;</assert-xml></result>
++   </test-case>
++
++   <test-case name="array-030">
++      <description>Order-export members retain original source-node identity and explicit non-document order.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <environment ref="array-member-orders"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-030.xsl"/></test>
++      <result><assert-xml>&lt;out members="2" grouped="2" first-same="true" second-same="true" last-same="true" order="C|A"/&gt;</assert-xml></result>
++   </test-case>
++
++   <test-case name="array-031">
++      <description>The for-each form retains empty members and evaluates select with per-line focus.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <environment ref="array-member-orders"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-031.xsl"/></test>
++      <result><assert-xml>&lt;out members="3" first="A|1|3" empty="true" last="C|3|3"/&gt;</assert-xml></result>
++   </test-case>
++
++   <test-case name="array-032">
++      <description>A for-each result mixing an array-member JNode with an atomic item raises XTTE4060.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-032.xsl"/></test>
++      <result><error code="XTTE4060"/></result>
++   </test-case>
++
+ </test-set>
+\ No newline at end of file
+diff --git a/tests/insn/array/array-027.xsl b/tests/insn/array/array-027.xsl
+new file mode 100644
+index 00000000..25d98075
+--- /dev/null
++++ b/tests/insn/array/array-027.xsl
+@@ -0,0 +1,25 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- An explicit empty member occupies a slot, while an empty sequence emits no member. -->
++  <xsl:template name="xsl:initial-template">
++    <xsl:variable name="members" as="array(*)">
++      <xsl:array>
++        <xsl:array-member select="'A'"/>
++        <xsl:array-member select="()"/>
++        <xsl:array-member select="'B'"/>
++      </xsl:array>
++    </xsl:variable>
++    <xsl:variable name="items" as="array(*)">
++      <xsl:array>
++        <xsl:sequence select="'A'"/>
++        <xsl:sequence select="()"/>
++        <xsl:sequence select="'B'"/>
++      </xsl:array>
++    </xsl:variable>
++    <out members="{array:size($members)}" empty="{empty($members(2))}"
++         last="{$members(3)}" emitted="{array:size($items)}" second="{$items(2)}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-028.xsl b/tests/insn/array/array-028.xsl
+new file mode 100644
+index 00000000..f9906cdd
+--- /dev/null
++++ b/tests/insn/array/array-028.xsl
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- An array-member sequence constructor returning no items still creates an empty member. -->
++  <xsl:template name="xsl:initial-template">
++    <xsl:variable name="a" as="array(*)">
++      <xsl:array>
++        <xsl:array-member><xsl:sequence select="'before'"/></xsl:array-member>
++        <xsl:array-member>
++          <xsl:if test="false()"><xsl:sequence select="'optional'"/></xsl:if>
++        </xsl:array-member>
++        <xsl:array-member><xsl:sequence select="('after','tail')"/></xsl:array-member>
++      </xsl:array>
++    </xsl:variable>
++    <out members="{array:size($a)}" empty="{empty($a(2))}"
++         grouped="{count($a(3))}" values="{string-join($a(3),'|')}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-029.xsl b/tests/insn/array/array-029.xsl
+new file mode 100644
+index 00000000..cd67d11d
+--- /dev/null
++++ b/tests/insn/array/array-029.xsl
+@@ -0,0 +1,21 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- Nested map and empty/nonempty array values remain singleton members without flattening. -->
++  <xsl:template name="xsl:initial-template">
++    <xsl:variable name="a" as="array(*)">
++      <xsl:array>
++        <xsl:array-member select="map{'sku':'A','lots':[]}"/>
++        <xsl:array-member select="['B','C']"/>
++        <xsl:array-member select="[]"/>
++      </xsl:array>
++    </xsl:variable>
++    <out members="{array:size($a)}" map="{$a(1) instance of map(*)}"
++         sku="{$a(1)?sku}" lots="{array:size($a(1)?lots)}"
++         nested="{$a(2) instance of array(*)}" nested-size="{array:size($a(2))}"
++         nested-second="{$a(2)(2)}" empty-array="{array:size($a(3))}"
++         empty-array-is-item="{count($a(3))}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-030.xsl b/tests/insn/array/array-030.xsl
+new file mode 100644
+index 00000000..ad934fce
+--- /dev/null
++++ b/tests/insn/array/array-030.xsl
+@@ -0,0 +1,20 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- Order-export members retain original source-node identity and explicit non-document order. -->
++  <xsl:template match="/">
++    <xsl:variable name="lines" select="order/line"/>
++    <xsl:variable name="a" as="array(*)">
++      <xsl:array>
++        <xsl:array-member select="($lines[3],$lines[1])"/>
++        <xsl:array-member select="$lines[2]"/>
++      </xsl:array>
++    </xsl:variable>
++    <out members="{array:size($a)}" grouped="{count($a(1))}"
++         first-same="{$a(1)[1] is $lines[3]}" second-same="{$a(1)[2] is $lines[1]}"
++         last-same="{$a(2) is $lines[2]}"
++         order="{string-join($a(1) ! string(@sku),'|')}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-031.xsl b/tests/insn/array/array-031.xsl
+new file mode 100644
+index 00000000..958a72fd
+--- /dev/null
++++ b/tests/insn/array/array-031.xsl
+@@ -0,0 +1,15 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- The for-each form retains empty members and evaluates select with per-line focus. -->
++  <xsl:template match="/">
++    <xsl:variable name="a" as="array(*)">
++      <xsl:array for-each="order/line"
++                 select="if (@sku='B') then () else (string(@sku),position(),last())"/>
++    </xsl:variable>
++    <out members="{array:size($a)}" first="{string-join($a(1) ! string(.),'|')}"
++         empty="{empty($a(2))}" last="{string-join($a(3) ! string(.),'|')}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-032.xsl b/tests/insn/array/array-032.xsl
+new file mode 100644
+index 00000000..b7649530
+--- /dev/null
++++ b/tests/insn/array/array-032.xsl
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++                xmlns:xs="http://www.w3.org/2001/XMLSchema"
++                xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++                exclude-result-prefixes="#all" version="4.0">
++  <!-- A for-each result mixing an array-member JNode with an atomic item raises XTTE4060. -->
++  <xsl:template name="xsl:initial-template">
++    <xsl:variable name="a" as="array(*)">
++      <xsl:array for-each="1">
++        <xsl:array-member select="'A'"/>
++        <xsl:sequence select="'B'"/>
++      </xsl:array>
++    </xsl:variable>
++    <out><xsl:value-of select="string-join($a?* ! string(.),'|')"/></out>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-member-orders.xml b/tests/insn/array/array-member-orders.xml
+new file mode 100644
+index 00000000..1ef10d68
+--- /dev/null
++++ b/tests/insn/array/array-member-orders.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<order><line sku="A"/><line sku="B"/><line sku="C"/></order>
+-- 
+2.54.0.windows.1
+

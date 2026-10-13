@@ -1,0 +1,1 @@
+build-uri(map{'scheme':'https','host':'inventory.example','port':443,'path-segments':('','v1','items','A/B +'),'query-parameters':map{'q':'A+B C'},'fragment':'part 1/?'},map{'omit-default-ports':true()})

@@ -1,0 +1,1 @@
+string-join(('QUI=' ! xs:base64Binary()) ! string(.), '|')

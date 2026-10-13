@@ -1,0 +1,2 @@
+let $value := map {'parts': ['FRAME', 'MOTOR']}
+return deep-equal(identity($value), $value)

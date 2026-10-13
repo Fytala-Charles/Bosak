@@ -1,0 +1,1 @@
+string-join(map:items(map:build(('FILTER-A','SEAL-B'), (), function($sku,$position){concat($position, ':', $sku)})), '|')

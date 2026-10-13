@@ -1,0 +1,2 @@
+(: Iteration across collection sequences; synthetic fulfillment data; mode 40; no external context. :)
+for member $parcel in ([1], 2) return $parcel

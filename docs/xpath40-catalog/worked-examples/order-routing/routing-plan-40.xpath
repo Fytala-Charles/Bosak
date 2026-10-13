@@ -1,0 +1,35 @@
+(: Author: Charles Korthout; 11 October 2026; Apache-2.0; Copyright Fytala.
+   Context: document with urn:example:routing orders. Compile at XPath40.
+   Result: map containing original orders, accepted orders, arrays of batches,
+   and exception maps. No outputs or external resource access.
+   Missing/duplicate identity raises Q{urn:example:routing}ROUTING-ID before XSLT.
+   Predicates are boolean; castable guards bad quantities; empty orders are invalid. :)
+let $orders := Q{urn:example:routing}orders/Q{urn:example:routing}order,
+    $valid-line := function($line) {
+      normalize-space($line/@sku) ne '' and
+      (if ($line/@quantity castable as xs:integer)
+       then xs:integer($line/@quantity) gt 0 else false())
+    },
+    $valid-order := function($order) {
+      $order/@route = ('NORTH', 'SOUTH') and exists($order/Q{urn:example:routing}line)
+      and every($order/Q{urn:example:routing}line,
+        function($line, $position) { $valid-line($line) })
+    }
+return if (some($orders, function($order, $position) { normalize-space($order/@id) = '' })
+           or not(all-different($orders/@id ! string(.))))
+then error(QName('urn:example:routing', 'ROUTING-ID'), 'ROUTING-ID: order IDs must be nonblank and unique.')
+else let $accepted := $orders[$valid-order(.)]
+return map {
+  'orders': $orders,
+  'accepted': $accepted,
+  'batches': partition($accepted, function($current, $next, $position) {
+    count($current) ge 2 or $current[1]/@route ne $next/@route
+  }),
+  'exceptions': for $order in $orders[not($valid-order(.))] return map {
+    'order': $order,
+    'missing-lines': empty($order/Q{urn:example:routing}line),
+    'unsupported-route': not($order/@route = ('NORTH', 'SOUTH')),
+    'invalid-lines': index-where($order/Q{urn:example:routing}line,
+      function($line, $position) { not($valid-line($line)) })
+  }
+}

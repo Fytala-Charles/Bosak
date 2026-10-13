@@ -1,0 +1,1 @@
+string-join(lowest((1,xs:double('NaN'),2)) ! string(.),",")

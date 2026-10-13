@@ -1,0 +1,2 @@
+(: Synthetic Focus-based constructors case; compatibility 40; no external context required. :)
+ 'pending' ! xs:integer()

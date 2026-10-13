@@ -1,0 +1,1 @@
+map:size(map:filter(map := map{'A':1}, predicate := function($k,$v){true()}))

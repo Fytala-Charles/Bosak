@@ -1,0 +1,1 @@
+every $v in ('--10-12' ! xs:gMonthDay()) satisfies $v instance of xs:gMonthDay

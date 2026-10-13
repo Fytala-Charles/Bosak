@@ -1,0 +1,78 @@
+{
+  "reviewDate": "2026-10-12",
+  "suiteBase": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "suiteCommit": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+  "branch": "bosak/array-member-review",
+  "specRevision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+  "patchSha256": "6f9b75c8f206186fa52f5af20351c98f922aaaa35cdc24eb188a98a7a6ce1514",
+  "cases": [
+    {
+      "id": "array-027",
+      "description": "An explicit empty member occupies a slot, while an empty sequence emits no member.",
+      "expected": "<out members=\"3\" empty=\"true\" last=\"B\" emitted=\"2\" second=\"B\"/>",
+      "environment": null,
+      "status": "pass",
+      "actualBoundary": "Native catalog assertion passed.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "4fcae2e7faf56675cc6869b1a7b8ca9d1e30dd4a249df43b2f381fc095bcc19d"
+    },
+    {
+      "id": "array-028",
+      "description": "An array-member sequence constructor returning no items still creates an empty member.",
+      "expected": "<out members=\"3\" empty=\"true\" grouped=\"2\" values=\"after|tail\"/>",
+      "environment": null,
+      "status": "pass",
+      "actualBoundary": "Native catalog assertion passed.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "f995778d65161bb540c781b43c786c3edaca3a101c4fea240f19d35539ab572d"
+    },
+    {
+      "id": "array-029",
+      "description": "Nested map and empty/nonempty array values remain singleton members without flattening.",
+      "expected": "<out members=\"3\" map=\"true\" sku=\"A\" lots=\"0\" nested=\"true\" nested-size=\"2\" nested-second=\"C\" empty-array=\"0\" empty-array-is-item=\"1\"/>",
+      "environment": null,
+      "status": "pass",
+      "actualBoundary": "Native catalog assertion passed.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "e289e53d21cd3f1f5a4db650582881f7ec10afb62808b0667f0cd5ea94a5b98a"
+    },
+    {
+      "id": "array-030",
+      "description": "Order-export members retain original source-node identity and explicit non-document order.",
+      "expected": "<out members=\"2\" grouped=\"2\" first-same=\"true\" second-same=\"true\" last-same=\"true\" order=\"C|A\"/>",
+      "environment": "array-member-orders",
+      "status": "pass",
+      "actualBoundary": "Native catalog assertion passed.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "3e43ec8b6facaa2f38dbe6db6fb34eecc853c535117918c87e4d3bc60fe449ff"
+    },
+    {
+      "id": "array-031",
+      "description": "The for-each form retains empty members and evaluates select with per-line focus.",
+      "expected": "<out members=\"3\" first=\"A|1|3\" empty=\"true\" last=\"C|3|3\"/>",
+      "environment": "array-member-orders",
+      "status": "pass",
+      "actualBoundary": "Native catalog assertion passed.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "b21166d8644d4df5c10d37aec8c9a9d36b131d6d1847c095143a4fbb4d9cb629"
+    },
+    {
+      "id": "array-032",
+      "description": "A for-each result mixing an array-member JNode with an atomic item raises XTTE4060.",
+      "expected": "XTTE4060",
+      "environment": null,
+      "status": "fail",
+      "actualBoundary": "Required XTTE4060 is not raised; Bosak returns <out>A|B</out>.",
+      "sourceSection": "array-construction",
+      "stylesheetSha256": "fc5ee07f06a40ea898f2328dd24dbd9a2c4f99d802ef399cb3ee05e48883cde1"
+    }
+  ],
+  "batchCounts": {
+    "passed": 5,
+    "failed": 1,
+    "skipped": 0
+  },
+  "validation": "Native test-set schema passed; exact committed clean checkout rerun. Independent processor confirmation not available. Existing expected results unchanged; no upstream submission.",
+  "scope": "Six new array cases only; wrapper aggregate counts include inherited substring matches and must not be used as this batch total."
+}

@@ -516,6 +516,32 @@
 //                      |                  |       |                | policy: authority-approved bytes via XmlStreamingProvider/LoadControlled with DTDs        |
 //                      |                  |       |                | prohibited; no StreamingDocumentLoader hook or file fallback when a policy is attached    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.07  | 10-10-2026     | REQ-125 Slice C: ResultDocumentCaptureObserver hook — per-output observer over captured   |
+//                      |                  |       |                | result documents (return false = engine does not retain); default null = bit-identical  |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.08  | 10-10-2026     | REQ-125 Slice D: ExecutionGate checkpoints — instruction dispatch, call-template and     |
+//                      |                  |       |                | apply-templates entries; gate inherited from the evaluation context (null = no-op)      |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 7.09  | 11-10-2026     | Apply effective-version XPath profiles to expression compilation.                       |
+//                      | Charles Korthout | 7.10  | 12-10-2026     | Preserve array-member JNodes and enforce for-each XTTE4060 before unwrapping.             |
+//                      | Charles Korthout | 7.11  | 12-10-2026     | Evaluate xsl:select body expressions with focus and declared result coercion.              |
+//                      | Charles Korthout | 7.12  | 12-10-2026     | Pass enumeration aliases to XPath and AVT compilation; preserve EQName URIs
+//                      | Charles Korthout | 7.13  | 13-10-2026     | Register record constructors, convert fields and preserve named record bindings.         |
+//                      | Charles Korthout | 7.14  | 13-10-2026     | Validate select prefixes against inline namespace declarations
+//                      | Charles Korthout | 7.15 | 13-10-2026     | Convert named and inline enumeration bindings with scoped declaration profiles
+//                      | Charles Korthout | 7.16 | 13-10-2026     | Resolve array and atomic aliases at XSLT declaration and function boundaries
+//                      | Charles Korthout | 7.17 | 13-10-2026     | Supply expanded package aliases to XPath expression and AVT compilation
+//                      | Charles Korthout | 7.18 | 13-10-2026     | Resolve nested array/map aliases in declaration and function sequence types
+//                      | Charles Korthout | 7.19 | 13-10-2026     | Coerce maps to package-local nominative records with defaults and static field protection
+//                      | Charles Korthout | 7.20 | 13-10-2026     | Cast named record fields and resolve nested named references in declaration namespaces
+//                      | Charles Korthout | 7.21 | 13-10-2026     | Reuse shared sequence casting for record fields and nested containers
+//                      | Charles Korthout | 7.22 | 13-10-2026     | Supply known record names for XPath and AVT static named-type validation
+//                      | Charles Korthout | 7.23 | 13-10-2026     | Preserve named node test namespaces when resolving binding sequence types
+//                      | Charles Korthout | 7.24 | 13-10-2026     | Preserve schema annotation namespace bindings at runtime declaration boundaries
+//                      | Charles Korthout | 7.25 | 13-10-2026     | Normalize XPath 4.0 binding signatures even without declared aliases
+//                      | Charles Korthout | 7.26 | 13-10-2026     | Preserve schema declaration identities and normalize document bindings
+//                      | Charles Korthout | 7.27 | 13-10-2026     | Use fixed namespaces in XPath compilation and named type binding resolution
+//                      | Charles Korthout | 7.28 | 13-10-2026     | Coerce direct structural record bindings through the XPath 4.0 converter
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -527,6 +553,7 @@ using System.Xml.Linq;
 using System.Xml.Schema;
 using Bosak.XPath.Api;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
@@ -608,12 +635,33 @@ internal sealed class TransformEngine
     private bool _captureResultDocuments;
     private readonly Dictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> _capturedResultDocuments = new();
 
+    // REQ-125 Slice D: cooperative execution gate (host cancellation token, wall-clock
+    // deadline, engine-operation budget) inherited from the evaluation context. Observed at
+    // instruction-dispatch and template-invocation checkpoints; null means no controls and
+    // adds a single branch per checkpoint.
+    private readonly ExecutionGate? _executionGate;
+
+    // Cooperative execution-control checkpoint (REQ-125 Slice D). No-op when no gate is attached.
+    private void CheckpointExecution() => _executionGate?.Checkpoint();
+
     /// <summary>
     /// The secondary result documents captured during the last transformation when
     /// result-document capture was enabled (used by fn:transform), keyed by the
     /// resolved result-document URI.
     /// </summary>
     public IReadOnlyDictionary<string, (XdmValue Value, Stylesheet.OutputProperties Props)> CapturedResultDocuments => _capturedResultDocuments;
+
+    /// <summary>
+    /// REQ-125 Slice C: optional observer invoked once per completed secondary
+    /// <c>xsl:result-document</c> while <see cref="CapturedResultDocuments"/> capture is active.
+    /// The observer receives the resolved URI, the captured value and its effective output
+    /// properties; returning <see langword="false"/> tells the engine not to retain the value in
+    /// <see cref="CapturedResultDocuments"/> (the observer has taken ownership, typically by
+    /// serializing it immediately under a capture bound). <see langword="null"/> (the default)
+    /// keeps the fn:transform behavior bit-identical. Throwing from the observer aborts the
+    /// transformation with that exception.
+    /// </summary>
+    internal Func<string, XdmValue, Stylesheet.OutputProperties, bool>? ResultDocumentCaptureObserver { get; set; }
 
     // Flattened template rules and named templates from the entire stylesheet tree
     private readonly List<Stylesheet.TemplateRule> _allTemplateRules;
@@ -893,6 +941,10 @@ internal sealed class TransformEngine
         _stylesheet = stylesheet;
         _context = context ?? new EvaluationContext();
         _context.IsXsltMode = true;
+        // REQ-125 Slice D: inherit the controlled run's execution gate (cancellation token,
+        // wall-clock deadline, operation budget) from the evaluation context. Nested
+        // fn:transform calls inherit the same gate instance, sharing the remaining budget.
+        _executionGate = _context.ExecutionGate;
         _messageListener = messageListener;
         _treatRecoverableAmbiguousMatchAsError = treatRecoverableAmbiguousMatchAsError;
         _context.BackwardsCompatible = stylesheet.Version is "1.0";
@@ -915,7 +967,12 @@ internal sealed class TransformEngine
         // failing statically with XPST0008 (no schema awareness).
         if (_context.SchemaSet is { } inScopeSchemas)
             _schemaCompileOptions = new CompileOptions { SchemaSet = inScopeSchemas };
+        // Mixed-version modules share one registry. Install frozen signatures once;
+        // expression evaluation stamps the profile and resolution hides them in 3.x.
+        _context.IsXPath40 = true;
+        _context.IsXPath40Experimental = false;
         FunctionLibrary.Populate(_context);
+        _context.IsXPath40 = false;
         _context.CollationComparer = FunctionLibrary.CompareStrings;
         XsltFunctionLibrary.Populate(_context);
         // The engine keeps the standard function registry intact for its lifetime, so
@@ -1125,6 +1182,8 @@ internal sealed class TransformEngine
     /// <returns>The result of the transformation as an XDM value.</returns>
     public XdmValue Transform(IXdmNode? source, string? initialTemplate = null, string? initialMode = null, bool rawResult = false, string? baseOutputUri = null, XdmValue? initialMatchSelection = null, bool captureResultDocuments = false, bool rawTransformResult = false, IXdmNode? globalContextItem = null)
     {
+        _staticRecordFieldValues.Clear();
+        _evaluatingRecordFields.Clear();
         _baseOutputUri = baseOutputUri;
         _context.CurrentOutputUri = baseOutputUri;
         _context.DocumentLoadPolicy = null;
@@ -1275,7 +1334,7 @@ internal sealed class TransformEngine
         var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
-            rule.CompileMatch(patternCompiler);
+            rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
             ValidateStrictModePatternDeclarations(rule);
         }
 
@@ -2532,7 +2591,7 @@ internal sealed class TransformEngine
         var patternCompiler = new Patterns.PatternCompiler(_context);
         foreach (var rule in _allTemplateRules)
         {
-            rule.CompileMatch(patternCompiler);
+            rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
             ValidateStrictModePatternDeclarations(rule);
         }
 
@@ -2913,6 +2972,35 @@ internal sealed class TransformEngine
     // every execution — the dominant per-node cost on row/cell-heavy stylesheets.
     private static readonly System.Runtime.CompilerServices.ConditionalWeakTable<XElement, System.Collections.Concurrent.ConcurrentDictionary<string, XPath31Expression>> CompiledXPathCache = new();
 
+    /// <summary>Evaluates body XPath text without TVT expansion and coerces the declared result type.</summary>
+    private XdmValue EvaluateSelectInstruction(XElement instruction, EvaluationContext? context = null)
+    {
+        var expression = new StringBuilder();
+        foreach (var node in instruction.Nodes())
+        {
+            if (node is XText text)
+                expression.Append(text.Value);
+            else if (node is XElement element && element.Name == XName.Get("fallback", Stylesheet.Stylesheet.XslNamespace))
+                expression.Clear();
+        }
+        var textValue = expression.ToString();
+        var evaluationContext = context ?? _context;
+        var savedCollation = evaluationContext.DefaultCollation;
+        evaluationContext.DefaultCollation = GetEffectiveDefaultCollation(instruction);
+        try
+        {
+            var value = string.IsNullOrWhiteSpace(textValue)
+                ? XdmValue.FromSequence(XdmSequence.Empty)
+                : CompileXPath(textValue, instruction).Evaluate(evaluationContext);
+            return ConvertVariableValue(value, instruction.Attribute("as")?.Value,
+                context: evaluationContext, errorCodeOverride: "XPTY0004", declaration: instruction);
+        }
+        finally
+        {
+            evaluationContext.DefaultCollation = savedCollation;
+        }
+    }
+
     private XPath31Expression CompileXPath(string expression, XElement instruction)
     {
         var cache = CompiledXPathCache.GetValue(instruction,
@@ -2924,25 +3012,41 @@ internal sealed class TransformEngine
     /// Compiles an XPath expression that has no instruction-level static namespace context,
     /// carrying the stylesheet's compiled schema set when the transform is schema-aware
     /// (REQ-104) so schema-element()/schema-attribute() kind tests compile; equivalent to
-    /// <see cref="XPath31Expression.Compile(string)"/> when no schema set is in scope.
+    /// <see cref="XPath31Expression.Compile(string)"/> when no schema set is in scope
+    /// and the owning element selects the XPath31 profile.
     /// </summary>
-    private XPath31Expression CompileWithSchemaContext(string expression)
-        => _schemaCompileOptions is { } options
-            ? XPath31Expression.Compile(expression, options)
-            : XPath31Expression.Compile(expression);
+    private XPath31Expression CompileWithSchemaContext(string expression, XElement? instruction = null)
+    {
+        var compatibility = _stylesheet.GetXPathCompatibility(instruction ?? _stylesheet.Root);
+        if (_schemaCompileOptions is null && compatibility == XPathCompatibility.XPath31)
+            return XPath31Expression.Compile(expression);
+        return XPath31Expression.Compile(expression, new CompileOptions
+        {
+            Compatibility = compatibility,
+            SchemaSet = _schemaCompileOptions?.SchemaSet,
+        });
+    }
 
     private XPath31Expression CompileXPathUncached(string expression, XElement instruction)
     {
-        var nsMap = GetInScopeNamespaces(instruction);
-        ValidateXPathPrefixes(expression, nsMap);
+        var nsMap = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(instruction);
+        var declarations = Bosak.XPath.Parser.Ast.XPathParser.ExtractNamespaceDeclarations(expression, _stylesheet.GetXPathCompatibility(instruction) >= XPathCompatibility.XPath40);
+        var validationNamespaces = new Dictionary<string, string>(nsMap, StringComparer.Ordinal);
+        foreach (var (prefix, uri) in declarations.Namespaces)
+            validationNamespaces[prefix] = uri;
+        ValidateXPathPrefixes(declarations.Expression, validationNamespaces);
         var defaultNs = GetXPathDefaultNamespace(instruction);
         var definingNs = instruction.GetDefaultNamespace().NamespaceName;
         var baseUri = GetEffectiveBaseUri(instruction);
-        if (nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
+        var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
+        if (_stylesheet.GetXPathCompatibility(instruction) >= XPathCompatibility.XPath40 || itemTypeAliases.Count > 0 || nsMap.Count > 1 || !string.IsNullOrEmpty(defaultNs) || !string.IsNullOrEmpty(definingNs) || !string.IsNullOrEmpty(baseUri))
         {
             var options = new CompileOptions
             {
+                Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
+                ItemTypeAliases = itemTypeAliases,
+                NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                 DefaultElementNamespace = defaultNs,
                 DefiningElementDefaultNamespace = definingNs,
                 BaseUri = baseUri,
@@ -2951,7 +3055,7 @@ internal sealed class TransformEngine
             };
             return XPath31Expression.Compile(expression, options);
         }
-        return CompileWithSchemaContext(expression);
+        return CompileWithSchemaContext(expression, instruction);
     }
 
     private static readonly HashSet<string> XPathAxisNames = new(StringComparer.Ordinal)
@@ -2971,6 +3075,30 @@ internal sealed class TransformEngine
         for (int i = 0; i < expression.Length; i++)
         {
             char c = expression[i];
+            if (!inString && c == '(' && i + 1 < expression.Length && expression[i + 1] == ':')
+            {
+                int depth = 1;
+                i += 2;
+                while (i < expression.Length && depth > 0)
+                {
+                    if (i + 1 < expression.Length && expression[i] == '(' && expression[i + 1] == ':')
+                    { depth++; i += 2; }
+                    else if (i + 1 < expression.Length && expression[i] == ':' && expression[i + 1] == ')')
+                    { depth--; i += 2; }
+                    else i++;
+                }
+                i--;
+                continue;
+            }
+            if (!inString && c == 'Q' && i + 1 < expression.Length && expression[i + 1] == '{')
+            {
+                var close = expression.IndexOf('}', i + 2);
+                if (close >= 0)
+                {
+                    i = close;
+                    continue;
+                }
+            }
             if (!inString && (c == '\'' || c == '"'))
             {
                 inString = true;
@@ -3071,6 +3199,7 @@ internal sealed class TransformEngine
     private void RegisterXsltFunctions()
     {
         var allFuncs = _stylesheet.GetAllFunctionDefinitions();
+        RegisterRecordConstructors(CurrentStylesheet, allFuncs.Keys.Select(k => (k.ns, k.name, k.arity)).ToHashSet());
         foreach (var (key, def) in allFuncs)
         {
             var paramElements = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToList();
@@ -3088,15 +3217,129 @@ internal sealed class TransformEngine
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
                 ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                    .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                    .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                     .ToList(),
-                ReturnTypeName = def.ReturnType,
+                ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)),
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
             _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
         }
         RegisterXslOriginalFunctions(allFuncs.Values);
+    }
+
+    private readonly Dictionary<XElement, XdmValue> _staticRecordFieldValues = new();
+    private readonly HashSet<XElement> _evaluatingRecordFields = new();
+
+    private void RegisterRecordConstructors(Stylesheet.Stylesheet scope, HashSet<(string ns, string name, int arity)> functionKeys)
+    {
+        var definitions = scope.GetNamedRecordTypes();
+        _context.BindingItemTypes = scope.GetBindingItemTypes();
+        _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
+        _context.NamedRecordCoercion = (type, map, casting) => CoerceNamedRecord(definitions.Values.Single(d => ReferenceEquals(d.Type, type)), map, casting);
+        foreach (var definition in definitions.Values)
+        {
+            if (!definition.Constructor) continue;
+            var close = definition.ExpandedName.IndexOf('}');
+            var ns = definition.ExpandedName[2..close];
+            var local = definition.ExpandedName[(close + 1)..];
+            var parameters = definition.Fields.Where(f => f.Attribute("static")?.Value is not ("yes" or "true" or "1")).ToList();
+            var minArity = parameters.Count(f => f.Attribute("select") is null && !f.Nodes().Any(n => n is XElement || n is XText t && !string.IsNullOrWhiteSpace(t.Value)));
+            for (var arity = minArity; arity <= parameters.Count; arity++)
+            {
+                if (functionKeys.Contains((ns, local, arity)))
+                    throw new InvalidOperationException("XTSE0770: Record constructor conflicts with an explicit function.");
+                _context.RegisterFunction(new FunctionSignature
+                {
+                    NamespaceUri = ns, LocalName = local, Arity = arity,
+                    ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, arity).ToList(),
+                    ReturnType = XdmValueKind.Map,
+                    Implementation = (ctx, args) => ConstructNamedRecord(definition, args)
+                });
+            }
+        }
+    }
+
+    private XdmMap CoerceNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, XdmMap supplied, bool casting)
+    {
+        foreach (var key in supplied.Keys)
+            if (!casting && (key.Kind != XdmValueKind.String || !definition.Type.HasField(key.StringValue)))
+                throw new InvalidOperationException("XPTY0004: The map contains a surplus record field.");
+        var result = new XdmMap();
+        foreach (var field in definition.Fields)
+        {
+            var key = XdmValue.FromString(field.Attribute("name")!.Value);
+            var present = supplied.TryGetValue(key, out var value);
+            var isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
+            if (isStatic && present && !ReferenceEquals(supplied.RecordType, definition.Type))
+                throw new InvalidOperationException("XPTY0004: A supplied map cannot specify a static record field.");
+            if (!present || (isStatic && !casting)) value = EvaluateRecordFieldInitialValue(field, isStatic, "XPTY0004");
+            if (casting && present)
+            {
+                var sequenceType = ResolveBindingSequenceType(field.Attribute("as")?.Value ?? "item()*", field,
+                    _context.BindingItemTypes, _context.NamedRecordTypes)!;
+                value = VmEngine.CastSequence(value, sequenceType, _context);
+            }
+            else value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context,
+                errorCodeOverride: "XPTY0004", declaration: field);
+            result = result.WithAdded(key, value);
+        }
+        return result.WithRecordType(definition.Type);
+    }
+
+    private XdmValue ConstructNamedRecord(Stylesheet.Stylesheet.NamedRecordDefinition definition, ReadOnlySpan<XdmValue> args)
+    {
+        var map = new XdmMap();
+        int parameter = 0;
+        foreach (var field in definition.Fields)
+        {
+            bool isStatic = field.Attribute("static")?.Value is "yes" or "true" or "1";
+            XdmValue value;
+            if (isStatic)
+                value = EvaluateRecordFieldInitialValue(field, true);
+            else
+            {
+                value = parameter < args.Length ? args[parameter] : EvaluateRecordFieldInitialValue(field, false);
+                parameter++;
+            }
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: "XPTY0004", declaration: field);
+            map = map.WithAdded(XdmValue.FromString(field.Attribute("name")!.Value), value);
+        }
+        return XdmValue.FromMap(map.WithRecordType(definition.Type));
+    }
+
+    private XdmValue EvaluateRecordFieldInitialValue(XElement field, bool isStatic, string errorCode = "XTTE0570")
+    {
+        if (isStatic && _staticRecordFieldValues.TryGetValue(field, out var cached)) return cached;
+        if (!_evaluatingRecordFields.Add(field))
+            throw new InvalidOperationException("XTDE0640: Circular record field initialization.");
+        var focus = _context.ContextItem;
+        var position = _context.ContextPosition;
+        var size = _context.ContextSize;
+        var variables = _context.SnapshotVariables();
+        var currentItem = _context.CurrentItem;
+        try
+        {
+            var initialFocus = isStatic ? _globalContextItem : XdmValue.Undefined;
+            _context.WithFocus(initialFocus, 1, 1);
+            _context.WithCurrentItem(initialFocus);
+            _context.RestoreVariables(new Dictionary<(string, string), XdmValue>());
+            var value = field.Attribute("select") is { } select
+                ? CompileXPath(select.Value, field).Evaluate(_context)
+                : EvaluateSequenceConstructor(field, initialFocus, wrapInDocumentNode: false);
+            value = ConvertVariableValue(value, field.Attribute("as")?.Value ?? "item()*", context: _context, errorCodeOverride: errorCode, declaration: field);
+            if (isStatic) _staticRecordFieldValues[field] = value;
+            return value;
+        }
+        finally
+        {
+            _context.WithFocus(focus, position, size);
+            _context.WithCurrentItem(currentItem);
+            _context.RestoreVariables(variables);
+            _evaluatingRecordFields.Remove(field);
+        }
     }
 
     /// <summary>
@@ -3796,7 +4039,7 @@ internal sealed class TransformEngine
         foreach (var rule in acc.Rules)
         {
             var defaultNs = GetXPathDefaultNamespace(rule.Element);
-            var match = patternCompiler.Compile(rule.Match, defaultNs ?? "");
+            var match = patternCompiler.Compile(rule.Match, defaultNs ?? "", compatibility: _stylesheet.GetXPathCompatibility(rule.Element));
             compiledRules.Add((rule, match));
         }
 
@@ -3941,6 +4184,9 @@ internal sealed class TransformEngine
                             ctx.WithVariable(name, CompileXPath(select, child).Evaluate(ctx));
                         break;
                     }
+                case "select":
+                    items.Add(EvaluateSelectInstruction(child, ctx));
+                    break;
                 case "sequence":
                     {
                         var select = child.Attribute("select")?.Value;
@@ -4193,6 +4439,12 @@ internal sealed class TransformEngine
         public IDisposable? LazyGlobalsSnapshot;
         /// <summary>The function-lookup interceptor that was installed before the package scope was entered.</summary>
         public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
+        /// <summary>Package-local named record identities active before entering the scope.</summary>
+        public IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes;
+        /// <summary>Package-local item-type binding aliases active before entering the scope.</summary>
+        public IReadOnlyDictionary<string, string> BindingItemTypes;
+        /// <summary>Package-local record conversion callback active before entering the scope.</summary>
+        public Func<XdmRecordType, XdmMap, bool, XdmMap>? NamedRecordCoercion;
     }
 
     /// <summary>
@@ -4209,6 +4461,9 @@ internal sealed class TransformEngine
         var defaultDecimalSnapshot = _context.DefaultDecimalFormat;
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
         var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
+        var namedRecordTypesSnapshot = _context.NamedRecordTypes;
+        var namedRecordCoercionSnapshot = _context.NamedRecordCoercion;
+        var enumerationTypesSnapshot = _context.BindingItemTypes;
 
         if (package?.IsPackage == true && package != previousScope)
         {
@@ -4246,9 +4501,11 @@ internal sealed class TransformEngine
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
                     ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                        .Select(i => i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null)
+                        .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                         .ToList(),
-                    ReturnTypeName = def.ReturnType,
+                    ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
+                        (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)),
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
                 _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
@@ -4270,6 +4527,7 @@ internal sealed class TransformEngine
                     });
                 }
             }
+            RegisterRecordConstructors(package, scopeFunctions.Keys.Select(k => (k.ns, k.name, k.arity)).ToHashSet());
             RegisterXslOriginalFunctions(scopeFunctions.Values);
 
             // Within a package, fn:function-lookup returns the package's own declarations,
@@ -4282,6 +4540,9 @@ internal sealed class TransformEngine
         return new PackageScopeState
         {
             PreviousScope = previousScope,
+            NamedRecordTypes = namedRecordTypesSnapshot,
+            NamedRecordCoercion = namedRecordCoercionSnapshot,
+            BindingItemTypes = enumerationTypesSnapshot,
             FunctionSnapshot = functionSnapshot,
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
             NamedDecimalFormatSnapshot = namedDecimalSnapshot,
@@ -4296,6 +4557,9 @@ internal sealed class TransformEngine
         _currentPackageScope = state.PreviousScope;
         _namespaceAliases = state.NamespaceAliasSnapshot;
         _context.RestoreFunctions(state.FunctionSnapshot);
+        _context.NamedRecordTypes = state.NamedRecordTypes;
+        _context.NamedRecordCoercion = state.NamedRecordCoercion;
+        _context.BindingItemTypes = state.BindingItemTypes;
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
         _context.FunctionLookupInterceptor = state.PreviousFunctionLookupInterceptor;
@@ -4393,7 +4657,7 @@ internal sealed class TransformEngine
                 if (isAbsorbing && raw.IsSequence && raw.SequenceValue is ISinglePassSequence)
                     raw = MaterializeAbsorbedArgument(raw);
                 var asType = i < paramElements.Count ? paramElements[i].Attribute("as")?.Value : null;
-                var converted = ConvertFunctionArgument(raw, asType, _context);
+                var converted = ConvertFunctionArgument(raw, asType, _context, i < paramElements.Count ? paramElements[i] : def.Element);
                 var (fpLocal, fpNs) = ExpandVariableName(def.Element, def.ParameterNames[i]);
                 _context.WithVariable(fpLocal, converted, fpNs);
             }
@@ -4879,7 +5143,13 @@ internal sealed class TransformEngine
                     {
                         _context.WithFocus(focusItems[i], i + 1, focusItems.Count);
                         _context.WithCurrentItem(focusItems[i]);
-                        array.Add(EvaluateArrayMemberSource(arrayInstruction, contextItem));
+                        var member = EvaluateArrayMemberSource(arrayInstruction, contextItem);
+                        var memberItems = EnumerateItems(member).ToList();
+                        if (memberItems.Count > 1 && memberItems.Any(item => item.IsJNode))
+                            throw new XsltRuntimeException("XTTE4060",
+                                "A for-each array member cannot mix a JNode with other items.", XdmValue.Undefined);
+                        array.Add(memberItems.Count == 1 && memberItems[0].IsJNode
+                            ? memberItems[0].JNodeValue.Value : member);
                     }
                     finally
                     {
@@ -4898,7 +5168,7 @@ internal sealed class TransformEngine
         if (!string.IsNullOrEmpty(selectAttr))
         {
             foreach (var item in EnumerateItems(CompileXPath(selectAttr, arrayInstruction).Evaluate(_context)))
-                array.Add(item);
+                array.Add(item.IsJNode ? item.JNodeValue.Value : item);
             return XdmValue.FromArray(array);
         }
 
@@ -4916,7 +5186,7 @@ internal sealed class TransformEngine
             var tempItems = new List<XdmValue>();
             ProcessFunctionBodyNode(childNode, tempItems, contextItem);
             foreach (var item in tempItems)
-                array.Add(item);
+                array.Add(item.IsJNode ? item.JNodeValue.Value : item);
         }
         return XdmValue.FromArray(array);
     }
@@ -4947,9 +5217,22 @@ internal sealed class TransformEngine
     {
         var selectAttr = memberInstruction.Attribute("select")?.Value;
         if (!string.IsNullOrEmpty(selectAttr))
-            return CompileXPath(selectAttr, memberInstruction).Evaluate(_context);
+            return UnwrapArrayMemberJNodes(CompileXPath(selectAttr, memberInstruction).Evaluate(_context));
 
         var items = EvaluateSequenceConstructorToItems(memberInstruction, contextItem);
+        return UnwrapArrayMemberJNodes(MaterializeItemList(items));
+    }
+
+    /// <summary>Recursively replaces JNode items with their values when constructing a member.</summary>
+    private static XdmValue UnwrapArrayMemberJNodes(XdmValue value)
+    {
+        if (value.IsJNode)
+            return UnwrapArrayMemberJNodes(value.JNodeValue.Value);
+        if (!value.IsSequence)
+            return value;
+        var items = new List<XdmValue>();
+        foreach (var item in EnumerateItems(value))
+            items.AddRange(EnumerateItems(UnwrapArrayMemberJNodes(item)));
         return MaterializeItemList(items);
     }
 
@@ -5036,6 +5319,9 @@ internal sealed class TransformEngine
         {
             switch (instruction.Name.LocalName)
             {
+                case "select":
+                    FlattenToList(EvaluateSelectInstruction(instruction), results);
+                    break;
                 case "sequence":
                     {
                         var select = instruction.Attribute("select")?.Value;
@@ -5233,7 +5519,7 @@ internal sealed class TransformEngine
                             throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute");
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = CompileWithSchemaContext(select);
+                            var compiled = CompileWithSchemaContext(select, instruction);
                             var feResult = compiled.Evaluate(_context);
                             var feItems = EnumerateItems(feResult).ToList();
 
@@ -5504,7 +5790,7 @@ internal sealed class TransformEngine
                             var select = instruction.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(select))
                             {
-                                var compiled = CompileWithSchemaContext(select);
+                                var compiled = CompileWithSchemaContext(select, instruction);
                                 var result = compiled.Evaluate(_context);
                                 FlattenToList(result, results);
                             }
@@ -5537,7 +5823,7 @@ internal sealed class TransformEngine
                                 var catchSelect = catchElem.Attribute("select")?.Value;
                                 if (!string.IsNullOrEmpty(catchSelect))
                                 {
-                                    var compiled = CompileWithSchemaContext(catchSelect);
+                                    var compiled = CompileWithSchemaContext(catchSelect, catchElem);
                                     var catchResult = compiled.Evaluate(_context);
                                     FlattenToList(catchResult, results);
                                 }
@@ -5568,7 +5854,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = CompileWithSchemaContext(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect, instruction);
                             var result = compiled.Evaluate(_context);
                             var fnCopyNamespacesAttrRaw = instruction.Attribute("copy-namespaces")?.Value
                                 ?? instruction.Attribute("_copy-namespaces")?.Value
@@ -5620,7 +5906,7 @@ internal sealed class TransformEngine
                         var copySelect = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(copySelect))
                         {
-                            var compiled = CompileWithSchemaContext(copySelect);
+                            var compiled = CompileWithSchemaContext(copySelect, instruction);
                             var result = compiled.Evaluate(_context);
                             if (result.IsNode && result.NodeValue != null)
                             {
@@ -5732,7 +6018,7 @@ internal sealed class TransformEngine
                         List<XdmValue> psItems;
                         if (!string.IsNullOrEmpty(psSelect))
                         {
-                            var compiled = CompileWithSchemaContext(psSelect);
+                            var compiled = CompileWithSchemaContext(psSelect, instruction);
                             var psResult = compiled.Evaluate(_context);
                             psItems = EnumerateItems(psResult).ToList();
                         }
@@ -5902,10 +6188,9 @@ internal sealed class TransformEngine
                     }
                 case "array-member":
                     {
-                        // A standalone xsl:array-member contributes one sequence-valued
-                        // item (Bosak has no JNode wrapper; XdmArray members hold
-                        // sequences natively).
-                        results.Add(EvaluateArrayMemberSequence(instruction, contextItem));
+                        // Preserve the wrapper until an array constructor consumes it.
+                        results.Add(XdmValue.FromJNode(new XdmJNode(
+                            EvaluateArrayMemberSequence(instruction, contextItem))));
                         break;
                     }
                 case "iterate":
@@ -6319,7 +6604,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression
-                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select, instruction);
                 var result = compiled.Evaluate(_context.WithFocus(XdmValue.FromNode(contextNode), 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -6400,6 +6685,7 @@ internal sealed class TransformEngine
     /// <param name="instruction">The xsl:apply-templates instruction element, used for the XPath static context.</param>
     public void ApplyTemplates(XdmValue contextItem, string mode, string? select, List<XElement>? sortKeys = null, Dictionary<string, XdmValue>? incomingTunnelParams = null, Dictionary<string, XdmValue>? callParams = null, XElement? instruction = null)
     {
+        CheckpointExecution();
         if (++_applyTemplatesDepth > MaxApplyTemplatesDepth)
         {
             _applyTemplatesDepth--;
@@ -6439,7 +6725,7 @@ internal sealed class TransformEngine
             else
             {
                 // Evaluate select expression with the given context item as focus
-                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select);
+                var compiled = instruction != null ? CompileXPath(select, instruction) : CompileWithSchemaContext(select, instruction);
                 var result = compiled.Evaluate(_context.WithFocus(contextItem, 1, 1));
                 if (result.IsSequence && result.SequenceValue is ISinglePassSequence)
                 {
@@ -7102,6 +7388,7 @@ internal sealed class TransformEngine
     /// <param name="incomingTunnelParams">Tunnel parameters visible to the called template.</param>
     public void CallTemplate(string name, XdmValue contextItem, Dictionary<string, XdmValue>? withParams = null, Dictionary<string, XdmValue>? incomingTunnelParams = null)
     {
+        CheckpointExecution();
         if (++_callTemplateDepth > MaxCallTemplateDepth)
         {
             _callTemplateDepth--;
@@ -7286,11 +7573,12 @@ internal sealed class TransformEngine
             // Without @namespace-context, the default element/type namespace is taken from
             // the innermost [xsl:]xpath-default-namespace attribute only.
             defaultNs = GetXPathDefaultNamespace(instruction);
-            nsMap = GetInScopeNamespaces(instruction);
+            nsMap = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(instruction);
         }
 
         var compileOptions = new CompileOptions
         {
+            Compatibility = _stylesheet.GetXPathCompatibility(instruction),
             Namespaces = nsMap,
             DefaultElementNamespace = defaultNs,
             DefiningElementDefaultNamespace = instruction.GetDefaultNamespace().NamespaceName,
@@ -7342,6 +7630,8 @@ internal sealed class TransformEngine
         var savedCurrentItem = _context.CurrentItem;
         var savedDefaultCollation = _context.DefaultCollation;
         var savedSkipPopulation = _context.SkipStandardFunctionPopulation;
+        var savedXPath40 = _context.IsXPath40;
+        var savedXPath40Experimental = _context.IsXPath40Experimental;
         var savedSchemaSet = _context.SchemaSet;
         var savedMergeGroup = _currentMergeGroup;
         var savedMergeKey = _currentMergeKey;
@@ -7353,6 +7643,8 @@ internal sealed class TransformEngine
             // functions plus visible stylesheet functions. XSLT-defined functions such as
             // current() and key() are not available.
             _context.ClearFunctions();
+            _context.IsXPath40 = _stylesheet.GetXPathCompatibility(instruction) == XPathCompatibility.XPath40;
+            _context.IsXPath40Experimental = false;
             Bosak.XPath.Standard.Functions.FunctionLibrary.Populate(_context);
             RemoveXsltContextFunctions(_context);
             RegisterVisibleXsltFunctions(_context);
@@ -7399,6 +7691,8 @@ internal sealed class TransformEngine
         {
             _context.DefaultCollation = savedDefaultCollation;
             _context.SkipStandardFunctionPopulation = savedSkipPopulation;
+            _context.IsXPath40 = savedXPath40;
+            _context.IsXPath40Experimental = savedXPath40Experimental;
             _context.SchemaSet = savedSchemaSet;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
             _context.WithCurrentItem(savedCurrentItem);
@@ -7418,6 +7712,7 @@ internal sealed class TransformEngine
 
     private void ExecuteXsltInstruction(XElement instruction, XdmValue contextItem)
     {
+        CheckpointExecution();
         _currentInstruction = instruction;
         var node = contextItem.IsNode ? contextItem.NodeValue : null;
 
@@ -8052,7 +8347,7 @@ internal sealed class TransformEngine
                             var oeSelect = onEmpty.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(oeSelect))
                             {
-                                var compiled = CompileWithSchemaContext(oeSelect);
+                                var compiled = CompileWithSchemaContext(oeSelect, onEmpty);
                                 var oeResult = compiled.Evaluate(_context);
                                 CopyToResult(oeResult, separateAtomicsWithSpace: true);
                             }
@@ -8489,7 +8784,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = CompileWithSchemaContext(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect, instruction);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -8530,6 +8825,19 @@ internal sealed class TransformEngine
                     break;
                 }
 
+            case "select":
+                {
+                    var value = EvaluateSelectInstruction(instruction);
+                    if (_sequenceAccumulator != null)
+                    {
+                        var items = new List<XdmValue>();
+                        FlattenToList(value, items, preserveUndefined: true);
+                        AddSequencePlaceholder(_currentContainer, items);
+                    }
+                    else
+                        CopyToResult(value, separateAtomicsWithSpace: true);
+                    break;
+                }
             case "sequence":
                 {
                     var select = instruction.Attribute("select")?.Value;
@@ -9035,7 +9343,7 @@ internal sealed class TransformEngine
                         var select = instruction.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(select))
                         {
-                            var compiled = CompileWithSchemaContext(select);
+                            var compiled = CompileWithSchemaContext(select, instruction);
                             var result = compiled.Evaluate(_context);
                             CopyToResult(result);
                         }
@@ -9084,7 +9392,7 @@ internal sealed class TransformEngine
                             var catchSelect = catchElem.Attribute("select")?.Value;
                             if (!string.IsNullOrEmpty(catchSelect))
                             {
-                                var compiled = CompileWithSchemaContext(catchSelect);
+                                var compiled = CompileWithSchemaContext(catchSelect, catchElem);
                                 var catchResult = compiled.Evaluate(_context);
                                 CopyToResult(catchResult);
                             }
@@ -9154,7 +9462,7 @@ internal sealed class TransformEngine
                     List<XdmValue> psItems;
                     if (!string.IsNullOrEmpty(psSelect2))
                     {
-                        var compiled = CompileWithSchemaContext(psSelect2);
+                        var compiled = CompileWithSchemaContext(psSelect2, instruction);
                         var psResult = compiled.Evaluate(_context);
                         psItems = EnumerateItems(psResult).ToList();
                     }
@@ -9239,7 +9547,8 @@ internal sealed class TransformEngine
 
             case "array-member":
                 {
-                    var memberValue = EvaluateArrayMemberSequence(instruction, contextItem);
+                    var memberValue = XdmValue.FromJNode(new XdmJNode(
+                        EvaluateArrayMemberSequence(instruction, contextItem)));
                     if (_sequenceAccumulator != null)
                     {
                         _sequenceAccumulator.Add(memberValue);
@@ -9992,10 +10301,11 @@ internal sealed class TransformEngine
         var sb = new System.Text.StringBuilder();
         int i = 0;
         var avtBaseUri = GetEffectiveBaseUri(contextElement);
-        var nsMap = contextElement != null ? GetInScopeNamespaces(contextElement) : null;
+        var nsMap = contextElement != null ? Stylesheet.Stylesheet.GetApplicableStaticNamespaces(contextElement) : null;
         var defaultNs = contextElement != null ? GetXPathDefaultNamespace(contextElement) : null;
         var definingNs = contextElement != null ? contextElement.GetDefaultNamespace().NamespaceName : null;
-        bool needsOptions = (nsMap != null && nsMap.Count > 1)
+        var compatibility = _stylesheet.GetXPathCompatibility(contextElement ?? _stylesheet.Root);
+        bool needsOptions = compatibility != XPathCompatibility.XPath31 || (nsMap != null && nsMap.Count > 1)
             || !string.IsNullOrEmpty(defaultNs)
             || !string.IsNullOrEmpty(definingNs)
             || !string.IsNullOrEmpty(avtBaseUri);
@@ -10027,11 +10337,15 @@ internal sealed class TransformEngine
                         // (version-014: string(3 + '2') = '5' under xsl:version="1.0").
                         bool avtBackwards = contextElement != null && IsEffectiveBackwardsCompatible(contextElement);
                         XPath31Expression compiled;
-                        if (needsOptions || avtBackwards)
+                        var itemTypeAliases = CurrentStylesheet.GetBindingItemTypes();
+                        if (compatibility >= XPathCompatibility.XPath40 || needsOptions || avtBackwards || itemTypeAliases.Count > 0)
                         {
                             var options = new CompileOptions
                             {
+                                Compatibility = compatibility,
                                 Namespaces = nsMap,
+                                ItemTypeAliases = itemTypeAliases,
+                                NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                                 DefaultElementNamespace = defaultNs,
                                 DefiningElementDefaultNamespace = definingNs,
                                 BaseUri = avtBaseUri,
@@ -10042,7 +10356,7 @@ internal sealed class TransformEngine
                         }
                         else
                         {
-                            compiled = CompileWithSchemaContext(expr);
+                            compiled = CompileWithSchemaContext(expr, contextElement);
                         }
                         var savedBackwardsCompatible = _context.BackwardsCompatible;
                         XdmValue result;
@@ -15409,7 +15723,7 @@ internal sealed class TransformEngine
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var patternCompiler = new Patterns.PatternCompiler();
-            var pattern = patternCompiler.Compile(groupStarting, defaultNs);
+            var pattern = patternCompiler.Compile(groupStarting, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
             _context.CurrentOutputUri = null;
@@ -15443,7 +15757,7 @@ internal sealed class TransformEngine
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var patternCompiler = new Patterns.PatternCompiler();
-            var pattern = patternCompiler.Compile(groupEnding, defaultNs);
+            var pattern = patternCompiler.Compile(groupEnding, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
             _context.CurrentOutputUri = null;
@@ -16349,6 +16663,37 @@ internal sealed class TransformEngine
         return (callParams, tunnelParams);
     }
 
+    private static bool AllowsItemTypeDeclarations(XElement declaration)
+    {
+        foreach (var element in declaration.AncestorsAndSelf())
+        {
+            var version = element.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                ? element.Attribute("version") : element.Attribute(XName.Get("version", Stylesheet.Stylesheet.XslNamespace));
+            if (version is not null)
+                return double.TryParse(version.Value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var parsed) && parsed >= 4.0;
+        }
+        return false;
+    }
+
+    private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases,
+        IReadOnlyDictionary<string, XdmRecordType>? namedRecords = null)
+    {
+        if (string.IsNullOrWhiteSpace(sequenceType) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
+        if (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0) &&
+            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)(?:fn|record|schema-element|schema-attribute|document-node)\s*\("))
+            return sequenceType;
+        return ItemTypeAliasExpansion.Expand(sequenceType, name =>
+        {
+            if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
+                && !Stylesheet.Stylesheet.GetApplicableStaticNamespaces(declaration).ContainsKey(name[..colon])) return name;
+            var expandedName = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration);
+            return aliases.TryGetValue(expandedName, out var definition) ? definition
+                : namedRecords?.ContainsKey(expandedName) == true ? expandedName : name;
+        }, (name, attribute) => Stylesheet.Stylesheet.ExpandNodeTypeName(name, attribute, declaration),
+            name => Stylesheet.Stylesheet.ExpandSchemaTypeName(name, declaration),
+            (name, attribute) => Stylesheet.Stylesheet.ExpandSchemaDeclarationName(name, attribute, declaration)) ?? sequenceType;
+    }
+
     /// <summary>
     /// Applies type conversion and validation for the <c>as</c> attribute on
     /// <c>xsl:variable</c> / <c>xsl:param</c> / <c>xsl:with-param</c>.
@@ -16362,14 +16707,14 @@ internal sealed class TransformEngine
     /// Converts a function call argument to the required type of an <c>xsl:param</c>,
     /// using the XPath function conversion rules and reporting failures as XPTY0004.
     /// </summary>
-    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType, EvaluationContext? context = null)
+    private static XdmValue ConvertFunctionArgument(XdmValue value, string? asType, EvaluationContext? context = null, XElement? declaration = null)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
 
         try
         {
-            return ConvertVariableValue(value, asType, isParam: true, context);
+            return ConvertVariableValue(value, asType, isParam: true, context, declaration: declaration);
         }
         catch (InvalidOperationException ex)
         {
@@ -16526,6 +16871,42 @@ internal sealed class TransformEngine
 
         if (declaration is not null && context is not null)
         {
+            var originalBindingType = asType;
+            asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes, context.NamedRecordTypes);
+            if (AllowsItemTypeDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal) || asType.TrimStart().StartsWith("record(", StringComparison.Ordinal)))
+            {
+                var savedProfile = context.IsXPath40;
+                context.IsXPath40 = true;
+                try
+                {
+                    return VmEngine.ApplyFunctionConversion(value, asType!, context);
+                }
+                catch (InvalidOperationException error)
+                {
+                    var code = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
+                    throw new InvalidOperationException($"{code}: Value does not match declared item type {asType}.", error);
+                }
+                finally { context.IsXPath40 = savedProfile; }
+            }
+            var type = asType!.Trim();
+            var suffix = type.Length > 0 && type[^1] is '?' or '*' or '+' ? type[^1].ToString() : string.Empty;
+            var name = suffix.Length == 0 ? type : type[..^1].TrimEnd();
+            if (context.NamedRecordTypes.Count > 0 && !name.Contains('(') && context.NamedRecordTypes.ContainsKey(Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration)))
+            {
+                asType = Stylesheet.Stylesheet.ExpandItemTypeName(name, declaration) + suffix;
+                if (AllowsItemTypeDeclarations(declaration))
+                {
+                    var savedProfile = context.IsXPath40;
+                    context.IsXPath40 = true;
+                    try { return VmEngine.ApplyFunctionConversion(value, asType, context); }
+                    catch (InvalidOperationException error)
+                    {
+                        var code = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
+                        throw new InvalidOperationException($"{code}: Value does not match named record {asType}.", error);
+                    }
+                    finally { context.IsXPath40 = savedProfile; }
+                }
+            }
             var defaultNs = GetXPathDefaultNamespace(declaration);
             if (!string.IsNullOrEmpty(defaultNs) && context.DefaultElementNamespace != defaultNs)
             {
@@ -16601,6 +16982,14 @@ internal sealed class TransformEngine
         }
         if (items.Count > 1 && !allowsMultiple)
             throw new InvalidOperationException($"{errorCode}: Sequence of more than one item not allowed for type {originalType}");
+
+        if (context is not null && context.NamedRecordTypes.TryGetValue(type, out var namedRecord))
+        {
+            foreach (var item in items)
+                if (!item.IsMap || !ReferenceEquals(item.MapValue?.RecordType, namedRecord))
+                    throw new InvalidOperationException($"{errorCode}: Value is not an instance of the declared named record type.");
+            return value;
+        }
 
         // Function types: XPath 3.1 function conversion rules — a function item is
         // coercible to any function type of the same arity; parameter/return type
@@ -17032,7 +17421,7 @@ internal sealed class TransformEngine
                     var oeSelect = onEmpty.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(oeSelect))
                     {
-                        var compiled = CompileWithSchemaContext(oeSelect);
+                        var compiled = CompileWithSchemaContext(oeSelect, onEmpty);
                         var result = compiled.Evaluate(_context);
                         CopyToResult(result, separateAtomicsWithSpace: true);
                     }
@@ -17854,12 +18243,15 @@ internal sealed class TransformEngine
         var name = instruction.Name.LocalName;
         switch (name)
         {
+            case "select":
+                FlattenToList(EvaluateSelectInstruction(instruction), items);
+                break;
             case "sequence":
                 {
                     var seqSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(seqSelect))
                     {
-                        var compiled = CompileWithSchemaContext(seqSelect);
+                        var compiled = CompileWithSchemaContext(seqSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -17883,7 +18275,7 @@ internal sealed class TransformEngine
                     var copySelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(copySelect))
                     {
-                        var compiled = CompileWithSchemaContext(copySelect);
+                        var compiled = CompileWithSchemaContext(copySelect, instruction);
                         var result = compiled.Evaluate(_context);
                         if (result.IsSequence && result.SequenceValue != null)
                         {
@@ -17914,7 +18306,7 @@ internal sealed class TransformEngine
                     var feSelect = instruction.Attribute("select")?.Value;
                     if (!string.IsNullOrEmpty(feSelect))
                     {
-                        var compiled = CompileWithSchemaContext(feSelect);
+                        var compiled = CompileWithSchemaContext(feSelect, instruction);
                         var result = compiled.Evaluate(_context);
                         var feItems = new List<XdmValue>();
                         if (result.IsSequence && result.SequenceValue != null)
@@ -18037,7 +18429,7 @@ internal sealed class TransformEngine
                         XdmValue varValue;
                         if (!string.IsNullOrEmpty(varSelect))
                         {
-                            var compiled = CompileWithSchemaContext(varSelect);
+                            var compiled = CompileWithSchemaContext(varSelect, instruction);
                             varValue = compiled.Evaluate(_context);
                         }
                         else
@@ -18836,7 +19228,8 @@ internal sealed class TransformEngine
                     capturedValue = XdmValue.FromNode(XDocumentNode.Wrap(capturedDoc));
                     FinalizeResultDocument(capturedDoc);
                 }
-                _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
+                if (ResultDocumentCaptureObserver?.Invoke(resolvedHref, capturedValue, resultDocumentProps) != false)
+                    _capturedResultDocuments[resolvedHref] = (capturedValue, resultDocumentProps);
             }
             else if (rawItems != null)
             {
@@ -19981,7 +20374,7 @@ internal sealed class TransformEngine
         IXdmNode? targetNode = currentNode;
         if (!string.IsNullOrEmpty(selectAttr))
         {
-            var compiled = CompileWithSchemaContext(selectAttr);
+            var compiled = CompileWithSchemaContext(selectAttr, instruction);
             var result = compiled.Evaluate(_context);
 
             // XTTE1000: select must return at most one node
@@ -20006,7 +20399,7 @@ internal sealed class TransformEngine
 
         if (!string.IsNullOrEmpty(valueAttr))
         {
-            var compiled = CompileWithSchemaContext(valueAttr);
+            var compiled = CompileWithSchemaContext(valueAttr, instruction);
             var result = compiled.Evaluate(_context);
 
             // XSLT 1.0 backwards compatibility: xsl:number/@value uses only the first item.
@@ -20087,11 +20480,11 @@ internal sealed class TransformEngine
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
                 ? null
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs);
+                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             int[]? numbers = level switch
             {
@@ -21924,7 +22317,7 @@ internal sealed class TransformEngine
                 foreach (var rule in acc.Rules)
                 {
                     var defaultNs = GetXPathDefaultNamespace(rule.Element);
-                    rules.Add((rule, patternCompiler.Compile(rule.Match, defaultNs ?? "")));
+                    rules.Add((rule, patternCompiler.Compile(rule.Match, defaultNs ?? "", compatibility: engine._stylesheet.GetXPathCompatibility(rule.Element))));
                 }
                 var initialCtx = engine.CreateAccumulatorEvaluationContext(focusNode: docNode, value: null);
                 XdmValue current;

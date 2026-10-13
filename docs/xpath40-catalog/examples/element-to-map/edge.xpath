@@ -1,0 +1,2 @@
+(: Synthetic Element-to-map conversion case; compatibility 40; no external context required. :)
+string-length(fn:element-to-map(parse-xml('<sku/>')/sku)?sku)

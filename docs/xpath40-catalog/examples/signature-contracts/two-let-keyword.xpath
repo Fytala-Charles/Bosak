@@ -1,0 +1,1 @@
+let $first := 'a' let $payload := 'abc' return string(hash(value := $payload, algorithm := 'SHA-256', options := map{}))

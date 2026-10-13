@@ -1,0 +1,2 @@
+(: JNode model and template boundary; synthetic fulfillment data; mode 40; no external context. :)
+jvalue(jtree(map {'id':'R1'})/child::id)

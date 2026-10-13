@@ -1,0 +1,2 @@
+(: Synthetic Array member iteration case; compatibility 40; no external context required. :)
+count(for member $parcel in [] return $parcel)

@@ -113,6 +113,8 @@
 //                      |                  |       |                | collation-key/contains-token/node-name, fn:collation-available, min/max QName          |
 //                      |                  |       |                | ordering (PR2256)                                                                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.142   | 11-10-2026     | Return map:entries as a sequence; concatenate map:items values (REQ-118).                |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -453,6 +455,7 @@
 //                      | Charles Korthout | 5.140   | 10-10-2026     | REQ-125 Slice B: controlled policy on unparsed-text(-available/-lines), json-doc and  |
 //                      | Charles Korthout |         |                | collection/uri-collection: authority-approved bytes, no disk/HTTP fallback, no directory |
 //                      | Charles Korthout |         |                | enumeration; collection members re-authorized per member; availability probes IO-free     |
+//                      | Charles Korthout | 5.141   | 10-10-2026     | B-F2: static-phase acquisitions request StaticEvaluation purpose (concrete route kept)    |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -1993,7 +1996,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Map, LocalName = "entries", Arity = 1,
                 ParameterTypes = [XdmValueKind.Map],
-                ReturnType = XdmValueKind.Array,
+                ReturnType = XdmValueKind.Sequence,
                 IsXPath40Only = true,
                 Implementation = MapEntries
             },
@@ -10411,6 +10414,8 @@ public static class FunctionLibrary
         // Controlled profile (REQ-125 Slice B): the authority resolves the collection and
         // approves every member before it is loaded. The host CollectionLoader hook and the
         // built-in directory enumeration are bypassed — a refusal never falls back to them.
+        // During static evaluation the StaticEvaluation purpose governs (B-F2), with Collection
+        // as the concrete route.
         if (ctx.ResourcePolicy is { } collectionPolicy)
         {
             string policyKey = key;
@@ -10420,7 +10425,8 @@ public static class FunctionLibrary
             {
                 policyKey = ResolveUriAgainstBase(policyKey, ctx.BaseUri);
             }
-            var approvedMembers = collectionPolicy.AcquireCollectionMembers(policyKey, out _);
+            var (collectionPurpose, collectionConcrete) = ctx.ControlledRouteFor(ControlledResourceRoute.Collection);
+            var approvedMembers = collectionPolicy.AcquireCollectionMembers(policyKey, collectionPurpose, collectionConcrete, out _);
             return LoadCollectionMembers(ctx, approvedMembers, returnUris);
         }
 
@@ -10713,8 +10719,11 @@ public static class FunctionLibrary
             if (ctx.ResourcePolicy is { } policy)
             {
                 // Controlled profile: the authority supplies authoritative bytes; the
-                // resource mapper, filesystem and HTTP paths are never consulted.
-                var bytes = policy.AcquireBytes(resolved, ControlledResourceRoute.TextResource, out _);
+                // resource mapper, filesystem and HTTP paths are never consulted. During
+                // static evaluation the StaticEvaluation purpose governs, with TextResource
+                // as the concrete route (consumer review B-F2).
+                var (purpose, concrete) = ctx.ControlledRouteFor(ControlledResourceRoute.TextResource);
+                var bytes = policy.AcquireBytes(resolved, purpose, concrete, out _);
                 content = DecodeBytes(bytes, encoding);
             }
             else
@@ -10918,10 +10927,13 @@ public static class FunctionLibrary
             if (ctx.ResourcePolicy is { } policy)
             {
                 // Controlled profile: availability is decided by the authority alone —
-                // no filesystem probe and no HTTP HEAD request are performed.
+                // no filesystem probe and no HTTP HEAD request are performed. During static
+                // evaluation the StaticEvaluation purpose governs (B-F2); a refusal — including
+                // a declared-unsupported static phase — means simply "not available" (false).
                 try
                 {
-                    var bytes = policy.AcquireBytes(resolved, ControlledResourceRoute.TextResource, out _);
+                    var (purpose, concrete) = ctx.ControlledRouteFor(ControlledResourceRoute.TextResource);
+                    var bytes = policy.AcquireBytes(resolved, purpose, concrete, out _);
                     var decoded = DecodeBytes(bytes, encoding);
                     ValidateXmlCharacters(decoded);
                     return XdmValue.True;
@@ -13868,14 +13880,16 @@ public static class FunctionLibrary
     /// <summary>F+O 4.0 §14.2.2: map:entries — single-entry maps, one per entry, in entry order.</summary>
     private static XdmValue MapEntries(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var result = new XdmArray();
+        var result = new List<XdmValue>();
         foreach (var kvp in args[0].MapValue.Entries)
         {
             var single = new XdmMap();
             single.Add(kvp.Key, kvp.Value);
             result.Add(XdmValue.FromMap(single));
         }
-        return XdmValue.FromArray(result);
+        return result.Count == 0
+            ? XdmValue.Undefined
+            : XdmValue.FromSequence(MaterializedSequence.FromList(result));
     }
 
     /// <summary>
@@ -13903,7 +13917,7 @@ public static class FunctionLibrary
     {
         var values = new List<XdmValue>();
         foreach (var kvp in args[0].MapValue.Entries)
-            values.Add(kvp.Value);
+            values.AddRange(AsSequence(kvp.Value));
         return values.Count == 0
             ? XdmValue.Undefined
             : XdmValue.FromSequence(MaterializedSequence.FromList(values));
@@ -19386,8 +19400,11 @@ public static class FunctionLibrary
         if (ctx.ResourcePolicy is { } jsonPolicy)
         {
             // Controlled profile: the authority supplies authoritative bytes; the mapper,
-            // filesystem, document-loader and raw-path fallbacks are never consulted.
-            var jsonBytes = jsonPolicy.AcquireBytes(resolvedUri, ControlledResourceRoute.JsonResource, out _);
+            // filesystem, document-loader and raw-path fallbacks are never consulted. During
+            // static evaluation the StaticEvaluation purpose governs (B-F2), with JsonResource
+            // as the concrete route.
+            var (jsonPurpose, jsonConcrete) = ctx.ControlledRouteFor(ControlledResourceRoute.JsonResource);
+            var jsonBytes = jsonPolicy.AcquireBytes(resolvedUri, jsonPurpose, jsonConcrete, out _);
             json = DecodeJsonBytes(jsonBytes);
         }
         else

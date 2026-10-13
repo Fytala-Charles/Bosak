@@ -1,0 +1,1 @@
+let $a := array:build((1,2),function($v){($v,$v+10)}) return concat(array:size($a),"/",count($a(1)),"/",count(array:items($a)))

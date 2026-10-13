@@ -1,0 +1,1 @@
+count(('xs:integer', 'xs:integer') ! xs:QName())

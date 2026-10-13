@@ -1,0 +1,1 @@
+string(hash(options := map{}, algorithm := 'SHA-256', value := 'abc'))

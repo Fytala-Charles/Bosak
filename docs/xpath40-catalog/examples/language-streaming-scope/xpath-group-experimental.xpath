@@ -1,0 +1,1 @@
+for $i in (3,1,2) group by $key := $i mod 2 return $key

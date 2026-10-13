@@ -1,0 +1,1 @@
+serialize(map{'uri':'https://partner.example/invoices/1042'}, map{'method':'json','escape-solidus':false()})

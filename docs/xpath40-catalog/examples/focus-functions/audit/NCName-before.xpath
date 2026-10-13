@@ -1,0 +1,1 @@
+string-join(xs:NCName('PART_A') ! string(.), '|')

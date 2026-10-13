@@ -1,0 +1,1 @@
+parse-uri(uri := 'https://host:443/path', options := map {'omit-default-ports': true()})?host

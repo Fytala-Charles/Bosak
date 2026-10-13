@@ -1,0 +1,1 @@
+seconds(duration-to-seconds(xs:dayTimeDuration('P1DT0.5S'))) eq xs:dayTimeDuration('P1DT0.5S')

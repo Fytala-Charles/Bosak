@@ -1,0 +1,1 @@
+count(map:for-each(map{'FILTER-A':8,'SEAL-B':0}, function($key,$value){map:entry($key,$value)}))

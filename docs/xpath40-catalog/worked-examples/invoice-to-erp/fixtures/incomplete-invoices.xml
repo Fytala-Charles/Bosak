@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Synthetic learning fixture. Copyright Fytala; Apache-2.0; see license.md. -->
+<batch xmlns="urn:example:supplier:invoice">
+  <invoice id="INV-2026-1043" currency="EUR">
+    <supplier-id>SUP-0042</supplier-id>
+    <issue-date>12/10/2026</issue-date>
+    <line id="1"><sku>FILTER-A</sku><quantity>2</quantity><unit-price>12.50</unit-price><tax-rate>9</tax-rate></line>
+    <line id="2"><quantity>1</quantity><unit-price>5.00</unit-price><tax-rate>9</tax-rate></line>
+    <line id="3"><sku>FILTER-B</sku><quantity>1</quantity><unit-price>pending</unit-price><tax-rate>9</tax-rate></line>
+    <line id="4"><sku>FILTER-C</sku><quantity>0</quantity><unit-price>5.00</unit-price><tax-rate>9</tax-rate></line>
+  </invoice>
+</batch>

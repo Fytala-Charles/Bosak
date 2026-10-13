@@ -48,6 +48,11 @@
 //                      | Charles Korthout | 0.20  | 10-10-2026     | REQ-125 Slice B: fn:transform inherits the caller's controlled resource policy into the  |
 //                      |                  |       |                | nested transform context and compile; stylesheet-location/package acquisitions consult    |
 //                      |                  |       |                | the authority (Transform/Package routes) with no file fallback                             |
+//                      | Charles Korthout | 0.21  | 10-10-2026     | B-F2: a nested transform invoked during static evaluation inherits the static phase, so   |
+//                      |                  |       |                | its acquisitions request the StaticEvaluation purpose (concrete route preserved)          |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.22  | 10-10-2026     | REQ-125 Slice D: fn:transform inherits the caller's ExecutionGate (token, deadline,      |
+//                      |                  |       |                | operation budget) into the nested transform context                                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System.Globalization;
@@ -56,6 +61,7 @@ using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Providers.Xml;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime;
 using Bosak.XPath.Runtime.Functions;
 using Bosak.XPath.Runtime.Resources;
 using Bosak.XPath.Runtime.Vm;
@@ -731,6 +737,14 @@ public static class XsltFunctionLibrary
         // acquisition inside the nested transform — fn:doc, unparsed-text, further nested
         // fn:transform calls — is authorized by the same authority, with no disk fallback.
         transformContext.ResourcePolicy = ctx.ResourcePolicy;
+        // Nested contexts inherit the execution gate (REQ-125 Slice D): the nested transform
+        // shares the caller's cancellation token, wall-clock deadline and operation budget —
+        // the remaining budget and deadline are observed across the whole nested execution.
+        transformContext.ExecutionGate = ctx.ExecutionGate;
+        // A nested transform invoked from a static phase (use-when/static expression) stays
+        // in that phase: its acquisitions request the StaticEvaluation purpose so a host's
+        // declared static restriction governs the whole nested execution (consumer review B-F2).
+        transformContext.IsStaticEvaluation = ctx.IsStaticEvaluation;
         XdmExecutableSource executableSource = LoadExecutable(options, ctx, staticParameters);
 
         // The static base URI inside the nested stylesheet is the stylesheet's own base URI.

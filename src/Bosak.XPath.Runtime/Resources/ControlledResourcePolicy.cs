@@ -12,6 +12,8 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation (REQ-125 Slice B)                                                               |
+//                      | Charles Korthout | 0.2   | 10-10-2026     | B-F1: authorization runs before the document cache; B-F2: concrete-route (purpose) pair  |
+//                      | Charles Korthout | 0.3   | 10-10-2026     | B-F3: deferred document-cache approval receipts with digest-validated ServedFromCache    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -44,6 +46,20 @@ namespace Bosak.XPath.Runtime.Resources;
 /// <see cref="ControlledResourceReceipt"/> (thread-safe), carrying the credential-stripped
 /// requested and effective URIs, the route, the outcome and — for approvals — the byte count
 /// and SHA-256 of the exact bytes consumed.</para>
+/// <para><b>Purpose vs. concrete route.</b> Acquisitions governed by a phase route — static
+/// evaluation via <see cref="ControlledResourceRoute.StaticEvaluation"/> — present that route
+/// as the decision route on the request and receipt, together with
+/// <see cref="ControlledResourceRequest.ConcreteRoute"/> /
+/// <see cref="ControlledResourceReceipt.ConcreteRoute"/> naming the underlying operation
+/// (Document, TextResource, JsonResource or Collection). Both routes must be supported; a
+/// refusal names the governing route.</para>
+/// <para><b>Digest-validated document cache.</b> Document-route approvals consulted through
+/// the cache path (<see cref="AcquireBytesForCacheServe"/> /
+/// <see cref="RecordCacheServeApproval"/>) defer the approval receipt until the caller has
+/// decided whether the approved bytes match its cached entry (SHA-256 and effective URI).
+/// A match serves the cached node and marks the receipt
+/// <see cref="ControlledResourceReceipt.ServedFromCache"/>; a mismatch parses the fresh bytes
+/// and replaces the entry. Receipt and consumed content therefore always agree.</para>
 /// <para><b>XML safety.</b> Approved XML bytes are parsed with DTD processing prohibited and
 /// no external resolver, so the DTD/entity policy and limits apply to every XML acquisition
 /// path, not only the principal stylesheet.</para>
@@ -144,15 +160,88 @@ public sealed class ControlledResourcePolicy
     /// <param name="effectiveUri">Receives the credential-stripped effective URI to parse the bytes as.</param>
     /// <returns>The approved, authoritative bytes.</returns>
     internal byte[] AcquireBytes(string requestedUri, ControlledResourceRoute route, out string effectiveUri)
+        => AcquireBytes(requestedUri, route, null, out effectiveUri);
+
+    /// <summary>
+    /// Acquires the approved bytes for one resource where a phase/purpose route governs a
+    /// concrete operation (REQ-125 consumer review B-F2): <paramref name="route"/> is the
+    /// decision route the authority sees (for example <see cref="ControlledResourceRoute.StaticEvaluation"/>)
+    /// and <paramref name="concreteRoute"/> names the underlying operation (for example
+    /// <see cref="ControlledResourceRoute.Document"/>). Both must be supported; both are
+    /// recorded on the receipt.
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) requested URI.</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">Receives the credential-stripped effective URI to parse the bytes as.</param>
+    /// <returns>The approved, authoritative bytes.</returns>
+    internal byte[] AcquireBytes(string requestedUri, ControlledResourceRoute route, ControlledResourceRoute? concreteRoute, out string effectiveUri)
     {
-        var approval = Authorize(requestedUri, route);
+        var approval = Authorize(requestedUri, route, concreteRoute);
         if (approval.Bytes is not { } bytes)
-            throw Refusal(route, requestedUri, approval.EffectiveUri, "approval did not supply resource bytes");
+            throw Refusal(route, concreteRoute, requestedUri, approval.EffectiveUri, "approval did not supply resource bytes");
         effectiveUri = RedactCredentials(approval.EffectiveUri ?? requestedUri);
-        Record(route, requestedUri, effectiveUri, ControlledResourceReceiptOutcome.Approved,
+        Record(route, concreteRoute, requestedUri, effectiveUri, ControlledResourceReceiptOutcome.Approved,
             byteCount: bytes.Length, sha256: ToSha256Hex(bytes), message: null);
         return bytes;
     }
+
+    /// <summary>
+    /// Document-cache acquisition path (REQ-125 consumer review B-F3): runs the full policy
+    /// decision — unsupported-route check plus authority consult, refusal receipts included —
+    /// and returns the approved bytes with their evidence, but DEFERS the approval receipt
+    /// to <see cref="RecordCacheServeApproval"/>. The caller decides, by digest comparison
+    /// against its cache, whether the bytes are served from cache or parsed fresh, and records
+    /// the approval only then, so the receipt truthfully describes the content actually
+    /// consumed (see <see cref="ControlledResourceReceipt.ServedFromCache"/>).
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) requested URI.</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">Receives the credential-stripped effective URI.</param>
+    /// <param name="byteCount">Receives the approved byte count.</param>
+    /// <param name="sha256">Receives the lowercase hex SHA-256 of the approved bytes.</param>
+    /// <returns>The approved, authoritative bytes.</returns>
+    internal byte[] AcquireBytesForCacheServe(
+        string requestedUri,
+        ControlledResourceRoute route,
+        ControlledResourceRoute? concreteRoute,
+        out string effectiveUri,
+        out long byteCount,
+        out string sha256)
+    {
+        var approval = Authorize(requestedUri, route, concreteRoute);
+        if (approval.Bytes is not { } bytes)
+            throw Refusal(route, concreteRoute, requestedUri, approval.EffectiveUri, "approval did not supply resource bytes");
+        effectiveUri = RedactCredentials(approval.EffectiveUri ?? requestedUri);
+        byteCount = bytes.Length;
+        sha256 = ToSha256Hex(bytes);
+        return bytes;
+    }
+
+    /// <summary>
+    /// Records the deferred approval receipt for a document-cache acquisition performed via
+    /// <see cref="AcquireBytesForCacheServe"/>. <paramref name="servedFromCache"/> is <c>true</c>
+    /// only when the caller served a cached node whose stored digest and effective URI match
+    /// the approved bytes exactly.
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) requested URI.</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">The credential-stripped effective URI.</param>
+    /// <param name="byteCount">The approved byte count.</param>
+    /// <param name="sha256">The lowercase hex SHA-256 of the approved bytes.</param>
+    /// <param name="servedFromCache">Whether the approved content was served from the digest-validated cache.</param>
+    internal void RecordCacheServeApproval(
+        string requestedUri,
+        ControlledResourceRoute route,
+        ControlledResourceRoute? concreteRoute,
+        string effectiveUri,
+        long byteCount,
+        string sha256,
+        bool servedFromCache)
+        => Record(route, concreteRoute, requestedUri, effectiveUri, ControlledResourceReceiptOutcome.Approved,
+            byteCount, sha256, message: null, servedFromCache: servedFromCache);
 
     /// <summary>
     /// Acquires the approved member URIs of a collection, recording a receipt. Every member is
@@ -164,13 +253,25 @@ public sealed class ControlledResourcePolicy
     /// <param name="effectiveUri">Receives the credential-stripped effective collection URI.</param>
     /// <returns>The approved member URIs, in collection order.</returns>
     internal IReadOnlyList<string> AcquireCollectionMembers(string requestedUri, out string effectiveUri)
+        => AcquireCollectionMembers(requestedUri, ControlledResourceRoute.Collection, null, out effectiveUri);
+
+    /// <summary>
+    /// Acquires the approved member URIs of a collection where a phase/purpose route governs
+    /// the concrete collection operation; see the byte-acquiring overload for the contract.
+    /// </summary>
+    /// <param name="requestedUri">The resolved (absolute) collection URI (empty for the default collection).</param>
+    /// <param name="route">The route (purpose) of the acquisition.</param>
+    /// <param name="concreteRoute">The concrete operation behind <paramref name="route"/>; null when none.</param>
+    /// <param name="effectiveUri">Receives the credential-stripped effective collection URI.</param>
+    /// <returns>The approved member URIs, in collection order.</returns>
+    internal IReadOnlyList<string> AcquireCollectionMembers(string requestedUri, ControlledResourceRoute route, ControlledResourceRoute? concreteRoute, out string effectiveUri)
     {
-        var approval = Authorize(requestedUri, ControlledResourceRoute.Collection);
+        var approval = Authorize(requestedUri, route, concreteRoute);
         if (approval.CollectionMembers is not { } members)
-            throw Refusal(ControlledResourceRoute.Collection, requestedUri, approval.EffectiveUri,
+            throw Refusal(route, concreteRoute, requestedUri, approval.EffectiveUri,
                 "approval did not supply collection members");
         effectiveUri = RedactCredentials(approval.EffectiveUri ?? requestedUri);
-        Record(ControlledResourceRoute.Collection, requestedUri, effectiveUri,
+        Record(route, concreteRoute, requestedUri, effectiveUri,
             ControlledResourceReceiptOutcome.Approved, byteCount: null, sha256: null, message: null);
         return members;
     }
@@ -178,18 +279,19 @@ public sealed class ControlledResourcePolicy
     /// <summary>
     /// Consults the authority for one request, classifying abstention and callback errors as
     /// refusals (controlled profile: abstain = deny). Records the corresponding receipt.
+    /// Both the governing route and the concrete route (when supplied) must be supported.
     /// </summary>
-    private ControlledResourceResponse Authorize(string requestedUri, ControlledResourceRoute route)
+    private ControlledResourceResponse Authorize(string requestedUri, ControlledResourceRoute route, ControlledResourceRoute? concreteRoute)
     {
-        if (_unsupportedRoutes.Contains(route))
+        if (_unsupportedRoutes.Contains(route) || (concreteRoute.HasValue && _unsupportedRoutes.Contains(concreteRoute.Value)))
         {
-            Record(route, requestedUri, null, ControlledResourceReceiptOutcome.RefusedUnsupported,
+            Record(route, concreteRoute, requestedUri, null, ControlledResourceReceiptOutcome.RefusedUnsupported,
                 message: UnsupportedCode);
             throw new InvalidOperationException(
                 $"{UnsupportedCode}: Controlled resource route '{route}' is not supported under the controlled profile: {RedactCredentials(requestedUri)}");
         }
 
-        var request = new ControlledResourceRequest(route, requestedUri);
+        var request = new ControlledResourceRequest(route, requestedUri, concreteRoute);
         ControlledResourceResponse? response;
         try
         {
@@ -197,7 +299,7 @@ public sealed class ControlledResourcePolicy
         }
         catch (Exception ex)
         {
-            Record(route, requestedUri, null, ControlledResourceReceiptOutcome.AuthorityError, message: ex.GetType().Name);
+            Record(route, concreteRoute, requestedUri, null, ControlledResourceReceiptOutcome.AuthorityError, message: ex.GetType().Name);
             throw new InvalidOperationException(
                 $"{RefusedCode}: Controlled resource authority failed for '{route}' ({request.RedactedUri}): {ex.GetType().Name}",
                 ex);
@@ -205,14 +307,14 @@ public sealed class ControlledResourcePolicy
 
         if (response is null)
         {
-            Record(route, requestedUri, null, ControlledResourceReceiptOutcome.RefusedNoApproval, message: RefusedCode);
+            Record(route, concreteRoute, requestedUri, null, ControlledResourceReceiptOutcome.RefusedNoApproval, message: RefusedCode);
             throw new InvalidOperationException(
                 $"{RefusedCode}: Controlled resource refused for '{route}' (no authority approval): {request.RedactedUri}");
         }
 
         if (response.IsDenied)
         {
-            Record(route, requestedUri, null, ControlledResourceReceiptOutcome.Denied, message: response.DenyReason);
+            Record(route, concreteRoute, requestedUri, null, ControlledResourceReceiptOutcome.Denied, message: response.DenyReason);
             var reason = string.IsNullOrEmpty(response.DenyReason) ? string.Empty : $": {response.DenyReason}";
             throw new InvalidOperationException(
                 $"{RefusedCode}: Controlled resource denied for '{route}': {request.RedactedUri}{reason}");
@@ -221,31 +323,35 @@ public sealed class ControlledResourcePolicy
         return response;
     }
 
-    private InvalidOperationException Refusal(ControlledResourceRoute route, string requestedUri, string? effectiveUri, string detail)
+    private InvalidOperationException Refusal(ControlledResourceRoute route, ControlledResourceRoute? concreteRoute, string requestedUri, string? effectiveUri, string detail)
     {
         var redacted = RedactCredentials(effectiveUri ?? requestedUri);
-        Record(route, requestedUri, redacted, ControlledResourceReceiptOutcome.Denied, message: detail);
+        Record(route, concreteRoute, requestedUri, redacted, ControlledResourceReceiptOutcome.Denied, message: detail);
         return new InvalidOperationException(
             $"{RefusedCode}: Controlled resource refused for '{route}' ({detail}): {redacted}");
     }
 
     private void Record(
         ControlledResourceRoute route,
+        ControlledResourceRoute? concreteRoute,
         string requestedUri,
         string? effectiveUri,
         ControlledResourceReceiptOutcome outcome,
         long? byteCount = null,
         string? sha256 = null,
-        string? message = null)
+        string? message = null,
+        bool servedFromCache = false)
     {
         var receipt = new ControlledResourceReceipt(
             route,
             RedactCredentials(requestedUri),
             effectiveUri is null ? null : RedactCredentials(effectiveUri),
             outcome,
+            concreteRoute,
             byteCount,
             sha256,
-            message);
+            message,
+            servedFromCache);
         lock (_receiptLock)
             _receipts.Add(receipt);
     }

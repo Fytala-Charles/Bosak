@@ -1,0 +1,3 @@
+let $rows := (map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}),
+    $index := map:merge($rows ! map:entry(?sku, ?stock), map{'duplicates':'use-last'})
+return string-join(for $sku in sort(map:keys($index)) return if ($index($sku) gt 0) then concat($sku, '=', $index($sku)) else (), '|')

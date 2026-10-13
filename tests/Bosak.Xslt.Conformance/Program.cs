@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 25 mei 2026
-// PURPOSE              : W3C XSLT 3.0 conformance test harness.
+// PURPOSE              : Catalog-based XSLT conformance adapter for the 3.0 and 4.0 suites.
 // SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
 //
 // COPYRIGHT            : Fytala
@@ -237,6 +237,9 @@
 //                      |                  |       |                | coexists with named BasicOnlySkipTests (checked first); --schema-aware mode unchanged     |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 3.74  | 12-10-2026     | Opt-in XSLT 4.0 dependencies, exact errors and failure/zero-execution exit status          |
+//                      |==================|=======|================|=========================================================================================
+
 using System.Xml.Linq;
 using System.Xml;
 using System.Xml.Schema;
@@ -280,6 +283,7 @@ class Program
     static readonly HashSet<int> _assertClaimedIndexes = new();
     static string? _testNameFilter = null;
     static string? _testSetFilter = null;
+    static bool _xslt40 = false;
 
     // Resume support (--resume-file <path>): the file lists test-set names that completed
     // in earlier (possibly killed) sweep runs; those sets are skipped and every set that
@@ -535,7 +539,11 @@ class Program
         for (int i = 0; i < args.Length; i++)
         {
             var arg = args[i];
-            if (arg is "--schema-aware" or "-s")
+            if (arg == "--xslt40")
+            {
+                _xslt40 = true;
+            }
+            else if (arg is "--schema-aware" or "-s")
             {
                 _schemaAware = true;
                 SkipFeatures.Remove("schema_aware");
@@ -583,6 +591,7 @@ class Program
         Console.WriteLine($"Test sets: {testSets.Count}");
         if (filter != null) Console.WriteLine($"Filter: {filter}");
         if (_schemaAware) Console.WriteLine($"Mode: schema-aware (schema_aware / schema-import features un-gated)");
+        if (_xslt40) Console.WriteLine("Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage");
         Console.WriteLine();
 
         if (_resumeFile != null && File.Exists(_resumeFile))
@@ -628,6 +637,8 @@ class Program
         Console.WriteLine($"Skipped: {Skipped}");
         Console.WriteLine();
         Console.WriteLine($"Pass rate: {(Passed * 100.0 / Math.Max(1, Passed + Failed)):F1}%");
+        if (_xslt40)
+            Environment.ExitCode = Failed > 0 || Passed + Failed == 0 ? 1 : 0;
     }
 
     static void RunTestSet(string testSetPath, string testSetName, string catalogDir)
@@ -1774,6 +1785,9 @@ class Program
             return true;
         if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
             return true;
+        // Upstream contribution evidence must not use Bosak's legacy label/code aliases.
+        if (_xslt40)
+            return false;
         // Retired-code alias (mirrors Saxon): the XSLT 3.0 REC corrected the code for
         // reserved-namespace extension-element-prefixes from XTSE0800 to XTSE0085
         // (math-3702, corrected 2019), but extension-functions-0105 (written 2015,
@@ -1924,7 +1938,7 @@ class Program
             if (int.TryParse(rest, out int requiredVersion))
             {
                 // Our processor supports XSLT 3.0 = version 30
-                const int ourVersion = 30;
+                int ourVersion = _xslt40 ? 40 : 30;
                 if (plus)
                     return ourVersion >= requiredVersion;
                 else

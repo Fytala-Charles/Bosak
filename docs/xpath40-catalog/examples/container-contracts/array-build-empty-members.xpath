@@ -1,0 +1,1 @@
+concat(array:size(array:build((1,2),function($v){()})),"/",count(array:items(array:build((1,2),function($v){()}))))

@@ -1,0 +1,1 @@
+let $requested := 'urn:missing:collation' return let $c := if (collation-available($requested)) then $requested else 'http://www.w3.org/2005/xpath-functions/collation/codepoint' return string-join(sort(('b', 'A'), $c), ',')

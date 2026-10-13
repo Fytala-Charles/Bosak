@@ -1,0 +1,40 @@
+{
+  "family": "item-type",
+  "queueId": "N04",
+  "testSet": "type-alias",
+  "folder": "tests/type/type-alias",
+  "branch": "bosak/item-type-boundaries",
+  "base": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "commit": "4ddcad8cfc0604f3a0a2cbec7d00032c7e8e0c5a",
+  "baselineCases": 30,
+  "cases": [
+    {
+      "id": "type-alias-023",
+      "description": "An enumeration alias accepts status strings and rejects unknown strings and integers.",
+      "expected": "<out ready=\"true\" unknown=\"false\" numeric=\"false\"/>",
+      "status": "fail",
+      "actual": "FAIL type-alias-023: XPST0051",
+      "stylesheetSha256": "c6c8a90eda56c6cf5f1c4deeda76c7457b8058bab6d32812197cc9ff63943eb3"
+    },
+    {
+      "id": "type-alias-024",
+      "description": "Enumeration aliases with the same local name but distinct expanded names remain distinct.",
+      "expected": "<out primary=\"true\" other=\"true\" crossed=\"false\"/>",
+      "status": "fail",
+      "actual": "FAIL type-alias-024: XPST0051",
+      "stylesheetSha256": "dcd8da6bd892e67361ac7f64fb5bdced2b3f356e1c2a198c43f6caff76a6155d"
+    }
+  ],
+  "patchSha256": "018801f173ae4e18d26c6cbed7843fc5600a09d70b679f05f412077ff79e76d4",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+  "specSection": "named-item-types",
+  "audit": "Reviewed type-alias case descriptions and representative declarations: array/record/union aliases, forward/unresolved/circular references, duplicate names, precedence and package visibility exist. New cases use enumeration membership boundaries and locally rebound QName prefixes with the same local type name. This is a focused audit, not exhaustive absence-of-duplicates certification.",
+  "independentConfirmation": "Outstanding; reviewer cross-check requested",
+  "passed": 0,
+  "failed": 2,
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
+  "upstreamStatus": "Open; acceptance/review and independent confirmation pending",
+  "bosakImplementationBaseline": "7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82",
+  "publishedVersion": "1.1.3",
+  "sourceVersion": "1.1.4 (unpublished)"
+}

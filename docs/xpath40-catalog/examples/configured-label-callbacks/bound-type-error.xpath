@@ -1,0 +1,1 @@
+partial-apply(string-length#1, map {1: ('Ada', 'Grace')})()

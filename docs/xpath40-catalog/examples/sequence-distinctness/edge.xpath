@@ -1,0 +1,2 @@
+(: Sequence identity checks; synthetic fulfillment data; mode 40; no external context. :)
+string(all-different(())) || '/' || count(duplicate-values(()))

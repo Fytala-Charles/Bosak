@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-12",
+  "scope": "Post-fix candidate; original evidence.json and receipts remain historical.",
+  "sourceVersion": "1.1.4 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "cases": [
+    {
+      "id": "array-027",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    },
+    {
+      "id": "array-028",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    },
+    {
+      "id": "array-029",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    },
+    {
+      "id": "array-030",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    },
+    {
+      "id": "array-031",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    },
+    {
+      "id": "array-032",
+      "outcome": "pass",
+      "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+      "runnerExitCode": 0,
+      "note": "Exact native case outcome; substring-selected inherited cases excluded from this tally."
+    }
+  ],
+  "exactCaseCounts": {
+    "passed": 6,
+    "failed": 0
+  },
+  "sourceSha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "054f44f20944cf26c5b631d421d43c240ed3d815b74ed85f53fe56f3e7b62118",
+    "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs": "cc727bee28ca40ddc7295d378def1b96081dbb1d0ab3402698f2059cc781a6f1",
+    "src/Directory.Build.props": "605014e9aaa4cef0a34dd0b776ce17170ba68bef16540095319dbbd4a9b3a487"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamSubmission": null,
+  "validation": {
+    "releaseBuild": "pass (12 existing warnings; zero errors)",
+    "unitTests": {
+      "passed": 6811,
+      "failed": 0,
+      "skipped": 0,
+      "assemblies": 10
+    },
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894,
+      "gatedFailures": 0
+    },
+    "documentation": "Rendered; added local links verified"
+  },
+  "testedImplementationCommit": "7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/202"
+}

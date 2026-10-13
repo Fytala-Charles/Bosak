@@ -1,0 +1,138 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 11 October 2026
+// PURPOSE              : Verifies catalog examples and their declared compatibility outcomes.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 11-10-2026     | Creation: exact published catalog examples, edge cases, and version gates.              |
+//                      | Charles Korthout | 0.2   | 12-10-2026     | Verify declared 3.1 outcomes for changed existing-function contracts.                    |
+//                      | Charles Korthout | 0.3   | 12-10-2026     | Verify declared XSLT compile/capture errors for deferred declaration examples.           |
+//                      | Charles Korthout | 0.4   | 12-10-2026     | Execute XQuery and actual streaming catalog paths with exact results or errors.         |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using System.Text;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.Xslt.Api;
+using Bosak.Xslt.Capture;
+using Bosak.XQuery.Api;
+using Xunit;
+
+namespace Bosak.Xslt.Tests.Documentation;
+
+/// <summary>Verifies catalog examples and their declared compatibility outcomes.</summary>
+public class CatalogExampleTests
+{
+    private static readonly string Folder = Path.Combine(AppContext.BaseDirectory,
+        "Documentation", "ReferenceExamples", "Catalog");
+
+    /// <summary>Gets the IDs of all published catalog cases.</summary>
+    /// <returns>One theory row per catalog manifest entry.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(Folder, "cases.json")));
+        foreach (var row in doc.RootElement.EnumerateArray())
+            yield return new object[] { row.GetProperty("id").GetString()! };
+    }
+
+    /// <summary>Runs the exact published file and verifies result, error, and compatibility.</summary>
+    /// <param name="id">The case ID from the published manifest.</param>
+    [Theory]
+    [MemberData(nameof(Cases))]
+    public void PublishedExample_MatchesDeclaredOutcome(string id)
+    {
+        using var doc = JsonDocument.Parse(File.ReadAllText(Path.Combine(Folder, "cases.json")));
+        var row = doc.RootElement.EnumerateArray().Single(r => r.GetProperty("id").GetString() == id);
+        var file = Path.Combine(Folder, row.GetProperty("file").GetString()!);
+        var code = File.ReadAllText(file);
+        if (row.GetProperty("kind").GetString() == "xquery")
+        {
+            string EvaluateQuery() => new XQueryCompiler().Compile(code).Evaluate(new XQueryContext()).ToString();
+            if (row.TryGetProperty("error", out var queryError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => EvaluateQuery());
+                Assert.Contains(queryError.GetString()!, failure.Message);
+            }
+            else
+                Assert.Equal(row.GetProperty("expected").GetString(), EvaluateQuery());
+            return;
+        }
+        if (row.GetProperty("kind").GetString() == "xslt")
+        {
+            var source = XDocument.Load(Path.Combine(Folder, row.GetProperty("input").GetString()!));
+            string Transform()
+            {
+                if (row.GetProperty("mode").GetString() is "stream31" or "stream40")
+                {
+                    using var stream = File.OpenRead(Path.Combine(Folder, row.GetProperty("input").GetString()!));
+                    return new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
+                }
+                var result = new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri)
+                    .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
+                if (!result.IsSuccess)
+                    throw new InvalidOperationException(string.Join("; ", result.Failures.Select(f => f.Message)));
+                Assert.Empty(result.SecondaryOutputs);
+                return Encoding.UTF8.GetString(result.Principal!.Bytes.ToArray());
+            }
+
+            if (row.TryGetProperty("error", out var xsltError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => Transform());
+                Assert.Contains(xsltError.GetString()!, failure.Message);
+            }
+            else
+                Assert.Equal(row.GetProperty("expected").GetString(), Transform());
+            return;
+        }
+
+        var mode = row.GetProperty("mode").GetString();
+        var compatibility = mode switch
+        {
+            "31" => XPathCompatibility.XPath31,
+            "experimental" => XPathCompatibility.XPath40Experimental,
+            _ => XPathCompatibility.XPath40,
+        };
+        string Evaluate() => XPath31Expression.Compile(code, new CompileOptions { Compatibility = compatibility })
+            .Evaluate(new EvaluationContext()).ToString();
+
+        if (row.TryGetProperty("error", out var error))
+        {
+            var failure = Assert.ThrowsAny<Exception>(() => Evaluate());
+            Assert.Contains(error.GetString()!, failure.Message);
+        }
+        else
+        {
+            Assert.Equal(row.GetProperty("expected").GetString(), Evaluate());
+            if (mode != "31" && row.TryGetProperty("baselineError", out var baselineError))
+            {
+                var failure = Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code)
+                    .Evaluate(new EvaluationContext()).ToString());
+                Assert.Contains(baselineError.GetString()!, failure.Message);
+            }
+            else if (mode != "31" && row.TryGetProperty("baselineExpected", out var baselineExpected))
+            {
+                Assert.Equal(baselineExpected.GetString(), XPath31Expression.Compile(code)
+                    .Evaluate(new EvaluationContext()).ToString());
+            }
+            else if (mode != "31")
+                Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code));
+            if (mode == "experimental" && row.TryGetProperty("frozenExpected", out var frozenExpected))
+                Assert.Equal(frozenExpected.GetString(), XPath31Expression.Compile(code,
+                    new CompileOptions { Compatibility = XPathCompatibility.XPath40 }).Evaluate(new EvaluationContext()).ToString());
+            else if (mode == "experimental")
+                Assert.ThrowsAny<Exception>(() => XPath31Expression.Compile(code,
+                    new CompileOptions { Compatibility = XPathCompatibility.XPath40 }));
+        }
+    }
+}

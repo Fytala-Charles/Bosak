@@ -1,0 +1,1 @@
+string-join(xs:ID('PART_A') ! string(.), '|')

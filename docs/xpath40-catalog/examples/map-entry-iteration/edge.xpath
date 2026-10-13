@@ -1,0 +1,2 @@
+(: Synthetic Map entry iteration case; compatibility 40; no external context required. :)
+count(for key $sku value $quantity in map {} return $sku)

@@ -1,0 +1,1 @@
+map:build((map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}), function($r){$r?sku}, function($r){$r?stock}, map{'duplicates':'reject'})

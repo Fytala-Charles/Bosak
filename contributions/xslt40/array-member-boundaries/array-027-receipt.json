@@ -1,0 +1,18 @@
+{
+  "timestampUtc": "2026-10-12T18:49:52.3054223Z",
+  "suiteRevision": "e72f1b0e8511f78478e66c112201317cfe7b7ad1",
+  "bosakRevision": "01969ab37f946ff67325cfb547fc859f0c832f3e",
+  "schemaAware": false,
+  "testSet": "array",
+  "testCase": "array-027",
+  "runnerExitCode": 0,
+  "counts": {
+    "Failed": 0,
+    "Total": 180,
+    "Skipped": 179,
+    "Passed": 1
+  },
+  "success": true,
+  "caseOutcome": "pass",
+  "filterScope": "Substring filters also execute inherited square-array cases; counts are not the six-case batch total."
+}

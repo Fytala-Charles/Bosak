@@ -1,0 +1,1 @@
+string-join(slice(('ORD-101','ORD-102','ORD-103','ORD-104','ORD-105'), 4, 2), ',')

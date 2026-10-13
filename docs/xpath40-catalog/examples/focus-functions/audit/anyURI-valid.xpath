@@ -1,0 +1,1 @@
+string-join(('https://supplier.example/invoice/42' ! xs:anyURI()) ! string(.), '|')

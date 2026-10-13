@@ -1,0 +1,1 @@
+string-join(xs:ENTITY('PART_A') ! string(.), '|')

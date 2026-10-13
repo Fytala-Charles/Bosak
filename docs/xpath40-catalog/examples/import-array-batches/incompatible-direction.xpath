@@ -1,0 +1,1 @@
+array:size(array:slice(['ORD-101','ORD-102','ORD-103'], 1, 3, -1))

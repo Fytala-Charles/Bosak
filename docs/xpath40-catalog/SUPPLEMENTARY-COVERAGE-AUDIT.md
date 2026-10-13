@@ -1,0 +1,147 @@
+# Supplementary coverage audit — 2026-10-12
+
+The catalog assigns all 117 registered 4.0-only names, but REQ-126 remains
+**In Progress**. This audit separates registration evidence from documented and
+tested contracts. At the preceding audit delivery, coverage was 54 entries and
+415 executable documentation checks. The follow-up comparison delivery is
+recorded below; neither delivery changes engine behavior.
+
+Historical audit baseline: `37457bfd` after PR #169. Published engine: **1.1.2**.
+The accompanying [registration inventory](audit-registration-arities.json) records
+literal dictionary registrations for the 68 non-constructor names. Its arities
+are implementation metadata, not proof of full draft signatures or conformance.
+The 49 `xs:*` focus constructors now have a [separate representative audit](operators-and-syntax/focus-functions.md) of generated registrations, focus conversion, types, missing focus and invalid values. Exhaustive casting conformance remains unclaimed.
+
+## Sources and reproducible evidence
+
+- [Registered name inventory](audit-function-inventory.json) defines the 117-name scope.
+- [Function library](../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs)
+  contains registrations, keyword/default metadata and implementations.
+- [Parser](../../src/Bosak.XPath.Parser/Ast/XPathParser.cs) supplies grammar evidence.
+- [Function tests](../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs)
+  supply named behavior evidence; catalog coverage additionally requires a case in
+  [the example manifest](examples/cases.json).
+- [Pinned F&O draft source](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml)
+  is the current function-contract review reference. This does not recover the
+  historically adopted draft for earlier deliveries.
+- [REQ-118 dossier](../REQ-118-xpath-xslt-40.md) records the original tier and
+  disposition decisions. Live [XPath](https://qt4cg.org/specifications/xquery-40/xpath-40.html),
+  [XSLT](https://qt4cg.org/specifications/xslt-40/Overview.html) and
+  [specification index](https://qt4cg.org/specifications/) links are navigation,
+  not immutable evidence of adoption.
+
+## Contract gaps to close
+
+| Priority | Surface | Evidence and remaining work |
+|---|---|---|
+| 1 | Changed existing functions | `fn:compare` already existed in 3.1 and is absent from the 4.0-only name inventory. Tests `Compare40_CrossNumericExact_DoubleVsDecimal`, `Compare40_NanOrdersBelowNegativeInfinity_AndEqualsItself`, `Compare40_BooleansAndBinariesAndQName`, `Compare40_MixedIncomparable_RaisesXpty0004` and `Compare40_KeywordFormAndEmptyCollation` establish implementation evidence. The [measurement reference](functions/measurement-comparison.md) now supplies 27 executable cases and a distinct 3.1 normalization policy. This is scoped coverage, not every atomic-family contract. Min/max, sorting and URI reviews are now supplied. Remaining atomic-family, collation and changed map/array overload contracts still require systematic verification. |
+| 2 | Arity, keyword and default contracts | For every registration, reconcile parameter names, sequence types, omitted arguments and keyword calls against the pinned draft. A registered arity alone cannot establish any of these. Add success, empty and invalid-argument examples for uncovered forms. |
+| 2 | Options | `hash#3` accepts an options map, but the implementation currently only validates its shape; named option behavior is not established. Hash extension parameters are implementation-defined in the pinned contract; no standard named option is asserted missing. The [signature review](SIGNATURE-CONTRACT-AUDIT.md) now verifies selected default/empty/map/invalid options and keyword cases, without claiming complete option behavior. [URI option policy](functions/uri-option-policy.md) now documents `allow-deprecated-features`, `omit-default-ports` and `unc-path`, raw/structured component precedence and 28 fixtures. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps; raw-authority bypass is draft-defined. Audit sorting records and JSON options separately. |
+| 2 | Constructors and types | The 49-name representative audit is supplied, including lexical/type/context/error cases. Further lexical/value-space boundaries, structural records, enum/choice coercion and function-signature conversion remain. |
+| 3 | Grammar and patterns | Existing syntax entries do not constitute a grammar inventory. Reconcile REQ-118 S3/S4 and S7/S8 against parser/compiler tests: keyword calls, guarded/otherwise expressions, templates, collection iteration, arrows, focus functions, binary literals and type/map/array patterns. Record omitted productions and version-gate behavior explicitly. |
+| 3 | Drift and lifecycle | The 28-entry provenance ledger retains delivery evidence but lacks historical adopted draft pins. Keep that limitation. For each changed or superseded form, link an immutable current review and explain the difference; do not substitute a live page for historical adoption. |
+
+`highest`/`lowest` computed-key tie behavior and approximate Unicode grapheme
+segmentation remain separate engine/specification follow-ups. Existing observed
+fixtures do not prove complete conformance. The 1.1.2 map result-shape correction
+is delivered; it is no longer an outstanding implementation defect.
+
+The pinned hash draft requires BLAKE3 and CRC-32; Bosak's implementation explicitly
+reports these algorithms as unsupported (`FOHA0001`). Preserve that documented
+limitation when reviewing the options contract; a passing SHA-256 example cannot
+establish complete hash conformance.
+
+## Wider disposition backlog
+
+The section-1.2 decisions already have dedicated records in the
+[completeness audit](COMPLETENESS-AUDIT.md#deferred-and-rejected-decisions).
+The following wider dossier decisions now have dedicated records with scoped
+rationale, delivery/refusal evidence and alternatives. Validate source-to-record
+coverage and lifecycle before closure. Deferred implementation remains separate.
+
+| Dossier scope | Recorded decision | Evidence needed before catalog completion |
+|---|---|---|
+| Computed XPath node constructors | [Deferred record supplied](deferred/computed-node-constructors.md) | Current pinned draft includes them; Bosak refuses the seven braced-name forms at 31/40/experimental. Existing XQuery 3.1 named tests and complete XSLT receipt alternative provide separate evidence. Historical adopted pin remains unavailable. |
+| `xsl:item-type` / `xsl:record-type` | [Item-type](deferred/xslt-item-type.md) / [record-type](deferred/xslt-record-type.md) records supplied | Deferred named types; 28 fixtures distinguish unused tolerance from binding/function failure and supported anonymous/portable alternatives. Structural-record XSLT @as conversion remains an observed gap with explicit-cast workaround. |
+| Enclosing modes | [Deferred record supplied](deferred/enclosing-modes.md) | 20 fixtures record XTSE0260 refusal and supported top-level named-mode alternatives; no enclosing-rule isolation or draft diagnostic matrix claimed. |
+| Capturing accumulators | [Deferred record supplied](deferred/capturing-accumulators.md) | 16 in-memory fixtures distinguish ignored capture from new snapshot identity; ordinary accumulator/streaming tests remain separate evidence. |
+| `fn:apply-templates` | [Deferred record supplied](deferred/fn-apply-templates.md) | 28 refusal/availability and full instruction/wrapper fixtures; dynamic options and public-mode validation remain unimplemented. |
+| Serialization 4.0 parameters | [Nine-parameter record supplied](deferred/serialization-parameters.md) | 52 fixtures distinguish XSLT solidus support, ignored options, JSON Lines/canonical/layout/CSV boundaries and portable invoice export. |
+| `parse-html`, `html-doc`, `invisible-xml`, `unparsed-binary`, `xsd-validator` | [Scope record supplied](deferred/external-input-functions.md) | 55 absence/alternative fixtures, pinned contracts and per-function dependency/ownership rationale; original out-of-scope decision retained. |
+| Full GNode/JNode model | [Reconciled partial-model record](data-model/jnode-template-boundary.md) | Shipped navigation retained; eighteen added invoice/type/identity checks, pinned model review and explicit deferred generic-model/template remainder. |
+| XQuery 4.0 and XSLT Streaming 4.0 deltas | [Language scope supplied](deferred/language-streaming-scope.md) | 28 public-API fixtures; existing XQuery 3.1/streaming distinct from complete 4.0. REQ-087 Done and historical residual reports kept separate. |
+
+## Next delivery and acceptance
+
+The [typed measurement comparison](functions/measurement-comparison.md) now supplies that first delivery. Its default-mode outcomes and keyword drift are explicit. The [batch extrema reference](functions/batch-extrema.md) supplies 29 cases and records numeric promotion/result-type and duration gaps. The [warehouse sorting reference](functions/warehouse-pick-sorting.md) now supplies 28 cases and records numeric/NaN/default-key/collation limits. The URI option review is supplied. The 49-name constructor audit is supplied. Next complete the signature and grammar inventories in the [close-out queue](CLOSEOUT-REVIEW.md). Keyword spelling and legacy binary type validation remain separate engine/specification follow-ups.
+
+AC-01 through AC-04 remain partial. AC-05 remains met for the current scope.
+Closure requires reviewed contracts and disposition records, executable examples,
+exact gate assignments or explicit absence, and feature-specific drift warnings.
+Neither the 117-name milestone nor this registration inventory closes REQ-126.
+
+
+Measurement comparison delivery (2026-10-12): coverage was 55 entries and 442 checks (418 feature plus 24 chapter). The opening 54-entry/415-check count records the preceding audit delivery. Registered-name and arity inventories keep their original scopes.
+
+
+Batch extrema delivery (2026-10-12): coverage was 56 entries and 471 checks (447 feature plus 24 chapter). QName extrema have a 3.1 fold comparison; mixed numeric and plain-duration behavior remain incomplete against the pinned draft. Exact fn-min/fn-max gate assignment is absent.
+
+
+Historical warehouse sorting delivery (2026-10-12): coverage was 57 entries and 499 checks (475 feature plus 24 chapter). Portable composite-key sorting and array member boundaries were verified; exact numeric and NaN ordering remain incomplete against the pinned draft. The subsequent URI option review is supplied below.
+
+
+**URI option review — 2026-10-12:** [Archive and partner URI policy](functions/uri-option-policy.md) adds complete input/output, a scoped 3.1 comparison and 28 executable cases. Boolean options, UNC spelling, raw/structured authority and path/query precedence are explicit. Non-Boolean option truthiness and empty-query-map fallback remain observed draft gaps. Coverage: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names remain assigned. REQ-126 stays In Progress; source/public version remains 1.1.2. Next: catalog close-out and prioritized follow-up review.
+
+**Computed XPath constructor disposition — 2026-10-12:** [Deferred node construction](deferred/computed-node-constructors.md) separates the draft XPath feature from Bosak XQuery 3.1 support. Complete invoice input, refused XPath, 3.1 report and XSLT receipt output accompany 30 executable checks: 25 refusals across compatibility modes, three reports and two XML outputs. Current coverage: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names remain assigned. Version stays 1.1.2; REQ-126 remains In Progress. Named XSLT declaration dispositions are now supplied; enclosing modes are now supplied; capturing accumulator disposition is now supplied; fn:apply-templates disposition is now supplied; next: catalog close-out and prioritized follow-up review.
+
+**Named XSLT declaration review — 2026-10-12:** [xsl:item-type](deferred/xslt-item-type.md) and [xsl:record-type](deferred/xslt-record-type.md) add full invoice cases, pinned disposition evidence and 28 executable boundary/alternative checks. Unused 4.0 declarations are ignored, not implemented; named bindings and constructors fail. Portable map validation and inline enums are verified. Structural-record XSLT `@as` raises XTTE0570; explicit XPath cast in `select` plus `as="map(*)"` is the verified workaround. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. REQ-126 remains In Progress, version 1.1.2. Next: catalog close-out and prioritized follow-up review.
+
+**Enclosing-mode review — 2026-10-12:** [Deferred enclosing modes](deferred/enclosing-modes.md) supplies a full invoice export/audit case, pinned draft/source evidence and 20 executable checks. Nested mode templates refuse with XTSE0260; top-level named rules provide supported dispatch, without enclosing-rule isolation. Explicit mode, #current and lexical defaults, empty/reordered input and namespace identity are verified. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names remain assigned. Version remains 1.1.2; REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+**Capturing-accumulator review — 2026-10-12:** [Deferred capturing accumulators](deferred/capturing-accumulators.md) adds full invoice input/output and 16 executable cases. Accepted capture=yes retains source identity rather than a draft-required snapshot; invalid/start-phase capture is tolerated in tested 4.0 forms. Ordinary accumulators, explicit snapshots and scalar projection are verified separately in memory, without streaming or special annotation-copy claims. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. REQ-126 remains In Progress, version 1.1.2. Next: catalog close-out and prioritized follow-up review.
+
+**fn:apply-templates review — 2026-10-12:** [Deferred function and invoice alternatives](deferred/fn-apply-templates.md) adds 28 executable checks. Calls/references refuse with XPST0017; instruction availability is separate from function availability. Full invoice input/output verifies named-mode dispatch and a stylesheet-function wrapper with ordinary/tunnel parameters, empty/reordered input and explicit joining. Draft dynamic options/public-mode validation remain deferred. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+**Serialization parameter review — 2026-10-12:** [Nine draft additions and invoice export](deferred/serialization-parameters.md) adds 52 executable cases. XSLT JSON solidus control works; fn:serialize ignores the new keys. JSON Lines, canonicalization, layout controls and CSV serialization remain deferred; fn CSV fallback and XSLT sequence-as-array are explicit boundaries. Complete portable JSON Lines input/output includes empty/reordered cases. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+**External-input function review — 2026-10-12:** [Five function boundaries and partner invoices](deferred/external-input-functions.md) adds 55 checks. parse-html, html-doc, invisible-xml, unparsed-binary and xsd-validator remain absent/out of the original implementation scope. Pinned contracts and per-function dependency/ownership rationale accompany complete normalized XML, fixed-record, binary-value and business-guard alternatives. These do not implement HTML recovery, arbitrary grammar parsing, binary acquisition or XSD factory validation. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 registered names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+**GNode/JNode scope review — 2026-10-12:** [Partial model and invoice navigation](data-model/jnode-template-boundary.md) replaces blanket exclusion with shipped JNode support and a deferred remainder. Eighteen added checks verify full invoice navigation/portable reports and broader node()/xnode()/identity gaps. Full generic-model and stylesheet built-in behavior remain uncertified. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 registered names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+**Language/streaming scope review — 2026-10-12:** [Existing APIs and separate 4.0 deltas](deferred/language-streaming-scope.md) adds 28 cases through XQuery, XPath, ordinary XSLT and actual streaming APIs. Corrects stale XPath where exclusion and distinguishes REQ-087 Done from historical residual reports. Full XQuery/Streaming 4.0 remains unclaimed. Catalog: 67 entries, 778 feature plus 24 chapter checks (802 total); all 117 names assigned. Version 1.1.2, REQ-126 In Progress. Next: catalog close-out and prioritized follow-up review.
+
+
+Catalog close-out review (2026-10-12): **67 entries, 778 feature + 24 chapter checks = 802**; four worked chapters and all 117 registered names assigned. REQ-126 remains In Progress, version 1.1.2. The [prioritized review](CLOSEOUT-REVIEW.md) identifies constructor/signature/grammar and acceptance work, with engine follow-ups tracked separately. Next: audit all 49 focus constructors.
+
+
+**Focus-constructor audit — 2026-10-12:** [Typed supplier delivery import and all 49 names](operators-and-syntax/focus-functions.md) adds 508 executable checks, representative result types, lexical/source errors, missing context, empty/multiple input, default 3.1 refusal, experimental parity and portable 3.1 reports. List types and xs:error are explicit. Current coverage: 67 entries, 1,286 feature + 24 chapter checks = 1,310; four worked chapters; all 117 names assigned. Version remains 1.1.2, REQ-126 In Progress. This current snapshot supersedes earlier delivery counts. Next: D2, supplementary signatures/keywords/defaults/options.
+
+
+**Signature contract review — 2026-10-12:** [Metadata matrix and consumer boundaries](SIGNATURE-CONTRACT-AUDIT.md) supplies 68 new-name families plus 20 selected existing functions, 148 exact registration checks and 39 behavior cases (187 new checks). 37 families lack keyword metadata; four keyword-name differences and three default-expression differences are recorded. Replace arity/default and two-let hash keyword failures have reproducible cases. Hash extension options are implementation-defined; missing mandatory algorithms remain distinct. Catalog: 67 entries, 1,473 feature + 24 chapter checks = 1,497; version 1.1.2, REQ-126 In Progress. D2 remains partial. This snapshot supersedes earlier delivery counts; next review missing metadata/defaults/options family by family.
+
+
+**Text/Unicode contract review — 2026-10-12:** [Eight-family review and full label/filename reports](TEXT-CONTRACT-REVIEW.md) adds 83 checks: 24 keyword/mode refusals, 55 positional/default/empty/invalid/option cases and four normal/empty 3.1/4.0 reports. Metadata remains absent; eight of 37 such families are reviewed and 29 remain. Empty-source/empty-needle boundary wording corrected; coercion/option-validation follow-ups remain explicit. Current catalog: 67 entries, 1,556 feature + 24 chapter checks = 1,580; version 1.1.2, REQ-126 In Progress. This snapshot supersedes earlier delivery counts. Next: sequence selection/repetition contracts, keeping D2 partial.
+
+
+**Sequence contract review — 2026-10-12:** [Six-family review and complete dispatch batch reports](SEQUENCE-CONTRACT-REVIEW.md) adds 65 checks: 18 keyword/mode cases, 41 focused defaults/types/identity/keyword-validation cases and six normal/empty/reordered 3.1/4.0 reports. Five more absent-keyword families reviewed; 13 of 37 total, 24 awaiting targeted review. slice keywords/defaults work; items-at accepts the tested integral decimal, while replicate/slice reject it. Untyped-node position/coercion limits remain explicit. Catalog: 67 entries, 1,621 feature + 24 chapter checks = 1,645; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier delivery counts. Next: equality/distinctness/subsequence predicate contracts.
+
+
+**Predicate contract review — 2026-10-12:** [Equality/distinctness/subsequence contracts and complete shipment reports](PREDICATE-CONTRACT-REVIEW.md) add 102 checks: 15 keyword/mode refusals, 79 positional/default/type/callback checks and eight normal/empty/reordered/duplicate-event reports in 3.1/4.0. Targeted absent-keyword review now covers 18 of 37 families, with 19 remaining; metadata remains absent. Map acceptance in atomic-signature equality functions and numeric/empty-string collation processing remain engine follow-ups. Current catalog: 67 entries, 1,723 feature + 24 chapter checks = 1,747. Version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and next-step queues. Next: duplicate-values/highest/lowest/index-where comparison and selection contracts.
+
+
+**Comparison/selection contract review — 2026-10-12:** [Four-family review and detailed warehouse reports](SELECTION-CONTRACT-REVIEW.md) add 68 checks: 12 keyword/mode cases, 50 focused default/type/callback/keyword-validation checks and six complete 3.1/4.0 warehouse reports. Three more absent-keyword families reviewed: 21 of 37 supplied, 16 remaining, metadata unchanged. index-where keywords succeed. Map atomization and extrema NaN ordering remain explicit follow-ups. Current catalog: 67 entries, 1,791 feature + 24 chapter checks = 1,815; version 1.1.2, REQ-126 In Progress, D2 partial. This snapshot supersedes earlier counts and queues. Next: map:entries/map:items/map:filter and array:build/array:items/array:empty container contracts.
+
+
+**Container contract review — 2026-10-12:** [Six-family review and detailed stock-feed reports](CONTAINER-CONTRACT-REVIEW.md) 89 new checks: 18 keyword/mode refusals, 65 focused member/item/default/type/callback checks and six complete XPath 3.1/4.0 stock-feed reports. Targeted absent-keyword review: 27 of 37 families supplied, 10 remaining; metadata unchanged. map:filter accepts tested string/numeric predicate results despite its boolean result signature; dedicated conversion/enforcement review remains. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds contracts.
+
+
+**Date/time contract review — 2026-10-12:** [Five-family review and detailed receipt-retention reports](DATE-TIME-CONTRACT-REVIEW.md) 108 new checks: 15 keyword/mode refusals, 87 focused Gregorian/timezone/unit/type/cardinality checks and six full XPath 3.1/4.0 receipt-retention reports. Targeted absent-keyword review: 32 of 37 supplied, five remaining; metadata unchanged. Malformed string/multi-item tolerance, record conversion and fractional-component precision remain explicit follow-ups. Current catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-uri, decode-from-uri, collation-available, identity and is-NaN.
+
+
+**URI/import utility contract review — 2026-10-12:** [Five-family review and detailed import/link reports](URI-UTILITY-CONTRACT-REVIEW.md) 105 new checks: 15 keyword/mode refusals, 82 focused URI/option/decoding/collation/identity/NaN checks and eight complete XPath 3.1/4.0 import/link reports. All 37 originally absent-keyword families now have targeted review; zero await that first review, but all 37 still lack metadata. Boolean-option and record-field tolerance, empty query-map precedence and context-dependent collation boundaries remain follow-ups. Current catalog: 67 entries, 2,093 feature + 24 chapter checks = 2,117; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: exhaustively inventory changed existing 3.1 function contracts; the current matrix samples only twenty.
+
+
+**Complete baseline-name inventory — 2026-10-12:** [Existing 3.1 contract inventory](CHANGED-31-CONTRACT-INVENTORY.md) The complete 197-name fn/math/map/array baseline inventory is now supplied, with dated W3C 3.1 declarations, pinned F&O e7ee4ab8 declarations and fresh 3.1/4.0 evidence. Added 353 checks: 320 exact-arity lookups, 17 named-reference refusals, ten focused defaults/behavior checks and six complete stock reports. Thirteen families have positional arity declaration differences; seventeen draft arities are unavailable in the fresh standard context. Type/prose differences remain candidates for semantic review, not certified behavioral changes. Empty substring/subsequence lengths have distinct observed 3.1 and 4.0 results. Empty sort keys and map:merge options refuse XPTY0004. Catalog: 67 entries, 2,446 feature + 24 chapter checks = 2,470; four chapters, 117 assigned names. All 37 reviewed keyword families still lack metadata. REQ-126 stays In Progress, D2 partial; version 1.1.3, no engine/API/harness change or release. Next: fn:sort, array:sort, fn:min, fn:max and map:merge defaults/conversion contracts. Prose classification, D3/D4, historical adoption pins and AC-03 remain open.
+
+
+**Ordering/default review — 2026-10-12:** [Five-family review and supplier reports](ORDER-DEFAULT-CONTRACT-REVIEW.md) Targeted review of fn:sort, array:sort, fn:min, fn:max and map:merge adds 132 checks (126 focused, six complete supplier reports), preserving source declarations and exact 3.1/4.0/experimental keyword boundaries. min/max have no key callback parameter. Explicit empty sort keys and merge options, unknown sort collations, NaN ordering and malformed merge input/option cardinality remain engine follow-ups. Supplier rankings use numeric price plus stable ID and explicit duplicate combine; normal/reordered results match. Current catalog: 67 entries, 2,578 feature + 24 chapter checks = 2,602; four worked chapters, 117 assigned names. Version 1.1.3, REQ-126 In Progress, D2 partial. All 37 reviewed keyword families still lack metadata; no engine/API/harness change or release. Next: distinct-values, index-of, deep-equal, compare and contains-token equality/collation contracts. Earlier counts and queues are historical; normative prose impact, D3/D4, historical pins and AC-03 remain open.

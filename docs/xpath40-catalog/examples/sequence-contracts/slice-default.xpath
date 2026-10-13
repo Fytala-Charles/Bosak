@@ -1,0 +1,1 @@
+string-join(slice(('A','B','C','D')),',')

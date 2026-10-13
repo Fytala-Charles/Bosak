@@ -1,0 +1,1 @@
+count(map:items(map{'FILTER-A':(12,8),'SEAL-B':0}))

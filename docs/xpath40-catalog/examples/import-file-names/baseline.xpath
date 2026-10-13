@@ -1,0 +1,8 @@
+let $path := string(parse-xml('<file path="incoming/2026.10/invoice.batch.xml"/>')/file/@path)
+return let $positions := function($value, $needle) { for $p in 1 to string-length($value) return if (substring($value, $p, string-length($needle)) eq $needle) then $p else () }
+return let $slash := $positions($path, '/')[last()]
+return let $directory := substring($path, 1, $slash - 1)
+return let $name := substring($path, $slash + 1)
+return let $dots := $positions($name, '.')
+return let $dot := $dots[last()]
+return concat('directory=', $directory, '; file=', $name, '; stem=', substring($name, 1, $dot - 1), '; extension=', substring($name, $dot + 1), '; dots=', string-join($dots ! string(.), ','))

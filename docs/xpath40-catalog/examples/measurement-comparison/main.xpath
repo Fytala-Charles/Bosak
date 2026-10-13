@@ -1,0 +1,10 @@
+let $rows := parse-xml('<readings><reading id="A" kind="decimal" value="2" limit="2"/><reading id="B" kind="double" value="3.1" limit="3.1"/><reading id="C" kind="float" value="3.1" limit="3.1"/><reading id="D" kind="double" value="NaN" limit="3.1"/><reading id="E" kind="double" value="" limit="3.1"/></readings>')/readings/reading
+return string-join(for $row in $rows return
+  let $value := if (string($row/@value) = '') then () else
+    if ($row/@kind = 'decimal') then xs:decimal($row/@value) else
+    if ($row/@kind = 'float') then xs:float($row/@value) else xs:double($row/@value)
+  return let $limit := xs:decimal($row/@limit)
+  return let $status := if (empty($value) or not($value eq $value)) then 'missing' else
+    let $order := compare($value, $limit)
+    return if ($order lt 0) then 'below' else if ($order eq 0) then 'at-limit' else 'above'
+  return concat($row/@id, '=', $status), ';')

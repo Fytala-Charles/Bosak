@@ -1,0 +1,2 @@
+let $product := parse-xml('<sku>FILTER-A</sku>')/sku
+return map { 'sku': string($product) }?sku

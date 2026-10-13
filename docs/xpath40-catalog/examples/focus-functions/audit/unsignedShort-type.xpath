@@ -1,0 +1,1 @@
+every $v in ('12' ! xs:unsignedShort()) satisfies $v instance of xs:unsignedShort

@@ -1,0 +1,1 @@
+string(min(parse-xml('<prices><p>10</p><p>7</p></prices>')/prices/p))

@@ -1,0 +1,1 @@
+string-join(sort((2,5,1), (), function($priority) { -$priority }) ! string(.), ',')

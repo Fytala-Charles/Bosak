@@ -1,0 +1,1 @@
+starts-with-subsequence(input := ('A','B'), subsequence := 'A', compare := ())

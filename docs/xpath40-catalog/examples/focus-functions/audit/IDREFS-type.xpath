@@ -1,0 +1,1 @@
+every $v in ('A B' ! xs:IDREFS()) satisfies $v instance of xs:IDREF

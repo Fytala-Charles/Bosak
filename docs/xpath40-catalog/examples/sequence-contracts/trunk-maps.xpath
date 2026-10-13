@@ -1,0 +1,1 @@
+string-join(trunk((map{'id':'A'},map{'id':'B'},map{'id':'C'}))?id,',')

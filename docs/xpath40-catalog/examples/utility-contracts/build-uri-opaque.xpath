@@ -1,0 +1,1 @@
+build-uri(map{'scheme':'mailto','path-segments':'a+b@example.org'})

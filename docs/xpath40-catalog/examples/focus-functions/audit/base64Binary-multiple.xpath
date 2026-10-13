@@ -1,0 +1,1 @@
+count(('QUI=', 'QUI=') ! xs:base64Binary())

@@ -1,4 +1,1823 @@
+# 1.2.0 release preparation — 2026-10-13
+
+Branch: main; integrated revision ed785f7979fd04552df7549a0d502d21462e8010 from PR #247, with verified candidate d6316237. This documentation receipt follows the integration. This section supersedes the earlier next-slice queue.
+
+The user froze the 1.2.0 scope on 2026-10-13 and authorized release preparation. The candidate includes the completed XSLT 4.0 array/member, select-body, switch, named item/record type, namespace and template-pattern slices through PR #246 (source tip 8a5164b4). Additional slices, authoring-context alignment and a new upstream test-area batch move after this release. REQ-126 and N01–N05 retain their recorded review/acceptance states; this release does not claim complete XPath/XSLT 4.0 conformance. PR #247 integrated the #223–246 stack after candidate CI passed; every slice head is included in main and the superseded PRs are closed. Release notes, ten coordinated 1.2.0 packages and a package-only fresh-cache consumer are verified before publication. The published version remains 1.1.3 until the final tag/publication action is authorized and completed.
+
+## What was built
+
+Release verification exposed a timing-dependent REQ-125 cancellation test on Linux CI: CancelAfter(1 ms) could fire after validation completed. The test now cancels deterministically between two template child validation boundaries using test-only descriptor enumeration instrumentation. It verifies XV0013, Cancelled classification and unchanged original bytes, with an uncancelled Valid control; no runtime/API hook or cancellation behavior changes. All twelve execution-control regressions pass. The final full suite passes 7,676/0/0; candidate CI passes and the verified tree is integrated.
+
+Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. All 7,676 unit tests pass, including 4,790 XSLT tests, with zero failures/skips. Frozen gates retain their verified totals on unchanged engine source. PR #247 final candidate CI passed (run 38412051528), and integration is complete. Main-based CI for this documentation receipt must pass before tagging. No tag, publication or external messaging.
+
+## Resume here
+
+Preparation and integration are complete. Check the final main-based receipt PR CI, then present that exact revision for explicit tag/NuGet publication approval. No tag exists yet; publication has not been authorized. All 24 stacked PRs are closed because their heads are included in merged PR #247. Do not reopen or remerge them. Retain the frozen scope and package receipts. After publication, authoring-context alignment and a new batch of XSLT 4.0 contribution areas resume. Preserve scratch and receipts; do not close REQ-126 or change gate membership.
+
+Delivery: [PR #247](https://github.com/Fytala-Charles/Bosak/pull/247), a cumulative preparation PR against main; preparation implementation 90de1878 follows frozen source tip 8a5164b4. The verified package and consumer results are in docs/RELEASE-1.2.0-PREPARATION.json. Integration completed at ed785f79 after passing candidate CI; final main CI precedes explicit publication approval. Historical slice notes below remain unchanged.
+
+# Pattern prefix diagnostics — 2026-10-13
+
+Branch: feat/xslt-pattern-prefix-diagnostics; parent db953bf6. Stacked on PR #245; PRs #223–245 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 template patterns when a lexical QName or prefixed wildcard uses an unavailable prefix. This includes native prefixes excluded by fixed-namespaces and undeclared prefixes without fixed bindings. A shared XPath-lexer check covers node names, attributes, axes, paths, union/set operands, function/variable references and nested type patterns; string literals, nested comments and EQName URIs remain protected. Earlier-profile loading retains its existing behavior. Thirty-three regressions cover omitted bindings, Unicode and dotted prefixes, protected text, native bindings across 2.0/3.0/4.0 and a direct lexical check distinguishing spaced map-entry delimiters from prefix wildcards; the initial twenty-four-test baseline was 4/20/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. This bounded check does not perform full eager pattern compilation. String-template interpolation checks, non-template authoring/static contexts, broader pattern grammar, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7676 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4790/0/0 and thirty-three new regressions; focused prefix-diagnostics regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: applicable static namespace bindings in XSLT 4.0 authoring validation; inspect pattern and expression slot contexts and keep runtime/static diagnostics consistent. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #246](https://github.com/Fytala-Charles/Bosak/pull/246), stacked on #245. Verified implementation commit 54c20221; this delivery-note commit follows it. PRs #223–246 remain open; CI starts after retargeting to main. Next: applicable static namespace bindings in XSLT 4.0 authoring validation. No merge or publication.
+
+# Pattern fixed namespaces — 2026-10-13
+
+Branch: feat/xslt-pattern-fixed-namespaces; parent b273ab5e. Stacked on PR #244; PRs #223–244 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves prefixes in effective XSLT 4.0 template patterns using the declaring applicable static namespace bindings. Fixed bindings now survive native rebinding in node names, attributes, axes, unions, set operands, nested type tests and predicates. Existing EQNames and quoted text are preserved. Without fixed bindings, native declarations remain applicable; earlier profiles retain their native lookup. Twenty-one regressions cover these boundaries; the initial nineteen-test baseline was 3/16/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. Broader pattern grammar, omitted-prefix diagnostics, non-template authoring/static contexts, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7643 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4757/0/0 and twenty-one new regressions; focused pattern-fixed regressions pass 21/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: omitted-prefix static diagnostics in 4.0 template patterns; inspect fixed bindings that exclude a native prefix and preserve earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #245](https://github.com/Fytala-Charles/Bosak/pull/245), stacked on #244. Verified implementation commit 5708d9cd; this delivery-note commit follows it. PRs #223–245 remain open; CI starts after retargeting to main. Next: omitted-prefix static diagnostics in 4.0 template patterns. No merge or publication.
+
+# Set-pattern axis focus — 2026-10-13
+
+Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–244 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches supported forward-axis operands in XSLT 4.0 intersect/except patterns against the candidate node instead of forcing axis-only chains into document-root XPath evaluation. Mixed axis/path operands use their respective pattern matchers; all-actual-path chains retain sequence evaluation and positional selection. The 4.0 single-pattern classifier reuses lexical path detection so slashes inside predicates or string literals do not turn an axis pattern into a path. Earlier profiles retain existing dispatch. Twenty-two regressions cover self/child/descendant-style axes, attributes, predicates, mixed actual paths, all-path positions, EQName URIs, first-operand priority and earlier-profile behavior. The baseline was 9/13/0 before the fix; all twenty-two now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Fixed namespace resolution in 4.0 template pattern names, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7622 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4736/0/0 and twenty-two new regressions; focused axis-focus regressions pass 22/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fixed namespace resolution in 4.0 template pattern names; use the declaring applicable static bindings consistently for nested node/type/predicate patterns and retain earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #244](https://github.com/Fytala-Charles/Bosak/pull/244), stacked on #243. Verified implementation revision 8a80f2ee; a documentation-only delivery commit follows. PRs #223–244 remain open. CI starts after retargeting to main. Next: fixed namespace resolution in 4.0 template pattern names.
+
+# Set-pattern associativity — 2026-10-13
+
+Branch: feat/xslt-set-pattern-associativity; parent 2e72184f. Stacked on PR #242; PRs #223–243 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 evaluates supported mixed intersect/except pattern chains from left to right in the effective XSLT 4.0 profile. Both operators have equal precedence: `root except missing intersect missing` does not match root, while `root except (missing intersect missing)` does. The matcher preserves parenthesized grouping, union precedence, quoted/URI operator text and existing all-path/all-axis expression evaluation. Missing operands in mixed chains raise XTSE0340. Earlier profiles retain their existing dispatch behavior. Eighteen new regressions cover membership, nonmatches, grouping, union precedence, URI/quoted punctuation, path/axis negatives and earlier-profile behavior. The baseline was 10/8/0 before the fix; focused new plus prior operator checks pass 41/0/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Forward-axis operand focus in 4.0 set patterns, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7600 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4714/0/0 and eighteen new regressions; focused associativity/operator regressions pass 41/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: forward-axis operand focus in 4.0 set patterns; distinguish candidate-node axis matching from actual path evaluation, preserving earlier profiles and positional path semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #243](https://github.com/Fytala-Charles/Bosak/pull/243), stacked on #242. Verified implementation revision 17bf95aa; a documentation-only delivery commit follows. PRs #223–243 remain open. CI starts after retargeting to main. Next: forward-axis operand focus in 4.0 set patterns.
+
+# Pattern operator scanning — 2026-10-13
+
+Branch: feat/xslt-pattern-operator-scanning; parent c6ae3f5b. Stacked on PR #241; PRs #223–242 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 splits supported top-level pattern operators outside string literals, doubled quote escapes, EQName namespace URIs and nested expressions. The shared scanner handles pipe unions and union/intersect/except keywords without splitting complete node-name tokens such as pre-except-post, pre_intersect_post or pre.union.post. Earlier-profile union rule expansion and type-choice priority splitting reuse the lexical scanner; existing profile-specific priority and grammar rules remain intact. Twenty-three regressions cover quoted delimiters/operator text, nested predicates, escaped quotes, URI punctuation, complete operator-like names, nonmatches and earlier-profile unions. The baseline was 17/6/0 before the fix; all twenty-three now pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Mixed intersect/except associativity, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7582 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4696/0/0 and twenty-three new regressions; focused operator regressions pass 23/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: mixed intersect/except associativity in the effective 4.0 profile; operators have equal precedence and evaluate left to right. Preserve earlier-profile behavior and frozen gates. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #242](https://github.com/Fytala-Charles/Bosak/pull/242), stacked on #241. Verified implementation revision 32a0b4a2; a documentation-only delivery commit follows. PRs #223–242 remain open. CI starts after retargeting to main. Next: mixed intersect/except associativity in the effective 4.0 profile.
+
+# Pattern delimiter scanning — 2026-10-13
+
+Branch: feat/xslt-pattern-delimiter-scanning; parent 123bed16. Stacked on PR #240; PRs #223–241 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches pattern parentheses and brackets outside string literals and EQName namespace URIs, including doubled quote escapes. Predicate extraction, parenthesized compilation and template normalization/priority share the same lexical delimiter matcher. Static function-call validation ignores parentheses inside EQName URIs. Nineteen regressions cover quoted opening/closing delimiters, nested predicates, escaped single/double quotes, URI parentheses, contained priority, false outer predicates and ordinary earlier-profile node patterns. The baseline was 6/13/0 before the fix; all nineteen now pass. Lexical corrections apply to supported patterns across profiles; existing profile-specific grammar and priority rules remain intact. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Top-level operator splitting around quoted delimiters, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7559 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4673/0/0 and nineteen new regressions; focused delimiter regressions pass 19/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: top-level pattern operator splitting around quoted delimiters and EQName URIs, preserving grammar/profile boundaries and operator precedence. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #241](https://github.com/Fytala-Charles/Bosak/pull/241), stacked on #240. Verified implementation revision 1bae8fb7; a documentation-only delivery commit follows. PRs #223–241 remain open. CI starts after retargeting to main. Next: top-level pattern operator splitting around quoted delimiters and EQName URIs.
+
+# Parenthesized outer-filter paths — 2026-10-13
+
+Branch: feat/xslt-parenthesized-filter-paths; parent 6f863e0d. Stacked on PR #239; PRs #223–240 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 classifies supported XSLT 4.0 parenthesized outer filters using path slashes outside predicates, string literals and EQName namespace URIs. Patterns such as `(.[child/..])[true()]` keep candidate-node focus instead of incorrectly evaluating from the document root. Actual path patterns retain sequence-based positional filtering, including nested parentheses, descendant paths and paths whose EQName URIs contain slashes. Earlier effective profiles retain their existing classification. Twenty-five regressions cover candidate predicates, nested predicates, escaped quotes, URI slashes, aliases, real path positions and nonmatches. The initial twenty-one-case baseline had six failures before the fix; all final twenty-five cases pass. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior gains remain green and upstream assertions/fixtures are unchanged. Pattern delimiter scanning around quoted parentheses/brackets, broader grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, fixed namespace/authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7540 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4654/0/0 and twenty-five new regressions; focused outer-filter regressions pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs, retaining earlier profiles and existing positional semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #240](https://github.com/Fytala-Charles/Bosak/pull/240), stacked on #239. Verified implementation revision 0d80ec2a; a documentation-only delivery commit follows. PRs #223–240 remain open. CI starts after retargeting to main. Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs.
+
+# Parenthesized item patterns — 2026-10-13
+
+Branch: feat/xslt-parenthesized-item-patterns; parent 6a2151d0. Stacked on PR #238; PRs #223–239 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 admits supported parenthesized predicate and type patterns in the effective XSLT 4.0 profile and restricts those outer XNode patterns to nodes. Atomic values, maps and records therefore do not match a parenthesized item pattern; standalone predicate/type patterns retain their item matching. A prior local quoted-record-field regression incorrectly used a parenthesized type pattern for a map; it now uses the standalone type pattern, and new negative regressions verify the node boundary. Nested compilation retains declaring-package aliases, nominative type registries and applicable namespaces. Contained type priorities are recomputed after alias expansion, including wrapped union operands. Earlier profiles retain parenthesized-predicate rejection. Twenty-seven new regressions cover nesting, predicates, node-only membership, atomic/map negatives, aliases, default namespaces, contained priority and invalid direct item unions. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Parenthesized outer-filter path classification, broader pattern grammar/set semantics, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7515 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4629/0/0 and twenty-seven new regressions; focused parenthesized/type/union regressions pass 83/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: parenthesized outer-filter path classification; distinguish slashes in contained predicates, strings and EQName URIs from actual path operators while preserving positional path filtering. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #239](https://github.com/Fytala-Charles/Bosak/pull/239), stacked on #238. Verified implementation revision c2290f67; a documentation-only delivery commit follows. PRs #223–239 remain open. CI starts after retargeting to main. Next: parenthesized outer-filter path classification. Historical section text is preserved from parent 6a2151d0.
+
+# Set and predicate-pattern priorities — 2026-10-13
+
+Branch: feat/xslt-set-pattern-priorities; parent a3db0f35. Stacked on PR #237; PRs #223–238 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 computes supported XSLT 4.0 intersect/except pattern default priorities from the first operand, including mixed operators, parenthesized operands and union precedence. Bare predicate pattern `.` has priority -1; predicate patterns with one or more predicates have priority +1 even when their expressions contain path slashes or slash string literals. Earlier effective profiles retain their existing behavior. Thirty-four regressions compare explicit competitors, check excluded-node and false-predicate nonmatches, atomic bare-dot matching, comments, adjacent punctuation, operator-name elements and EQName URI operator text. This is a priority calculation slice; broader pattern grammar and set-matching semantics remain separate follow-ups. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Parenthesized item-pattern static validation, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7488 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4602/0/0 and thirty-four new regressions; focused set/predicate-priority regressions pass 34/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: parenthesized item-pattern static validation and declaring-scope matching; compare the 4.0 grammar against existing earlier-profile restrictions before implementation. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #238](https://github.com/Fytala-Charles/Bosak/pull/238), stacked on #237. Verified implementation revision b161cdd0; a documentation-only delivery commit follows. PRs #223–238 remain open. CI starts after retargeting to main. Next: parenthesized item-pattern static validation and declaring-scope matching.
+
+# Attribute and forward-axis priorities — 2026-10-13
+
+Branch: feat/xslt-forward-axis-priorities; parent 030533e4. Stacked on PR #236; PRs #223–237 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 computes supported XSLT 4.0 attribute shorthand and forward-axis pattern priorities from the underlying node test. Named attributes (@A and attribute::A) and named element axis tests have priority 0; namespace/local wildcards retain -0.25 and untargeted kind tests retain -0.5. Named processing-instruction axis tests have priority 0 and now match their target in 4.0 child/self/descendant-style node-test compilation. Existing 4.0 typed kind-test priorities, explicit priorities, predicate priority 0.5 and single-rule union behavior are retained. Earlier effective profiles keep their original behavior. Axis recognition for priority and 4.0 matching ignores :: inside EQName URIs. Thirty-three regressions compare default priorities against explicit competitors, verify earlier-profile differences, target nonmatches, attribute-union next-match chains and positive/negative EQName URI cases. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Intersect/except and bare predicate-pattern priorities, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7454 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4568/0/0 and thirty-three new regressions; focused forward-axis regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: intersect/except and bare predicate-pattern default priorities. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: [PR #237](https://github.com/Fytala-Charles/Bosak/pull/237), stacked on #236. Verified implementation revision b3e22b0f; a documentation-only delivery commit follows. PRs #223–237 remain open. CI starts after retargeting to main. Next: intersect/except and bare predicate-pattern default priorities.
+
+# Node union patterns — 2026-10-13
+
+Branch: feat/xslt-union-pattern-priorities; parent c93926a3. Stacked on PR #235; PRs #223–235 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 keeps supported XSLT 4.0 node union patterns as one template rule, using the highest default priority of their alternatives even when a lower-priority alternative is the one that matches. xsl:next-match visits that rule once, and overlapping alternatives do not create competing rule identities. Earlier effective profiles retain separate rules and their original per-alternative next-match behavior. Explicit priorities remain unchanged. Priority calculation recognizes pipe and union keyword operators, recursively computes nested alternatives, and preserves strings, predicates and EQName URIs; parenthesized 4.0 matching retains the declaring static namespace/type context. Empty top-level alternatives are rejected with XTSE0340. Twenty-eight regressions verify maximum priority, single visits, duplicate alternatives, failing ambiguity modes, nested/default namespaces, explicit priorities, version overrides, delimiters and invalid alternatives. Native next-match (including si-next-match) remains 46/8/6, and type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Four next-match 4.0 assertions (021a/023a/025a/039a) reference version-2.0 stylesheets and therefore still select the earlier effective profile; their fixtures and assertions remain unchanged. Processor-level selection for those lower-version native fixtures is a separate harness/API boundary. Other node-pattern priority forms, broader pattern grammar, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7421 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4535/0/0 and twenty-eight new regressions; focused union-pattern regressions pass 28/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names. Native lower-version fixture processor selection is a separate harness/API boundary; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #236 (https://github.com/Fytala-Charles/Bosak/pull/236), stacked on feat/xslt-wildcard-node-patterns / PR #235. Verified implementation revision: 62fa90dd. A documentation-only delivery commit follows this recorded revision. PRs #223–236 remain open; main-target CI begins after stack retargeting. Next implementation slice: remaining XSLT 4.0 node-pattern priority forms, particularly attribute shorthand and forward-axis names.
+
+# Wildcard node patterns — 2026-10-13
+
+Branch: feat/xslt-wildcard-node-patterns; parent d84a154c. Stacked on PR #234; PRs #223–234 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 matches XSLT 4.0 element(...) and attribute(...) kind-test patterns using namespace wildcards (p:* and Q{uri}*), local-name wildcards (*:local), and supported name unions. Matching applies in standalone, explicit-axis and path steps while retaining schema type checks and distinct element/attribute default namespaces. The 4.0 priority table gives untyped partial wildcards -0.25, typed all-name wildcards 0, typed partial wildcards 0.125 and typed exact names 0.25; name unions use their highest member priority. Supported node type patterns and document-node wrappers reuse those priorities. Explicit priorities are retained, and predicates raise node-pattern priority to 0.5, including explicit-axis kind tests. Earlier profiles retain their existing matching and priority behavior. Node-type schema annotations now tolerate surrounding whitespace; 4.0 pattern EQName URI rewriting and kind-test argument splitting preserve embedded delimiters. Forty-one regressions cover matching/nonmatching namespaces and types, axes/paths, unions, priorities, malformed names, prior-profile compatibility and EQName delimiters. Native type-alias advances from 18/14/0 to 22/10/0: wildcard-type-003–006 newly pass with upstream assertions unchanged. Full XSLT 4.0 union-pattern priority/next-match semantics, other node-pattern priority forms, schema-defined atomic priorities, authoring-validation named-type/fixed-namespace contexts and non-template declaring-type registries remain follow-ups. Remaining record/result cases and annotated function types remain independent boundaries; plain maps do not gain record annotations through pattern matching. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7393 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4507/0/0 and forty-one new regressions; focused wildcard-pattern regressions pass 41/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 22/10/0: wildcard-type-003–006 newly pass, all six wildcard cases are green, and original 023/024 and record-pattern 008/009 remain green; runner exits 1 for the ten remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior. Other node-pattern priority forms, remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #235 (https://github.com/Fytala-Charles/Bosak/pull/235), stacked on feat/xslt-template-type-patterns / PR #234. Verified implementation revision: 728c7b29. A documentation-only delivery commit follows this recorded revision. PRs #223–235 remain open; main-target CI begins after stack retargeting. Next implementation slice: XSLT 4.0 union-pattern default priorities and xsl:next-match behavior.
+
+# Template type patterns — 2026-10-13
+
+Branch: feat/xslt-template-type-patterns; parent d9a695f1. Stacked on PR #233; PRs #223–233 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports standalone XSLT 4.0 template type patterns ~T with zero or more predicates, including parenthesized forms, named item types, structural records and nominative records. The matcher delegates membership to the existing XPath type tests and preserves numeric predicate, singleton focus and dynamic-error-as-nonmatch behavior. Template patterns compile with the declaring package type registry and applicable static namespaces, including fixed-namespaces. Default priorities cover item/node/function/map/array families, built-in atomic derivation depth, enumerations and supported choice types; predicate patterns have priority 0.5 and explicit priorities are retained. xs:anyAtomicType is now recognized in host-supplied static type contexts. Twenty-nine regressions cover these behaviors, invalid syntax, previous-profile rejection, quoted field names, EQName delimiters and package-private alias isolation. Native type-alias advances from 16/16/0 to 18/14/0: cases 008 and 009 now pass with their upstream assertions unchanged. Ordinary wildcard node patterns, full XSLT 4.0 union-pattern priority semantics, schema-defined atomic priority derivation and named-type/fixed-namespace authoring-validation contexts remain follow-ups. Non-template pattern slots have not gained the template declaring-type registry in this slice. Plain maps still do not acquire record annotations through pattern matching; cases 006/010/013 and case 050 result handling remain independent boundaries. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7352 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4466/0/0 and twenty-nine new regressions; focused new regressions pass 29/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias advances to 18/14/0: cases 008/009 newly pass, while original 023/024 and case 016 remain green; runner exits 1 for the fourteen remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: ordinary wildcard node patterns and their XSLT 4.0 default priorities (native wildcard-type-003–006). Remaining native record outcomes, including case 050 result handling, and annotated function types remain follow-ups. Full union-pattern priorities, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain bounded gaps. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: PR #234 (https://github.com/Fytala-Charles/Bosak/pull/234), stacked on feat/xslt-structural-record-bindings / PR #233. Verified implementation revision: 1b4bfafc. A documentation-only delivery commit follows this recorded revision. PRs #223–234 remain open; main-target CI begins after stack retargeting. Next implementation slice: ordinary wildcard node patterns and their XSLT 4.0 priorities.
+
+# Direct structural record bindings — 2026-10-13
+
+Branch: feat/xslt-structural-record-bindings; parent c3853871. Stacked on PR #232; PRs #223–232 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 coerces direct structural record(...) and record(*) XSLT binding contracts through the existing XPath 4.0 converter. Supported direct record fields resolve aliases and node/type namespaces in their declaration context. Local/global variables and template parameters preserve record annotations and numeric field conversion; invalid values retain XTTE0570/XTTE0590 binding diagnostics. Required single-record and record-plus conversion now reject empty sequences in both empty-value representations, while optional/star records retain empty-sequence support. Plain maps still do not match annotated record instance tests; record(*) requires an existing annotation. Seventeen regressions cover local/global/default-parameter bindings, occurrence indicators, field aliases and node contracts, empty records, invalid values/extra fields, parameter diagnostics and required inline function returns. The local inline-record40 invoice example now verifies INV-2048|EUR instead of the previously observed XTTE0570. Native type-alias stays 16/16/0: case 050 now gets past XTTE0570 record coercion but still fails its independent result assertion. Upstream assertions remain unchanged. Type patterns, broader native record outcomes and annotated function types remain follow-ups. N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7323 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4437/0/0 and seventeen new regressions. Focused structural record binding tests pass 17/0/0; the updated invoice catalog case passes 1/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 16/16/0, with original 023/024 and case 016 still passing; case 050 now reaches its result assertion after successful record coercion; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: type patterns and remaining native record outcomes, including case 050 result handling. Annotated function types and remaining fixed namespace QName/pattern/static contexts stay follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #233](https://github.com/Fytala-Charles/Bosak/pull/233), stacked on #232. Verified implementation commit ef942c75; final handover bookkeeping follows in this branch. PR #233 remains open; CI runs once retargeted to main.
+
+# Inline function named type contracts — 2026-10-13
+
+Branch: feat/xslt-inline-function-alias-contracts; parent 1ac473de. Stacked on PR #231; PRs #223–231 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 expands host named types in inline function parameter and return contracts before IR lowering. Both function(...) and fn(...) retain resolved atomic, array, structural record and nominative record types, including occurrence indicators and nested member aliases. Signature resolution uses the expression static namespace context, including defaults, EQNames, inline namespace declarations and fixed bindings; the existing VM conversion rules apply to arguments and results. Unknown supported signature types are rejected statically even when the function is unused. Public EnumerationItemTypes registrations also resolve in inline signatures and remain restricted to single enum item types. Omitted annotations and XPath 3.1 instructions keep their existing behavior. Twenty-five regressions cover record/date updates, argument and return coercion, cardinality errors, namespaces, array members, record identity, AVTs, public enumeration boundaries and mixed-version refusal. Native type-alias improves from 15/17/0 to 16/16/0: case 016 now passes without changing its assertion; original contribution cases 023/024 remain green. Broader record matching, annotated function types, type patterns and remaining native failures stay outstanding. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7306 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4420/0/0 and twenty-five new regressions. Focused inline contract tests pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 16/16/0, with case 016 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: broader native type-alias record matching and conversion boundaries; type patterns and annotated function types remain follow-ups. Fixed namespaces still need remaining QName/pattern/static contexts. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #232](https://github.com/Fytala-Charles/Bosak/pull/232), stacked on #231. Verified implementation commit 760b9174; final handover bookkeeping follows in this branch. PR #232 remains open; CI runs once retargeted to main.
+
+# Fixed namespace type contexts — 2026-10-13
+
+Branch: feat/xslt-fixed-type-namespaces; parent c0312a70. Stacked on PR #230; PRs #223–230 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves fixed-namespaces for named item/record type names, supported nested type references, static declaration validation and the main XPath compilation paths. Supported tokens include #standard, selected root-native or conventional prefixes, explicit prefix=URI bindings and namespace-document references through the existing stylesheet resolver. Bindings are module-local, cached at compilation, unaffected by descendant rebinding and applied in token order. Invalid bindings or unavailable namespace documents raise XTSE0122. Unprefixed type/node names retain their existing default-namespace rules; fixed bindings do not create native result namespaces. Sixteen regressions cover standard prefixes, nested node contracts, explicit/repeated bindings, namespace documents, include isolation and invalid/unavailable bindings. Native type-alias remains 15/17/0: case 016 now passes namespace resolution but still fails its independent inline-function record conversion contract with XPTY0004. No upstream assertion changes. Fixed namespace coverage of other QName-bearing XSLT attributes, pattern compilation and shadow/static processing remains a follow-up; this is not complete fixed-namespaces support. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero warnings and zero errors. All 7281 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4395/0/0 and sixteen new regressions. Focused fixed namespace tests pass 16/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 15/17/0, with original 023/024 still passing; case 016 now reaches its independent XPTY0004 record-conversion gap; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: native type-alias record conversion and matching gaps; annotated function types and type patterns remain follow-ups. Extend fixed namespace handling to remaining QName/pattern/static contexts separately. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #231](https://github.com/Fytala-Charles/Bosak/pull/231), stacked on #230. Verified implementation commit 4c93a5ea; final handover bookkeeping follows in this branch. PR #231 remains open; CI runs once retargeted to main.
+
+# Package named type exposure — 2026-10-13
+
+Branch: feat/xslt-package-type-exposure; parent f65e01d6. Stacked on PR #229; PRs #223–229 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts item-type and record-type components in xsl:expose and xsl:accept. Public or exposed named types enter using-package type registries unless accepted as hidden; private dependencies retain the defining package's resolved alias definitions and record metadata. Accept names resolve namespaces on the accept element. Missing component names, incompatible acceptance, invalid declaration visibility and collisions with local types produce static errors. Seventeen regressions cover public declarations, explicit and wildcard exposure, private and hidden names, prefix scope, record constructors, private alias dependencies rejected collisions and public/private visibility through an intermediate package. Native type-alias improves from 11/21/0 to 15/17/0; newly passing cases are 018, 020, 021 and 022. Original contribution cases 023/024 remain green. Broader native failures and independent processor confirmation remain outstanding; N04/N05 and REQ-126 stay In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7265 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4379/0/0 and seventeen new regressions. Focused package type tests pass 17/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 15/17/0, with 018/020/021/022 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining native type-alias failures, including annotated function types and record boundaries. Reassess the five original contribution areas after these implementation slices. No gate promotion or publication. CI runs when the PR targets main; retarget stacked PRs after prerequisites merge. Preserve upstream assertions, original contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: [PR #230](https://github.com/Fytala-Charles/Bosak/pull/230), stacked on #229. Verified implementation commit ad660282; final handover bookkeeping follows in this branch. PR #230 remains open; CI runs once retargeted to main.
+
+# Schema-declaration and document shorthand aliases — 2026-10-13
+
+Branch: feat/xslt-schema-declaration-aliases; parent a8497065. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226, #227 and #228 remain open and this slice is stacked on #228. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema-element(Name), schema-attribute(Name) and document-node(schema-element(Name)) in item-type aliases and supported structural sequence types. Schema declaration names retain their declaration namespace under prefix rebinding and must resolve to imported global elements/attributes; unknown or unavailable declarations raise XPST0008 and undeclared prefixes raise XPST0081. Wildcards, unions and empty declaration names raise XPST0003. Schema-element under ##any uses no namespace for an unprefixed declaration; unprefixed schema attributes always use no namespace. Document shorthand such as document-node(root|other) normalizes to document-node(element(root|other)), including wildcard and EQName alternatives, and reuses single-root matching. Direct host type operands and alias-free XSLT document/schema bindings normalize the new forms. Twenty-nine new regressions cover node identity, namespace mismatches, imported declarations, substitution members, typed attribute matching, rejection of untyped nodes, nested arrays, ##any defaults, empty documents and static validation of unused bindings. Annotated function types, package exposure and broader native type-alias gaps remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker has a schema-declaration callback and normalizes document name shorthand. Static API and stylesheet resolvers verify imported globals; binding resolvers preserve declaration names. Existing runtime schema and document matchers handle the canonical forms. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7248 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4362/0/0 and twenty-nine new regressions. Focused node-alias tests pass 144/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: package type exposure and remaining native type-alias failures; annotated function types remain a separate grammar follow-up. Reassess the five original contribution areas after these implementation boundaries. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation f58dc6e7 in PR #229 (https://github.com/Fytala-Charles/Bosak/pull/229), stacked on #228. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Function-type grammar aliases — 2026-10-13
+
+Branch: feat/xslt-function-type-grammar; parent 015dce6f. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 and #227 remain open and this slice is stacked on #227. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts fn(...) as a synonym for function(...) and documentary parameter names in supported function-type aliases, direct XPath type operands and XSLT binding signatures. Names do not affect matching or coercion; duplicate expanded names raise XQST0039, including different prefixes bound to the same namespace and unprefixed names paired with Q{} names. Undeclared documentary prefixes raise XPST0081; malformed named parameters raise XPST0003; unknown parameter/result item types retain XPST0051. Named and unnamed parameters may be mixed, with independent name scopes for nested function types. Nested arrays, records and higher-order signatures retain parameter/result sequence occurrences. XPath 3.1 rejects fn type synonyms and named type parameters. Twenty-six new regressions cover callback conversion, wildcard maps/arrays, direct bindings without aliases, direct host evaluation, nesting, namespace identity, diagnostics and version boundaries. Annotated function types, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The 4.0 parser reads recursive function signatures. The shared walker validates documentary expanded names and emits name-free function(...) signatures. Direct host operands and XSLT bindings normalize these forms even without alias registrations; runtime matching and coercion reuse existing signature logic. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7219 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4333/0/0 and twenty-six new regressions. Focused grammar and catalog-example tests pass 2623/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining schema-element/schema-attribute and document shorthand alias traversal, then package exposure and broader native type-alias failures. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation 68945389 in PR #228 (https://github.com/Fytala-Charles/Bosak/pull/228), stacked on #227. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Schema-annotated node aliases — 2026-10-13
+
+Branch: feat/xslt-schema-node-aliases; parent eaabf8ad. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 remains open and this slice is stacked on it. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports schema annotations in element/attribute item-type aliases and supported structural sequence types, including node-name unions, nested documents, arrays and record fields. The annotation resolves independently against in-scope schema types and retains declaration namespaces under prefix rebinding; item-type aliases are not substituted into the schema annotation. Built-in and imported simple/complex schema types are accepted. Unknown annotations raise XPST0008; undeclared annotation prefixes raise XPST0081; malformed or empty annotations raise XPST0003. Only element annotations permit the nillable ? marker. The ##any default maps unprefixed schema annotations to the XML Schema namespace. Twenty-eight new regressions cover matching untyped and validated nodes, non-coercion, imported simple/complex types, nillability, namespace identity, nested contracts and unused declarations. fn/named-parameter function grammar, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared alias walker has a separate schema-annotation callback. API and declaration resolvers validate in-scope schema types; runtime binding resolution preserves annotation namespace identity. Existing runtime type-compatibility checks evaluate nodes without content coercion. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with one existing warning and zero errors. All 7193 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4307/0/0 and twenty-eight new regressions. Focused node-alias tests pass 115/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: fn/named-parameter function type grammar, then remaining schema-declaration/document shorthand traversal and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation 15ffc171 in PR #227 (https://github.com/Fytala-Charles/Bosak/pull/227), stacked on #226. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Node-name union aliases — 2026-10-13
+
+Branch: feat/xslt-node-name-unions; parent 41a61ca1. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. This slice is stacked on #225. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports node-name unions in element/attribute item-type aliases and supported structural sequence types: element(doctor|nurse) and attribute(price|cost) match any listed name. Each alternative retains declaration namespaces and may use a partial wildcard, including nested document-node(element(...)), arrays and record fields. EQName namespace URIs containing pipe or comma characters remain intact. Empty alternatives raise XPST0003; an undeclared prefix in any alternative raises XPST0081; adjacent unknown type names retain XPST0051. Twenty-two new regressions cover positive/negative matching, identity, declaration prefix rebinding, wildcard combinations, nested types and ##any defaults. Schema-annotated alias traversal, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared alias walker expands each alternative through the existing namespace callback. Runtime node tests split unions outside EQName braces and reuse single-name matching for each alternative. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with 11 existing warnings and zero errors. All 7165 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4279/0/0 and twenty-two new regressions. Focused node-alias tests pass 87/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: schema-annotated alias traversal and diagnostics, then function type grammar and package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivered: implementation df1177ce in PR #226 (https://github.com/Fytala-Charles/Bosak/pull/226), stacked on #225. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
+
+# Partial node wildcard aliases — 2026-10-13
+
+Branch: feat/xslt-node-wildcard-aliases; parent 7fae0371. PR #223 CI passed and PR #224 is stacked on it; both remain open. This slice will be stacked on #224. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports partial element/attribute name wildcards in aliases and supported structural types: *:Name matches an exact local name in any namespace; prefix:* and Q{uri}* match any local name in the specified namespace. Prefix wildcards retain declaration bindings under use-site rebinding, including document-node(element(...)) nesting. Unbound wildcard prefixes raise XPST0081; adjacent unknown type names retain XPST0051. The ##any declaration default now expands unprefixed element tests to *:Name while unprefixed attributes stay unqualified. Twenty new regressions verify identity, case/namespace mismatches, empty namespaces, nested arrays/documents and diagnostics. Node-name unions, schema-annotated tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker recognizes wildcard node names; host/declaration namespace callbacks preserve wildcard intent. Runtime node tests constrain only the specified name part. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7143 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4257/0/0 and twenty new regressions. Focused node-alias tests pass 65/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 11/21/0: wildcard-type-001/002 newly pass and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: node-name unions/schema diagnostics and function type grammar, then package exposure. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation 7c71f657 committed and pushed; [Bosak PR #225](https://github.com/Fytala-Charles/Bosak/pull/225) open, stacked on #224 (itself stacked on #223). PR #223 CI passed; prerequisites remain open. Retarget each slice to main after its prerequisite merges, then wait for CI. This delivery record changes documentation only.
+
+# Processing-instruction target aliases — 2026-10-13
+
+Branch: feat/xslt-pi-target-aliases; parent 3d076aa9. PR #223 CI 38372757169 passed; it remains open, so this slice is stacked on #223. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports processing-instruction targets in item-type aliases and supported structural sequence types. NCName and quoted-string targets retain case, normalize surrounding whitespace and are never expanded as type QNames. The parser validates targeted sequence-type syntax using a shared target reader; runtime matching compares the actual PI target. Malformed targets raise XPST0003 and quoted targets outside the NCName lexical space raise XPTY0004. Twelve new regressions verify identity, target/case mismatch, nesting, optional occurrences and static diagnostics. Partial wildcards, schema-annotated node tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+XPathParser shares target parsing between sequence-type validation, alias traversal and runtime matching. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Final Release build passes with zero warnings/errors. All 7123 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4237/0/0 and twelve new regressions. Focused node-alias tests pass 45/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: partial wildcard/schema node diagnostics and function type grammar, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation 97c77996 committed and pushed; [Bosak PR #224](https://github.com/Fytala-Charles/Bosak/pull/224) open, stacked on #223. PR #223 CI passed but it remains open; retarget #224 to main after #223 merges, then wait for CI (the workflow targets main PRs only). This delivery record changes documentation only.
+
+# Named node-type alias grammar — 2026-10-13
+
+Branch: feat/xslt-named-node-aliases; main baseline ef0b156a184d7ed91641d05a879b6f64740e053b. PR #221 merged after passing CI under explicit user authorization; PR #222 merged as ef0b156a after CI 38371939071 passed and the user authorized merging. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports named element/attribute node tests, the complete * wildcard, and document-node(element(...)) inside package-local aliases and supported structural sequence types. Node names resolve in their declaration namespace and remain stable under use-site prefix/default namespace rebinding; unprefixed attributes retain the empty namespace. The host statically rejects unbound node prefixes and validates unknown type names beside named node tests. Explicit Q{}Name matching now checks both namespace and case-sensitive local name. Seventeen new regressions cover matching/mismatches, node identity, nested types, record fields, namespace defaults and static errors. Schema-annotated node tests, partial wildcards, processing-instruction targets, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The shared walker distinguishes node names from type names and passes a namespace callback through structural nesting. Stylesheet and binding paths resolve names at declaration sites; host expression resolution handles direct node tests. Runtime matching corrects the empty-namespace EQName boundary. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 12 existing warnings and zero errors. All 7111 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4225/0/0 and seventeen new regressions. Focused node-alias tests pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining node grammar/schema diagnostics and function type grammar, then package exposure. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation e745cbbd committed and pushed; [Bosak PR #223](https://github.com/Fytala-Charles/Bosak/pull/223) open against main, CI pending. PRs #221 and #222 are merged. This delivery record changes documentation only. Check #223 CI before its merge; next work is remaining node grammar/schema diagnostics and function type grammar, then package exposure.
+
+# Node-kind alias grammar — 2026-10-13
+
+Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 merged after CI 38368964609 passed and the user authorized merging the prerequisite. PR #222 now targets main. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 supports node-kind aliases whose tests have empty parentheses: element(), attribute(), text(), comment(), processing-instruction(), namespace-node() and document-node(). The shared type walker also accepts whitespace and nested comments around empty tests. These types can appear within supported array/map/record/function/choice types; adjacent unknown names now receive static validation instead of being hidden by an unsupported node-kind branch. Sixteen regressions verify node identity, occurrences, structural nesting, unknown names, binding failures and non-atomic choice cast rejection. Named/wildcard/schema-annotated node tests, fn/named-parameter function type grammar, full schema semantics and package type exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Public version remains 1.1.3; candidate 1.2.0 stays unpublished.
+
+ItemTypeAliasExpansion recognizes empty node-kind tests without treating their names as type QNames. Existing parser/runtime node matching and conversion are reused. No public API, native assertions, catalog outcomes, gate promotion or publication.
+
+Validation: Release build passes with 10 existing warnings and zero errors. All 7094 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4208/0/0 and sixteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 9/23/0; unchanged contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: named/wildcard/schema-annotated node tests and function grammar gaps, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery: tested implementation d456c000 committed and pushed; [Bosak PR #222](https://github.com/Fytala-Charles/Bosak/pull/222) open against main, CI pending. This delivery record changes documentation only. PR #221 is merged; PR #222 is retargeted to main. Wait for its CI before the authorized merge.
+
+# Declaration static named-type validation — 2026-10-13
+
+Branch: feat/xslt-declaration-type-validation; main baseline 4323b1c8. PR #220 merged after CI 38362079480 passed and the user explicitly requested the merge. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 now validates supported XPath 4.0 sequence-type names on XSLT @as declarations at stylesheet registration, including unused variables, parameters, function results and record fields. The check runs after package-local aliases and records are registered and traverses import/include modules with each declaration's namespace context. Unknown direct/nested names raise XPST0051; undeclared binding prefixes raise XPST0081; record registration retains XTSE0280 for unbound field prefixes. Forward aliases, finite recursive record references, default type namespaces and quoted enumeration/field names remain valid. Fourteen new regressions cover these boundaries. XPath 3.1 declarations keep their existing path. Unsupported shared-walker grammar, complete schema variety semantics and package type exposure remain follow-ups; N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; no release or gate promotion.
+
+Stylesheet.ValidateDeclarationTypeNames reuses the existing internal host resolver after aliases and record definitions are registered, preserving nominative identity. No public API, native assertions, catalog outcomes or historical receipts changed.
+
+Validation: Release build passes with 12 existing analyzer warnings and zero errors. All 7078 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4192/0/0 and fourteen new regressions. Database provider tests initially failed because sandboxed HttpListener access was blocked; rerunning that assembly with listener access passed 47/0/0. Focused static-type tests pass 35/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias 9/23/0; type-alias-019 newly passes and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: supported type grammar gaps, then package exposure. Preserve original upstream assertions, contribution patches, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation. No release/tag/package publication.
+
+Delivery: tested implementation fcb866e6 committed and pushed; [Bosak PR #221](https://github.com/Fytala-Charles/Bosak/pull/221) open against main, CI pending. This delivery record changes documentation only. Check CI before merging; next implementation work is supported type grammar gaps, then package exposure.
+
+# Host static named-type validation — 2026-10-13
+
+Branch: feat/xslt-static-named-types; baseline PR #219 metadata at 397903ce59c01e81bbce23893d5b87ee68c63a2e. PR #219 merged as a76b54e43d8f089c38a512620240d494a9d9a73d after CI 38360549109 passed and the user explicitly approved the merge. PR #220 now targets main. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) validates package-local named types in supported XPath 4.0 instance-of, treat, cast and castable targets when the XSLT host compiles the expression. Unknown direct/nested names raise XPST0051, including AVT expressions; undeclared prefixes retain XPST0081. Declared nominative record references are canonicalized to their expanded names, and record alternatives in choice cast targets raise XPST0080. Ordinary record-valued type-test choices remain valid. The internal host registry survives inline namespace declarations, recognizes built-in/XDM types and consults in-scope simple schema types. Twenty-one new regressions pass. Binding/field declaration validation, unsupported type grammar, complete schema variety/choice semantics and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+CompileOptions carries known record names internally. XPath31Expression resolves/validates supported host type targets and retains the registry through inline namespace options. The shared helper classifies nominative record alternatives as non-atomic. TransformEngine supplies the host registry to expression and AVT compilation. No public API change, gate promotion, native assertion/catalogue manifest change or publication. Expression compilation can occur on first execution; unused instructions are not all eagerly validated.
+
+Validation: Final Release build passes with zero warnings/errors. All 7064 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4178/0/0 and twenty-one new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0 and record family 12/52/1; unchanged contributed cases 023/024 and 026/027 pass. Broader failures retained (runner exit 1). Fifteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Next: binding/field declaration static names and supported grammar gaps, then package exposure. Check this slice's CI before merging. PR #219 merge is complete; check PR #220 CI before its merge. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: tested implementation 31afbbb35d14a23be062109672d47b2690601031 committed and pushed; [Bosak PR #220](https://github.com/Fytala-Charles/Bosak/pull/220) open against main, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes. PR #219 merge completed after explicit user approval.
+
+# Choice casting target validation — 2026-10-13
+
+Branch: feat/xslt-choice-cast-validation; main baseline 5e85889d4c7a7f9ae67fece95df5b77e612d40c8. PR #218 merged after CI 38357999516 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) statically rejects XPath 4.0 cast/castable choices containing syntactically non-atomic alternatives, including arrays, maps, records, functions and node tests. Validation covers direct targets and expanded aliases, follows nested parentheses and preserves quoted separators and EQName text. Atomic/enumeration choices, optional inputs, ordinary container-valued instance-of choices and standalone container casts remain supported. Twenty-one new regressions pass. Schema-defined and nominative QName classification, unknown expression type names, broader alias grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+The shared type helper traverses parenthesized choices without splitting strings or EQNames. XPath31Expression validates direct and expanded targets only in the 4.0 profile. No public API change, gate promotion, native assertion/catalogue manifest change or publication.
+
+Validation: Release build passes (12 existing warnings, zero errors). All 7043 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4157/0/0 and twenty-one focused new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0, unchanged contributed cases 023/024 pass, broader failures retained (runner exit 1). Thirteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: static named-type classification/unknown expression names, followed by package exposure. Keep schema-defined/nominative QName classification explicitly deferred; the choice predicate conservatively leaves unknown QNames for name/schema validation. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: tested implementation 5081e6ff3b6337675397904933c2ed20cdf6dfca committed and pushed; [Bosak PR #219](https://github.com/Fytala-Charles/Bosak/pull/219) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Item-type alias casts and declaration validation — 2026-10-13
+
+Branch: feat/xslt-alias-casts-validation; baseline PR #217 implementation and metadata at 2b827d1d. PR #217 merged as 99f2d1efa567e29a6fe3b26594b9c51e29d8b5ea after CI 38355216383 passed and the user explicitly authorized merging. PR #218 now targets main. Candidate 1.2.0 remains unpublished; public version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) expands named item-type aliases in XPath 4.0 cast and castable targets, including nested container targets and namespace forms. Atomic, enumeration, array, map and structural/nominative record aliases reuse existing casting. Optional targets preserve empty sequences. Function and generic item/node aliases raise XPST0080 as casting targets. Unknown named references in supported alias definitions raise XPST0051 during stylesheet registration; declared record references preserve nominative identity. Eighteen new regressions pass. Full schema validation, unsupported alias grammar, unknown names outside declarations, choice-target eligibility and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+Validation: Release build passes (12 existing warnings, zero errors). All 7022 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4136/0/0 and eighteen focused new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0, unchanged contributed cases 023/024 pass, broader failures retained (runner exit 1). Thirteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Next: remaining static type diagnostics and choice-target eligibility, then package exposure. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation. No local second processor is available.
+
+Delivery: tested implementation 5ba044eb514cfe404c7b6156040be4ec675be11e committed and pushed; [Bosak PR #218](https://github.com/Fytala-Charles/Bosak/pull/218) is open against main, CI pending. This documentation-only delivery record follows the tested implementation. PR #217 merge completed after explicit approval; check PR #218 CI before its merge.
+
+# Finite recursive records and container casts — 2026-10-13
+
+Branch: feat/xslt-recursive-container-casts; main baseline 0991f6f320092a3611822dc3ef05fe3e842a3adb. PR #216 merged after CI 38353496629 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now casts XPath 4.0 arrays/maps by casting member/key/value sequences, retaining container shape and checking cardinality. Map-key collisions raise XQDY0137; wildcard casts retain the supplied container and empty container types reject nonempty inputs. Named record field casts reuse the shared sequence caster. Record field metadata resolves aliases and finite self/mutual named references in the declaration namespace without expanding nominative identities. Sixteen new regressions cover finite linked lists, recursive array casts, nested containers, invalid members and collisions. Arbitrary-depth resource handling, full recursive/static diagnostics, item-type alias cast expansion and package exposure remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.
+
+VmEngine adds shared sequence casting and version-gated array/map casting with shape/cardinality checks and key collisions. TransformEngine reuses it for named fields. Stylesheet resolves aliases and recursive named field references without expanding identities. No public API, gate promotion, native assertion/catalogue manifest change or publication.
+
+Validation: Release build passes (10 existing warnings, zero errors); all 7004 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4118/0/0. Focused record run passes 55 tests, including sixteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: item-type alias cast expansion and static named-type validation. N05/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+Delivery: tested implementation 8c67d3e6e91299305c89f946f979908dc7ea8c6e committed and pushed; [Bosak PR #217](https://github.com/Fytala-Charles/Bosak/pull/217) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Named record casts and nested references — 2026-10-13
+
+Branch: feat/xslt-named-record-casts; main baseline d4d30be3a369187f8c8561d066b5e06e9e87b913. PR #215 merged after CI 38352230728 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now supports package-local nominative record cast/castable operations. Casts retain map operands, cast each present field sequence, apply defaults to missing fields, discard surplus keys, protect static fields and attach the target declaration identity. Nested named references in binding/function signatures resolve in their declaration namespace, and nested named record fields reuse casting recursively. Fourteen new regressions cover lexical/type failures, empty/optional inputs, field cardinalities and namespace boundaries. General array/map casts, item-type alias cast expansion, recursive definitions, full package exposure and complete static diagnostics remain follow-ups. N05/REQ-126 remain In Progress; published version remains 1.1.3.
+
+EvaluationContext's host callback distinguishes casting/coercion. VmEngine preserves map operands for named Cast/Castable and routes through the callback. TransformEngine casts field sequences, uses defaults and static-field checks, and resolves nested binding/function declaration names to EQNames. No public API, gate promotion, native assertion/catalogue manifest change or publication.
+
+Validation: Release build passes (12 existing warnings, zero errors); all 6988 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4102/0/0. Focused record run passes 39 tests, including fourteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: recursive/static type resolution and cast-container boundaries. N05/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+Delivery: tested implementation f2b04280569ea08732825c80a2603f4038ce964b committed and pushed; [Bosak PR #216](https://github.com/Fytala-Charles/Bosak/pull/216) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Nominative record coercion — 2026-10-13
+
+Branch: feat/xslt-nominative-record-coercion; main baseline b7645389456d4ea16eb28cc1b16c50e7c19f700c. PR #214 merged after CI 38350739038 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now coerces maps to package-local nominative xsl:record-type declarations at variable and function boundaries. Conversion applies field types, missing-field defaults and static initializers, rejects surplus keys and supplied static fields, preserves declaration order and annotates the result with the target identity. Existing matching records are retained. Type checks still reject plain maps and distinguish same-shaped declarations. Nine new regressions cover sensor defaults, function references, cardinality, invalid bindings and identity; the previous valid-map refusal test now rejects surplus fields. Named casts, recursive named records, nested named-type/static namespace resolution and complete package exposure remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+EvaluationContext stores the host record coercion callback; VmEngine applies cardinalities and delegates to it. TransformEngine handles field initialization/conversion and restores the callback at package exit. Existing matching records retain their identity. No public API, gate promotion, native assertion change or publication. The catalogue named-record plain-map expectation now records INV-2048; fixture behavior is unchanged.
+
+Validation: Final Release build passes with zero warnings/errors; all 6974 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4088/0/0. Focused record run passes 25 tests, including nine new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native record family remains 12/52/1 on the record contribution branch; unchanged 026/027 pass. Broader failures retained, runner exit 1. Fourteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: named record cast and nested type resolution boundaries. N04/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+Delivery: tested implementation eec8d0b56f74b218867ac6fe5c00ba7211331838 committed and pushed; [Bosak PR #215](https://github.com/Fytala-Charles/Bosak/pull/215) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Structural-record aliases — 2026-10-13
+
+Branch: feat/xslt-structural-record-aliases; main baseline a519a13e14add2bb5ecdc22126a50227e19cdda1. PR #213 merged after CI 38347679974 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now expands structural-record aliases and aliases nested in record fields, arrays, choices and function signatures. Quoted field names, default item()* fields, trailing commas, nested comments and declaration namespaces are preserved. Existing structural record coercion converts field values and annotates records; type checks require record values and do not coerce plain maps. Eleven new regressions cover the documented sensor example, nested contracts, function boundaries, invalid fields and cycles. Nominative record coercion, recursive named records and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; published version remains 1.1.3.
+
+Shared alias expansion now traverses structural record fields, preserving quoted names and resolving field sequence types. Existing parser/VM record conversion and matching are reused. No public API, gate promotion, native assertion change, catalogue manifest change or publication.
+
+Validation: Release build passes (10 existing warnings, zero errors); all 6965 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4079/0/0. Focused alias run passes 94 tests, including eleven new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native type-alias improves to 8/24/0; case 005 newly passes and original 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: nominative record coercion boundaries. N04/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
+
+Delivery: tested implementation 669c862a42963b98c2d7bb90385e9a8227a23b00 committed and pushed; [Bosak PR #214](https://github.com/Fytala-Charles/Bosak/pull/214) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Function and choice aliases — 2026-10-13
+
+Branch: feat/xslt-function-choice-aliases; main baseline 8b9279622f5c5da5eeea08a60570c184cdc789fb. PR #212 merged after CI 38346556251 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now expands function signatures and ordered choice xsl:item-type aliases, including nested references, parameter/result occurrences and outer function-item occurrences. Existing binding conversion wraps function results and tries choice alternatives in declaration order; instance-of/treat checks do not coerce. XPath 4.0 function instance-of now uses cardinality-aware matching, safely rejecting non-functions and handling empty sequences. Nineteen new regressions cover these boundaries, cycles, mixed-version refusal and a calibration example. Structural-record aliases, remaining named-record coercion and complete schema/package semantics remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+ItemTypeAliasExpansion traverses function parameters/results and ordered choices, groups expanded function alias uses and retains return occurrences. Stylesheet registration checks parsed outer cardinality. VmEngine uses cardinality-aware function matching only for XPath 4.0. Nineteen new regressions include the documented sensor calibration example. No new public API, gate promotion, native assertion change, catalogue manifest change or publication.
+
+Validation: Release build passes (12 existing warnings, zero errors); all 6954 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4068/0/0. Focused alias run passes 83 tests, including nineteen new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native type-alias improves to 7/25/0; case 011 newly passes and original 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass.
+
+## Resume here
+
+Check this slice's CI before merging. Next: structural-record alias boundaries and remaining named-record coercion. Native type-alias is now 7/25/0; original 023/024 pass and case 011 newly passes. N04 and REQ-126 remain In Progress. Preserve original expectations, patches, receipts, historical evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: tested implementation 34b4bb3e98a4cb1e28a894ff50794b9b4d134ce5 committed and pushed; [Bosak PR #213](https://github.com/Fytala-Charles/Bosak/pull/213) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
+
+# Typed map aliases and nested references — 2026-10-13
+
+Branch: feat/xslt-map-aliases; main baseline 8e1dfe1f0e659d4d6097de0f68d66871b5a38bb1. PR #211 merged after CI 38345226739 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) supports typed map xsl:item-type aliases and nested alias references inside array/map types at XSLT binding/function boundaries and XPath instance-of/treat operands. Shared expansion respects declaration/use namespaces, occurrence indicators, quoted enumeration members, EQName URI delimiters, whitespace and nested comments. XPath 4.0 typed-map coercion recursively converts keys and values, rejects converted key collisions, preserves entry order and retains already-matching maps/record identity. The new coercion path excludes wildcard map types; their existing behavior is preserved. Twenty new regressions cover these boundaries and the documented sensor example. Function/choice/structural-record aliases, arbitrary type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress; public release remains 1.1.3.
+
+New internal API helper ItemTypeAliasExpansion traverses supported map/array sequence-type syntax with a QName-resolution callback, preserving enumeration strings, EQName URI punctuation and nested comments. Stylesheet registration resolves nested forward references and supported cycles and validates concrete definitions. TransformEngine expands nested @as references; XPath31Expression expands nested instance-of/treat operands. VmEngine adds version-gated typed-map key/value conversion, duplicate-key rejection and order retention, with already-matching values returned unchanged. The new path excludes wildcard map types. No new public API, gate promotion, native test edit, catalogue manifest/outcome change or publication. Twenty new regressions include a documented XML sensor normalization example.
+
+Validation: Release build passes; all 6935 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4049/0/0. Focused run passes 2642 checks: 64 alias regressions (twenty new) and 2578 catalogue feature cases. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias remains 6/26/0; original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.
+
+## Resume here
+
+Check this slice's CI before merging. Next: function and choice aliases, then remaining named-record coercion. Keep broader native type-alias 6/26/0 limitations explicit. N04 and REQ-126 remain In Progress. Preserve all original expectations, patches, receipts, prior follow-up evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: ffaf19ffba05af3747fd341e8bd480994df110b9, [Bosak PR #212](https://github.com/Fytala-Charles/Bosak/pull/212), pushed on feat/xslt-map-aliases. CI pending; check the latest run before merging. This metadata commit records delivery. No release/tag/package publication.
+
+# Atomic and array alias type expressions — 2026-10-13
+
+Branch: feat/xslt-alias-type-expressions; main baseline aa7f7c7be261ad6b255c0d81ab4754d799a4afac. PR #210 merged after CI 38344200518 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) resolves the supported atomic and array xsl:item-type aliases in XPath instance-of and treat expressions, including AVTs and expression-local namespace declarations. Tests preserve alias occurrences and definition namespaces, distinguish type checking from conversion, and isolate private package definitions from same-named caller aliases. Mixed XPath 3.1 instructions still refuse these aliases. Fourteen new regressions pass; the public EnumerationItemTypes option retains its enum-only contract. General map/function/choice aliases, aliases nested in arbitrary XPath structural type syntax, complete schema/package semantics and remaining named-record coercion remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.
+
+CompileOptions.ItemTypeAliases is an internal host dictionary; Bosak.XPath.Api grants Bosak.Xslt friend access through its project file. XPath31Expression expands supported host alias operands using the existing parser, retaining occurrence indicators, while preserving public EnumerationItemTypes validation. Inline namespace prolog context copies retain the dictionary. TransformEngine supplies Stylesheet.GetBindingItemTypes for ordinary expression and AVT compilation. No new public API, runtime change, gate promotion, upstream/native edit, catalogue count/outcome change or publication. Fourteen regressions include package isolation and the frozen 3.1 boundary.
+
+Validation: Release build passes; all 6915 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4029/0/0. Forty-four focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run remains 6/26/0, original contribution cases 023/024 pass. Broader failures retained, runner exit 1. Thirteen documentation pages render; native catalog schema and original patch/receipt integrity checks pass. No post-validation behavioral changes.
+
+## Resume here
+
+Check this slice's CI before merging. Next: other structural alias forms and references nested in arbitrary type syntax, then remaining named-record coercion. Keep the broader native type-alias 6/26/0 limitations explicit. N04 and REQ-126 remain In Progress. Original expectations, patches and historical receipts/evidence remain unchanged. Native checkout stays clean on bosak/item-type-boundaries; preserve scratch directories. Upstream PRs #22–26 await review and independent confirmation. No second processor available; no release/tag/package publication.
+
+Delivery: e9aea516e6b925f7d5cb4a5b9c77c5f02a9dc733, [Bosak PR #211](https://github.com/Fytala-Charles/Bosak/pull/211), pushed on feat/xslt-alias-type-expressions. CI pending; check the latest run before merging. This metadata commit records delivery. No release/tag/package publication.
+
+# Atomic and array alias bindings — 2026-10-13
+
+Branch: feat/xslt-array-alias-bindings; main baseline 9afa7bfcf32c1b258930bc973c7b82ef3130cc50. PR #209 merged after CI 38342994287 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) supports atomic and array item-type aliases at XSLT declaration and function boundaries. Array member types can use forward aliases, nested arrays, optional member sequences and enumeration aliases. Definition namespace bindings are preserved; outer occurrence indicators apply to arrays rather than their members. Supported direct/indirect recursive aliases raise XTSE4035. XPath 4.0 array coercion converts member sequences without atomizing the outer array; the XPath 3.1 path remains unchanged. Native type-alias-001/002 now pass; the filtered family is 6 pass/26 fail/0 skip, including unchanged contribution cases 023/024. Non-enumeration aliases in XPath instance-of/treat, general map/function/choice aliases, complete recursive validation, schema collisions and package exposure remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.
+
+Stylesheet.GetBindingItemTypes builds a package-local alias dictionary separately from the public enumeration-only XPath compile option. Complete QName tokens and nested array member sequence types are expanded using each defining element's namespace context; forward references are supported and an active-name set detects supported cycles. TransformEngine resolves the dictionary for @as conversions and function signature metadata, restoring it on package exit. VmEngine.ApplyFunctionConversion adds version-gated recursive array member conversion, preserving the outer array and cardinality. Fourteen regressions cover conversion, dynamic calls, namespace rebinding, occurrences, invalid values, cycles, the frozen 3.1 profile and the documented coordinate example. No public API, gate promotion, native test edit, manifest count/outcome change or publication.
+
+Validation: Release build passes with pre-existing warnings; all 6901 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4015/0/0. Thirty focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run 6/26/0; cases 001/002/017 newly pass and original 023/024 still pass. Broader failures are retained, with runner exit 1. Thirteen documentation pages render; native catalog schema, original patches and historical receipt integrity checks pass. No behavioral changes after gate verification.
+
+## Resume here
+
+Check this slice's CI before merging. Next: structural aliases in XPath instance-of/treat and other structural forms, then remaining named-record coercion. Keep 6/26/0 broader family limitations explicit. REQ-126 and N04 remain In Progress. Preserve original patches, expectations, historical receipts/evidence and scratch directories. Native checkout remains clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review/independent confirmation; no second processor available. No release/tag/package publication.
+
+Delivery: 84df762206468d2a6a8976e5f7cdbbe6ffdc74f3, [Bosak PR #210](https://github.com/Fytala-Charles/Bosak/pull/210), pushed on feat/xslt-array-alias-bindings. CI pending; check the latest run before merging. This metadata commit records delivery. No release/tag/package publication.
+
+# Enumeration declaration bindings — 2026-10-13
+
+Branch: feat/xslt-enum-bindings; main baseline 73920217f7673401d438f34e0d0bd91ad4dc371c. PR #208 merged after CI 38341314078 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now converts named enumeration aliases at XSLT variable, parameter and result boundaries. Namespace/EQName aliases and occurrence indicators resolve from the declaring instruction; atomization and membership use XPath function conversion rules. Direct/dynamic function metadata uses the same definitions; private package aliases are isolated and restored. Sixteen regressions cover valid values, membership/cardinality errors, source attributes, record fields, template/select/function boundaries and mixed-version refusal. The invoice currency fixture now returns EUR; invalid XYZ still raises XTTE0570. Original native type-alias-023/024 still pass; broader filtered family remains 3/29/0, with structural/recursive/schema/package gaps outstanding. N04 and REQ-126 stay In Progress; no complete alias or package-conformance claim. Public release remains 1.1.3.
+
+EvaluationContext stores a package-local enumeration alias dictionary; package entry/exit snapshots restore it beside named record identities. Function parameter/result metadata expands enumeration aliases in the declaring package; function argument binding receives its declaration element. Named and inline enumeration conversion reuses VmEngine.ApplyFunctionConversion with a temporary 4.0 profile, restoring it in finally and remapping failures to the host boundary error code. Other type converters are unchanged. No new public API, upstream edits or gate promotions. One catalogue expected outcome updated (item-used-valid -> EUR); invalid cases, counts and original receipts remain intact. Source example comments and catalogue explanation synchronized; wider structural aliases/recursive definitions/schema collisions/full package type semantics remain follow-ups.
+
+Validation: final Release build zero warnings/errors; 16 focused regressions pass. All 6887 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4001/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Exact native type-alias-023/024 pass; broader filtered family remains 3/29/0, with native runner exit 1 from retained broader failures. Thirteen synchronized pages rendered; native catalog schema, original patch trees/bytes, original receipts, current source hashes and changed catalogue outcome checked. No post-validation engine changes.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. Next: structural item-type aliases, then remaining named-record conversion/coercion. Keep broader type-alias 3/29/0 limitations explicit; N04/REQ-126 remain In Progress. Monitor upstream PRs #22–26, pending review and independent confirmation. Preserve scratch dirs, native commits/expectations, original patches and before-fix receipts. Native checkout clean on bosak/item-type-boundaries. No release/tag/package publication.
+
+Delivery: c91184eeb2e6f83272b0b8f7e82808f780e5ca0c, [Bosak review PR](https://github.com/Fytala-Charles/Bosak/pull/209), pushed on feat/xslt-enum-bindings. CI pending; check the latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/item-type-boundaries. No release/tag/package publication.
+
+# Select namespace declarations — 2026-10-13
+
+Branch: feat/xslt-select-namespaces; main baseline d0d0da20f25f285c884d5a79c0641ba9d21c66b8. PR #207 merged after CI 38334370685 passed. Source candidate 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) now supports expression-local XPath 4.0 namespace declarations in the XPath API and xsl:select bodies. Prefix bindings override host bindings; an optional default element namespace must come first. Default ##any matches unprefixed element axis name tests across namespaces while preserving attribute/kind-test boundaries and XML Schema item type resolution. Namespace contexts restore after success or failure. All unchanged native seqtor-140–146 cases pass; the broader seqtor-filter run is 83 pass/0 fail/9 skip. The nine known harness skips, independent confirmation and upstream PR #23 acceptance remain outstanding, so this does not establish complete XSLT 4.0 conformance. N02 and REQ-126 remain In Progress; public release remains 1.1.3.
+
+Shared lexer/parser extraction implements the XPath 4.0 namespace prolog, preserving offsets, comments and escaped URI literals. The API merges an expression-local static context without mutating options; runtime namespace/default bindings restore in finally. Default ##any axis tests lower to local-name wildcards, simple item types resolve to schema EQNames, and 4.0 casts normalize those schema names. Static errors cover duplicate/reserved bindings and declaration order. XSLT prefix validation accounts for body declarations and skips nested comments. Streamability parses declaration-prefixed bodies so a streamed last() call still raises XTSE3430. No new public API or native contribution edits. Twenty-three new regressions; existing catalogue counts/outcomes unchanged. Queue, integration, catalogue/audit, setup and contribution documentation synchronized; original select POST_FIX_RESULTS and failed receipts preserved.
+
+Validation: final Release build zero warnings/errors; 19 API and 18 select-body regressions pass, with 23 new tests. All 6871 unit tests across ten assemblies pass, zero failures/skips, including XSLT 3985/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. All seven native seqtor-140–146 cases pass; filtered family 83/0/9. Eleven synchronized pages rendered; native catalog schema, original portable patch trees/bytes, preserved receipts and source hashes checked. Final review added an explicit frozen-profile regression: ##any remains a literal namespace in XPath 3.1; complete validation rerun against that final source.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. Next: named item-type conversion and remaining record coercion gaps. N02/REQ-126 remain In Progress pending review/independent confirmation; monitor upstream PRs #22–26. Nine seqtor harness skips remain. Preserve .guard-tmp/, .sweep-baselines/, .upstream/ and historical receipts. Native checkout is clean on bosak/select-boundaries. No release/tag/package publication.
+
+Delivery: 8ce138d3c93654346662d34949261bb17313e7d7, [Bosak review PR](https://github.com/Fytala-Charles/Bosak/pull/208), pushed on feat/xslt-select-namespaces. CI pending; check the latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/select-boundaries. No release/tag/package publication.
+
+# Named record constructors — 2026-10-13
+
+Branch: feat/xslt-record-constructors; main baseline 7feef01daa36ef21ab84495e12b5a4157605d987. PR #206 merged after CI 38310340341 passed. Source 1.2.0 unpublished; public release 1.1.3. Earlier sections remain historical.
+
+## What was built
+
+Bosak source candidate 1.2.0 (unpublished) now recognizes xsl:record-type/xsl:field and registers constructor=yes functions. Constructors retain field order and empty entries, convert field values, supply trailing defaults and exclude static fields from arguments. Records carry declaration identity: constructed values satisfy named @as and instance-of tests; same-shaped other types and plain maps do not. Both unchanged native cases record-026/027 pass. The wider record substring sweep is 12 pass/52 fail/1 skip, including inherited structural/subtype cases. Plain-map coercion/casts, recursive record definitions, complete package exposure/function signatures and streaming conformance remain follow-ups. N05 and REQ-126 remain In Progress; original failed receipts and upstream PR #26 remain unchanged, with review/independent confirmation pending. Public release remains 1.1.3; no publication. Next: prioritize the wider named-type/coercion gaps and select body namespace declarations after checking this slice's CI.
+
+Shared declaration collection resolves item/record names by expanded identity and import/include precedence; winning cross-kind duplicates raise XTSE4030 and duplicate fields XTSE4050. Record constructors are registered over their required/default arities; field conversions reuse host conversion rules. Static initializers use global focus and cache per transformation; parameter defaults use absent focus. Initializer focus/current item/variables restore in finally; circular initialization is guarded. The existing XdmRecordType annotation instance supplies nominal identity through an internal package-local EvaluationContext registry; VM type tests compare identity. Host named @as bindings validate constructed instances, without plain-map coercion. Package scope snapshots preserve the registry; full exposure/accept/export and constructor signature metadata are not claimed. No public API additions or Core representation changes. Sixteen focused regressions added with headers/XML comments. Two catalog outcomes updated (constructor success and duplicate-field error); examples and canonical docs synchronized.
+
+Validation: final Release build passed, zero errors; 16 focused regressions pass. 6848 unit tests across ten assemblies pass with zero failures/skips, including XSLT 3981/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Two exact native cases pass; broader filtered sweep 12/52/1 retained. Thirteen documentation pages rendered; source hashes, original patch trees and receipts verified. The only post-full-suite source change adds an XML documentation comment to the private package snapshot field; final build and focused tests rerun, no behavioral change. The initial catalog probe exposed two historical outcome rows; source constructor regressions passed. Native checkout is clean on bosak/record-type-boundaries; original committed expectations, branches, patches and receipts remain unchanged. No upstream edits, release or external messages in this slice.
+
+## Resume here
+
+Check latest Bosak PR CI before merging. All 14 first-batch contribution cases have passed individually in their respective prior/current slices, without independent confirmation or acceptance. Prioritize remaining named-type coercion/package gaps and select body namespace declarations; do not classify broader native suites as conformant. Preserve scratch directories and historical receipts. Wider adoption/provenance/metadata limits remain.
+
+Delivery: 47b20a52709af92430afa441ec209207f1d2fc55, [Bosak PR #207](https://github.com/Fytala-Charles/Bosak/pull/207), pushed on feat/xslt-record-constructors. CI pending; check latest run before merging. This metadata commit records delivery. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
+
+# Enumeration item-type aliases — 2026-10-12
+
+Branch: feat/xslt-item-type-enumerations; main baseline 0842dc037f00d9939626004cf020d3d8b87c156d. PR #205 merged after CI 38304922055 passed. Source 1.2.0 unpublished; public release 1.1.3.
+
+## What was built
+
+Bosak source candidate 1.2.0 (unpublished) now resolves xsl:item-type enumeration aliases in XPath instance-of and treat expressions, including AVTs, namespace rebinding, EQNames and occurrence indicators. Both unchanged native cases type-alias-023/024 pass; broader type-alias-filter run is 3 pass/29 fail/0 skip (includes inherited related cases). Other alias types, named XSLT @as conversion, package exposure and complete recursive/schema-collision validation remain unsupported. Duplicate winning declarations raise XTSE4030; lower-precedence definitions remain overridable. Original failure receipts are preserved; upstream PR #25 review and independent confirmation are pending. N04 and REQ-126 remain In Progress; public release remains 1.1.3. Next: generated nominative record constructors, with wider alias support and select namespace declarations tracked separately.
+
+CompileOptions.EnumerationItemTypes supplies expanded-name enumeration definitions for XPath type tests. AST resolution preserves literals and occurrence indicators. Stylesheet collection respects import/include precedence, validates duplicate winners and declaration content, and excludes used-package aliases. Both expression and AVT compilation receive the package-local dictionary. EQName URI prefix validation corrected. Seven focused regressions added with required headers/XML comments; two existing catalog outcome metadata rows updated to current source behavior. Other named @as cases retain XTTE0570; no broad alias support is claimed.
+
+Validation: final Release build zero warnings/errors; focused 7/0/0; 6832 unit tests across ten assemblies, zero failures/skips, including XSLT 3965/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native exact two cases pass; filtered family 3/29/0 retains wider gaps. Twelve pages rendered; source hashes and original portable patch trees/receipts verified. Initial full test run exposed stale catalog outcomes; final outcomes and 3.0 refusal verified by the passing rerun. Original upstream native branches, expectations, commits and patches unchanged; checkout clean on bosak/item-type-boundaries. No publication or external contribution edits.
+
+## Resume here
+
+Check latest Bosak PR CI before merging; continue N05 nominative record constructors. Wider aliases/package visibility/typed declaration conversion and select body namespace declarations remain separate work. Monitor upstream PRs #22–26. Preserve ignored scratch dirs, native checkout and historical receipts.
+
+Delivery: f53bc80f4270a04e12cc0c88a32d4a087373b3d3, [Bosak PR #206](https://github.com/Fytala-Charles/Bosak/pull/206), pushed on feat/xslt-item-type-enumerations. CI pending; check latest run before merging. This metadata commit records delivery. No release/tag/package publication. The only post-full-suite source change was a comment-only header version correction (0.20); final build and focused tests rerun.
+
+# Select body evaluation — 2026-10-12
+
+Branch: fix/xslt-select-body-evaluation; main baseline 1c9fe01d149a0e576587c50d69a607f04a0f7b78 (PR #204 merged after CI 38297641680 passed). Source 1.2.0 unpublished; public release 1.1.3. Earlier sections are historical, including 1.1.4 as the previous unreleased candidate.
+
+## What was built
+
+Bosak now recognizes and evaluates xsl:select body XPath in template, function, simple-content and accumulator-rule paths, preserving literal newlines/CDATA and current focus without TVT expansion. Declared result coercion, collation restoration, fallback/content validation and streamed-body analysis are covered by 14 focused regressions. Both unchanged native contribution cases pass; [post-fix evidence](../contributions/xslt40/select-boundaries/POST_FIX_RESULTS.json) retains the broader seqtor result 78/5/9. The five remaining failures concern expression-body namespace declarations, so complete select conformance is not claimed. Original failed receipts and upstream PR #23 remain unchanged; independent confirmation/acceptance are pending. Source candidate is 1.2.0 under the Minor-for-new-features convention, unpublished; public release remains 1.1.3. N02 and REQ-126 stay In Progress.
+
+Root cause: select was absent from KnownXsltElementNames and runtime dispatch, so forward-compatible unknown-element handling produced no result. Added cached body expression evaluation with declared-type conversion (XPTY0004), effective collation save/restore, raw placeholders, simple content and accumulator context support. Streamability examines body text as XPath without traversing fallback or expanding TVTs. Static validation rejects non-fallback children and text preceding fallback. Existing header histories bumped; new test file has required header and public XML comments.
+
+Native checkout is clean on bosak/select-boundaries; contributed commit/patch/expectations unchanged. Independent processor and upstream review outstanding. No external PR/comment/message or package publication in this implementation step.
+
+Validation: focused 14/0/0; exact new native cases 2/0; broader seqtor 78/5/9 with namespace-declaration failures 140–144 retained. Final Release build passed, zero errors; 6825 unit tests across ten assemblies, zero failures/skips (XSLT 3958/0/0). QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Canonical/setup/queue/contribution pages rendered; source hashes, exact outcomes, native clean commit/patch, links and new file header verified. An earlier rebuild overlapped an active test host and hit a DLL lock; that host completed and the subsequent final rebuild passed. Do not use initial 11-test run as final evidence.
+
+## Resume here
+
+Check latest Bosak fix PR CI before merging. Continue N04 enumeration alias triage, then N05 generated nominative constructors; body namespace declarations are a separate select follow-up. Monitor upstream PRs #22–26 and retain expected outputs until a specification-based correction is justified. N01–N05 and REQ-126 remain In Progress. No release/tag/publication; source Minor bump reflects the newly supported instruction. Preserve all scratch dirs, native branches/receipts and original tracked patch/evidence.
+
+Delivery: 69a7cfd3c84e405c037be41786464950d1c06696, [Bosak PR #205](https://github.com/Fytala-Charles/Bosak/pull/205), pushed on fix/xslt-select-body-evaluation. CI run 38304867902 pending; PR open. This subsequent metadata commit records delivery. On resume check latest CI before merging, then continue the enum-alias slice; retain namespace-declaration failures as a separate follow-up.
+
+# Remaining priority XSLT 4.0 contributions — 2026-10-12
+
+Branch: test/xslt40-other-element-batches; branch base 1a046bde984355279ab179f6c2f71fa42b82aa06 includes PR #203, now merged after CI 38296575892 passed. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Four additional native batches are submitted: [select PR #23](https://github.com/qt4cg/xslt40-test/pull/23), [switch PR #24](https://github.com/qt4cg/xslt40-test/pull/24), [item-type PR #25](https://github.com/qt4cg/xslt40-test/pull/25), [record-type PR #26](https://github.com/qt4cg/xslt40-test/pull/26). Eight new cases validate against native catalog schemas: switch 2 pass; select 2 fail (empty select results), item-type 2 fail (XPST0051), record-type/field 2 fail (constructor XPST0017). Normative outputs are retained, with [portable patches and detailed example/evidence pages](../contributions/xslt40/README.md). No independent processor was run; reviewer cross-check requested in each PR. These are initial priority-family contributions, not complete XSLT 4.0 coverage. N02–N05 and REQ-126 stay In Progress while upstream review and engine triage are pending. Source 1.1.4 remains unpublished; public release 1.1.3.
+
+Independent native branches bosak/select-boundaries, bosak/switch-boundaries, bosak/item-type-boundaries and bosak/record-type-boundaries each contain two new cases and one existing test-set edit, based on 6205faf9. Each was pushed to the fork and submitted separately as upstream PRs #23–26. Native current branch is record-type-boundaries, clean. Original array branch/patch and PR #22 preserved. No existing native cases/expected results or root catalog changed. No engine/API/adapter change, no release or external messages beyond the four authorized contribution PRs.
+
+Validation: four native catalog schemas pass; exact new cases give 2 pass/6 failures, all run on clean committed native branches. Existing cases compare unchanged; all four portable patches reproduce their native commit trees exactly; hashes, three-file scopes, exact outcomes/receipts and queue mappings checked. Canonical/setup/queue and four detailed example pages rendered; contribution links/code fences verified. Source implementation is unchanged from PR #202 with 6811 tests passing and required gates clear; PR #203 CI also passed. Do not repeat full engine checks for test-catalog/evidence-only changes. New conformance failures remain exploratory findings, not unit-test results.
+
+## Resume here
+
+Check the latest Bosak preservation PR CI before merging. Monitor upstream PRs #22–26, preserve normative expectations and request/record independent verification. Triage Bosak select body dispatch first (seqtor-145/146), then enum aliases (type-alias-023/024), then generated nominative constructors (record-026/027). Keep fixes separate from native contributions; do not mark the queues accepted. Previous catalog/provenance/metadata limits remain. Preserve scratch dirs, ignored native checkout/receipts and all tracked patches/evidence.
+
+Delivery: f40443d0 (implementation/evidence preservation commit), [Bosak PR #204](https://github.com/Fytala-Charles/Bosak/pull/204), pushed on test/xslt40-other-element-batches. CI pending; PR open. This subsequent metadata commit records delivery and marks portable mail patches to preserve required context/signature whitespace without editing their bytes. On resume check latest CI before merging, review upstream feedback and begin separate select dispatch triage.
+
+# First upstream XSLT 4.0 submission — 2026-10-12
+
+Baseline: 0e806a351f422d9d4725b1581f2008cd867c76ba (PR #202 merged after CI 38295568498 success). Branch: docs/xslt40-first-upstream-submission. Source 1.1.4 unpublished; public release 1.1.3. Earlier sections are historical.
+
+## What was built
+
+The first six-case native array/member batch is [submitted as xslt40-test PR #22](https://github.com/qt4cg/xslt40-test/pull/22). All six exact cases pass with Bosak; specification review is recorded. No second processor was run: independent cross-check was requested in the PR. [Submission details](../contributions/xslt40/array-member-boundaries/SUBMISSION.md) explain the Saxon PE/EE and partial-for-each limitation and the decision to seek upstream review without making local independent execution a prerequisite. Review/acceptance remain pending; N01 and REQ-126 stay In Progress. Bosak fix PR #202 merged after CI 38295568498 passed (6811 unit tests); source 1.1.4 remains unpublished, public release 1.1.3 unchanged.
+
+Fork Fytala-Charles/xslt40-test created; native origin points to it, upstream remains qt4cg/xslt40-test. Native branch bosak/array-member-review pushed clean at e72f1b0e; upstream/master was still 6205faf9 at submission. No renumbering/rebase or native content changes. Schema revalidated and portable patch hashes/tree checked. SUBMISSION.md/json and the retained UPSTREAM_PR_DRAFT.md filename record the actual submitted body/status. No additional issue/comment/email sent; no alternate processor/license installation or release.
+
+Validation: unchanged implementation baseline CI passes 6811 tests; manual gates and six exact native passes recorded in the prior section. Canonical/setup/queue/contribution/submission documentation rendered and added local links checked. Upstream PR head/base and exact eight-file scope verified for this submission-only step. Do not repeat implementation tests for documentation/status-only changes.
+
+## Resume here
+
+Check upstream PR #22 for review/independent results and respond within the user's contribution scope. N01 remains In Progress, submitted but unaccepted; independent confirmation is outstanding. N02 xsl:select focused gap audit is the next separate batch while review is pending. Preserve original failing receipts, post-fix evidence, ignored checkout/artifacts and scratch dirs. No package publication in this step; previous catalog/provenance/metadata and REQ-125/127 limits remain.
+
+Bosak preservation delivery: 87a467d829108cfa5e48f5acb0f727b2af91ed33, [PR #203](https://github.com/Fytala-Charles/Bosak/pull/203), pushed on docs/xslt40-first-upstream-submission. CI run 38296530533 pending; PR open. This subsequent documentation commit records delivery. On resume check latest Bosak CI before merging, monitor upstream PR #22 and proceed with the separate N02 audit while review is pending.
+
+# Array/member JNode correction — 2026-10-12
+
+Branch: fix/xslt-array-member-jnode; implementation base c1c3fa708aadda0970b81d5302b79701c275e388. PR #201 merged after CI 38294339193 passed. Source version 1.1.4, unpublished; public release remains 1.1.3. Earlier sections are historical.
+
+## What was built
+
+The [array/member assertion review](../contributions/xslt40/array-member-boundaries/ASSERTION_REVIEW.md) confirms the six native expectations. Bosak now preserves existing core JNode wrappers in both XSLT evaluation paths, unwraps member values at array construction, and raises XTTE4060 for multi-item per-focus results containing a JNode. All six unchanged native cases pass; the original five-pass/one-failure receipts remain historical. Five additional regression checks cover direct, empty, conditional and variable-carried errors plus valid grouped/nested wrappers. Source candidate 1.1.4 is unpublished; 1.1.3 remains the published version. N01 and REQ-126 stay In Progress; independent processor confirmation and upstream submission remain outstanding.
+
+The array-member evaluator's stale no-JNode assumption was replaced with the existing XdmJNode core type, without adding public APIs. Construction performs recursive item-level unwrapping without flattening containers. The for-each constructor checks wrapper cardinality before unwrapping. Four mixed-result checks and one successful grouped/nested-wrapper check added to Xslt40ArraySwitchTests; file history rows bumped. Native branch e72f1b0e and its patch are unchanged and clean.
+
+Validation: final Release build passed (12 existing warnings, zero errors); 6811 unit tests across ten assemblies, zero failures/skips, including XSLT 3944/0/0. Focused array/switch 36/0/0; six exact native cases pass after the final build. Contribution hashes/tree, exact outcomes and tested source hashes checked; canonical/setup/queue/contribution pages rendered and newly added local links verified. Frozen QT3 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Specification review is complete; independent processor execution remains outstanding.
+
+## Resume here
+
+Check the latest fix PR CI before merging. Confirm the native assertions with another XSLT 4.0 processor, then prepare upstream submission; the PR draft has not been sent. Do not change the original expectations or classify original failed receipts as passes. N01 and REQ-126 remain In Progress; subsequent queue families and previous catalog/provenance/metadata limits remain. No release/tag/package publication authorized in this step.
+
+Preserve scratch directories, ignored checkout/receipts and tracked original patch/evidence. Delivery: 7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82, [Bosak PR #202](https://github.com/Fytala-Charles/Bosak/pull/202), pushed on fix/xslt-array-member-jnode. CI run 38295512515 pending; PR open. This subsequent documentation commit records delivery. PR #201 is merged at 8ef77e487ea6aa6ac214825788de54673a2216fd; native contribution remains local, unchanged at e72f1b0e.
+
+# First native upstream array/member batch — 2026-10-12
+
+Main baseline: `01969ab37f946ff67325cfb547fc859f0c832f3e`; PR #200 merged after successful CI run 38291879106. Bosak branch: `docs/xslt40-array-member-first-batch`. Version **1.1.3**. Prior queues below are historical.
+
+## What was built
+
+N01 now has a [six-case native array/member batch](../contributions/xslt40/array-member-boundaries/README.md), committed locally on bosak/array-member-review at e72f1b0e8511f78478e66c112201317cfe7b7ad1. Five exact new cases pass; array-032 exposes missing XTTE4060 enforcement and returns A|B. Normative expectations are retained. A portable mail patch, source/expected-outcome mapping, clean-commit receipts and an upstream PR draft preserve the work; no upstream submission or independent processor confirmation yet. Version 1.1.3, REQ-126 In Progress, no Bosak engine/API/adapter change. Next: independent assertion review and separate error triage before submission.
+
+Native suite base 6205faf9, spec e7ee4ab8. Added array-027 through -032 and array-member-orders.xml to the existing array group; native test-set grows 31→37, root catalog unchanged. Reviewed existing grouped/nested/map/JNode scenarios; this is a focused additional-boundary audit, not exhaustive absence-of-duplicates certification. Cases cover empty/no-emission, empty content/grouped tail, retained nested containers, original nodes/order, per-item focus/empty results and mixed JNode/non-JNode type error.
+
+Native commit is clean and local, with a source-preserving mail patch and portable evidence under contributions/xslt40/array-member-boundaries. Git identity was copied from Bosak's configured identity into the nested repo only. No fork/push/PR or external message. Current source node identity/order and five shape assertions pass; JNode representation/conformance as a whole remains unclaimed.
+
+Validation: native catalog schema passes and six clean-commit reruns give 5 pass/1 gap. Patch reproduces the native commit tree exactly; hashes, unchanged baseline cases, exact case receipts and documentation rendering verified. Independent processor confirmation remains outstanding. Unchanged Bosak implementation baseline CI passes 6,806 tests; native contribution tests are separate from that total.
+
+## Resume here
+
+Review/assert independent confirmation for this first batch and triage the missing XTTE4060 check separately; retain the required error expectation. Prepare upstream submission only with honest source/run evidence. No existing expectations changed. Substring filters also run inherited square-array tests; use exact case outcomes for the 5/1 tally. N01 stays in progress, N02–N05 queued; previous schema/JSON and catalog D2/D3/D4/provenance/metadata follow-ups remain.
+
+Preserve scratch dirs, ignored upstream checkout/receipts and tracked contribution patch/evidence. Delivery: ed5a47d0a42b9a6fe42771cbac3692f6c45e6115, [Bosak PR #201](https://github.com/Fytala-Charles/Bosak/pull/201), pushed on docs/xslt40-array-member-first-batch. CI run 38294287371 pending; PR open. This subsequent metadata commit records delivery and preserves patch bytes with a local .gitattributes rule. On resume check the latest CI before merging, then independently review the assertions and triage XTTE4060.
+
+# XSLT 4.0 new-element priority queue — 2026-10-12
+
+Main baseline: `cc5eb4be485c6d6f68ea985fa55b96504a9b6e81`; PR #199 merged after successful CI run 38287949458. Bosak branch: `docs/xslt40-contribution-priority-queue`. Version **1.1.3**. Previous queues below are historical.
+
+## What was built
+
+The [contribution priority queue](XSLT40_CONTRIBUTION_QUEUE.md) now starts with new XSLT 4.0 elements: array/member, select, switch, named item types and named records. Likely use is estimated, not measured; structural stylesheet counts are not semantic coverage. Next: N01 native array-case audit and a small nonduplicate order-export/member batch. Schema-awareness and inherited JSON findings remain secondary triage. Version 1.1.3; REQ-126 In Progress; no engine change or upstream submission.
+
+Added human-readable queue and raw ordered JSON with exact file footprints, source SHA-256/pins, ranking rationale, candidate-gap limits and targeted probe outcomes. Pinned spec e7ee4ab8, suite 6205faf9; array/member 35 distinct files, select 36, switch 12, item-type 24, record-type/field one. These are parseable stylesheet mentions, not test/coverage totals. Corrected the candidate meaning of xsl:select: body XPath expression for readability/escaping, not the inherited select attribute.
+
+switch-001 passes; array-004 grouped members passes; array-001 fails XTSE0740 on unqualified helper function, while two substring-selected square-array cases pass. Results do not establish full family readiness. New upstream branch bosak/array-member-review is clean at the baseline; prior schema branch retained.
+
+Validation: Queue/source SHA-256 and section anchors, five ordered families, exact distinct-file inventories, three recorded Bosak probe counts, clean upstream revision, local links/code fences and rendered queue/setup/canonical documents verified. PR #199 baseline CI passed 6,806 tests; source, adapter and test implementation are unchanged, so the full suite/manual engine gates were not repeated for this planning/documentation-only step. Probe failures remain visible rather than reclassified as passes.
+
+## Resume here
+
+N01: audit existing array/member tests and precise rules for empty/no-emission/grouped/nested members and order/identity, then prepare a small native upstream order-export test batch without duplicating array-004. Record source clauses, genuine gaps and normative assertions before implementing. User explicitly prioritizes new 4.0 elements likely to be used frequently; schema-awareness and inherited JSON triage are now secondary. No external submission/message yet. Keep prior REQ-126 D2/D3/D4, metadata, provenance and AC-03 limits.
+
+Preserve scratch directories, ignored upstream checkout and local receipts. Delivery: `188fca1ba51e2fce8cb5fd39c1fae72d97db3891`, [Bosak PR #200](https://github.com/Fytala-Charles/Bosak/pull/200), pushed on `docs/xslt40-contribution-priority-queue`. CI pending; PR open. This subsequent metadata commit records delivery. On resume check CI and merge after success, then audit N01 upstream array/member scenarios before preparing the first test batch.
+
+# Upstream XSLT 4.0 adapter setup — 2026-10-12
+
+Main baseline: `3658b53849c6583bc72f75fdefd5df7a3d395695`; PR #198 merged after successful CI run 38286066449. Bosak branch: `test/xslt40-upstream-adapter`; public/source version **1.1.3**. Earlier queues below are historical.
+
+## What was built
+
+Upstream XSLT 4.0 contribution setup now takes priority over the next equality/collation catalog slice. Independent ignored xslt40-test checkout at pin 6205faf9f32ace6338ac245c41f8eb9a1447926f retains native catalogs/schema/tests; Bosak supplies an explicit --xslt40 adapter mode, bounded runner with revision/status receipts and failure/zero-execution exit status, catalog validator and four adapter controls. Initial upstream select evidence: 157/0/1. Existing XSLT40+ JSON case executes and fails (-0 versus expected -0e0); it remains a visible finding. No upstream tests or expected results changed, no upstream PR/message and no release. Version 1.1.3; REQ-126 In Progress, prior D2/D3/D4 and provenance/metadata limits retained.
+
+[Setup and commands](XSLT40_UPSTREAM_TESTING.md). Local upstream branch `bosak/schema-awareness-review`, remote `upstream`, clean at the recorded pin. The checkout lives under `.upstream/xslt40-test` and is separate Git history; contributions belong in its native tests structure. Bosak-owned launch/validation/control scripts and tests/xslt40-adapter.json record the setup. Only the conformance adapter changes; engine/API behavior unchanged. Actual stylesheet versions are retained, and XSLT30-only dependencies skip in the 4.0 profile.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,806 tests / 0 failures / 0 skips** across ten assemblies. Four adapter controls passed; upstream select 157/0/1, genuine XSLT40+ JSON case 0/1/161 with exit 1, zero selection exit 1, upstream catalog/select and local control schema validation passed. Setup guide and six canonical/implementation documents rendered; local links/code fences and JSON run receipt counts/status verified. Manual engine gates were not rerun for adapter-only changes; engine/API unchanged.
+
+## Resume here
+
+Review current upstream schema-awareness environments/dependencies for source-document, si-fork and si-map against issue #90, avoiding coverage already supplied. Prepare specification-derived native test changes before proposing submission. Retain JSON -0/-0e0 triage separately; do not change upstream expectation to match Bosak. No fork, upstream push/PR or external message has been sent. Bosak documentation links can accompany a focused contribution note. The equality/collation catalog queue is postponed, not discarded; all previous D2/D3/D4, missing metadata, historical pins and AC-03 limits remain.
+
+Preserve `.guard-tmp/`, `.sweep-baselines/`, `.upstream/` and local receipts under `.artifacts/xslt40/`. Delivery: `f30142931847825ecdac48973889c9ab3ed08e17`, [Bosak PR #199](https://github.com/Fytala-Charles/Bosak/pull/199), pushed on `test/xslt40-upstream-adapter`. CI pending; PR remains open. This subsequent metadata commit records delivery. On resume check CI and merge after success, then review the upstream schema-awareness contribution candidates. Upstream checkout remains clean and unpublished.
+
+# Ordering/default contracts — 2026-10-12
+
+Main baseline: `28144810a56370d3901ceca5ef35bb1759053b47`; [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38284111686). Branch: `docs/req126-order-default-contracts`. Public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family ordering/default review](xpath40-catalog/ORDER-DEFAULT-CONTRACT-REVIEW.md), raw exact-source/registration/case evidence and [detailed supplier reports](xpath40-catalog/examples/order-contracts/README.md). Complete XML, paired 3.1/4.0 code, exact outputs and all focused fixture links supplied. Linked the complete 197-name inventory to these five reviews; canonical docs, audits, queue and three family entries synchronized.
+
+Targeted review of fn:sort, array:sort, fn:min, fn:max and map:merge adds 132 checks (126 focused, six complete supplier reports), preserving source declarations and exact 3.1/4.0/experimental keyword boundaries. min/max have no key callback parameter. Explicit empty sort keys and merge options, unknown sort collations, NaN ordering and malformed merge input/option cardinality remain engine follow-ups. Supplier rankings use numeric price plus stable ID and explicit duplicate combine; normal/reordered results match. Current catalog: 67 entries, 2,578 feature + 24 chapter checks = 2,602; four worked chapters, 117 assigned names. Version 1.1.3, REQ-126 In Progress, D2 partial. All 37 reviewed keyword families still lack metadata; no engine/API/harness change or release. Next: distinct-values, index-of, deep-equal, compare and contains-token equality/collation contracts. Earlier counts and queues are historical; normative prose impact, D3/D4, historical pins and AC-03 remain open.
+
+Observed both profiles: explicit empty sort keys fail on nonempty input but bypass on empty input; invalid callbacks can bypass empty input. Empty merge options fail even for empty maps input. Unknown sort collations are accepted in tested two-string calls; min/max nonempty strings refuse FOCH0002. NaN sort results vary by input position. map:merge skips tested numeric non-map input and accepts multi-item duplicate-policy values by the tested first item. Keep bounded engine follow-ups; no corrections made. min/max values keyword succeeds, input/key labels refuse, #3 lookup is correctly absent. Original source node identity and grouped array members preserved. Project sorted nodes via simple mapping; path ordering is a consumer semantic distinction.
+
+Validation: Release solution build passed (zero warnings/errors); **6,806 tests / 0 failures / 0 skips**, ten assemblies including all 2,578 feature checks. Renderer verified 103 catalog pages plus six implementation/canonical pages. Five pinned declarations, 132 exact fixtures with explicit version expectations, six independently computed supplier reports, local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed keyword families still lack metadata. The first full run exposed five experimental fixtures missing frozenExpected assertions; the corrected final full run passed. No engine/API/harness changes; manual engine gates were not rerun.
+
+## Resume here
+
+Next review fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token equality/collation contracts against the pinned declarations and observed version modes. The exhaustive baseline declaration inventory is supplied; semantic/prose/default/conversion behavior remains partial. Retain all earlier engine follow-ups, all 37 absent metadata families, D3/D4, historical adopted pins and AC-03. No release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `acdb3f6267df995dda44a0d8b4e9230da15b396d`, [PR #198](https://github.com/Fytala-Charles/Bosak/pull/198), pushed on `docs/req126-order-default-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the equality/collation review.
+
+# Complete existing-function inventory — 2026-10-12
+
+Main baseline: `21ca1497df93b6c2d7186406be7189ef28b32618`; PR #196 merged after successful CI run 38278858160. Current branch: `docs/req126-changed31-inventory`. Public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [complete existing-function inventory](xpath40-catalog/CHANGED-31-CONTRACT-INVENTORY.md), raw 197-row source/registration/evidence inventory and [detailed stock-lookup examples](xpath40-catalog/examples/changed31-contracts/README.md). Every dated baseline name is retained, including unchanged signatures and the XSLT-host fn:transform boundary. concat variadic bounds are explicitly preserved. Canonical summaries, audits, two family entries and queue synchronized.
+
+The complete 197-name fn/math/map/array baseline inventory is now supplied, with dated W3C 3.1 declarations, pinned F&O e7ee4ab8 declarations and fresh 3.1/4.0 evidence. Added 353 checks: 320 exact-arity lookups, 17 named-reference refusals, ten focused defaults/behavior checks and six complete stock reports. Thirteen families have positional arity declaration differences; seventeen draft arities are unavailable in the fresh standard context. Type/prose differences remain candidates for semantic review, not certified behavioral changes. Empty substring/subsequence lengths have distinct observed 3.1 and 4.0 results. Empty sort keys and map:merge options refuse XPTY0004. Catalog: 67 entries, 2,446 feature + 24 chapter checks = 2,470; four chapters, 117 assigned names. All 37 reviewed keyword families still lack metadata. REQ-126 stays In Progress, D2 partial; version 1.1.3, no engine/API/harness change or release. Next: fn:sort, array:sort, fn:min, fn:max and map:merge defaults/conversion contracts. Prose classification, D3/D4, historical adoption pins and AC-03 remain open.
+
+Validation: Release solution build passed (zero warnings/errors); **6,674 tests / 0 failures / 0 skips**, ten assemblies including all 2,446 feature checks. Renderer verified 101 catalog pages plus six canonical/implementation pages. All 197 baseline names and both exact source prototype sets/hashes, variadic bounds, 353 new checks, six independently calculated reports, profile differences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed keyword rows still lack metadata. Manual engine gates were not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Review fn:sort, array:sort, fn:min, fn:max and map:merge higher-order/default/conversion contracts next. The exhaustive declaration inventory is supplied; normative prose impact and exhaustive behavior remain open. Retain previous engine follow-ups and add the seventeen missing draft arities plus empty sort-key/map:merge-option enforcement. REQ-126 remains In Progress. Preserve `.guard-tmp/` and `.sweep-baselines/`.
+
+Delivery: `7fbff212b2992144dcaa738be74d74a6185f0361`, [PR #197](https://github.com/Fytala-Charles/Bosak/pull/197), pushed on `docs/req126-changed31-inventory`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before reviewing sorting/min/max/map:merge defaults.
+
+# URI/import utility contracts — 2026-10-12
+
+Main baseline: `9d7e0b8f93594ff2086c5da321cb3fab88b72897`; [PR #195](https://github.com/Fytala-Charles/Bosak/pull/195) merged after successful [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38277697192). Current branch: `docs/req126-uri-utility-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family URI/import utility review](xpath40-catalog/URI-UTILITY-CONTRACT-REVIEW.md) and [detailed inventory import/link README](xpath40-catalog/examples/utility-contracts/README.md), with complete normal/empty/reordered/fallback XML, paired XPath 3.1/4.0 code and exact outputs. Five raw signature rows link case IDs and baseline; build-uri's original type-ref, fourteen record fields and three boolean option definitions are preserved. Canonical summaries, registry, audits, queue and four family entries synchronized.
+
+105 new checks: 15 keyword/mode refusals, 82 focused URI/option/decoding/collation/identity/NaN checks and eight complete XPath 3.1/4.0 import/link reports. All 37 originally absent-keyword families now have targeted review; zero await that first review, but all 37 still lack metadata. Boolean-option and record-field tolerance, empty query-map precedence and context-dependent collation boundaries remain follow-ups. Current catalog: 67 entries, 2,093 feature + 24 chapter checks = 2,117; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: exhaustively inventory changed existing 3.1 function contracts; the current matrix samples only twenty.
+
+All five keywords refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1. URI defaults/encoding/raw-field precedence/ports/opaque/UNC, decoder replacement/plus/one-pass behavior, typed collation candidates, source node identity, mixed/function values and NaN type/cardinality boundaries verified. Tested string 'false' and multiple boolean options enable omission; malformed parameter values and empty-query-map precedence remain follow-ups. Collation availability depends on context; a fresh no-base probe and explicit fallback business policy are documented. is-NaN does not reject infinity or validate business ranges. The 3.1 business baseline relies on fixture raw code fields and configured collation allowlist, not a general decoder/availability probe.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,321 tests / 0 failures / 0 skips**, ten assemblies including all 2,093 feature checks. Renderer verified 99 catalog pages plus six implementation/canonical pages. Five pinned signatures, URI record/options, 105 exact cases, eight independently computed full reports, complete README expressions/local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. All 37 reviewed rows still report absent metadata. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next complete D2's exhaustive inventory of changed existing 3.1 function signatures/contracts, using pinned declarations/change notes and the frozen baseline; the current 88-row matrix has 68 new names plus only twenty existing-function samples. Identify omissions, map exact contracts and prioritize further conversion/default/options cases. First targeted review of missing-keyword families is complete; implementation remains missing for all 37. Consolidate these findings for later engine remediation without calling this a feature fix. D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Retain all earlier keyword/text/sequence/predicate/selection/hash/map/date-time follow-ups and these URI record/option/precedence boundaries. REQ-126 stays In Progress; no release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `ff2329db23fcb2d3a6ffb8e611c24266286a439b`, [PR #196](https://github.com/Fytala-Charles/Bosak/pull/196), pushed on `docs/req126-uri-utility-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
+
+# Date/time construction contracts — 2026-10-12
+
+Main baseline: `675d8f96facf1fc72ed3a05cb2781fa493fd1f01`; [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194) merged after successful CI retry. The first CI attempt failed an existing 1ms cancellation-timing test (Valid before cancellation fired); all container checks passed. Current branch: `docs/req126-date-contracts`; public/source version remains **1.1.3**. Earlier states below are historical.
+
+## What was built
+
+Added [five-family date/time review](xpath40-catalog/DATE-TIME-CONTRACT-REVIEW.md) and [detailed receipt-retention README](xpath40-catalog/examples/date-contracts/README.md), with complete normal/empty/reordered XML, paired XPath 3.1/4.0 code and exact outputs. Five raw signature rows link case IDs, baseline and build-dateTime's original type-ref plus seven record fields. Canonical summaries, registry, audits, queue and two family entries synchronized. Corrected the family entry's and AGENTS.md's obsolete blanket pre-year-1 construction limitation: XPathDateTime stores extended years, while DateTimeOffset conversion and unix-dateTime remain bounded.
+
+108 new checks: 15 keyword/mode refusals, 87 focused Gregorian/timezone/unit/type/cardinality checks and six full XPath 3.1/4.0 receipt-retention reports. Targeted absent-keyword review: 32 of 37 supplied, five remaining; metadata unchanged. Malformed string/multi-item tolerance, record conversion and fractional-component precision remain explicit follow-ups. Current catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-uri, decode-from-uri, collation-available, identity and is-NaN.
+
+All five keywords refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1. Date/timeStamp/no-invented-zone, eight Gregorian shapes, leap/local-month calculations, epoch default/millisecond units, duration totals/sign/fractions and limits verified. Tested days-in-month malformed suffix/two-date input and unix-dateTime first-item behavior remain tolerance follow-ups. Constructed 4.2678 seconds gives component 4.267 in tested time/dateTime forms. Year-zero date/dateTime and year-10000 date work; no universal extended-year claim. Consumer reports use valid integers, UTC and a half-second duration, independently calculated.
+
+Validation: Release solution build passed (12 existing warnings, zero errors); **6,216 tests / 0 failures / 0 skips**, ten assemblies including all 1,988 feature checks. Renderer verified 97 catalog pages plus six implementation/canonical pages. Five pinned signatures and record fields, 108 exact cases, six independently computed full reports, complete README expressions/local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next review the final five absent-keyword families: build-uri, decode-from-uri, collation-available, identity and is-NaN, with validated import/link diagnostics. Targeted review does not supply missing metadata or close full defaults/types/options. Exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain. Retain earlier keyword/text/sequence/predicate/selection/hash/map-filter follow-ups and these date/time conversion/cardinality/precision boundaries. REQ-126 stays In Progress; no release or Braid action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `edf2ea63291db8ebf22af6b79cea5d625a110de2`, [PR #195](https://github.com/Fytala-Charles/Bosak/pull/195), pushed on `docs/req126-date-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
+
+# Map/array container contracts — 2026-10-12
+
+Main baseline: `43ed546bd1d61364fe3e61fee736433617473301`; PR #193 publication record merged. Current branch: `docs/req126-container-contracts`. Public/source version remains **1.1.3**. Earlier delivery states below are historical.
+
+## What was built
+
+Added [six-family container review](xpath40-catalog/CONTAINER-CONTRACT-REVIEW.md) and [detailed stock-feed README](xpath40-catalog/examples/container-contracts/README.md), with complete normal/empty/reordered XML, paired XPath 3.1/4.0 code and exact outputs. Six raw signature rows link exact case IDs and immutable source baseline. Canonical summaries, registry, audits, queue and two existing family entries synchronized.
+
+89 new checks: 18 keyword/mode refusals, 65 focused member/item/default/type/callback checks and six complete XPath 3.1/4.0 stock-feed reports. Targeted absent-keyword review: 27 of 37 families supplied, 10 remaining; metadata unchanged. map:filter accepts tested string/numeric predicate results despite its boolean result signature; dedicated conversion/enforcement review remains. Current catalog: 67 entries, 1,880 feature + 24 chapter checks = 1,904; four worked chapters, 117 names assigned. Version 1.1.3, REQ-126 In Progress, D2 partial; no engine/API/harness change or release. This snapshot supersedes earlier counts and queues. Next: build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds contracts.
+
+All six keyword families refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1 grammar. Empty/grouped array members, retained nested maps/arrays, source node identity, one-based callbacks, single-entry map sequences and positive-stock aggregation verified. Empty-input nonfunction callbacks return empty containers in tested forms; zero-argument callbacks adapt. These are observed boundaries, not a complete function-conversion claim. Earlier map result-shape fixes remain shipped.
+
+Validation: Release solution build passed (11 existing warnings, zero errors); **6,108 tests / 0 failures / 0 skips**, ten assemblies including all 1,880 feature checks. Renderer verified 95 catalog pages plus six implementation/canonical pages. Six pinned signatures, 89 exact cases, six independently computed full reports, node identity, local links/code fences, 67 sixteen-field entries, 241 cached primary links/anchors, 28 delivery/test records and 117 assigned names verified. Manual engine gates are not rerun for this documentation/example-only slice.
+
+## Resume here
+
+Next review build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds with a realistic timestamp/retention workflow. Remaining five absent families after that group: build-uri, decode-from-uri, collation-available, identity and is-NaN. Full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance, historical adopted pins and AC-03 applicability remain unresolved. Earlier keyword/text/sequence/predicate/selection/hash engine follow-ups remain; add map:filter boolean-result enforcement. REQ-126 stays In Progress; no release or Braid adoption action.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Delivery: `0f39a1d98b8dd28504eaf01fb1a07c69512c5dec`, [PR #194](https://github.com/Fytala-Charles/Bosak/pull/194), pushed on `docs/req126-container-contracts`. CI pending; PR remains open. This subsequent metadata commit records the delivery. On resume check CI and merge after success before the next D2 slice.
+
+# Bosak 1.1.3 published — 2026-10-12
+
+**Release revision:** `636a2f4d64c757a1f3c00bcf7ec1387416530ccc`, tag [v1.1.3](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.3); PR #192 merged after CI success. User reported Braid verification and explicitly authorized publication. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38271538007) passed. All ten public packages and 29 fresh-cache consumer checks verified. Public/source version is **1.1.3**.
+
+## What shipped and verification
+
+REQ-127: SourceTagScanner uses the exclusive start-tag end directly, preserving immediate child markup/nesting and correct compact-sibling extents without source rewriting. No public API/capability or validation/execution profile changes. 206 regressions cover 1/2/80 groups, layout/Unicode/BOM combinations, exact ranges/coordinates/containment, mixed content/entities/aliases, isolated middle-sibling Expression edits and malformed refusal. Before fix: 155 failures/51 passes; after: all 206 pass. Braid verification is user-reported; do not invent its exact adopted pin or test totals.
+
+Local Release build passed (12 existing warnings, zero errors); full solution **6,019/0/0**, ten assemblies. QT3 exactly **31,142/0/679**; qt4 gated-only **8,278/0/1,894**, zero gated failures, no promotion. Final fix CI and Release workflow passed. All ten public nupkgs verified version/internal dependencies/net10 DLLs/README/license/SHA-256; records `.guard-tmp/release113-published/verification.json`. Fresh-cache nuget.org-only smoke **29/0**: 24 compact/indented count/encoding inspections with exact group/slot ranges and original bytes, four isolated sibling edits and one malformed refusal. No complete XSLT sweep newly claimed.
+
+## Resume here
+
+Resume REQ-126 D2 map:entries/map:items/map:filter and array:build/array:items/array:empty contract review using a stock-feed normalization workflow. Catalog remains 67 entries, 1,791 feature + 24 chapter checks = 1,815; four worked chapters; 117 names assigned; 21/37 absent-keyword families reviewed, 16 remaining. Full conversion/options and changed-3.1 inventory, D3 grammar/pattern, D4 provenance/acceptance and AC-03 applicability remain unresolved. REQ-126 stays In Progress; no further release is authorized by this record.
+
+README, architecture, integration, registry, REQ-127 dossier, patch notes and audit are synchronized. Earlier pending/unpublished states below are historical. Preserve `.guard-tmp/` and `.sweep-baselines/`. Publication record: `f6a16281e14e7c6c6897e098793f7f73fe51605c`, [PR #193](https://github.com/Fytala-Charles/Bosak/pull/193), pushed on `docs/release-1.1.3-record`. This subsequent metadata commit records that delivery. Resume the D2 map/array review from the published 1.1.3 baseline.
+
+# REQ-127 compact source inspection correction — 2026-10-12
+
+Main baseline: `ea3b9454cabb83c8d5a015faa54d022bfbfe5c86`; [PR #191](https://github.com/Fytala-Charles/Bosak/pull/191) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38263494090). Current branch: `fix/req127-compact-source-inspection`.
+
+## Current state and what was built
+
+User prioritized Braid's REQ-127 over the next REQ-126 catalog slice. Fixed SourceTagScanner.FindElementEnd: ScanTagInterior returns the exclusive offset after `>`, so the extra increment skipped immediate nested opening markup and computed premature ranges. Child scanning now starts at that offset. No public API/capability/profile, decoding or retained-byte change.
+
+Added CompactSourceInspectionTests: 206 checks (192 layout/encoding/count combinations, four mixed-content/alias/entity cases, four isolated middle-sibling Expression edits, five direct scanner cases and one malformed/refusal case). Before fix: 155 failures/51 passes; after: 206 passes. Byte/URI fidelity, unique IDs/containment/order, exact group/nested/value-of/slot ranges and independent line/column expectations verified. Source version bumped to **1.1.3 (unpublished)**; public packages remain 1.1.2. Dossier, registry, README, architecture, integration and new patch notes synchronized. Prior REQ-127 uncommitted request is now included in the authorized implementation scope.
+
+Validation: Release solution build passed (12 warnings, zero errors); **6,019 tests / 0 failures / 0 skips** across ten assemblies. QT3 stays exactly **31,142/0/679**. qt4 gated-only run: **8,278/0/1,894**, zero gated failures; no gate promotion. All 206 REQ-127 regressions pass. All 24 current-runtime reproduction probes now succeed and direct scanner extents match expected ends. Renderer verified 93 catalog pages plus six implementation/canonical pages; local links, source headers and unpublished 1.1.3 version checked.
+
+## Resume here
+
+Commit/push through normal PR workflow and record immutable delivery for Braid's separate adoption. REQ-127 is Implemented in source, with delivery CI/Braid adoption pending. No publication, Braid pin update or external message has been requested. Source 1.1.3 is prepared but unpublished. After this consumer correction, resume D2 map/array container contracts. REQ-126 remains In Progress: 67 entries, 1,791 feature + 24 chapter checks = 1,815; targeted absent-keyword review 21/37 supplied, 16 remaining; historical pins and AC-03 applicability unresolved.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Implementation revision: `5bab4799783569d538cec9b03d37a57454f0eebc`, [PR #192](https://github.com/Fytala-Charles/Bosak/pull/192), pushed on `fix/req127-compact-source-inspection`. CI pending; PR remains open. This subsequent documentation commit records delivery. On resume check CI and merge after success. Source 1.1.3 remains unpublished; Braid adoption is separate.
+
+# Comparison/selection contracts — 2026-10-12
+
+Main baseline: `9f656df3edf0a162226c996fbeb939da09c175a6`; [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38261968897). Current branch: `docs/req126-selection-contracts`.
+
+## Current state and what was built
+
+Added [comparison/selection review](xpath40-catalog/SELECTION-CONTRACT-REVIEW.md) and [detailed warehouse README](xpath40-catalog/examples/selection-contracts/README.md), extending four raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 compared with duplicate-values/highest/lowest/index-where behavior; canonical summaries, audits, queue and three family entries synchronized. Corrected an escaped control character in the prior handover delivery hash.
+
+68 new checks: 12 keyword/mode cases, 50 focused defaults/types/callback/keyword-validation cases and six full normal/empty/reordered warehouse reports in 3.1/4.0. Three absent-keyword families refuse XPST0017 at 4.0/experimental, while index-where keywords work; all keyword syntax refuses XPST0003 at 3.1. Second-occurrence order, collation/defaults, untyped numeric keys, node identity, boundary-equal records versus equal keys, predicate positions/results verified. duplicate-values accepts the tested two maps and returns count zero despite its atomic signature. highest/lowest over (1,NaN,2) produce 1/2; dedicated NaN/sort-order review remains. No engine behavior changed.
+
+Targeted absent-keyword review: **21 of 37 families supplied, 16 remaining**, metadata unchanged. Catalog: **67 entries; 1,791 feature + 24 chapter checks = 1,815**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,813 tests / 0 failures / 0 skips**, ten assemblies including all 1,791 feature checks. Renderer verified 93 pages. Four pinned signatures, exact case IDs/keyword modes, six independently computed full report outputs, node identity, complete README expressions/local links, 67 sixteen-field entries, 241 cached primary links/anchors and inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## REQ-127 triage — 2026-10-12
+
+User requested review of Braid's REQ-127. The [dossier](REQ-127-compact-source-inspection.md) and registry now include current-checkout reproduction and recommended implementation tasks. 24 no-compilation inspection probes: eight compact 2/80-group failures across UTF-8, UTF-8 BOM, UTF-16 LE/BE; all original bytes retained, no snapshot on failure. One compact group and indented forms inspect successfully but range fidelity remains unverified. Direct scanner probe proves premature end 32 versus expected 40 for immediate non-self-closing nested content: FindElementEnd increments an already-exclusive start-tag end, skipping the child's opening `<`. Fix this offset and add precise range/encoding/Expression-edit/negative regressions, then full tests/QT3/qt4 gates and canonical sync. Prioritize this consumer blocker over the next catalog slice; proposed patch 1.1.3, status still Pending. No engine fix, commit/push, release or Braid adoption in this review. Dossier, registry and this handover triage remain uncommitted. Diagnostic program/results are under `.guard-tmp/req127-probe` and `.guard-tmp/req127-results.jsonl`.
+
+## Resume here
+
+Next continue D2 with map:entries/map:items/map:filter and array:build/array:items/array:empty absent-keyword families. Use a stock-feed normalization workflow with explicit sequence/member/result-shape and callback boundaries. Keep documentation-first scope. Remaining missing metadata, full coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier engine follow-ups, historical adopted pins and AC-03 applicability are unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 dossier and registry additions remain uncommitted and must not be silently included or removed. This block supersedes historical delivery states below. Delivery: `3c230ca641e3bdc51d8ae342a7d452b2f9df48e0`, [PR #191](https://github.com/Fytala-Charles/Bosak/pull/191), pushed on `docs/req126-selection-contracts`. Rebase onto merged main preserved the validated tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before the next D2 slice.
+
+# Historical equality/distinctness/subsequence predicate contracts — 2026-10-12
+
+Main baseline: `a151fff80e2ef3d3afc226179df673f66165ab4f`; [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38259813618). Current branch: `docs/req126-predicate-contracts`.
+
+## Current state and what was built
+
+Added [predicate contract review](xpath40-catalog/PREDICATE-CONTRACT-REVIEW.md) and [detailed shipment acceptance README](xpath40-catalog/examples/predicate-contracts/README.md), extending five raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 compared against observed all-equal/all-different and contains-/starts-with-/ends-with-subsequence behavior. Updated two family entries, canonical summaries, audits and delivery queue.
+
+102 new checks: 15 explicit keyword/mode refusals, 79 positional/default/type/callback checks and eight complete normal/empty/reordered/duplicate-event reports in 3.1/4.0. All five keyword families refuse XPST0017 at 4.0/experimental and XPST0003 at 3.1 grammar. Empty/default/collation, numeric/NaN/node comparisons, map projection versus deep equality, asymmetric callback direction, empty/result cardinality/type/arity boundaries verified. Equality predicates accept a singleton map despite atomic signatures; numeric and empty-string collation processing remain explicit engine follow-ups. No engine behavior changed.
+
+Targeted absent-keyword review: **18 of 37 families supplied, 19 awaiting review**, metadata unchanged. Catalog: **67 entries; 1,723 feature + 24 chapter checks = 1,747**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,745 tests / 0 failures / 0 skips**, ten assemblies, including all 1,723 catalog feature checks. Renderer verified 91 pages. Five pinned signatures, exact keyword errors/case IDs, eight independent XML report outputs, complete README expressions/local links, 67 sixteen-field entries, 241 cached primary links/anchors and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with duplicate-values/highest/lowest and index-where comparison/selection contracts. The first three remain absent-keyword families; index-where already has metadata and needs supported-keyword/default/key/predicate behavior review. Use a warehouse exception-selection workflow with collation, callbacks, typed and empty cases. Other missing families, complete coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Map/collation boundaries join prior keyword spelling, replace arity, two-let hash, text options/coercion and sequence integer/atomization engine follow-ups. Historical adopted pins and AC-03 gate applicability remain unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. Separate REQ-127 edits appeared during this step: `docs/REQ-127-compact-source-inspection.md` and its registry additions. They are preserved unstaged and were not part of this predicate review. Do not remove or silently commit them. This block supersedes historical delivery states below. Delivery: `a06fbc3da9291db927073a1254948e7d0688a10d`, [PR #190](https://github.com/Fytala-Charles/Bosak/pull/190), pushed on docs/req126-predicate-contracts. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before the next D2 slice.
+
+# Historical sequence selection/repetition contracts — 2026-10-12
+
+Main baseline: `2efcd33a483cb9adb8eae35908a083a661388b1d`; [PR #188](https://github.com/Fytala-Charles/Bosak/pull/188) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38245747354). Current branch: `docs/req126-sequence-contracts`.
+
+## Current state and what was built
+
+Added [sequence contract review](xpath40-catalog/SEQUENCE-CONTRACT-REVIEW.md) and [detailed dispatch-batch README](xpath40-catalog/examples/sequence-contracts/README.md), extending six raw signature rows with exact case IDs. Pinned F&O e7ee4ab8 contrasts signatures/defaults with observed replicate/items-at/foot/trunk/insert-separator/slice behavior. Updated the family reference, current summaries/queue/audits and prior text-review remainder; its current package wording is now 1.1.2.
+
+65 new checks: 18 explicit keyword/mode cases, 41 focused defaults/typed-source/identity/keyword-validation cases and six full normal/empty/reordered 3.1/4.0 reports. Five families refuse keyword binding at 4.0/experimental; all keyword syntax refuses 3.1 XPST0003. slice keyword defaults/reordering work. Replication preserves node identity and repeats a whole page; requested positions retain order and duplicates. Generic map and separator-sequence boundaries verified. Integral decimal positions work in items-at, but replicate/slice reject them XPTY0004; tested untyped XML position nodes refuse. Full coercion remains an explicit follow-up; no engine behavior changed.
+
+Targeted absent-keyword review: **13 of 37 families supplied, 24 awaiting review**; metadata remains absent. Catalog: **67 entries; 1,621 feature + 24 chapter checks = 1,645**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,643 tests / 0 failures / 0 skips**, ten assemblies, including all 1,621 catalog feature checks. Renderer verified 89 pages. Six pinned contracts, explicit modes, independent six batch reports/stride/typed decimal and node-identity evidence, exact case IDs/local links and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with all-equal/all-different and contains-/starts-with-/ends-with-subsequence. Compare pinned keywords, optional collation/defaults, comparator/callback forms and empty/typed cases; publish a realistic shipment-event workflow with paired portable reports. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Earlier keyword spelling, replace arity, two-let hash, text option/coercion and sequence integer/atomization issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `0236f62cd1697880930d58406b81db57064344cd`, [PR #189](https://github.com/Fytala-Charles/Bosak/pull/189), pushed on `docs/req126-sequence-contracts`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
+
+# Historical text/Unicode contract review — 2026-10-12
+
+Main baseline: `f53dd8ff9ca055eef36e2cdd69c469653b0a1ae5`; [PR #187](https://github.com/Fytala-Charles/Bosak/pull/187) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38233707437). Current branch: `docs/req126-text-contracts`.
+
+## Current state and what was built
+
+Added [text contract review](xpath40-catalog/TEXT-CONTRACT-REVIEW.md) and [detailed label/filename README](xpath40-catalog/examples/text-contracts/README.md), extending the raw signature matrix's eight family rows with exact case IDs. Pinned e7ee4ab8 signatures and option conventions distinguish declared input/types/defaults from observed behavior. Reviewed char, characters, graphemes, pad-string, trim-space, index-of-substring, substring-before-last and substring-after-last.
+
+83 new checks: 24 keyword/mode refusals (3.1 XPST0003 grammar, 4.0/experimental XPST0017 metadata), 55 positional/default/empty/invalid/option cases and four full normal/empty 3.1/4.0 import reports. Defaults and empty options/collations verified; numeric substring/padding-option tolerance, no-padding side validation and unqualified unknown-key handling remain explicit coercion/option follow-ups. Corrected filename entry: empty source plus empty needle has one boundary; nonempty needle has none. Approximate grapheme segmentation unchanged. Full portable baseline uses explicit nested-let returns.
+
+Eight of the 37 absent-keyword families now have targeted behavioral review; metadata remains absent and 29 families await this review. Canonical README/architecture/registry/integration/catalog/audits/queue and relevant entries synchronized. Catalog: **67 entries; 1,556 feature + 24 chapter checks = 1,580**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**, D2 partial. No engine/API/harness change, gate promotion or release.
+
+Validation: Release solution build passed (zero warnings/errors); **5,578 tests / 0 failures / 0 skips**, ten assemblies, including all 1,556 catalog feature checks. Renderer verified 87 pages. Eight pinned contracts, exact keyword errors/case IDs, independent normal/empty reports and codepoint/boundary/padding results, local links and scoped inventories/provenance verified. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with sequence selection/repetition: replicate, items-at, foot, trunk, insert-separator and slice. Compare pinned keywords/defaults/sequence types to source, then add realistic batch import/export positional/keyword/default/empty/invalid examples. Keep documentation-first scope; record unavailable/tolerated forms without silently implementing metadata. Other missing families, precise coercion/options, exhaustive changed-3.1 inventory, D3 grammar/pattern and D4 provenance/acceptance remain. Prior keyword spelling, replace arity and two-let hash issues remain separate engine follow-ups. Historical adopted pins and AC-03 gate applicability unresolved; no closure or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `dc4f5bfab6bf033e8aa951788ef32c3a6bf7169f`, [PR #188](https://github.com/Fytala-Charles/Bosak/pull/188), pushed on `docs/req126-text-contracts`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
+
+# Historical signature contract matrix — 2026-10-12
+
+Main baseline: `3a078fa4cb8b17233837670d41e0ef951da86cd1`; [PR #186](https://github.com/Fytala-Charles/Bosak/pull/186) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38231726134). Current branch: `docs/req126-signature-contract-audit`.
+
+## Current state and what was built
+
+Added [signature contract audit](xpath40-catalog/SIGNATURE-CONTRACT-AUDIT.md), [raw comparison JSON](xpath40-catalog/audit-signature-contracts.json) and [invoice fingerprint README](xpath40-catalog/examples/signature-contracts/README.md). Compared all 68 non-constructor 4.0-only names and 20 selected existing functions with live registration/keyword metadata and pinned F&O e7ee4ab8. 148 exact registrations; 37 absent keyword metadata, 47 matching lists, four differing lists. Of the 51 metadata-bearing families, 48 default-expression lists match after only literal/empty-map normalization; jkey/jvalue/node-name differ. Their arity-zero registrations remain present, so metadata differences alone do not establish behavioral failures.
+
+187 new published checks: 148 exact lookup/visibility probes and 39 behavior cases. Independent SHA-256/MD5 results, full invoice input/output, empty/invalid options and keyword/default boundaries verified. New observed follow-ups: element-to-map input versus element, map-to-element input versus map, parse-uri uri versus value; compare spelling already documented. replace positional/reference #2 refuses while keyword defaults work; lookup is zero. Tested hash keyword calls after two let bindings refuse hash#0; one-let/concat-only probes succeed and positional business report succeeds. Root cause not diagnosed; engine remains unchanged.
+
+Clarified hash extension options: pinned contract leaves additional parameters implementation-defined; arbitrary opaque-key tolerance is not a missing standardized option. Mandatory BLAKE3/CRC-32 remain unsupported FOHA0001. Updated relevant entries and canonical docs/audits/queue. No engine/API/harness change or gate promotion.
+
+Catalog: **67 entries; 1,473 feature + 24 chapter checks = 1,497**, four worked chapters, all 117 names assigned. Version **1.1.2**, REQ-126 **In Progress**; D2 first matrix supplied, behavioral/type/option and exhaustive changed-3.1 coverage still partial. Historical snapshots retain original counts.
+
+Validation: Release solution build passed (11 warnings, zero errors); **5,495 tests / 0 failures / 0 skips**, ten assemblies, including all 1,473 catalog checks. Renderer verified 85 pages. All 88 matrix rows independently matched to live/pinned metadata, exact case-ID links, local/source/provenance inventories and independent digest vectors checked. Manual engine gates not rerun for documentation/example scope.
+
+## Resume here
+
+Next continue D2 with a bounded family review among the 37 missing-keyword families: text/Unicode functions are a useful first group (char/characters/graphemes/pad-string/trim-space/substring helpers). Review pinned parameter names, required/default arguments and sequence types, then publish realistic positional/keyword/default/empty/invalid cases. Keep documentation-first scope and record unavailable forms rather than implementing metadata silently. The new spelling, replace and two-let keyword boundaries are separately prioritized engine follow-ups. D3 grammar/type/pattern inventory and D4 provenance/drift/acceptance remain queued; historical adopted pins and AC-03 gate applicability remain unresolved. No closure or release based solely on this matrix.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `76046795662e487ebb35bdae29b360072f80ee95`, [PR #187](https://github.com/Fytala-Charles/Bosak/pull/187), pushed on `docs/req126-signature-contract-audit`. Rebase onto merged main preserved the validated content tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before continuing D2.
+
+# Historical focus-constructor audit — 2026-10-12
+
+Main baseline: `b76be1776a5e3c86164772dcf91d682de218da1c`; [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38229658392). Current branch: `docs/req126-focus-constructor-audit`.
+
+## Current state and what was built
+
+Expanded [focus constructors](xpath40-catalog/operators-and-syntax/focus-functions.md), with a [detailed delivery-import README](xpath40-catalog/examples/focus-functions/README.md) and [49-name audit inventory](xpath40-catalog/audit-focus-constructors.json). Verified current registrations against the live function-name sets and generated registration source. Pinned F&O constructor source e7ee4ab8 supplies atomic/list/union/default-argument contracts; it does not recover the historical adopted pin.
+
+508 new executable cases cover all names with representative values/types, lexical/source errors, missing context, empty mapping, multiple mapped items, explicit empty arguments, 3.1 alternatives/default refusal and experimental parity. Eight complete delivery-import reports demonstrate attribute atomization, canonical values, empty/reordered input and invalid quantity. Ten additional boundary cases cover bounds/timezone/QName/array/cardinality/normalization/wrong-source-type behavior. Lists and xs:error have explicit semantics. No engine/API/harness change, new gate promotion or release.
+
+Catalog: **67 entries; 1,286 feature + 24 chapter checks = 1,310**; four worked chapters; all 117 names assigned. D1 representative all-name audit supplied; exhaustive casting conformance unclaimed. Version **1.1.2**, REQ-126 **In Progress**. README/architecture/registry/integration/catalog/audits/close-out queue synchronized; earlier delivery snapshots retain original counts.
+
+Validation: Release solution build passed (one warning, zero errors); **5,308 tests / 0 failures / 0 skips**, ten assemblies, including all 1,286 catalog checks. Renderer verified 83 pages. Scoped inventory/provenance, pinned constructor sections, all scenario/mode coverage, local links and independent delivery report calculations passed. Existing misc-FocusConstructors gate reference corrected; manual engine gates were not rerun for this documentation/example slice.
+
+## Resume here
+
+Next: D2, reconcile the 68 non-constructor registrations against pinned signatures, keywords, defaults and options, plus changed existing 3.1 functions excluded from the name inventory. Build a source-to-contract coverage matrix and choose uncovered forms for realistic success/empty/invalid examples. Keep documentation-first scope; record engine limits. D3 grammar/type/pattern matrix and D4 provenance/drift/acceptance follow. Historical adopted-pin gaps and AC-03 blanket gate applicability remain unresolved. Do not close REQ-126 or release based on sample coverage.
+
+Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below. Delivery: `f792cedc9eb5f5f708f6d27d4639aad9e081f614`, [PR #186](https://github.com/Fytala-Charles/Bosak/pull/186), pushed on `docs/req126-focus-constructor-audit`. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before starting D2.
+
+# Historical catalog close-out review — 2026-10-12
+
+Main baseline: `fb2e20a2f05d29b7c5e66ba5d561a39804248e48`; [PR #184](https://github.com/Fytala-Charles/Bosak/pull/184) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38228857439). Current branch: `docs/req126-closeout-review`.
+
+## Current state and what was built
+
+Added [catalog close-out review](xpath40-catalog/CLOSEOUT-REVIEW.md), with criterion-by-criterion evidence, four concrete documentation deliveries and a separate prioritized engine follow-up table. Corrected stale 38-entry/104-case living summaries and stale claims that supplied disposition records were missing. Historical evidence retains its original counts. Synchronized README, architecture, registry, integration, catalog and both audits.
+
+Catalog remains **67 entries; 778 feature + 24 chapter checks = 802**, four worked chapters, all 117 names assigned. REQ-126 **In Progress**, version **1.1.2**. AC-01–04 remain partial; AC-05 met for current scope. Literal AC-03 gate applicability and 28 missing historical adopted pins remain explicit, without waiver or invented evidence. No engine/API/fixture changes or release.
+
+Validation: Release solution build succeeded (12 warnings, zero errors); **4,800 tests / 0 failures / 0 skips**, ten assemblies. Catalog inventory/provenance/source checks passed; 82 pages rendered. Manual engine gates were not rerun for this documentation-only slice.
+
+## Resume here
+
+Next: D1, audit all 49 focus constructors with a realistic typed import, per-name source/contracts, valid/invalid/missing-focus outcomes and explicit mode evidence. Keep this next slice documentation-first; record engine limits. D2 signatures/defaults/options, D3 grammar/type/pattern inventory, D4 provenance/drift/acceptance follow. Do not close REQ-126 or release because names are assigned. Preserve `.guard-tmp/` and `.sweep-baselines/`. This block supersedes historical delivery states below.
+
+Delivery: `06b44c6f7594ef883159306f59e11d363ca8da67`, [PR #185](https://github.com/Fytala-Charles/Bosak/pull/185), pushed on `docs/req126-closeout-review`. Rebase onto merged main preserved the validated content tree. CI pending; PR remains open. This handover status commit follows the delivery. On resume check CI and merge after success before starting D1.
+
+# Historical XQuery/streaming scope review — 2026-10-12
+
+Main baseline: `2184e9200394ca2e06f720bb9cdb95afd927aa51`; [PR #183](https://github.com/Fytala-Charles/Bosak/pull/183) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38227449888). Current branch: `docs/req126-language-streaming-scope`.
+
+## Current state and what was built
+
+Added [XQuery and streaming scope](xpath40-catalog/deferred/language-streaming-scope.md), a 16-field reference against pinned query prolog/streaming sources e7ee4ab8. Existing XQuery 3.1 and actual streaming input APIs are distinct from complete 4.0 claims. Corrected REQ-118: XPath accepts tested simple where clauses across modes, while tested order-by/group-by refuse XPST0003. XQuery version 4.0 refuses XQST0031. REQ-087 Phase D is Done; residual sweep figures remain historical, not newly certified current counts.
+
+28 fixtures supply full invoice XML/query/portable/stylesheet reports, empty/reordered input, clause/version boundaries and ordinary-versus-actual-streaming parity at stylesheet versions 3.0/4.0. Harness now handles xquery rows and stream31/stream40, plus explicit frozenExpected for a pre-existing experimental/frozen outcome. Tests project references XQuery; no engine/API/package implementation change or gate promotion. Catalog: **67 entries; 778 feature + 24 chapter checks = 802**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (10 warnings, zero errors); **4,800 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 778 focused checks. Renderer verified 81 pages. Source/local links, scoped inventories/provenance, full inline inputs/code/output, six named regression tests, pinned sections and eighteen independently calculated reports verified. Manual engine gates were not rerun for this documentation/test-harness slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `d500ab3aa6fb6c25cdea37ed595fba334e228813`,
+[PR #184](https://github.com/Fytala-Charles/Bosak/pull/184), pushed on
+`docs/req126-language-streaming-scope`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
+Next perform catalog close-out and prioritized follow-up review: check the mandatory completeness criteria and remaining evidence gaps, consolidate concrete engine issues with consumers/tests, and distinguish documentary completion from full conformance. Do not mark REQ-126 Done or bump/release solely because inventory is assigned. Existing generic-node, capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization and adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical GNode/JNode scope review — 2026-10-12
+
+Main baseline: `3c0bd5994baf4fa85b1db5805fc5c081d63c50ee`; [PR #182](https://github.com/Fytala-Charles/Bosak/pull/182) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38226566196). Current branch: `docs/req126-gnode-jnode-scope`.
+
+## Current state and what was built
+
+Expanded [JNode model and template boundary](xpath40-catalog/data-model/jnode-template-boundary.md) against pinned XDM/function/XSLT sources e7ee4ab8. Updated REQ-118's original blanket exclusion to acknowledge delivered REQ-123 navigation; the full model/template remainder stays deferred. Retained original PR #116 delivery provenance and missing adopted-pin limitation.
+
+Eighteen new fixtures supply complete invoice JSON and Frozen 4.0/portable 3.1 reports, empty/reordered input, positional keys, parent/root/missing/attribute navigation, types and wrong unwrapping. Confirmed gaps: node() returns false for the tested JNode; xnode() reports XPST0051; same-JNode is comparison reports XPTY0004. These fixtures do not certify generic ordering, mixed-model operations or XSLT JNode built-ins. No engine/API/package/harness changes or gate promotions. Catalog: **66 entries; 750 feature + 24 chapter checks = 774**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,772 tests / 0 failures / 0 skips**, ten assemblies. All 750 focused catalog checks passed. Renderer verified 80 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, four named regression tests, pinned generic-node source, existing gate references and six independently calculated invoice reports verified. Identity evidence comes from executable refusal. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `3889d0a00944a19781b1fff7a246f3c7fe2c04b3`,
+[PR #183](https://github.com/Fytala-Charles/Bosak/pull/183), pushed on
+`docs/req126-gnode-jnode-scope`. Rebase onto merged main preserved the validated
+content tree. CI is pending; PR remains open. This handover status commit follows
+the delivery. On resume check CI, merge after it passes, then start the next slice
+on current main.
+
+Next review XQuery 4.0 and XSLT Streaming 4.0 scope against pinned contracts, existing language/streaming implementations and named tests. Keep documentation-only scope unless engine work is requested. Generic-node type/identity gaps join prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization differences and historical adopted-pin limits. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical external-input function review — 2026-10-12
+
+Main baseline: `bce0d9b1e21ce2ed875821e592f64bf2ed69ee55`; [PR #181](https://github.com/Fytala-Charles/Bosak/pull/181) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38225603028). Current branch: `docs/req126-external-input-functions`.
+
+## Current state and what was built
+
+Added [External-input function boundaries](xpath40-catalog/deferred/external-input-functions.md), a 16-field reference for parse-html, html-doc, invisible-xml, unparsed-binary and xsd-validator against pinned QT4CG function catalog e7ee4ab8. All absent in inspected registrations; 30 calls refuse XPST0017 across 3.1/4.0/experimental, ten lookup probes return zero. Per-function dependency/ownership rationale retains the original out-of-scope decision; unparsed-binary does not inherently need a third-party parser, and existing schema machinery does not implement the validator factory contract.
+
+55 fixtures include full normalized invoice XML, fixed three-field partner records, already-acquired binary values and business guards, with empty/reordered/invalid cases. Alternatives do not claim HTML recovery, arbitrary grammar parsing, binary IO or XSD validation. No engine/API/package/harness changes or gate promotions. Catalog: **66 entries; 732 feature + 24 chapter checks = 756**. All 117 registered names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (12 warnings, zero errors); **4,754 tests / 0 failures / 0 skips**, ten assemblies. All 732 focused catalog checks passed. Renderer verified 80 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, four named regression tests, pinned declarations and inspected registration absence, XML/record reports and attachment octets verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `b88e950d0c90165d0ec6a6ae28f80bde57001ab1`,
+[PR #182](https://github.com/Fytala-Charles/Bosak/pull/182), pushed on
+`docs/req126-external-input-functions`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
+Next reconcile the original full GNode/JNode out-of-scope wording with shipped partial navigation and catalog coverage, using pinned model contracts, source and existing named tests. Keep documentation-only scope unless engine work is requested; no full-model/conformance claim follows from navigation functions. The language-boundary review (XQuery 4.0 / Streaming 4.0) follows. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash, serialization path differences and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain original delivery states; this block supersedes them.
+
+# Historical serialization parameter review — 2026-10-12
+
+Main baseline: `232180733358fc4239229267763854fda0fa2791`; [PR #180](https://github.com/Fytala-Charles/Bosak/pull/180) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38224462290). Current branch: `docs/req126-serialization-parameters`.
+
+## Current state and what was built
+
+Added [Serialization 4.0 parameter dispositions](xpath40-catalog/deferred/serialization-parameters.md), a 16-field reference to nine additions against pinned QT4CG serialization XML e7ee4ab8. XSLT JSON escape-solidus yes/no works; fn option handling ignores all nine new keys. JSON Lines/canonical/layout/CSV controls remain deferred. Source and fixtures separate missing handling from non-applicable-method tolerance and draft-permitted optional formatting.
+
+52 fixtures provide complete invoice JSON Lines input/output, empty/reordered selections, ignored/invalid options, solidus controls, XML canonical counterexamples, LF retained despite requested CRLF, fn JSON cardinality error, XSLT JSON sequence-as-array and fn CSV fallback versus XSLT refusal. No engine/API/package/harness changes or gate promotions. Catalog: **65 entries; 677 feature + 24 chapter checks = 701**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,699 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 677 focused checks. Renderer verified 79 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, two named regression tests, XML validity and independently decoded JSON Lines verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `bb41445ad4287d5b4351132d35d27f7315670aaa`,
+[PR #181](https://github.com/Fytala-Charles/Bosak/pull/181), pushed on
+`docs/req126-serialization-parameters`. Rebase onto merged main preserved the
+validated content tree. CI is pending; PR remains open. This handover status
+commit follows the delivery. On resume check CI, merge after it passes, then
+start the next slice on current main.
+
+Next review the original out-of-scope external-input functions `parse-html`, `html-doc`, `invisible-xml`, `unparsed-binary` and `xsd-validator`: verify actual registrations, pinned contracts, dependencies and supported consumer alternatives before recording dispositions. Keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open; serialization path differences join the follow-up list. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks retain their original delivery states; this block supersedes them.
+
+# Historical fn:apply-templates review — 2026-10-12
+
+Main baseline: `7758c568612a19781c36bb1ca30c01e973a6246a`; [PR #179](https://github.com/Fytala-Charles/Bosak/pull/179) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38222446627). Current branch: `docs/req126-apply-templates-function`.
+
+## Current state and what was built
+
+Added [Deferred fn:apply-templates](xpath40-catalog/deferred/fn-apply-templates.md), a 16-field reference against QT4CG XSLT sources e7ee4ab8. Calls/references refuse XPST0017; instruction availability does not establish function registration. The draft's dynamic options, public-mode validation and package/error contracts remain deferred. The pin's omitted-mode prose/table difference is recorded for implementation review.
+
+28 fixtures verify refusal/availability, full invoice input/output, instruction and stylesheet-function wrapper alternatives, ordinary/tunnel parameters, empty/reordered selections and explicit atomic joining. No engine/API/package/harness changes or gate promotions. Catalog: **64 entries; 625 feature + 24 chapter checks = 649**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Release solution build passed (zero warnings/errors); **4,647 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 625 focused checks. Renderer verified 78 pages. Source/local links, scoped inventories/provenance, complete inline inputs/code/output, three named regression tests, XML validity and twelve independent report calculations verified. Manual engine gates were not rerun for this documentation-only slice. Delivery will be recorded below.
+
+## Resume here
+
+Delivery: `09ff052eec8ecafef3865ba220f6555dce0c1155`,
+[PR #180](https://github.com/Fytala-Charles/Bosak/pull/180), pushed on
+`docs/req126-apply-templates-function`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38224401480)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit Serialization 4.0 parameter dispositions against pinned sources, Bosak serialization and existing tests; keep documentation-only scope unless engine work is requested. Prior capture, structural @as, URI, comparison, extrema, sorting, Unicode, hash and historical adopted-pin limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Historical blocks below retain their original delivery states; this block supersedes them.
+
+# Historical capturing-accumulator review — 2026-10-12
+
+Main baseline: `3abb40f27f39cb8a8696fbb1eb8abfdeff69dc17`; [PR #178](https://github.com/Fytala-Charles/Bosak/pull/178) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38221562384). Current branch: `docs/req126-capturing-accumulators`.
+
+## Current state and what was built
+
+Added [Deferred capturing accumulators](xpath40-catalog/deferred/capturing-accumulators.md), a 16-field reference against QT4CG xslt.xml e7ee4ab8. Capture=yes is accepted at versions 3.0/4.0 but does not create a snapshot: identity stays the source node. Invalid capture and start-phase capture are tolerated in tested 4.0 forms. This is a documented deferred implementation/validation boundary, not conformance.
+
+16 in-memory fixtures verify capture identity, ordinary accumulators, explicit snapshot/projection alternatives, empty/reordered input and access errors. Explicit snapshot creates a new node but does not certify the capture rule's no-accumulator-values exception. No streaming execution or bounded-memory claim follows from these catalog checks. Existing streaming unit tests remain separate evidence. No engine/API/package/harness changes or gate promotions.
+
+Catalog: **63 entries; 597 feature + 24 chapter checks = 621**. All 117 names assigned, version **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 597 passed. Release build passed (one existing warning, zero errors); **4,619 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 597 catalog checks. Renderer verified 77 pages. Entry/index, source/local links, scoped inventories/provenance, full input/code/output, six named tests, XML validity and fourteen report calculations verified; node-identity evidence is from executable fixtures. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `ad9556a9500affb45ca8491de7ee87301210bcac`,
+[PR #179](https://github.com/Fytala-Charles/Bosak/pull/179), pushed on
+`docs/req126-capturing-accumulators`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38222394153)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit the deferred `fn:apply-templates` function against pinned draft, function registration and XSLT runtime, keeping it separate from supported `xsl:apply-templates` instructions. Keep documentation-only scope unless engine work is requested. Read [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+Capture identity/validation joins existing XSLT structural @as, URI, comparison, extrema, sorting, Unicode, hash and adopted-pin follow-ups. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, PR states and next steps are superseded here.
+
+# Historical enclosing-mode review — 2026-10-12
+
+Main baseline: `68183912a16456ba9ab4297e00e2668aac5dba21`; [PR #177](https://github.com/Fytala-Charles/Bosak/pull/177) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38220304749). Current branch: `docs/req126-enclosing-modes`.
+
+## Current state and what was built
+
+Added [Deferred enclosing modes](xpath40-catalog/deferred/enclosing-modes.md), a 16-field reference against pinned QT4CG xslt.xml e7ee4ab8. Bosak requires xsl:mode to be empty and collects top-level template rules; enclosing templates refuse with XTSE0260 at stylesheet versions 3.0 and 4.0. Generic refusal is not the draft enclosure diagnostic matrix.
+
+Full invoice export/audit input, refused stylesheet, portable named-mode alternative and exact outputs accompany 20 fixtures (nine refusals, eleven successful dispatch/ordering cases). Explicit recursive mode and #current retain export dispatch; omitted mode is lexical and selects unnamed rules unless a lexical default is set. Ordinary modes do not provide enclosing-rule isolation. No engine/API/package/harness changes or gate promotions.
+
+Catalog: **62 entries; 581 feature + 24 chapter checks = 605**. All 117 names assigned, source/public **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 581 passed. Release build passed (one existing warning, zero errors); **4,603 tests / 0 failures / 0 skips**, ten assemblies. Final formatted fixtures passed all 581 catalog checks. Renderer verified 76 pages. Entry/index, source/local links, scoped inventories/provenance, inline input/code/output, six named tests, XML validity and eleven independently calculated reports verified. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `6e256666f1ac9117613266cdbf0294dcae2731f5`,
+[PR #178](https://github.com/Fytala-Charles/Bosak/pull/178), pushed on
+`docs/req126-enclosing-modes`. Rebase onto merged main preserved the validated
+content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38221517047)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit capturing accumulators against pinned XSLT draft, source and tests, separate from ordinary accumulators and streaming claims. Keep the slice documentation-only unless engine work is requested. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+Existing structural-record XSLT @as, URI truthiness/empty-query-map, comparison, extrema, sorting, Unicode, hash and historical adopted-pin follow-ups remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; counts, PR states and next steps are superseded here.
+
+# Historical named XSLT declaration review — 2026-10-12
+
+Main baseline: `bb91dea2c31b7cfacb346b1689680517eae56d87`; [PR #176](https://github.com/Fytala-Charles/Bosak/pull/176) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38219107877). Current branch: `docs/req126-xslt-type-declarations`.
+
+## Current state and what was built
+
+Added two 16-field Deferred references: [xsl:item-type](xpath40-catalog/deferred/xslt-item-type.md) and [xsl:record-type](xpath40-catalog/deferred/xslt-record-type.md), reviewed against immutable QT4CG xslt.xml e7ee4ab8. Unused 4.0 declarations are ignored; named aliases/bindings and generated constructors are not implemented. Draft field/name duplicate checks are not established by unused declaration tolerance.
+
+28 fixtures cover unused declarations, actual type/constructor use, inline enum/structural contracts and full invoice alternatives. Portable XSLT 3.0 map validation rejects invalid currency/empty ID. Separate observed gap: structural-record XSLT @as conversion raises XTTE0570; explicit XPath cast in select plus as="map(*)" works. Harness now verifies XSLT error markers from compile exceptions or failed capture, without promising detection stage. Successful captures retain exact bytes/no-secondary assertions. No engine/API/package changes or gate promotions.
+
+Catalog: **61 entries; 561 feature + 24 chapter checks = 585**. All 117 names remain assigned; source/public **1.1.2**, REQ-126 **In Progress**. Focused catalog tests: 561 passed. Release build passed (one existing warning, zero errors); **4,583 tests / 0 failures / 0 skips**, ten assemblies. Renderer verified 75 pages. Entry/index, source/local links, scoped inventories/provenance, all inline inputs/code/results, nine named tests, XML validity and independent portable reports verified. Manual engine gates were not rerun for this documentation/test-harness slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `26b88f30ab90029c24221bfe0b240ca6763ebe42`,
+[PR #177](https://github.com/Fytala-Charles/Bosak/pull/177), pushed on
+`docs/req126-xslt-type-declarations`. Rebase onto merged main preserved the
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38220250789)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next audit enclosing-mode dispositions against immutable XSLT draft, compiler/runtime and tests, separate from ordinary/named modes. Keep the slice documentation-only unless engine work is requested. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md).
+
+The structural-record XSLT @as gap joins existing URI truthiness/empty-query-map, comparison, extrema, sorting, Unicode, hash and historical adopted-pin follow-ups. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, PR state and next steps are superseded here.
+
+# Historical computed XPath constructor disposition — 2026-10-12
+
+Main baseline: `e99dd76c32101403c7a5b6e6c20f79b2af881a96`; [PR #175](https://github.com/Fytala-Charles/Bosak/pull/175) merged after [CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38217982422). Current branch: `docs/req126-computed-constructors`.
+
+## Current state and what was built
+
+Added [computed XPath node constructors](xpath40-catalog/deferred/computed-node-constructors.md), a 16-field Deferred disposition record with immutable draft review pin e7ee4ab8. The draft includes computed XPath constructors; Bosak retains its tier-2 deferral. Parser recognition is limited to the XQuery host flag. Existing XQuery 3.1 construction is not XPath support or full XQuery 4.0 certification.
+
+Complete invoice input, refused XPath, portable 3.1 report and XSLT receipt construction accompany 30 fixtures: 25 XPath refusals, three reports and two XML outputs. XSLT files document context, projection/escaping and empty-content boundaries. Catalog: **59 entries; 533 feature + 24 chapter checks = 557**. All 117 names remain assigned; REQ-126 **In Progress**, source/public **1.1.2**. No engine/API/package changes or gate promotions. Focused catalog tests: 533 passed. Release solution build passed (one existing warning, zero errors); **4,555 tests / 0 failures / 0 skips**, ten assemblies. Renderer verified 73 pages. Entry/index, primary/local links, scoped provenance/inventories, all fixture input/code/results, ten XQuery named tests and independent receipt projections verified. Manual engine gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Delivery: `21eda38017feba3ab3b44d86eac00e9672e689ce`,
+[PR #176](https://github.com/Fytala-Charles/Bosak/pull/176), pushed on
+`docs/req126-computed-constructors`. Rebase onto merged main preserved the exact
+validated content tree. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38219052945)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice on current main.
+
+Next document `xsl:item-type` / `xsl:record-type` dispositions against pinned draft, compiler and tests, keeping them separate from shipped XPath structural types. Read the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md). Keep this documentation-only unless engine work is separately requested.
+
+Existing URI option truthiness/empty-query-map gaps, comparison, extrema, sorting, Unicode, hash and historical provenance limits remain open. Preserve `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and next steps are superseded here.
+
+# Historical URI option review — 2026-10-12
+
+Main baseline: `21c8a888e690f1b8d14e22e15c19111e5c158616`; PR #174 merged after CI passed. Current delivery branch: `docs/req126-uri-options`.
+
+## Current state and what was built
+
+Added [archive and partner URI policy](xpath40-catalog/functions/uri-option-policy.md), complete input/output, scoped XPath 3.1 comparison and 28 executable fixtures. Boolean option contracts, UNC interpretation/spelling and raw/structured component precedence are documented against pinned QT4CG source e7ee4ab8. Non-Boolean option truthiness and empty-query-map fallback are observed draft gaps. No engine/API/package changes or gate promotions.
+
+Catalog: **58 entries; 503 feature + 24 chapter checks = 527**. All 117 names remain assigned; name assignment does not certify options, grammar or conformance. Version **1.1.2**, REQ-126 **In Progress**. Validation: Release build passed (one existing warning, zero errors); **4,525 tests / 0 failures / 0 skips** across ten assemblies, 503 focused catalog cases, 72 pages rendered. Entry/index, primary/local links, provenance, all fixture code/results and eight named tests verified. Manual conformance gates were not rerun for this documentation-only slice. Delivery status is recorded below.
+
+## Resume here
+
+Implementation/documentation delivery: `9d57f5c9681f430fc402c10c957149a2bb9be9f4`,
+[PR #175](https://github.com/Fytala-Charles/Bosak/pull/175), pushed on
+`docs/req126-uri-options`. [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38217926468)
+is running; PR remains open. This handover status commit follows the delivery.
+On resume check CI, merge after it passes, then start the next slice from current main.
+
+Review wider grammar/disposition provenance in the [supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md), starting with computed XPath constructors and their classification against immutable draft/source evidence. Keep the next slice documentation-only unless engine work is separately requested. Existing comparison, extrema, sorting, Unicode, hash and provenance limits below remain open; add the two URI gaps above to follow-up reconciliation.
+
+Preserve untracked `.guard-tmp/` and `.sweep-baselines/`. Prior session blocks below are historical; their counts, pending PRs and resume suggestions are superseded by this block.
+
+# Historical session close — 2026-10-12
+
+Verified implementation baseline: `52183ca36fbea4e791f66dbfda4635c0b9c851c1` on `main`.
+[PR #173](https://github.com/Fytala-Charles/Bosak/pull/173) merged after
+[CI passed](https://github.com/Fytala-Charles/Bosak/actions/runs/38202856408).
+PRs #170–#172 were also merged after passing CI. Closure documentation delivery
+is on `docs/session-handover-20261012`; review its PR status before resuming.
+Closure delivery: `cef7c62f`, [PR #174](https://github.com/Fytala-Charles/Bosak/pull/174).
+Documentation checks passed; closure PR CI is pending at session close. If it is
+unmerged, read this handover on that branch, merge after CI passes, then use main.
+
+## Current state
+
+- Released and source version: **1.1.2**. No new publication is requested.
+- REQ-126: **In Progress**; AC-01 through AC-04 remain partial, AC-05 met for current scope.
+- Catalog: **57 entries**, **475 feature + 24 chapter checks = 499**.
+- All **117 registered 4.0-only names** assigned. That inventory excludes changed
+  existing functions, full arities/options, grammar and disposition coverage.
+- Last implementation verification: Release build passed (one existing warning);
+  **4,497 tests / 0 failures / 0 skips**, ten assemblies; 71 pages rendered.
+- Manual engine conformance gates were not rerun for these documentation slices.
+  Prior engine gate evidence remains historical; no gate membership changed.
+
+## Resume here
+
+Audit `fn:parse-uri` / `fn:build-uri` option contracts and component precedence,
+specifically `allow-deprecated-features` and `unc-path`, complementing existing
+`omit-default-ports` examples in
+[invoice API URIs](xpath40-catalog/functions/invoice-api-uris.md).
+Read [the supplementary audit](xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md)
+and [completeness audit](xpath40-catalog/COMPLETENESS-AUDIT.md) first. Compare
+pinned draft contracts, source and tests; add real input/output and executable
+normal/edge/error cases, then synchronize canonical docs. Keep version 1.1.2
+unless a separately authorized engine/release task changes it.
+
+## Open evidence and engine follow-ups
+
+- Historical adopted specification pins are missing for the 28 baseline entries;
+  current draft reviews do not recover them. Wider grammar/disposition records remain.
+- `fn:compare` keyword drift: engine `comparand1`/`comparand2`, reviewed draft
+  `value1`/`value2`; legacy binary type-validation behavior is recorded.
+- `fn:min`/`fn:max`: mixed numeric promotion/result-type and plain-duration gaps.
+- `fn:sort`/`array:sort`: mixed numeric promotion, input-dependent NaN order,
+  missing explicit-empty key defaults and unknown-collation acceptance.
+  Explicit `data#1` is the verified empty-key workaround.
+- Computed-key boundary ties and approximate Unicode grapheme segmentation remain.
+- Hash lacks draft-required BLAKE3/CRC-32; options are not fully certified.
+- The map entries/items result-shape correction is delivered in 1.1.2.
+
+Observed fixtures document limits; they are not conformance assertions. Update
+their expected results and retain historical notes when engine corrections land.
+No engine/API/package changes, release or Braid work is part of this closure.
+
+## Workspace and verification
+
+All tracked implementation work is committed and pushed. Preserve untracked
+`.guard-tmp/` (verification scripts/logs) and `.sweep-baselines/` (existing artifacts).
+Important evidence: `.guard-tmp/pick-sorting-full.log`, `pick-sorting-build.log`,
+`pick-sorting-focused.log`, and `check-pick-sorting.py`. The catalog's permanent
+manifest/harness is the canonical runnable evidence; temporary scripts are optional.
+Root `AGENTS.md` conventions remain applicable. On resume check the closure PR,
+checkout current main, inspect status and read this block before starting a slice.
+
+Earlier sections below are dated delivery history; their next-step and pending-CI
+notes describe the state at that delivery and are superseded by this block.
+
+# Agent Handover — 2026-10-12: warehouse pick sorting
+
+PR #172 merged after CI passed. Base 0597047aed99851d10445993e2e636f3aeb437f2.
+Added fn:sort/array:sort reference with full warehouse input/output, portable
+3.1 comparison, composite location keys, multi-item members and 28 cases.
+Coverage: 57 entries, 475 feature plus 24 chapter checks (499 total); all
+117 names remain assigned. Source baseline and named tests are linked.
+Exact fn-sort/array-sort gated membership is recorded, without full conformance
+claims. Legacy numeric promotion, input-dependent NaN order and missing empty-key defaults and unknown-collation acceptance remain observed limits. No engine/API/package/gate
+changes; source/public stays 1.1.2 and REQ-126 remains In Progress.
+Next: URI option contracts (allow-deprecated-features, unc-path) and component
+precedence; keep engine numeric/NaN and prior keyword/duration findings separate.
+Validation: Release build passed (one existing warning, zero errors); all 4,497 tests across ten assemblies passed without failures/skips, including 475 catalog cases. Renderer verified 71 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; pick order/payloads and numeric boundary independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: 81149db4; [PR #173](https://github.com/Fytala-Charles/Bosak/pull/173). CI passed; merged at 52183ca36fbea4e791f66dbfda4635c0b9c851c1.
+
+# Agent Handover — 2026-10-12: batch extrema and component codes
+
+PR #171 merged after CI passed. Base 40a5ff9e47204699fb479400df80b1b3f0dd2f7d.
+Added fn:min/fn:max reference with full batch input/output, explicit decimal
+normalization, QName endpoints, a 3.1 namespace/local-name fold and 29 cases.
+Coverage: 56 entries, 447 feature plus 24 chapter checks (471 total); all
+117 registered names remain assigned. Observed numeric promotion/result-type
+and plain-duration limitations are recorded against the pinned e7ee4ab8 draft.
+QName delivery #114 and MinMax_QNameOrdering_OnlyIn40 are linked. No exact
+fn-min/fn-max gated sets are claimed. No engine/API/package/gate changes;
+source/public stays 1.1.2 and REQ-126 remains In Progress.
+Next: changed fn:sort/array:sort contracts; numeric/duration engine follow-ups
+remain separate, alongside earlier keyword/type-validation findings.
+Validation: Release build passed (one existing warning, zero errors); all 4,469 tests across ten assemblies passed without failures/skips, including 447 catalog cases. Renderer verified 70 pages. Entry fields/index, primary/local links, inventory/provenance, named tests, full XML and inline reports/results verified; batch decimal range and QName endpoints independently computed with Python. No engine conformance rerun for this documentation-only delivery. Delivery revision: dac2e4b9; [PR #172](https://github.com/Fytala-Charles/Bosak/pull/172). CI pending at handover.
+
+# Agent Handover — 2026-10-12: typed measurement comparison
+
+PR #170 merged after CI passed. Base `8008827c5f4282e8345b9542edf5b00c69abd551`.
+Added changed-function fn:compare reference with complete input/output, a distinct
+3.1 double-normalization policy and 27 executable cases. Coverage: 55 entries,
+418 feature plus 24 chapter checks (442 total); all 117 names remain assigned.
+The catalog harness now supports explicit baselineError/baselineExpected for
+changed existing functions; existing compile-refusal checks remain the default.
+Verified keyword drift: Bosak comparand1/comparand2, reviewed draft value1/value2.
+Legacy binary comparison orders lexical spellings in 3.1; empty collation is
+also accepted there. These observed boundaries are not portable 3.1 guarantees.
+Only exact fn-compare gate membership is claimed; no gate changes or engine
+changes. REQ-126 remains In Progress; source/public version stays 1.1.2.
+Next: changed fn:min/fn:max contracts; separate keyword/type-validation follow-ups.
+Validation: Release build passed (one existing warning, zero errors); all 4,440 tests across ten assemblies passed without failures/skips, including 418 catalog cases. Renderer verified 69 pages. Entry fields/index, local/primary anchors, inventory/provenance, named tests, complete XML inputs and inline report/results verified; numeric boundary values independently checked with Python Fraction/float32. No engine conformance rerun for this documentation/test-harness change. Delivery revision: 35a18ccd; [PR #171](https://github.com/Fytala-Charles/Bosak/pull/171). CI pending at handover.
+
+# Agent Handover — 2026-10-12: supplementary coverage audit
+
+PR #169 merged after CI passed. Base `37457bfd`. Added supplementary coverage audit
+and literal registration-arity inventory for 68 non-constructor names. The 49
+focus constructors are explicitly outside that extraction. Changed existing
+functions, notably fn:compare, options, grammar/type/pattern coverage and wider
+dossier decisions require separate evidence. Hash options currently validate map
+shape only; no complete options contract is claimed. REQ-126 remains In Progress.
+Coverage remains 54 entries, 391 feature plus 24 chapter checks (415 total).
+No engine/API/package/example/gate changes; source/public stays 1.1.2.
+Next: typed measurement comparison reference for fn:compare with 3.1/4.0 cases.
+Validation: Release build passed (12 existing warnings, zero errors); all 4413 tests across 10 assemblies passed without failures/skips. Rendered 68 pages; verified catalog fields, links, inventory/provenance, 391 manifest cases and supplementary local links/68 unique names. Engine conformance gates were not rerun for this documentation-only step. Delivery revision: 24f2ea39; [PR #170](https://github.com/Fytala-Charles/Bosak/pull/170). CI pending at handover.
+
+# Agent Handover — 2026-10-12: ranking, numeric diagnostics and fingerprints
+
+PR #168 merged after CI passed. Base `126ac117b46fc914f1ad3fcf193477fb9616fbc8`.
+Added supplier-offer-ranking (16 cases), numeric-import-diagnostics (15) and
+payload-fingerprints (10). All eight remaining registered names gain entries.
+Coverage: 54 entries, 391 feature plus 24 chapter checks (415 total), and all
+117 registered names assigned. Name assignment is complete, not REQ-126:
+signatures/options, grammar/disposition provenance and conformance remain partial.
+The ranking example explicitly filters all equal-price offers because Bosak
+boundary selection compares full items; computed-key tie semantics need follow-up
+against the pinned specification rules/examples. An observed B-only tie fixture
+records the limit. Simple-map projection preserves sorted node order.
+Numeric diagnostics screen NaN only; hash uses a declared UTF-8 payload and
+SHA-256, independently checked with hashlib. No 3.1 hash equivalent is claimed.
+Spec review pin `e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e`. Original deliveries
+#83/#102/#112/#114 and named tests are linked. Only exact fn-op and
+fn-collation-available gate assignments are claimed. Source/public stays 1.1.2.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,413 tests across ten assemblies passed without failures/skips, including 391 catalog cases. Renderer verified 67 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs and inline expressions/results verified; payload SHA-256 independently computed with hashlib. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `740ee5bf`; [PR #169](https://github.com/Fytala-Charles/Bosak/pull/169). CI pending at handover.
+Next: supplementary signature/options and grammar/disposition audit, then engine
+follow-ups for boundary computed-key ties and Unicode grapheme segmentation.
+
+# Agent Handover — 2026-10-12: customer text and import filename references
+
+PR #167 initially failed an existing D_ValidationCancelMidWalk timing test;
+failed-job rerun passed and PR #167 merged. Base `568e9569502d76dbc55e46217db254bbf2575bed`.
+Added customer-text-cleanup (22 cases) and import-file-names (13 cases), assigning
+char/characters/graphemes/pad-string/trim-space and the three substring names.
+Full XML inputs/reports, scoped 3.1 comparisons, codepoint versus grapheme and
+minimum-padding contracts, NBSP/interior-space preservation, overlaps and final
+filename delimiter rules are explicit. Grapheme segmentation is approximate;
+source omits several Unicode classes. No complete Unicode conformance is claimed.
+Coverage: 51 entries, 350 feature plus 24 chapter checks (374 total), and
+109 assigned / 8 unassigned registered names. Source/public remains 1.1.2.
+New eight-function review pin: `e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e`;
+definitions unchanged versus a014e1b4. Inventory-wide review pin remains scoped
+as before. Initial engine deliveries #82/#83 and named tests are linked.
+Only exact fn-characters and fn-index-of-substring gate assignments are claimed.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,372 tests passed across ten assemblies without failures/skips, including 350 catalog cases. Renderer verified 64 pages. Entry fields, primary/local links, inventory/provenance, named tests, full XML inputs including text content, and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `bacc9ec3`; [PR #168](https://github.com/Fytala-Charles/Bosak/pull/168). CI pending at handover.
+Next: ranking/numeric diagnostics and remaining utility references.
+
+# Agent Handover — 2026-10-11: invoice API URI reference
+
+PR #166 merged after CI passed. Base `d6156de534f01daa3aea66002e528aaab20ed46e`.
+Added invoice-api-uris: 28 executable cases assigning parse-uri, build-uri and
+decode-from-uri. Full XML input/report, scoped XPath 3.1 route construction,
+path-segment delimiters, form/generic decoding, repeated query values, malformed
+UTF-8/escapes, IPv6/port fields, component precedence and non-identical textual
+roundtrips are explained. Original text remains necessary for wire/signing rules.
+Coverage: 49 entries, 315 feature plus 24 chapter checks (339 total), and
+101 assigned / 16 unassigned registered names. Source/public remains 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
+#84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. No exact GatedSets assignment
+is claimed for these three names. No engine/API/package/gate changes.
+REQ-126 remains In Progress. Validation: Release build passed (0 errors, 12 existing warnings); all 4,337 tests passed across ten assemblies without failures/skips, including 315 catalog cases. Renderer verified 62 pages. Entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `06974cae`; [PR #167](https://github.com/Fytala-Charles/Bosak/pull/167). CI pending at handover.
+Next: Unicode/text cleanup and substring reference examples.
+
+# Agent Handover — 2026-10-11: scheduling and date/time references
+
+PR #165 merged after CI passed. Base `33299e74db763b0f11794c1d888a0f2ae6e8e20f`.
+Added month-end-cutoffs (19 cases) and timestamp-deadlines (17 cases), assigning
+build-dateTime, days-in-month, unix-dateTime, seconds and duration-to-seconds.
+Full XML inputs and exact reports plus 3.1 comparisons explain leap rules,
+local versus UTC month, explicit offsets (no named-zone/DST inference), stamp
+subtypes, empty inputs, epoch milliseconds and signed/fractional durations.
+The report calculates deadlines; the host owns measurement and enforcement.
+Coverage: 48 entries, 287 feature plus 24 chapter checks (311 total), and
+98 assigned / 19 unassigned registered names. Source/public remains 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; original engine
+#84 `f7f55b4e3a6e92da26ac607e34f46aede695cb19`. Exact fn-unix-dateTime gate
+exists; no exact gate assignment is claimed for the other four functions.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed (0 errors, 12 existing warnings); all 4,309 tests passed across ten assemblies without failures/skips, including 287 catalog cases. Renderer verified 61 pages. Entry fields, primary/local links, inventory/provenance, named tests, four full XML inputs and inline expression/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `6709d3f2`; [PR #166](https://github.com/Fytala-Charles/Bosak/pull/166). CI pending at handover.
+Next: URI parsing/construction and encoding reference examples.
+
+# Agent Handover — 2026-10-11: dependency traversal and configured callbacks
+
+PR #164 merged after its CI passed. Base `c011a9c97a47a2cb2265cd90a3062b11b35f581b`.
+Added two complete references: product-dependency-closure (15 cases) and
+configured-label-callbacks (22 cases), assigning transitive-closure, partial-apply
+and identity. Full XML inputs, exact reports, 3.1 comparisons, shared dependencies,
+cycles/start inclusion, original node identity/document order, unresolved-reference
+validation, binding order/arity/types and identity values are explicit.
+Coverage: 46 entries, 251 feature plus 24 chapter checks (275 total), and
+93 assigned / 24 unassigned registered names. Source/public stays 1.1.2.
+Spec review pin `a014e1b408baf5614a11401d3570a04498ab76be`; engine delivery
+#88 `0a928bb81b81d0631cc681f86bba83259c0ed790`, identity follow-up
+`eedcb321848ff7e9381c34fd72cb42db4994992f`. Exact fn-identity gate exists;
+no exact transitive-closure/partial-apply gate assignment is claimed.
+No engine/API/package/gate changes. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,273 tests passed across ten assemblies with no failures/skips, including 251 catalog cases. Renderer verified 59 pages. Entry fields, primary/local links, inventory/provenance, named tests, three full XML blocks and inline expressions/results verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `5c5388d8`; [PR #165](https://github.com/Fytala-Charles/Bosak/pull/165). CI pending at handover.
+Next: scheduling/date-time and formatting reference families from the unassigned inventory.
+
+# Agent Handover — 2026-10-11: bounded retry state
+
+PR #163 merged after CI passed. Base revision: `df6e1ddd9c6546ea093816e31f824482bcd4a81a`.
+Added a complete while-do/do-until reference with full invoice-submission response
+inputs/reports, XPath 3.1 bounded-fold comparison, explicit attempt limits and
+25 executable normal/edge/error cases. The guide explains callback order, whole
+sequence state, zero-budget guarding and exception propagation. It simulates
+status checks; the host owns network acquisition, scheduling and idempotency.
+Coverage: 44 entries, 214 feature plus 24 chapter checks (238 total), and
+90 assigned / 27 unassigned registered names. Specification review pin:
+`a014e1b408baf5614a11401d3570a04498ab76be`; original engine delivery #88
+`0a928bb81b81d0631cc681f86bba83259c0ed790`. Both exact sets fn-while-do and
+fn-do-until already belong to GatedSets. No engine/API/package/gate changes;
+source/public version remains 1.1.2. REQ-126 remains In Progress.
+Validation: Release build passed; all 4,236 tests passed across ten assemblies (no failures/skips), including 214 catalog cases. Renderer verified 57 pages; entry fields, primary/local links, inventory/provenance, named tests, both full XML inputs and inline expressions verified. No engine conformance rerun for this documentation-only change. Delivery revision: `b00948e1`; [PR #164](https://github.com/Fytala-Charles/Bosak/pull/164). CI pending at handover.
+Next: dependency traversal and partial application references.
+
+# Agent Handover — 2026-10-11: ordered queue prefix
+
+PR #162 merged after its CI passed. Base revision: `aaf3c9e090da2efdacfbd214959c842a91223491`.
+Added the take-while/drop-while reference with full warehouse queue input/output,
+XPath 3.1 comparison and 18 executable edge/callback cases. Coverage is 43 entries,
+189 feature checks plus 24 chapter checks (213 total); 88 assigned / 29 unassigned
+registered names. Immutable specification review pin: `a014e1b408baf5614a11401d3570a04498ab76be`.
+No engine, API, package version or gate membership changed; source/public remains 1.1.2.
+Validation: Release build succeeded (0 errors, 12 existing warnings); all 4,211 tests passed across ten assemblies, with no failures/skips. Catalog examples: 189/0/0; renderer: 56 pages. Entry fields, primary/local links, inventory, provenance, named tests and inline queue examples verified. Engine conformance gates were not rerun for this documentation-only change. Delivery revision: `57d4ee89`; [PR #163](https://github.com/Fytala-Charles/Bosak/pull/163). CI pending at handover.
+Next: bounded while-do/do-until reference, followed by dependency traversal/partial application.
+
+# REQ-126 shipment-event sequence checks: 2026-10-11
+
+**Delivery revision:** `b75c0d26`, PR #162; base `c0610588eebf68f012f72c4ed20900586644c487`; branch `docs/req126-shipment-event-sequences`. Public/source version stays 1.1.2 (`3aebf76a`); no engine, public API, package version or gate membership changes.
+**What was built:** one complete 16-field family entry for fn:all-equal, fn:contains-subsequence, fn:starts-with-subsequence and fn:ends-with-subsequence; 27 exact fixtures. Full normal/empty/unexpected-event XML inputs and report outputs, XPath31 comparison, mixed/missing shipment IDs, missing/unknown codes, wrong starts and unfinished histories are covered. Additional probes explain contiguous versus sparse occurrence, repeated events, full-map versus projected record comparison, empty comparators/results, strict callback signatures/booleans, collation and numeric/NaN contracts. Presence/count guards prevent vacuous all-equal from certifying an empty history or missing fields.
+**Provenance:** original #83 implementation `532d04f40c3f1cbad93752e3158fc3cdfd4c7c39`; review specification pin remains `a014e1b408baf5614a11401d3570a04498ab76be`. fn:all-equal's earlier fn:uniform proposal name is documented without creating an alias. Named existing tests and exact gate status supplied: only fn-contains-subsequence has an assigned exact GatedSets identifier. Historical adopted snapshots remain unavailable.
+**Coverage:** 42 entries, 171 manifest feature checks and four worked chapters with 24 checks: 195 documentation checks. Four names gain family entries: 86 assigned / 31 unassigned of 117. Assignment is not exhaustive signature/conformance coverage; REQ-126 stays In Progress.
+**Verification:** Release build 0 errors / 12 existing warnings. Full isolated solution `dotnet test Bosak.sln -c Release --no-build -m:1`: 4,193/0/0 across ten assemblies (XSLT 1,326). Targeted catalog 171/0/0. All 42 entry structures/index links, 170 primary links/anchors, 28 immutable baseline delivery/test records, 117 inventory names and 171 manifest files verified. New sample code/results, all 27 case links, named unit tests and both full XML input blocks match their files. 55 documentation pages rendered; whitespace checks pass. Logs `.guard-tmp/shipment-events-*`. Engine gates were not rerun for this documentation-only delivery; published 1.1.2 gate results remain historical.
+**Documentation:** README, architecture, integration, registry, catalog index/runner, audit and function inventory synchronized. Local `.guard-tmp/` and `.sweep-baselines/` remain excluded.
+**Next:** continue higher-order processing families (take/drop-while, while-do/do-until, partial-apply, transitive-closure and identity), then supplementary signatures and parser/type/pattern coverage. Braid adoption remains separate.
+
+---
+
+# Bosak 1.1.2 publication: 2026-10-11
+
+**Release revision:** `3aebf76a24b28af7d40aa42e6eaf714b3a596838`, tag [v1.1.2](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.2); PR #160 merged after CI success. User explicitly authorized publishing 1.1.2. [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38144723077) passed; all ten public package downloads verified version, internal dependencies, README/license and SHA-256 records (`.guard-tmp/release112-published/verification.json`). Public/source version is 1.1.2.
+**What shipped:** map:entries returns an ordinary sequence of single-entry maps, including empty results; map:items concatenates entry values and retains nested containers. Metadata, two prior unit expectations and catalog probes corrected. Migration removes map:entries ?* adapters and uses sequence predicates instead of array lookup. The correction dossier pins QT4CG source `a014e1b408baf5614a11401d3570a04498ab76be` and implementation `c6fd1cb6`.
+**Verification:** full solution 4,166/0/0; QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894 with zero gated failures. Targeted map-entries 16/0/1 and map-items 15/0/0 remain exploratory; no gate promotion or complete XSLT sweep claimed. Eight fresh-cache public-package checks passed for direct/dynamic entry sequences, empty results, concatenation, nested container retention and both XPath31 refusals. Release and merged-main CI passed.
+**Documentation:** README, architecture, integration, registry, catalog audit/entry and function inventory, correction dossier and patch notes synchronized. Earlier source-preparation sections below are historical. Local `.guard-tmp/` and `.sweep-baselines/` remain excluded.
+**Next:** continue equality/subsequence and higher-order catalog families, then supplementary signatures and parser/type/pattern coverage. REQ-126 remains In Progress (41 entries, 168 documentation checks, 35 unassigned registered names). Braid adoption remains in its separate session.
+
+---
+
+# REQ-118 map result-shape correction: 2026-10-11
+
+**Delivery revision:** `c6fd1cb6`, PR #160. **Base:** map/array/selection delivery `e6a1ee45` + handover `da556a9d`; prerequisite PR #159 is merged at `7b270bbf`. Fix branch `fix/map-result-shapes`. Source version is 1.1.2, prepared but unpublished; public packages remain 1.1.1.
+**What was built:** map:entries signature/result changes from Array to Sequence, preserving one single-entry map per entry and complete value sequences. map:items concatenates entry value sequences, skips empty values and retains nested maps/arrays as items. Existing two unit assertions and catalog main/boundary probes now assert corrected contracts. Twenty-one new standard checks plus two nested-XSLT checks cover direct/dynamic calls, empty/nested values, order, sequence equivalence and default XPath31 isolation/caller restoration. No API or gate promotion.
+**Source/evidence:** correction dossier pins QT4CG F&O source `a014e1b408baf5614a11401d3570a04498ab76be`; original delivery #84 `f7f55b4e`. Published 1.1.1 array/grouping behavior remains documented for migration; remove map:entries ?* adapters and replace array lookup of that result with sequence predicates. Source/header histories and canonical documentation synchronized.
+**Verification:** final incremental Release build 0 warnings / 0 errors (initial rebuild: 12 existing warnings). Full isolated solution 4,166/0/0 across ten assemblies (Standard 1,303; XSLT 1,299). New standard checks 21/0/0; catalog + nested-map checks 146/0/0. QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894, zero gated/exploratory failures, 11 experimental-level passes. Targeted map-entries 16/0/1 (unsupported dependency), map-items 15/0/0; both remain exploratory. 41 entries/index links, 166 primary links/anchors, 28 baseline provenance rows and 144 manifest files checked; 54 catalog pages plus correction/patch notes rendered. No complete XSLT sweep is claimed. Logs `.guard-tmp/map-shapes-*`; local artifacts remain excluded.
+**Next:** review/merge this focused correction; source 1.1.2 patch notes are prepared for release. Then continue equality/subsequence and higher-order catalog families; REQ-126 remains In Progress with 35 unassigned names. Braid adoption is separate.
+
+---
+
+# REQ-126 map/array and sequence-selection coverage: 2026-10-11
+
+**Delivery revision:** `e6a1ee45`; base `09e678f30b0e655ed619c8d5440350984cd20b02`; branch `docs/req126-map-array-selection`. Published/source engine stays 1.1.1 (`d35cf1d4`); this delivery changes documentation and exact example fixtures only.
+**What was built:** three 16-field entries: product-map indexing (15 checks), array import batches (11), order-export sequence selection (14). Every entry shows complete synthetic input expressions, exact outputs, a 3.1 comparison and edge contracts, delivery PR/revision, named tests and actual exact-name gate status. A new review pin records QT4CG F&O source `a014e1b408baf5614a11401d3570a04498ab76be`; historical adopted snapshots are still unavailable.
+**Coverage:** 41 entries, 144 manifest checks and four worked chapters with 24 checks: 168 documentation checks. Fourteen additional names are assigned: 82 assigned / 35 unassigned of 117. Mapping is not exhaustive signature/conformance coverage. Baseline provenance remains scoped to its original 28 entries.
+**Confirmed engine findings:** 1.1.1 `map:entries` returns an array of single-entry maps rather than the reviewed draft's sequence; `map:items` retains grouped sequence-valued entries rather than concatenating all items. Existing named unit tests already pin those shapes. New exact probes and 3.1 comparisons record both; the product-index main example explicitly uses Bosak's `?*` adapter. No engine fix or conformance promotion is included.
+**Verification:** Release build 0 warnings / 0 errors. Full isolated solution `dotnet test Bosak.sln -c Release --no-build -m:1`: 4,143 passed / 0 failed / 0 skipped across ten assemblies (XSLT 1,297). Targeted catalog 144/0/0. All 41 entries/index links, 166 primary links/anchors, 28 immutable baseline delivery/test records, 117 inventory names and 144 manifest files verified. All three new families' inline expressions/results match their files/manifest and named unit tests exist. 54 documentation pages rendered; whitespace checks pass. Logs: `.guard-tmp/map-array-selection-*`. Engine conformance gates were not rerun for this documentation-only delivery; published release results remain historical.
+**Documentation:** README, architecture, integration, feature registry, catalog index/runner, completeness audit and inventory synchronized. REQ-126 remains In Progress; local `.guard-tmp/` and `.sweep-baselines/` remain excluded.
+**Next:** perform a separately gated REQ-118 bug-fix slice for both map result shapes before another patch publication, deliberately updating existing tests and catalog probes. Then continue equality/subsequence and higher-order families, followed by supplementary signatures and parser/type/pattern coverage. Braid adoption remains separate.
+
+---
+
+# Bosak 1.1.1 publication: 2026-10-11
+
+**Release revision:** `d35cf1d4bd1d1b7143ccb9ab304812f781dc0d50`, tag [v1.1.1](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.1); documentation prerequisite PR #156 and engine/release-note PR #157 merged. User authorized commit, push and publication. All ten libraries are published via [Trusted Publishing](https://github.com/Fytala-Charles/Bosak/actions/runs/38139040259); public downloads verify package versions, internal dependencies, README and license, with SHA-256 records in `.guard-tmp/release111-published/verification.json`.
+**Verification:** existing final source evidence remains full isolated solution 4,103/0/0, QT3 31,142/0/679, qt4 promoted sets 8,278/0/1,894 with zero gated failures; XSLT version/evaluate sets 110/0/4 and 41/0/16. PR CI passed on retry after one timer-based cancellation regression test finished before its 1 ms timer fired. Release workflow passed. Fresh-cache public-package smoke passes four checks: 4.0 partition and grammar, 3.0 baseline and frozen-function refusal. No complete XSLT sweep is newly claimed.
+**Documentation:** README, architecture, integration, registry, compatibility dossier and patch release notes record publication. Older handover sections below are historical. Source and public packages now agree on 1.1.1. Local verification artifacts and `.sweep-baselines/` remain excluded.
+**Next:** continue REQ-126 map/array and sequence-selection reference coverage, then supplementary signatures and syntax/type/pattern coverage. REQ-126 remains In Progress; 49 registered names remain unassigned and historical adopted-specification snapshot gaps remain explicit. Braid adoption stays in its separate session.
+
+---
+
+# XSLT effective-version XPath compatibility fix: 2026-10-11
+
+**Delivery revision:** `6156a2b`; base `8fdb220` (PR #156 documentation follow-up); fix branch `fix/xslt-xpath40-runtime`. Source version is **1.1.1**, prepared but unpublished. Published 1.1.0 and Braid adoption remain unchanged. This branch builds on PR #156 rather than merging that separate documentation PR as part of the engine fix.
+**What was built:** effective-version 4.0 or later selects frozen XPath40; earlier expression owners retain XPath31. Runtime instruction and legacy schema helpers, AVTs/text templates, static variables/use-when/shadow AVTs, xsl:evaluate, template/grouping/numbering/accumulator pattern predicates, module/local overrides and serialization-version separation now carry the owning profile. Validation and authoring use the same numeric rule, including future versions. XSLT registers frozen signatures once, resolution hides them from 3.x profiles, and nested evaluations restore their caller's profile. Experimental scan is not granted by stylesheet version. No new public API or gate promotion.
+**Evidence and source policy:** 30 `XPathCompatibilityRuntimeTests` checks cover version boundaries and execution paths; five additional routing checks verify a self-contained 4.0 stylesheet against identical normal/all-invalid/empty outputs and both identity refusals. Chapter total is 11; documentation total is 128 (104 manifest + 24 chapter). REQ-126 remains In Progress with 49 unassigned registered names. The new compatibility dossier pins QT4CG specification source `a014e1b408baf5614a11401d3570a04498ab76be` rather than inventing older adopted snapshots. Existing pattern grammar restrictions are retained, including curly-braced inline function bodies in match attributes.
+**Final verification:** Release solution build 0 errors / 1 existing nullable warning; full isolated `dotnet test Bosak.sln -c Release --no-build -m:1` **4,103 passed / 0 failed / 0 skipped** across ten assemblies (XSLT 1,257). Focused runtime/routing filter 41/0/0. QT3 exactly **31,142/0/679**; qt4 promoted sets **8,278/0/1,894**, zero gated failures and 11 experimental-level passes. XSLT 3.0 version set **110/0/4**, evaluate set **41/0/16**. No new complete XSLT sweep is claimed. An earlier overlapping full-suite run had one database-stub localhost port-registration collision; the isolated full rerun passed, including all 47 database tests. Build/test logs are `.guard-tmp/xslt40-profile-complete-*` and `.guard-tmp/xslt40-profile-isolated-full-tests.log`.
+**Documentation:** README, architecture, integration, registry, audit, chapter index/style notes and full routing README synchronized. All 38 entry structures/index links, 152 primary links/anchors, 28 provenance rows, 117 inventory names and 104 manifest files verified. All 27 inline fixtures and both routing stylesheets' combined element inventory verified; catalog plus the compatibility dossier rendered, and whitespace checks passed. Local `.guard-tmp/` and `.sweep-baselines/` excluded.
+**Next:** review/merge the documentation parent and this dependent engine correction; publish 1.1.1 only as a separately authorized release step. Continue REQ-126 map/array and sequence-selection coverage afterward. No Braid work is included.
+
+---
+
+# REQ-126 provenance, dispositions and routing: 2026-10-11
+
+**Delivery revision:** `ce0be10` (reference material and tests); base `17f9cc7c8dad3f0ce382024ac2ab87c38c7178f0`, with PR #155 merged. Follow-up branch: `docs/req126-provenance-and-routing`. Published engine remains 1.1.0; no engine or Braid source changes.
+**What was built:** all 28 baseline entries now carry exact Bosak delivery/dossier revisions and named tests, plus a Markdown/JSON provenance ledger. Historical immutable specification snapshots were not retained and remain explicitly null rather than reconstructed from moving URLs. Ten added 16-field entries cover three sequence/HOF families and seven disposition/boundary records. Collection-sequence iteration is correctly classified as shipped; JNode navigation is distinguished from full model/template contracts; record cast/coercion surplus policies are corrected against named tests. The function inventory maps six additional names: 68 assigned / 49 unassigned of 117 registered names.
+**Worked example:** `order-routing` supplies a complete XPath40 planning expression, portable XSLT 3.0 rendering, full host integration, 11 input/output fixtures shown inline and six checks. Valid orders retain source order and form consecutive batches of at most two for one route; invalid content gets explicit repair reasons; missing/duplicate identities fail before XSLT. Normal/all-invalid/empty inputs, identity refusals and default-mode refusal are verified. The catalog now has 38 entries, 104 manifest checks and four chapters with 19 chapter checks: 123 documentation checks total.
+**Runtime finding:** declaring stylesheet version 4.0 alone does not opt transformation-time XPath compilation into XPath40; direct fn:partition calls currently refuse XPST0017. The chapter uses public explicit XPath40 planning and passes the resulting map via `XsltCaptureOptions.Context.WithVariable`. Automatic runtime compatibility propagation remains separate engine work requiring regression/conformance gates; no engine fix or new gate promotion is claimed here.
+**Verification:** Release build 0 errors / 1 existing nullable warning in `Bosak.Xslt.Conformance/Program.cs`; full `dotnet test Bosak.sln -c Release --no-build` 4,068 passed / 0 failed / 0 skipped across ten solution assemblies, including XSLT 1,222. Targeted documentation checks 123/0/0. All 38 entry structures/index links, 152 primary-source anchors/links, 28 immutable delivery/test records, 117 unique inventory names and 104 manifest files verified. All 27 inline fixture documents match their files and every chapter's XSLT instruction inventory matches its stylesheet. 51 documentation pages rendered; `git diff --check` passes. Frozen conformance runners were not rerun because no engine files changed; release counts remain historical evidence.
+**Acceptance and next:** REQ-126 stays In Progress. Continue sequence-selection and map/array families, then supplementary signatures and syntax/type/pattern coverage. Recover historical adopted specification revisions only from actual evidence; record immutable specification commits at future engine deliveries. `.guard-tmp/` and `.sweep-baselines/` remain local and excluded from commits.
+
+---
+
+# REQ-126 external source references: 2026-10-11
+
+**Base audit commit:** `4b4c2a60`; continuing PR #155 on `docs/req126-completeness-audit`.
+**What changed:** catalog index and completeness audit now link official QT4CG 4.0 drafts, W3C 3.x baselines, specification history, and upstream test repositories. Every one of the 28 catalog entries has verified relevant section links; the audit's missing-function table links actual function sections. Direct QT4CG proposal/issue references are supplied for bindings, method calls, scan, and nominative records. Source policy distinguishes current navigation links from immutable adopted-revision evidence, and upstream tests from Bosak gate membership. Reviewing the accepted mapping-arrow source also corrected a lingering whole-sequence description in the rejected-spelling entry to per-item application, consistent with its existing verified example.
+**Scope:** external references improve discoverability; they do not close the audit's missing feature/signature and adopted-revision gaps. REQ-126 stays In Progress. No executable source or fixture changes.
+**Verification:** 19 primary specification/baseline/test/history pages fetched successfully; 138 source links and section anchors verified across index, audit, and entries. All 28 entries retain their 16 fields, index membership, local links, and valid fences. Catalog/audit HTML rendering passes. All five existing mapping-arrow catalog cases pass (0 failures/skips), confirming the corrected explanation. Other release tests/gates are not rerun for prose-only links.
+
+---
+
+# REQ-126 completeness audit: 2026-10-11
+
+**Base revision:** `9d3950f8ebc8bb0793c9317a91d3d412095cf6e8`; published engine baseline 1.1.0 at `6c2a867cbc7587922cb3973a7505746116caa54c`. Work is isolated on `docs/req126-completeness-audit`; Braid product work belongs to another session.
+**What changed:** `docs/xpath40-catalog/COMPLETENESS-AUDIT.md` assesses AC-01 through AC-05, maps landed slices and deferred/rejected decisions, and prioritizes evidence repair, missing decision records, and sequence/HOF families. A JSON snapshot records all 117 registered 4.0-only namespace/local-name pairs from the published engine: 67 frozen fn/map/array names, 49 constructor names, and one experimental name; 55 have no dedicated family entry. These are name/family coverage assessments, not signature completeness or new conformance claims. The scan entry now accurately records its promoted test set while retaining its experimental tier.
+**Acceptance:** AC-05 is satisfied for current discoverability; AC-01 through AC-04 remain partial. The three worked chapters and existing 94 checks are supplied, but generic provenance, missing feature/decision entries, supplementary forms, changed-3.1 semantics, and precise harness evidence prevent closure. REQ-126 remains In Progress.
+**Verification:** all 117 inventory rows are unique and resolve their assigned entry links; 55 unassigned-name assessments are reproduced. All 28 entries retain 16 fields and index membership; all 81 manifest cases retain their files. Audit/catalog/scan links, Markdown whitespace, code fences, and rendered audit headings/tables pass. No executable files changed, so the already-passing release tests/gates are not rerun for this audit.
+**Next:** P1 evidence repair for existing entries and missing decision records; then a realistic sequence/HOF order-routing case. Do not implement deferred forms merely to fill a documentation gap. No engine files, examples, gate membership, or Braid dependency changes.
+
+---
+
+# Bosak 1.1.0 published: 2026-10-11
+
+**Release revision:** `6c2a867cbc7587922cb3973a7505746116caa54c`, tag `v1.1.0`, [GitHub release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.1.0). Corrections #151, reference guide #152, and release preparation #153 are merged. Release implementation is `a9beb48`; the tagged merge is the immutable publication identity.
+**Publication:** merged-main CI [38118583678](https://github.com/Fytala-Charles/Bosak/actions/runs/38118583678) and Trusted Publishing [38118879264](https://github.com/Fytala-Charles/Bosak/actions/runs/38118879264) passed. NuGet reported Created for all ten packages. All ten public 1.1.0 downloads were fetched and their versions, internal dependencies, README/license contents, and SHA-256 hashes verified after propagation.
+**Consumer verification:** an isolated Braid checkout uses Bosak.Xslt 1.1.0 from the downloaded public artifacts and a fresh package cache; all 192 tests pass / 0 fail / 0 skip. Its public `AuthoringCapabilities.EngineVersion` reports `1.1.0+6c2a867cbc7587922cb3973a7505746116caa54c`. Braid's production source pin remains `0ff33163...`; this check proves package consumption without silently changing its source-based adoption contract. Logs: `.guard-tmp/release110-braid-published-*.log`; package/hash manifest: `.guard-tmp/release110-published/verification.json`; publishing log: `.guard-tmp/release110-publish-complete.log`.
+**Release gates:** local full solution 4,039/0/0; QT3 exactly 31,142/0/679; qt4 promoted sets 8,278/0/1,894. No new complete XSLT sweep is claimed. Existing warnings and documented coverage/platform limitations remain.
+**Next:** decide Braid's production release adoption (source pin to the tagged revision or a deliberate package migration), then resume the remaining REQ-126 inventory/traceability work or production preview adapter/worker work according to owner priority. No release work remains pending for Bosak 1.1.0.
+
+---
+
+# Bosak 1.1.0 release preparation: 2026-10-11
+
+**Base commit:** `d1f1f50895776cc8a716d0f89d81ffdefe3720a3` (main after merging #151 and #152). Release preparation is on `release/1.1.0`.
+**What changed:** coordinated version 1.1.0 in `src/Directory.Build.props`; new release notes cover post-1.0 XPath adoption, REQ-124 authoring, REQ-125 accepted controlled validation/preview with explicit restrictions, and the executable reference guide. README, architecture, integration package examples, and registry are synchronized. REQ-126 remains In Progress.
+**Verified:** Release build 0 errors / 12 existing warnings; full solution 4,039 passed / 0 failed / 0 skipped; QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894, zero gated failures. All ten candidate packages have version 1.1.0, coherent internal dependencies, README, and license. An isolated clone of Braid, replacing only its engine-source dependency with Bosak.Xslt 1.1.0, passes all 192 tests. Consumer-loaded assembly informational version is `1.1.0+d1f1f50895776cc8a716d0f89d81ffdefe3720a3` before the release commit. Logs/artifacts are under `.guard-tmp/release110-*`; isolated Braid is `.guard-tmp/braid110-check`.
+**Next:** create/merge the release PR after CI, tag the merged revision, monitor Trusted Publishing for all ten packages, create GitHub release using `docs/RELEASE-NOTES-1.1.md`, and verify isolated Braid against published artifacts. Braid's production source manifest remains unchanged; changing its adoption mode is separate from this verification.
+
+---
+
+# Detailed worked-example READMEs: 2026-10-11
+
+**Base commit:** `c9543c29dce2ab02b8f969e0fdb31170a167e00a`; continuing PR #152 on `docs/req126-invoice-reference-chapter`.
+**What changed:** all three chapter READMEs now include a reading path, complete normal/edge-case input and output documents (16 fixture documents), source-to-target field guides, validation/repair contracts, and an inventory of every XSLT element used plus the main XPath constructs. Invoice audit clarifies unchanged source ID spelling, single-valued-field assumptions, and source price precision versus two-place display. Manual documentation distinguishes the checked root-title cardinality from assumed section titles; reconciliation explains root identity refusals versus line rejection and shipment exception identity limitations. Reading-path guidance, README, integration, and REQ-126 are synchronized; no executable files changed.
+**Verification:** all 13 worked-example checks pass (0 failures/skips). Structural comparison confirms all 16 inline documents match published fixtures, preserving paragraph mixed content; complete XSLT inventories, local links, code fences, table structure, Markdown whitespace, and HTML rendering pass. The previous full solution result remains 4,039 passed / 0 failed / 0 skipped; this prose-only follow-up reran the affected chapter checks. Existing nullable/analyzer warnings remain in the test build.
+**Remaining:** publish this follow-up on PR #152. REQ-126 remains In Progress for the previously recorded wider inventory and traceability work.
+
+---
+
+# Worked chapters and catalog expansion: 2026-10-11
+
+**Base commit:** `3ae1aa6` (annotated invoice chapter). Expansion implementation/examples committed and published as `cee5b35` on PR #152; final documentation formatting is a follow-up. Continuing the same reference-guide branch.
+**What was built:** XML-manual-to-HTML and order reconciliation chapters with fully documented stylesheets, complete/incomplete inputs and expected outputs, and six checks; 24 new catalog entries, making 28 in total; 81 manifest-driven feature/edge/migration checks. New cases cover syntax, function families, types, JNodes, XSLT instructions, experimental scan, and stable/rejected alternatives. The invoice tests retain seven checks, so chapter coverage is 13 checks and combined documentation coverage is 94.
+**Verified so far:** Release solution build 0 errors; both new chapter fixture suites 6/6; catalog suite 81/81, including 24 earlier-version baselines and the stock-ledger fold comparison. Full solution passes: 4,039 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,193); 94 documentation checks in total. README/catalog/chapter HTML rendering passes. Logs: `.guard-tmp/catalog-expansion-*.log`, `.guard-tmp/catalog-examples.log`, `.guard-tmp/other-worked-examples.log`. Local links, XML structure, XSLT headers, and all 16-field entries pass structural checks.
+**Findings corrected:** scan returns a sequence of single-member arrays without an outer array; mapping arrow applies once per item. Seed text and example results are corrected without engine changes. Negative/deferred examples claim no new syntax support. Version 4.0 instruction samples are labeled separately from portable 3.0 chapters.
+**Remaining:** REQ-126 stays In Progress for full shipped-function and deferred-shape inventory, precise per-delivery/spec/conformance traceability, and additional syntax forms. No engine source, conformance gate membership, Braid dependency, or production preview behavior changes in this step.
+
+---
+
+# Annotated invoice stylesheet — 2026-10-11
+
+**Base commit:** `da0c11c` (invoice chapter, PR #152).
+**What changed:** invoice stylesheet header now records author/date/purpose/license/change history, input/output and host contracts, and rounding policy. Each helper documents parameters, results, edge posture, and preconditions; each template documents context, output, and business invariants. The copied `docs/XSLT_STYLE_GUIDE.md` is retained with a Bosak applicability note and explicit separation of Exslt-only tooling, tiers, and fixture paths. README, chapter/catalog guidance, integration, and REQ-126 are synchronized.
+**Verification:** XML parsing and comparison against the base commit confirm the executable stylesheet tree is unchanged after removing comments and indentation. The exact published fixture remains exercised by the seven chapter checks. Full Release solution build/test passes: 3,952 passed / 0 failed / 0 skipped across 10 projects (XSLT 1,106). Local links, header markers, and README/chapter HTML rendering pass. Log: `.guard-tmp/invoice-comments-solution-tests.log`.
+**Next:** continue publication on PR #152; XML-manual publishing remains the next planned chapter. No new engine or API behavior is introduced.
+
+---
+
+# Reference-guide invoice chapter — 2026-10-11
+
+**Base commit:** `3f525af` (published correction branch; PR #151 remains open). This chapter and the prior documentation direction are a separate delivery based on that revision.
+**What was built:** first complete REQ-126 chapter, supplier invoice XML to simplified ERP XML, with principal/exception expected documents, complete/incomplete fixtures, numeric tax grouping and rounding policy, optional fields, invalid-header/all-rejected cases, and a separately gated XPath 3.1/4.0 metadata-label migration pair. The test project copies and executes the exact published files through public APIs. Catalog guidance now distinguishes the book reading path from implementation reference details and links the chapter and publishing plan.
+**Verification:** Release solution build 0 errors; seven chapter checks pass; full solution 3,952 passed / 0 failed / 0 skipped across 10 projects. Documentation local links and XML/XSLT structural checks pass; README/catalog/chapter HTML renders with headings and tables. Existing engine source is unchanged, so no new conformance-harness run is required for this documentation/test-only slice. Logs: `.guard-tmp/invoice-chapter-*.log`.
+**Next:** publish this chapter through a separate PR; XML-manual-to-HTML chapter (mixed content, links, table of contents, broken-reference evidence) is planned next. Remaining REQ-126 feature entries/examples are pending; the catalog is not complete. No production preview changes or industry-standard compliance are implied by these fixtures.
+
+---
+
 # Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-10-11 (REQ-125 consumer-review corrections C-F1/D-F1)
+**Commit:** correction source `0ff33163ba985bf8562722424db7e66c37e3566d`; Bosak.Braid immutable dependency adoption `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Related consumer-review records are committed; temporary gate artifacts are excluded.
+**Current focus:** REQ-125 is implemented, accepted within the declared coverage/restricted profiles, committed and adopted by Bosak.Braid. C-F1/D-F1 are closed. Remote publication awaits explicit push authorization.
+**What was built:**
+- D-F1: `ExecutionGate.ObserveControls()` observes token/deadline unconditionally without decrementing operations or resetting batching. Capture observes before/after serialization, between bounded encoding chunks and after output/message snapshots immediately before selecting the public outcome. Cancelled/XV0013 and deadline/XV0011 cannot publish Success at the terminal boundary; earlier outputs remain evidence.
+- C-F1: `BoundedSerializationWriter` streams encoder chunks under per-output and remaining aggregate budgets (BOM included), retaining only accepted bytes. `CaptureDecodingStream` and `CaptureMarkupWriter` preserve XmlWriter encoding fallback and lexical fidelity with fixed-size buffers/lookahead. Text traverses items/nodes and applies character maps incrementally; HTML/XHTML share writer-based serializer bodies. CDATA splitting now writes spans instead of allocating a complete expanded string. Offending outputs are dropped as XV0007/XV0008; prior outputs/identities survive.
+- Explicit restricted profile: when either byte limit is configured, JSON/adaptive, text Unicode normalization, non-text character maps and non-XDocument markup provider fallbacks refuse `UnsupportedSerializationProfile` / XV0014 before serialization. Without byte limits the established serializer routes remain available. Result-tree construction, normalization and XPath working memory remain outside serialization byte budgets; host process controls still provide hard memory/wall-clock limits.
+- New `ConsumerReviewCorrectionTests`: **42 regression cases** covering public probes, measured early production stops, principal/secondary/aggregate budgets, Unicode/BOM boundaries, XML/HTML/XHTML fidelity, CDATA/raw output, explicit refusals, serialization failure identities, terminal cancellation/deadline checks and exact operation-budget invariance. The combined correction + existing capture + Slice D filter passes **76/76**.
+- Canonical docs, requirements dossier and a Bosak delivery appendix on the consumer review describe the profiles and re-review command. Braid technical acceptance is recorded in review section 7; dependency pinning is handled by the following adoption step.
+**Verification:** Release build **0 errors** (existing test warnings). Combined consumer filter **76 passed / 0 failed**. QT3 **31,142/0/679** exit 0. qt4 gate-only **8,278/0/1,894**, **0 gated failures**, exit 0. Full solution **3,945 passed / 0 failed / 0 skipped** across 10 projects (XSLT 1,099/0), verified outside the sandbox.
+**REQ-125 delivery traceability (2026-10-11):** Bosak correction revision `0ff33163ba985bf8562722424db7e66c37e3566d` is accepted within the documented coverage and restricted byte-bounded profiles. Bosak.Braid adopted this exact immutable revision in commit `9423d41b52a5f3a3c1206df370c7998f7ad88886`. Its Release build passed with 0 errors, all **192 tests passed / 0 failed / 0 skipped** (including six public-contract checks), and the strict documentation gate passed. The bootstrap also rejects solution/manifest revision mismatches before checkout preparation. Both repositories have local commits; remote publication awaits explicit push authorization. Production preview adapter/worker integration remains separate product work.
+**Environment note:** the initial sandboxed solution test run failed 45 database-provider cases while constructing `HttpListener` (invalid handle). Running the required tests outside the sandbox allows the local HTTP server; database-provider tests then pass **47/47**. No provider engine/test edits were needed. Logs: `.guard-tmp/req125-cf1-df1/`.
+**Next steps:** publish both repositories after explicit push authorization. Release packaging and the qt4/REQ-126 backlog are subsequent work; production preview adapter/worker integration remains separate product work.
+
+---
+
+# Handover — Bosak XPath/XSLT/XQuery Implementation
+
+**Date:** 2026-10-10 (ninetieth session — REQ-125 Slice D: execution limits and cancellation — the final slice; all four REQ-125 slices delivered)
+**Commit:** main `1d85767` (PR #148 squash — branch `feature/req125-slice-d-limits` off main `aac4387`; CI "Build & test (net10.0)" green 5m02s); final hash-tail PR #149 → main `0612606` (CI green 4m52s). With these merges **REQ-125 is feature-complete on main**: validation + resource policy + capture + limits/cancellation, status Implemented pending Braid whole-request acceptance. Session-close documentation sync (README feature bullet, ARCHITECTURE controlled-preview section, this hash tail) landed in the same docs pass.
+**Current focus:** **REQ-125 is feature-complete.** The reserved `Cancelled` outcomes are triggerable in both taxonomies and hosts can bound runaway transformations: new internal `ExecutionGate` (CancellationToken + TickCount64 wall-clock deadline amortized over 64-checkpoint batches + exact-decrement operation budget) with checkpoints at XSLT instruction dispatch, template invocation, result-document production, message emission, and principal capture — VM dispatch deliberately untouched, null gate is a single null-conditional, so the default path is bit-identical (test-proven: a generous-limits run returns bit-identical bytes to an unlimited run). Interrupts classify into the existing outcome taxonomies (XV0011/XV0012/XV0013; `Cancelled` beats Invalid/Refused precedence in validation) and never throw. Nested `fn:transform` shares the same gate instance — the remaining budget is shared by construction — and the gate is stamped only when none is inherited and cleared in `finally`, giving sequential and concurrent run isolation.
+**What was built:**
+- New: `src/Bosak.XPath.Runtime/ExecutionGate.cs` 0.1, `tests/Bosak.Xslt.Tests/Limits/SliceDExecutionControlTests.cs` 0.1 — 12 `D_` tests (AC-08/09 mapped: pre-start cancel, mid-run cancel via host message listener with partial outputs retained, time-limit loop stop, exact-determinism operation-limit runs, recursion stop, validation pre/mid cancel, generous-limits bit-identical bytes, nested shared-budget proof, sequential + concurrent isolation, setter validation).
+- Modified: `EvaluationContext` 2.40 (`ExecutionGate` inheritance seam), `TransformEngine` 7.08 (checkpoint sites), `XsltExecutable` 1.17 (gate stamp/clear + pre-run checkpoint), `XsltFunctionLibrary` 0.22 (nested inheritance), `XsltCaptureOptions`/`Session`/`FailureKind`/`Outcome`/`Failure`/`Result` 0.2 (options + XV0011–13 + Cancelled triggerable), `XsltValidationOptions` 0.2 / `XsltValidationEngine` 0.3 / `XsltValidationOutcome`/`Result` 0.3 (token + Cancelled + stale "reserved" docs removed).
+- Docs: FEATURE_REQUESTS banner + REQ-125 row (**In Progress → Implemented, pending Braid whole-request acceptance**) + status + decision-log row; INTEGRATION 2026-10-10 (s) + baseline 3,903; dossier §6 delivery bullet. **Merged this turn:** PR #147 (B-F3 hash tail).
+**Verification:** Release build 0 errors. `dotnet test Bosak.sln -c Release` **3,903 passed / 0 failed** (3,891 + 12, run twice identical). QT3 **31,142/0/679** exit 0. XSLT smoke **162/0/26**. qt4 gate **0 failures**.
+**Quirks / flags for follow-up:** (1) Cooperative, not preemptive: a single long XPath evaluation between checkpoints is not interrupted mid-evaluation — Braid's worker-process termination remains the hard wall-clock control (documented in XML remarks). (2) A stylesheet `xsl:catch` swallowing the termination still records the XV0011–13 downgrade (same deliberate semantics as Slice C). (3) Validation accepts a cancellation token only — no wall-clock/operation limits there (host process responsibility, documented). (4) One `EvaluationContext` instance must not be reused concurrently across runs (sequential reuse tested). (5) **Awaiting Braid whole-request acceptance** — the REQ-125 dossier's preview contract is now fully delivered: validation + resource policy + capture + limits/cancellation. (6) `Directory.Build.props` still pins 1.0.0 — with REQ-125 complete, the 1.1.0 release-mechanics bump (Bosak.Xslt + Bosak.XPath.Runtime) is the natural next packaging step. (7) Bosak.Xslt.csproj `<Version>` absent → `EngineVersion` = `0.0.0+hash`. (8) qt4 exploratory backlog 4,171 failures; fn:parse-html largest. (9) EXSLT/REQ-121 in the parallel session.
+**Next steps:** merge the PR → docs hash-tail pass → Braid whole-request acceptance → 1.1.0 release mechanics → resume qt4/REQ-126 backlog.
+
+---
+
+**Date:** 2026-10-10 (eighty-ninth session — REQ-125 B-F3 correction: digest-validated controlled cache hits — consumed-input provenance made truthful)
+**Commit:** main `aac4387` (PR #146 squash — branch `fix/req125-bf3-cache-provenance` off main `4651378`; CI "Build & test (net10.0)" green 4m48s).
+**Current focus:** **The last Slice B blocker is closed.** Braid's re-review of the B-F1/B-F2 corrections verified both closed but opened B-F3: on a controlled cache hit, the approval receipt hashed the *newly approved* bytes while the node retained *earlier* bytes — misleading AC-05 consumed-input evidence. The owner ratified the fix design and it is implemented exactly: the document cache now stores a `DocumentCacheEntry` (parsed node + SHA-256 digest + effective URI) under the exact B-F1 key; per load the policy decision still runs first, then a digest+URI **match serves the cached node unchanged** (identity preserved) with the new additive `ControlledResourceReceipt.ServedFromCache` (v0.3) flag, while a **mismatch/miss parses the approved bytes into a fresh node replacing the entry** — receipt and content always agree. Effective-URI changes refresh like a digest mismatch; approval receipts now record only after a successful parse (side-benefit: no Approved receipt for unconsumed malformed content); no-policy path bit-identical.
+**What was built:**
+- Modified: `ControlledResourceReceipt` 0.3 (`ServedFromCache` + new 9-param ctor chaining the old), `ControlledResourcePolicy` 0.3 (`AcquireBytesForCacheServe`/`RecordCacheServeApproval` decision/record split), `EvaluationContext` 2.39 (`DocumentCacheEntry`, digest-validated hit logic, public contract remarks).
+- Tests: `ControlledResourceReviewFindingTests` 0.2 — 5 `BF3_` tests incl. the reviewer's exact probe (digests `7af55314…`/`a6f97c66…`) and a doc()-twice stylesheet e2e; suites 73/73.
+- Docs: FEATURE_REQUESTS banner + REQ-125 row + status + decision-log row; INTEGRATION 2026-10-10 (r) + baseline 3,891; dossier §6 delivery bullet. **Merged this turn:** PR #144 (B-F1/B-F2 fixes → `6c7d250`, CI green after the package-registry test-isolation fix) and PR #145 (Braid re-review notes + hash tail → `4651378`).
+**Verification:** Release build 0 errors. `dotnet test Bosak.sln -c Release` **3,891 passed / 0 failed** (3,886 + 5). QT3 **31,142/0/679** and XSLT smoke **162/0/26** run as insurance (only Runtime + tests touched).
+**Quirks / flags for follow-up:** (1) `ServedFromCache` is document-route-only (always false for other routes, whose receipts were never deferred) — documented. (2) On mismatch the entry is **replaced**, not versioned — the policy/route key already scopes entries so a second version could never be addressed. (3) **Awaiting Braid re-review for final Slice B acceptance.** (4) **REQ-125 Slice D (limits/cancellation) is the only remaining slice** — `Cancelled` reserved in both taxonomies; seams: cancellation token in the capture observer/message listener + mid-run engine checkpoints + the per-output peak-memory bound decision. (5) `Directory.Build.props` still pins 1.0.0 (release mechanics). (6) qt4 exploratory backlog 4,171 failures; fn:parse-html largest. (7) EXSLT/REQ-121 in the parallel session.
+**Next steps:** merge the PR → docs hash-tail pass → hand to Braid re-review → REQ-125 Slice D completes the dossier.
+
+---
+
+**Date:** 2026-10-10 (eighty-eighth session — REQ-125 Slice B consumer-review corrections: B-F1 cache-bypass and B-F2 static-phase route findings fixed in the controlled resource policy)
+**Commit:** main `6c7d250` (PR #144 squash — branch `fix/req125-slice-b-findings` off main `6742274`; CI "Build & test (net10.0)" green 4m50s after a test-isolation fix for a package-registry flake; reviewed pre-squash as `facbf37` + `64f7286`).
+**Current focus:** **Both Slice B acceptance blockers are closed.** B-F1: the controlled document cache could serve content acquired under one route/policy to a request on another route — `LoadDocumentControlled` now runs the full policy decision (unsupported-route XV0005 → authority consult → receipt) *before* cache service, the cache key carries (URI, load policy, policy instance, route), and every controlled access including cache hits records an approval receipt with authoritative byte count + SHA-256; the no-policy path keeps the exact legacy key, bit-identical. B-F2: static-phase acquisition (use-when, compile-time availability probes) requested the Document route so a host's `StaticEvaluation` restriction never governed — acquisition during `IsStaticEvaluation` now maps to purpose route StaticEvaluation with the concrete operation preserved: request/receipt carry additive nullable `ConcreteRoute` (v0.2), the authority sees both, either unsupported → XV0005; availability functions in a forbidden static phase yield spec-appropriate false with a refusal receipt; non-availability static acquisition refuses explicitly; nested `fn:transform` compile inherits policy **and** phase.
+**What was built:**
+- Modified: `ControlledResourcePolicy`/`ControlledResourceRequest`/`ControlledResourceReceipt` 0.2 (ConcreteRoute + dual-route acquire overloads), `EvaluationContext` 2.38 (policy-before-cache + widened key + `ControlledRouteFor`), `FunctionLibrary` 5.141 + `XsltFunctionLibrary` 0.21 (static-phase route mapping, availability-probe false semantics).
+- New: `tests/Bosak.Xslt.Tests/Validation/ControlledResourceReviewFindingTests.cs` 0.1 — 15 tests covering every required regression incl. both verbatim reviewer probes, the stylesheet doc()+source-document e2e, and a warm-approval→deny-all second-compile refusal.
+- Docs: FEATURE_REQUESTS banner + REQ-125 row + status + decision-log row; INTEGRATION 2026-10-10 (q) + baseline 3,886; dossier §6 delivery bullet. **Also merged this turn:** Slice C (PR #142 → `012efa5`) and the Slice B consumer review (PR #143 → `6742274`, rebased after a FEATURE_REQUESTS conflict; a stale unpushed local-main commit `ba5a30f` turned out to be already upstream and was dropped by rebase). **Post-CI addition:** the consumer's B-F3 re-review notes were set aside to /tmp/req125-bf3-review for a separate docs PR after this PR merges.
+**Verification:** Release build 0 errors. Policy/route suites **68/68**. `dotnet test Bosak.sln -c Release` **3,886 passed / 0 failed** (3,871 + 15, run twice with identical totals). QT3 **31,142/0/679** exit 0. XSLT smoke **162/0/26**. qt4 gate 0 failures. Full XSLT conformance **10,242/0/4,359**.
+**Quirks / flags for follow-up:** (1) Receipts under policy are now **per access**, not per parse — multi-pass use-when evaluation records one receipt per pass; consumer probes keyed to Slice B receipt counts should expect N-pass counts. (2) `ControlledResourceRequest.ToString()` renders `"StaticEvaluation (Document): uri"` when a concrete route is present. (3) **Braid re-review closed B-F1/B-F2 and opened B-F3**: on a controlled cache hit the approval receipt hashes the newly approved bytes while the returned node retains earlier bytes — consumed-input provenance correction pending (the consumer requires a defined deterministic policy: distinct cache-hit receipt marking, re-parse on digest mismatch, or conflict refusal — never silent fresh-approval-as-input presentation). (4) PR #144's CI caught a flake local runs missed: `UsePackage_DenyAll_...` mutates the process-global package registry (`XsltFunctionLibrary._packageRegistry`) but the class sat outside the existing `[Collection("XSLT package registry")]` — fixed test-only (collection attribute + comment); engine audit confirmed package acquisition is already per-compile through the policy (the registry is host name→location config; bytes are always acquired), and no other cache stores acquired bytes. (5) **REQ-125 Slice D (limits/cancellation) is the last remaining slice** — `Cancelled` is already reserved in both the Validation and Capture outcome taxonomies; natural seams: cancellation token in `ResultDocumentCaptureObserver`/message listener + mid-run engine checkpoints, plus a decision on the documented per-output peak-memory bound. (6) `Directory.Build.props` still pins 1.0.0 (release mechanics). (7) qt4 exploratory backlog 4,171 failures; fn:parse-html largest. (8) EXSLT/REQ-121 in the parallel session.
+**Next steps:** merge the PR → docs hash-tail pass → hand branch to Braid re-review → REQ-125 Slice D (limits/cancellation) completes the dossier.
+
+---
+
+**Date:** 2026-10-10 (eighty-seventh session — REQ-125 Slice C: captured output contract — new `Bosak.Xslt.Capture` public API over the engine's internal result-document capture)
+**Commit:** branch `feature/req125-slice-c-output-capture` off main `ba5a30f` — PR pending.
+**Current focus:** **Braid's preview can now capture everything a transformation produces.** `XsltExecutable.CaptureTransform(source, options)` returns principal + secondary (`xsl:result-document`) output identities and exact serialization bytes with no disk writes — the missing half of the controlled-preview contract after Slices A (validation, accepted by Braid after F1–F4) and B (resource policy). The design reuses the engine's internal `captureResultDocuments` machinery (the same path `fn:transform` uses), so serialization semantics are proven, not reimplemented: each output's bytes come from `ResultTreeSerializer` under its effective output properties, with declared BOMs emitted as real preamble bytes via new `SerializeToBytes`. Bounded production is enforced *during* production through a null-gated `TransformEngine.ResultDocumentCaptureObserver` hook — count/per-output/aggregate-byte/message caps terminate at the offending output, retain earlier outputs, and downgrade the outcome (a stylesheet `xsl:catch` swallowing the termination still records the failure → Partial, documented). Failures are classified with stable codes: XTDE1490 collisions (extracted from the engine's existing transformation-scoped check), XV0006–XV0010 for bound breaches and uncoded failures. `Cancelled` joins the outcome taxonomy reserved for Slice D.
+**What was built:**
+- New: `src/Bosak.Xslt/Capture/` 0.1 ×8 (`XsltCaptureOptions`, `XsltCaptureResult`, `XsltCapturedOutput`, `XsltCaptureFailure`, `XsltCaptureOutcome`, `XsltCaptureFailureKind`, internal `XsltCaptureSession`, `XsltCaptureLimitException`), `tests/Bosak.Xslt.Tests/Capture/XsltCaptureTests.cs` 0.1 — 22 AC-mapped tests.
+- Modified: `XsltExecutable` 1.16 (`CaptureTransform`), `TransformEngine` 7.07 (observer property + one call site, `!= false` keeps default bit-identical), `ResultTreeSerializer` 1.37 (`SerializeToBytes`).
+- Docs: FEATURE_REQUESTS banner + REQ-125 row + status + decision-log row; INTEGRATION 2026-10-10 (p) + baseline 3,871; dossier §6 delivery bullet. **Set aside to /tmp/req125-sliceb-review:** Braid's Slice B consumer review (`docs/REQ-125-SLICE-B-CONSUMER-REVIEW.md` + FEATURE_REQUESTS line, findings B-F1 document-cache route bypass / B-F2 static-evaluation route bypass) — separate docs PR, then a fix slice.
+**Verification:** Release build 0 errors. `dotnet test Bosak.sln -c Release` **3,871 passed / 0 failed** (3,849 + 22, run twice identical; reconciled against pristine `ba5a30f` worktree: Xslt.Tests 1,003 → 1,025). XSLT smoke **162/0/26**. QT3 **31,142/0/679** and qt4 gate **0/223** unchanged by condition (all changes inside `Bosak.Xslt` + its tests; engine diff is a null-gated branch).
+**Quirks / flags for follow-up:** (1) **B-F1/B-F2 (Slice B review) are the next correction slice** — document cache bypasses unsupported/denied route checks; static evaluation approvals use the Document route, bypassing StaticEvaluation restrictions. (2) Per-output byte bounds serialize the offending output before discarding (size known only after serialization) — retained set always bounded, peak memory for one pathological output is not; candidate for a documented limit or streaming serializer in Slice D. (3) `XsltCaptureOutcome.Cancelled` is reserved but not yet triggerable — Slice D's natural seam is a cancellation token in `ObserveResultDocument`/message listener + mid-run engine checkpoints. (4) `Directory.Build.props` still pins 1.0.0 (release mechanics); Bosak.Xslt.csproj `<Version>` absent → `EngineVersion` = `0.0.0+hash`. (5) qt4 exploratory backlog 4,171 failures; fn:parse-html largest. (6) EXSLT/REQ-121 in the parallel session.
+**Next steps:** merge the PR → docs hash-tail pass → Slice B fix slice (B-F1/B-F2) → REQ-125 Slice D (limits/cancellation) completes the dossier.
+
+---
 
 **Date:** 2026-10-10 (eighty-sixth session — REQ-125 Slice A consumer-review corrections: F1–F4 findings fixed in `Bosak.Xslt.Validation`, response to PR #137)
 **Commit:** main `5b0cf05` (PR #139 squash — branch `fix/req125-slice-a-validation-findings` off main `07922ea`; CI "Build & test (net10.0)" green 3m07s).
@@ -14226,3 +16045,7 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 ---
 
+
+
+
+**1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.

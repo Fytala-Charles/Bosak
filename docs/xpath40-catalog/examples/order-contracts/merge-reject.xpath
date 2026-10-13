@@ -1,0 +1,1 @@
+let $m := map:merge((map{'A':1},map{'A':2}),map{'duplicates':'reject'}) return concat('size=',map:size($m),';A=',string-join($m?A ! string(.),','),';present=',map:contains($m,'A'))

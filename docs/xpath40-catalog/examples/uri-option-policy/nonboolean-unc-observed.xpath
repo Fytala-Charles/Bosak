@@ -1,0 +1,1 @@
+parse-uri('//server/share', map {'unc-path': 'false'})?scheme

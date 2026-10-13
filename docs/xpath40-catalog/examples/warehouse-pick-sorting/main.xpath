@@ -1,0 +1,7 @@
+let $rows := parse-xml('<picks><line id="A" aisle="B" bin="2" qty="2"/><line id="B" aisle="A" bin="10" qty="1"/><line id="C" aisle="A" bin="2" qty="3"/><line id="D" aisle="A" bin="2" qty="4"/></picks>')/picks/line
+return let $cp := 'http://www.w3.org/2005/xpath-functions/collation/codepoint'
+return let $key := function($line) { (string($line/@aisle), xs:integer($line/@bin)) }
+return let $ordered := sort($rows, $cp, $key)
+return let $members := fold-left($rows, [], function($a, $line) { array:append($a, ($line, xs:integer($line/@qty))) })
+return let $sorted := array:sort($members, $cp, function($member) { $key($member[1]) })
+return concat('sequence=', string-join($ordered ! string(@id), ','), '; members=', string-join(for $i in 1 to array:size($sorted) return concat($sorted($i)[1]/@id, ':', $sorted($i)[2]), ','))

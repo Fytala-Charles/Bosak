@@ -9,7 +9,13 @@
 
 ## 1. Name and Classification
 
-**Destructuring `let` bindings** — **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 §4.14 (FLWOR expressions), qt4cg PR 1131. Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).
+**Destructuring `let` bindings** — **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 §4.14 (FLWOR expressions), [QT4CG PR #1131](https://github.com/qt4cg/qtspecs/pull/1131). Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).
+
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: let expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
+**Delivery provenance:** [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129), [immutable mainline revision `b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
 
 ## 2. Intent
 
@@ -86,6 +92,13 @@ Files: `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (1.74), `src/Bosak.XPath.Pars
 
 ## 13. Sample Code
 
+Additional executable catalog cases unpack invoice metadata and explicitly test
+a missing currency key: [main](../examples/destructuring-let/main.xpath) produces
+`INV-1042 / EUR`; [edge](../examples/destructuring-let/edge.xpath) returns missing
+currency cardinality `0`. These run at `XPath40` and verify default-mode refusal.
+
+Start with [the invoice chapter's practical migration pair](../worked-examples/invoice-to-erp/README.md#where-xpath-40-can-improve-readability): unpack invoice ID and currency from a metadata map to build a display label. Both complete expressions are supplied, engine-verified, and produce `INV-2026-1042 / EUR`. The 4.0 form requires explicit opt-in. The probes below cover the individual binding shapes.
+
 ~~~xquery
 let $($x, $y) := (1, 2, 3) return ($x, $y)
   (: → (1, (2,3)) — last variable takes the rest :)
@@ -109,7 +122,11 @@ Cost class: **small constant overhead**. One `Destructure` opcode per binding gr
 
 ## 15. Known Uses
 
+Practical case: `InvoiceReferenceGuideTests.InvoiceLabel_MigrationPairMatchesAndRequiresOptIn` executes both published label expressions and verifies XPST0003 in the default mode. This is a chapter-level example, separate from qt4tests gate evidence.
+
 qt4tests `prod-LetClause` **137/0/52** (52 skips = XQuery-only dependencies) and `fn-compare` collateral — both promoted into the conformance gate (223 sets) at landing.
+
+**Named implementation evidence:** [`Compile_DestructuringLet_DefaultOptions_ThrowXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_DestructuringSequence_FrozenXPath40_Works`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). No feature-specific qt4 set assignment recorded here; unit evidence is listed explicitly. This is not a claim of absent upstream tests. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 
@@ -117,4 +134,4 @@ qt4tests `prod-LetClause` **137/0/52** (52 skips = XQuery-only dependencies) and
 - Structural record types — own entry pending.
 - `fn:scan` — [experimental/fn-scan.md](../experimental/fn-scan.md) (same delivery wave, opposite tier).
 
-*Entry created 2026-10-10 (REQ-126 scaffold).*
+*Entry created 2026-10-10; updated 2026-10-11 with the verified invoice migration case (REQ-126).*

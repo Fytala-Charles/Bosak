@@ -1,0 +1,6 @@
+(: Business guard only; does not validate XSD or annotate nodes. :)
+let $invoice := parse-xml('<invoice id="" currency="EUR" total="-1"/>')/invoice
+return if (string-length(string($invoice/@id)) gt 0 and $invoice/@currency = ('EUR','USD') and $invoice/@total castable as xs:decimal) then
+  if (xs:decimal($invoice/@total) ge 0) then concat($invoice/@id, '/', $invoice/@currency, ':', format-number(xs:decimal($invoice/@total), '0.00'))
+  else error(QName('urn:invoice', 'INVALID-INVOICE'))
+else error(QName('urn:invoice', 'INVALID-INVOICE'))

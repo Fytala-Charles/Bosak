@@ -1,0 +1,1 @@
+min(parse-xml('<v><n>bad</n></v>')/v/n)

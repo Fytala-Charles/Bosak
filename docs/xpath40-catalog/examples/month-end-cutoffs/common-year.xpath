@@ -1,0 +1,6 @@
+let $schedule := parse-xml('<schedule year="2023" month="2" hours="17" minutes="30" timezone="PT2H"/>')/schedule
+let $year := xs:integer($schedule/@year)
+let $month := xs:integer($schedule/@month)
+let $days := days-in-month(build-dateTime(map {'year': $year, 'month': $month, 'day': 1}))
+let $cutoff := build-dateTime(map {'year': $year, 'month': $month, 'day': $days, 'hours': xs:integer($schedule/@hours), 'minutes': xs:integer($schedule/@minutes), 'seconds': 0, 'timezone': xs:dayTimeDuration($schedule/@timezone)})
+return concat('days=', $days, '; cutoff=', $cutoff, '; utc=', adjust-dateTime-to-timezone($cutoff, xs:dayTimeDuration('PT0S')))

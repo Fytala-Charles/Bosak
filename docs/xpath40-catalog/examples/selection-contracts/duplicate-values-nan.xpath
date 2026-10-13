@@ -1,0 +1,1 @@
+string-join(duplicate-values((xs:double('NaN'),xs:float('NaN'),xs:double('NaN'))) ! string(.),",")

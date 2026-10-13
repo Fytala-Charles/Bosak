@@ -1,0 +1,1 @@
+  FAIL seqtor-145: XTTE0570: Empty sequence not allowed for type map(*)

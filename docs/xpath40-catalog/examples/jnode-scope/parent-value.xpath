@@ -1,0 +1,1 @@
+jvalue(jtree(map{'invoice':map{'id':'INV-1042'}})/invoice/id/parent::*)?id

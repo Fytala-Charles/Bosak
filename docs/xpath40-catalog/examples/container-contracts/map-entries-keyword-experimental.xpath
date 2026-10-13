@@ -1,0 +1,1 @@
+count(map:entries(map := map{'A':1}))

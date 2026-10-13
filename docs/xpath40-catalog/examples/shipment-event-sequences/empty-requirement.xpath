@@ -1,0 +1,1 @@
+concat(all-equal(()), '/', contains-subsequence((),()), '/', starts-with-subsequence((),()), '/', ends-with-subsequence((),()))

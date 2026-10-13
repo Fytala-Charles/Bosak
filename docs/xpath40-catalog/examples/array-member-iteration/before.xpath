@@ -1,0 +1,2 @@
+let $parcels := [('FILTER-A','BOLT-M8'), 'MANUAL']
+return string-join((for $i in 1 to array:size($parcels) return string(count(array:get($parcels, $i)))), ',')

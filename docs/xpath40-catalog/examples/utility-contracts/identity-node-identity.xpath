@@ -1,0 +1,1 @@
+let $n := parse-xml('<v>A</v>')/v return identity($n) is $n

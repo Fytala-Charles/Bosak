@@ -1,0 +1,1 @@
+starts-with-subsequence(map{'code':'A','time':1},map{'code':'a','time':2},function($a,$b){upper-case($a?code) eq upper-case($b?code)})

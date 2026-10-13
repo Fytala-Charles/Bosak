@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 08-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 12-10-2026     | Verify JNode member flow, recursive unwrapping and XTTE4060 boundaries.                   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -67,6 +68,50 @@ public class Xslt40ArraySwitchTests
     // ------------------------------------------------------------------
     // xsl:array (XSLT 4.0 §21.1.2)
     // ------------------------------------------------------------------
+
+    /// <summary>Rejects mixed per-focus results, including empty wrappers and indirect results.</summary>
+    /// <param name="body">The per-focus sequence constructor.</param>
+    [Theory]
+    [InlineData("<xsl:array-member select=\"'A'\"/><xsl:sequence select=\"'B'\"/>")]
+    [InlineData("<xsl:array-member select='()'/><xsl:sequence select=\"'B'\"/>")]
+    [InlineData("<xsl:if test='true()'><xsl:array-member select=\"'A'\"/></xsl:if><xsl:sequence select=\"'B'\"/>")]
+    [InlineData("<xsl:variable name='m' as='item()'><xsl:array-member select=\"'A'\"/></xsl:variable><xsl:sequence select=\"($m,'B')\"/>")]
+    public void Array_ForEachMixedJNode_RaisesXTTE4060(string body)
+    {
+        var ex = TransformError($"""
+            <xsl:template match='/'>
+                <xsl:variable name='a' as='array(*)'><xsl:array for-each='1'>{body}</xsl:array></xsl:variable>
+                <out><xsl:value-of select="string-join($a?* ! string(.),'|')"/></out>
+            </xsl:template>
+            """);
+        Assert.Contains("XTTE4060", ex.Message);
+    }
+
+    /// <summary>Retains a sole wrapper as one member and recursively unwraps member content.</summary>
+    [Fact]
+    public void ArrayMember_JNodeValueAndNestedEmptyMembers()
+    {
+        var result = RunTransform("""
+            <xsl:template match='/'>
+                <xsl:variable name='m' as='item()'><xsl:array-member select="('A','B')"/></xsl:variable>
+                <xsl:variable name='a' as='array(*)'><xsl:array for-each='1' select='$m'/></xsl:variable>
+                <xsl:variable name='b' as='array(*)'><xsl:array>
+                    <xsl:if test='true()'><xsl:array-member select='()'/></xsl:if>
+                    <xsl:array-member><xsl:array-member select='$m'/></xsl:array-member>
+                </xsl:array></xsl:variable>
+                <out value="{string-join(jvalue($m),'|')}" members='{array:size($a)}'
+                     grouped='{count($a(1))}' slots='{array:size($b)}'
+                     empty='{empty($b(1))}' nested="{string-join($b(2),'|')}"/>
+            </xsl:template>
+            """);
+        var output = XElement.Parse(result);
+        Assert.Equal("A|B", (string?)output.Attribute("value"));
+        Assert.Equal("1", (string?)output.Attribute("members"));
+        Assert.Equal("2", (string?)output.Attribute("grouped"));
+        Assert.Equal("2", (string?)output.Attribute("slots"));
+        Assert.Equal("true", (string?)output.Attribute("empty"));
+        Assert.Equal("A|B", (string?)output.Attribute("nested"));
+    }
 
     [Fact]
     public void Array_Select_OneSingletonMemberPerItem()

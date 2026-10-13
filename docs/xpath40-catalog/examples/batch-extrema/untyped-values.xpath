@@ -1,0 +1,1 @@
+let $n := parse-xml('<v><n>2</n><n>10</n></v>')/v/n return concat(min($n), '|', max($n))

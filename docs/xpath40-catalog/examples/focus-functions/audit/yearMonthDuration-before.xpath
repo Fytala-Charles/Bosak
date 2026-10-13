@@ -1,0 +1,1 @@
+string-join(xs:yearMonthDuration('P2M') ! string(.), '|')

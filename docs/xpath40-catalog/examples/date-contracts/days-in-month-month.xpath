@@ -1,0 +1,1 @@
+string(days-in-month(xs:gYearMonth('2026-04')))

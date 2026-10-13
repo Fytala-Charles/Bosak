@@ -1,0 +1,5 @@
+let $queue := parse-xml('<queue><order id="ORD101" status="ready"/><order id="ORD102" status="ready"/><order id="ORD103" status="hold"/><order id="ORD104" status="ready"/></queue>')/queue/order
+return let $stop := ((for $i in 1 to count($queue) return if (string($queue[$i]/@status) eq 'ready') then () else $i)[1], count($queue) + 1)[1]
+return let $dispatch := subsequence($queue, 1, $stop - 1)
+return let $retained := subsequence($queue, $stop)
+return concat('dispatch=', string-join($dispatch/@id, ','), '; retained=', string-join($retained/@id, ','))

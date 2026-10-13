@@ -1,0 +1,1 @@
+serialize(parse-xml('<invoice z="30" a="EUR"><line/></invoice>'), map{'method':'xml', 'indent-attributes':map{'invalid':true()}}) eq serialize(parse-xml('<invoice z="30" a="EUR"><line/></invoice>'), map{'method':'xml'})

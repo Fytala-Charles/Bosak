@@ -1,0 +1,1 @@
+string(days-in-month(xs:date('1900-02-01')))

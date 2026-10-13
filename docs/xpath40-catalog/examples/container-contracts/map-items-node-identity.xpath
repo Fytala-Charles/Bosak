@@ -1,0 +1,1 @@
+let $n := parse-xml('<s><v>2</v></s>')/s/v return map:items(map{'A':$n}) is $n

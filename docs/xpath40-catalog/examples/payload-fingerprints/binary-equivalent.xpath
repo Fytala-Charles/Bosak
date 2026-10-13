@@ -1,0 +1,1 @@
+hash('abc', 'SHA-256') eq hash(xs:hexBinary('616263'), 'SHA-256')

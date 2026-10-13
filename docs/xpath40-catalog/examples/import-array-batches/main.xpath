@@ -1,0 +1,5 @@
+(: One array member holds all product codes for one order. :)
+let $orders := (map{'id':'ORD-101','lines':('FILTER-A','SEAL-B')}, map{'id':'ORD-102','lines':('VALVE-C')}, map{'id':'ORD-103','lines':('HOSE-D','CLIP-E')}),
+    $members := array:build($orders, function($order,$position){$order?lines}),
+    $batch := array:slice($members, 1, 2)
+return concat('orders=', array:size($batch), ';lines=', string-join(array:items($batch), ','))

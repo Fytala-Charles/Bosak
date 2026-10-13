@@ -1,0 +1,52 @@
+{
+  "date": "2026-10-13",
+  "candidateParentRevision": "9afa7bfcf32c1b258930bc973c7b82ef3130cc50",
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "4bde38141fd027a6330dfce87648c10c51c6d4942828a5268ad434415d0ec102",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "74d8b798daf1276a7e3cb072484ed4e47da7907bc0835acd9a54eb08ff3f6f92",
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "edfc63ab5618eb0a6b91e49f0b473bd03faa651b08e8a962c68807a688b84cde",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "a92593b917ce5bf272ea494c0b9c25d94fdf4b86189ca744e6be68fdd00c83af",
+    "tests/Bosak.Xslt.Tests/Xslt40ArrayAliasBindingTests.cs": "b9c1d0886a4911ddda77f7f2409d426587c99b76ac44225506ee6c17b32f8d8f",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "nativeFilteredRun": {
+    "passed": 6,
+    "failed": 26,
+    "skipped": 0,
+    "scope": "Broader inherited structural/package cases remain failing"
+  },
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json and BINDING_RESULTS.json (both preserved)",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
+  "validation": "Final incremental Release build passes with zero warnings/errors; all 6901 unit tests across ten assemblies pass, zero failures/skips, including XSLT 4015/0/0. Thirty focused alias checks pass (fourteen new). Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894, zero gated failures. Native filtered type-alias run 6/26/0; cases 001/002/017 newly pass and original 023/024 still pass. Broader failures are retained, with runner exit 1. Thirteen documentation pages render; native catalog schema, original patches and historical receipt integrity checks pass. No behavioral changes after gate verification.",
+  "nativeReceipt": ".artifacts/xslt40/20261013T035057619Z.json",
+  "scope": "Source candidate 1.2.0 (unpublished) supports atomic and array item-type aliases at XSLT declaration and function boundaries. Array member types can use forward aliases, nested arrays, optional member sequences and enumeration aliases. Definition namespace bindings are preserved; outer occurrence indicators apply to arrays rather than their members. Supported direct/indirect recursive aliases raise XTSE4035. XPath 4.0 array coercion converts member sequences without atomizing the outer array; the XPath 3.1 path remains unchanged. Native type-alias-001/002 now pass; the filtered family is 6 pass/26 fail/0 skip, including unchanged contribution cases 023/024. Non-enumeration aliases in XPath instance-of/treat, general map/function/choice aliases, complete recursive validation, schema collisions and package exposure remain follow-ups. N04/REQ-126 remain In Progress. Public release remains 1.1.3.",
+  "newlyPassingNativeCases": [
+    "type-alias-001",
+    "type-alias-002",
+    "type-alias-017"
+  ],
+  "remainingNativeNotes": {
+    "type-alias-004": "Expected processor-specific SXTA0001; actual normative XTSE4035. Original assertion retained."
+  },
+  "testedImplementationCommit": "84df762206468d2a6a8976e5f7cdbbe6ffdc74f3",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/210"
+}

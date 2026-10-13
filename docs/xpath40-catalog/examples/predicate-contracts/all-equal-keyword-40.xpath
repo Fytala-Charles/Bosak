@@ -1,0 +1,1 @@
+all-equal(values := ('A','A'), collation := ())

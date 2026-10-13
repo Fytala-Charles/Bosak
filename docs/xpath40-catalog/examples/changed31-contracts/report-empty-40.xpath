@@ -1,0 +1,8 @@
+let $rows := parse-xml('<stock/>')/stock/item
+return let $byCode := map:merge(for $r in $rows return map:entry(string($r/@code),xs:integer($r/@quantity)))
+return let $codes := array { $rows/@code ! string(.) }
+return concat('rows=',count($rows),';quantities=',string-join(
+  for $code in ('A','Z') return concat($code,':',if (map:contains($byCode,$code)) then map:get($byCode,$code) else 0)
+,','),';selected=',string-join(
+  for $p in (1,4) return if ($p ge 1 and $p le array:size($codes)) then array:get($codes,$p) else 'missing-row'
+,','))

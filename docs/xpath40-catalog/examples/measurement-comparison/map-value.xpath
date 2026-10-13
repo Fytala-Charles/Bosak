@@ -1,0 +1,1 @@
+compare(map {'value': 1}, 1)

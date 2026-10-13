@@ -1,0 +1,2 @@
+(: Synthetic Pipeline operator case; compatibility 40; no external context required. :)
+string-length('   ' -> normalize-space())

@@ -1,0 +1,2 @@
+(: Synthetic Mapping arrow case; compatibility 40; no external context required. :)
+string-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')

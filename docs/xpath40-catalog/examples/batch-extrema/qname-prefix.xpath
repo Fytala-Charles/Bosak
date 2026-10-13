@@ -1,0 +1,1 @@
+namespace-uri-from-QName(min((QName('urn:q', 'a:x'), QName('urn:q', 'b:x'))))

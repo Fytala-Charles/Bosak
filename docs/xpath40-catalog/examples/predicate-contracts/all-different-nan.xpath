@@ -1,0 +1,1 @@
+all-different((xs:float('NaN'),xs:double('NaN')))

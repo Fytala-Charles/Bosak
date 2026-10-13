@@ -1,0 +1,1 @@
+map {} cast as record(id as xs:string)

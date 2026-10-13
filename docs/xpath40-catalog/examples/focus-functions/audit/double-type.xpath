@@ -1,0 +1,1 @@
+every $v in ('12.5' ! xs:double()) satisfies $v instance of xs:double

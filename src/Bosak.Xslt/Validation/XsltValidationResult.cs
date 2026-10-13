@@ -15,6 +15,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-125 review F1: StructuralChecks added to the declared coverage                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-125 Slice D: Cancelled is now triggerable — outcome remarks describe cooperative      |
+//                      |                  |       |                | cancellation instead of the Slice D placeholder                                        |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Validation;
@@ -32,9 +35,10 @@ namespace Bosak.Xslt.Validation;
 /// could not be decoded or parsed as XML at all), <see cref="XsltValidationOutcome.Invalid"/>
 /// (expression/pattern/AVT or structural diagnostics), <see cref="XsltValidationOutcome.Refused"/> (a module
 /// reference was refused), <see cref="XsltValidationOutcome.UnsupportedCoverage"/> (deferred
-/// constructs present, no diagnostics), <see cref="XsltValidationOutcome.Valid"/>.
-/// <see cref="XsltValidationOutcome.Cancelled"/> is reserved for REQ-125 Slice D and is never
-/// produced by this build.
+/// constructs present, no diagnostics), <see cref="XsltValidationOutcome.Valid"/>, with
+/// <see cref="XsltValidationOutcome.Cancelled"/> reported instead of the accumulated outcome when
+/// the caller's cancellation token fires during the walk (the walk stops at the next element
+/// boundary; diagnostics collected so far are retained alongside an XV0013 cancellation entry).
 /// </para>
 /// <para>
 /// Validation performs no transformation and no result-document writes; the validated snapshot and

@@ -1,0 +1,1 @@
+string-join(sort(map:keys(map:filter(map{'A':(1,2),'B':0},function($k){1}))),',')

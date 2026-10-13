@@ -1,0 +1,2 @@
+(: Synthetic Rejected mapping spelling case; compatibility 40; no external context required. :)
+string-join((' FILTER-A ') =!> normalize-space(), ',')

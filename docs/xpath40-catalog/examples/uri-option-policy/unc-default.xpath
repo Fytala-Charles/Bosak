@@ -1,0 +1,1 @@
+let $p := parse-uri('//server/share') return concat('scheme=', $p?scheme, '; host=', $p?host, '; path=', $p?path)

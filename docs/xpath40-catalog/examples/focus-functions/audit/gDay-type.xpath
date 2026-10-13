@@ -1,0 +1,1 @@
+every $v in ('---12' ! xs:gDay()) satisfies $v instance of xs:gDay

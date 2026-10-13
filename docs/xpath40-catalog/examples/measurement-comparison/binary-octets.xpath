@@ -1,0 +1,1 @@
+compare(xs:hexBinary('0AFF'), xs:base64Binary('Cv8='))

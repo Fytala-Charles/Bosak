@@ -1,0 +1,1 @@
+string-join(xs:string('supplier A') ! string(.), '|')

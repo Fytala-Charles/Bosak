@@ -1,0 +1,1 @@
+pad-string(value := 'INV-42', length := 10)

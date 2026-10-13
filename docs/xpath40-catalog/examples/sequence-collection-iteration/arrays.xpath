@@ -1,0 +1,2 @@
+(: Iteration across collection sequences; synthetic fulfillment data; mode 40; no external context. :)
+string-join(for member $parcel in ([('FILTER-A','BOLT-M8')], ['MANUAL']) return string(count($parcel)), ',')

@@ -1,0 +1,2 @@
+(: Synthetic Atomic equality case; compatibility 40; no external context required. :)
+fn:atomic-equal(xs:double('NaN'), xs:double('NaN'))

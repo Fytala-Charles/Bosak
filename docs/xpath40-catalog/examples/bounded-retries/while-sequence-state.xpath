@@ -1,0 +1,1 @@
+while-do((1, 2), function($s, $p) { $p le 2 }, function($s, $p) { ($s, $p + 2) }) => string-join(',')

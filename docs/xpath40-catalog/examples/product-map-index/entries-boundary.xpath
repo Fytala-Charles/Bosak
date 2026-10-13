@@ -1,0 +1,1 @@
+let $entries := map:entries(map{'FILTER-A':8,'SEAL-B':0}) return concat($entries instance of array(*), '/', count($entries))

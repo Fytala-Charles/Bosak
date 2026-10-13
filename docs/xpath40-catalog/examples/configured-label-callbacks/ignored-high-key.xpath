@@ -1,0 +1,4 @@
+let $names := parse-xml('<dispatch><customer name="  Ada  "/><customer name="Grace"/></dispatch>')/dispatch/customer/@name ! string(.)
+let $format := function($prefix, $name, $uppercase) { concat($prefix, if ($uppercase) then upper-case(normalize-space($name)) else normalize-space($name)) }
+let $label := partial-apply($format, map {1: 'SHIP: ', 3: true(), 99: 'ignored'})
+return concat('arity=', function-arity($label), '; labels=', string-join(for-each($names, $label), ' | '))

@@ -1,0 +1,1 @@
+fn:parse-html('<p>Invoice INV-1042: EUR 30.00</p>', map{})

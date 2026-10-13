@@ -1,0 +1,2 @@
+let $order := parse-xml('<order id="ORD101"/>')/order
+return identity($order) is $order

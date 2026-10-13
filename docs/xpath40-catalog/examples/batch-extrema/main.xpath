@@ -1,0 +1,11 @@
+let $rows := parse-xml('<batch xmlns:q="urn:qa:codes" xmlns:e="urn:erp:codes"><reading id="A" value="2.5" code="q:low"/><reading id="B" value="7.5" code="q:high"/><reading id="C" value="5" code="e:normal"/><reading id="D" value="invalid" code="q:invalid"/><reading id="E" value="" code="q:missing"/></batch>')/batch/reading
+return let $valid := $rows[@value castable as xs:decimal]
+return let $invalid := $rows[not(@value castable as xs:decimal)]
+return let $values := $valid/@value ! xs:decimal(.)
+return let $codes := $rows ! resolve-QName(string(@code), .)
+return let $label := function($q) { if (empty($q)) then '-' else concat('Q{', namespace-uri-from-QName($q), '}', local-name-from-QName($q)) }
+return let $first := min($codes)
+return let $last := max($codes)
+return let $low := min($values)
+return let $high := max($values)
+return concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; min=', if (empty($low)) then '-' else string($low), '; max=', if (empty($high)) then '-' else string($high), '; first-code=', $label($first), '; last-code=', $label($last))

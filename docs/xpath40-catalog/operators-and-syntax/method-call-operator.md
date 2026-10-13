@@ -9,7 +9,13 @@
 
 ## 1. Name and Classification
 
-**Method-call operator `=?>`** — **Deferred** (deliberately not implemented). Spec: XPath 4.0 §4.22.3 (operator summary), qt4cg Issue 2219. Deferral recorded: REQ-118 dossier §1.2 "Still moving — do NOT build yet" (semantics changed 25 June 2026).
+**Method-call operator `=?>`** — **Deferred** (deliberately not implemented). Spec: XPath 4.0 §4.22.3 (operator summary), [QT4CG issue #2219](https://github.com/qt4cg/qtspecs/issues/2219). Deferral recorded: REQ-118 dossier §1.2 "Still moving — do NOT build yet" (semantics changed 25 June 2026).
+
+**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: methods and method calls](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.
+
+**Delivery provenance:** [PR #77](https://github.com/Fytala-Charles/Bosak/pull/77), [immutable mainline revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) (2026-10-08). This is the adoption/disposition dossier delivery, not implementation of the refused shape.
+
+**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
 
 ## 2. Intent
 
@@ -61,7 +67,12 @@ None. Gate posture if attempted later: it would land at `XPath40Experimental` fi
 
 ## 13. Sample Code
 
-None — no syntax is committed. Do not cargo-cult `$x =?> f()` from draft-era blog posts; it does not parse in any Bosak compatibility level.
+No method-call syntax is committed. Do not cargo-cult `$x =?> f()` from
+draft-era blog posts. Use a verified stable alternative for a packing-plan array:
+[main.xpath](../examples/method-call-alternative/main.xpath) evaluates
+`array:size(['FILTER-A', 'BOLT-M8'])` to `2`; the
+[empty-array case](../examples/method-call-alternative/edge.xpath) returns `0`.
+Both run at `XPath31` and claim no support for `=?>`.
 
 ## 14. Performance Notes
 
@@ -69,7 +80,12 @@ Not applicable (not implemented). Design note for the future: type-dictionary di
 
 ## 15. Known Uses
 
-None. qt4tests has no gated dependence on this operator.
+No implementation evidence for the deferred operator is claimed. Published
+stable alternatives are `method-call-alternative-main` and
+`method-call-alternative-edge` in `CatalogExampleTests`. These checks do not
+promote or implement method-call syntax.
+
+**Named implementation evidence:** [`Compile_MappingArrow_31Mode_ThrowsXpst0003`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_MappingArrow_AppliesFunctionPerItem`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs), [`Evaluate_MappingArrow_WithArgumentsPrependsContextItem`](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Decision record, not an engine delivery or a qt4 set promotion. Tests below pin the supported/refused alternatives. These references describe existing evidence; this documentation update does not rerun or promote the full conformance suite.
 
 ## 16. Related Features
 

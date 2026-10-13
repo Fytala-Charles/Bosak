@@ -1,0 +1,2 @@
+(: Synthetic Choice item types case; compatibility 40; no external context required. :)
+ 'PO-8801' instance of (xs:integer|xs:string)

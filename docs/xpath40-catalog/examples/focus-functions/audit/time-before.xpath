@@ -1,0 +1,1 @@
+string-join(xs:time('09:30:00Z') ! string(.), '|')

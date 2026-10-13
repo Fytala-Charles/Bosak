@@ -1,0 +1,68 @@
+From 024e11f3525c1753ccda92561adc220bf584f1f0 Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Mon, 12 Oct 2026 21:20:39 +0200
+Subject: [PATCH] Add record-type focused boundary tests
+
+---
+ tests/type/record/_record-test-set.xml | 14 ++++++++++++++
+ tests/type/record/record-026.xsl       |  8 ++++++++
+ tests/type/record/record-027.xsl       |  8 ++++++++
+ 3 files changed, 30 insertions(+)
+ create mode 100644 tests/type/record/record-026.xsl
+ create mode 100644 tests/type/record/record-027.xsl
+
+diff --git a/tests/type/record/_record-test-set.xml b/tests/type/record/_record-test-set.xml
+index c92f11f2..2fe917c0 100644
+--- a/tests/type/record/_record-test-set.xml
++++ b/tests/type/record/_record-test-set.xml
+@@ -741,4 +741,18 @@
+    
+    
+  
++   <test-case name="record-026">
++      <description>Named record constructor uses declared field order and retains an explicit empty field.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="record-026.xsl"/></test>
++      <result><assert-xml><![CDATA[<out sku="A" quantity="2" note="true" empty="true" typed="true"/>]]></assert-xml></result>
++   </test-case>
++   <test-case name="record-027">
++      <description>Static field initialization is excluded from constructor parameters and is retained in the record.</description>
++      <created by="Charles Korthout" on="2026-10-12"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="record-027.xsl"/></test>
++      <result><assert-xml><![CDATA[<out sku="B" kind="line" quantity="3" fields="3"/>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+\ No newline at end of file
+diff --git a/tests/type/record/record-026.xsl b/tests/type/record/record-026.xsl
+new file mode 100644
+index 00000000..eba255e3
+--- /dev/null
++++ b/tests/type/record/record-026.xsl
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- Named record constructor uses declared field order and retains an explicit empty field. -->
++<xsl:record-type name="t:line" constructor="yes"><xsl:field name="sku" as="xs:string"/><xsl:field name="quantity" as="xs:integer"/><xsl:field name="note" as="xs:string?"/></xsl:record-type>
++<xsl:template name="xsl:initial-template"><xsl:variable name="line" as="t:line" select="t:line('A',2,())"/><out sku="{$line?sku}" quantity="{$line?quantity}" note="{map:contains($line,'note')}" empty="{empty($line?note)}" typed="{$line instance of t:line}"/></xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/type/record/record-027.xsl b/tests/type/record/record-027.xsl
+new file mode 100644
+index 00000000..06e41866
+--- /dev/null
++++ b/tests/type/record/record-027.xsl
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:t="urn:order-types"
++ xmlns:map="http://www.w3.org/2005/xpath-functions/map" exclude-result-prefixes="#all">
++<!-- Static field initialization is excluded from constructor parameters and is retained in the record. -->
++<xsl:record-type name="t:line" constructor="yes"><xsl:field name="sku" as="xs:string"/><xsl:field name="quantity" as="xs:integer"/><xsl:field name="kind" static="yes" as="xs:string" select="'line'"/></xsl:record-type>
++<xsl:template name="xsl:initial-template"><xsl:variable name="line" as="t:line" select="t:line('B',3)"/><out sku="{$line?sku}" kind="{$line?kind}" quantity="{$line?quantity}" fields="{map:size($line)}"/></xsl:template>
++</xsl:stylesheet>
+-- 
+2.54.0.windows.1
+

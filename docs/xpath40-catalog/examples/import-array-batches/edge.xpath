@@ -1,0 +1,1 @@
+let $batch := array:slice(array:build(()), 1, 2) return concat(array:size($batch), '/', array:empty($batch), '/', count(array:items($batch)))

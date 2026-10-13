@@ -1,0 +1,10 @@
+{
+  "upstreamUrl": "https://github.com/qt4cg/xslt40-test.git",
+  "reviewedRevision": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "localCheckout": ".upstream/xslt40-test",
+  "catalog": "catalog.xml",
+  "schema": "admin/catalog-schema.xsd",
+  "adapter": "tests/Bosak.Xslt.Conformance",
+  "profile": "--xslt40",
+  "status": "Initial adapter setup; targeted evidence only, no full-suite conformance claim."
+}

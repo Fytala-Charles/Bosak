@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test-set xmlns="http://www.w3.org/2012/10/xslt-test-catalog" name="xslt40-adapter-controls">
+  <description>Local adapter controls, not upstream contribution tests.</description>
+  <test-case name="xslt40-adapter-keyword">
+    <description>Execute an actual version 4.0 stylesheet using XPath keyword arguments.</description>
+    <created by="Charles Korthout" on="2026-10-12"/>
+    <dependencies><spec value="XSLT40+"/></dependencies>
+    <test><stylesheet file="keyword.xsl"/></test>
+    <result><assert-xml>&lt;result&gt;1,2,3&lt;/result&gt;</assert-xml></result>
+  </test-case>
+  <test-case name="xslt40-adapter-error">
+    <description>Match the actual static unknown-function error code.</description>
+    <created by="Charles Korthout" on="2026-10-12"/>
+    <dependencies><spec value="XSLT40+"/></dependencies>
+    <test><stylesheet file="unknown-function.xsl"/></test>
+    <result><error code="XPST0017"/></result>
+  </test-case>
+</test-set>

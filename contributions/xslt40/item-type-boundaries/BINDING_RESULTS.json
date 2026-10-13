@@ -1,0 +1,102 @@
+{
+  "date": "2026-10-13",
+  "candidateParentRevision": "73920217f7673401d438f34e0d0bd91ad4dc371c",
+  "sourceCandidate": "1.2.0 (unpublished)",
+  "publishedVersion": "1.1.3",
+  "sourceSha256": {
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "c4611a739483d629898bfa6ac375014f0ac14e75e81dd6fedcd4b40210e2a3a0",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "346c8cdde0c4db68a84eb89f09b1af97c3e09bb182f5f8e5e72cdfc9f9f3a72a",
+    "tests/Bosak.Xslt.Tests/Xslt40EnumerationBindingTests.cs": "6bd8875b31d42dedfd372f92c8b033433c89a9ef414df1a9af5ed1799061e244",
+    "docs/xpath40-catalog/examples/cases.json": "0b1c53ace1d980a439ffb9bc5571f8ef918c045bba8c33108931b491df76b214",
+    "docs/xpath40-catalog/examples/xslt-type-declarations/item-used-valid.xsl": "52e8a441e358e9eafcc3b6dab3d5f36ad7a8642b25f14e8ed452f2ce20b19853",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "nativeFilteredRun": {
+    "passed": 3,
+    "failed": 29,
+    "skipped": 0,
+    "scope": "Includes inherited structural/package cases; broad alias conformance not established"
+  },
+  "previousImplementationEvidence": "POST_FIX_RESULTS.json (preserved)",
+  "specification": {
+    "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+    "source": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+    "section": "named-item-types",
+    "sha256": "e69cc409987baa7eebff3bf62a1ddb890007f4883962c11bf71be23f2d253bda"
+  },
+  "independentProcessorConfirmation": "Outstanding",
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/25",
+  "validation": {
+    "releaseBuild": "Pass; zero warnings/errors in final incremental build",
+    "focusedTests": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "unitTests": {
+      "passed": 6887,
+      "failed": 0,
+      "skipped": 0,
+      "assemblies": 10
+    },
+    "xsltTests": {
+      "passed": 4001,
+      "failed": 0,
+      "skipped": 0
+    },
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894,
+      "gatedFailures": 0
+    },
+    "documentation": "13 pages rendered; catalogue schema and original contribution patches/hashes checked; named currency fixture passes; original receipts preserved"
+  },
+  "nativeReceipt": {
+    "timestampUtc": "2026-10-13T03:36:11.4960981Z",
+    "upstream": "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot": "D:\\Development\\Bosak\\.upstream\\xslt40-test",
+    "suiteRevision": "4ddcad8cfc0604f3a0a2cbec7d00032c7e8e0c5a",
+    "suiteStatus": [],
+    "bosakRevision": "73920217f7673401d438f34e0d0bd91ad4dc371c",
+    "bosakStatus": [
+      " M docs/xpath40-catalog/examples/cases.json",
+      " M src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs",
+      " M src/Bosak.Xslt/Runtime/TransformEngine.cs",
+      "?? .guard-tmp/",
+      "?? .sweep-baselines/",
+      "?? tests/Bosak.Xslt.Tests/Xslt40EnumerationBindingTests.cs"
+    ],
+    "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware": false,
+    "testSet": "type-alias",
+    "testCase": "",
+    "runnerExitCode": 1,
+    "counts": {
+      "Failed": 29,
+      "Skipped": 0,
+      "Total": 32,
+      "Passed": 3
+    },
+    "success": false,
+    "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log": "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261013T033609151Z.log"
+  },
+  "testedImplementationCommit": "c91184eeb2e6f83272b0b8f7e82808f780e5ca0c",
+  "bosakReviewPr": "https://github.com/Fytala-Charles/Bosak/pull/209"
+}

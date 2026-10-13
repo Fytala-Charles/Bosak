@@ -1,0 +1,40 @@
+{
+  "family": "switch",
+  "queueId": "N03",
+  "testSet": "switch",
+  "folder": "tests/insn/switch",
+  "branch": "bosak/switch-boundaries",
+  "base": "6205faf9f32ace6338ac245c41f8eb9a1447926f",
+  "commit": "b91f75a45dccd6cf6653bfe00f95ae2e2aa49603",
+  "baselineCases": 10,
+  "cases": [
+    {
+      "id": "switch-008",
+      "description": "Overlapping status alternatives select the first match and do not evaluate later tests.",
+      "expected": "<out>first</out>",
+      "status": "pass",
+      "actual": "PASS switch-008",
+      "stylesheetSha256": "5d9e38d4155425470fc7b8d298b4422af7e7c44c4030ac29ef9d596d556e67ab"
+    },
+    {
+      "id": "switch-009",
+      "description": "A matching empty-result branch ends selection instead of falling through.",
+      "expected": "<out count=\"0\"/>",
+      "status": "pass",
+      "actual": "PASS switch-009",
+      "stylesheetSha256": "461c64e767898ed3d3e46c9857a4203592834e002cc5af196b4c3cc2940b43d3"
+    }
+  ],
+  "patchSha256": "0ecc3562e16b9fd52a2ac0291173a6d8114e070dfec0061ff97af5165e960653",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml",
+  "specSection": "xsl-switch",
+  "audit": "Reviewed switch-001\u2013007: basic expressions/content, multiple alternatives, fallback and no-match behavior exist. New cases add first-match termination with a later failing test, and empty-result termination after an empty candidate test. These are distinct from a switch with no matching branch.",
+  "independentConfirmation": "Outstanding; reviewer cross-check requested",
+  "passed": 2,
+  "failed": 0,
+  "upstreamPr": "https://github.com/qt4cg/xslt40-test/pull/24",
+  "upstreamStatus": "Open; acceptance/review and independent confirmation pending",
+  "bosakImplementationBaseline": "7cee697575742d8d9a1ed2bd3ebd56e7c47c3b82",
+  "publishedVersion": "1.1.3",
+  "sourceVersion": "1.1.4 (unpublished)"
+}

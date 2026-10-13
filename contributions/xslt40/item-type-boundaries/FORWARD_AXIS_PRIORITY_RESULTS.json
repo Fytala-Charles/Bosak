@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 computes supported XSLT 4.0 attribute shorthand and forward-axis pattern priorities from the underlying node test. Named attributes (@A and attribute::A) and named element axis tests have priority 0; namespace/local wildcards retain -0.25 and untargeted kind tests retain -0.5. Named processing-instruction axis tests have priority 0 and now match their target in 4.0 child/self/descendant-style node-test compilation. Existing 4.0 typed kind-test priorities, explicit priorities, predicate priority 0.5 and single-rule union behavior are retained. Earlier effective profiles keep their original behavior. Axis recognition for priority and 4.0 matching ignores :: inside EQName URIs. Thirty-three regressions compare default priorities against explicit competitors, verify earlier-profile differences, target nonmatches, attribute-union next-match chains and positive/negative EQName URI cases. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Intersect/except and bare predicate-pattern priorities, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "030533e4bbf16fec7be9037a1ce483167c3d53c0",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sections": [
+      "6.4.3 Default Priority for XNode Patterns"
+    ],
+    "retrieved": "2026-10-13"
+  },
+  "nativeNextMatch": {
+    "passed": 46,
+    "failed": 8,
+    "skipped": 6
+  },
+  "nativeTypeAlias": {
+    "passed": 22,
+    "failed": 10,
+    "skipped": 0
+  },
+  "newlyPassingNativeCases": [],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Final incremental Release build succeeds with zero warnings and zero errors. All 7454 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4568/0/0 and thirty-three new regressions; focused forward-axis regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "0bc9aa58f99ffb5d9ca356a08cda9689b9d53ff5f993d95841b98270e84fbd05",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "fafc609708bf92b71919e1509b0774c5d284f48ea33de27f19289ce2171cf3e9",
+    "tests/Bosak.Xslt.Tests/Xslt40ForwardAxisPriorityTests.cs": "4229ef96d42782e8e4f55e7cc67c34c6c05d93caef28b4f959ef0afd16cc4d7a",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  },
+  "nativeFinalReceipt": ".artifacts/xslt40/20261013T120309024Z.json",
+  "nativeTypeAliasReceipt": ".artifacts/xslt40/20261013T120310946Z.json"
+}

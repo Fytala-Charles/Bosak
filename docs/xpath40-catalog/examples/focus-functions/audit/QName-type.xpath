@@ -1,0 +1,1 @@
+every $v in ('xs:integer' ! xs:QName()) satisfies $v instance of xs:QName

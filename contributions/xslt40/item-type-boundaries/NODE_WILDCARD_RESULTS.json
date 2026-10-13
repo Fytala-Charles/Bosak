@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 supports partial element/attribute name wildcards in aliases and supported structural types: *:Name matches an exact local name in any namespace; prefix:* and Q{uri}* match any local name in the specified namespace. Prefix wildcards retain declaration bindings under use-site rebinding, including document-node(element(...)) nesting. Unbound wildcard prefixes raise XPST0081; adjacent unknown type names retain XPST0051. The ##any declaration default now expands unprefixed element tests to *:Name while unprefixed attributes stay unqualified. Twenty new regressions verify identity, case/namespace mismatches, empty namespaces, nested arrays/documents and diagnostics. Node-name unions, schema-annotated tests, fn/named-parameter function grammar and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "7fae0371ceb4930593804f378329af752e7866d7",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-element-test",
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 11,
+    "failed": 21,
+    "skipped": 0
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T091724728Z.json",
+  "newlyPassingCases": [
+    "wildcard-type-001",
+    "wildcard-type-002"
+  ],
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Release build passes with 12 existing warnings and zero errors. All 7143 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4257/0/0 and twenty new regressions. Focused node-alias tests pass 65/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 11/21/0: wildcard-type-001/002 newly pass and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/ItemTypeAliasExpansion.cs": "4a6301be2dcce2b4393f2c945fa1ed3adb42ec9a4f514ac429f580c2b22c950a",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "5a5b976baa753b4844fc08cbf4e705f4804b6c75619bc4d861899766d96f222c",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "b7f2849e8d641d653f4efd4333893fe48774711e9e99cb914d92853db6eb4480",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "f93a8f160dc4059ca383a64c426eca1747fa1bb058858ff90114e85dda93fc58",
+    "tests/Bosak.Xslt.Tests/Xslt40NodeKindAliasTests.cs": "206d6138a3df0dcefd2932088d129e530dc71ccd77cd078336871e786cc7e5ea",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

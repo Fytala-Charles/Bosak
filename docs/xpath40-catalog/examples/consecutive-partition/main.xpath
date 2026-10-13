@@ -1,0 +1,2 @@
+(: Consecutive partitioning; synthetic fulfillment data; mode 40; no external context. :)
+string-join(partition(('NORTH','NORTH','NORTH','SOUTH','NORTH'), function($current,$next,$position) { count($current) ge 2 or $current[1] ne $next }) ! string-join(?*, ','), '|')

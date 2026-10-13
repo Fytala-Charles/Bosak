@@ -1,0 +1,5 @@
+<erp:exceptions xmlns:erp="urn:example:erp:import">
+  <erp:exception invoice-id="INV-2026-1043" scope="line" line-id="2" reason="missing-sku"/>
+  <erp:exception invoice-id="INV-2026-1043" scope="line" line-id="3" reason="invalid-unit-price"/>
+  <erp:exception invoice-id="INV-2026-1043" scope="line" line-id="4" reason="invalid-quantity"/>
+</erp:exceptions>

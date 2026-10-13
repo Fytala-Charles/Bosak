@@ -1,0 +1,1 @@
+concat(map:size(map:build((), function($r){$r?sku})), '/', map:size(map:filter(map{'SEAL-B':0}, function($k,$v){$v gt 0})), '/', count(map:items(map{})))

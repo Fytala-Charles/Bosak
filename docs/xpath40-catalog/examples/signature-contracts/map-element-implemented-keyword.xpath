@@ -1,0 +1,1 @@
+count(map-to-element(input := map{'invoice':map{}}, options := map{}))

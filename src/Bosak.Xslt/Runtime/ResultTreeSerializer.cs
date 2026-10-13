@@ -71,6 +71,10 @@
 //                      | Charles Korthout | 1.36  | 02-10-2026     | Port of the Saxon 9.x HTMLIndenter for method=xhtml indent=yes (3-space levels,        |
 //                      |                  |       |                | inline/formatted-tag adjacency rules, newline folding in text) — validation-0201       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.37  | 10-10-2026     | REQ-125 Slice C: SerializeToBytes — capture-mode byte production with encoding/BOM      |
+//                      |                  |       |                | preamble                                                                              |
+//                      | Charles Korthout | 1.38  | 11-10-2026     | C-F1: shared writer-based HTML/XHTML serialization for bounded capture.                  |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -86,7 +90,7 @@ namespace Bosak.Xslt.Runtime;
 /// <summary>
 /// Serializes XDM result trees to XML, HTML, XHTML, or text strings.
 /// </summary>
-internal static class ResultTreeSerializer
+internal static partial class ResultTreeSerializer
 {
     /// <summary>
     /// Serializes an XDM value to an XML string using default settings.
@@ -159,6 +163,31 @@ internal static class ResultTreeSerializer
 
         // Atomic value
         return value.ToString();
+    }
+
+    /// <summary>
+    /// Serializes an XDM value to bytes using the provided output properties: the value is serialized
+    /// with the effective method/encoding and encoded with the declared output encoding. A declared
+    /// byte-order mark is emitted as real preamble bytes (the string serializer carries it as a
+    /// leading U+FEFF character, which is stripped here so the preamble is not duplicated).
+    /// REQ-125 Slice C: capture-mode byte production.
+    /// </summary>
+    internal static byte[] SerializeToBytes(XdmValue value, Stylesheet.OutputProperties output)
+    {
+        var serialized = Serialize(value, output);
+        if (serialized.Length > 0 && serialized[0] == '\uFEFF')
+            serialized = serialized.Substring(1);
+
+        var encoding = GetEncodingWithBom(output.Encoding, output.ByteOrderMark);
+        var body = encoding.GetBytes(serialized);
+        var preamble = output.ByteOrderMark ? encoding.GetPreamble() : Array.Empty<byte>();
+        if (preamble.Length == 0)
+            return body;
+
+        var bytes = new byte[preamble.Length + body.Length];
+        Buffer.BlockCopy(preamble, 0, bytes, 0, preamble.Length);
+        Buffer.BlockCopy(body, 0, bytes, preamble.Length, body.Length);
+        return bytes;
     }
 
     /// <summary>
@@ -691,6 +720,12 @@ internal static class ResultTreeSerializer
     private static string SerializeAsHtml(XdmValue value, Stylesheet.OutputProperties props)
     {
         using var writer = new StringWriter();
+        WriteHtml(writer, value, props);
+        return writer.ToString();
+    }
+
+    private static void WriteHtml(TextWriter writer, XdmValue value, Stylesheet.OutputProperties props)
+    {
         WriteByteOrderMark(writer, props);
 
         // Flatten the value into a list of nodes/atomics.
@@ -803,12 +838,18 @@ internal static class ResultTreeSerializer
         }
 
         writer.Flush();
-        return writer.ToString();
+
     }
 
     private static string SerializeAsXhtml(XdmValue value, Stylesheet.OutputProperties props)
     {
         using var writer = new StringWriter();
+        WriteXhtml(writer, value, props);
+        return NormalizeSurrogatePairEntities(writer.ToString());
+    }
+
+    private static void WriteXhtml(TextWriter writer, XdmValue value, Stylesheet.OutputProperties props)
+    {
         WriteByteOrderMark(writer, props);
 
         var items = FlattenItems(value).ToList();
@@ -1043,7 +1084,7 @@ internal static class ResultTreeSerializer
         }
 
         writer.Flush();
-        return NormalizeSurrogatePairEntities(writer.ToString());
+
     }
 
     private static IEnumerable<XdmValue> FlattenItems(XdmValue value)
@@ -2972,7 +3013,15 @@ internal static class ResultTreeSerializer
     {
         // Split any ]]> inside the text as required by the spec.
         writer.Write("<![CDATA[");
-        writer.Write(value.Replace("]]>", "]]]]><![CDATA[>"));
+        var remaining = value.AsSpan();
+        int split;
+        while ((split = remaining.IndexOf("]]>")) >= 0)
+        {
+            writer.Write(remaining[..split]);
+            writer.Write("]]]]><![CDATA[>");
+            remaining = remaining[(split + 3)..];
+        }
+        writer.Write(remaining);
         writer.Write("]]>");
     }
 

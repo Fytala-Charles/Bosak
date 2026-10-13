@@ -1,0 +1,1 @@
+all-equal((xs:double('NaN'),xs:double('NaN')))

@@ -1,0 +1,33 @@
+{
+  "date": "2026-10-13",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "scope": "Candidate 1.2.0 now validates supported XPath 4.0 sequence-type names on XSLT @as declarations at stylesheet registration, including unused variables, parameters, function results and record fields. The check runs after package-local aliases and records are registered and traverses import/include modules with each declaration's namespace context. Unknown direct/nested names raise XPST0051; undeclared binding prefixes raise XPST0081; record registration retains XTSE0280 for unbound field prefixes. Forward aliases, finite recursive record references, default type namespaces and quoted enumeration/field names remain valid. Fourteen new regressions cover these boundaries. XPath 3.1 declarations keep their existing path. Unsupported shared-walker grammar, complete schema variety semantics and package type exposure remain follow-ups; N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; no release or gate promotion.",
+  "candidateParentRevision": "4323b1c84c159c508611b8930ef4d34b103f51bc",
+  "nativeFilteredRun": {
+    "passed": 9,
+    "failed": 23,
+    "skipped": 0
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T081811166Z.json",
+  "newlyPassingCases": [
+    "type-alias-019"
+  ],
+  "exactContributionCases": [
+    {
+      "id": "type-alias-023",
+      "outcome": "pass"
+    },
+    {
+      "id": "type-alias-024",
+      "outcome": "pass"
+    }
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Release build passes with 12 existing analyzer warnings and zero errors. All 7078 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4192/0/0 and fourteen new regressions. Database provider tests initially failed because sandboxed HttpListener access was blocked; rerunning that assembly with listener access passed 47/0/0. Focused static-type tests pass 35/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias 9/23/0; type-alias-019 newly passes and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "703388bffa1872cf2c221494a2fbabe2957574def180a9d4a984b07be2d55a29",
+    "tests/Bosak.Xslt.Tests/Xslt40StaticNamedTypeTests.cs": "a6967d7bb471eb6c2b73d10d3e6e93ffe50beef4a09d41636d85e739075af874",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

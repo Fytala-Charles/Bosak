@@ -1,0 +1,1 @@
+pad-string('Ada', 8, map {'side': 'both', 'padding': '*'})

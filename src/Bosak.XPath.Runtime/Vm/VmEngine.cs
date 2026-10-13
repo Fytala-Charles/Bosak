@@ -399,6 +399,19 @@
 //                      |                  |         |                | SaveVariables captures direct bindings only (via TryGetDirectVariable) so in-flight
 //                      |                  |         |                | lazy globals are not flagged circular (K2-FunctionProlog-15)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.175 | 13-10-2026     | Match named record types by annotation identity in type tests.                           |
+//                      | Charles Korthout | 2.176 | 13-10-2026     | Normalize schema EQName cast targets for XPath 4.0 default item types
+//                      | Charles Korthout | 2.177 | 13-10-2026     | Apply XPath 4.0 array member coercion without atomizing the outer array
+//                      | Charles Korthout | 2.178 | 13-10-2026     | Coerce XPath 4.0 typed map keys and values with collision checks and entry order
+//                      | Charles Korthout | 2.179 | 13-10-2026     | Use cardinality-aware function type matching for XPath 4.0 instance-of operands
+//                      | Charles Korthout | 2.180 | 13-10-2026     | Apply sequence-aware nominative record coercion through the host callback
+//                      | Charles Korthout | 2.181 | 13-10-2026     | Preserve map operands for named record casts and cast field sequences
+//                      | Charles Korthout | 2.182 | 13-10-2026     | Cast XPath 4.0 array members and map entries using shared sequence casting
+//                      | Charles Korthout | 2.183 | 13-10-2026     | Match explicit empty-namespace element and attribute type names
+//                      | Charles Korthout | 2.184 | 13-10-2026     | Match processing-instruction sequence types by their case-sensitive target
+//                      | Charles Korthout | 2.185 | 13-10-2026     | Match element and attribute type tests with partial name wildcards
+//                      | Charles Korthout | 2.186 | 13-10-2026     | Match node-name unions without splitting EQName namespace separators
+//                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3361,7 +3374,7 @@ internal static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // XPath 4.0 §4.19.2.7: a record-type target takes a map operand,
                         // which must not be atomized (maps otherwise raise FOTY0013).
-                        var value = IsRecordTypeText(typeName)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _) || IsContainerCastTarget(typeName, context)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -3394,7 +3407,7 @@ internal static class VmEngine
                         string typeName = (string)literalPool[instr.Operand]!;
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         // Record-type targets take a map operand (see the Cast case).
-                        var value = IsRecordTypeText(typeName)
+                        var value = IsRecordTypeText(typeName) || context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _) || IsContainerCastTarget(typeName, context)
                             ? registers[instr.RegisterB]
                             : AtomizeForCast(registers[instr.RegisterB]);
                         // Peek-based emptiness: a lazy sequence reports unknown length.
@@ -3436,7 +3449,11 @@ internal static class VmEngine
                         var occurrence = (OccurrenceIndicator)instr.RegisterC;
                         var instanceValue = registers[instr.RegisterB];
                         bool instance;
-                        if (typeName.TrimStart().StartsWith("function(", StringComparison.OrdinalIgnoreCase))
+                        if (context.IsXPath40)
+                        {
+                            instance = InstanceOf(instanceValue, typeName, occurrence, context.DefaultElementNamespace, context);
+                        }
+                        else if (typeName.TrimStart().StartsWith("function(", StringComparison.OrdinalIgnoreCase))
                         {
                             // Function type tests on named function items need the
                             // registered signature, which requires the evaluation context.
@@ -8870,6 +8887,14 @@ internal static class VmEngine
     /// for a lexical failure.</exception>
     public static XdmValue Cast(XdmValue value, string typeName, EvaluationContext? context)
     {
+        if (IsContainerCastTarget(typeName, context)) return CastContainer(value, typeName, context!);
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out var named))
+        {
+            var inputs = MaterializeSequence(value);
+            if (inputs.Length != 1 || !inputs[0].IsMap || context.NamedRecordCoercion is null)
+                throw new InvalidOperationException("XPTY0004: A named record cast requires one map.");
+            return XdmValue.FromMap(context.NamedRecordCoercion(named!, inputs[0].MapValue, true));
+        }
         try
         {
             if (!TryCast(value, typeName, context, out var result, out var failureKind))
@@ -8913,6 +8938,72 @@ internal static class VmEngine
                 n = n[(colon + 1)..];
             return n.ToLowerInvariant();
         }
+    }
+
+    private static bool IsContainerCastTarget(string type, EvaluationContext? context)
+        => context?.IsXPath40 == true && (type.StartsWith("array(", StringComparison.Ordinal) || type.StartsWith("map(", StringComparison.Ordinal));
+
+    private static XdmValue CastContainer(XdmValue value, string type, EvaluationContext context)
+    {
+        type = type.Trim();
+        var optional = type.EndsWith('?');
+        if (optional) type = type[..^1].TrimEnd();
+        var inputs = MaterializeSequence(value);
+        if (inputs.Length == 0 && optional) return XdmValue.Undefined;
+        if (inputs.Length != 1) throw new InvalidOperationException("XPTY0004: A container cast requires one item.");
+        var input = inputs[0];
+        if (type.StartsWith("array(", StringComparison.Ordinal))
+        {
+            if (!input.IsArray) throw new InvalidOperationException("XPTY0004: An array cast requires an array.");
+            var memberType = type[6..^1].Trim();
+            if (memberType == "*") return input;
+            if (memberType.Length == 0)
+            {
+                if (input.ArrayValue.Count != 0) throw new InvalidOperationException("XPTY0004: An empty array is required.");
+                return input;
+            }
+            var members = new XdmValue[input.ArrayValue.Count];
+            for (int i = 0; i < members.Length; i++) members[i] = CastSequence(input.ArrayValue.Get(i + 1), memberType, context);
+            return XdmValue.FromArray(new XdmArray(members));
+        }
+        if (!input.IsMap) throw new InvalidOperationException("XPTY0004: A map cast requires a map.");
+        if (type == "map(*)") return input;
+        if (type == "map()")
+        {
+            if (input.MapValue.Count != 0) throw new InvalidOperationException("XPTY0004: An empty map is required.");
+            return input;
+        }
+        if (!TryGetMapTypeParts(type, out var keyType, out var valueType))
+            throw new InvalidOperationException("XPST0003: Invalid map cast type.");
+        var result = new XdmMap();
+        foreach (var key in input.MapValue.Keys)
+        {
+            var castKey = CastSequence(key, keyType, context);
+            if (result.TryGetValue(castKey, out _)) throw new InvalidOperationException("XQDY0137: A map cast produces duplicate keys.");
+            input.MapValue.TryGetValue(key, out var entry);
+            result.Add(castKey, CastSequence(entry, valueType, context));
+        }
+        return XdmValue.FromMap(result);
+    }
+
+    /// <summary>Casts each unmatched sequence item and validates the required cardinality.</summary>
+    internal static XdmValue CastSequence(XdmValue value, string sequenceType, EvaluationContext context)
+    {
+        var parsed = (InstanceOfNode)XPathParser.Parse("() instance of " + sequenceType, xpath40: true);
+        var type = string.IsNullOrEmpty(parsed.Prefix) ? parsed.TypeName : parsed.Prefix + ":" + parsed.TypeName;
+        var inputs = MaterializeSequence(value);
+        if (type == "empty-sequence()")
+        {
+            if (inputs.Length != 0) throw new InvalidOperationException("XPTY0004: An empty sequence is required.");
+            return XdmValue.Undefined;
+        }
+        var converted = new List<XdmValue>(inputs.Length);
+        foreach (var item in inputs) converted.Add(ValueMatchesType(item, type, context) ? item : Cast(item, type, context));
+        if ((converted.Count == 0 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.OneOrMore)
+            || (converted.Count > 1 && parsed.Occurrence is OccurrenceIndicator.One or OccurrenceIndicator.ZeroOrOne))
+            throw new InvalidOperationException("XPTY0004: Cast sequence cardinality does not match its declaration.");
+        return converted.Count == 0 ? XdmValue.Undefined : converted.Count == 1 ? converted[0]
+            : XdmValue.FromSequence(MaterializedSequence.FromList(converted));
     }
 
     /// <summary>
@@ -8997,6 +9088,16 @@ internal static class VmEngine
                 {
                     casted.Add(RecordFieldKey(field.Name), fieldValue);
                 }
+                else if (context?.IsXPath40 == true)
+                {
+                    try { casted.Add(RecordFieldKey(field.Name), CastSequence(fieldValue, field.SequenceTypeText, context)); }
+                    catch (InvalidOperationException error)
+                    {
+                        failureKind = error.Message.StartsWith("XPTY0004", StringComparison.Ordinal)
+                            ? CastFailureKind.NotPermitted : CastFailureKind.Lexical;
+                        return false;
+                    }
+                }
                 else if (TryCast(fieldValue, field.SequenceTypeText, context, out var castField, out _))
                 {
                     casted.Add(RecordFieldKey(field.Name), castField);
@@ -9023,6 +9124,16 @@ internal static class VmEngine
 
     private static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result, out CastFailureKind failureKind)
     {
+        if (IsContainerCastTarget(typeName, context))
+        {
+            try { result = CastContainer(value, typeName, context!); failureKind = CastFailureKind.Lexical; return true; }
+            catch (InvalidOperationException) { result = value; failureKind = CastFailureKind.NotPermitted; return false; }
+        }
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out _))
+        {
+            try { result = Cast(value, typeName, context); failureKind = CastFailureKind.Lexical; return true; }
+            catch (InvalidOperationException) { result = value; failureKind = CastFailureKind.NotPermitted; return false; }
+        }
         failureKind = CastFailureKind.Lexical;
         result = value;
         string normalized = typeName.ToLowerInvariant().Replace("xs:", "").Replace("xsd:", "");
@@ -9040,6 +9151,11 @@ internal static class VmEngine
         var (resolvedNs, resolvedLocal) = isStructuralCastTarget
             ? default
             : ResolveTypeQName(typeName, context);
+
+        // XPath 4.0 default ##any item types are resolved to schema EQNames by the compiler.
+        if (context?.IsXPath40 == true && typeName.StartsWith("Q{", StringComparison.Ordinal)
+            && resolvedNs == XmlSchema.Namespace)
+            normalized = resolvedLocal.ToLowerInvariant();
 
         // A prefixed type name resolves via the in-scope namespaces (constructor-local
         // declarations included). If the prefix is bound to the XML Schema namespace,
@@ -10666,6 +10782,16 @@ internal static class VmEngine
 
         if (count == 0)
             return true;
+
+        if (context is not null && context.TryResolveNamedRecordType(typeName, defaultElementNamespace, out var namedRecord))
+        {
+            bool Matches(XdmValue item) => item.IsMap && ReferenceEquals(item.MapValue?.RecordType, namedRecord);
+            if (!value.IsSequence)
+                return Matches(value);
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+                if (!Matches(item)) return false;
+            return true;
+        }
 
         // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are structural
         // type texts, not QNames: the QName resolution below does not apply, and the type
@@ -12322,10 +12448,10 @@ internal static class VmEngine
         if (open < 0 || close <= open)
             return;
         var inner = s.Substring(open + 1, close - open - 1);
-        int comma = inner.IndexOf(',');
-        if (comma < 0)
+        var parts = SplitNodeTestParts(inner, ',');
+        if (parts.Length < 2)
             return;
-        var typePart = inner[(comma + 1)..].Trim();
+        var typePart = parts[1];
         if (typePart.EndsWith('?'))
             typePart = typePart[..^1].TrimEnd();
         if (typePart.Length == 0 || typePart == "*")
@@ -12579,6 +12705,9 @@ internal static class VmEngine
     {
         if (string.IsNullOrEmpty(typeName)) return true;
 
+        if (context is not null && context.TryResolveNamedRecordType(typeName, context.DefaultElementNamespace, out var namedRecord))
+            return value.IsMap && ReferenceEquals(value.MapValue?.RecordType, namedRecord);
+
         // XPath 4.0 §3.2.5/§3.2.6: choice item types and enumeration types are matched
         // structurally, before QName resolution and case-folding. Enum members compare
         // with codepoint (ordinal) equality against the string datum of any xs:string
@@ -12706,16 +12835,25 @@ internal static class VmEngine
                 var typePart = cpInner.Substring(3).Trim();
                 return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
-            var namePart = cpInner.Split(',')[0].Trim();
+            var nodeParts = SplitNodeTestParts(cpInner, ',');
+            var names = SplitNodeTestParts(nodeParts[0], '|');
+            if (names.Length > 1)
+                return names.Any(name => ValueMatchesType(value, "element(" + name +
+                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            var namePart = nodeParts[0];
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12723,7 +12861,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {
@@ -12747,9 +12885,9 @@ internal static class VmEngine
                     }
                 }
             }
-            if (cpInner.Contains(','))
+            if (nodeParts.Length > 1)
             {
-                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
+                var typePart = nodeParts[1];
                 return IsElementTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -12773,16 +12911,25 @@ internal static class VmEngine
                 var typePart = cpInner.Substring(3).Trim();
                 return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
-            var namePart = cpInner.Split(',')[0].Trim();
+            var nodeParts = SplitNodeTestParts(cpInner, ',');
+            var names = SplitNodeTestParts(nodeParts[0], '|');
+            if (names.Length > 1)
+                return names.Any(name => ValueMatchesType(value, "attribute(" + name +
+                    (nodeParts.Length > 1 ? "," + nodeParts[1] : string.Empty) + ")", context));
+            var namePart = nodeParts[0];
             if (namePart != "*")
             {
-                if (namePart.StartsWith("Q{", StringComparison.Ordinal))
+                if (namePart.StartsWith("*:", StringComparison.Ordinal))
+                {
+                    if (value.NodeValue.LocalName != namePart[2..]) return false;
+                }
+                else if (namePart.StartsWith("Q{", StringComparison.Ordinal))
                 {
                     // Q{uri}local — match namespace URI and local name exactly.
                     var closeBrace = namePart.IndexOf('}');
-                    if (closeBrace > 2)
+                    if (closeBrace >= 2)
                     {
-                        if (value.NodeValue.LocalName != namePart[(closeBrace + 1)..] ||
+                        if ((namePart[(closeBrace + 1)..] != "*" && value.NodeValue.LocalName != namePart[(closeBrace + 1)..]) ||
                             value.NodeValue.NamespaceUri != namePart[2..closeBrace])
                             return false;
                     }
@@ -12790,7 +12937,7 @@ internal static class VmEngine
                 else
                 {
                     var testLocalName = namePart.Contains(':') ? namePart[(namePart.IndexOf(':') + 1)..] : namePart;
-                    if (value.NodeValue.LocalName != testLocalName)
+                    if (testLocalName != "*" && value.NodeValue.LocalName != testLocalName)
                         return false;
                     if (namePart.Contains(':'))
                     {
@@ -12812,9 +12959,9 @@ internal static class VmEngine
                     }
                 }
             }
-            if (cpInner.Contains(','))
+            if (nodeParts.Length > 1)
             {
-                var typePart = cpInner.Substring(cpInner.IndexOf(',') + 1).Trim();
+                var typePart = nodeParts[1];
                 return IsAttributeTypeCompatible(typePart, context, value.NodeValue);
             }
             return true;
@@ -12874,6 +13021,14 @@ internal static class VmEngine
 
         if (normalized is "processing-instruction()" or "processing-instruction")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction;
+
+        if (normalized.StartsWith("processing-instruction(", StringComparison.Ordinal))
+        {
+            var text = GetCasePreservedTypeName(typeName);
+            return XPathParser.TryParseProcessingInstructionTypeTarget(text, out var target)
+                && value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.ProcessingInstruction
+                && (target is null || string.Equals(value.NodeValue.LocalName, target, StringComparison.Ordinal));
+        }
 
         if (normalized is "namespace-node()" or "namespace-node")
             return value.IsNode && value.NodeValue.NodeKind == XdmNodeKind.Namespace;
@@ -13131,6 +13286,26 @@ internal static class VmEngine
             if (depth == 0) return i;
         }
         return -1;
+    }
+
+    /// <summary>Splits node-test names and annotations without dividing EQName namespace URIs.</summary>
+    private static string[] SplitNodeTestParts(string text, char delimiter)
+    {
+        var parts = new List<string>();
+        int start = 0;
+        bool inUri = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            if (text[i] == '{') inUri = true;
+            else if (text[i] == '}') inUri = false;
+            else if (text[i] == delimiter && !inUri)
+            {
+                parts.Add(text[start..i].Trim());
+                start = i + 1;
+            }
+        }
+        parts.Add(text[start..].Trim());
+        return parts.ToArray();
     }
 
     /// <summary>
@@ -13928,16 +14103,42 @@ internal static class VmEngine
     /// <exception cref="InvalidOperationException">No function conversion rule applies (XPTY0004).</exception>
     public static XdmValue ApplyFunctionConversion(XdmValue value, string targetType, EvaluationContext? context = null)
     {
+        var nominalText = targetType.Trim();
+        var nominalSuffix = nominalText.Length > 0 && nominalText[^1] is '?' or '*' or '+' ? nominalText[^1] : '\0';
+        var nominalName = nominalSuffix == '\0' ? nominalText : nominalText[..^1].TrimEnd();
+        if (context is not null && context.TryResolveNamedRecordType(nominalName, context.DefaultElementNamespace, out var nominalType))
+        {
+            var nominalItems = new List<XdmValue>();
+            if (value.IsSequence)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue!)) nominalItems.Add(item);
+            }
+            else if (!value.IsUndefined) nominalItems.Add(value);
+            if ((nominalItems.Count == 0 && nominalSuffix is not ('?' or '*')) || (nominalItems.Count > 1 && nominalSuffix is not ('*' or '+')))
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}.");
+            var nominalConverted = new List<XdmValue>(nominalItems.Count);
+            foreach (var item in nominalItems)
+            {
+                if (!item.IsMap) throw new InvalidOperationException($"XPTY0004: A map is required for {targetType}.");
+                if (ReferenceEquals(item.MapValue.RecordType, nominalType)) nominalConverted.Add(item);
+                else if (context.NamedRecordCoercion is { } coerce) nominalConverted.Add(XdmValue.FromMap(coerce(nominalType!, item.MapValue, false)));
+                else throw new InvalidOperationException($"XPTY0004: No host coercion is registered for {targetType}.");
+            }
+            return nominalConverted.Count == 0 ? XdmValue.Undefined : nominalConverted.Count == 1 ? nominalConverted[0]
+                : XdmValue.FromSequence(MaterializedSequence.FromList(nominalConverted));
+        }
         // XPath 4.0 §3.4.2 rule 10 (record coercion): a record type text is structural
         // and is not a legal QName conversion target, so it is handled before the
         // syntactic parse of the target below. The occurrence indicator applies to the
         // record item itself: each item of the input is coerced individually.
         var recordTargetText = targetType.Trim();
+        bool recordRequiresSingle = IsRecordTypeText(recordTargetText);
+        if (recordRequiresSingle) recordTargetText += "?";
         bool recordAllowsEmpty = false;
         bool recordAllowsMultiple = false;
         if (recordTargetText.Length > 1 && recordTargetText[^1] is '?' or '*' or '+')
         {
-            recordAllowsEmpty = recordTargetText[^1] is '?' or '*';
+            recordAllowsEmpty = !recordRequiresSingle && recordTargetText[^1] is '?' or '*';
             recordAllowsMultiple = recordTargetText[^1] is '*' or '+';
             var recordBaseText = recordTargetText[..^1].TrimEnd();
             if (IsRecordTypeText(recordBaseText))
@@ -13959,6 +14160,8 @@ internal static class VmEngine
                 {
                     recordItems.Add(value);
                 }
+                if (recordItems.Count == 0 && !recordAllowsEmpty)
+                    throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
                 if (recordItems.Count > 1 && !recordAllowsMultiple)
                     throw new InvalidOperationException($"XPTY0004: Sequence of more than one item not allowed for type {targetType}");
                 var coercedRecords = new List<XdmValue>(recordItems.Count);
@@ -13972,10 +14175,6 @@ internal static class VmEngine
                     : XdmValue.FromSequence(MaterializedSequence.FromList(coercedRecords));
             }
         }
-        else if (IsRecordTypeText(recordTargetText))
-        {
-            return ApplyFunctionConversion(value, recordTargetText + "?", context);
-        }
 
         // The syntactic parse of the target sequence type depends only on the type string,
         // so it is cached per distinct name (call sites repeat the same handful of type
@@ -13983,6 +14182,87 @@ internal static class VmEngine
         // below still run per call.
         var (type, allowsEmpty, allowsMultiple, isFunctionTest) =
             s_conversionTargets.GetOrAdd(targetType, static t => ParseConversionTarget(t));
+
+        // XPath 4.0 array coercion preserves the array item and recursively converts
+        // each member sequence. The 3.1 conversion path remains version-gated.
+        if (context?.IsXPath40 == true && type.StartsWith("array(", StringComparison.Ordinal) && type.EndsWith(')'))
+        {
+            if (value.IsJNode) return ApplyFunctionConversion(value.JNodeValue.Value, targetType, context);
+            if (value.IsUndefined)
+            {
+                if (allowsEmpty) return value;
+                throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+            }
+            var arrayItems = new List<XdmValue>();
+            if (value.IsSequence && value.SequenceValue is not null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue)) arrayItems.Add(item);
+            }
+            else arrayItems.Add(value);
+            if (arrayItems.Count == 0 && !allowsEmpty || arrayItems.Count > 1 && !allowsMultiple)
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}");
+            var memberType = type[6..^1].Trim();
+            var arrays = new List<XdmValue>(arrayItems.Count);
+            foreach (var item in arrayItems)
+            {
+                if (!item.IsArray) throw new InvalidOperationException($"XPTY0004: Cannot convert {item.Kind} to {targetType}");
+                var array = item.ArrayValue;
+                if (memberType == "*") { arrays.Add(item); continue; }
+                if (memberType.Length == 0)
+                {
+                    if (array.Count != 0) throw new InvalidOperationException($"XPTY0004: Nonempty array does not match {targetType}");
+                    arrays.Add(item);
+                    continue;
+                }
+                var members = new XdmValue[array.Count];
+                for (int i = 0; i < members.Length; i++)
+                    members[i] = ApplyFunctionConversion(array.Get(i + 1), memberType, context);
+                arrays.Add(XdmValue.FromArray(new XdmArray(members)));
+            }
+            return arrays.Count == 1 ? arrays[0] : XdmValue.FromSequence(MaterializedSequence.FromList(arrays));
+        }
+
+        // XPath 4.0 §3.4.2 rule 9: coerce both keys and value sequences,
+        // rejecting key collisions after conversion and retaining entry order.
+        if (context?.IsXPath40 == true && type.StartsWith("map(", StringComparison.Ordinal) && type.EndsWith(')')
+            && type is not ("map(*)" or "map()"))
+        {
+            if (value.IsJNode) return ApplyFunctionConversion(value.JNodeValue.Value, targetType, context);
+            if (ValueMatchesType(value, targetType, context)) return value;
+            if (value.IsUndefined)
+            {
+                if (allowsEmpty) return value;
+                throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+            }
+            var mapItems = new List<XdmValue>();
+            if (value.IsSequence && value.SequenceValue is not null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue)) mapItems.Add(item);
+            }
+            else mapItems.Add(value);
+            if (mapItems.Count == 0 && !allowsEmpty || mapItems.Count > 1 && !allowsMultiple)
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}");
+            var inner = type[4..^1].Trim();
+            var parts = inner is "" or "*" ? Array.Empty<string>() : SplitTopLevel(inner, ',');
+            if (parts.Length is not (0 or 2)) throw new InvalidOperationException("XPST0003: A map type requires a key and value type.");
+            if (parts.Length == 2 && (string.IsNullOrWhiteSpace(parts[0]) || parts[0].TrimEnd()[^1] is '?' or '*' or '+'))
+                throw new InvalidOperationException("XPST0003: A map key type cannot have an occurrence indicator.");
+            var maps = new List<XdmValue>(mapItems.Count);
+            foreach (var item in mapItems)
+            {
+                if (!item.IsMap) throw new InvalidOperationException($"XPTY0004: Cannot convert {item.Kind} to {targetType}");
+                if (parts.Length == 0) { maps.Add(item); continue; }
+                var map = new XdmMap();
+                foreach (var entry in item.MapValue.Entries)
+                {
+                    var key = ApplyFunctionConversion(entry.Key, parts[0].Trim(), context);
+                    if (map.ContainsKey(key)) throw new InvalidOperationException("XPTY0004: Map key coercion produced duplicate keys.");
+                    map = map.WithAdded(key, ApplyFunctionConversion(entry.Value, parts[1].Trim(), context));
+                }
+                maps.Add(XdmValue.FromMap(map));
+            }
+            return maps.Count == 1 ? maps[0] : XdmValue.FromSequence(MaterializedSequence.FromList(maps));
+        }
 
         // XPath 4.0 §17.7: a JNode coerces to a map/array/function-typed parameter by
         // extracting its jvalue, then the standard conversion rules apply to that value.

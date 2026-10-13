@@ -1,0 +1,1 @@
+every $v in ('true' ! xs:boolean()) satisfies $v instance of xs:boolean
