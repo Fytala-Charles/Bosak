@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Validate mode names, lists and default references in captured authoring contexts.        |
+//                      | Charles Korthout | 0.13  | 13-10-2026     | Report key declaration QName syntax and applicable namespace errors.                     |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -299,12 +300,14 @@ internal sealed class XsltValidationEngine
     {
         if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element
             || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
-            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode")) return;
+            || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode" or "key")) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
         if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
         try
         {
+            if (element.Name.LocalName == "key" && attribute.ExpandedValue.Length == 0)
+                throw new InvalidOperationException("XTSE0010: xsl:key must have a name attribute.");
             if (element.Name.LocalName == "function")
                 _ = Stylesheet.XsltFunctionDefinition.ValidateFunctionQName(element, attribute.ExpandedValue);
             else

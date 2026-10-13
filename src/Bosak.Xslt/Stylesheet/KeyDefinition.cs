@@ -17,6 +17,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 09-09-2026     | XML doc coverage on public API (Beta review)                                           |
 //                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      | Charles Korthout | 0.6   | 13-10-2026     | Expand XSLT 4.0 key names using applicable namespaces and EQNames.                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -121,6 +122,12 @@ internal sealed class KeyDefinition
     /// </summary>
     private static string ExpandKeyName(string name, XElement element)
     {
+        if (Stylesheet.UsesXPath40Namespaces(element))
+        {
+            var (keyLocal, keyUri) = Stylesheet.ValidateXsltName(element, name, "xsl:key/@name", useApplicableNamespaces: true);
+            return $"{{{keyUri}}}{keyLocal}";
+        }
+
         var colon = name.IndexOf(':');
         if (colon <= 0 || colon == name.Length - 1)
             return "{" + "}" + name;

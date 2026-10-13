@@ -544,6 +544,7 @@
 //                      | Charles Korthout | 7.28 | 13-10-2026     | Coerce direct structural record bindings through the XPath 4.0 converter
 //                      | Charles Korthout | 7.29  | 13-10-2026     | Share variable QName expansion with stylesheet compilation                             |
 //                      | Charles Korthout | 7.30  | 13-10-2026     | Share XSLT 4.0 mode QName expansion for dispatch and scoped defaults.                    |
+//                      | Charles Korthout | 7.31  | 13-10-2026     | Align 4.0 key EQName and QName arguments with declaration identities.                    |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -12787,7 +12788,9 @@ internal sealed class TransformEngine
             _keyIndices = new List<(IXdmNode DocRoot, Stylesheet.Stylesheet Scope, KeyIndex Index)>();
 
         var rawKeyName = args[0].ToString();
-        var keyName = ExpandKeyName(rawKeyName, ctx);
+        var keyName = ctx.IsXPath40 && args[0].Kind == XdmValueKind.QName
+            ? $"{{{args[0].QNameValue.NamespaceUri}}}{args[0].QNameValue.LocalName}"
+            : ExpandKeyName(rawKeyName, ctx);
         var keyValueArg = args[1];
 
         // XPath 1.0 backwards compatibility: key() treats its second argument as a
@@ -12931,6 +12934,27 @@ internal sealed class TransformEngine
     /// </summary>
     private static string ExpandKeyName(string qname, EvaluationContext context)
     {
+        if (context.IsXPath40)
+        {
+            qname = qname.Trim();
+            if (qname.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                int close = qname.IndexOf('}');
+                if (close < 2 || !Stylesheet.Stylesheet.IsValidNCName(qname[(close + 1)..]))
+                    throw new InvalidOperationException($"XTDE1260: Invalid key EQName '{qname}'.");
+                return qname[1..];
+            }
+            int separator = qname.IndexOf(':');
+            var keyLocal = separator < 0 ? qname : qname[(separator + 1)..];
+            var keyPrefix = separator < 0 ? null : qname[..separator];
+            if (!Stylesheet.Stylesheet.IsValidNCName(keyLocal) || keyPrefix is not null && !Stylesheet.Stylesheet.IsValidNCName(keyPrefix))
+                throw new InvalidOperationException($"XTDE1260: Invalid key QName '{qname}'.");
+            if (keyPrefix is null) return "{}" + keyLocal;
+            if (!context.TryResolveNamespace(keyPrefix, out var keyUri))
+                throw new InvalidOperationException($"XTDE1260: Undeclared key-name prefix '{keyPrefix}'.");
+            return $"{{{keyUri}}}{keyLocal}";
+        }
+
         if (qname.StartsWith("Q{", StringComparison.Ordinal))
         {
             int close = qname.IndexOf('}');

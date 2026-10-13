@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "4b54034eac8b525dcf5141faee8e0746848f640a",
+  "implementationRevision": "09129fe4e5ca4e11e1c0addb6f41f7ef7f251e0c",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "XSLT 4.0 key declaration namespaces and fn:key string/EQName/QName lookup identities",
+  "baselineFocused": {
+    "passed": 3,
+    "failed": 21,
+    "skipped": 0,
+    "total": 24
+  },
+  "newKeyTests": 33,
+  "finalFocused": {
+    "passed": 132,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7908,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 5022
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Declaration and index names use the same expanded identity. QName arguments use their own namespace URI. Existing earlier-profile paths are retained. Authoring checks literal key declaration names without evaluating fn:key calls or resolving resources during repeated validation. Key-value equality, map-for-key, function signature introspection, broader shadow evaluation and package linkage remain separate follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#func-key",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "ddb37918671379c1456657640f360cf48c60eb5f3dddad7cbb6b049e15af8b51",
+    "focused": "ab929f55019a4b0c667b7663907cbdaddc520a48037b47ab351c31e0a79fd7f5",
+    "build": "d49e143ea80dc56806355af984428642b6be0325965dea993c6fb96fccd4ea2d",
+    "unit": "de1d3e5ed3c7654884eb5057157815ef45179360e9548577b098ef435b425aba",
+    "qt3": "2d27ad4ded12e93435b2700c11d31ed174a54d79d425311e2842663d0c0bb30d",
+    "qt4": "5295794788fc890012a5e485724cd5f6ef52625a0ba73d5d047747d6cfff0949"
+  }
+}

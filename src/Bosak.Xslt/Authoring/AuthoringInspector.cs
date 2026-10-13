@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.10  | 13-10-2026     | Validate declaration sequence types in captured authoring contexts.                       |
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Link captured named types using include and import precedence.                           |
 //                      | Charles Korthout | 0.12  | 13-10-2026     | Capture internal contexts for mode names, lists and default-mode references.             |
+//                      | Charles Korthout | 0.13  | 13-10-2026     | Capture key declaration namespaces without changing public metadata.                     |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -637,7 +638,7 @@ public sealed class AuthoringInspector
                     or AuthoringAttributeSlotKind.Pattern
                     or AuthoringAttributeSlotKind.Avt
                     || (slotKind == AuthoringAttributeSlotKind.QName && element.Name.Namespace == XsltNs
-                        && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode")
+                        && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode" or "key")
                     || (split.LocalName == "mode" && split.NamespaceUri.Length == 0 && element.Name.Namespace == XsltNs
                         && element.Name.LocalName is "template" or "apply-templates")
                     || (split.LocalName == "default-mode" && (element.Name.Namespace == XsltNs
