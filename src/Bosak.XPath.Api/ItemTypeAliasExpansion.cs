@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.3 | 13-10-2026     | Expand aliases in structural record fields while preserving literal field names
 //                      | Charles Korthout | 0.4 | 13-10-2026     | Check choice cast eligibility with quote and EQName-aware type traversal
 //                      | Charles Korthout | 0.5 | 13-10-2026     | Classify known nominative names as non-atomic choice alternatives
+//                      | Charles Korthout | 0.6 | 13-10-2026     | Traverse name-free node-kind types within aliases and structural sequence types
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -66,7 +67,8 @@ internal static class ItemTypeAliasExpansion
         }
         var enumeration = Regex.Match(text, @"^enum\s*\(");
         if (enumeration.Success && text.EndsWith(')')) return "enum(" + text[enumeration.Length..] + suffix;
-        if (text is "item()" or "node()" or "empty-sequence()") return text + suffix;
+        var emptyTest = Regex.Match(text, @"^(item|node|empty-sequence|element|attribute|text|comment|namespace-node|document-node|processing-instruction)\s*\(\s*\)$");
+        if (emptyTest.Success) return emptyTest.Groups[1].Value + "()" + suffix;
         var record = Regex.Match(text, @"^record\s*\(");
         if (record.Success && MatchingClose(text, record.Length - 1) == text.Length - 1)
         {
