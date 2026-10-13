@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2 | 13-10-2026     | Verify fn synonyms, documentary parameters and duplicate-name diagnostics
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -200,4 +201,140 @@ public class Xslt40FunctionChoiceAliasTests
         => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => Run(Choice + """
             <xsl:template match='/' version='3.0'><xsl:sequence select='1 instance of t:value'/></xsl:template>
             """)).ToString());
+
+    /// <summary>Normalizes the fn synonym and documentary names in callback aliases.</summary>
+    /// <param name="type">The callback signature.</param>
+    [Theory]
+    [InlineData("fn(xs:integer) as t:number")]
+    [InlineData("fn($input as xs:integer) as t:number")]
+    [InlineData("function($input as xs:integer) as t:number")]
+    [InlineData("fn($Q{urn:param}input as xs:integer) as t:number")]
+    public void FunctionAlias_DocumentaryGrammar(string type)
+        => Assert.Equal("true|3", XElement.Parse(Run(
+            $"<xsl:item-type name='t:callback' as='{type}'/><xsl:item-type name='t:number' as='xs:double'/>" + """
+            <xsl:template match='/'>
+              <xsl:variable name='f' as='t:callback' select='fn($different as xs:integer) as xs:integer {$different+1}'/>
+              <out><xsl:value-of separator='|' select='($f(2) instance of t:number,$f(2))'/></out>
+            </xsl:template>
+            """)).Value);
+
+    /// <summary>Matches any-function synonyms including maps and arrays.</summary>
+    /// <param name="type">The wildcard function signature.</param>
+    [Theory]
+    [InlineData("fn(*)")]
+    [InlineData("function(*)")]
+    public void FunctionAlias_WildcardSynonym(string type)
+        => Assert.Equal("true|true|false", XElement.Parse(Run($"<xsl:item-type name='t:call' as='{type}'/>" + """
+            <xsl:template match='/'><out><xsl:value-of separator='|' select='([] instance of t:call,
+              map{} instance of t:call,42 instance of t:call)'/></out></xsl:template>
+            """)).Value);
+
+    /// <summary>Ignores names in matching while retaining arity and sequence constraints.</summary>
+    [Fact]
+    public void FunctionAlias_DocumentaryMatching()
+        => Assert.Equal("true|false|true", XElement.Parse(Run("""
+            <xsl:item-type name='t:call' as='fn($first as xs:integer,$second as xs:string?) as xs:string*'/>
+            <xsl:template match='/'>
+              <xsl:variable name='f' select='fn($a as xs:integer,$b as xs:string?) as xs:string* {$b}'/>
+              <out><xsl:value-of separator='|' select='($f instance of t:call,
+                fn($a as xs:integer) as xs:string* {()} instance of t:call,empty(($f treat as t:call)(1,())))'/></out>
+            </xsl:template>
+            """)).Value);
+
+    /// <summary>Normalizes direct binding signatures without registered aliases.</summary>
+    [Fact]
+    public void FunctionAlias_DirectBindingWithoutAliases()
+        => Assert.Equal("true|3", XElement.Parse(Run("""
+            <xsl:template match='/'>
+              <xsl:variable name='f' as='fn($documentary as xs:integer) as xs:double'
+                select='fn($actual as xs:integer) as xs:integer {$actual+1}'/>
+              <out><xsl:value-of separator='|' select='($f(2) instance of xs:double,$f(2))'/></out>
+            </xsl:template>
+            """)).Value);
+
+    /// <summary>Rejects malformed signatures and duplicate expanded names statically.</summary>
+    /// <param name="type">The invalid signature.</param>
+    /// <param name="code">The expected diagnostic.</param>
+    [Theory]
+    [InlineData("fn($x as xs:integer,$x as xs:string) as item()", "XQST0039")]
+    [InlineData("fn($p:x as xs:integer,$q:x as xs:string) as item()", "XQST0039")]
+    [InlineData("fn($x xs:integer) as item()", "XPST0003")]
+    [InlineData("fn($x as) as item()", "XPST0003")]
+    [InlineData("fn(xs:integer, ) as item()", "XPST0003")]
+    [InlineData("fn(xs:integer)", "XPST0003")]
+    [InlineData("fn(*) as xs:integer", "XPST0003")]
+    [InlineData("fn($absent:x as xs:integer) as item()", "XPST0081")]
+    [InlineData("fn($x as t:missing) as item()", "XPST0051")]
+    public void FunctionAlias_InvalidDocumentaryGrammar(string type, string code)
+        => Assert.Contains(code, Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(Wrap(
+            $"<xsl:item-type xmlns:p='urn:param' xmlns:q='urn:param' name='t:call' as='{type}'/>"))).ToString());
+
+    /// <summary>Accepts distinct parameter names even when their local names coincide.</summary>
+    [Fact]
+    public void FunctionAlias_DistinctParameterNamespaces()
+        => Assert.Equal("true", XElement.Parse(Run("""
+            <xsl:item-type xmlns:p='urn:first' xmlns:q='urn:second' name='t:call'
+              as='fn($p:x as xs:integer,$q:x as xs:integer) as xs:integer'/>
+            <xsl:template match='/'><out><xsl:value-of select='fn($a as xs:integer,$b as xs:integer) as xs:integer {$a+$b} instance of t:call'/></out></xsl:template>
+            """)).Value);
+
+    /// <summary>Keeps fn and documentary parameters unavailable in XPath 3.1 type positions.</summary>
+    /// <param name="type">The XPath 4.0 signature.</param>
+    [Theory]
+    [InlineData("fn(*)")]
+    [InlineData("function($x as xs:integer) as xs:integer")]
+    public void FunctionAlias_GrammarVersionBoundary(string type)
+        => Assert.Contains("XPST0003", Assert.ThrowsAny<Exception>(() => Bosak.XPath.Api.XPath31Expression.Compile(
+            "1 instance of " + type)).ToString());
+
+    /// <summary>Normalizes documentary signatures in a host without item-type registrations.</summary>
+    [Fact]
+    public void FunctionAlias_DirectHostGrammar()
+        => Assert.True(Bosak.XPath.Api.XPath31Expression.Compile(
+            "fn($actual as xs:integer) as xs:integer {$actual} instance of fn($documentary as xs:integer) as xs:integer",
+            new Bosak.XPath.Api.CompileOptions { Compatibility = Bosak.XPath.Api.XPathCompatibility.XPath40 }).Evaluate(new XDocumentNode(XDocument.Parse("<root/>"))).BooleanValue);
+
+    /// <summary>Traverses nested fn signatures in containers and structural record fields.</summary>
+    [Fact]
+    public void FunctionAlias_NestedDocumentaryGrammar()
+        => Assert.Equal("true|true|true", XElement.Parse(Run("""
+            <xsl:item-type name='t:arr' as='array(fn($input as xs:integer) as xs:integer)'/>
+            <xsl:item-type name='t:r' as='record(callback as fn($input as xs:integer) as xs:integer)'/>
+            <xsl:template match='/'>
+              <xsl:variable name='f' select='fn($actual as xs:integer) as xs:integer {$actual}'/>
+              <out><xsl:value-of separator='|' select='([$f] instance of t:arr,
+                (map{"callback":$f} cast as t:r) instance of t:r,[$f] instance of array(fn(xs:integer) as xs:integer))'/></out>
+            </xsl:template>
+            """)).Value);
+
+    /// <summary>Normalizes names inside higher-order parameters independently of the outer signature.</summary>
+    [Fact]
+    public void FunctionAlias_HigherOrderDocumentaryGrammar()
+        => Assert.Equal("true|2", XElement.Parse(Run("""
+            <xsl:item-type name='t:call' as='fn($callback as fn($value as xs:integer) as xs:integer) as xs:integer'/>
+            <xsl:template match='/'>
+              <xsl:variable name='f' as='t:call' select='fn($g as function(xs:integer) as xs:integer) as xs:integer {$g(2)}'/>
+              <out><xsl:value-of separator='|' select='($f instance of t:call,$f(fn($n as xs:integer) as xs:integer {$n}))'/></out>
+            </xsl:template>
+            """)).Value);
+
+    /// <summary>Allows named and unnamed parameters in the same signature.</summary>
+    [Fact]
+    public void FunctionAlias_MixedDocumentaryParameters()
+        => Assert.Equal("true", XElement.Parse(Run("""
+            <xsl:item-type name='t:call' as='fn($x as xs:integer,xs:integer) as xs:integer'/>
+            <xsl:template match='/'><out><xsl:value-of select='fn($a as xs:integer,$b as xs:integer) as xs:integer {$a+$b} instance of t:call'/></out></xsl:template>
+            """)).Value);
+
+    /// <summary>Checks empty-namespace EQNames against unprefixed parameter names.</summary>
+    [Fact]
+    public void FunctionAlias_DuplicateEmptyNamespaceName()
+        => Assert.Contains("XQST0039", Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(Wrap(
+            "<xsl:item-type name='t:call' as='fn($x as xs:integer,$Q{}x as xs:integer) as xs:integer'/>"))).ToString());
+
+    /// <summary>Validates the return type after a valid named parameter.</summary>
+    [Fact]
+    public void FunctionAlias_UnknownDocumentaryReturnType()
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(Wrap(
+            "<xsl:item-type name='t:call' as='fn($x as xs:integer) as t:missing'/>"))).ToString());
 }

@@ -1,3 +1,21 @@
+# Function-type grammar aliases — 2026-10-13
+
+Branch: feat/xslt-function-type-grammar; parent 015dce6f. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 and #227 remain open and this slice is stacked on #227. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 accepts fn(...) as a synonym for function(...) and documentary parameter names in supported function-type aliases, direct XPath type operands and XSLT binding signatures. Names do not affect matching or coercion; duplicate expanded names raise XQST0039, including different prefixes bound to the same namespace and unprefixed names paired with Q{} names. Undeclared documentary prefixes raise XPST0081; malformed named parameters raise XPST0003; unknown parameter/result item types retain XPST0051. Named and unnamed parameters may be mixed, with independent name scopes for nested function types. Nested arrays, records and higher-order signatures retain parameter/result sequence occurrences. XPath 3.1 rejects fn type synonyms and named type parameters. Twenty-six new regressions cover callback conversion, wildcard maps/arrays, direct bindings without aliases, direct host evaluation, nesting, namespace identity, diagnostics and version boundaries. Annotated function types, schema-element/schema-attribute alias traversal, document shorthand and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+The 4.0 parser reads recursive function signatures. The shared walker validates documentary expanded names and emits name-free function(...) signatures. Direct host operands and XSLT bindings normalize these forms even without alias registrations; runtime matching and coercion reuse existing signature logic. No public API, native assertion changes, gate promotion or publication.
+
+Validation: Release build passes with zero warnings and zero errors. All 7219 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4333/0/0 and twenty-six new regressions. Focused grammar and catalog-example tests pass 2623/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias stays 11/21/0: wildcard-type-001/002 and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: remaining schema-element/schema-attribute and document shorthand alias traversal, then package exposure and broader native type-alias failures. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Schema-annotated node aliases — 2026-10-13
 
 Branch: feat/xslt-schema-node-aliases; parent eaabf8ad. PR #223 CI passed; #224 and #225 are stacked prerequisites. All three remain open. PR #226 remains open and this slice is stacked on it. Earlier sections are historical.

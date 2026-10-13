@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 0.27 | 13-10-2026     | Resolve host element and attribute type-test names in their static namespaces
 //                      | Charles Korthout | 0.28 | 13-10-2026     | Preserve node-name wildcards and expand the XPath 4.0 any default namespace
 //                      | Charles Korthout | 0.29 | 13-10-2026     | Resolve schema annotations against in-scope schema types
+//                      | Charles Korthout | 0.30 | 13-10-2026     | Normalize documentary function signatures without host alias registrations
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -446,7 +447,7 @@ public sealed class XPath31Expression
     private static XPathAstNode ResolveSequenceTypeAlias(XPathAstNode node, CompileOptions options)
     {
         var resolved = ResolveItemTypeAlias(node, options);
-        if (options.Compatibility < XPathCompatibility.XPath40 || options.NamedRecordTypeNames is null)
+        if (options.Compatibility < XPathCompatibility.XPath40)
             return resolved;
         var (prefix, type) = resolved switch
         {
@@ -457,6 +458,8 @@ public sealed class XPath31Expression
             _ => (null, string.Empty)
         };
         var text = string.IsNullOrEmpty(prefix) ? type : prefix + ":" + type;
+        if (options.NamedRecordTypeNames is null && !text.Contains('$') && !text.Contains("fn(", StringComparison.Ordinal))
+            return resolved;
         var expanded = ItemTypeAliasExpansion.Expand(text, lexical => ResolveStaticItemTypeName(lexical, options),
             (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
             name => ResolveStaticSchemaTypeName(name, options));
@@ -523,7 +526,7 @@ public sealed class XPath31Expression
         }
         var key = $"Q{{{uri}}}{local}";
         if (options.ItemTypeAliases?.TryGetValue(key, out var definition) == true) return definition;
-        if (options.NamedRecordTypeNames!.Contains(key)) return key;
+        if (options.NamedRecordTypeNames?.Contains(key) == true) return key;
         var qname = new System.Xml.XmlQualifiedName(local, uri);
         if (uri == schemaNamespace)
         {

@@ -23,6 +23,7 @@
 //                      | Charles Korthout | 0.9 | 13-10-2026     | Traverse partial wildcards in element and attribute type aliases
 //                      | Charles Korthout | 0.10 | 13-10-2026     | Expand each node-name union alternative using its declaration namespace
 //                      | Charles Korthout | 0.11 | 13-10-2026     | Traverse and validate node schema annotations separately from item-type aliases
+//                      | Charles Korthout | 0.12 | 13-10-2026     | Normalize fn signatures and validate documentary parameter names
 // ===========================================================================================================================================================
 using System.Text;
 using System.Text.RegularExpressions;
@@ -35,7 +36,7 @@ internal static class ItemTypeAliasExpansion
     internal static string? Expand(string type, Func<string, string?> resolveName, Func<string, bool, string>? resolveNodeName = null, Func<string, string>? resolveSchemaType = null)
     {
         var text = RemoveComments(type).Trim();
-        var function = Regex.Match(text, @"^function\s*\(");
+        var function = Regex.Match(text, @"^(?:function|fn)\s*\(");
         if (function.Success)
         {
             var close = MatchingClose(text, function.Length - 1);
@@ -43,13 +44,26 @@ internal static class ItemTypeAliasExpansion
             var arguments = text[function.Length..close].Trim();
             var tail = text[(close + 1)..].Trim();
             if (arguments == "*" && tail is "" or "?" or "*" or "+") return "function(*)" + tail;
+            if (arguments == "*") throw new InvalidOperationException("XPST0003: A wildcard function type cannot declare a return type.");
             var resultMarker = Regex.Match(tail, @"^as\s+");
             if (!resultMarker.Success) throw new InvalidOperationException("XPST0003: A typed function requires an as return type.");
             var parameters = arguments.Length == 0 ? new List<string>() : SplitArguments(arguments);
             var expandedParameters = new List<string>(parameters.Count);
+            var names = new HashSet<string>(StringComparer.Ordinal);
             foreach (var parameter in parameters)
             {
-                var expanded = Expand(parameter, resolveName, resolveNodeName, resolveSchemaType);
+                var parameterType = parameter;
+                if (parameter.StartsWith('$'))
+                {
+                    var named = Regex.Match(parameter, @"^\$\s*((?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{M}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{M}\p{N}_.-]*)?)\s+as\s+");
+                    if (!named.Success) throw new InvalidOperationException("XPST0003: A named function-type parameter requires an EQName and an as type.");
+                    var name = named.Groups[1].Value;
+                    var key = resolveNodeName?.Invoke(name, true) ?? name;
+                    if (!names.Add(key)) throw new InvalidOperationException("XQST0039: Duplicate function-type parameter name.");
+                    parameterType = parameter[named.Length..];
+                }
+                if (parameterType.Length == 0) throw new InvalidOperationException("XPST0003: Empty function-type parameter.");
+                var expanded = Expand(parameterType, resolveName, resolveNodeName, resolveSchemaType);
                 if (expanded is null) return null;
                 expandedParameters.Add(expanded);
             }

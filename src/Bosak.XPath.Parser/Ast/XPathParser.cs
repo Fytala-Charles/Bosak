@@ -169,6 +169,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.75  | 13-10-2026     | Parse XPath 4.0 inline namespace declarations
 //                      | Charles Korthout | 1.76  | 13-10-2026     | Validate targeted processing-instruction sequence types with shared target parsing
+//                      | Charles Korthout | 1.77 | 13-10-2026     | Parse XPath 4.0 fn function types and documentary parameters
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -4786,6 +4787,14 @@ internal sealed class XPathParser
             }
         }
 
+        if (string.IsNullOrEmpty(prefix) && local == "fn" && Current.Kind == TokenKind.LParen && !_xpath40)
+            throw new XPathParseException("XPST0003: The fn function-type synonym requires XPath 4.0.", Current.Start);
+        if (_xpath40 && string.IsNullOrEmpty(prefix) && local is "function" or "fn" && Current.Kind == TokenKind.LParen)
+        {
+            var functionType = ParseFunctionSequenceType();
+            return (null, annotations.Length > 0 ? annotations + " " + functionType : functionType, true);
+        }
+
         // Consume optional parens and their contents: item(), node(), empty-sequence(), function(*), function(int) as int, map(*), element(foo), etc.
         bool hasParens = false;
         var baseLocal = local;
@@ -4820,6 +4829,8 @@ internal sealed class XPathParser
                 }
                 else
                 {
+                    if (!_xpath40 && baseLocal == "function" && Current.Kind == TokenKind.Dollar)
+                        throw new XPathParseException("XPST0003: Named function-type parameters require XPath 4.0.", Current.Start);
                     sb.Append(GetString(Current));
                     Advance();
                 }
@@ -4890,6 +4901,46 @@ internal sealed class XPathParser
 
         return (prefix, annotations.Length > 0 ? annotations + " " + local : local, hasParens);
     }
+
+    private string ParseFunctionSequenceType()
+    {
+        Expect(TokenKind.LParen);
+        if (Match(TokenKind.Star))
+        {
+            Expect(TokenKind.RParen);
+            return "function(*)";
+        }
+        var parameters = new List<string>();
+        var names = new HashSet<string>(StringComparer.Ordinal);
+        if (Current.Kind != TokenKind.RParen)
+        {
+            do
+            {
+                var parameterName = string.Empty;
+                if (Match(TokenKind.Dollar))
+                {
+                    var name = GetString(ExpectName());
+                    SplitQName(name);
+                    if (!names.Add(name)) throw new XPathParseException("XQST0039: Duplicate function-type parameter name.", Current.Start);
+                    Expect(TokenKind.KeywordAs);
+                    parameterName = "$" + name + " as ";
+                }
+                parameters.Add(parameterName + RenderSequenceType(ParseSequenceType()));
+            } while (Match(TokenKind.Comma));
+        }
+        Expect(TokenKind.RParen);
+        Expect(TokenKind.KeywordAs);
+        return "function(" + string.Join(",", parameters) + ") as " + RenderSequenceType(ParseSequenceType());
+    }
+
+    private static string RenderSequenceType((string? Prefix, string Local, OccurrenceIndicator Occurrence) type)
+        => (type.Prefix is null ? type.Local : type.Prefix + ":" + type.Local) + (type.Occurrence switch
+        {
+            OccurrenceIndicator.ZeroOrOne => "?",
+            OccurrenceIndicator.ZeroOrMore => "*",
+            OccurrenceIndicator.OneOrMore => "+",
+            _ => string.Empty
+        });
 
     // Shared parsing keeps PI targets as case-sensitive NCNames rather than type QNames.
     internal static bool TryParseProcessingInstructionTypeTarget(string text, out string? target)

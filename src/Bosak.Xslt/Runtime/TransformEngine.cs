@@ -538,6 +538,7 @@
 //                      | Charles Korthout | 7.22 | 13-10-2026     | Supply known record names for XPath and AVT static named-type validation
 //                      | Charles Korthout | 7.23 | 13-10-2026     | Preserve named node test namespaces when resolving binding sequence types
 //                      | Charles Korthout | 7.24 | 13-10-2026     | Preserve schema annotation namespace bindings at runtime declaration boundaries
+//                      | Charles Korthout | 7.25 | 13-10-2026     | Normalize XPath 4.0 binding signatures even without declared aliases
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -16674,7 +16675,10 @@ internal sealed class TransformEngine
     private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases,
         IReadOnlyDictionary<string, XdmRecordType>? namedRecords = null)
     {
-        if (string.IsNullOrWhiteSpace(sequenceType) || (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0)) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
+        if (string.IsNullOrWhiteSpace(sequenceType) || !AllowsItemTypeDeclarations(declaration)) return sequenceType;
+        if (aliases.Count == 0 && (namedRecords is null || namedRecords.Count == 0) &&
+            !sequenceType.Contains('$') && !Regex.IsMatch(sequenceType, @"(?:^|\W)fn\s*\("))
+            return sequenceType;
         return ItemTypeAliasExpansion.Expand(sequenceType, name =>
         {
             if (!name.StartsWith("Q{", StringComparison.Ordinal) && name.IndexOf(':') is var colon && colon >= 0
