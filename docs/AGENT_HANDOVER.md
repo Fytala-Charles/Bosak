@@ -12,7 +12,7 @@ Validation: Release build succeeds with zero errors and ten existing test-projec
 
 Next: broader native type-alias record matching and conversion boundaries; type patterns and annotated function types remain follow-ups. Fixed namespaces still need remaining QName/pattern/static contexts. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: [PR #232](https://github.com/Fytala-Charles/Bosak/pull/232), stacked on #231. Verified implementation commit 760b9174; final handover bookkeeping follows in this branch. PR #232 remains open; CI runs once retargeted to main.
 
 # Fixed namespace type contexts — 2026-10-13
 
