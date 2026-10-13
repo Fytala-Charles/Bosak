@@ -471,6 +471,14 @@
         "familyFailed": 0,
         "familySkipped": 0,
         "evidence": "XSLT40-FUNCTION-KEYWORD-RESULTS.json"
+      },
+      "authoringFollowUp": {
+        "implementation": "7caa9f4d5f9677fc2700d8e9dc697ff11eb79c95",
+        "newRegressions": 38,
+        "focusedPassed": 103,
+        "familyPassed": 16,
+        "familyFailed": 0,
+        "evidence": "XSLT40-AUTHORING-FUNCTION-KEYWORD-RESULTS.json"
       }
     }
   ]

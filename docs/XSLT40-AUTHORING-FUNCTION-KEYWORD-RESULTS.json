@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-13",
+  "base": "4932b72440d2bf06deffa8840fbccf19738aa159",
+  "implementation": "7caa9f4d5f9677fc2700d8e9dc697ff11eb79c95",
+  "publishedVersion": "1.2.0",
+  "sourceVersion": "1.2.1 (unpublished)",
+  "scope": "Authoring expression/AVT validation of exact-arity XSLT function keyword calls with every argument supplied.",
+  "baseline": {
+    "initialTests": 24,
+    "passed": 10,
+    "failed": 14,
+    "skipped": 0
+  },
+  "verification": {
+    "newTestsPassed": 38,
+    "focusedXsltPassed": 103,
+    "fullUnitPassed": 7974,
+    "xsltUnitPassed": 5088,
+    "failed": 0,
+    "skipped": 0,
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    },
+    "nativeFamily": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "Release solution: 0 errors, 2 existing warnings"
+  },
+  "architecture": "Immutable frozen signature registry derived from retained declaration contexts and include/import occurrence ranks. No stylesheet compilation, evaluation or resource resolution is performed by signature capture or snapshot validation.",
+  "namespaces": "Applicable fixed/native declaration namespaces; parameter-local bindings; unprefixed names in no namespace; undeclared host keyword prefixes report XPST0081.",
+  "sourcePreservation": "Original bytes and public native namespace/QName descriptors unchanged. Repeated validation makes no resolver requests; namespace-document refusal is not retried.",
+  "publicApi": "No public API addition; registry is retained internally on the snapshot.",
+  "coverageGaps": [
+    "Omitted optional/default arguments",
+    "Conditional/shadow/ambiguous declarations and parameters",
+    "Unresolved/cyclic/limited module graphs",
+    "Package keyword signature linkage"
+  ],
+  "boundaries": [
+    "Authoring expression edits",
+    "Pattern and expression-body keyword signature validation",
+    "Static use-when calls to ordinary stylesheet functions",
+    "Record constructor keywords and xsl:original"
+  ],
+  "upstream": "Original five areas/14 cases and PR #27 three cases remain separate. Acceptance/independent confirmation remain pending.",
+  "nativeSuiteRevision": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+  "nativeReceiptSha256": "a5840f2a2a8db24f81269e4aae7c9d1cdfb7e6a63adbf85a652092d12f7d181e",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xslt-40/src/xslt.xml"
+}
