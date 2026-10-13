@@ -315,6 +315,7 @@
 //                      | Charles Korthout | 2.154 | 13-10-2026     | Align mode names, membership and defaults with applicable namespaces.                    |
 //                      | Charles Korthout | 2.155 | 13-10-2026     | Use applicable key declaration bindings and share NCName validation.                     |
 //                      | Charles Korthout | 2.156 | 13-10-2026     | Share module fixed-binding policy independently of local expression grammar.              |
+//                      | Charles Korthout | 2.157 | 13-10-2026     | Retain fixed variable and parameter identities across local earlier profiles.              |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1075,6 +1076,14 @@ internal sealed class Stylesheet
             && double.TryParse(root.Attribute("version")?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var version)
             && version >= 4.0;
     }
+
+    /// <summary>Gets whether a variable or parameter name uses its module fixed bindings.</summary>
+    /// <param name="element">The declaration or supplied parameter element.</param>
+    /// <returns>Whether this variable/parameter construct belongs to a fixed-binding module.</returns>
+    internal static bool UsesModuleFixedVariableNamespaces(XElement element)
+        => element.Name.NamespaceName == XslNamespace
+            && (element.Name.LocalName is "variable" or "param" or "with-param")
+            && HasModuleFixedNamespaces(element);
 
     internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
     {
@@ -4659,7 +4668,8 @@ internal sealed class Stylesheet
                 {
                     var nameAttr = elem.Attribute("name") ?? elem.Attribute("_name");
                     if (nameAttr != null && !string.IsNullOrWhiteSpace(nameAttr.Value))
-                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name", useApplicableNamespaces: true);
+                        ValidateXsltName(elem, nameAttr.Value, $"xsl:{localName}/@name", useApplicableNamespaces: true,
+                            namespaceBindings: UsesModuleFixedVariableNamespaces(elem) ? GetApplicableStaticNamespaces(elem) : null);
                 }
 
                 // xsl:apply-templates/@mode must be a valid mode token (QName or #current/#default/#unnamed/#all).
@@ -5770,7 +5780,8 @@ internal sealed class Stylesheet
     /// Validates that <paramref name="name"/> is a legal XSLT lexical QName or EQName.
     /// Returns the local name and namespace URI if valid; otherwise throws <c>XTSE0020</c>.
     /// </summary>
-    internal static (string localName, string namespaceUri) ValidateXsltName(XElement element, string name, string construct, bool useApplicableNamespaces = false)
+    internal static (string localName, string namespaceUri) ValidateXsltName(XElement element, string name, string construct,
+        bool useApplicableNamespaces = false, IReadOnlyDictionary<string, string>? namespaceBindings = null)
     {
         var trimmed = name.Trim();
         if (string.IsNullOrEmpty(trimmed))
@@ -5806,8 +5817,9 @@ internal sealed class Stylesheet
             if (!IsValidNCName(local))
                 throw new InvalidOperationException($"XTSE0020: The local part '{local}' in '{name}' for {construct} is not a valid NCName.");
 
-            var nsDecl = useApplicableNamespaces ? GetComponentNamespace(element, prefix)
-                : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+            var nsDecl = namespaceBindings is not null ? namespaceBindings.GetValueOrDefault(prefix)
+                : useApplicableNamespaces ? GetComponentNamespace(element, prefix)
+                    : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
             if (nsDecl == null)
                 throw new InvalidOperationException($"XTSE0280: The prefix '{prefix}' in '{name}' for {construct} is not declared.");
             var ns = nsDecl;
@@ -6157,8 +6169,10 @@ internal sealed class Stylesheet
         // QName-valued attributes are whitespace-collapsed by the XSLT data model,
         // so leading and trailing space around a lexical or EQName must be ignored.
         name = name.Trim();
-        if (UsesXPath40Namespaces(element))
-            return ValidateXsltName(element, name, "variable/parameter name", useApplicableNamespaces: true);
+        var moduleVariableBindings = UsesModuleFixedVariableNamespaces(element);
+        if (UsesXPath40Namespaces(element) || moduleVariableBindings)
+            return ValidateXsltName(element, name, "variable/parameter name", useApplicableNamespaces: true,
+                namespaceBindings: moduleVariableBindings ? GetApplicableStaticNamespaces(element) : null);
 
         // The empty URI form Q{}local is permitted and means "no namespace".
         if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')

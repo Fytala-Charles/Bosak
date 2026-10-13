@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Correct local earlier-profile variable identity to module fixed bindings.                  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -144,13 +145,13 @@ public class Xslt40VariableQNameTests
         Assert.Contains("XTSE0020", Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(text)).Message);
     }
 
-    /// <summary>Local earlier host versions retain native declarations inside a 4.0 module.</summary>
+    /// <summary>Local earlier host versions cannot restore an omitted native declaration prefix.</summary>
     [Fact]
-    public void LocalEarlierHostVersionRetainsNativeNames()
+    public void LocalEarlierHostVersionRetainsModuleFixedNames()
     {
         var text = Sheet("<xsl:template match='/' version='3.0'><xsl:variable name='p:v' select='7'/><out><xsl:value-of select='$Q{urn:native}v'/></out></xsl:template>", "#standard");
-        Assert.Equal(XsltValidationOutcome.Valid, Validate(text).Outcome);
-        Assert.Equal("7", Transform(text));
+        Assert.Contains(Validate(text).Diagnostics, d => d.Code == "XTSE0280");
+        Assert.Contains("XTSE0280", Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(text)).Message);
     }
 
     /// <summary>QName descriptors retain their public metadata contract and original bytes.</summary>

@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Report key declaration QName syntax and applicable namespace errors.                     |
 //                      | Charles Korthout | 0.14  | 13-10-2026     | Use captured function keyword signatures and report deferred coverage.                   |
 //                      | Charles Korthout | 0.15  | 13-10-2026     | Apply retained module fixed bindings to locally earlier expression and pattern slots.     |
+//                      | Charles Korthout | 0.16  | 13-10-2026     | Bind and validate locally earlier variable/parameter names in retained module contexts.    |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -302,9 +303,10 @@ internal sealed class XsltValidationEngine
     /// <summary>Reports applicable QName syntax and binding errors on active 4.0 component names.</summary>
     private void CheckComponentQName(ModuleWalkState state, AuthoringNodeDescriptor node)
     {
-        if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element
+        if (node.BackingObject is not XElement element
             || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
             || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode" or "key")) return;
+        if (GetEffectiveVersion(node) < 4.0 && !Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(element)) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
         if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
@@ -315,7 +317,8 @@ internal sealed class XsltValidationEngine
             if (element.Name.LocalName == "function")
                 _ = Stylesheet.XsltFunctionDefinition.ValidateFunctionQName(element, attribute.ExpandedValue);
             else
-                _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, $"xsl:{element.Name.LocalName}/@name", useApplicableNamespaces: true);
+                _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, $"xsl:{element.Name.LocalName}/@name", useApplicableNamespaces: true,
+                    namespaceBindings: Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(element) ? attribute.DeclarationContext?.StaticNamespaces : null);
             if (element.Name.LocalName == "template")
                 Stylesheet.Stylesheet.ValidateNamedQName(element, attribute.ExpandedValue, "xsl:template");
         }
@@ -369,13 +372,15 @@ internal sealed class XsltValidationEngine
                 continue;
             }
 
-            if (GetEffectiveVersion(element) >= 4.0 && element.BackingObject is XElement backing)
+            if (element.BackingObject is XElement backing && (GetEffectiveVersion(element) >= 4.0
+                || Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(backing)))
             {
                 if (attribute.DeclarationContext?.StaticNamespaceError is not null) return false;
                 try
                 {
                     (localName, namespaceUri) = Stylesheet.Stylesheet.ValidateXsltName(backing,
-                        attribute.ExpandedValue, "variable/parameter name", useApplicableNamespaces: true);
+                        attribute.ExpandedValue, "variable/parameter name", useApplicableNamespaces: true,
+                        namespaceBindings: Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(backing) ? attribute.DeclarationContext?.StaticNamespaces : null);
                     return true;
                 }
                 catch (InvalidOperationException) { return false; }

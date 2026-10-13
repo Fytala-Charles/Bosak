@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Retain optional ranges by winning arity and defer conditional parameters.                 |
+//                      | Charles Korthout | 0.3   | 13-10-2026     | Retain captured parameter bindings independently of local declaration grammar.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -122,7 +123,7 @@ internal sealed class AuthoringFunctionSignatures
                     {
                         if (!contexts.TryGetValue(p, out var parameterContext) || p.Attribute("name") is not { } parameterName)
                             throw new InvalidOperationException("A parameter name is unavailable.");
-                        var expanded = ExpandName(parameterName.Value.Trim(), parameterContext);
+                        var expanded = ExpandName(parameterName.Value.Trim(), parameterContext, useCapturedNamespaces: true);
                         return $"Q{{{expanded.Namespace}}}{expanded.Name}";
                     }).ToArray();
                     signatures[key] = Array.AsReadOnly(names);
@@ -137,7 +138,7 @@ internal sealed class AuthoringFunctionSignatures
         return new(signatures, uncertain, optional, graphGap);
     }
 
-    private static (string Namespace, string Name) ExpandName(string text, ExpressionSlotContext context)
+    private static (string Namespace, string Name) ExpandName(string text, ExpressionSlotContext context, bool useCapturedNamespaces = false)
     {
         if (context.StaticNamespaceError is not null) throw new InvalidOperationException(context.StaticNamespaceError);
         if (text.StartsWith("Q{", StringComparison.Ordinal))
@@ -152,7 +153,8 @@ internal sealed class AuthoringFunctionSignatures
         if (colon < 0) return (string.Empty, local);
         var prefix = text[..colon];
         if (!XsltStylesheet.IsValidNCName(prefix)) throw new InvalidOperationException("Invalid prefix.");
-        string? uri = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion) >= XPathCompatibility.XPath40
+        string? uri = (useCapturedNamespaces && context.StaticNamespaces is not null)
+            || Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion) >= XPathCompatibility.XPath40
             ? context.StaticNamespaces?.GetValueOrDefault(prefix)
             : context.InScopeNamespaces.LastOrDefault(n => n.Prefix == prefix)?.Uri;
         if (string.IsNullOrEmpty(uri)) throw new InvalidOperationException("Unavailable namespace prefix.");
