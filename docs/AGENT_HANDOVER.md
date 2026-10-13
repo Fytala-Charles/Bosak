@@ -14,7 +14,7 @@ Validation: Release build passes with 12 existing warnings and zero errors. All 
 
 Next: remaining node grammar/schema diagnostics and function type grammar, then package exposure. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: tested implementation e745cbbd committed and pushed; [Bosak PR #223](https://github.com/Fytala-Charles/Bosak/pull/223) open against main, CI pending. PRs #221 and #222 are merged. This delivery record changes documentation only. Check #223 CI before its merge; next work is remaining node grammar/schema diagnostics and function type grammar, then package exposure.
 
 # Node-kind alias grammar — 2026-10-13
 
