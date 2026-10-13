@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 2.6   | 13-10-2026     | Resolve standalone type patterns in their declaring scope and compute type priorities.   |
 //                      | Charles Korthout | 2.7   | 13-10-2026     | Apply profile-specific XPath 4.0 kind-test wildcard/type priorities.
 //                      | Charles Korthout | 2.8   | 13-10-2026     | Keep 4.0 node union patterns as one rule with maximum alternative priority.
+//                      | Charles Korthout | 2.9   | 13-10-2026     | Normalize 4.0 attribute shorthand and forward-axis default priorities.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -706,10 +707,23 @@ internal sealed class TemplateRule
         // A predicate increases node-pattern priority, including explicit-axis kind tests.
         if (xpath40 && MaskPatternUris(trimmed).Contains('[')) return 0.5;
 
-        // Explicit axis step
-        if (trimmed.Contains("::"))
+        if (xpath40 && trimmed.StartsWith('@'))
+            return ComputeSinglePatternPriority(trimmed[1..].Trim(), xpath40: true);
+
+        // EQName URI punctuation must not be interpreted as an axis separator.
+        var axisText = xpath40 ? MaskPatternUris(trimmed) : trimmed;
+        int axisSeparator = axisText.IndexOf("::", StringComparison.Ordinal);
+        if (xpath40 && axisSeparator >= 0)
         {
-            int colonIdx = trimmed.IndexOf("::");
+            var forwardAxis = trimmed[..axisSeparator].Trim();
+            if (forwardAxis is "child" or "descendant" or "attribute" or "self" or "descendant-or-self" or "namespace")
+                return ComputeSinglePatternPriority(trimmed[(axisSeparator + 2)..].Trim(), xpath40: true);
+        }
+
+        // Explicit axis step in earlier profiles.
+        if (axisSeparator >= 0)
+        {
+            int colonIdx = axisSeparator;
             string axis = trimmed[..colonIdx].Trim().ToLowerInvariant();
             string nodeTest = trimmed[(colonIdx + 2)..].Trim();
 

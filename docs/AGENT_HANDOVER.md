@@ -1,3 +1,19 @@
+# Attribute and forward-axis priorities — 2026-10-13
+
+Branch: feat/xslt-forward-axis-priorities; parent 030533e4. Stacked on PR #236; PRs #223–236 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 computes supported XSLT 4.0 attribute shorthand and forward-axis pattern priorities from the underlying node test. Named attributes (@A and attribute::A) and named element axis tests have priority 0; namespace/local wildcards retain -0.25 and untargeted kind tests retain -0.5. Named processing-instruction axis tests have priority 0 and now match their target in 4.0 child/self/descendant-style node-test compilation. Existing 4.0 typed kind-test priorities, explicit priorities, predicate priority 0.5 and single-rule union behavior are retained. Earlier effective profiles keep their original behavior. Axis recognition for priority and 4.0 matching ignores :: inside EQName URIs. Thirty-three regressions compare default priorities against explicit competitors, verify earlier-profile differences, target nonmatches, attribute-union next-match chains and positive/negative EQName URI cases. Native next-match remains 46/8/6 and type-alias remains 22/10/0; prior wildcard/type-pattern gains remain green and upstream assertions/fixture versions are unchanged. Intersect/except and bare predicate-pattern priorities, broader pattern grammar, lower-version native fixture processor selection, schema-defined atomic priorities, named-type/fixed-namespace authoring contexts, non-template type registries, remaining record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7454 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4568/0/0 and thirty-three new regressions; focused forward-axis regressions pass 33/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: intersect/except and bare predicate-pattern default priorities. Broader pattern grammar and native lower-version processor selection remain separate boundaries; preserve assertions and fixture versions. Remaining record outcomes (including case 050 result handling), annotated function types, schema-derived atomic priorities and broader fixed namespace/authoring-validation contexts remain follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Node union patterns — 2026-10-13
 
 Branch: feat/xslt-union-pattern-priorities; parent c93926a3. Stacked on PR #235; PRs #223–235 remain open. Earlier sections are historical.

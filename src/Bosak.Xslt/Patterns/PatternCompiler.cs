@@ -89,6 +89,7 @@
 //                      | Charles Korthout | 3.17  | 13-10-2026     | Compile XPath 4.0 type patterns with declaring type and namespace scopes.                 |
 //                      | Charles Korthout | 3.18  | 13-10-2026     | Match XPath 4.0 wildcard and union names in element/attribute kind-test patterns.
 //                      | Charles Korthout | 3.19  | 13-10-2026     | Preserve 4.0 static context while compiling parenthesized union alternatives.
+//                      | Charles Korthout | 3.20  | 13-10-2026     | Match named processing instructions in 4.0 forward-axis node tests.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -2085,9 +2086,10 @@ internal sealed class PatternCompiler
     private PatternPredicate CompileElementPattern(string name)
     {
         // Handle axis steps: axis::nodetest
-        if (name.Contains("::"))
+        var axisText = _compatibility >= XPathCompatibility.XPath40 ? MaskEQNameUris(name) : name;
+        if (axisText.Contains("::", StringComparison.Ordinal))
         {
-            int colonIdx = name.IndexOf("::");
+            int colonIdx = axisText.IndexOf("::", StringComparison.Ordinal);
             string axis = name[..colonIdx].Trim();
             string nodeTest = name[(colonIdx + 2)..].Trim();
             return CompileAxisStep(axis, nodeTest);
@@ -2658,6 +2660,13 @@ internal sealed class PatternCompiler
             return node => node.NodeKind == XdmNodeKind.Comment;
         if (nodeTest == "processing-instruction()")
             return node => node.NodeKind == XdmNodeKind.ProcessingInstruction;
+        if (_compatibility >= XPathCompatibility.XPath40 && nodeTest.StartsWith("processing-instruction(", StringComparison.Ordinal))
+        {
+            var target = ExtractFunctionArg(nodeTest).Trim();
+            if (target.Length >= 2 && target[0] is '\'' or '"')
+                target = target[1..^1];
+            return node => node.NodeKind == XdmNodeKind.ProcessingInstruction && node.LocalName == target;
+        }
         if (nodeTest == "element()")
             return node => node.NodeKind == XdmNodeKind.Element;
         if (nodeTest == "document-node()")
