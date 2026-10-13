@@ -1,6 +1,6 @@
 # Pattern operator scanning — 2026-10-13
 
-Branch: feat/xslt-pattern-operator-scanning; parent c6ae3f5b. Stacked on PR #241; PRs #223–241 remain open. Earlier sections are historical.
+Branch: feat/xslt-pattern-operator-scanning; parent c6ae3f5b. Stacked on PR #241; PRs #223–242 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: mixed intersect/except associativity in the effective 4.0 profile; operators have equal precedence and evaluate left to right. Preserve earlier-profile behavior and frozen gates. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #242](https://github.com/Fytala-Charles/Bosak/pull/242), stacked on #241. Verified implementation revision 32a0b4a2; a documentation-only delivery commit follows. PRs #223–242 remain open. CI starts after retargeting to main. Next: mixed intersect/except associativity in the effective 4.0 profile.
 
 # Pattern delimiter scanning — 2026-10-13
 
