@@ -1,6 +1,6 @@
 # Node-kind alias grammar — 2026-10-13
 
-Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 CI 38368964609 passed; PR remains open and this slice will be stacked on it. Earlier sections are historical.
+Branch: feat/xslt-node-kind-aliases; parent 965718fd on feat/xslt-declaration-type-validation. PR #221 merged after CI 38368964609 passed and the user authorized merging the prerequisite. PR #222 now targets main. Earlier sections are historical.
 
 ## What was built
 
@@ -14,7 +14,7 @@ Validation: Release build passes with 10 existing warnings and zero errors. All 
 
 Next: named/wildcard/schema-annotated node tests and function grammar gaps, then package exposure. Check CI before merging. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery: tested implementation d456c000 committed and pushed; [Bosak PR #222](https://github.com/Fytala-Charles/Bosak/pull/222) open, stacked on #221, CI pending. This delivery record changes documentation only. PR #221 CI passed but it remains open; retarget #222 to main after #221 merges.
+Delivery: tested implementation d456c000 committed and pushed; [Bosak PR #222](https://github.com/Fytala-Charles/Bosak/pull/222) open against main, CI pending. This delivery record changes documentation only. PR #221 is merged; PR #222 is retargeted to main. Wait for its CI before the authorized merge.
 
 # Declaration static named-type validation — 2026-10-13
 
