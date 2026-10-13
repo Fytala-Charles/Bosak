@@ -1,3 +1,11 @@
+# Variable and parameter QName alignment — 2026-10-13
+
+Branch: fix/xslt40-variable-qname-bindings; base main `444bc724`; implementation `ba2effc092e730042f1f1d8857a7e13d431e71e1`.
+
+Source candidate 1.2.1 (unpublished) aligns XSLT 4.0 variable, parameter and with-param QName bindings across compilation, execution and authoring scope validation. With fixed-namespaces="#standard p=urn:fixed", name="p:v" binds to urn:fixed even when XML declares p as urn:native; $p:v and supplied parameters now identify the same value. Fixed-only prefixes work, unused excluded-prefix names report XTSE0280 and malformed names report XTSE0020. Explicit EQNames, unprefixed names, declaration-order scope and literal static exclusions remain intact. QName descriptors retain their public SlotContext=null contract and source bytes; declaration namespace documents are captured internally through the caller resolver during inspection, with no new resolution during snapshot validation. All 27 focused regressions pass (original baseline: 9 pass/18 fail). All 7,721 unit tests pass, including XSLT 4,835/0/0; QT3 remains 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Published version remains 1.2.0; no gate promotion or upstream assertion changes. Other component-name paths, mixed-version expression namespace contexts and authoring named-type registration remain follow-ups; REQ-125 acceptance and REQ-126/N01–N05 statuses are unchanged. Evidence: XSLT40-VARIABLE-QNAME-RESULTS.json.
+
+Delivery: submit against main and merge after CI. Next: triage remaining function/template/mode/key component-name paths and authoring named-type registration, then reassess a small next XSLT 4.0 contribution batch. Mixed-version expression namespace selection is a separate observed runtime gap; the earlier-profile QName regression uses an explicit EQName reference to isolate declaration binding. Preserve source evidence, compatibility gates and pending upstream acceptance. No publication or external messages in this slice. Earlier records below are historical.
+
 # Authoring static namespace alignment — 2026-10-13
 
 Branch: fix/xslt40-authoring-static-namespaces; base main `69a5c934`; implementation `df513959e04549ee8769e1e3a8f5a6ffbaf37b45`.

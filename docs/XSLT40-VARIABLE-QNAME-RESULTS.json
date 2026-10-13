@@ -1,0 +1,46 @@
+{
+  "date": "2026-10-13",
+  "baseRevision": "444bc724e8a5c8bcd9bee8ec9bd4a5696a96e1e9",
+  "implementationRevision": "ba2effc092e730042f1f1d8857a7e13d431e71e1",
+  "publishedVersion": "1.2.0",
+  "sourceCandidate": "1.2.1",
+  "publication": "Unpublished; no tag or NuGet publication",
+  "scope": "Variable, parameter and with-param QName bindings agree across compilation, execution and authoring validation",
+  "baselineFocused": {
+    "passed": 9,
+    "failed": 18,
+    "skipped": 0
+  },
+  "finalFocused": {
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0
+  },
+  "unitTests": {
+    "passed": 7721,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 4835
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gate": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "boundary": "Native source descriptors, QName SlotContext null contract and original bytes remain unchanged. Internal declaration contexts capture namespace documents during caller-controlled inspection; snapshot validation performs no new resolution. Earlier host profiles retain native QName behavior; EQNames/unprefixed names and static exclusions are preserved. Other component-name paths, mixed-version expression namespace contexts and authoring named-type registration remain follow-ups.",
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+  "upstreamAssertionsChanged": false,
+  "gateMembershipChanged": false,
+  "logs": {
+    "baseline": "965aee5064050abe9ebef6b2dabdbca895f21cb8bcb6cc46ba491f3c6bae918c",
+    "focused": "af1fcf54a1736fb8d323eacb5fc07ce6340a19d89f9dff0818c35ec62a56e9b1",
+    "unit": "506e804091a7f50348b972180defb36b280a9ff134029e1939fb2891c4e4f1f1",
+    "qt3": "ccc438d587aaaa98d914db77c5c823be7e35b9c27634833a366a865908340602",
+    "qt4": "ed0f627e4455b11632bbd83d80f4b27f1f30511ec929358c3e5ecca90aa9c7de"
+  }
+}
