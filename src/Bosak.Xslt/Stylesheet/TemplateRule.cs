@@ -51,6 +51,7 @@
 //                      | Charles Korthout | 2.7   | 13-10-2026     | Apply profile-specific XPath 4.0 kind-test wildcard/type priorities.
 //                      | Charles Korthout | 2.8   | 13-10-2026     | Keep 4.0 node union patterns as one rule with maximum alternative priority.
 //                      | Charles Korthout | 2.9   | 13-10-2026     | Normalize 4.0 attribute shorthand and forward-axis default priorities.
+//                      | Charles Korthout | 2.10  | 13-10-2026     | Apply first-operand set priorities and 4.0 predicate-pattern priorities.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -625,6 +626,13 @@ internal sealed class TemplateRule
         if (branches.Length > 1)
             return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true) : ComputeSinglePatternPriority(branch));
 
+        if (xpath40)
+        {
+            var operands = SplitNodeUnion40(trimmed, setOperators: true);
+            if (operands.Length > 1)
+                return ComputeDefaultPriority(operands[0], xpath40: true);
+        }
+
         return ComputeSinglePatternPriority(trimmed, xpath40);
     }
 
@@ -668,6 +676,11 @@ internal sealed class TemplateRule
             if (close == trimmed.Length - 1)
                 return ComputeSinglePatternPriority(trimmed[1..close].Trim(), xpath40);
         }
+
+        // Predicate patterns precede path classification: slashes inside their predicates are expressions.
+        if (xpath40 && (trimmed == "." ||
+            (trimmed.StartsWith('.') && trimmed[1..].TrimStart().StartsWith('['))))
+            return trimmed == "." ? -1 : 1;
 
         // Root pattern
         if (trimmed == "/")
@@ -986,8 +999,8 @@ internal sealed class TemplateRule
         return false;
     }
 
-    /// <summary>Splits 4.0 node unions without interpreting strings, predicates or EQName URIs as operators.</summary>
-    private static string[] SplitNodeUnion40(string pattern)
+    /// <summary>Splits 4.0 union or intersect/except operands without treating nested content as operators.</summary>
+    private static string[] SplitNodeUnion40(string pattern, bool setOperators = false)
     {
         var parts = new List<string>();
         int start = 0, depth = 0;
@@ -1011,14 +1024,19 @@ internal sealed class TemplateRule
             if (c is '(' or '[') { depth++; continue; }
             if (c is ')' or ']') { depth--; continue; }
             if (depth != 0) continue;
-            int width = c == '|' ? 1 : 0;
-            if (width == 0 && i > start && pattern.AsSpan(i).StartsWith("union", StringComparison.Ordinal)
-                && char.IsWhiteSpace(pattern[i - 1])
-                && (i + 5 == pattern.Length || char.IsWhiteSpace(pattern[i + 5])))
+            int width = !setOperators && c == '|' ? 1 : 0;
+            string? word = setOperators
+                ? (pattern.AsSpan(i).StartsWith("intersect", StringComparison.Ordinal) ? "intersect"
+                    : pattern.AsSpan(i).StartsWith("except", StringComparison.Ordinal) ? "except" : null)
+                : "union";
+            if (width == 0 && word is not null && i > start && pattern.AsSpan(i).StartsWith(word, StringComparison.Ordinal)
+                && (char.IsWhiteSpace(pattern[i - 1]) || (setOperators && pattern[i - 1] is ')' or ']' or '*'))
+                && (i + word.Length == pattern.Length || char.IsWhiteSpace(pattern[i + word.Length]) ||
+                    (setOperators && pattern[i + word.Length] is '(' or '/' or '@' or '*')))
             {
                 int previous = i - 1;
                 while (previous >= start && char.IsWhiteSpace(pattern[previous])) previous--;
-                if (previous >= start && pattern[previous] is not '/' and not '@' and not ':' and not '|') width = 5;
+                if (previous >= start && pattern[previous] is not '/' and not '@' and not ':' and not '|') width = word.Length;
             }
             if (width == 0) continue;
             parts.Add(pattern[start..i].Trim());
@@ -1027,7 +1045,7 @@ internal sealed class TemplateRule
         }
         parts.Add(pattern[start..].Trim());
         if (parts.Count > 1 && parts.Any(string.IsNullOrEmpty))
-            throw new InvalidOperationException("XTSE0340: A union pattern requires an alternative on each side of its operator.");
+            throw new InvalidOperationException("XTSE0340: A node set pattern requires an operand on each side of its operator.");
         return parts.ToArray();
     }
 
