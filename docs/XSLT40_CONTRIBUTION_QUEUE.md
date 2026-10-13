@@ -339,3 +339,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 ## Second contribution batch: fixed namespace components - 2026-10-13
 
 Three native fixed-namespace component tests are submitted as [xslt40-test PR #27](https://github.com/qt4cg/xslt40-test/pull/27): explicit mode declaration/membership under native rebinding, root/scoped default-mode identity, and fixed-bound key names with QName lookup identity. All three pass with source candidate 1.2.1 (unpublished). The wider fixed-namespaces set is 11 pass/5 fail/0 skip; existing cases 006-009 and 011 fail on user-function keyword parameter metadata (XPST0017). Expected outputs are specification-derived, the native catalog schema validates and the portable patch reconstructs the submitted tree exactly. Upstream acceptance and independent confirmation remain pending. This is a new contribution area separate from the original five batches and fourteen cases; REQ-126/N01-N05 statuses remain unchanged. Published version remains 1.2.0. See [examples and exact verification evidence](../contributions/xslt40/fixed-namespace-components/README.md).
+
+
+## Fixed namespace keyword follow-up - 2026-10-13
+
+The unchanged fixed-namespaces family now passes 16/0/0 after support for all-supplied XSLT function keyword calls (initial 11/5/0 preserved). The three new PR #27 cases remain green. See [separate implementation evidence](XSLT40-FUNCTION-KEYWORD-RESULTS.json). Original N01-N05 and upstream acceptance states are unchanged; next host-signature work is authoring validation, with optional/default arguments and broader package coverage separate. Version 1.2.1 remains unpublished.

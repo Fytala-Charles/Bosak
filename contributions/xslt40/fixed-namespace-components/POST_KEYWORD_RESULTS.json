@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-13",
+  "base": "8e317e33c1f368b6a57e57ddca7af91bc38f074d",
+  "implementation": "96f24e0a7c5191bd158679d57258fc37f02cdf6d",
+  "publishedVersion": "1.2.0",
+  "sourceVersion": "1.2.1 (unpublished)",
+  "scope": "All-supplied keyword arguments to exact-arity XSLT functions; declaration-expanded parameter identities.",
+  "baseline": {
+    "newTests": {
+      "passed": 12,
+      "failed": 16,
+      "skipped": 0,
+      "total": 28
+    },
+    "nativeFamily": {
+      "passed": 11,
+      "failed": 5,
+      "skipped": 0
+    }
+  },
+  "verification": {
+    "newTestsPassed": 28,
+    "focusedXsltPassed": 74,
+    "xpathVersionGatePassed": 211,
+    "fullUnitPassed": 7936,
+    "xsltUnitPassed": 5050,
+    "failed": 0,
+    "skipped": 0,
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    },
+    "nativeFamily": {
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0
+    },
+    "build": "Release solution: 0 errors, 27 existing warnings"
+  },
+  "nativeSuiteRevision": "2c6664329b4951f0122bd4c82e6de78460cc9411",
+  "nativeAssertions": "Unchanged; original five failure receipts remain preserved.",
+  "nativeReceiptSha256": "c16572fb73fadb5ae09f8ac1b244336cad46a8f56d2b0cb8a535bcf141a78b2b",
+  "specSource": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xslt-40/src/xslt.xml",
+  "boundaries": [
+    "Optional/default function arguments and reduced arities",
+    "Authoring snapshot host-function keyword signatures",
+    "Keyword calls in patterns and xsl:evaluate",
+    "Record constructor keywords and xsl:original",
+    "Broader package keyword and overridden signature validation"
+  ],
+  "compatibility": "Earlier profiles retain positional behavior and reject keyword syntax; built-in keyword defaults stay unchanged.",
+  "publicApi": "No new public API; CompileOptions host callback is internal."
+}

@@ -2,6 +2,8 @@
 
 Three specification-derived native tests complement the original five contribution areas. They target existing XSLT 4.0 attributes/components. All three pass in Bosak source `32916981`; published version is 1.2.0 and candidate 1.2.1 remains unpublished. [Submitted as upstream PR #27](https://github.com/qt4cg/xslt40-test/pull/27); upstream acceptance and independent processor confirmation are pending.
 
+**Keyword follow-up - 2026-10-13:** All 16 unchanged native cases now pass at Bosak implementation `96f24e0a`. The initial wider 11/5 results below remain historical. See [post-fix evidence](POST_KEYWORD_RESULTS.json), [exact family log](post-keyword-result.txt) and [receipt](post-keyword-receipt.json). Published version remains 1.2.0; candidate 1.2.1 is unpublished.
+
 ## Coverage review
 
 Reviewed fixed-namespaces 001-012/901 and key 101/102. Case 010 covers implicit fixed-only modes; the new cases add explicit declarations with local native rebinding, root/scoped defaults with EQName membership, and fixed-bound key names alongside QName values whose lexical prefix is absent from the static context. Existing key QName tests do not combine these fixed/native binding boundaries.
@@ -109,6 +111,6 @@ pwsh -File ./run-xslt40-tests.ps1 -TestSet fixed-namespaces -TestCase fixed-name
 pwsh -File ./run-xslt40-tests.ps1 -TestSet fixed-namespaces -TestCase fixed-namespaces-015 -NoBuild
 ```
 
-Build the Release adapter first if needed. Full family execution intentionally reports the five existing failures. [Manifest](evidence.json) records stylesheet, patch and exact receipt SHA-256 values. Receipts retain original checkout paths and statuses for provenance. [Upstream PR text](UPSTREAM_PR_BODY.md) records the requested independent cross-check.
+Build the Release adapter first if needed. Initial family evidence retains the five failures; the current keyword-fixed source passes all sixteen unchanged cases. [Manifest](evidence.json) records stylesheet, patch and exact receipt SHA-256 values. Receipts retain original checkout paths and statuses for provenance. [Upstream PR text](UPSTREAM_PR_BODY.md) records the requested independent cross-check.
 
 Verification: Release solution build succeeds (0 errors; 88 existing warnings); all 7,908 unit tests pass, including 5,022 XSLT tests, with zero failures/skips. No engine source changed; conformance gate results are retained from merged PR #260. Contribution and canonical Markdown render checks pass.

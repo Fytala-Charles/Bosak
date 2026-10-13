@@ -26,7 +26,9 @@
 //                      | Charles Korthout | 0.8   | 13-10-2026     | Document inline namespaces and XPath 4.0 default namespace wildcard
 //                      | Charles Korthout | 0.9 | 13-10-2026     | Carry expanded XSLT item-type aliases through the internal host static context
 //                      | Charles Korthout | 0.10 | 13-10-2026     | Carry known nominative record names for host static type validation
+//                      | Charles Korthout | 0.11  | 13-10-2026     | Carry internal host keyword parameter identities for exact-arity functions.
 // ===========================================================================================================================================================
+
 using System.Xml.Schema;
 
 namespace Bosak.XPath.Api;
@@ -63,6 +65,10 @@ public sealed class CompileOptions
     // Expanded package-local definitions supplied by the XSLT host, independent of
     // the public enumeration-only option. Definitions contain no unresolved aliases.
     internal IReadOnlyDictionary<string, string>? ItemTypeAliases { get; init; }
+
+    // The XSLT host supplies fully expanded parameter EQNames for an exact-arity
+    // function. Null retains the standard-library keyword signature lookup.
+    internal Func<string, string, int, IReadOnlyList<string>?>? FunctionParameterNames { get; init; }
 
     // Non-null enables host named-type validation, even when no records are declared.
     internal IReadOnlySet<string>? NamedRecordTypeNames { get; init; }
