@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 2.11  | 13-10-2026     | Preserve parenthesized item-pattern scopes and expanded type priorities.
 //                      | Charles Korthout | 2.12  | 13-10-2026     | Use lexical delimiter matching for pattern normalization and priority.
 //                      | Charles Korthout | 2.13  | 13-10-2026     | Share lexical union splitting for earlier-profile rule expansion and type choices.
+//                      | Charles Korthout | 2.14  | 13-10-2026     | Resolve 4.0 pattern prefixes using applicable static namespace bindings                |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -527,8 +528,8 @@ internal sealed class TemplateRule
 
     /// <summary>
     /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
-    /// resolving prefixes using the namespace declarations in scope on the
-    /// xsl:template element.
+    /// resolving prefixes using applicable static namespaces in 4.0 and native
+    /// declarations in earlier profiles.
     /// </summary>
     private string ResolveNamespacePrefixes(string pattern)
     {
@@ -536,6 +537,8 @@ internal sealed class TemplateRule
         if (!pattern.Contains(':'))
             return pattern;
 
+        var staticNamespaces = Stylesheet.GetXPathCompatibility(Element) >= XPathCompatibility.XPath40
+            ? Stylesheet.GetApplicableStaticNamespaces(Element) : null;
         var sb = new System.Text.StringBuilder();
         int i = 0;
         while (i < pattern.Length)
@@ -594,8 +597,10 @@ internal sealed class TemplateRule
                     while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
                         i++;
                     var local = pattern[localStart..i];
-                    // Resolve prefix; if not found, keep original (will fail to match, which is correct)
-                    var nsUri = Element.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
+                    // Preserve unresolved prefixes for the pattern compiler to diagnose.
+                    var nsUri = staticNamespaces is null
+                        ? Element.GetNamespaceOfPrefix(prefix)?.NamespaceName
+                        : staticNamespaces.GetValueOrDefault(prefix);
                     if (!string.IsNullOrEmpty(nsUri))
                     {
                         sb.Append($"Q{{{nsUri}}}{local}");

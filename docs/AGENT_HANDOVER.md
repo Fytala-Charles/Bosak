@@ -1,3 +1,19 @@
+# Pattern fixed namespaces — 2026-10-13
+
+Branch: feat/xslt-pattern-fixed-namespaces; parent b273ab5e. Stacked on PR #244; PRs #223–244 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 resolves prefixes in effective XSLT 4.0 template patterns using the declaring applicable static namespace bindings. Fixed bindings now survive native rebinding in node names, attributes, axes, unions, set operands, nested type tests and predicates. Existing EQNames and quoted text are preserved. Without fixed bindings, native declarations remain applicable; earlier profiles retain their native lookup. Twenty-one regressions cover these boundaries; the initial nineteen-test baseline was 3/16/0. Native next-match remains 46/8/6 and type-alias remains 22/10/0; upstream assertions and fixtures are unchanged. Broader pattern grammar, omitted-prefix diagnostics, non-template authoring/static contexts, schema-defined atomic priorities, lower-version native fixture processor selection, record/result cases and annotated function types remain follow-ups. N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Final incremental Release build succeeds with zero warnings and zero errors. All 7643 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4757/0/0 and twenty-one new regressions; focused pattern-fixed regressions pass 21/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native next-match, including si-next-match, remains 46/8/6; type-alias remains 22/10/0 with all prior wildcard/type-pattern gains retained. Both native filtered runners exit 1 for their remaining failures; no assertions or fixture versions changed. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: omitted-prefix static diagnostics in 4.0 template patterns; inspect fixed bindings that exclude a native prefix and preserve earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Set-pattern axis focus — 2026-10-13
 
 Branch: feat/xslt-set-pattern-axis-focus; parent d2f0fef3. Stacked on PR #243; PRs #223–244 remain open. Earlier sections are historical.
