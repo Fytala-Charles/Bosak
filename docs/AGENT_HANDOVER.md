@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: omitted-prefix static diagnostics in 4.0 template patterns; inspect fixed bindings that exclude a native prefix and preserve earlier profiles. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #245](https://github.com/Fytala-Charles/Bosak/pull/245), stacked on #244. Verified implementation commit 5708d9cd; this delivery-note commit follows it. PRs #223–245 remain open; CI starts after retargeting to main. Next: omitted-prefix static diagnostics in 4.0 template patterns. No merge or publication.
 
 # Set-pattern axis focus — 2026-10-13
 
