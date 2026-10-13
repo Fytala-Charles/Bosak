@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: applicable static namespace bindings in XSLT 4.0 authoring validation; inspect pattern and expression slot contexts and keep runtime/static diagnostics consistent. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #246](https://github.com/Fytala-Charles/Bosak/pull/246), stacked on #245. Verified implementation commit 54c20221; this delivery-note commit follows it. PRs #223–246 remain open; CI starts after retargeting to main. Next: applicable static namespace bindings in XSLT 4.0 authoring validation. No merge or publication.
 
 # Pattern fixed namespaces — 2026-10-13
 
