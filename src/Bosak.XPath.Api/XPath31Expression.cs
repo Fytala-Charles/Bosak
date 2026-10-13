@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 0.21  | 13-10-2026     | Apply expression namespace context and default wildcard tests
 //                      | Charles Korthout | 0.22 | 13-10-2026     | Expand host atomic and array aliases in XPath instance-of and treat expressions
 //                      | Charles Korthout | 0.23 | 13-10-2026     | Expand nested named types inside XPath array and map instance-of/treat operands
+//                      | Charles Korthout | 0.24 | 13-10-2026     | Expand aliases in cast/castable targets and reject ineligible alias targets
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -286,8 +287,8 @@ public sealed class XPath31Expression
             QuantifiedExpressionNode qe => qe with { Bindings = qe.Bindings.Select(b => b with { Expression = ResolveFunctionNamespaces(b.Expression, options) }).ToList(), SatisfiesExpression = ResolveFunctionNamespaces(qe.SatisfiesExpression, options) },
             BinaryExpressionNode bin => bin with { Left = ResolveFunctionNamespaces(bin.Left, options), Right = ResolveFunctionNamespaces(bin.Right, options) },
             UnaryExpressionNode un => un with { Operand = ResolveFunctionNamespaces(un.Operand, options) },
-            CastNode cast => cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) },
-            CastableNode castable => castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) },
+            CastNode cast => ResolveItemTypeAlias(cast with { Expression = ResolveFunctionNamespaces(cast.Expression, options), TypeName = ResolveDefaultItemType(cast.TypeName, cast.Prefix, options, castTarget: true) }, options),
+            CastableNode castable => ResolveItemTypeAlias(castable with { Expression = ResolveFunctionNamespaces(castable.Expression, options), TypeName = ResolveDefaultItemType(castable.TypeName, castable.Prefix, options, castTarget: true) }, options),
             InstanceOfNode io => ResolveItemTypeAlias(io with { Expression = ResolveFunctionNamespaces(io.Expression, options), TypeName = ResolveDefaultItemType(io.TypeName, io.Prefix, options) }, options),
             TreatNode treat => ResolveItemTypeAlias(treat with { Expression = ResolveFunctionNamespaces(treat.Expression, options), TypeName = ResolveDefaultItemType(treat.TypeName, treat.Prefix, options) }, options),
             ArrowExprNode arrow => arrow with { Source = ResolveFunctionNamespaces(arrow.Source, options), Target = ResolveArrowTarget(arrow.Target, options) },
@@ -366,6 +367,8 @@ public sealed class XPath31Expression
             return node;
         var (prefix, name) = node switch
         {
+            CastNode cast => (cast.Prefix, cast.TypeName),
+            CastableNode castable => (castable.Prefix, castable.TypeName),
             InstanceOfNode instance => (instance.Prefix, instance.TypeName),
             TreatNode treat => (treat.Prefix, treat.TypeName),
             _ => (null, string.Empty)
@@ -388,12 +391,17 @@ public sealed class XPath31Expression
             {
                 var parsedType = XPathParser.Parse("() instance of " + expanded, xpath40: true);
                 if (parsedType is InstanceOfNode nested)
+                {
+                    ValidateAliasCastTarget(node, nested);
                     return node switch
                     {
+                        CastNode cast => cast with { Prefix = nested.Prefix, TypeName = nested.TypeName },
+                        CastableNode castable => castable with { Prefix = nested.Prefix, TypeName = nested.TypeName },
                         InstanceOfNode instance => instance with { Prefix = nested.Prefix, TypeName = nested.TypeName },
                         TreatNode treat => treat with { Prefix = nested.Prefix, TypeName = nested.TypeName },
                         _ => node
                     };
+                }
             }
             return node;
         }
@@ -419,12 +427,33 @@ public sealed class XPath31Expression
         var parsed = XPathParser.Parse("() instance of " + definition, xpath40: true);
         if (parsed is not InstanceOfNode { Occurrence: OccurrenceIndicator.One } alias)
             throw new ArgumentException("An item-type alias must denote one item type.");
+        ValidateAliasCastTarget(node, alias);
         return node switch
         {
+            CastNode cast => cast with { Prefix = alias.Prefix, TypeName = alias.TypeName },
+            CastableNode castable => castable with { Prefix = alias.Prefix, TypeName = alias.TypeName },
             InstanceOfNode instance => instance with { Prefix = alias.Prefix, TypeName = alias.TypeName },
             TreatNode treat => treat with { Prefix = alias.Prefix, TypeName = alias.TypeName },
             _ => node
         };
+    }
+
+    private static void ValidateAliasCastTarget(XPathAstNode node, InstanceOfNode alias)
+    {
+        if (node is not (CastNode or CastableNode)) return;
+        var type = alias.TypeName.Trim();
+        while (type.StartsWith('(') && type.EndsWith(')') && !type.Contains('|'))
+            type = type[1..^1].Trim();
+        if (type.StartsWith("function(", StringComparison.Ordinal) ||
+            type is "item()" or "node()" or "empty-sequence()" ||
+            type.StartsWith("element(", StringComparison.Ordinal) ||
+            type.StartsWith("attribute(", StringComparison.Ordinal) ||
+            type.StartsWith("document-node(", StringComparison.Ordinal) ||
+            type.StartsWith("text(", StringComparison.Ordinal) ||
+            type.StartsWith("comment(", StringComparison.Ordinal) ||
+            type.StartsWith("processing-instruction(", StringComparison.Ordinal) ||
+            type.StartsWith("namespace-node(", StringComparison.Ordinal))
+            throw new InvalidOperationException("XPST0080: An item-type alias does not resolve to an eligible cast target.");
     }
 
     // An arrow target that is a static function call receives the arrow source as its

@@ -1,3 +1,19 @@
+# Item-type alias casts and declaration validation — 2026-10-13
+
+Branch: feat/xslt-alias-casts-validation; baseline PR #217 implementation and metadata at 2b827d1d. PR #217 merged as 99f2d1efa567e29a6fe3b26594b9c51e29d8b5ea after CI 38355216383 passed and the user explicitly authorized merging. PR #218 now targets main. Candidate 1.2.0 remains unpublished; public version 1.1.3. Earlier sections are historical.
+
+## What was built
+
+Source candidate 1.2.0 (unpublished) expands named item-type aliases in XPath 4.0 cast and castable targets, including nested container targets and namespace forms. Atomic, enumeration, array, map and structural/nominative record aliases reuse existing casting. Optional targets preserve empty sequences. Function and generic item/node aliases raise XPST0080 as casting targets. Unknown named references in supported alias definitions raise XPST0051 during stylesheet registration; declared record references preserve nominative identity. Eighteen new regressions pass. Full schema validation, unsupported alias grammar, unknown names outside declarations, choice-target eligibility and package exposure remain follow-ups. N04/N05 and REQ-126 remain In Progress; published version stays 1.1.3.
+
+Validation: Release build passes (12 existing warnings, zero errors). All 7022 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4136/0/0 and eighteen focused new regressions. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias remains 8/24/0, unchanged contributed cases 023/024 pass, broader failures retained (runner exit 1). Thirteen synchronized pages render; original contribution patch/receipt integrity checks pass.
+
+## Resume here
+
+Next: remaining static type diagnostics and choice-target eligibility, then package exposure. Preserve historical evidence, original upstream assertions and scratch directories. Native checkout is clean on bosak/item-type-boundaries. Upstream PRs #22–26 await review and independent confirmation. No local second processor is available.
+
+Delivery: tested implementation 5ba044eb514cfe404c7b6156040be4ec675be11e committed and pushed; [Bosak PR #218](https://github.com/Fytala-Charles/Bosak/pull/218) is open against main, CI pending. This documentation-only delivery record follows the tested implementation. PR #217 merge completed after explicit approval; check PR #218 CI before its merge.
+
 # Finite recursive records and container casts — 2026-10-13
 
 Branch: feat/xslt-recursive-container-casts; main baseline 0991f6f320092a3611822dc3ef05fe3e842a3adb. PR #216 merged after CI 38353496629 passed. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.
