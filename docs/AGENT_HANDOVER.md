@@ -6,6 +6,8 @@ The user froze the 1.2.0 scope on 2026-10-13 and authorized release preparation.
 
 ## What was built
 
+Release verification exposed a timing-dependent REQ-125 cancellation test on Linux CI: CancelAfter(1 ms) could fire after validation completed. The test now cancels deterministically between two template child validation boundaries using test-only descriptor enumeration instrumentation. It verifies XV0013, Cancelled classification and unchanged original bytes, with an uncancelled Valid control; no runtime/API hook or cancellation behavior changes. All twelve execution-control regressions pass. The full suite is rerun before final integration.
+
 Frozen release scope and prepared release notes; enabled package XML documentation generation. Ten coordinated packages pass version/dependency/content/hash checks; a fresh-cache package-only consumer passes 45 checks and verifies all ten assembly versions. Build: 0 errors, 71 warnings including pre-existing XML documentation issues. All 7,676 unit tests pass, including 4,790 XSLT tests, with zero failures/skips. Frozen gates retain their verified totals on unchanged engine source. PR #247 CI must pass before integration. No tag, publication or external messaging.
 
 ## Resume here

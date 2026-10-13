@@ -283,5 +283,14 @@
   "integrationPullRequest": "https://github.com/Fytala-Charles/Bosak/pull/247",
   "ciStatus": "https://github.com/Fytala-Charles/Bosak/pull/247/checks",
   "publicationStatus": "Requires explicit approval after integration; no tag or package publication",
-  "unitLogSha256": "a010101625efd14d33624b2a9d536baa94a5a68151af0eae5f454cd58c5f1df3"
+  "unitLogSha256": "a010101625efd14d33624b2a9d536baa94a5a68151af0eae5f454cd58c5f1df3",
+  "ciFinding": {
+    "run": "https://github.com/Fytala-Charles/Bosak/actions/runs/38410092472",
+    "test": "D_ValidationCancelMidWalk_CancelledDespiteValidStylesheet",
+    "problem": "Timing-dependent 1 ms CancelAfter token",
+    "correction": "Deterministic test-only cancellation between walked template children; runtime unchanged",
+    "focusedTestsPassed": 12
+  },
+  "ciPriorSourceValidation": "https://github.com/Fytala-Charles/Bosak/actions/runs/38410595622",
+  "cancellationTestSha256": "6e5275a7267c787c9d7a070856780a9ba7fb4e42267cfce769db14485b3c757d"
 }
