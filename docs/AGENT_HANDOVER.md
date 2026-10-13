@@ -1,3 +1,19 @@
+# Inline function named type contracts — 2026-10-13
+
+Branch: feat/xslt-inline-function-alias-contracts; parent 1ac473de. Stacked on PR #231; PRs #223–231 remain open. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 expands host named types in inline function parameter and return contracts before IR lowering. Both function(...) and fn(...) retain resolved atomic, array, structural record and nominative record types, including occurrence indicators and nested member aliases. Signature resolution uses the expression static namespace context, including defaults, EQNames, inline namespace declarations and fixed bindings; the existing VM conversion rules apply to arguments and results. Unknown supported signature types are rejected statically even when the function is unused. Public EnumerationItemTypes registrations also resolve in inline signatures and remain restricted to single enum item types. Omitted annotations and XPath 3.1 instructions keep their existing behavior. Twenty-five regressions cover record/date updates, argument and return coercion, cardinality errors, namespaces, array members, record identity, AVTs, public enumeration boundaries and mixed-version refusal. Native type-alias improves from 15/17/0 to 16/16/0: case 016 now passes without changing its assertion; original contribution cases 023/024 remain green. Broader record matching, annotated function types, type patterns and remaining native failures stay outstanding. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.
+
+Validation: Release build succeeds with zero errors and ten existing test-project warnings. All 7306 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4420/0/0 and twenty-five new regressions. Focused inline contract tests pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 16/16/0, with case 016 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: broader native type-alias record matching and conversion boundaries; type patterns and annotated function types remain follow-ups. Fixed namespaces still need remaining QName/pattern/static contexts. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
+
+Delivery pending.
+
 # Fixed namespace type contexts — 2026-10-13
 
 Branch: feat/xslt-fixed-type-namespaces; parent c0312a70. Stacked on PR #230; PRs #223–230 remain open. Earlier sections are historical.

@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-13",
+  "scope": "Candidate 1.2.0 expands host named types in inline function parameter and return contracts before IR lowering. Both function(...) and fn(...) retain resolved atomic, array, structural record and nominative record types, including occurrence indicators and nested member aliases. Signature resolution uses the expression static namespace context, including defaults, EQNames, inline namespace declarations and fixed bindings; the existing VM conversion rules apply to arguments and results. Unknown supported signature types are rejected statically even when the function is unused. Public EnumerationItemTypes registrations also resolve in inline signatures and remain restricted to single enum item types. Omitted annotations and XPath 3.1 instructions keep their existing behavior. Twenty-five regressions cover record/date updates, argument and return coercion, cardinality errors, namespaces, array members, record identity, AVTs, public enumeration boundaries and mixed-version refusal. Native type-alias improves from 15/17/0 to 16/16/0: case 016 now passes without changing its assertion; original contribution cases 023/024 remain green. Broader record matching, annotated function types, type patterns and remaining native failures stay outstanding. N04/N05 and REQ-126 remain In Progress. Published version stays 1.1.3; candidate 1.2.0 remains unpublished.",
+  "sourceCandidate": "1.2.0 unpublished",
+  "publishedVersion": "1.1.3",
+  "candidateParentRevision": "1ac473de4353251284614a2337b25f67c9ebc3a7",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-inline-func",
+    "retrieved": "2026-10-13"
+  },
+  "nativeFilteredRun": {
+    "passed": 16,
+    "failed": 16,
+    "skipped": 0
+  },
+  "nativeReceipt": ".artifacts/xslt40/20261013T105818499Z.json",
+  "newlyPassingCases": [
+    "type-alias-016"
+  ],
+  "independentProcessorConfirmation": "Pending; no second processor available",
+  "validation": "Release build succeeds with zero errors and ten existing test-project warnings. All 7306 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4420/0/0 and twenty-five new regressions. Focused inline contract tests pass 25/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias improves to 16/16/0, with case 016 newly green and original 023/024 still passing; runner exits 1 for the remaining failures. Fifteen synchronized documentation pages render successfully.",
+  "sourceSha256": {
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "2ec88224ba9b070aff54d450e277a8f90b7082ce508a8c33bade76fa4069b922",
+    "tests/Bosak.Xslt.Tests/Xslt40InlineAliasContractTests.cs": "947c3ae13f09c3740c86e4dc4357e667c8e82c0f1025a417d571844081539d9c",
+    "src/Directory.Build.props": "f399293306daa0b3c3bf2bfa22c91cec2d124ea8b6e700e61a4bfe1bd33d54d1"
+  }
+}

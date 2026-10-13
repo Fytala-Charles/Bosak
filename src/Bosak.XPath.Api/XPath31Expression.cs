@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 0.29 | 13-10-2026     | Resolve schema annotations against in-scope schema types
 //                      | Charles Korthout | 0.30 | 13-10-2026     | Normalize documentary function signatures without host alias registrations
 //                      | Charles Korthout | 0.31 | 13-10-2026     | Validate schema declaration types and normalize direct document shorthand
+//                      | Charles Korthout | 0.32 | 13-10-2026     | Expand host named types in inline function parameter and return contracts
 // ===========================================================================================================================================================
 using System.Collections.Concurrent;
 using Bosak.XPath.Compiler.Ir;
@@ -310,7 +311,12 @@ public sealed class XPath31Expression
             StringTemplateNode st => st with { Parts = st.Parts.Select(p => ResolveFunctionNamespaces(p, options)).ToList() },
             LookupNode lookup => lookup with { Expression = ResolveFunctionNamespaces(lookup.Expression, options), Key = ResolveFunctionNamespaces(lookup.Key, options) },
             LookupWildcardNode lw => lw with { Expression = ResolveFunctionNamespaces(lw.Expression, options) },
-            InlineFunctionNode inf => inf with { Body = ResolveFunctionNamespaces(inf.Body, options) },
+            InlineFunctionNode inf => inf with
+            {
+                Parameters = inf.Parameters.Select(parameter => parameter with { TypeName = ResolveInlineFunctionType(parameter.TypeName, options) }).ToList(),
+                ReturnType = ResolveInlineFunctionType(inf.ReturnType, options),
+                Body = ResolveFunctionNamespaces(inf.Body, options)
+            },
             MapConstructorNode mc => mc with { Entries = mc.Entries.Select(e => e with { Key = ResolveFunctionNamespaces(e.Key, options), Value = ResolveFunctionNamespaces(e.Value, options) }).ToList() },
             ArrayConstructorNode ac => ac with { Items = ac.Items.Select(i => ResolveFunctionNamespaces(i, options)).ToList() },
             PostfixPredicateNode pp => pp with { Expression = ResolveFunctionNamespaces(pp.Expression, options), Predicate = ResolveFunctionNamespaces(pp.Predicate, options) },
@@ -445,6 +451,17 @@ public sealed class XPath31Expression
         };
     }
 
+    private static string? ResolveInlineFunctionType(string? type, CompileOptions options)
+    {
+        if (type is null || options.Compatibility < XPathCompatibility.XPath40 ||
+            (options.ItemTypeAliases is null && options.EnumerationItemTypes is null && options.NamedRecordTypeNames is null))
+            return type;
+        return ItemTypeAliasExpansion.Expand(type, lexical => ResolveStaticItemTypeName(lexical, options),
+            (name, attribute) => ResolveStaticNodeTypeName(name, attribute, options),
+            name => ResolveStaticSchemaTypeName(name, options),
+            (name, attribute) => ResolveStaticSchemaDeclarationName(name, attribute, options)) ?? type;
+    }
+
     private static XPathAstNode ResolveSequenceTypeAlias(XPathAstNode node, CompileOptions options)
     {
         var resolved = ResolveItemTypeAlias(node, options);
@@ -537,6 +554,14 @@ public sealed class XPath31Expression
         }
         var key = $"Q{{{uri}}}{local}";
         if (options.ItemTypeAliases?.TryGetValue(key, out var definition) == true) return definition;
+        if (options.EnumerationItemTypes?.TryGetValue(key, out var enumeration) == true)
+        {
+            if (!enumeration.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+                throw new ArgumentException("Enumeration aliases must contain enum(...) item types.");
+            if (XPathParser.Parse("() instance of " + enumeration, xpath40: true) is not InstanceOfNode { Occurrence: OccurrenceIndicator.One })
+                throw new ArgumentException("An item-type alias must denote one item type.");
+            return enumeration;
+        }
         if (options.NamedRecordTypeNames?.Contains(key) == true) return key;
         var qname = new System.Xml.XmlQualifiedName(local, uri);
         if (uri == schemaNamespace)
