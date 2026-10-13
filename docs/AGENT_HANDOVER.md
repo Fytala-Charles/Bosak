@@ -1,3 +1,13 @@
+# Second contribution batch: fixed namespace components - 2026-10-13
+
+Branch: test/xslt40-fixed-namespace-contribution; base main `32916981c743bf8962d8f85e7f9af860710132f0` (PR #260 merged). Native branch bosak/fixed-namespace-components, commit `2c6664329b4951f0122bd4c82e6de78460cc9411`, base `6205faf9f32ace6338ac245c41f8eb9a1447926f`.
+
+Three native fixed-namespace component tests are submitted as [xslt40-test PR #27](https://github.com/qt4cg/xslt40-test/pull/27): explicit mode declaration/membership under native rebinding, root/scoped default-mode identity, and fixed-bound key names with QName lookup identity. All three pass with source candidate 1.2.1 (unpublished). The wider fixed-namespaces set is 11 pass/5 fail/0 skip; existing cases 006-009 and 011 fail on user-function keyword parameter metadata (XPST0017). Expected outputs are specification-derived, the native catalog schema validates and the portable patch reconstructs the submitted tree exactly. Upstream acceptance and independent confirmation remain pending. This is a new contribution area separate from the original five batches and fourteen cases; REQ-126/N01-N05 statuses remain unchanged. Published version remains 1.2.0.
+
+Evidence and portable patch: contributions/xslt40/fixed-namespace-components. Three exact receipts retain source provenance and separate unselected skips. Patch round-trip tree: c8c52e0a2d79d7193045d0793b270555eadf9ce8. No Bosak engine source or gate membership changed. Existing engine gate receipts remain QT3 31,142/0/679 and qt4 8,278/0/1,894 from PR #260.
+
+Delivery: merge Bosak evidence PR after CI. Next: inspect keyword parameter metadata for user-defined XSLT functions and isolate a fix using existing native cases 006-009/011; retain specification assertions. Respond to upstream reviews when available. Version 1.2.1 remains unpublished. Earlier records below are historical.
+
 # Key QName alignment - 2026-10-13
 
 Branch: fix/xslt40-key-qnames; base main `4b54034e`; implementation `09129fe4e5ca4e11e1c0addb6f41f7ef7f251e0c`.
@@ -16149,3 +16159,5 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 
 
 **1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
+
+Verification: Release solution build succeeds (0 errors; 88 existing warnings); all 7,908 unit tests pass, including 5,022 XSLT tests, with zero failures/skips. No engine source changed; conformance gate results are retained from merged PR #260. Contribution and canonical Markdown render checks pass.

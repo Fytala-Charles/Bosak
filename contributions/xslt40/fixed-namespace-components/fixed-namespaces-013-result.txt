@@ -1,0 +1,20 @@
+Bosak XSLT Conformance Harness
+Catalog: D:\Development\Bosak\.upstream\xslt40-test\catalog.xml
+Test sets: 250
+Filter: fixed-namespaces
+Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage
+
+  Starting: fixed-namespaces ...
+  RUN  fixed-namespaces-013
+  PASS fixed-namespaces-013
+  Done: fixed-namespaces (16 tests, 1 passed, 0 failed, 15 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   16
+Passed:  1
+Failed:  0
+Skipped: 15
+
+Pass rate: 100.0%

@@ -1,0 +1,122 @@
+From 2c6664329b4951f0122bd4c82e6de78460cc9411 Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Tue, 13 Oct 2026 21:12:34 +0200
+Subject: [PATCH] Add fixed namespace mode and key identity tests
+
+---
+ .../_fixed-namespaces-test-set.xml            | 36 +++++++++++++++++++
+ .../fixed-namespaces/fixed-namespaces-013.xsl | 11 ++++++
+ .../fixed-namespaces/fixed-namespaces-014.xsl | 16 +++++++++
+ .../fixed-namespaces/fixed-namespaces-015.xsl | 12 +++++++
+ 4 files changed, 75 insertions(+)
+ create mode 100644 tests/attr/fixed-namespaces/fixed-namespaces-013.xsl
+ create mode 100644 tests/attr/fixed-namespaces/fixed-namespaces-014.xsl
+ create mode 100644 tests/attr/fixed-namespaces/fixed-namespaces-015.xsl
+
+diff --git a/tests/attr/fixed-namespaces/_fixed-namespaces-test-set.xml b/tests/attr/fixed-namespaces/_fixed-namespaces-test-set.xml
+index 6b871f5f..07e12165 100644
+--- a/tests/attr/fixed-namespaces/_fixed-namespaces-test-set.xml
++++ b/tests/attr/fixed-namespaces/_fixed-namespaces-test-set.xml
+@@ -157,6 +157,42 @@
+    
+    
+    
++   <test-case name="fixed-namespaces-013">
++      <description>Explicit mode declaration and template membership use fixed bindings despite native prefix rebinding.</description>
++      <created by="Charles Korthout" on="2026-10-13"/>
++      <test>
++         <stylesheet file="fixed-namespaces-013.xsl"/>
++         <initial-template name="main"/>
++      </test>
++      <result>
++         <assert-xml><![CDATA[<out><hit>fixed</hit></out>]]></assert-xml>
++      </result>
++   </test-case>
++
++   <test-case name="fixed-namespaces-014">
++      <description>Root and scoped default-mode names resolve against fixed bindings and agree with EQName template modes.</description>
++      <created by="Charles Korthout" on="2026-10-13"/>
++      <test>
++         <stylesheet file="fixed-namespaces-014.xsl"/>
++         <initial-template name="main"/>
++      </test>
++      <result>
++         <assert-xml><![CDATA[<out><root/><scoped/></out>]]></assert-xml>
++      </result>
++   </test-case>
++
++   <test-case name="fixed-namespaces-015">
++      <description>Key declaration and string lookup use fixed bindings; QName lookup retains its own namespace identity.</description>
++      <created by="Charles Korthout" on="2026-10-13"/>
++      <test>
++         <stylesheet file="fixed-namespaces-015.xsl"/>
++         <initial-template name="main"/>
++      </test>
++      <result>
++         <assert-xml><![CDATA[<out string="1" qname="1"/>]]></assert-xml>
++      </result>
++   </test-case>
++
+    <test-case name="fixed-namespaces-901">
+       <description>xsl prefix used in xsl:initial-template but not declared</description>
+       <created by="Michael Kay" on="2023-11-28"/>     
+diff --git a/tests/attr/fixed-namespaces/fixed-namespaces-013.xsl b/tests/attr/fixed-namespaces/fixed-namespaces-013.xsl
+new file mode 100644
+index 00000000..e6411ed6
+--- /dev/null
++++ b/tests/attr/fixed-namespaces/fixed-namespaces-013.xsl
+@@ -0,0 +1,11 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++    xmlns:p="urn:native" exclude-result-prefixes="#all"
++    fixed-namespaces="#standard p=urn:fixed">
++  <xsl:mode name="p:m" on-no-match="fail"/>
++  <xsl:template name="main">
++    <xsl:variable name="node"><item/></xsl:variable>
++    <out><xsl:apply-templates xmlns:p="urn:local" select="$node/item" mode="p:m"/></out>
++  </xsl:template>
++  <xsl:template xmlns:p="urn:other" match="item" mode="p:m"><hit>fixed</hit></xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/attr/fixed-namespaces/fixed-namespaces-014.xsl b/tests/attr/fixed-namespaces/fixed-namespaces-014.xsl
+new file mode 100644
+index 00000000..9f427f2b
+--- /dev/null
++++ b/tests/attr/fixed-namespaces/fixed-namespaces-014.xsl
+@@ -0,0 +1,16 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++    xmlns:p="urn:native" exclude-result-prefixes="#all"
++    fixed-namespaces="#standard p=urn:fixed" default-mode="p:root">
++  <xsl:mode name="p:root" on-no-match="fail"/>
++  <xsl:mode name="p:scoped" on-no-match="fail"/>
++  <xsl:template name="main">
++    <xsl:variable name="node"><item/></xsl:variable>
++    <out>
++      <xsl:apply-templates select="$node/item"/>
++      <xsl:apply-templates xmlns:p="urn:local" default-mode="p:scoped" select="$node/item"/>
++    </out>
++  </xsl:template>
++  <xsl:template match="item" mode="Q{urn:fixed}root"><root/></xsl:template>
++  <xsl:template match="item" mode="Q{urn:fixed}scoped"><scoped/></xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/attr/fixed-namespaces/fixed-namespaces-015.xsl b/tests/attr/fixed-namespaces/fixed-namespaces-015.xsl
+new file mode 100644
+index 00000000..c39120c2
+--- /dev/null
++++ b/tests/attr/fixed-namespaces/fixed-namespaces-015.xsl
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++    xmlns:p="urn:native" exclude-result-prefixes="#all"
++    fixed-namespaces="#standard p=urn:fixed">
++  <xsl:key name="p:k" match="item" use="@id"/>
++  <xsl:template name="main">
++    <xsl:variable name="doc"><item id="a"/></xsl:variable>
++    <out xmlns:p="urn:local"
++      string="{count(key('p:k', 'a', $doc))}"
++      qname="{count(key(QName('urn:fixed', 'unbound:k'), 'a', $doc))}"/>
++  </xsl:template>
++</xsl:stylesheet>
+-- 
+2.54.0.windows.1
+
