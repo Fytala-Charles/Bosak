@@ -92,6 +92,7 @@
 //                      | Charles Korthout | 3.20  | 13-10-2026     | Match named processing instructions in 4.0 forward-axis node tests.
 //                      | Charles Korthout | 3.21  | 13-10-2026     | Validate parenthesized 4.0 item patterns and restrict outer patterns to nodes.
 //                      | Charles Korthout | 3.22  | 13-10-2026     | Ignore predicate, string and URI slashes when classifying 4.0 outer filters.
+//                      | Charles Korthout | 3.23  | 13-10-2026     | Match delimiters outside strings and EQName URIs in pattern compilation.
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -218,10 +219,11 @@ internal sealed class PatternCompiler
             // Match:  name(...) at the very start
             if (afterSlash.Length > 0 && char.IsLetter(afterSlash[0]))
             {
-                var paren = afterSlash.IndexOf('(');
+                var lexicalStart = MaskEQNameUris(afterSlash);
+                var paren = lexicalStart.IndexOf('(');
                 if (paren > 0)
                 {
-                    var firstSpecial = afterSlash.IndexOfAny(new[] { ' ', '/', '|', '[', '@' });
+                    var firstSpecial = lexicalStart.IndexOfAny(new[] { ' ', '/', '|', '[', '@' });
                     if (firstSpecial < 0 || firstSpecial > paren)
                     {
                         var funcName = afterSlash[..paren];
@@ -3289,18 +3291,7 @@ internal sealed class PatternCompiler
             return CompileSinglePattern(pattern);
 
         // Find matching close bracket
-        int bracketClose = -1;
-        int depth = 0;
-        for (int i = bracketOpen; i < pattern.Length; i++)
-        {
-            if (pattern[i] == '[') depth++;
-            else if (pattern[i] == ']') depth--;
-            if (depth == 0)
-            {
-                bracketClose = i;
-                break;
-            }
-        }
+        int bracketClose = FindMatchingBracket(pattern, bracketOpen);
         if (bracketClose < 0 || bracketClose < bracketOpen)
             throw new InvalidOperationException($"Invalid pattern: {pattern}");
 
@@ -3544,18 +3535,7 @@ internal sealed class PatternCompiler
         if (bracketOpen < 0)
             return innerPattern;
 
-        int bracketClose = -1;
-        int depth = 0;
-        for (int i = bracketOpen; i < after.Length; i++)
-        {
-            if (after[i] == '[') depth++;
-            else if (after[i] == ']') depth--;
-            if (depth == 0)
-            {
-                bracketClose = i;
-                break;
-            }
-        }
+        int bracketClose = FindMatchingBracket(after, bracketOpen);
         if (bracketClose < 0)
             return innerPattern;
 
@@ -3722,31 +3702,36 @@ internal sealed class PatternCompiler
     /// Returns -1 if not found.
     /// </summary>
     private static int FindMatchingParen(string text, int startIndex)
-    {
-        if (text[startIndex] != '(') return -1;
-        int depth = 1;
-        for (int i = startIndex + 1; i < text.Length; i++)
-        {
-            if (text[i] == '(') depth++;
-            else if (text[i] == ')') depth--;
-            if (depth == 0) return i;
-        }
-        return -1;
-    }
+        => FindMatchingDelimiter(text, startIndex, '(', ')');
 
-    /// <summary>
-    /// Finds the index of the matching closing bracket for the bracket at startIndex.
-    /// Returns -1 if not found.
-    /// </summary>
+    /// <summary>Finds a closing bracket outside string literals and EQName namespace URIs.</summary>
     private static int FindMatchingBracket(string text, int startIndex)
+        => FindMatchingDelimiter(text, startIndex, '[', ']');
+
+    /// <summary>Matches nested delimiters without interpreting quoted or URI characters as syntax.</summary>
+    internal static int FindMatchingDelimiter(string text, int startIndex, char opening, char closing)
     {
-        if (text[startIndex] != '[') return -1;
+        if (startIndex < 0 || startIndex >= text.Length || text[startIndex] != opening) return -1;
         int depth = 1;
+        char quote = '\0';
+        bool uri = false;
         for (int i = startIndex + 1; i < text.Length; i++)
         {
-            if (text[i] == '[') depth++;
-            else if (text[i] == ']') depth--;
-            if (depth == 0) return i;
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == opening) depth++;
+            else if (c == closing && --depth == 0) return i;
         }
         return -1;
     }

@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 2.9   | 13-10-2026     | Normalize 4.0 attribute shorthand and forward-axis default priorities.
 //                      | Charles Korthout | 2.10  | 13-10-2026     | Apply first-operand set priorities and 4.0 predicate-pattern priorities.
 //                      | Charles Korthout | 2.11  | 13-10-2026     | Preserve parenthesized item-pattern scopes and expanded type priorities.
+//                      | Charles Korthout | 2.12  | 13-10-2026     | Use lexical delimiter matching for pattern normalization and priority.
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -1164,17 +1165,7 @@ internal sealed class TemplateRule
     /// Returns -1 if not found.
     /// </summary>
     private static int FindMatchingParen(string text, int startIndex)
-    {
-        if (text[startIndex] != '(') return -1;
-        int depth = 1;
-        for (int i = startIndex + 1; i < text.Length; i++)
-        {
-            if (text[i] == '(') depth++;
-            else if (text[i] == ')') depth--;
-            if (depth == 0) return i;
-        }
-        return -1;
-    }
+        => Patterns.PatternCompiler.FindMatchingDelimiter(text, startIndex, '(', ')');
 
     /// <summary>
     /// Returns true if the attribute value contains an unescaped AVT expression delimiter.
