@@ -309,6 +309,7 @@
 //                      | Charles Korthout | 2.148 | 13-10-2026     | Reject unavailable template pattern prefixes at 4.0 stylesheet compilation.             |
 //                      | Charles Korthout | 2.149 | 13-10-2026     | Allow caller-controlled fixed namespace document resolution                            |
 //                      | Charles Korthout | 2.150 | 13-10-2026     | Use applicable namespaces for variable and parameter QNames                            |
+//                      | Charles Korthout | 2.151 | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4570,7 +4571,8 @@ internal sealed class Stylesheet
                         var nameValue = localName == "function"
                             ? StripAritySuffix(nameAttr.Value)
                             : nameAttr.Value;
-                        ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name");
+                        ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
+                            useApplicableNamespaces: localName is "template" or "call-template");
                     }
                 }
 
@@ -9993,7 +9995,7 @@ internal sealed class Stylesheet
                 if (prefix == "xml")
                     nsUri = "http://www.w3.org/XML/1998/namespace";
                 else
-                    nsUri = element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+                    nsUri = construct == "xsl:template" ? GetComponentNamespace(element, prefix) : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
             }
         }
 

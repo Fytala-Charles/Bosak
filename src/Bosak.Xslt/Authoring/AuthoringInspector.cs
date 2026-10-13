@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.5   | 13-10-2026     | Capture applicable static namespace bindings during inspection                         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.6   | 13-10-2026     | Capture static context for variable and parameter name slots                           |
+//                      | Charles Korthout | 0.7   | 13-10-2026     | Align named template QNames with applicable namespaces.                                  |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -596,7 +597,7 @@ public sealed class AuthoringInspector
                     or AuthoringAttributeSlotKind.Pattern
                     or AuthoringAttributeSlotKind.Avt
                     || (slotKind == AuthoringAttributeSlotKind.QName && element.Name.Namespace == XsltNs
-                        && element.Name.LocalName is "variable" or "param" or "with-param")
+                        && element.Name.LocalName is "variable" or "param" or "with-param" or "template" or "call-template")
                     ? BuildSlotContext(element, rawName, elementNameAsWritten)
                     : null;
 
