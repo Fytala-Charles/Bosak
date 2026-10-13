@@ -14,7 +14,7 @@ Validation: Release build passes (12 existing warnings, zero errors); all 6988 u
 
 Check this slice's CI before merging. Next: recursive/static type resolution and cast-container boundaries. N05/REQ-126 remain In Progress. Preserve original native expectations, patches, receipts, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation; no second processor available. Native checkout remains clean on bosak/record-type-boundaries. No release/tag/package publication.
 
-Delivery pending.
+Delivery: tested implementation f2b04280569ea08732825c80a2603f4038ce964b committed and pushed; [Bosak PR #216](https://github.com/Fytala-Charles/Bosak/pull/216) open, CI pending. This documentation-only delivery record follows the tested implementation; no behavioral changes.
 
 # Nominative record coercion — 2026-10-13
 
