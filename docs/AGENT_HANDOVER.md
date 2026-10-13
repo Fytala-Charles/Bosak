@@ -14,7 +14,7 @@ Validation: Release build passes with zero warnings and zero errors. All 7219 un
 
 Next: remaining schema-element/schema-attribute and document shorthand alias traversal, then package exposure and broader native type-alias failures. CI runs only for PRs targeting main; retarget stacked PRs after their prerequisites merge. Preserve original upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: implementation 68945389 in PR #228 (https://github.com/Fytala-Charles/Bosak/pull/228), stacked on #227. This handover-only commit records delivery; its own hash is available from git log. No CI is triggered while this PR targets the prerequisite branch.
 
 # Schema-annotated node aliases — 2026-10-13
 
