@@ -46,7 +46,7 @@
     "failed": 0,
     "skipped": 1894
   },
-  "validation": "Final full suite 7676/0/0; twelve deterministic execution-control tests pass. Final candidate CI passes; merged tree equals tested tree. All ten packages verified; 45 package-only fresh-cache consumer checks pass, with ten assembly versions and candidate-feed provenance verified. Frozen gates unchanged. Final main-branch CI precedes tagging; publication still requires approval.",
+  "validation": "Final full suite 7676/0/0; twelve deterministic execution-control tests pass. Final candidate CI passes; merged tree equals tested tree. All ten packages verified; 45 package-only fresh-cache consumer checks pass, with ten assembly versions and candidate-feed provenance verified. Frozen gates unchanged. Final main-based CI precedes tagging; publication still requires approval.",
   "publicationAuthorized": false,
   "postReleasePlan": "Additional focused implementation slices and a new XSLT 4.0 contribution-area batch",
   "packageConsumer": {
