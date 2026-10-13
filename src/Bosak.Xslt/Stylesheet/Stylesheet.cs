@@ -293,6 +293,7 @@
 //                      | Charles Korthout | 2.132 | 12-10-2026     | Recognize xsl:select and validate expression-text/fallback structure.                     |
 //                      | Charles Korthout | 2.133 | 12-10-2026     | Collect enumeration item-type declarations by expanded name and precedence
 //                      | Charles Korthout | 2.134 | 13-10-2026     | Validate named record/field declarations and shared named-type precedence.               |
+//                      | Charles Korthout | 2.135 | 13-10-2026     | Resolve atomic and array declaration aliases with forward references and cycle detection
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -801,7 +802,7 @@ internal sealed class Stylesheet
         OwningPackage = IsPackage ? this : owningPackage;
         if (ReferenceEquals(_rootStylesheet, this))
         {
-            GetEnumerationItemTypes();
+            GetBindingItemTypes();
             GetNamedRecordTypes();
         }
     }
@@ -872,6 +873,61 @@ internal sealed class Stylesheet
             result[name] = definition;
         }
         return _enumerationItemTypes = result;
+    }
+
+    private IReadOnlyDictionary<string, string>? _bindingItemTypes;
+
+    internal IReadOnlyDictionary<string, string> GetBindingItemTypes()
+    {
+        if (_bindingItemTypes is not null) return _bindingItemTypes;
+        var result = new Dictionary<string, string>(GetEnumerationItemTypes(), StringComparer.Ordinal);
+        var active = new HashSet<string>(StringComparer.Ordinal);
+        var declarations = GetNamedTypeDeclarations();
+        string? Expand(string name)
+        {
+            if (result.TryGetValue(name, out var cached)) return cached;
+            if (!declarations.TryGetValue(name, out var declaration) || declaration.Name.LocalName != "item-type") return null;
+            if (!active.Add(name)) throw new InvalidOperationException("XTSE4035: Circular item-type alias definition.");
+            try
+            {
+                var expanded = ExpandType(declaration.Attribute("as")!.Value.Trim(), declaration, false);
+                if (expanded is not null) result[name] = expanded;
+                return expanded;
+            }
+            finally { active.Remove(name); }
+        }
+        string? ExpandType(string text, XElement declaration, bool sequence)
+        {
+            text = text.Trim();
+            var suffix = text.Length > 0 && text[^1] is '?' or '*' or '+' ? text[^1].ToString() : string.Empty;
+            if (suffix.Length > 0)
+            {
+                if (!sequence) throw new InvalidOperationException("XTSE0020: An item-type definition cannot have an occurrence indicator.");
+                text = text[..^1].TrimEnd();
+            }
+            if (text.StartsWith("array(", StringComparison.Ordinal) && text.EndsWith(')'))
+            {
+                var inner = text[6..^1].Trim();
+                if (inner == "*") return "array(*)" + suffix;
+                var member = ExpandType(inner, declaration, true);
+                return member is null ? null : "array(" + member + ")" + suffix;
+            }
+            if (text is "item()" or "node()") return text + suffix;
+            // Only complete QName tokens are expanded. Enumeration member strings and
+            // other structural grammars are deliberately left to their existing handlers.
+            if (!System.Text.RegularExpressions.Regex.IsMatch(text, @"^(?:Q\{[^}]*\})?[\p{L}_][\p{L}\p{N}_.-]*(?::[\p{L}_][\p{L}\p{N}_.-]*)?$")) return null;
+            var key = ExpandItemTypeName(text, declaration);
+            if (key.StartsWith("Q{http://www.w3.org/2001/XMLSchema}", StringComparison.Ordinal))
+            {
+                var atomic = "xs:" + key[(key.IndexOf('}') + 1)..];
+                XPath31Expression.Compile("() instance of " + atomic, new CompileOptions { Compatibility = XPathCompatibility.XPath40 });
+                return atomic + suffix;
+            }
+            var alias = Expand(key);
+            return alias is null ? null : alias + suffix;
+        }
+        foreach (var name in declarations.Keys) Expand(name);
+        return _bindingItemTypes = result;
     }
 
     internal sealed record NamedRecordDefinition(string ExpandedName, XElement Element, XdmRecordType Type, IReadOnlyList<XElement> Fields, bool Constructor);

@@ -401,6 +401,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.175 | 13-10-2026     | Match named record types by annotation identity in type tests.                           |
 //                      | Charles Korthout | 2.176 | 13-10-2026     | Normalize schema EQName cast targets for XPath 4.0 default item types
+//                      | Charles Korthout | 2.177 | 13-10-2026     | Apply XPath 4.0 array member coercion without atomizing the outer array
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -14003,6 +14004,45 @@ internal static class VmEngine
         // below still run per call.
         var (type, allowsEmpty, allowsMultiple, isFunctionTest) =
             s_conversionTargets.GetOrAdd(targetType, static t => ParseConversionTarget(t));
+
+        // XPath 4.0 array coercion preserves the array item and recursively converts
+        // each member sequence. The 3.1 conversion path remains version-gated.
+        if (context?.IsXPath40 == true && type.StartsWith("array(", StringComparison.Ordinal) && type.EndsWith(')'))
+        {
+            if (value.IsJNode) return ApplyFunctionConversion(value.JNodeValue.Value, targetType, context);
+            if (value.IsUndefined)
+            {
+                if (allowsEmpty) return value;
+                throw new InvalidOperationException($"XPTY0004: Empty sequence not allowed for type {targetType}");
+            }
+            var arrayItems = new List<XdmValue>();
+            if (value.IsSequence && value.SequenceValue is not null)
+            {
+                foreach (var item in XdmSequence.FromSource(value.SequenceValue)) arrayItems.Add(item);
+            }
+            else arrayItems.Add(value);
+            if (arrayItems.Count == 0 && !allowsEmpty || arrayItems.Count > 1 && !allowsMultiple)
+                throw new InvalidOperationException($"XPTY0004: Cardinality does not match {targetType}");
+            var memberType = type[6..^1].Trim();
+            var arrays = new List<XdmValue>(arrayItems.Count);
+            foreach (var item in arrayItems)
+            {
+                if (!item.IsArray) throw new InvalidOperationException($"XPTY0004: Cannot convert {item.Kind} to {targetType}");
+                var array = item.ArrayValue;
+                if (memberType == "*") { arrays.Add(item); continue; }
+                if (memberType.Length == 0)
+                {
+                    if (array.Count != 0) throw new InvalidOperationException($"XPTY0004: Nonempty array does not match {targetType}");
+                    arrays.Add(item);
+                    continue;
+                }
+                var members = new XdmValue[array.Count];
+                for (int i = 0; i < members.Length; i++)
+                    members[i] = ApplyFunctionConversion(array.Get(i + 1), memberType, context);
+                arrays.Add(XdmValue.FromArray(new XdmArray(members)));
+            }
+            return arrays.Count == 1 ? arrays[0] : XdmValue.FromSequence(MaterializedSequence.FromList(arrays));
+        }
 
         // XPath 4.0 §17.7: a JNode coerces to a map/array/function-typed parameter by
         // extracting its jvalue, then the standard conversion rules apply to that value.

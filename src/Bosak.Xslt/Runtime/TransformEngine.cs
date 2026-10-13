@@ -529,6 +529,7 @@
 //                      | Charles Korthout | 7.13  | 13-10-2026     | Register record constructors, convert fields and preserve named record bindings.         |
 //                      | Charles Korthout | 7.14  | 13-10-2026     | Validate select prefixes against inline namespace declarations
 //                      | Charles Korthout | 7.15 | 13-10-2026     | Convert named and inline enumeration bindings with scoped declaration profiles
+//                      | Charles Korthout | 7.16 | 13-10-2026     | Resolve array and atomic aliases at XSLT declaration and function boundaries
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Linq;
@@ -3203,9 +3204,9 @@ internal sealed class TransformEngine
                 ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
                 ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                    .Select(i => i < paramElements.Count ? ResolveEnumerationSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()) : null)
+                    .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()) : null)
                     .ToList(),
-                ReturnTypeName = ResolveEnumerationSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()),
+                ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()),
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
@@ -3220,7 +3221,7 @@ internal sealed class TransformEngine
     private void RegisterRecordConstructors(Stylesheet.Stylesheet scope, HashSet<(string ns, string name, int arity)> functionKeys)
     {
         var definitions = scope.GetNamedRecordTypes();
-        _context.EnumerationItemTypes = scope.GetEnumerationItemTypes();
+        _context.BindingItemTypes = scope.GetBindingItemTypes();
         _context.NamedRecordTypes = definitions.ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal);
         foreach (var definition in definitions.Values)
         {
@@ -4397,8 +4398,8 @@ internal sealed class TransformEngine
         public Func<EvaluationContext, string, string, int, XdmValue?>? PreviousFunctionLookupInterceptor;
         /// <summary>Package-local named record identities active before entering the scope.</summary>
         public IReadOnlyDictionary<string, XdmRecordType> NamedRecordTypes;
-        /// <summary>Package-local enumeration aliases active before entering the scope.</summary>
-        public IReadOnlyDictionary<string, string> EnumerationItemTypes;
+        /// <summary>Package-local item-type binding aliases active before entering the scope.</summary>
+        public IReadOnlyDictionary<string, string> BindingItemTypes;
     }
 
     /// <summary>
@@ -4416,7 +4417,7 @@ internal sealed class TransformEngine
         var lazyGlobalsSnapshot = _context.SnapshotLazyGlobals();
         var functionLookupInterceptorSnapshot = _context.FunctionLookupInterceptor;
         var namedRecordTypesSnapshot = _context.NamedRecordTypes;
-        var enumerationTypesSnapshot = _context.EnumerationItemTypes;
+        var enumerationTypesSnapshot = _context.BindingItemTypes;
 
         if (package?.IsPackage == true && package != previousScope)
         {
@@ -4454,9 +4455,9 @@ internal sealed class TransformEngine
                     ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
                     ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
-                        .Select(i => i < paramElements.Count ? ResolveEnumerationSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()) : null)
+                        .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()) : null)
                         .ToList(),
-                    ReturnTypeName = ResolveEnumerationSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetEnumerationItemTypes() ?? CurrentStylesheet.GetEnumerationItemTypes()),
+                    ReturnTypeName = ResolveBindingSequenceType(def.ReturnType, def.Element, def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes()),
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
                 _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
@@ -4492,7 +4493,7 @@ internal sealed class TransformEngine
         {
             PreviousScope = previousScope,
             NamedRecordTypes = namedRecordTypesSnapshot,
-            EnumerationItemTypes = enumerationTypesSnapshot,
+            BindingItemTypes = enumerationTypesSnapshot,
             FunctionSnapshot = functionSnapshot,
             NamespaceAliasSnapshot = namespaceAliasSnapshot,
             NamedDecimalFormatSnapshot = namedDecimalSnapshot,
@@ -4508,7 +4509,7 @@ internal sealed class TransformEngine
         _namespaceAliases = state.NamespaceAliasSnapshot;
         _context.RestoreFunctions(state.FunctionSnapshot);
         _context.NamedRecordTypes = state.NamedRecordTypes;
-        _context.EnumerationItemTypes = state.EnumerationItemTypes;
+        _context.BindingItemTypes = state.BindingItemTypes;
         _context.RestoreDecimalFormats(state.NamedDecimalFormatSnapshot);
         _context.DefaultDecimalFormat = state.DefaultDecimalFormatSnapshot;
         _context.FunctionLookupInterceptor = state.PreviousFunctionLookupInterceptor;
@@ -16623,7 +16624,7 @@ internal sealed class TransformEngine
         return false;
     }
 
-    private static string? ResolveEnumerationSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases)
+    private static string? ResolveBindingSequenceType(string? sequenceType, XElement declaration, IReadOnlyDictionary<string, string> aliases)
     {
         if (string.IsNullOrWhiteSpace(sequenceType) || aliases.Count == 0 || !AllowsEnumerationDeclarations(declaration)) return sequenceType;
         var type = sequenceType.Trim();
@@ -16814,19 +16815,20 @@ internal sealed class TransformEngine
 
         if (declaration is not null && context is not null)
         {
-            asType = ResolveEnumerationSequenceType(asType, declaration, context.EnumerationItemTypes);
-            if (AllowsEnumerationDeclarations(declaration) && asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal))
+            var originalBindingType = asType;
+            asType = ResolveBindingSequenceType(asType, declaration, context.BindingItemTypes);
+            if (AllowsEnumerationDeclarations(declaration) && (asType != originalBindingType || asType!.TrimStart().StartsWith("enum(", StringComparison.Ordinal)))
             {
                 var savedProfile = context.IsXPath40;
                 context.IsXPath40 = true;
                 try
                 {
-                    return VmEngine.ApplyFunctionConversion(value, asType, context);
+                    return VmEngine.ApplyFunctionConversion(value, asType!, context);
                 }
                 catch (InvalidOperationException error)
                 {
                     var code = errorCodeOverride ?? (isParam ? "XTTE0590" : "XTTE0570");
-                    throw new InvalidOperationException($"{code}: Value does not match declared enumeration type {asType}.", error);
+                    throw new InvalidOperationException($"{code}: Value does not match declared item type {asType}.", error);
                 }
                 finally { context.IsXPath40 = savedProfile; }
             }
