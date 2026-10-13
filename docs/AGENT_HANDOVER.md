@@ -1,6 +1,6 @@
 # Parenthesized outer-filter paths — 2026-10-13
 
-Branch: feat/xslt-parenthesized-filter-paths; parent 6f863e0d. Stacked on PR #239; PRs #223–239 remain open. Earlier sections are historical.
+Branch: feat/xslt-parenthesized-filter-paths; parent 6f863e0d. Stacked on PR #239; PRs #223–240 remain open. Earlier sections are historical.
 
 ## What was built
 
@@ -12,7 +12,7 @@ Validation: Final incremental Release build succeeds with zero warnings and zero
 
 Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs, retaining earlier profiles and existing positional semantics. Broader pattern grammar, lower-version native processor selection, record/result case 050, annotated function types and fixed namespace/authoring contexts remain follow-ups. Reassess the five contribution areas after these boundaries. No gate promotion or publication. CI runs when PRs target main; retarget after prerequisites merge. Preserve contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivery: [PR #240](https://github.com/Fytala-Charles/Bosak/pull/240), stacked on #239. Verified implementation revision 0d80ec2a; a documentation-only delivery commit follows. PRs #223–240 remain open. CI starts after retargeting to main. Next: pattern delimiter scanning around quoted parentheses/brackets and EQName URIs.
 
 # Parenthesized item patterns — 2026-10-13
 
