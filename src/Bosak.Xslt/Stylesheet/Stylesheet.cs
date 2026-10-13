@@ -298,6 +298,7 @@
 //                      | Charles Korthout | 2.137 | 13-10-2026     | Validate outer item occurrence independently of function return sequence cardinality
 //                      | Charles Korthout | 2.138 | 13-10-2026     | Resolve record field aliases and recursive named references without expanding identities
 //                      | Charles Korthout | 2.139 | 13-10-2026     | Validate named alias references and preserve declared record identities
+//                      | Charles Korthout | 2.140 | 13-10-2026     | Validate supported binding and field type names at stylesheet registration
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -808,6 +809,7 @@ internal sealed class Stylesheet
         {
             GetBindingItemTypes();
             GetNamedRecordTypes();
+            ValidateDeclarationTypeNames();
         }
     }
 
@@ -930,6 +932,40 @@ internal sealed class Stylesheet
     }
 
     internal sealed record NamedRecordDefinition(string ExpandedName, XElement Element, XdmRecordType Type, IReadOnlyList<XElement> Fields, bool Constructor);
+
+    private void ValidateDeclarationTypeNames()
+    {
+        var aliases = GetBindingItemTypes();
+        var records = GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal);
+        void ValidateModule(Stylesheet module)
+        {
+            foreach (var element in module.Root.DescendantsAndSelf())
+            {
+                if (element.Name.NamespaceName != XslNamespace || element.Name.LocalName == "item-type" ||
+                    element.Attribute("as") is not { } attribute ||
+                    GetXPathCompatibility(element) < XPathCompatibility.XPath40)
+                    continue;
+                // Leave grammar beyond the shared supported type walker to its existing validator.
+                if (ItemTypeAliasExpansion.Expand(attribute.Value, name => name) is null)
+                    continue;
+                var namespaces = new Dictionary<string, string>(StringComparer.Ordinal);
+                foreach (var ancestor in element.AncestorsAndSelf().Reverse())
+                    foreach (var ns in ancestor.Attributes().Where(a => a.IsNamespaceDeclaration))
+                        namespaces[ns.Name.LocalName == "xmlns" ? string.Empty : ns.Name.LocalName] = ns.Value;
+                XPath31Expression.Compile("() instance of " + attribute.Value, new CompileOptions
+                {
+                    Compatibility = XPathCompatibility.XPath40,
+                    Namespaces = namespaces,
+                    DefaultElementNamespace = GetXPathDefaultNamespace(element),
+                    ItemTypeAliases = aliases,
+                    NamedRecordTypeNames = records,
+                    SchemaSet = CompiledSchemaSet
+                });
+            }
+            foreach (var child in module.Imports.Concat(module.Includes)) ValidateModule(child);
+        }
+        ValidateModule(this);
+    }
 
     internal IReadOnlyDictionary<string, NamedRecordDefinition> GetNamedRecordTypes()
     {

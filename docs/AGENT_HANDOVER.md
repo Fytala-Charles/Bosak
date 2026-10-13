@@ -1,3 +1,21 @@
+# Declaration static named-type validation — 2026-10-13
+
+Branch: feat/xslt-declaration-type-validation; main baseline 4323b1c8. PR #220 merged after CI 38362079480 passed and the user explicitly requested the merge. Earlier sections are historical.
+
+## What was built
+
+Candidate 1.2.0 now validates supported XPath 4.0 sequence-type names on XSLT @as declarations at stylesheet registration, including unused variables, parameters, function results and record fields. The check runs after package-local aliases and records are registered and traverses import/include modules with each declaration's namespace context. Unknown direct/nested names raise XPST0051; undeclared binding prefixes raise XPST0081; record registration retains XTSE0280 for unbound field prefixes. Forward aliases, finite recursive record references, default type namespaces and quoted enumeration/field names remain valid. Fourteen new regressions cover these boundaries. XPath 3.1 declarations keep their existing path. Unsupported shared-walker grammar, complete schema variety semantics and package type exposure remain follow-ups; N04/N05 and REQ-126 remain In Progress. Published version remains 1.1.3; no release or gate promotion.
+
+Stylesheet.ValidateDeclarationTypeNames reuses the existing internal host resolver after aliases and record definitions are registered, preserving nominative identity. No public API, native assertions, catalog outcomes or historical receipts changed.
+
+Validation: Release build passes with 12 existing analyzer warnings and zero errors. All 7078 unit tests across ten assemblies pass with zero failures/skips, including XSLT 4192/0/0 and fourteen new regressions. Database provider tests initially failed because sandboxed HttpListener access was blocked; rerunning that assembly with listener access passed 47/0/0. Focused static-type tests pass 35/0/0. Frozen QT3 exactly 31142/0/679; qt4 gate-only 8278/0/1894 with zero gated failures. Native type-alias 9/23/0; type-alias-019 newly passes and original contribution cases 023/024 pass. Broader native failures remain, runner exit 1. Fifteen synchronized documentation pages render successfully.
+
+## Resume here
+
+Next: supported type grammar gaps, then package exposure. Preserve original upstream assertions, contribution patches, historical evidence and scratch directories. Upstream PRs #22–26 await review and independent confirmation. No release/tag/package publication.
+
+Delivery pending.
+
 # Host static named-type validation — 2026-10-13
 
 Branch: feat/xslt-static-named-types; baseline PR #219 metadata at 397903ce59c01e81bbce23893d5b87ee68c63a2e. PR #219 merged as a76b54e43d8f089c38a512620240d494a9d9a73d after CI 38360549109 passed and the user explicitly approved the merge. PR #220 now targets main. Source candidate 1.2.0 unpublished; published version 1.1.3. Earlier sections are historical.

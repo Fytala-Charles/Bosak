@@ -229,7 +229,7 @@
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
       "specUrl": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
-      "status": "First batch submitted; host expression named-type/static diagnostics pass locally; binding/schema/package gaps and independent confirmation pending",
+      "status": "First batch submitted; supported host expression and declaration static names pass locally; grammar/schema/package gaps and independent confirmation pending",
       "candidateScenarios": "Named type visibility, reuse, unknown names and type mismatches; avoid duplicating the type-alias test set.",
       "candidateGapAssessment": "Unconfirmed until case/assertion review; structural hits are not semantic coverage.",
       "nativeTestSetHint": "type-alias",
@@ -288,7 +288,8 @@
         "recordAliasFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/RECORD_ALIAS_RESULTS.json",
         "castValidationFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/CAST_VALIDATION_RESULTS.json",
         "choiceCastFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/CHOICE_CAST_RESULTS.json",
-        "staticTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/STATIC_TYPE_RESULTS.json"
+        "staticTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/STATIC_TYPE_RESULTS.json",
+        "declarationTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/DECLARATION_TYPE_RESULTS.json"
       }
     },
     {
@@ -336,7 +337,8 @@
         "coercionFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/COERCION_RESULTS.json",
         "castFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/CAST_RESULTS.json",
         "containerFollowUpEvidence": "../contributions/xslt40/record-type-boundaries/CONTAINER_RESULTS.json",
-        "staticTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/STATIC_TYPE_RESULTS.json"
+        "staticTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/STATIC_TYPE_RESULTS.json",
+        "declarationTypeFollowUpEvidence": "../contributions/xslt40/item-type-boundaries/DECLARATION_TYPE_RESULTS.json"
       }
     }
   ],

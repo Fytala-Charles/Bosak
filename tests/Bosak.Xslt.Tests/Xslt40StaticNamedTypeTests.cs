@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 13-10-2026     | Cover static names on unused bindings and record fields
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -30,6 +31,52 @@ public class Xslt40StaticNamedTypeTests
         """ + declarations + "<xsl:template match='/'>" + body + "</xsl:template></xsl:stylesheet>")
         .TransformToString(new XDocumentNode(XDocument.Parse("<root/>")));
     private const string Sensor = "<xsl:record-type name='t:sensor'><xsl:field name='reading' as='xs:integer'/></xsl:record-type>";
+
+    private static void CompileDeclarations(string declarations) => new Api.XsltCompiler().Compile("""
+        <xsl:stylesheet version='4.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform'
+          xmlns:t='urn:types' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+        """ + declarations + "</xsl:stylesheet>");
+
+    /// <summary>Rejects unknown supported declaration types even when never executed.</summary>
+    /// <param name="declaration">An unused declaration containing an unknown type.</param>
+    [Theory]
+    [InlineData("<xsl:variable name='v' as='t:missing?' select='()'/>")]
+    [InlineData("<xsl:param name='v' as='array(t:missing)?' select='()'/>")]
+    [InlineData("<xsl:template name='unused'><xsl:variable name='v' as='map(xs:string,t:missing)?' select='()'/></xsl:template>")]
+    [InlineData("<xsl:template name='unused'><xsl:param name='v' as='record(x as t:missing)?'/></xsl:template>")]
+    [InlineData("<xsl:function name='t:unused' as='t:missing?'><xsl:sequence select='()'/></xsl:function>")]
+    [InlineData("<xsl:function name='t:unused'><xsl:param name='v' as='function(t:missing) as xs:integer'/><xsl:sequence select='()'/></xsl:function>")]
+    [InlineData("<xsl:record-type name='t:r'><xsl:field name='x' as='t:missing?'/></xsl:record-type>")]
+    [InlineData("<xsl:record-type name='t:r'><xsl:field name='x' as='array(t:missing)'/></xsl:record-type>")]
+    [InlineData("<xsl:variable name='v' as='(xs:integer | t:missing)?' select='()'/>")]
+    [InlineData("<xsl:variable name='v' as='xs:notAType?' select='()'/>")]
+    [InlineData("<xsl:variable name='v' as='Q{urn:missing}type?' select='()'/>")]
+    public void Declaration_UnknownType(string declaration)
+        => Assert.Contains("XPST0051", Assert.ThrowsAny<Exception>(() => CompileDeclarations(declaration)).ToString());
+
+    /// <summary>Reports unbound declaration prefixes using the XPath static error.</summary>
+    [Fact]
+    public void Declaration_UnboundPrefix()
+        => Assert.Contains("XPST0081", Assert.ThrowsAny<Exception>(() => CompileDeclarations(
+            "<xsl:variable name='v' as='absent:type?' select='()'/>")).ToString());
+
+    /// <summary>Accepts forward aliases, recursive records and local namespace bindings.</summary>
+    [Fact]
+    public void Declaration_ForwardAndRecursiveNames()
+        => CompileDeclarations("""
+            <xsl:variable name='v' as='array(t:alias)?' select='()'/>
+            <xsl:record-type name='t:r'><xsl:field name='next' as='t:r?'/></xsl:record-type>
+            <xsl:item-type name='t:alias' as='t:r'/>
+            <xsl:template name='unused' xmlns:u='urn:types'><xsl:param name='v' as='u:r?'/></xsl:template>
+            <xsl:template name='default' xpath-default-namespace='urn:types'><xsl:param name='v' as='r?'/></xsl:template>
+            """);
+
+    /// <summary>Leaves QName-like field names and enumeration strings untouched.</summary>
+    [Fact]
+    public void Declaration_LiteralNames()
+        => CompileDeclarations("""
+            <xsl:variable name='v' as="record('absent:type' as enum('absent:type'))?" select='()'/>
+            """);
 
     /// <summary>Rejects unknown names, including nested types, before operand evaluation.</summary>
     /// <param name="expression">The invalid expression.</param>
