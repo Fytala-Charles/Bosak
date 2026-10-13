@@ -12,7 +12,7 @@ Validation: Release build succeeds with zero warnings and zero errors. All 7323 
 
 Next: type patterns and remaining native record outcomes, including case 050 result handling. Annotated function types and remaining fixed namespace QName/pattern/static contexts stay follow-ups. Reassess the five original contribution areas after these implementation boundaries. No gate promotion or publication. CI runs when PRs target main; retarget the stack after prerequisites merge. Preserve upstream assertions, contribution patches, receipts and scratch directories. Upstream PRs #22–26 await review and independent confirmation.
 
-Delivery pending.
+Delivered: [PR #233](https://github.com/Fytala-Charles/Bosak/pull/233), stacked on #232. Verified implementation commit ef942c75; final handover bookkeeping follows in this branch. PR #233 remains open; CI runs once retargeted to main.
 
 # Inline function named type contracts — 2026-10-13
 
