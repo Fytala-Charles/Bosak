@@ -1,0 +1,49 @@
+{
+    "date":  "2026-10-14",
+    "base":  "a9e6f94d",
+    "branch":  "fix/xslt40-local-template-qnames",
+    "implementation":  "53757ede",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "scope":  "Module fixed QName identities for named-template declarations and call-template references under local earlier versions.",
+    "verification":  {
+                         "newTestsPassed":  10,
+                         "focusedPassed":  24,
+                         "fullUnitPassed":  8098,
+                         "xsltUnitPassed":  5212,
+                         "failed":  0,
+                         "skipped":  0,
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  81
+                                   }
+                     },
+    "environment":  "The initial sandboxed solution test run could not start local HTTP listeners for database tests and XSLT verification stalled. Database tests pass 47/0/0 outside the sandbox. XSLT tests pass from the prescribed temporary copy outside the sandbox. All other solution assemblies pass in the original run.",
+    "architecture":  "An internal construct-specific predicate enables module fixed bindings for template names, compilation/registration/runtime identity expansion and reserved-namespace checks; authoring diagnostics use retained namespace maps. No public API or gate membership changes.",
+    "boundaries":  [
+                       "Function/mode/key and other component QName paths under local versions remain separate audits.",
+                       "Optional/default function execution, broader keyword/package linkage, named-type edit compilation and pattern/AVT edits remain separate.",
+                       "No native suite rerun or upstream case modification in this slice."
+                   ],
+    "specification":  "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+    "logs":  [
+                 ".guard-tmp/local-template-build.log",
+                 ".guard-tmp/local-template-unit.log",
+                 ".guard-tmp/local-template-database.log",
+                 ".guard-tmp/local-template-focused.log",
+                 ".guard-tmp/local-template-xslt-unrestricted.log",
+                 ".guard-tmp/local-template-qt3.log",
+                 ".guard-tmp/local-template-qt4.log"
+             ]
+}

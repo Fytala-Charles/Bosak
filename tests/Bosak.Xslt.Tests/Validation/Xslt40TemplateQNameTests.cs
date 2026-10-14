@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -26,6 +27,41 @@ namespace Bosak.Xslt.Tests.Validation;
 /// <summary>Tests applicable namespaces on named templates and call sites.</summary>
 public class Xslt40TemplateQNameTests
 {
+    /// <summary>Local earlier grammar retains module fixed template identities.</summary>
+    /// <param name="declaration">The template name.</param>
+    /// <param name="call">The call name.</param>
+    /// <param name="version">The local grammar version.</param>
+    [Theory]
+    [InlineData("p:target", "q:target", "3.0")]
+    [InlineData("q:target", "p:target", "2.0")]
+    [InlineData("Q{urn:fixed}target", "q:target", "3.0")]
+    [InlineData("q:target", "Q{urn:fixed}target", "2.0")]
+    [InlineData("target", "Q{}target", "3.0")]
+    public void LocalEarlierTemplatesUseModuleBindings(string declaration, string call, string version)
+    {
+        var text = Sheet("<xsl:template version='" + version + "' xmlns:p='urn:local' name='" + declaration + "'>7</xsl:template><xsl:template match='/' version='" + version + "'><out><xsl:call-template name='" + call + "'/></out></xsl:template>", "#standard p=urn:fixed q=urn:fixed");
+        Assert.Equal(XsltValidationOutcome.Valid, Validate(text).Outcome);
+        var result = new Api.XsltCompiler().Compile(text).TransformToString(new XDocumentNode(XDocument.Parse("<root/>")));
+        Assert.Equal("7", XElement.Parse(result).Value);
+    }
+
+    /// <summary>Local earlier template names retain static QName diagnostics.</summary>
+    /// <param name="body">The invalid declaration or reference.</param>
+    /// <param name="bindings">The module bindings.</param>
+    /// <param name="code">The expected error code.</param>
+    [Theory]
+    [InlineData("<xsl:template version='3.0' name='p:target'/>", "#standard", "XTSE0280")]
+    [InlineData("<xsl:template match='/' version='3.0'><xsl:call-template name='p:target'/></xsl:template>", "#standard", "XTSE0280")]
+    [InlineData("<xsl:template version='2.0' name='a:b:c'/>", "#standard", "XTSE0020")]
+    [InlineData("<xsl:template match='/'><xsl:call-template version='2.0' name='a:b:c'/></xsl:template>", "#standard", "XTSE0020")]
+    [InlineData("<xsl:template version='3.0' name='p:target'/>", "#standard p=http://www.w3.org/2005/xpath-functions", "XTSE0080")]
+    public void LocalEarlierTemplateNamesAreRejected(string body, string bindings, string code)
+    {
+        var text = Sheet(body, bindings);
+        Assert.Contains(Validate(text).Diagnostics, d => d.Code == code);
+        Assert.Contains(code, Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(text)).Message);
+    }
+
     private static string Sheet(string body, string bindings) => "<xsl:stylesheet version='4.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:p='urn:native' fixed-namespaces='" + bindings + "'>" + body + "</xsl:stylesheet>";
     private static XsltValidationResult Validate(string text) => XsltValidation.Validate(Encoding.UTF8.GetBytes(text), new Uri("file:///templates/main.xsl"));
 
