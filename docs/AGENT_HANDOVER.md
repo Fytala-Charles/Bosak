@@ -1,3 +1,18 @@
+# Upstream key indexing context batch - 2026-10-14
+
+Branch: test/xslt40-key-index-contexts; base main 836ec5a8 (index-context PR #272 merged after passing CI). Engine source and gate membership unchanged in this batch. Evidence commit: 4c208172.
+
+What was built: native fixed-namespaces-016/017 plus one included key-module fixture. Case 016 checks current/local 3.0 pattern bindings, fixed-only wildcard/predicate and selected-node namespace URIs against a native node sharing the lookup value. Case 017 checks @use bindings from an included module independently of caller bindings and local grammar. Both explicitly assert absent p/q result namespaces. No existing fixture/assertion or original receipt changed; PR #29 remains a separate correction.
+
+Upstream submission: https://github.com/qt4cg/xslt40-test/pull/30; branch bosak/key-index-contexts, native head 586d75d7. Current upstream master 91328fbf0fed4a5d2813eb3661808ee53cb961ba was fetched before branching and again immediately before submission; it did not advance. Final four-file diff reviewed against that base. Acceptance and independent processor execution confirmation remain pending. Original seventeen contributed cases retain original acceptance; these two cases are additional submissions. No new issue reply or external message.
+
+Verification: both exact submitted cases pass (each filtered receipt 1/0/17); expanded family 18/0/0. Both cases fail with retained pre-index-fix binaries: case 016 selects urn:native and misses the local earlier key; case 017 reports XPST0081. This uses the current harness with only retained Bosak.Xslt.dll substituted, not a fresh source-checkout baseline; hashes and logs are recorded. Namespace negative control fails exactly the new two cases (16/2/0), with fixtures restored byte-for-byte. Catalog XML validates. Integrated engine CI 38515477922 passes 8,170 unit tests including XSLT 5,284/0/0. The unchanged source's QT3/qt4 receipts remain authoritative; no engine-touching change in this contribution step.
+
+Evidence: contributions/xslt40/key-index-contexts/README.md, RESULTS.json, UPSTREAM_SUBMISSION.json, portable patch, exact/family/negative receipts and pre-fix logs. Canonical docs synchronized. Candidate 1.2.1 remains unpublished; published 1.2.0 unchanged.
+
+Delivery: Bosak evidence/documentation PR #273 submitted, CI pending: https://github.com/Fytala-Charles/Bosak/pull/273. Merge after CI passes. Next: monitor upstream PR #29/#30 review, then review the completed namespace/indexing corrections as a potential bounded 1.2.1 scope; preparation may proceed but publication remains unauthorized. Broader package linkage, optional/default function execution, named-type editing and pattern/AVT editing remain separate scopes. Always refresh current upstream before contribution branching and submission, rebase on advancement and record exact bases.
+
+Earlier records below are historical.
 # Key indexing static contexts - 2026-10-14
 
 Branch: fix/key-index-static-contexts; base main d8c44a2c (key-name PR #271 merged after passing CI). Implementation: cd25f9e5.

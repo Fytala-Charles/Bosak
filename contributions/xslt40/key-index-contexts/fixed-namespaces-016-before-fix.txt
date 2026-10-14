@@ -1,0 +1,22 @@
+Bosak XSLT Conformance Harness
+Catalog: .upstream/xslt40-test/catalog.xml
+Test sets: 250
+Filter: fixed-namespaces
+Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage
+
+  Starting: fixed-namespaces ...
+  RUN  fixed-namespaces-016
+  FAIL fixed-namespaces-016: Result mismatch
+    Expected: (complex assertion)
+    Got:      <?xml version="1.0" encoding="UTF-8"?><out current="1" earlier="0" current-ns="urn:native" earlier-ns=""/>
+  Done: fixed-namespaces (18 tests, 0 passed, 1 failed, 17 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   18
+Passed:  0
+Failed:  1
+Skipped: 17
+
+Pass rate: 0.0%
