@@ -1,3 +1,13 @@
+# 1.4.0 published - 2026-10-14
+
+The user explicitly approved tagging and publication at exact reviewed revision `1ebbc8ecf375027e23eda0194a4205117031293f`. Preparation PR #285 merged after CI 38603077426 passed. Tag `v1.4.0` points to that revision. Release workflow 38604498372 succeeded with 8,298 solution tests and ten NuGet uploads. GitHub release: https://github.com/Fytala-Charles/Bosak/releases/tag/v1.4.0.
+
+All ten official-feed packages pass version, dependency, repository revision, .NET 10 assets, XML documentation, README/license/icon and hash checks. A fresh package-only consumer using nuget.org exclusively passes 120 checks; all ten assembly versions are 1.4.0.0. Cached archives match direct downloads; signed archive SHA-512 and restore content hashes are verified separately. Canonical evidence: docs/RELEASE-1.4.0-PUBLICATION.json. Preparation and implementation receipts remain unchanged. Logs, downloads and caches are retained under .guard-tmp/release140-*.
+
+Published libraries are 1.4.0; Marketplace extension remains 0.1.6. Private no-namespace XSLT 4.0 functions and the earlier optional/default argument behavior are released. No new public API or gate membership. Implementation verification: 8,298 solution tests including 5,412 XSLT tests, 77 language-server tests; frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Used-package optional ranges and optional xsl:override remain unsupported; retain the documented bounds. Upstream PRs #31/#32 were pending at the preparation check. Submit any future correction against freshly fetched current upstream and rebase if it advances, avoiding Michael's reported conflicts.
+
+Next: await upstream feedback and select the next bounded slice, or separately align the VS Code extension with the released engine. Do not repeat this publication. Integrate publication documentation only after successful exact-head CI. Earlier records below are historical.
+
 # 1.4.0 release preparation - 2026-10-14
 
 Main86c1547a62893fc5a555648d512ad7886e373f94 includes namespace-free function PR284 merged after exact-head CI38599962860 passed8298solution/77LS. User approved preparation of a bounded1.4.0 release candidate, not tagging/publication. Scope: private/default-private effective4.0 declarations; arity-aware fn fallback and explicit Q{} identity; call/reference/lookup/arrow/partial paths; positional placeholders plus keywords only for no-namespace host calls; authoring signatures/source preservation and runtime AVT/pattern callbacks. All prior documented broader boundaries retained.
