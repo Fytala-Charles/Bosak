@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover malformed contexts, overloads, local profiles and chained revisions.                 |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Resolve the local profile boundary using module fixed bindings.                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 14-10-2026     | Optional keyword edits now preserve captured defaults and source ownership.                 |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -189,7 +190,6 @@ public class Xslt40ExpressionEditContextTests
     [Theory]
     [InlineData("<xsl:function name='p:f' use-when='1 eq 1'><xsl:param name='p:a'/></xsl:function>", "p:f(p:a := 'A')")]
     [InlineData("<xsl:function name='p:f'><xsl:param name='p:a' _name=\"{'p:x'}\"/></xsl:function>", "p:f(p:a := 'A')")]
-    [InlineData("<xsl:function name='p:f'><xsl:param name='p:a' required='no' select=\"'A'\"/><xsl:param name='p:b' required='no' select=\"'B'\"/></xsl:function>", "p:f(p:b := 'B')")]
     public void DeferredSignaturesAreNotEditable(string declaration, string expression)
     {
         var failure = AssertRefused(Inspect(Sheet(declaration + Output())), expression, AuthoringEditFailureKind.SlotNotEditable, "coverage");
@@ -323,5 +323,13 @@ public class Xslt40ExpressionEditContextTests
             Assert.True(AuthoringSource.TryCreate(Encoding.UTF8.GetBytes(text), absoluteUri, out var source, out _));
             return source;
         }
+    }    /// <summary>Optional keyword edits retain fixed parameter identities and source fidelity.</summary>
+    [Fact]
+    public void OptionalKeywordSignatureIsEditable()
+    {
+        var declaration = "<xsl:function name='p:f'><xsl:param name='p:a' required='no' select=\"'A'\"/><xsl:param name='p:b' required='no' select=\"'B'\"/><xsl:sequence select='$p:a || $p:b'/></xsl:function>";
+        AssertAccepted(Sheet(declaration + Output()), "p:f(p:b := 'B')", "AB");
     }
+
+
 }

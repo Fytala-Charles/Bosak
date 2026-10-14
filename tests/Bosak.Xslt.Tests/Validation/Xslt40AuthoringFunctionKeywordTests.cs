@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Add precedence, exclusion, overload and deferred coverage boundaries.                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Optional keyword omissions now have supported validation coverage.                         |
 // ===========================================================================================================================================================
 
 
@@ -184,7 +185,6 @@ public class Xslt40AuthoringFunctionKeywordTests
     [Theory]
     [InlineData("<xsl:function _name=\"{'p:f'}\"><xsl:param name='p:a'/><xsl:sequence select='$p:a'/></xsl:function>", "p:f(p:a := 'A')")]
     [InlineData("<xsl:function name='p:f'><xsl:param name='p:a' _name=\"{'p:x'}\"/><xsl:sequence select='$p:a'/></xsl:function>", "p:f(p:a := 'A')")]
-    [InlineData("<xsl:function name='p:f'><xsl:param name='p:a' required='no' select=\"'A'\"/><xsl:param name='p:b' required='no' select=\"'B'\"/><xsl:sequence select='$p:a || $p:b'/></xsl:function>", "p:f(p:b := 'B')")]
     public void DeferredSignaturesAreCoverageGaps(string declaration, string call)
     {
         var result = XsltValidation.Validate(Inspect(Sheet(declaration + Output(call))));

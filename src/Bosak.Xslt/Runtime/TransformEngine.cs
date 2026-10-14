@@ -549,6 +549,7 @@
 //                      | Charles Korthout | 7.33  | 14-10-2026     | Resolve #all exclusions at their owner and copy native namespaces on every literal element. |
 //                      | Charles Korthout | 7.34  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 7.35  | 14-10-2026     | Compile key use expressions through the existing declaration-context host pipeline.         |
+//                      | Charles Korthout | 7.36  | 14-10-2026     | Evaluate reduced-arity defaults in global scope with caller focus.                       |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -2654,7 +2655,7 @@ internal sealed class TransformEngine
     {
         foreach (var (key, def) in _stylesheet.GetAllFunctionDefinitions())
         {
-            if (def.NamespaceUri == nsUri && def.LocalName == localName && def.Arity == arity)
+            if (def.NamespaceUri == nsUri && def.LocalName == localName && key.arity == arity)
                 return def;
         }
         return null;
@@ -3054,6 +3055,7 @@ internal sealed class TransformEngine
                 Compatibility = _stylesheet.GetXPathCompatibility(instruction),
                 Namespaces = nsMap,
                 FunctionParameterNames = ResolveFunctionParameterNames,
+                FunctionMinimumArity = ResolveFunctionMinimumArity,
                 ItemTypeAliases = itemTypeAliases,
                 NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                 DefaultElementNamespace = defaultNs,
@@ -3065,6 +3067,14 @@ internal sealed class TransformEngine
             return XPath31Expression.Compile(expression, options);
         }
         return CompileWithSchemaContext(expression, instruction);
+    }
+
+    private int? ResolveFunctionMinimumArity(string namespaceUri, string localName, int arity)
+    {
+        var functions = _currentPackageScope is null ? _stylesheet.GetAllFunctionDefinitions()
+            : CurrentStylesheet.GetPackageScopeFunctionDefinitions();
+        return functions.TryGetValue((namespaceUri, localName, arity), out var definition)
+            ? definition.MinimumArity : null;
     }
 
     private IReadOnlyList<string>? ResolveFunctionParameterNames(string namespaceUri, string localName, int arity)
@@ -3241,10 +3251,11 @@ internal sealed class TransformEngine
             {
                 NamespaceUri = def.NamespaceUri,
                 LocalName = def.LocalName,
-                Arity = def.Arity,
-                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                Arity = key.arity,
+                MinimumHostArity = def.MinimumArity < def.Arity ? def.MinimumArity : null,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, key.arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
-                ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
+                ParameterTypeNames = absorbing ? null : Enumerable.Range(0, key.arity)
                     .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
                         (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                     .ToList(),
@@ -3253,7 +3264,7 @@ internal sealed class TransformEngine
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
             _context.RegisterFunction(sig);
-            _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
+            _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, key.arity));
         }
         RegisterXslOriginalFunctions(allFuncs.Values);
     }
@@ -3595,8 +3606,9 @@ internal sealed class TransformEngine
             {
                 NamespaceUri = def.NamespaceUri,
                 LocalName = def.LocalName,
-                Arity = def.Arity,
-                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                Arity = key.arity,
+                MinimumHostArity = def.MinimumArity < def.Arity ? def.MinimumArity : null,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, key.arity).ToList(),
                 ReturnType = XdmValueKind.Sequence,
                 Implementation = (ctx, args) => ExecuteXsltFunction(def, args)
             };
@@ -4525,10 +4537,11 @@ internal sealed class TransformEngine
                 {
                     NamespaceUri = def.NamespaceUri,
                     LocalName = def.LocalName,
-                    Arity = def.Arity,
-                    ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, def.Arity).ToList(),
+                    Arity = key.arity,
+                    MinimumHostArity = def.MinimumArity < def.Arity ? def.MinimumArity : null,
+                    ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, key.arity).ToList(),
                     ReturnType = XdmValueKind.Sequence,
-                    ParameterTypeNames = absorbing ? null : Enumerable.Range(0, def.Arity)
+                    ParameterTypeNames = absorbing ? null : Enumerable.Range(0, key.arity)
                         .Select(i => i < paramElements.Count ? ResolveBindingSequenceType(paramElements[i].Attribute("as")?.Value, paramElements[i], def.Stylesheet.OwningPackage?.GetBindingItemTypes() ?? CurrentStylesheet.GetBindingItemTypes(),
                         (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)) : null)
                         .ToList(),
@@ -4536,7 +4549,7 @@ internal sealed class TransformEngine
                         (def.Stylesheet.OwningPackage ?? CurrentStylesheet).GetNamedRecordTypes().ToDictionary(d => d.Key, d => d.Value.Type, StringComparer.Ordinal)),
                     Implementation = (ctx, a) => ExecuteXsltFunction(def, a)
                 });
-                _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, def.Arity));
+                _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, key.arity));
 
                 // The overridden original remains callable for fn:function-lookup through an
                 // internal alias, since its plain name now resolves to the override.
@@ -4644,7 +4657,7 @@ internal sealed class TransformEngine
         var isAbsorbing = string.Equals(
             GetEffectiveFunctionAttribute(def.Element, "streamability"),
             "absorbing", StringComparison.OrdinalIgnoreCase);
-        XsltFunctionCacheKey? cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
+        XsltFunctionCacheKey? cacheKey = null;
         PackageScopeState packageScopeState = default;
         try
         {
@@ -4658,6 +4671,25 @@ internal sealed class TransformEngine
             _context.CurrentOutputUri = null;
             using var temporaryOutputState = EnterTemporaryOutputState();
 
+            if (def.MinimumArity < def.Arity)
+            {
+                var parameterDefaults = def.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToArray();
+                XdmValue[]? completedArguments = null;
+                for (int i = 0; i < def.Arity; i++)
+                {
+                    if (i < args.Length && !args[i].IsUndefined) continue;
+                    if (i < def.MinimumArity)
+                        throw new InvalidOperationException("XPST0017: A required function argument was omitted.");
+                    if (completedArguments is null)
+                    {
+                        completedArguments = new XdmValue[def.Arity];
+                        args.CopyTo(completedArguments);
+                    }
+                    completedArguments[i] = EvaluateFunctionParameterDefault(parameterDefaults[i], savedFocus, savedPosition, savedSize);
+                }
+                if (completedArguments is not null) args = completedArguments;
+            }
+            cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
             if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
                 return cached;
 
@@ -4745,6 +4777,43 @@ internal sealed class TransformEngine
             if (def.OverriddenFunction != null)
                 _overriddenFunctionStack.Pop();
             ExitPackageScope(packageScopeState);
+        }
+    }
+
+    private XdmValue EvaluateFunctionParameterDefault(XElement declaration, XdmValue focus, int position, int size)
+    {
+        var variables = _context.SnapshotVariables();
+        var resolver = _context.LazyVariableResolver;
+        var current = _context.CurrentItem;
+        var backwards = _context.BackwardsCompatible;
+        var template = _currentTemplateRule;
+        try
+        {
+            _context.RestoreVariables(_currentPackageScope is null && _globalVariableSnapshot is not null
+                ? _globalVariableSnapshot : new Dictionary<(string, string), XdmValue>());
+            _context.LazyVariableResolver = (local, ns) => ResolveLazyGlobal(_currentPackageScope, local, ns);
+            _context.WithFocus(focus, position, size);
+            _context.WithCurrentItem(focus);
+            _context.BackwardsCompatible = IsEffectiveBackwardsCompatible(declaration);
+            _currentTemplateRule = null;
+            XdmValue value;
+            if (declaration.Attribute("select") is { } select)
+                value = CompileXPath(select.Value, declaration).Evaluate(_context);
+            else if (!declaration.Nodes().Any(n => n is XElement || n is XText text && (!string.IsNullOrWhiteSpace(text.Value) || IsWhitespacePreserveContext(declaration))))
+                value = XdmValue.FromSequence(XdmSequence.Empty);
+            else
+                value = EvaluateSequenceConstructor(declaration, focus, wrapInDocumentNode: declaration.Attribute("as") is null);
+            return ConvertVariableValue(value, declaration.Attribute("as")?.Value, context: _context,
+                errorCodeOverride: "XTTE0600", declaration: declaration);
+        }
+        finally
+        {
+            _context.RestoreVariables(variables);
+            _context.LazyVariableResolver = resolver;
+            _context.WithFocus(focus, position, size);
+            _context.WithCurrentItem(current);
+            _context.BackwardsCompatible = backwards;
+            _currentTemplateRule = template;
         }
     }
 
@@ -10379,6 +10448,7 @@ internal sealed class TransformEngine
                                 Compatibility = compatibility,
                                 Namespaces = nsMap,
                                 FunctionParameterNames = ResolveFunctionParameterNames,
+                FunctionMinimumArity = ResolveFunctionMinimumArity,
                                 ItemTypeAliases = itemTypeAliases,
                                 NamedRecordTypeNames = CurrentStylesheet.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
                                 DefaultElementNamespace = defaultNs,

@@ -5,6 +5,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Optional XSLT function arguments - 2026-10-14:** Source candidate 1.3.0 supports trailing `required="no"` parameters in ordinary XSLT 4.0 functions, positional/keyword/arrow omissions and reduced-arity function items. Defaults use declaration namespaces/globals with caller focus; bodies retain absent focus. Captured authoring signatures and supported expression edits agree with execution. Used-package optional arity linkage and optional `xsl:override` remain explicit unsupported profiles. Published libraries remain 1.2.1 and Marketplace extension 0.1.6; no publication in this slice. [Contract and evidence](XSLT40-OPTIONAL-FUNCTION-ARGUMENTS.md). Earlier milestone entries below are historical.
+
+
 **VS Code highlighting correction - 2026-10-14:** Published extension 0.1.6 gives XML attribute names and literal values separate scopes, and embeds XPath in expression-valued XSLT attributes. For `select="concat('a','b')"`, Dark+ renders `select` light blue, `concat` yellow, and string arguments orange. Semantic highlighting recognizes unprefixed functions and excludes ordinary XML values/text/comments plus XPath strings/comments from code matching. Both quote styles, multiline values and doubled quotes are covered. [Marketplace 0.1.6](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) is published and its downloaded grammar/client/server payload matches the successful CI package. Library release remains 1.2.1. Earlier milestone entries below are historical. [Verification and installation](VSCODE-XSLT-HIGHLIGHTING.md).
 
 

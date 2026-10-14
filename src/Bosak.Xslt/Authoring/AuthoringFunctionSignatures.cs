@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain captured parameter bindings independently of local declaration grammar.              |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
+//                      | Charles Korthout | 0.5   | 14-10-2026     | Capture required prefixes and all optional function arities.                             |
 // ===========================================================================================================================================================
 
 using System.Collections.Frozen;
@@ -53,10 +54,13 @@ internal sealed class AuthoringFunctionSignatures
         if (_graphGap is not null || _uncertain.Contains(name))
             throw new AuthoringFunctionSignatureCoverageException(_graphGap ?? "Conditional, shadow or ambiguous function signatures remain outside keyword validation coverage.");
         if (_signatures.TryGetValue((namespaceUri, localName, arity), out var parameters)) return parameters;
-        if (_optional.Any(p => p.Key.Namespace == namespaceUri && p.Key.Name == localName && arity >= p.Value && arity < p.Key.Arity))
-            throw new AuthoringFunctionSignatureCoverageException("Omitted optional XSLT function arguments remain outside keyword validation coverage.");
+
         return null;
     }
+
+    internal int? ResolveMinimumArity(string namespaceUri, string localName, int arity)
+        => _optional.TryGetValue((namespaceUri, localName, arity), out var minimum) ? minimum
+            : _signatures.TryGetValue((namespaceUri, localName, arity), out var names) ? names.Count : null;
 
     internal static AuthoringFunctionSignatures Capture(
         IReadOnlyList<(XElement Root, string BaseUri, int Precedence)> modules,
@@ -127,11 +131,17 @@ internal sealed class AuthoringFunctionSignatures
                         var expanded = ExpandName(parameterName.Value.Trim(), parameterContext, useCapturedNamespaces: true);
                         return $"Q{{{expanded.Namespace}}}{expanded.Name}";
                     }).ToArray();
-                    signatures[key] = Array.AsReadOnly(names);
-                    ranks[key] = precedence;
-                    var minimum = parameters.Count(p => p.Attribute("required")?.Value is not ("no" or "false" or "0"));
-                    optional.Remove(key);
-                    if (minimum < parameters.Length) optional[key] = minimum;
+                    var minimum = parameters.TakeWhile(p => p.Attribute("required")?.Value.Trim() is not ("no" or "false" or "0")).Count();
+                    for (int arity = minimum; arity <= parameters.Length; arity++)
+                    {
+                        var rangeKey = (name.Namespace, name.Name, arity);
+                        if (ranks.TryGetValue(rangeKey, out var existing) && existing < precedence) continue;
+                        if (ranks.TryGetValue(rangeKey, out existing) && existing == precedence) { uncertain.Add(name); continue; }
+                        signatures[rangeKey] = Array.AsReadOnly(names);
+                        ranks[rangeKey] = precedence;
+                        optional.Remove(rangeKey);
+                        if (minimum < parameters.Length) optional[rangeKey] = minimum;
+                    }
                 }
                 catch (InvalidOperationException) { uncertain.Add(name); }
             }

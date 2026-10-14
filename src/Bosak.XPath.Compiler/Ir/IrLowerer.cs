@@ -130,6 +130,7 @@
 //                      | Charles Korthout | 1.54  | 10-10-2026     | REQ-123 destructuring let: Destructure opcode lowering (PR1131); destructured variable
 //                      |                  |       |                | names join let-scoping helpers (CollectTopLevelLetNames / FLWOR bound variables)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.20  | 14-10-2026     | Lower omitted host argument markers as boxed undefined values.                           |
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -428,6 +429,7 @@ internal sealed class IrLowerer
             DecimalLiteralNode n => LowerDecimalLiteral(n, targetReg),
             DoubleLiteralNode n => LowerDoubleLiteral(n, targetReg),
             StringLiteralNode n => LowerStringLiteral(n, targetReg),
+            OmittedArgumentNode => LowerOmittedArgument(targetReg),
             QNameLiteralNode n => LowerNode(new FunctionCallNode("QName", new XPathAstNode[]
             {
                 new StringLiteralNode(n.NamespaceUri ?? string.Empty),
@@ -517,6 +519,13 @@ internal sealed class IrLowerer
         int reg = targetReg ?? AllocRegister();
         int poolIdx = AddToLiteralPool(node.Value);
         Emit(IrOpCode.LoadDouble, (ushort)reg, operand: poolIdx);
+        return reg;
+    }
+
+    private int LowerOmittedArgument(int? targetReg)
+    {
+        int reg = targetReg ?? AllocRegister();
+        Emit(IrOpCode.LoadNode, (ushort)reg, operand: AddToLiteralPool(XdmValue.Undefined));
         return reg;
     }
 

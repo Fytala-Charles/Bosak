@@ -72,6 +72,7 @@
 //                      | Charles Korthout | 1.25  | 10-10-2026     | REQ-123 destructuring let: LetDestructuringKind + DestructuringVariable on              |
 //                      |                  |       |                | QuantifiedBinding (XPath 4.0 let $(...)/$[...]/${...} bindings)                         |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.26  | 14-10-2026     | Represent omitted host arguments independently of empty sequence.                        |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -117,6 +118,9 @@ internal sealed record DoubleLiteralNode(double Value) : XPathAstNode;
 /// <summary>A string literal: <c>'abc'</c>.</summary>
 /// <param name="Value">The literal content with the delimiting quotes removed and escapes resolved.</param>
 internal sealed record StringLiteralNode(string Value) : XPathAstNode;
+
+/// <summary>Internal host-call marker for an omitted optional argument; never parsed from source.</summary>
+internal sealed record OmittedArgumentNode : XPathAstNode;
 
 /// <summary>An XPath 4.0 QName literal: <c>#local</c>, <c>#prefix:local</c>, or <c>#Q{uri}local</c> (PR1976/PR2227).</summary>
 /// <param name="LocalName">The local name of the QName.</param>

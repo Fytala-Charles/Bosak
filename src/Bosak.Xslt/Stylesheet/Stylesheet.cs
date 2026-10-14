@@ -320,6 +320,7 @@
 //                      | Charles Korthout | 2.159 | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 2.160 | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 2.161 | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
+//                      | Charles Korthout | 0.10  | 14-10-2026     | Allow 4.0 optional function parameters and register reduced arities.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2429,12 +2430,17 @@ internal sealed class Stylesheet
 
         // XTSE0770: duplicate xsl:function declarations with the same expanded QName and arity
         {
+            var optionalNames = _functionDefinitions.Where(d => d.MinimumArity < d.Arity)
+                .Select(d => (d.NamespaceUri, d.LocalName)).ToHashSet();
             var seenFunctions = new HashSet<(string ns, string local, int arity)>();
             foreach (var def in _functionDefinitions)
             {
-                var key = (def.NamespaceUri, def.LocalName, def.Arity);
-                if (!seenFunctions.Add(key))
-                    throw new InvalidOperationException($"XTSE0770: Duplicate function declaration '{{{def.NamespaceUri}}}{def.LocalName}#{def.Arity}'.");
+                for (int arity = def.MinimumArity; arity <= def.Arity; arity++)
+                {
+                    var key = (def.NamespaceUri, def.LocalName, arity);
+                    if (!seenFunctions.Add(key) && !optionalNames.Contains((def.NamespaceUri, def.LocalName)))
+                        throw new InvalidOperationException($"XTSE0770: Overlapping function arity ranges for '{{{def.NamespaceUri}}}{def.LocalName}#{arity}'.");
+                }
             }
         }
 
@@ -2495,6 +2501,7 @@ internal sealed class Stylesheet
 
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
+        if (_isRootStylesheet) ValidateOptionalFunctionRanges();
 
         // Schema-aware compilation (REQ-097): every module in the import tree has now
         // been loaded and its xsl:import-schema declarations collected; compile the
@@ -2698,6 +2705,34 @@ internal sealed class Stylesheet
         // import precedence is an error unless a higher-precedence template exists.
         if (_isRootStylesheet)
             ValidateNamedTemplateBindings();
+    }
+
+    private void ValidateOptionalFunctionRanges()
+    {
+        var declarations = new List<XsltFunctionDefinition>();
+        var visited = new HashSet<Stylesheet>();
+        void Collect(Stylesheet module)
+        {
+            if (!visited.Add(module)) return;
+            declarations.AddRange(module._functionDefinitions);
+            foreach (var imported in module._imports) Collect(imported);
+            foreach (var included in module._includes) Collect(included);
+        }
+        Collect(this);
+        foreach (var group in declarations.GroupBy(d => (d.NamespaceUri, d.LocalName)))
+        {
+            if (!group.Any(d => d.MinimumArity < d.Arity)) continue;
+            var active = group.Where(d => !group.Any(h => h.Stylesheet.ImportPrecedence < d.Stylesheet.ImportPrecedence
+                && h.MinimumArity <= d.MinimumArity && h.Arity >= d.Arity)).ToArray();
+            for (int i = 0; i < active.Length; i++)
+                for (int j = i + 1; j < active.Length; j++)
+                {
+                    var a = active[i]; var b = active[j];
+                    if (a.Arity < b.MinimumArity || b.Arity < a.MinimumArity) continue;
+                    string code = a.Stylesheet.ImportPrecedence == b.Stylesheet.ImportPrecedence ? "XTSE0770" : "XTSE0769";
+                    throw new InvalidOperationException($"{code}: Overlapping function arity ranges for '{{{a.NamespaceUri}}}{a.LocalName}'.");
+                }
+        }
     }
 
     /// <summary>
@@ -3454,7 +3489,8 @@ internal sealed class Stylesheet
             if (isXsltElement && localName == "param")
             {
                 var parent = elem.Parent;
-                if (parent != null && parent.Name.NamespaceName == XslNamespace && parent.Name.LocalName == "function")
+                if (parent != null && parent.Name.NamespaceName == XslNamespace && parent.Name.LocalName == "function"
+                    && !(GetXPathCompatibility(elem) >= XPathCompatibility.XPath40 && TryParseYesNo(elem.Attribute("required")?.Value?.Trim() ?? "yes") == false))
                 {
                     if (elem.Attribute("select") != null)
                         throw new InvalidOperationException("XTSE0760: xsl:param inside xsl:function must not have a select attribute.");
@@ -3773,11 +3809,20 @@ internal sealed class Stylesheet
                         throw new InvalidOperationException("XTSE0020");
                 }
 
+                bool optionalSeen = false;
+                foreach (var parameter in elem.Elements(XName.Get("param", XslNamespace)))
+                {
+                    bool optional = TryParseYesNo(parameter.Attribute("required")?.Value?.Trim() ?? "yes") == false;
+                    if (optionalSeen && !optional)
+                        throw new InvalidOperationException("XTSE0761: Required function parameters cannot follow optional parameters.");
+                    optionalSeen |= optional;
+                }
+
                 // xsl:param children of xsl:function may have @required='yes' but not @required='no'
                 foreach (var param in elem.Elements(XName.Get("param", XslNamespace)))
                 {
                     var requiredVal = param.Attribute("required")?.Value.Trim();
-                    if (requiredVal == "no")
+                    if (TryParseYesNo(requiredVal ?? "yes") == false && GetXPathCompatibility(param) < XPathCompatibility.XPath40)
                         throw new InvalidOperationException("XTSE0020");
                 }
             }
@@ -5189,7 +5234,7 @@ internal sealed class Stylesheet
                 // Constructor functions have arity one; only a user function with the
                 // same name and arity collides. xs:* names are already rejected as
                 // reserved function namespaces (XTSE0080).
-                if (def.Arity != 1 || string.IsNullOrEmpty(def.NamespaceUri))
+                if (def.MinimumArity > 1 || def.Arity < 1 || string.IsNullOrEmpty(def.NamespaceUri))
                     continue;
                 if (schemaSet.GlobalTypes[new XmlQualifiedName(def.LocalName, def.NamespaceUri)] is XmlSchemaSimpleType)
                     throw new InvalidOperationException($"XTSE0770: Function '{def.LocalName}' with arity 1 conflicts with the constructor function for the schema type '{def.LocalName}'.");
@@ -5263,6 +5308,9 @@ internal sealed class Stylesheet
                 // XTSE3058: the override must be homonymous with a component of the used package.
                 if (!package.TryFindFunction(local, ns, arity, out var def) || def == null)
                     throw new InvalidOperationException($"XTSE3058: xsl:override function '{nameAttr}#{arity}' does not match any function in the used package.");
+                var overriding = XsltFunctionDefinition.FromElement(overrideElem, this);
+                if (def.MinimumArity < def.Arity || overriding is not null && overriding.MinimumArity < overriding.Arity)
+                    throw new NotSupportedException("Optional function arity ranges in xsl:override remain outside the supported profile.");
                 var exposed = package.GetExposedVisibility("function", local, ns, arity);
                 var effective = exposed ?? def.Visibility;
                 // XTSE3060: only public or abstract components may be overridden.
@@ -6662,6 +6710,8 @@ internal sealed class Stylesheet
 
             var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, schemaState: _schemaState, importDepth: ImportDepth + 1);
             child.ApplyImportsContextModule = child;
+            if (child.GetAllFunctionDefinitions(includePrivate: true).Values.Any(d => d.MinimumArity < d.Arity))
+                throw new NotSupportedException("Optional function arity ranges across used-package linkage remain outside the supported profile.");
             _usedPackages.Add(child);
             usePackageElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
         }
@@ -9146,7 +9196,8 @@ internal sealed class Stylesheet
         foreach (var def in _functionDefinitions)
         {
             if (includePrivate || !IsPackage || IsExportedFromPackage(this, def))
-                result[(def.NamespaceUri, def.LocalName, def.Arity)] = def;
+                for (int arity = def.MinimumArity; arity <= def.Arity; arity++)
+                    result[(def.NamespaceUri, def.LocalName, arity)] = def;
         }
 
         return result;
