@@ -1,3 +1,14 @@
+# 1.2.1 release preparation - 2026-10-14
+
+Branch: release/1.2.1-preparation; scope frozen at cf8aae647cbe8dfe94c381d7e533f31afc57b1fd (PR #273 merged after CI). User authorized preparation, not publication. Published version remains 1.2.0; source version is already 1.2.1 for all ten public .NET 10 libraries.
+
+Scope: integrated post-1.2.0 namespace/context, authoring validation/type/signature/edit alignment, exact-arity all-supplied function keyword binding, literal result namespace exclusions/copying and key match/use compilation fixes through PR #251-273. Public API and gate membership unchanged. Broader package linkage, optional/default host execution, named-type editing and pattern/AVT replacement remain separate.
+
+Verified preparation candidate ed5080b553824ff8bf6a922640e0d4c12b8e6548: Release build zero errors/81 existing warnings; all 8,170 unit tests pass (XSLT 5,284); QT3 31,142/0/679; qt4 gate-only 8,278/0/1,894; native fixed-namespaces 18/0/0. Ten packages pass versions, dependencies, assets, assemblies, XML documentation and hashes. Fresh-cache package-only consumer passes 60 checks with all ten assembly versions 1.2.1.0 and all Bosak packages from the candidate feed. Evidence: docs/RELEASE-1.2.1-PREPARATION.json. Seven Markdown pages rendered; release notes screenshot inspected. Next: integrate the preparation PR after CI, rebuild/pack and repeat the fresh consumer against the exact merged revision, then present it for publication approval. Do not create tags, dispatch release workflow or publish packages yet.
+
+Upstream #29/#30 remain open without review feedback; original seventeen cases remain accepted and independent processor confirmation is pending. Always refresh upstream before branching and before contribution submission, record bases and preserve original receipts. Original scratch evidence remains untouched.
+
+Earlier records below are historical.
 # Upstream key indexing context batch - 2026-10-14
 
 Branch: test/xslt40-key-index-contexts; base main 836ec5a8 (index-context PR #272 merged after passing CI). Engine source and gate membership unchanged in this batch. Evidence commit: 4c208172.
