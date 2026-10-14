@@ -1,3 +1,16 @@
+# Local mode QName identities and upstream submission policy - 2026-10-14
+
+Branch: fix/xslt40-local-mode-qnames; base main b5583dbf (namespace-copying PR #269 merged after passing CI).
+
+What was built: UsesApplicableModeNamespaces separates mode namespace binding policy from local grammar. Declarations, template membership, apply-templates/default dispatch, scoped defaults and expose resolution retain module fixed identities under local earlier versions. Authoring mode diagnostics and references use retained maps. Eleven added cases cover local 2.0/3.0 grammar, fixed-only/rebound prefixes, aliases, explicit identities, excluded-prefix diagnostics, scoped owners and namespace documents without validation retries. The older local-native expectation is corrected; earlier-root native profiles, special modes and public metadata remain covered.
+
+Verification: 50 focused checks; all 8,129 unit tests pass including XSLT 5,243/0/0. Final incremental Release build: 0 errors/22 warnings. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged corrected native family 16/0/0 at suite 0e3204d3. Evidence: docs/XSLT40-LOCAL-MODE-QNAME-RESULTS.json and local-mode scratch logs. No public API or gate membership changes. Original source bytes and historical receipts are preserved.
+
+Mandatory upstream policy: Fetch current upstream before creating a contribution branch and again immediately before submission; rebase onto the refreshed default branch if advanced, record the exact base and inspect the final diff. Do not submit from stale contribution branches. Recorded in AGENTS.md and contributions/xslt40/README.md to avoid the merge conflicts Michael Kay reported in issue #28. Upstream correction PR #29 remains under review; independent processor confirmation remains pending.
+
+Delivery: submit verified slice and merge after CI. Next: audit key QNames under local versions. Broader package linkage, optional/default function execution, named-type edit compilation and pattern/AVT replacement remain separate. Published version remains 1.2.0; candidate 1.2.1 is unpublished. No new external message or upstream test submission in this slice.
+
+Earlier records below are historical.
 # Literal result namespace copying correction - 2026-10-14
 
 Branch: fix/literal-result-namespace-exclusions; base main `dc38d923` (function PR #268 merged after passing CI). Implementation: `f42027a4`.

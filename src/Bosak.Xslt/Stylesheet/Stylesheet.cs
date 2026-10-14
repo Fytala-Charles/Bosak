@@ -318,6 +318,7 @@
 //                      | Charles Korthout | 2.157 | 13-10-2026     | Retain fixed variable and parameter identities across local earlier profiles.              |
 //                      | Charles Korthout | 2.158 | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 //                      | Charles Korthout | 2.159 | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
+//                      | Charles Korthout | 2.160 | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3074,7 +3075,7 @@ internal sealed class Stylesheet
             bool isXsltElement = elem.Name.NamespaceName == XslNamespace;
             var localName = elem.Name.LocalName;
 
-            if (UsesXPath40Namespaces(elem))
+            if (UsesApplicableModeNamespaces(elem))
             {
                 var defaultMode = elem.Attribute(isXsltElement ? XName.Get("default-mode") : XName.Get("default-mode", XslNamespace));
                 if (defaultMode is not null)
@@ -4701,7 +4702,7 @@ internal sealed class Stylesheet
                         if (!IsValidModeValue(modeVal))
                             throw new InvalidOperationException($"XTSE0020: Invalid mode value '{modeVal}' on xsl:apply-templates.");
                         if (modeVal is not ("#current" or "#default" or "#unnamed" or "#all"))
-                            ValidateXsltName(elem, modeVal, "xsl:apply-templates/@mode", useApplicableNamespaces: true);
+                            ExpandModeQName(elem, modeVal);
                     }
                 }
 
@@ -5978,7 +5979,8 @@ internal sealed class Stylesheet
     /// if the list is empty, contains duplicates, contains an invalid token, or
     /// contains <c>#all</c> together with any other value.
     /// </summary>
-    internal static void ValidateTemplateModeAttribute(XElement element, string value)
+    internal static void ValidateTemplateModeAttribute(XElement element, string value,
+        IReadOnlyDictionary<string, string>? namespaceBindings = null)
     {
         var trimmed = value.Trim();
         if (string.IsNullOrEmpty(trimmed))
@@ -6015,7 +6017,7 @@ internal sealed class Stylesheet
             else
             {
                 // QName/EQName mode token: ensure any prefix is declared (XTSE0280).
-                ValidateXsltName(element, token, "xsl:template/@mode", useApplicableNamespaces: true);
+                ExpandModeQName(element, token, namespaceBindings);
             }
 
             if (!seen.Add(token))
@@ -6153,30 +6155,39 @@ internal sealed class Stylesheet
         => UsesXPath40Namespaces(element) ? GetApplicableStaticNamespaces(element).GetValueOrDefault(prefix)
             : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
 
+    /// <summary>Gets whether mode QNames use applicable bindings independently of local grammar.</summary>
+    /// <param name="element">The mode declaration, reference or default-mode owner.</param>
+    /// <returns>Whether applicable bindings govern mode names in this context.</returns>
+    internal static bool UsesApplicableModeNamespaces(XElement element)
+        => UsesXPath40Namespaces(element) || HasModuleFixedNamespaces(element);
+
     /// <summary>Expands XSLT 4.0 mode references while retaining special mode tokens.</summary>
     internal static string ExpandModeName(string mode, XElement element)
         => mode is "#current" or "#default" or "#all" or "#unnamed" ? mode : ExpandModeQName(element, mode);
 
     /// <summary>Expands a mode QName using applicable namespaces and the mode identity format.</summary>
-    internal static string ExpandModeQName(XElement element, string name)
+    internal static string ExpandModeQName(XElement element, string name,
+        IReadOnlyDictionary<string, string>? namespaceBindings = null)
     {
-        var (local, uri) = ValidateXsltName(element, name, "mode name", useApplicableNamespaces: true);
+        var (local, uri) = ValidateXsltName(element, name, "mode name", useApplicableNamespaces: true,
+            namespaceBindings: namespaceBindings ?? (HasModuleFixedNamespaces(element) ? GetApplicableStaticNamespaces(element) : null));
         return uri.Length == 0 ? local : $"{{{uri}}}{local}";
     }
 
     /// <summary>Checks literal mode references while preserving existing keyword rules.</summary>
-    internal static void ValidateModeReference(XElement element, string attribute, string value)
+    internal static void ValidateModeReference(XElement element, string attribute, string value,
+        IReadOnlyDictionary<string, string>? namespaceBindings = null)
     {
         if (attribute == "mode" && element.Name == XName.Get("template", XslNamespace))
         {
-            ValidateTemplateModeAttribute(element, value);
+            ValidateTemplateModeAttribute(element, value, namespaceBindings);
             return;
         }
         var token = value.Trim();
         if (!IsValidModeValue(token))
             throw new InvalidOperationException($"XTSE0020: Invalid mode value '{token}'.");
         if (token is not ("#current" or "#default" or "#unnamed" or "#all"))
-            ValidateXsltName(element, token, "mode reference", useApplicableNamespaces: true);
+            ExpandModeQName(element, token, namespaceBindings);
     }
 
     /// <summary>Expands a variable/parameter QName using the applicable declaration context.</summary>
@@ -8080,7 +8091,7 @@ internal sealed class Stylesheet
     /// </summary>
     private static string ExpandModeNameForExpose(string name, XElement context)
     {
-        if (UsesXPath40Namespaces(context))
+        if (UsesApplicableModeNamespaces(context))
             return ExpandModeQName(context, name);
 
         if (name.Length > 2 && name[0] == 'Q' && name[1] == '{')
@@ -9388,7 +9399,7 @@ internal sealed class Stylesheet
         {
             expanded = mode;
         }
-        else if (UsesXPath40Namespaces(element))
+        else if (UsesApplicableModeNamespaces(element))
         {
             expanded = ExpandModeQName(element, mode);
         }

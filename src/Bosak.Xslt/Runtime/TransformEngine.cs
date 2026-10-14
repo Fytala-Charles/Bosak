@@ -547,6 +547,7 @@
 //                      | Charles Korthout | 7.31  | 13-10-2026     | Align 4.0 key EQName and QName arguments with declaration identities.                    |
 //                      | Charles Korthout | 7.32  | 13-10-2026     | Supply XSLT function keyword signatures with declaration namespace identities.
 //                      | Charles Korthout | 7.33  | 14-10-2026     | Resolve #all exclusions at their owner and copy native namespaces on every literal element. |
+//                      | Charles Korthout | 7.34  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -6950,7 +6951,7 @@ internal sealed class TransformEngine
     /// </summary>
     private static string ExpandModeName(string mode, XElement instruction)
     {
-        if (Stylesheet.Stylesheet.UsesXPath40Namespaces(instruction))
+        if (Stylesheet.Stylesheet.UsesApplicableModeNamespaces(instruction))
         {
             // Consumer-supplied initial modes may already use the internal Clark notation.
             if (mode.StartsWith('{'))

@@ -333,3 +333,7 @@ The separate 40-case regression slice resolves module bindings across locally ea
 ## Local variable and parameter QName identities - 2026-10-13
 
 A separate 35-case regression slice aligns locally earlier variable/parameter identities with module fixed bindings, including authoring scope, parameter passing and keyword metadata. The native namespace family remains 16/0/0; no contribution cases or assertions are added. All 17 submitted cases remain accepted upstream; independent execution confirmation remains pending. Candidate 1.2.1 remains unpublished. See [verification evidence and boundaries](../../docs/XSLT40-LOCAL-VARIABLE-QNAME-RESULTS.json).
+
+## Upstream submission base
+
+Corrections and additions must start from the current upstream default branch. Fetch before branching and again immediately before submitting; rebase onto the refreshed default branch if it has advanced, record the exact base revision, and check the final diff against current upstream. This is mandatory following Michael Kay's merge-conflict report in [issue #28](https://github.com/qt4cg/xslt40-test/issues/28). Original contribution branches and receipts remain historical evidence, rather than submission bases.
