@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-**1.2.1 published - 2026-10-14:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.1) from `70f5c5b2`. All ten .NET 10 packages were published by the successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38525706208), passing 8,170 tests with zero failures/skips. See [release notes](RELEASE-NOTES-1.2.1.md). Earlier preparation and slice entries are historical. Upstream PR #29/#30 review and independent processor confirmation remain pending; broader REQ-126 work remains separate.
+**1.2.1 published - 2026-10-14:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.1) from `70f5c5b2`. All ten .NET 10 packages were published by the successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38525706208), passing 8,170 tests with zero failures/skips. All ten published packages pass content/metadata/hash checks; a fresh-cache consumer using only nuget.org passes 60 checks and verifies all ten assembly versions. See [release notes](RELEASE-NOTES-1.2.1.md). Earlier preparation and slice entries are historical. Upstream PR #29/#30 review and independent processor confirmation remain pending; broader REQ-126 work remains separate.
 
 
 **Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json).
