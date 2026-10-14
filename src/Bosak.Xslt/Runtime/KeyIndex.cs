@@ -28,6 +28,7 @@
 //                      |                  |       |                | sees the in-scope schema set (validation-0202)                                         |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 14-10-2026     | Compile key match/use with declaring namespaces and local grammar; reuse host compiler.    |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -334,34 +335,57 @@ internal sealed class KeyIndex
     /// <summary>
     /// Builds a single key definition into the given index, walking the document tree once.
     /// </summary>
-    public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index)
+    /// <param name="sourceDocument">The document to index.</param>
+    /// <param name="keyDef">The declaring key definition.</param>
+    /// <param name="context">The evaluation context whose focus is restored after indexing.</param>
+    /// <param name="index">The target index.</param>
+    /// <param name="expressionCompiler">The host compiler for declaration-context use expressions.</param>
+    public static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index,
+        Func<string, XElement, XPath31Expression>? expressionCompiler = null)
     {
         var patternCompiler = new Patterns.PatternCompiler(context);
-        BuildSingleKey(sourceDocument, keyDef, context, index, patternCompiler);
+        BuildSingleKey(sourceDocument, keyDef, context, index, patternCompiler, expressionCompiler);
     }
 
-    private static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index, Patterns.PatternCompiler patternCompiler)
+    private static void BuildSingleKey(IXdmNode sourceDocument, Stylesheet.KeyDefinition keyDef, EvaluationContext context, KeyIndex index,
+        Patterns.PatternCompiler patternCompiler, Func<string, XElement, XPath31Expression>? expressionCompiler = null)
     {
-        var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element!);
-        var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
-        var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);
+        var declaration = keyDef.Element ?? keyDef.Stylesheet.Root;
+        var defaultNs = Stylesheet.Stylesheet.GetXPathDefaultNamespace(declaration);
+        var compiledMatch = CompileMatch(keyDef, patternCompiler, defaultNs);
         var useExpr = string.IsNullOrEmpty(keyDef.Use)
             ? null
-            : CompileUseExpression(keyDef.Use, defaultNs, keyDef.Element!.GetDefaultNamespace().NamespaceName);
+            : expressionCompiler is not null ? expressionCompiler(keyDef.Use, declaration)
+                : CompileUseExpression(keyDef, defaultNs, context);
 
         IndexNodes(sourceDocument, keyDef.Name, compiledMatch, useExpr, keyDef.Composite, context, index);
     }
 
-    private static XPath31Expression CompileUseExpression(string use, string? defaultElementNamespace, string? definingElementDefaultNamespace)
+    private static Patterns.PatternPredicate CompileMatch(Stylesheet.KeyDefinition keyDef, Patterns.PatternCompiler compiler, string? defaultNs)
     {
-        if (string.IsNullOrEmpty(defaultElementNamespace) && string.IsNullOrEmpty(definingElementDefaultNamespace))
-            return XPath31Expression.Compile(use);
+        var declaration = keyDef.Element ?? keyDef.Stylesheet.Root;
+        var namespaces = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(declaration);
+        var compatibility = keyDef.Stylesheet.GetXPathCompatibility(declaration);
+        var owner = keyDef.Stylesheet.OwningPackage ?? keyDef.Stylesheet;
+        Patterns.PatternCompiler.ValidateNamespacePrefixes(keyDef.Match, namespaces);
+        return compiler.Compile(keyDef.Match, defaultNs, namespaces: namespaces, compatibility: compatibility,
+            itemTypeAliases: compatibility >= XPathCompatibility.XPath40 ? owner.GetBindingItemTypes() : null,
+            namedRecordTypeNames: compatibility >= XPathCompatibility.XPath40 ? owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal) : null);
+    }
+
+    private static XPath31Expression CompileUseExpression(Stylesheet.KeyDefinition keyDef, string? defaultElementNamespace, EvaluationContext context)
+    {
+        var declaration = keyDef.Element ?? keyDef.Stylesheet.Root;
         var options = new CompileOptions
         {
             DefaultElementNamespace = defaultElementNamespace,
-            DefiningElementDefaultNamespace = definingElementDefaultNamespace
+            DefiningElementDefaultNamespace = declaration.GetDefaultNamespace().NamespaceName,
+            Namespaces = Stylesheet.Stylesheet.GetApplicableStaticNamespaces(declaration),
+            Compatibility = keyDef.Stylesheet.GetXPathCompatibility(declaration),
+            BackwardsCompatible = keyDef.Stylesheet.GetEffectiveVersion(declaration) < 2.0,
+            SchemaSet = context.SchemaSet
         };
-        return XPath31Expression.Compile(use, options);
+        return XPath31Expression.Compile(keyDef.Use!, options);
     }
 
     /// <summary>
@@ -371,8 +395,7 @@ internal sealed class KeyIndex
     {
         var patternCompiler = new Patterns.PatternCompiler(context);
         var defaultNs = Bosak.Xslt.Stylesheet.Stylesheet.GetXPathDefaultNamespace(keyDef.Element!);
-        var resolvedMatch = ResolveNamespacePrefixes(keyDef.Match, keyDef.Element);
-        var compiledMatch = patternCompiler.Compile(resolvedMatch, defaultNs);
+        var compiledMatch = CompileMatch(keyDef, patternCompiler, defaultNs);
 
         IndexNodes(sourceDocument, keyDef.Name, compiledMatch, useEvaluator, keyDef.Composite, context, index);
     }
@@ -538,83 +561,4 @@ internal sealed class KeyIndex
         return value;
     }
 
-    /// <summary>
-    /// Replaces prefix:local-name occurrences in a pattern with Q{uri}local-name,
-    /// resolving prefixes using the namespace declarations in scope on the given element.
-    /// Returns the pattern unchanged if contextElement is null.
-    /// </summary>
-    private static string ResolveNamespacePrefixes(string pattern, XElement? contextElement)
-    {
-        if (contextElement == null || !pattern.Contains(':'))
-            return pattern;
-
-        var sb = new System.Text.StringBuilder();
-        int i = 0;
-        while (i < pattern.Length)
-        {
-            char c = pattern[i];
-            if (c == '\'' || c == '\"')
-            {
-                char quote = c;
-                sb.Append(c);
-                i++;
-                while (i < pattern.Length && pattern[i] != quote)
-                {
-                    sb.Append(pattern[i]);
-                    i++;
-                }
-                if (i < pattern.Length)
-                {
-                    sb.Append(pattern[i]);
-                    i++;
-                }
-                continue;
-            }
-            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{')
-            {
-                sb.Append(c);
-                i++;
-                continue;
-            }
-            if (char.IsLetter(c) || c == '_')
-            {
-                int start = i;
-                while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
-                    i++;
-                if (i < pattern.Length && pattern[i] == ':')
-                {
-                    if (i + 1 < pattern.Length && pattern[i + 1] == ':')
-                    {
-                        sb.Append(pattern[start..i]);
-                        continue;
-                    }
-                    var prefix = pattern[start..i];
-                    i++;
-                    int localStart = i;
-                    while (i < pattern.Length && (char.IsLetterOrDigit(pattern[i]) || pattern[i] == '_' || pattern[i] == '-' || pattern[i] == '.'))
-                        i++;
-                    var local = pattern[localStart..i];
-                    var nsUri = contextElement.GetNamespaceOfPrefix(prefix)?.NamespaceName ?? "";
-                    if (!string.IsNullOrEmpty(nsUri))
-                    {
-                        sb.Append($"Q{{{nsUri}}}{local}");
-                    }
-                    else
-                    {
-                        sb.Append(prefix);
-                        sb.Append(':');
-                        sb.Append(local);
-                    }
-                }
-                else
-                {
-                    sb.Append(pattern[start..i]);
-                }
-                continue;
-            }
-            sb.Append(c);
-            i++;
-        }
-        return sb.ToString();
-    }
 }

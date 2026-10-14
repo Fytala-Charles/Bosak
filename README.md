@@ -5,6 +5,8 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+**Key indexing contexts - 2026-10-14:** Source candidate 1.2.1 compiles key match/use expressions with declaring namespaces and local grammar; see [integration details](docs/INTEGRATION.md#key-indexing-static-contexts---2026-10-14). Candidate 1.2.1 remains unpublished.
+
 **Local key identities - 2026-10-14:** Source candidate 1.2.1 retains module fixed key declaration names under local earlier XSLT versions; see [integration details](docs/INTEGRATION.md#local-key-declaration-qname-identities---2026-10-14). Candidate 1.2.1 remains unpublished.
 
 **Local mode bindings - 2026-10-14:** Source candidate 1.2.1 retains module fixed mode identities under local earlier XSLT versions; see [integration details](docs/INTEGRATION.md#local-mode-qname-identities---2026-10-14). Upstream test contributions must use refreshed upstream bases as recorded in [the contribution guide](contributions/xslt40/README.md#upstream-submission-base). Candidate 1.2.1 remains unpublished.

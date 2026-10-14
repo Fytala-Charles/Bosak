@@ -548,6 +548,7 @@
 //                      | Charles Korthout | 7.32  | 13-10-2026     | Supply XSLT function keyword signatures with declaration namespace identities.
 //                      | Charles Korthout | 7.33  | 14-10-2026     | Resolve #all exclusions at their owner and copy native namespaces on every literal element. |
 //                      | Charles Korthout | 7.34  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
+//                      | Charles Korthout | 7.35  | 14-10-2026     | Compile key use expressions through the existing declaration-context host pipeline.         |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -13130,7 +13131,8 @@ internal sealed class TransformEngine
                                     return EvaluateSequenceConstructor(keyDef.Element!, XdmValue.FromNode(n), wrapInDocumentNode: false);
                                 });
                             else
-                                KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex);
+                                KeyIndex.BuildSingleKey(docRoot, keyDef, _context, keyIndex,
+                                    expressionCompiler: CompileXPathUncached);
                         }
                     }
                     finally

@@ -1,0 +1,66 @@
+{
+    "date":  "2026-10-14",
+    "base":  "d8c44a2c65d3879fb395bea558d11d696536df76",
+    "branch":  "fix/key-index-static-contexts",
+    "implementation":  "Pending commit",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "scope":  "Key match patterns and use-expression compilation retain declaration namespaces and grammar on both attribute-use and content-key paths.",
+    "verification":  {
+                         "newRegressionsPassed":  22,
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "skipped":  0,
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  10
+                                   },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "failed":  0,
+                         "fullUnitPassed":  8170,
+                         "correctedNativeFamily":  {
+                                                       "skipped":  0,
+                                                       "failed":  0,
+                                                       "passed":  16
+                                                   },
+                         "xsltUnitPassed":  5284
+                     },
+    "architecture":  "KeyIndex.CompileMatch passes declaration namespaces and effective profile directly to PatternCompiler, with owning type metadata. Runtime attribute-use indexing passes the existing CompileXPathUncached host compiler to KeyIndex, retaining defaults, base URI, schema/type context and function keyword signatures. The generic internal fallback also receives declaration maps and grammar. The obsolete lexical namespace-rewrite helper is removed.",
+    "behavior":  "Rebound/fixed-only prefixes, predicates, wildcards, earlier native modules, sequence-constructor keys, declaration base URI, function keywords, local grammar gates and excluded-prefix XPST0081 diagnostics are verified. Linked keys use their own module maps without evaluation-time resolver requests. Existing focus/current-item save and restore code is unchanged.",
+    "probe":  {
+                  "beforeCount":  0,
+                  "after":  ".guard-tmp/key-context-after-probe.log",
+                  "before":  ".guard-tmp/local-key-pattern-probe.log",
+                  "afterCount":  1,
+                  "localVersions":  [
+                                        "3.0",
+                                        "4.0"
+                                    ],
+                  "expectedCount":  1
+              },
+    "ownership":  "No new public API or gate membership changes; original source fixtures and upstream receipts are unchanged. Compilation uses retained/cached module bindings and the established host resolver/resource contract.",
+    "boundaries":  [
+                       "Broader package linkage, omitted/default host function execution and general pattern/AVT editing remain separate scopes.",
+                       "Reassess a small upstream contribution batch for these indexing boundaries, starting from refreshed current upstream.",
+                       "Upstream PR #29 review and independent processor confirmation remain pending; source candidate remains unpublished."
+                   ],
+    "logs":  [
+                 ".guard-tmp/key-context-build.log",
+                 ".guard-tmp/key-context-focused.log",
+                 ".guard-tmp/key-context-unit.log",
+                 ".guard-tmp/key-context-xslt.log",
+                 ".guard-tmp/key-context-qt3.log",
+                 ".guard-tmp/key-context-qt4.log",
+                 ".guard-tmp/key-context-native.log"
+             ],
+    "nativeSuiteRevision":  "0e3204d35a81f933cde0e01bd78f71d6cb17ff59",
+    "nativeReceipt":  ".artifacts/xslt40/20261014T050833435Z.json"
+}
