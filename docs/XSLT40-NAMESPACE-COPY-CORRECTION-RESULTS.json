@@ -1,7 +1,7 @@
 {
     "date":  "2026-10-14",
     "base":  "dc38d923",
-    "implementation":  "Pending implementation commit",
+    "implementation":  "f42027a4",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "issue":  "https://github.com/qt4cg/xslt40-test/issues/28",

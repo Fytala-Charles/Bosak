@@ -1,6 +1,6 @@
 # Literal result namespace copying correction - 2026-10-14
 
-Branch: fix/literal-result-namespace-exclusions; base main `dc38d923` (function PR #268 merged after passing CI).
+Branch: fix/literal-result-namespace-exclusions; base main `dc38d923` (function PR #268 merged after passing CI). Implementation: `f42027a4`.
 
 Michael Kay's upstream issue #28 correctly identifies missing native namespace nodes in fixed-namespaces-013/015 expectations. GetExcludedNamespaceUris now expands #all at the attribute's owning element and accumulates excluded URIs; namespace-alias targets retain their exception. Literal result copying handles each element's native in-scope bindings, including nested elements below rebound instruction namespaces. Eight new regressions cover earlier versions, scoped exclusions, URI aliases, fixed/native separation and namespace-alias targets. Two existing type/record tests separately assert native namespace retention and ordinary result attributes.
 
