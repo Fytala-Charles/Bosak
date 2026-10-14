@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover empty names and unnamed mode declarations.                                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -145,10 +146,13 @@ public class Xslt40ModeQNameTests
     }
 
     /// <summary>Namespace documents are captured during inspection, without validation retries.</summary>
-    [Fact]
-    public void NamespaceDocumentIsCapturedOnce()
+    /// <param name="version">The local declaration and template grammar.</param>
+    [Theory]
+    [InlineData("4.0")]
+    [InlineData("3.0")]
+    public void NamespaceDocumentIsCapturedOnce(string version)
     {
-        var text = Sheet("<xsl:mode name='q:m'/><xsl:template match='/' mode='q:m'><out>7</out></xsl:template>", "#standard bindings.xml", "default-mode='q:m'");
+        var text = Sheet("<xsl:mode name='q:m' version='" + version + "'/><xsl:template match='/' mode='q:m' version='" + version + "'><out>7</out></xsl:template>", "#standard bindings.xml", "default-mode='q:m'");
         var resolver = new Resolver();
         var snapshot = Inspect(text, resolver);
         int requests = resolver.Requests;
@@ -162,10 +166,47 @@ public class Xslt40ModeQNameTests
         _ = new Api.XsltCompiler { UriResolver = new AuthoringModuleUriResolverBridge(new Resolver()) }.Compile(text, MainUri.AbsoluteUri);
     }
 
-    /// <summary>Earlier local host profiles retain native bindings inside a 4.0 module.</summary>
+    /// <summary>Earlier local host profiles retain module fixed mode bindings.</summary>
     [Fact]
-    public void EarlierLocalProfileRemainsNative()
-        => AssertExecutes(Sheet("<xsl:mode name='p:m' version='3.0'/><xsl:template match='/' mode='#unnamed'><out><xsl:apply-templates select='root/item' mode='Q{urn:native}m'/></out></xsl:template><xsl:template match='item' mode='p:m' version='3.0'>7</xsl:template>"));
+    public void EarlierLocalProfileRetainsModuleBindings()
+        => AssertExecutes(Sheet("<xsl:mode name='p:m' version='3.0'/><xsl:template match='/' mode='#unnamed'><out><xsl:apply-templates select='root/item' mode='Q{urn:fixed}m'/></out></xsl:template><xsl:template match='item' mode='p:m' version='3.0'>7</xsl:template>"));
+
+    /// <summary>Declarations, membership and dispatch retain module identity under local versions.</summary>
+    /// <param name="version">The locally selected grammar.</param>
+    [Theory]
+    [InlineData("2.0")]
+    [InlineData("3.0")]
+    public void LocalModePathsAgree(string version)
+        => AssertExecutes(Sheet("<xsl:mode name='q:m' version='" + version + "'/><xsl:template match='/' mode='#unnamed' version='" + version + "'><out><xsl:apply-templates xmlns:p='urn:local' select='root/item' mode='p:m'/></out></xsl:template><xsl:template xmlns:p='urn:other' match='item' mode='p:m' version='" + version + "'>7</xsl:template>"));
+
+    /// <summary>Scoped defaults use module bindings even on locally earlier literal owners.</summary>
+    /// <param name="location">The default-mode owner.</param>
+    [Theory]
+    [InlineData("template")]
+    [InlineData("instruction")]
+    [InlineData("literal")]
+    public void LocalScopedDefaultsAgree(string location)
+    {
+        var template = location == "template" ? "version='3.0' default-mode='p:m'" : "";
+        var instruction = location == "instruction" ? "version='3.0' default-mode='p:m'" : "";
+        var literal = location == "literal" ? "xsl:version='3.0' xsl:default-mode='p:m'" : "";
+        AssertExecutes(Sheet("<xsl:mode name='q:m'/><xsl:template match='/' mode='#unnamed' " + template + "><out " + literal + "><xsl:apply-templates select='root/item' " + instruction + "/></out></xsl:template><xsl:template match='item' mode='q:m'>7</xsl:template>"));
+    }
+
+    /// <summary>Excluded prefixes in locally earlier mode constructs receive source-local errors.</summary>
+    /// <param name="body">The invalid construct.</param>
+    [Theory]
+    [InlineData("<xsl:mode name='p:m' version='3.0'/>")]
+    [InlineData("<xsl:template match='item' mode='p:m' version='3.0'/>")]
+    [InlineData("<xsl:template match='/' version='3.0'><xsl:apply-templates mode='p:m'/></xsl:template>")]
+    [InlineData("<xsl:template match='/' version='3.0' default-mode='p:m'/>")]
+    [InlineData("<xsl:template match='/'><out xsl:version='3.0' xsl:default-mode='p:m'/></xsl:template>")]
+    public void LocalExcludedModePrefixesAreRejected(string body)
+    {
+        var text = Sheet(body, "#standard");
+        Assert.Contains(XsltValidation.Validate(Inspect(text)).Diagnostics, d => d.Code == "XTSE0280" && d.Range is not null);
+        Assert.Contains("XTSE0280", Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(text)).ToString());
+    }
 
     /// <summary>Existing special template modes retain their dispatch behavior.</summary>
     /// <param name="membership">The template's special mode token.</param>

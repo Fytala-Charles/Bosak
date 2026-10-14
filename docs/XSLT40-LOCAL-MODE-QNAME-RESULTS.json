@@ -1,0 +1,57 @@
+{
+    "date":  "2026-10-14",
+    "base":  "b5583dbf1dfb1aade981cc8c965cf3f527de2dd8",
+    "branch":  "fix/xslt40-local-mode-qnames",
+    "implementation":  "c937547a",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "scope":  "Module fixed identities for mode declarations, template membership, apply-templates dispatch and scoped defaults under local earlier grammar; retained authoring namespace maps.",
+    "verification":  {
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "skipped":  0,
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  22
+                                   },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "failed":  0,
+                         "fullUnitPassed":  8129,
+                         "correctedNativeFamily":  {
+                                                       "skipped":  0,
+                                                       "failed":  0,
+                                                       "passed":  16
+                                                   },
+                         "focusedPassed":  50,
+                         "xsltUnitPassed":  5243,
+                         "newCasesPassed":  11
+                     },
+    "architecture":  "UsesApplicableModeNamespaces separates mode binding selection from local grammar. Internal mode expansion/validation accepts retained namespace maps. Declaration registration, membership, runtime defaults/dispatch and expose resolution use the same policy.",
+    "ownership":  "Original source export remains identical; namespace-document bindings are captured during inspection and repeated validation does not re-resolve them. Public QName SlotContext metadata remains unchanged.",
+    "compatibility":  "Earlier-root native profiles and existing special tokens retain their behavior. The earlier local native-binding regression expectation is corrected to the module fixed identity. No public API or gate membership changes.",
+    "upstreamPolicy":  "AGENTS.md and contributions/xslt40/README.md require refreshed current upstream default branches before branching and before submission, rebase on advancement, recorded exact bases and final diff checks to avoid issue #28 application conflicts.",
+    "boundaries":  [
+                       "Key component QNames under local versions are the next audit.",
+                       "Broader package linkage, optional/default function execution, named-type edit compilation and pattern/AVT replacement remain separate.",
+                       "Upstream PR #29 remains under review; independent processor confirmation remains pending."
+                   ],
+    "logs":  [
+                 ".guard-tmp/local-mode-build.log",
+                 ".guard-tmp/local-mode-focused.log",
+                 ".guard-tmp/local-mode-unit.log",
+                 ".guard-tmp/local-mode-xslt.log",
+                 ".guard-tmp/local-mode-qt3.log",
+                 ".guard-tmp/local-mode-qt4.log",
+                 ".guard-tmp/local-mode-native.log"
+             ],
+    "nativeSuiteRevision":  "0e3204d35a81f933cde0e01bd78f71d6cb17ff59",
+    "nativeReceipt":  ".artifacts/xslt40/20261014T044333758Z.json"
+}

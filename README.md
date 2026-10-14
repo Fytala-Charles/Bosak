@@ -5,6 +5,8 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+**Local mode bindings - 2026-10-14:** Source candidate 1.2.1 retains module fixed mode identities under local earlier XSLT versions; see [integration details](docs/INTEGRATION.md#local-mode-qname-identities---2026-10-14). Upstream test contributions must use refreshed upstream bases as recorded in [the contribution guide](contributions/xslt40/README.md#upstream-submission-base). Candidate 1.2.1 remains unpublished.
+
 **Namespace assertion correction - 2026-10-14:** Michael Kay identified missing native namespace nodes in expected outputs for fixed-namespaces-013/015 ([issue #28](https://github.com/qt4cg/xslt40-test/issues/28)). [Correction PR #29](https://github.com/qt4cg/xslt40-test/pull/29) retains the fixtures and adds namespace-sensitive checks; the corrected family passes 16/0/0 with the Bosak source fix. Prior pass receipts remain historical and did not verify namespace copying; independent processor confirmation is pending. Original 17-case upstream acceptance is retained, with two assertions under correction review. Candidate 1.2.1 remains unpublished.
 
 

@@ -36,6 +36,7 @@
 //                      | Charles Korthout | 0.16  | 13-10-2026     | Bind and validate locally earlier variable/parameter names in retained module contexts.    |
 //                      | Charles Korthout | 0.17  | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.18  | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
+//                      | Charles Korthout | 0.19  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -310,7 +311,8 @@ internal sealed class XsltValidationEngine
             || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode" or "key")) return;
         bool moduleBindings = Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(element)
             || Stylesheet.Stylesheet.UsesModuleFixedTemplateNamespaces(element)
-            || Stylesheet.Stylesheet.UsesModuleFixedFunctionNamespaces(element);
+            || Stylesheet.Stylesheet.UsesModuleFixedFunctionNamespaces(element)
+            || (element.Name.LocalName == "mode" && Stylesheet.Stylesheet.HasModuleFixedNamespaces(element));
         if (GetEffectiveVersion(node) < 4.0 && !moduleBindings) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
@@ -339,7 +341,8 @@ internal sealed class XsltValidationEngine
     /// <summary>Checks literal mode references using their captured applicable namespace context.</summary>
     private void CheckModeReferences(ModuleWalkState state, AuthoringNodeDescriptor node)
     {
-        if (GetEffectiveVersion(node) < 4.0 || node.BackingObject is not XElement element) return;
+        if (node.BackingObject is not XElement element
+            || !Stylesheet.Stylesheet.UsesApplicableModeNamespaces(element)) return;
         bool xslt = element.Name.NamespaceName == AttributeSlotClassifier.XsltNamespace;
         foreach (var attribute in node.Attributes)
         {
@@ -351,7 +354,7 @@ internal sealed class XsltValidationEngine
                 || ReportStaticNamespaceError(state, attribute, context)) continue;
             try
             {
-                Stylesheet.Stylesheet.ValidateModeReference(element, attribute.LocalName, attribute.ExpandedValue);
+                Stylesheet.Stylesheet.ValidateModeReference(element, attribute.LocalName, attribute.ExpandedValue, context.StaticNamespaces);
             }
             catch (InvalidOperationException ex)
             {

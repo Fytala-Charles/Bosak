@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 2.14  | 13-10-2026     | Resolve 4.0 pattern prefixes using applicable static namespace bindings                |
 //                      | Charles Korthout | 2.15  | 13-10-2026     | Resolve XSLT 4.0 template mode membership using applicable namespaces.                   |
 //                      | Charles Korthout | 2.16  | 13-10-2026     | Preserve module fixed bindings in locally earlier template match patterns.                 |
+//                      | Charles Korthout | 2.17  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -313,7 +314,7 @@ internal sealed class TemplateRule
 
     internal static IReadOnlyList<string> ParseModes(string? modeAttr, XElement element, string stylesheetDefaultMode)
     {
-        if (modeAttr is not null && Stylesheet.UsesXPath40Namespaces(element))
+        if (modeAttr is not null && Stylesheet.UsesApplicableModeNamespaces(element))
             Stylesheet.ValidateTemplateModeAttribute(element, modeAttr);
 
         if (string.IsNullOrEmpty(modeAttr))
@@ -356,7 +357,7 @@ internal sealed class TemplateRule
     /// </summary>
     private static string ExpandModeName(string mode, XElement element)
     {
-        if (Stylesheet.UsesXPath40Namespaces(element))
+        if (Stylesheet.UsesApplicableModeNamespaces(element))
             return mode == "#unnamed" ? "" : Stylesheet.ExpandModeName(mode, element);
 
         int colon = mode.IndexOf(':');

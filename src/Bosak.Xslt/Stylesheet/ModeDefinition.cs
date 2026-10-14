@@ -34,6 +34,7 @@
 //                      | Charles Korthout | 1.5   | 13-10-2026     | Reject explicit empty names while retaining unnamed mode declarations.                  |
 //                      |                  |       |                | by a higher-import-precedence declaration are resolved (mode-1505 vs mode-1506)          |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.6   | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -375,7 +376,7 @@ internal sealed class ModeDefinition
         if (mode is "#current" or "#default" or "#all" or "#unnamed")
             throw new InvalidOperationException($"XTSE0020: Invalid mode name '{mode}' in xsl:mode/@name.");
 
-        if (Stylesheet.UsesXPath40Namespaces(element) && (mode.Length != 0 || element.Attribute("name") is not null))
+        if (Stylesheet.UsesApplicableModeNamespaces(element) && (mode.Length != 0 || element.Attribute("name") is not null))
             return Stylesheet.ExpandModeQName(element, mode);
 
         int colon = mode.IndexOf(':');
