@@ -1,3 +1,14 @@
+# Key indexing static contexts - 2026-10-14
+
+Branch: fix/key-index-static-contexts; base main d8c44a2c (key-name PR #271 merged after passing CI). Implementation: cd25f9e5.
+
+What was built: KeyIndex compiles match patterns directly with declaring applicable namespaces, local grammar and owning type metadata. Attribute-use indexing reuses TransformEngine.CompileXPathUncached through an internal callback, retaining declaration defaults, base URI, schemas/types and function keyword signatures. Content-key indexing shares the same match compiler. The obsolete native lexical prefix-rewrite helper is removed. Twenty-two regressions cover rebinding, predicates, wildcards, content keys, declaration URI, host keywords, declaration/caller grammar boundaries, excluded-prefix errors, earlier native modules and independent linked-module contexts without evaluation-time resolver requests. Focus/current-item save and restore code is unchanged.
+
+Verification: all 8,170 unit tests pass including XSLT 5,284/0/0; all 22 focused checks pass. Final incremental Release build: 0 errors/10 warnings. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged corrected native family 16/0/0 at suite 0e3204d3. Original probe now returns one rather than zero under local 3.0 and 4.0. Evidence: docs/XSLT40-KEY-INDEX-CONTEXT-RESULTS.json and key-context scratch logs. No public API or gate membership changes; native fixtures and original receipts are preserved.
+
+Delivery: submit verified slice and merge after CI. Next: reassess a small specification-derived upstream contribution batch for key match/use namespace contexts, avoiding duplicate coverage. Fetch current upstream before branching and again before submission, rebase on advancement, record bases and inspect the final diff. Upstream correction PR #29 remains under review; independent processor confirmation remains pending. Broader package linkage, optional/default host function execution and pattern/AVT editing remain separate. Published 1.2.0 remains unchanged; candidate 1.2.1 unpublished. No new upstream submission or external message in this slice.
+
+Earlier records below are historical.
 # Local key declaration QName identities - 2026-10-14
 
 Branch: fix/xslt40-local-key-qnames; base main b045ba03 (mode PR #270 merged after passing CI). Implementation: 96923f1b.
