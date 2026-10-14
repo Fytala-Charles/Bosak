@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-14",
+  "engine": {
+    "sourceCandidate": "1.5.0",
+    "revision": "bfb050e5c75752eb324263d456cc8676511c01e2",
+    "pr": 288,
+    "ci": 38615928472,
+    "solutionPassed": 8331,
+    "languageServerPassed": 84,
+    "ciLogSha256": "cf30e670aa8204a76df1d3f396cd496ca42a48a8974b1d8f657aa4eb704ff16d",
+    "codeTrees": {
+      "src": "cd2cd2bc97321b34068d1ecb3d0061cc80219757",
+      "tests": "82a3dd2f4bf8b7c358bf5f1a39310a6c8ae0a80f"
+    }
+  },
+  "extension": {
+    "candidate": "0.2.0",
+    "engine": "1.4.0",
+    "revision": "ebd37910835f50c83f377d6ad37f06e90fd90913",
+    "pr": 287,
+    "ci": 38613559773,
+    "solutionPassed": 8298,
+    "languageServerPassed": 84,
+    "ciLogSha256": "b4bfac702750868e682107f1926bd4a846335d74112a49b5ddaeb53e78e0c45d",
+    "reviewedPackage": {
+      "extensionVersion": "0.2.0",
+      "engineVersion": "1.4.0",
+      "archiveSha256": "e01288149722de079d14538b19c6fb99526c56e42a1d805c3852a98ce5e29bb2",
+      "bundledProjects": [
+        "Bosak.LanguageServer/1.4.0",
+        "Bosak.XPath.Api/1.4.0",
+        "Bosak.XPath.Compiler/1.4.0",
+        "Bosak.XPath.Core/1.4.0",
+        "Bosak.XPath.Parser/1.4.0",
+        "Bosak.XPath.Providers/1.4.0",
+        "Bosak.XPath.Runtime/1.4.0",
+        "Bosak.XPath.Standard/1.4.0",
+        "Bosak.XQuery/1.4.0",
+        "Bosak.Xslt/1.4.0"
+      ],
+      "packagedStdioChecks": [
+        {
+          "expression": "divide(a := 9)",
+          "diagnostics": []
+        },
+        {
+          "expression": "divide(?, b := 3)(9)",
+          "diagnostics": []
+        },
+        {
+          "expression": "divide(unknown := 9)",
+          "diagnostics": [
+            {
+              "range": {
+                "start": {
+                  "line": 0,
+                  "character": 269
+                },
+                "end": {
+                  "line": 0,
+                  "character": 289
+                }
+              },
+              "severity": 1,
+              "code": "XPST0017",
+              "source": "bosak",
+              "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+            }
+          ]
+        }
+      ]
+    },
+    "editor": {
+      "extensionVersion": "0.2.0",
+      "results": [
+        {
+          "name": "valid",
+          "languageId": "xslt",
+          "diagnostics": []
+        },
+        {
+          "name": "invalid",
+          "languageId": "xslt",
+          "diagnostics": [
+            "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+          ]
+        },
+        {
+          "name": "corrected-live",
+          "diagnostics": []
+        }
+      ]
+    },
+    "artifact": ".guard-tmp/vscode-bosak-0.2.0-reviewed.vsix"
+  },
+  "publicationPerformed": false,
+  "publishedLibraries": "1.4.0",
+  "publishedMarketplace": "0.1.6",
+  "originalPreparationEvidencePreserved": true,
+  "upstreamCorrectionRule": "Fetch current upstream before any follow-up correction and rebase if it advances."
+}
