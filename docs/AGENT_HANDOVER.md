@@ -1,6 +1,6 @@
 # Key indexing static contexts - 2026-10-14
 
-Branch: fix/key-index-static-contexts; base main d8c44a2c (key-name PR #271 merged after passing CI).
+Branch: fix/key-index-static-contexts; base main d8c44a2c (key-name PR #271 merged after passing CI). Implementation: cd25f9e5.
 
 What was built: KeyIndex compiles match patterns directly with declaring applicable namespaces, local grammar and owning type metadata. Attribute-use indexing reuses TransformEngine.CompileXPathUncached through an internal callback, retaining declaration defaults, base URI, schemas/types and function keyword signatures. Content-key indexing shares the same match compiler. The obsolete native lexical prefix-rewrite helper is removed. Twenty-two regressions cover rebinding, predicates, wildcards, content keys, declaration URI, host keywords, declaration/caller grammar boundaries, excluded-prefix errors, earlier native modules and independent linked-module contexts without evaluation-time resolver requests. Focus/current-item save and restore code is unchanged.
 

@@ -2,7 +2,7 @@
     "date":  "2026-10-14",
     "base":  "d8c44a2c65d3879fb395bea558d11d696536df76",
     "branch":  "fix/key-index-static-contexts",
-    "implementation":  "Pending commit",
+    "implementation":  "cd25f9e5",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "scope":  "Key match patterns and use-expression compilation retain declaration namespaces and grammar on both attribute-use and content-key paths.",
