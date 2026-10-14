@@ -4,6 +4,8 @@
   <p>Verified source correction - 14 October 2026</p>
 </div>
 
+**Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](XSLT40-PRIMITIVE-NUMERIC-COERCION.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.
+
 When an omitted XSLT 4.0 function argument has a default that does not satisfy its declared type, Bosak now reports **XPTY0004** through its existing function-argument conversion path. The initial optional-function implementation reported XTTE0600. The correction applies consistently to direct, keyword and arrow calls, named references, lookup and partial application. It also preserves errors raised while evaluating the default and skips invalid defaults when a valid explicit argument is supplied.
 
 The [XSLT 4.0 parameter rules](https://qt4cg.org/specifications/xslt-40/Overview.html#function-arguments) delegate function parameter conversion and errors to XPath. [XPath 4.0 static call evaluation](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-eval-static-function-call) applies argument coercion to both supplied values and defaults; [cardinality coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules) reports XPTY0004. Upstream implicit-default case `function-40-904` therefore required a Bosak fix.

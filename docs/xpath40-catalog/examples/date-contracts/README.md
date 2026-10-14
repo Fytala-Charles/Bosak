@@ -255,7 +255,7 @@ The [contract review](../../DATE-TIME-CONTRACT-REVIEW.md) links the pinned speci
 | [seconds-day.xpath](seconds-day.xpath) | 40 | `P1D` |
 | [seconds-string.xpath](seconds-string.xpath) | 40 | `XPTY0004` |
 | [seconds-untyped.xpath](seconds-untyped.xpath) | 40 | `PT1.25S` |
-| [seconds-double.xpath](seconds-double.xpath) | 40 | `XPTY0004` |
+| [seconds-double.xpath](seconds-double.xpath) | 40 | `PT1.25S` |
 | [seconds-boolean.xpath](seconds-boolean.xpath) | 40 | `XPTY0004` |
 | [seconds-multiple.xpath](seconds-multiple.xpath) | 40 | `XPTY0004` |
 | [seconds-wrong-map.xpath](seconds-wrong-map.xpath) | 40 | `XPTY0004` |
