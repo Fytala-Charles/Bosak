@@ -1,3 +1,15 @@
+# VS Code XSLT highlighting - 2026-10-14
+
+Base main 8bba94dd (1.2.1 publication documentation integrated). Branch fix/vscode-xslt-highlighting. User requested distinct attribute name/value colors and function/string colors in select="concat('a','b')". Extension candidate version 0.1.6; library version remains published 1.2.1.
+
+Implemented: XSLT expression grammar precedes XML fallback; generic XML attributes remain strings; both quote styles, multiline expressions and doubled XPath quotes. Semantic tokenization scopes code to expression attributes on conventional xsl: tags, masks strings/nested comments, recognizes unprefixed functions and produces nonoverlapping single-line tokens. XML text/comments/CDATA/processing instructions excluded. CI adds the separate language-server tests (outside Bosak.sln) and actual TextMate grammar checks.
+
+Verification: solution 8,170/0/0 (XSLT 5,284); language server 77/0/0 including 12 focused checks; TextMate tests and TypeScript compile pass. Actual installed Dark+ theme gives select #9CDCFE, concat #DCDCAA, strings #CE9178. Local VSIX built with refreshed server; evidence docs/VSCODE-XSLT-HIGHLIGHTING.json. Conventional xsl prefix retained; AVTs/text templates and arbitrary prefix aliases remain follow-ups. No engine or public library API changes; frozen conformance receipts remain valid.
+
+Next: submit and integrate after CI; provide the concrete VSIX for user review. Marketplace publication requires authorization for this extension candidate; the previous tag/publish approval concerned library 1.2.1. Optional/default XSLT function execution remains the planned engine task after this sidestep. Upstream #29/#30 review and independent confirmation remain pending; use refreshed upstream before contribution branching/submission.
+
+Earlier records below are historical.
+
 # 1.2.1 publication - 2026-10-14
 
 User explicitly approved publication of verified main revision 70f5c5b2c1b18a238ad8b90b6cad204b840e460c. Annotated tag v1.2.1 pushed at that revision. Release workflow 38525706208 succeeded: all 8,170 tests pass, all ten 1.2.1 packages uploaded. GitHub release: https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.1. Publication source and tests match the fully verified preparation candidate ed5080b5; QT3 31,142/0/679, qt4 gate-only 8,278/0/1,894. Final main-based local consumer passed 60 checks.

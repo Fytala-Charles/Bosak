@@ -2,6 +2,12 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
+## Highlighting correction (0.1.6 candidate)
+
+XML attribute names and plain attribute values have separate scopes. In XSLT expression attributes such as `select="concat('a','b')"`, attribute names, function calls, strings, variables and numbers use distinct token categories. Both XML quote styles and multiline values are supported. Colors follow the active theme; Dark+ displays `select` light blue, `concat` yellow and the strings orange.
+
+The new 0.1.6 candidate is available as a local VSIX; Marketplace publication remains pending. Use **Extensions: Install from VSIX...**, select the candidate package, then **Developer: Reload Window**. The language mode for `.xsl`/`.xslt` files should be **XSLT**. Attribute value templates and arbitrary aliases of the XSLT namespace prefix remain outside this focused correction.
+
 ## Features
 
 - **Syntax highlighting** for XPath (`.xpath`), XSLT (`.xsl`, `.xslt`), and XQuery (`.xq`, `.xqy`, `.xquery`) files

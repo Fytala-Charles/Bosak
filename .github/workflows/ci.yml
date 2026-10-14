@@ -30,6 +30,9 @@ jobs:
       - name: Test
         run: dotnet test Bosak.sln -c Release --no-build --logger trx --results-directory TestResults
 
+      - name: Language-server tests
+        run: dotnet test tests/Bosak.LanguageServer.Tests -c Release --logger trx --results-directory TestResults
+
       - name: Upload test results on failure
         if: failure()
         uses: actions/upload-artifact@v4
@@ -37,3 +40,20 @@ jobs:
           name: test-results
           path: TestResults
           retention-days: 14
+
+  extension-highlighting:
+    name: VS Code highlighting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: vscode-bosak/package-lock.json
+      - name: Compile and verify TextMate highlighting
+        working-directory: vscode-bosak
+        run: |
+          npm ci
+          npm run compile
+          npm test
