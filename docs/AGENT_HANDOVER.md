@@ -1,3 +1,12 @@
+# 1.3.2 release preparation - 2026-10-14
+
+Main implementation67644ba38dce654356c81aae1fdf60266bca87fc includes numeric PR281 merged after exact-head CI38584099424 passed. Frozen scope is optional/default ordinary XSLT4 functions plus default conversion errors and permitted primitive numeric casts. All ten local packages verified from this exact main; fresh-cache package-only consumer79checks and ten assembly versions1.3.2.0; Bosak source mapping pins local candidate feed. Evidence docs/RELEASE-1.3.2-PREPARATION.json and notes docs/RELEASE-NOTES-1.3.2.md. Source/tests trees and logs hashed. The initial 3.0 smoke fixture incorrectly retained a default (XTSE0760); corrected. A crashed apphost prevented a retry copy; final fresh-output consumer without apphost passed. Preliminary runs excluded.
+
+Existing successful implementation verification8259solution/5373Xslt/77LS; frozen gates31142/0/679 and8278/0/1894. No engine edits in release preparation. Upstream31/32 freshly checked OPEN/no reviews; current32headacb80188 retains903fixture. Independent acceptance pending. Submit corrections against freshly fetched current upstream, not old branches, and rebase if advanced.
+
+Next: review/integrate release preparation documentation only after exact-head CI passes. Repack and repeat consumer/content checks for the merged revision, comparing source/test trees. Then ask approval for tag v1.3.2 and publication: the user authorized preparation, not this new publication. Published libraries1.2.1, extension0.1.6. Do not trigger release workflow_dispatch or push a v tag before approval. Preserve scratch/baselines and historical receipts.
+
+Earlier records below are historical.
 # Primitive numeric coercion and normative clarification - 2026-10-14
 
 Base main30d71aacf3433963579e31b2dc866bf56eae7df0 includes default-error PR280 merged after exact-head CI38578045289 succeeded. Current branch fix/xslt40-primitive-numeric-coercion; implementation ee8a5588ae3853c2c3a1615502aed71044e8cfb5. User continued the recommended numeric review. Source candidate1.3.2 patch bump (unpublished); libraries1.2.1 and extension0.1.6 published. No release authorization.
