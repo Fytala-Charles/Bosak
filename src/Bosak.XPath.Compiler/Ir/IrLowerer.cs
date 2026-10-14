@@ -131,6 +131,7 @@
 //                      |                  |       |                | names join let-scoping helpers (CollectTopLevelLetNames / FLWOR bound variables)
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 14-10-2026     | Lower omitted host argument markers as boxed undefined values.                           |
+//                      | Charles Korthout | 1.55  | 14-10-2026     | Support private namespace-free XSLT 4.0 functions.                                      |
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -939,7 +940,7 @@ internal sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
 
         int funcPoolIdx;
-        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        if (node.NamespaceUri is not null)
         {
             funcPoolIdx = AddToLiteralPool((node.LocalName, node.NamespaceUri));
         }
@@ -969,7 +970,7 @@ internal sealed class IrLowerer
             // Load the named function as a function item
             int funcReg = AllocRegister();
             int funcItemPoolIdx;
-            if (!string.IsNullOrEmpty(node.NamespaceUri))
+            if (node.NamespaceUri is not null)
             {
                 funcItemPoolIdx = AddToLiteralPool(new NamedFunctionItem(node.NamespaceUri, node.LocalName, argCount));
             }
@@ -1071,7 +1072,7 @@ internal sealed class IrLowerer
     private int LowerNamedFunctionRef(NamedFunctionRefNode node, int? targetReg)
     {
         int resultReg = targetReg ?? AllocRegister();
-        if (!string.IsNullOrEmpty(node.NamespaceUri))
+        if (node.NamespaceUri is not null)
         {
             int nsPoolIdx = AddToLiteralPool(new NamedFunctionItem(node.NamespaceUri, node.LocalName, node.Arity));
             Emit(IrOpCode.LoadFunction, (ushort)resultReg, operand: nsPoolIdx);
@@ -2005,7 +2006,7 @@ internal sealed class IrLowerer
             case FunctionCallNode staticCall:
                 {
                     int funcPoolIdx;
-                    if (!string.IsNullOrEmpty(staticCall.NamespaceUri))
+                    if (staticCall.NamespaceUri is not null)
                     {
                         funcPoolIdx = AddToLiteralPool((staticCall.LocalName, staticCall.NamespaceUri));
                     }
@@ -2042,7 +2043,7 @@ internal sealed class IrLowerer
 
                         int funcReg = AllocRegister();
                         int funcRefPoolIdx;
-                        if (!string.IsNullOrEmpty(staticCall.NamespaceUri))
+                        if (staticCall.NamespaceUri is not null)
                         {
                             funcRefPoolIdx = AddToLiteralPool(new NamedFunctionItem(staticCall.NamespaceUri, staticCall.LocalName, argCount));
                         }

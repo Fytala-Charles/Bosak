@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -102,7 +103,7 @@ public class Xslt40FunctionQNameTests
     [InlineData("p:f", "#standard p=http://www.w3.org/2005/xpath-functions/math", "XTSE0080")]
     public void InvalidFunctionNamesAreRejected(string name, string bindings, string code)
     {
-        var text = Sheet("<xsl:function name='" + name + "'><xsl:sequence select='7'/></xsl:function>", bindings);
+        var text = Sheet("<xsl:function name='" + name + "'" + (code == "XTSE0740" ? " visibility='public'" : "") + "><xsl:sequence select='7'/></xsl:function>", bindings);
         Assert.Contains(code, Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(text)).Message);
         Assert.Contains(Validate(text).Diagnostics, d => d.Code == code);
     }

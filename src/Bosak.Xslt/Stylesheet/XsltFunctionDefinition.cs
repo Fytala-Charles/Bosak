@@ -28,6 +28,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.3   | 14-10-2026     | Retain the optional parameter arity range.                                               |
+//                      | Charles Korthout | 0.4   | 14-10-2026     | Support private namespace-free XSLT 4.0 functions.                                      |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -129,7 +130,7 @@ internal sealed class XsltFunctionDefinition
     /// <param name="element">The xsl:function element to parse.</param>
     /// <param name="stylesheet">The stylesheet module that declares the function.</param>
     /// <returns>The parsed function definition, or null when the element has no usable name.</returns>
-    /// <exception cref="InvalidOperationException">XTSE0020/XTSE0740/XTSE0080: the function name is invalid, not in a namespace, or in a reserved namespace.</exception>
+    /// <exception cref="InvalidOperationException">XTSE0020/XTSE0740/XTSE0080: the function name is invalid, has disallowed namespace-free visibility/profile, or uses a reserved namespace.</exception>
     public static XsltFunctionDefinition? FromElement(XElement element, Stylesheet stylesheet)
     {
         var nameAttr = element.Attribute("name")?.Value;
@@ -174,8 +175,7 @@ internal sealed class XsltFunctionDefinition
             throw new InvalidOperationException($"XTSE0020: '{displayName}' is not a valid QName in xsl:function/@name.");
         }
 
-        if (string.IsNullOrEmpty(nsUri))
-            throw new InvalidOperationException("XTSE0740: xsl:function name must be in a namespace.");
+        ValidateNamespaceFreeVisibility(element, nsUri);
 
         if (ReservedFunctionNamespaces.Contains(nsUri))
             throw new InvalidOperationException("XTSE0080: xsl:function name must not use a reserved namespace.");
@@ -323,11 +323,23 @@ internal sealed class XsltFunctionDefinition
             "xsl:function/@name", useApplicableNamespaces: true,
             namespaceBindings: namespaceBindings ?? (Stylesheet.UsesModuleFixedFunctionNamespaces(element)
                 ? Stylesheet.GetApplicableStaticNamespaces(element) : null));
-        if (expanded.namespaceUri.Length == 0)
-            throw new InvalidOperationException("XTSE0740: xsl:function name must be in a namespace.");
+        ValidateNamespaceFreeVisibility(element, expanded.namespaceUri);
         if (ReservedFunctionNamespaces.Contains(expanded.namespaceUri))
             throw new InvalidOperationException("XTSE0080: xsl:function name must not use a reserved namespace.");
         return expanded;
+    }
+
+    private static void ValidateNamespaceFreeVisibility(XElement element, string namespaceUri)
+    {
+        if (namespaceUri.Length != 0) return;
+        var version = element.AncestorsAndSelf()
+            .Select(e => e.Name.NamespaceName == Stylesheet.XslNamespace
+                ? e.Attribute("version") : e.Attribute(XName.Get("version", Stylesheet.XslNamespace)))
+            .FirstOrDefault(a => a is not null)?.Value;
+        if (!double.TryParse(version, NumberStyles.Any, CultureInfo.InvariantCulture, out var effectiveVersion)
+            || effectiveVersion < 4.0
+            || (element.Attribute("visibility")?.Value.Trim() ?? "private") != "private")
+            throw new InvalidOperationException("XTSE0740: A namespace-free function requires XSLT 4.0 and private visibility.");
     }
 
     /// <summary>

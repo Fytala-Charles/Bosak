@@ -97,6 +97,7 @@
 //                      | Charles Korthout | 3.25  | 13-10-2026     | Evaluate mixed 4.0 intersect/except pattern chains from left to right.
 //                      | Charles Korthout | 3.26  | 13-10-2026     | Match 4.0 set-pattern axis operands against the candidate node.
 //                      | Charles Korthout | 3.27  | 13-10-2026     | Validate 4.0 template pattern prefixes eagerly using lexer tokens.                     |
+//                      | Charles Korthout | 3.28  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -129,6 +130,8 @@ internal sealed class PatternCompiler
     private static readonly Regex UnionPattern = new(@"\s*\|\s*", RegexOptions.Compiled);
 
     private readonly EvaluationContext? _validationContext;
+    private readonly Func<string, string, int, IReadOnlyList<string>?>? _functionParameterNames;
+    private readonly Func<string, string, int, int?>? _functionMinimumArity;
     private string? _defaultElementNamespace;
     private IReadOnlyDictionary<string, string>? _namespaces;
     private ModeTyped? _typedMode;
@@ -143,9 +146,15 @@ internal sealed class PatternCompiler
     /// Creates a pattern compiler.
     /// </summary>
     /// <param name="validationContext">Optional evaluation context used when validating pattern predicates at compile time.</param>
-    public PatternCompiler(EvaluationContext? validationContext = null)
+    /// <param name="functionParameterNames">Host function parameter identities for keyword binding.</param>
+    /// <param name="functionMinimumArity">Host function availability and required arity.</param>
+    public PatternCompiler(EvaluationContext? validationContext = null,
+        Func<string, string, int, IReadOnlyList<string>?>? functionParameterNames = null,
+        Func<string, string, int, int?>? functionMinimumArity = null)
     {
         _validationContext = validationContext;
+        _functionParameterNames = functionParameterNames;
+        _functionMinimumArity = functionMinimumArity;
     }
 
     private XPathCompatibility _compatibility = XPathCompatibility.XPath31;
@@ -170,6 +179,8 @@ internal sealed class PatternCompiler
             DefaultElementNamespace = _defaultElementNamespace,
             SchemaSet = schemaSet,
             Namespaces = _namespaces,
+            FunctionParameterNames = _functionParameterNames,
+            FunctionMinimumArity = _functionMinimumArity,
             ItemTypeAliases = _itemTypeAliases,
             NamedRecordTypeNames = _namedRecordTypeNames,
         };

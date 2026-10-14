@@ -17,6 +17,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.5   | 14-10-2026     | Capture required prefixes and all optional function arities.                             |
+//                      | Charles Korthout | 0.6   | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 // ===========================================================================================================================================================
 
 using System.Collections.Frozen;
@@ -59,8 +60,12 @@ internal sealed class AuthoringFunctionSignatures
     }
 
     internal int? ResolveMinimumArity(string namespaceUri, string localName, int arity)
-        => _optional.TryGetValue((namespaceUri, localName, arity), out var minimum) ? minimum
+    {
+        if (_uncertain.Contains((namespaceUri, localName)))
+            throw new AuthoringFunctionSignatureCoverageException("Conditional, shadow or ambiguous function signatures remain outside captured name resolution coverage.");
+        return _optional.TryGetValue((namespaceUri, localName, arity), out var minimum) ? minimum
             : _signatures.TryGetValue((namespaceUri, localName, arity), out var names) ? names.Count : null;
+    }
 
     internal static AuthoringFunctionSignatures Capture(
         IReadOnlyList<(XElement Root, string BaseUri, int Precedence)> modules,

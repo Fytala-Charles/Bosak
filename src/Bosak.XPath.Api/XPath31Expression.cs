@@ -68,6 +68,7 @@
 //                      | Charles Korthout | 0.34  | 13-10-2026     | Expand XSLT host keyword calls using declared parameter QName identities.
 //                      | Charles Korthout | 0.35  | 13-10-2026     | Reject undeclared prefixes in host function keyword names.                               |
 //                      | Charles Korthout | 0.36  | 14-10-2026     | Preserve optional host keyword omissions for declaration-time defaults.                  |
+//                      | Charles Korthout | 0.37  | 14-10-2026     | Support private namespace-free XSLT 4.0 functions.                                      |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -614,11 +615,21 @@ public sealed class XPath31Expression
             ? ResolveFunctionCall(fc, options, arrowInsertsFirst: true)
             : ResolveFunctionNamespaces(target, options);
 
+    private static string? ResolveFunctionNamespace(string? namespaceUri, string? prefix, string localName,
+        int arity, CompileOptions options)
+    {
+        // An explicit Q{} name is resolved already; null alone means unresolved.
+        if (namespaceUri is not null) return namespaceUri;
+        if (string.IsNullOrEmpty(prefix) && options.Compatibility >= XPathCompatibility.XPath40
+            && options.FunctionMinimumArity?.Invoke(string.Empty, localName, arity) is not null)
+            return string.Empty;
+        return ResolvePrefix(prefix, options);
+    }
+
     private static FunctionCallNode ResolveFunctionCall(FunctionCallNode node, CompileOptions options, bool arrowInsertsFirst = false)
     {
-        var nsUri = string.IsNullOrEmpty(node.NamespaceUri)
-            ? ResolvePrefix(node.Prefix, options)
-            : node.NamespaceUri;
+        var nsUri = ResolveFunctionNamespace(node.NamespaceUri, node.Prefix, node.LocalName,
+            node.Arguments.Count + (node.KeywordArguments?.Count ?? 0) + (arrowInsertsFirst ? 1 : 0), options);
         var resolvedKeywords = node.KeywordArguments?
             .Select(k => k with { Value = ResolveFunctionNamespaces(k.Value, options) })
             .ToList();
@@ -645,11 +656,11 @@ public sealed class XPath31Expression
     // to the corresponding standard registration.
     private static FunctionCallNode ExpandKeywordArguments(FunctionCallNode node, CompileOptions options, bool arrowInsertsFirst)
     {
-        if (node.Arguments.Any(a => a is ArgumentPlaceholderNode))
+        if (node.NamespaceUri != string.Empty && node.Arguments.Any(a => a is ArgumentPlaceholderNode))
             throw new InvalidOperationException("XPST0017: Argument placeholders cannot be combined with keyword arguments.");
 
         var nsUri = node.NamespaceUri;
-        if (string.IsNullOrEmpty(nsUri))
+        if (nsUri is null)
         {
             // Unresolved prefixes fall back to the canonical predefined bindings (same
             // treatment as ThrowIfXPath40OnlyFunction).
@@ -662,7 +673,7 @@ public sealed class XPath31Expression
             };
         }
         var suppliedArity = node.Arguments.Count + node.KeywordArguments!.Count + (arrowInsertsFirst ? 1 : 0);
-        var hostNames = string.IsNullOrEmpty(nsUri) ? null
+        var hostNames = nsUri is null ? null
             : options.FunctionParameterNames?.Invoke(nsUri, node.LocalName, suppliedArity);
         int minimumArity = hostNames is null ? int.MaxValue
             : options.FunctionMinimumArity?.Invoke(nsUri!, node.LocalName, suppliedArity) ?? hostNames.Count;
@@ -777,9 +788,7 @@ public sealed class XPath31Expression
 
     private static NamedFunctionRefNode ResolveNamedFunctionRef(NamedFunctionRefNode node, CompileOptions options)
     {
-        var nsUri = string.IsNullOrEmpty(node.NamespaceUri)
-            ? ResolvePrefix(node.Prefix, options)
-            : node.NamespaceUri;
+        var nsUri = ResolveFunctionNamespace(node.NamespaceUri, node.Prefix, node.LocalName, node.Arity, options);
         var resolved = node with { NamespaceUri = nsUri };
         ThrowIfRemovedFunction(resolved.NamespaceUri, resolved.LocalName);
         ThrowIfXPath40OnlyFunction(resolved.NamespaceUri, resolved.LocalName, resolved.Arity, resolved.Prefix, options);

@@ -39,6 +39,7 @@
 //                      | Charles Korthout | 0.19  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 0.20  | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 //                      | Charles Korthout | 0.21  | 14-10-2026     | Validate host keyword omissions using captured optional signatures.                      |
+//                      | Charles Korthout | 0.22  | 14-10-2026     | Validate private namespace-free function profiles.                                      |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -316,7 +317,7 @@ internal sealed class XsltValidationEngine
             || Stylesheet.Stylesheet.UsesModuleFixedFunctionNamespaces(element)
             || Stylesheet.Stylesheet.UsesModuleFixedKeyNamespaces(element)
             || (element.Name.LocalName == "mode" && Stylesheet.Stylesheet.HasModuleFixedNamespaces(element));
-        if (GetEffectiveVersion(node) < 4.0 && !moduleBindings) return;
+        if (GetEffectiveVersion(node) < 4.0 && !moduleBindings && element.Name.LocalName != "function") return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
         if (attribute.DeclarationContext is { } context && ReportStaticNamespaceError(state, attribute, context)) return;
