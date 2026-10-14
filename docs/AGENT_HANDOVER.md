@@ -1,6 +1,6 @@
 # Local mode QName identities and upstream submission policy - 2026-10-14
 
-Branch: fix/xslt40-local-mode-qnames; base main b5583dbf (namespace-copying PR #269 merged after passing CI).
+Branch: fix/xslt40-local-mode-qnames; base main b5583dbf (namespace-copying PR #269 merged after passing CI). Implementation: c937547a.
 
 What was built: UsesApplicableModeNamespaces separates mode namespace binding policy from local grammar. Declarations, template membership, apply-templates/default dispatch, scoped defaults and expose resolution retain module fixed identities under local earlier versions. Authoring mode diagnostics and references use retained maps. Eleven added cases cover local 2.0/3.0 grammar, fixed-only/rebound prefixes, aliases, explicit identities, excluded-prefix diagnostics, scoped owners and namespace documents without validation retries. The older local-native expectation is corrected; earlier-root native profiles, special modes and public metadata remain covered.
 

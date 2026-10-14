@@ -2,7 +2,7 @@
     "date":  "2026-10-14",
     "base":  "b5583dbf1dfb1aade981cc8c965cf3f527de2dd8",
     "branch":  "fix/xslt40-local-mode-qnames",
-    "implementation":  "Pending commit",
+    "implementation":  "c937547a",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "scope":  "Module fixed identities for mode declarations, template membership, apply-templates dispatch and scoped defaults under local earlier grammar; retained authoring namespace maps.",
