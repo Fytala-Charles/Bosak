@@ -1,7 +1,7 @@
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak VS Code XSLT highlighting correction">
   <br><br><h1>XSLT highlighting correction</h1>
-  <p>Extension 0.1.6 candidate - 14 October 2026</p>
+  <p>Published extension 0.1.6 - 14 October 2026</p>
 </div>
 
 The XML grammar previously took precedence over XSLT expression rules, while the semantic provider scanned entire XML files as XPath. The correction gives attribute names and literal values separate scopes and places XPath expressions in `meta.embedded.block.xpath`. `name`, `href`, namespace declarations and literal result attributes retain XML value styling. Expression rules support single and double XML quotes and multiline attributes.
@@ -20,4 +20,4 @@ Verification: all 8,170 solution tests pass (including 5,284 XSLT tests); the se
 
 The correction retains the existing conventional `xsl:` prefix support. Attribute value templates, text value templates and arbitrary XSLT prefix aliases are separate work. Exact colors depend on the active theme. This follows [VS Code's embedded-language scope guidance](https://code.visualstudio.com/api/language-extensions/syntax-highlight-guide).
 
-Install the local `vscode-bosak-0.1.6.vsix` using **Extensions: Install from VSIX...**, then **Developer: Reload Window**. Confirm the file's language mode is **XSLT**. Library version 1.2.1 remains published; extension 0.1.6 is prepared locally and is not yet published to the Marketplace. Evidence is recorded in [the highlighting receipt](VSCODE-XSLT-HIGHLIGHTING.json).
+Install the local `vscode-bosak-0.1.6.vsix` using **Extensions: Install from VSIX...**, then **Developer: Reload Window**. Confirm the file's language mode is **XSLT**. Library version 1.2.1 remains published; extension 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). The downloaded Marketplace manifest, grammar, client and server match the successful CI package; [publication evidence](VSCODE-0.1.6-PUBLICATION.json) records revisions and hashes. Updating the installed extension and reloading VS Code enables this release. Evidence is recorded in [the highlighting receipt](VSCODE-XSLT-HIGHLIGHTING.json).
