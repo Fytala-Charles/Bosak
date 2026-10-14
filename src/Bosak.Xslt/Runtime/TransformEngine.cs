@@ -552,6 +552,7 @@
 //                      | Charles Korthout | 7.36  | 14-10-2026     | Evaluate reduced-arity defaults in global scope with caller focus.                       |
 //                      | Charles Korthout | 7.37  | 14-10-2026     | Apply XPath function conversion to optional defaults (source 1.3.1).                     |
 //                      | Charles Korthout | 7.38  | 14-10-2026     | Permit primitive numeric argument coercion in XSLT 4.0 (source 1.3.2).                   |
+//                      | Charles Korthout | 7.39  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -1342,7 +1343,7 @@ internal sealed class TransformEngine
             }
         }
 
-        var patternCompiler = new Patterns.PatternCompiler(_context);
+        var patternCompiler = new Patterns.PatternCompiler(_context, ResolveFunctionParameterNames, ResolveFunctionMinimumArity);
         foreach (var rule in _allTemplateRules)
         {
             rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
@@ -2599,7 +2600,7 @@ internal sealed class TransformEngine
             }
         }
 
-        var patternCompiler = new Patterns.PatternCompiler(_context);
+        var patternCompiler = new Patterns.PatternCompiler(_context, ResolveFunctionParameterNames, ResolveFunctionMinimumArity);
         foreach (var rule in _allTemplateRules)
         {
             rule.CompileMatch(patternCompiler, _stylesheet.GetXPathCompatibility(rule.Element));
@@ -4077,7 +4078,7 @@ internal sealed class TransformEngine
         var current = ConvertVariableValue(CompileXPath(acc.InitialValue, acc.Element).Evaluate(initialCtx), acc.As, context: _context, errorCodeOverride: "XPTY0004", declaration: acc.Element);
 
         var compiledRules = new List<(Stylesheet.AccumulatorRule Rule, Patterns.PatternPredicate Match)>();
-        var patternCompiler = new Patterns.PatternCompiler(_context);
+        var patternCompiler = new Patterns.PatternCompiler(_context, ResolveFunctionParameterNames, ResolveFunctionMinimumArity);
         foreach (var rule in acc.Rules)
         {
             var defaultNs = GetXPathDefaultNamespace(rule.Element);
@@ -15854,7 +15855,7 @@ internal sealed class TransformEngine
         else if (!string.IsNullOrEmpty(groupStarting))
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
-            var patternCompiler = new Patterns.PatternCompiler();
+            var patternCompiler = new Patterns.PatternCompiler(functionParameterNames: ResolveFunctionParameterNames, functionMinimumArity: ResolveFunctionMinimumArity);
             var pattern = patternCompiler.Compile(groupStarting, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
@@ -15888,7 +15889,7 @@ internal sealed class TransformEngine
         else if (!string.IsNullOrEmpty(groupEnding))
         {
             var defaultNs = GetXPathDefaultNamespace(instruction);
-            var patternCompiler = new Patterns.PatternCompiler();
+            var patternCompiler = new Patterns.PatternCompiler(functionParameterNames: ResolveFunctionParameterNames, functionMinimumArity: ResolveFunctionMinimumArity);
             var pattern = patternCompiler.Compile(groupEnding, defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
             List<XdmValue>? currentItems = null;
             var savedOutputUri = _context.CurrentOutputUri;
@@ -20582,11 +20583,11 @@ internal sealed class TransformEngine
             var defaultNs = GetXPathDefaultNamespace(instruction);
             var countMatcher = string.IsNullOrEmpty(countPattern)
                 ? CreateDefaultCountMatcher(targetNode)
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
+                : new Patterns.PatternCompiler(functionParameterNames: ResolveFunctionParameterNames, functionMinimumArity: ResolveFunctionMinimumArity).Compile(ResolveNamespacePrefixes(countPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             var fromMatcher = string.IsNullOrEmpty(fromPattern)
                 ? null
-                : new Patterns.PatternCompiler().Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
+                : new Patterns.PatternCompiler(functionParameterNames: ResolveFunctionParameterNames, functionMinimumArity: ResolveFunctionMinimumArity).Compile(ResolveNamespacePrefixes(fromPattern, instruction), defaultNs, compatibility: _stylesheet.GetXPathCompatibility(instruction));
 
             int[]? numbers = level switch
             {
@@ -22410,7 +22411,7 @@ internal sealed class TransformEngine
             // to the streamed tree (the initial mode's use-accumulators, as in memory).
             // The union across the package closure is evaluated, keyed per definition, so
             // same-named accumulators in different packages keep separate pushed values.
-            var patternCompiler = new Patterns.PatternCompiler(engine._context);
+            var patternCompiler = new Patterns.PatternCompiler(engine._context, engine.ResolveFunctionParameterNames, engine.ResolveFunctionMinimumArity);
             foreach (var acc in engine.GetAllPackageAccumulators())
             {
                 if (!engine.IsAccumulatorApplicableToTree(acc.ClarkName, docNode))
