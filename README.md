@@ -5,6 +5,8 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+**1.2.1 preparation - 2026-10-14:** The namespace/context and key-indexing patch scope is frozen through PR #273. See [release scope](docs/RELEASE-NOTES-1.2.1.md). Published version remains 1.2.0; tagging and publication require approval after final verification.
+
 **Upstream key indexing tests - 2026-10-14:** [PR #30](https://github.com/qt4cg/xslt40-test/pull/30) submits two declaration-context cases; [evidence](contributions/xslt40/key-index-contexts/README.md) records exact 2/0, expanded family 18/0/0 and negative controls. Acceptance and independent confirmation are pending; source candidate 1.2.1 remains unpublished.
 
 **Key indexing contexts - 2026-10-14:** Source candidate 1.2.1 compiles key match/use expressions with declaring namespaces and local grammar; see [integration details](docs/INTEGRATION.md#key-indexing-static-contexts---2026-10-14). Candidate 1.2.1 remains unpublished.

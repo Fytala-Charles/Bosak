@@ -1,3 +1,14 @@
+# 1.2.1 release preparation - 2026-10-14
+
+Branch: release/1.2.1-preparation; scope frozen at cf8aae647cbe8dfe94c381d7e533f31afc57b1fd (PR #273 merged after CI). User authorized preparation, not publication. Published version remains 1.2.0; source version is already 1.2.1 for all ten public .NET 10 libraries.
+
+Scope: integrated post-1.2.0 namespace/context, authoring validation/type/signature/edit alignment, exact-arity all-supplied function keyword binding, literal result namespace exclusions/copying and key match/use compilation fixes through PR #251-273. Public API and gate membership unchanged. Broader package linkage, optional/default host execution, named-type editing and pattern/AVT replacement remain separate.
+
+Release notes and canonical preparation status written. Next: commit the reviewable preparation candidate, build/test/gates, pack and verify all ten packages, run a fresh-cache package-only consumer covering both existing functionality and patch regressions, then record hashes/provenance/source revisions. Integrate the preparation PR after CI; present the exact verified main revision for explicit publication approval. Do not create tags, dispatch release workflow or publish packages yet.
+
+Upstream #29/#30 remain open without review feedback; original seventeen cases remain accepted and independent processor confirmation is pending. Always refresh upstream before branching and before contribution submission, record bases and preserve original receipts. Original scratch evidence remains untouched.
+
+Earlier records below are historical.
 # Upstream key indexing context batch - 2026-10-14
 
 Branch: test/xslt40-key-index-contexts; base main 836ec5a8 (index-context PR #272 merged after passing CI). Engine source and gate membership unchanged in this batch. Evidence commit: 4c208172.
