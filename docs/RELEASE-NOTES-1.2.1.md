@@ -20,7 +20,7 @@ For example, a locally 3.0 key inside a fixed-binding 4.0 module now registers t
 
 ## Verification
 
-The integrated source baseline passes 8,170 unit tests, including 5,284 XSLT tests, with no failures or skips. Frozen QT3 is 31,142/0/679 and qt4 gate-only is 8,278/0/1,894. Final release build, package metadata/content/hash checks and fresh-cache package-only consumer verification are pending; their exact revisions and results will be recorded in RELEASE-1.2.1-PREPARATION.json.
+Final preparation candidate ed5080b5 passes 8,170 unit tests, including 5,284 XSLT tests, with no failures or skips. Frozen QT3 is 31,142/0/679 and qt4 gate-only is 8,278/0/1,894. Release build and pack succeed with zero errors and 81 existing warnings. All ten 1.2.1 packages pass version, dependency, .NET 10 assembly, XML documentation, README/license/icon and SHA-256 checks. A fresh-cache consumer with package references only passes 60 checks and verifies all ten assembly versions as 1.2.1.0; every Bosak dependency comes from the local candidate feed. Local package verification does not establish successful publication. Exact revisions, hashes and provenance are recorded in [preparation evidence](RELEASE-1.2.1-PREPARATION.json).
 
 The submitted native key-indexing cases pass 2/0, and their expanded fixed-namespaces family passes 18/0/0. Both cases fail against retained pre-index-fix binaries, and namespace negative controls fail exactly those two cases. These selected results are not complete draft conformance.
 
