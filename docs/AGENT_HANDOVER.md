@@ -1,3 +1,14 @@
+# Literal result namespace copying correction - 2026-10-14
+
+Branch: fix/literal-result-namespace-exclusions; base main `dc38d923` (function PR #268 merged after passing CI). Implementation: `f42027a4`.
+
+Michael Kay's upstream issue #28 correctly identifies missing native namespace nodes in fixed-namespaces-013/015 expectations. GetExcludedNamespaceUris now expands #all at the attribute's owning element and accumulates excluded URIs; namespace-alias targets retain their exception. Literal result copying handles each element's native in-scope bindings, including nested elements below rebound instruction namespaces. Eight new regressions cover earlier versions, scoped exclusions, URI aliases, fixed/native separation and namespace-alias targets. Two existing type/record tests separately assert native namespace retention and ordinary result attributes.
+
+Verification: all 8,118 unit tests pass (XSLT 5,232/0/0); Release build 0 errors/10 warnings in the final incremental build. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894. Corrected native family 16/0/0 at upstream commit 0e3204d3; negative control fails exactly 013/015, with fourteen other passes. Direct output probes confirm corrected 013, unchanged 014 and retained local binding in 015. No public API or gate membership changes. Evidence: docs/XSLT40-NAMESPACE-COPY-CORRECTION-RESULTS.json and contributions/xslt40/fixed-namespace-components/issue28-correction/. Original receipts and portable patches are preserved; prior assert-xml passes did not establish namespace correctness.
+
+Upstream correction: https://github.com/qt4cg/xslt40-test/pull/29, prepared on current master 91328fbf. Fixtures and 014 remain unchanged; expected XML and explicit namespace predicates correct 013/015. Bosak PR #269 is submitted, CI pending: https://github.com/Fytala-Charles/Bosak/pull/269. Authorized issue reply posted and read back: https://github.com/qt4cg/xslt40-test/issues/28#issuecomment-6160961330. Upstream PR #29 remains under review. Independent processor confirmation remains pending. Published 1.2.0 unchanged; candidate 1.2.1 unpublished. After delivery, resume local-version mode/key QName audits.
+
+Earlier records below are historical.
 # Local function QName identities - 2026-10-14
 
 Branch: fix/xslt40-local-function-qnames; base main `b94ebbb069ff6417efc99d003655d92bcdb18cb3` (template PR #267 merged after CI passed). Implementation: `fc355323`.

@@ -1,5 +1,8 @@
 # Fixed namespace component boundaries
 
+
+**Namespace assertion correction - 2026-10-14:** Michael Kay identified missing native namespace nodes in expected outputs for fixed-namespaces-013/015 ([issue #28](https://github.com/qt4cg/xslt40-test/issues/28)). [Correction PR #29](https://github.com/qt4cg/xslt40-test/pull/29) retains the fixtures and adds namespace-sensitive checks; the corrected family passes 16/0/0 with the Bosak source fix. Prior pass receipts remain historical and did not verify namespace copying; independent processor confirmation is pending. Original 17-case upstream acceptance is retained, with two assertions under correction review. Candidate 1.2.1 remains unpublished.
+
 **Current status — 2026-10-13:** [Upstream PR #27](https://github.com/qt4cg/xslt40-test/pull/27) was merged by Michael Kay (`michaelhkay`) at `2026-10-13T20:21:07Z`; 3 new cases are accepted. Independent processor execution confirmation remains pending. [Merge record](../UPSTREAM_ACCEPTANCE.json). Earlier submission and verification entries below are historical; their original receipts are preserved.
 
 ## Original submission evidence
