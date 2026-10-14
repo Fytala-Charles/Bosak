@@ -1,6 +1,6 @@
 # Upstream key indexing context batch - 2026-10-14
 
-Branch: test/xslt40-key-index-contexts; base main 836ec5a8 (index-context PR #272 merged after passing CI). Engine source and gate membership unchanged in this batch.
+Branch: test/xslt40-key-index-contexts; base main 836ec5a8 (index-context PR #272 merged after passing CI). Engine source and gate membership unchanged in this batch. Evidence commit: 4c208172.
 
 What was built: native fixed-namespaces-016/017 plus one included key-module fixture. Case 016 checks current/local 3.0 pattern bindings, fixed-only wildcard/predicate and selected-node namespace URIs against a native node sharing the lookup value. Case 017 checks @use bindings from an included module independently of caller bindings and local grammar. Both explicitly assert absent p/q result namespaces. No existing fixture/assertion or original receipt changed; PR #29 remains a separate correction.
 
@@ -10,7 +10,7 @@ Verification: both exact submitted cases pass (each filtered receipt 1/0/17); ex
 
 Evidence: contributions/xslt40/key-index-contexts/README.md, RESULTS.json, UPSTREAM_SUBMISSION.json, portable patch, exact/family/negative receipts and pre-fix logs. Canonical docs synchronized. Candidate 1.2.1 remains unpublished; published 1.2.0 unchanged.
 
-Delivery: submit Bosak evidence/documentation PR and merge after CI. Next: monitor upstream PR #29/#30 review, then review the completed namespace/indexing corrections as a potential bounded 1.2.1 scope; preparation may proceed but publication remains unauthorized. Broader package linkage, optional/default function execution, named-type editing and pattern/AVT editing remain separate scopes. Always refresh current upstream before contribution branching and submission, rebase on advancement and record exact bases.
+Delivery: Bosak evidence/documentation PR #273 submitted, CI pending: https://github.com/Fytala-Charles/Bosak/pull/273. Merge after CI passes. Next: monitor upstream PR #29/#30 review, then review the completed namespace/indexing corrections as a potential bounded 1.2.1 scope; preparation may proceed but publication remains unauthorized. Broader package linkage, optional/default function execution, named-type editing and pattern/AVT editing remain separate scopes. Always refresh current upstream before contribution branching and submission, rebase on advancement and record exact bases.
 
 Earlier records below are historical.
 # Key indexing static contexts - 2026-10-14

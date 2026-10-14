@@ -28,5 +28,7 @@
     "baseline":  "Current harness replay with only the retained pre-index-fix Bosak.Xslt.dll replaced; hashes and exact failures preserved. Not a fresh source-checkout baseline.",
     "basePolicy":  "Upstream fetched before branching and immediately before submission; its master remained unchanged; four-file diff checked against that base.",
     "ownership":  "No existing fixtures, assertions, original receipts or acceptance records changed. New evidence is stored separately; PR #29 remains separate.",
-    "release":  "No engine source, public API, gate membership or publication changes in this batch."
+    "release":  "No engine source, public API, gate membership or publication changes in this batch.",
+    "bosakEvidenceCommit":  "4c208172",
+    "bosakEvidencePr":  "https://github.com/Fytala-Charles/Bosak/pull/273"
 }
