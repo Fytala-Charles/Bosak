@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Cover linked keys, accumulated definitions and declaration edges.                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -28,6 +29,70 @@ namespace Bosak.Xslt.Tests.Validation;
 /// <summary>Tests key names and string or QName lookup arguments using fixed namespaces.</summary>
 public class Xslt40KeyQNameTests
 {
+    /// <summary>Local earlier declarations retain fixed key identity for 4.0 callers.</summary>
+    /// <param name="name">The key declaration name.</param>
+    /// <param name="argument">The lookup argument.</param>
+    [Theory]
+    [InlineData("p:k", "'q:k'")]
+    [InlineData("q:k", "'p:k'")]
+    [InlineData("Q{urn:fixed}k", "'q:k'")]
+    [InlineData(" q:k ", "'Q{urn:fixed}k'")]
+    [InlineData("q:k", "QName('urn:fixed','unbound:k')")]
+    [InlineData("Q{}k", "'k'")]
+    public void LocalDeclarationsUseModuleIdentity(string name, string argument)
+        => AssertExecutes(Sheet(Key(name, "version='3.0' xmlns:p='urn:local'") + Output(argument)));
+
+    /// <summary>Lower-profile string lookups retain module namespaces for both key arities.</summary>
+    /// <param name="version">The local declaration and lookup version.</param>
+    /// <param name="threeArguments">Whether a search root is supplied.</param>
+    [Theory]
+    [InlineData("2.0", false)]
+    [InlineData("3.0", false)]
+    [InlineData("2.0", true)]
+    [InlineData("3.0", true)]
+    public void LocalStringLookupsAgree(string version, bool threeArguments)
+        => AssertExecutes(Sheet(Key("q:k", "version='" + version + "'") + Output("'p:k'", threeArguments, "version='" + version + "' xmlns:p='urn:other'")));
+
+    /// <summary>Unused locally earlier declarations retain source-local QName diagnostics.</summary>
+    /// <param name="name">The invalid declaration name.</param>
+    /// <param name="code">The expected static error.</param>
+    [Theory]
+    [InlineData("p:k", "XTSE0280")]
+    [InlineData("a:b:c", "XTSE0020")]
+    [InlineData("Q{urn:key}", "XTSE0020")]
+    [InlineData("", "XTSE0010")]
+    [InlineData("  ", "XTSE0020")]
+    public void LocalInvalidDeclarationsAreRejected(string name, string code)
+    {
+        var text = Sheet(Key(name, "version='3.0'"), "#standard");
+        Assert.Contains(XsltValidation.Validate(Inspect(text)).Diagnostics, d => d.Code == code && d.Range is not null);
+        Assert.Contains(code, Assert.ThrowsAny<Exception>(() => new Api.XsltCompiler().Compile(text)).ToString());
+    }
+
+    /// <summary>Locally earlier aliases contribute to one shared expanded key identity.</summary>
+    [Fact]
+    public void LocalDeclarationsAccumulate()
+        => AssertExecutes(Sheet(Key("p:k", "version='3.0'") + Key("q:k", "version='2.0'").Replace("match='item'", "match='other'") + Output("'q:k'")), "2");
+
+    /// <summary>Linked earlier key declarations retain their own module namespace identities.</summary>
+    /// <param name="kind">The linkage instruction.</param>
+    [Theory]
+    [InlineData("include")]
+    [InlineData("import")]
+    public void LocalLinkedDeclarationsUseTheirOwnModule(string kind)
+    {
+        var main = Sheet("<xsl:" + kind + " href='keys.xsl'/>" + Output("'q:k'"), "#standard p=urn:principal q=urn:fixed");
+        var module = Sheet(Key("p:k", "version='3.0'"), "#standard p=urn:fixed");
+        var resolver = new Resolver(new() { ["keys.xsl"] = module });
+        var snapshot = Inspect(main, resolver);
+        int requests = resolver.Requests;
+        Assert.Equal(XsltValidationOutcome.Valid, XsltValidation.Validate(snapshot).Outcome);
+        Assert.Equal(requests, resolver.Requests);
+        Assert.Equal(Encoding.UTF8.GetBytes(module), snapshot.ExportOriginal(new Uri(MainUri, "keys.xsl")));
+        var compiler = new Api.XsltCompiler { UriResolver = new AuthoringModuleUriResolverBridge(new Resolver(new() { ["keys.xsl"] = module })) };
+        Assert.Equal("1", Transform(compiler.Compile(main, MainUri.AbsoluteUri)));
+    }
+
     private static readonly Uri MainUri = new("file:///keys/main.xsl");
     private static string Sheet(string body, string bindings = "#standard p=urn:fixed q=urn:fixed")
         => "<xsl:stylesheet version='4.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:p='urn:native' fixed-namespaces='" + bindings + "'>" + body + "</xsl:stylesheet>";
@@ -140,10 +205,13 @@ public class Xslt40KeyQNameTests
     }
 
     /// <summary>Key name contexts capture caller-resolved namespace documents only during inspection.</summary>
-    [Fact]
-    public void NamespaceDocumentIsNotResolvedDuringValidation()
+    /// <param name="version">The local key grammar.</param>
+    [Theory]
+    [InlineData("4.0")]
+    [InlineData("3.0")]
+    public void NamespaceDocumentIsNotResolvedDuringValidation(string version)
     {
-        var text = Sheet(Key("q:k") + Output("'q:k'"), "#standard bindings.xml");
+        var text = Sheet(Key("q:k", "version='" + version + "'") + Output("'q:k'"), "#standard bindings.xml");
         var resolver = new Resolver(new() { ["bindings.xml"] = "<bindings xmlns:q='urn:fixed'/>" });
         var snapshot = Inspect(text, resolver);
         int requests = resolver.Requests;

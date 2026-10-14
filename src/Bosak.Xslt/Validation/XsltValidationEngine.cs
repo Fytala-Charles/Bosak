@@ -37,6 +37,7 @@
 //                      | Charles Korthout | 0.17  | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.18  | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.19  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
+//                      | Charles Korthout | 0.20  | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -312,6 +313,7 @@ internal sealed class XsltValidationEngine
         bool moduleBindings = Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(element)
             || Stylesheet.Stylesheet.UsesModuleFixedTemplateNamespaces(element)
             || Stylesheet.Stylesheet.UsesModuleFixedFunctionNamespaces(element)
+            || Stylesheet.Stylesheet.UsesModuleFixedKeyNamespaces(element)
             || (element.Name.LocalName == "mode" && Stylesheet.Stylesheet.HasModuleFixedNamespaces(element));
         if (GetEffectiveVersion(node) < 4.0 && !moduleBindings) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);

@@ -1,3 +1,16 @@
+# Local key declaration QName identities - 2026-10-14
+
+Branch: fix/xslt40-local-key-qnames; base main b045ba03 (mode PR #270 merged after passing CI). Implementation: 96923f1b.
+
+What was built: UsesModuleFixedKeyNamespaces restricts module fixed name selection to xsl:key declarations under local earlier versions. Compilation/registration use applicable module bindings; authoring diagnostics use retained maps. Runtime key lookup code is unchanged: its existing expression context provides module bindings. Nineteen added cases cover fixed-only/native-rebound prefixes, aliases, explicit/no-namespace/whitespace names, both key arities, accumulated definitions, include/import modules with different principal bindings, unused QName diagnostics and namespace-document capture without validation retries. Earlier-root native profiles and existing argument grammar gates remain covered; source exports and public metadata are unchanged.
+
+Verification: all 52 focused checks and 8,148 unit tests pass including XSLT 5,262/0/0. Release build: 0 errors/81 warnings. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894; unchanged corrected native family 16/0/0 at suite 0e3204d3. Evidence: docs/XSLT40-LOCAL-KEY-QNAME-RESULTS.json and local-key scratch logs. No public API or gate membership changes; original receipts and native fixtures are preserved.
+
+Next bounded fix: key match/use static contexts. A diagnostic probe (.guard-tmp/local-key-pattern-probe.log) with key match p:item, native p=urn:native and fixed p=urn:fixed returns zero rather than one for an urn:fixed input item under both local 3.0 and 4.0. KeyIndex.ResolveNamespacePrefixes currently uses native bindings; use-expression compilation also requires auditing declaration context. Keep local grammar and caller focus/resource policies intact. This indexing defect is separate from the completed key-name registration correction.
+
+Delivery: submit verified slice and merge after CI. Broader package linkage, optional/default execution, named-type edits and pattern/AVT replacement remain separate. Upstream PR #29 remains under review; independent processor confirmation is pending. Always fetch current upstream before branching and before submitting, rebase if advanced, record the base and check the final diff. No new upstream contribution or external message in this slice. Published 1.2.0 unchanged; candidate 1.2.1 unpublished.
+
+Earlier records below are historical.
 # Local mode QName identities and upstream submission policy - 2026-10-14
 
 Branch: fix/xslt40-local-mode-qnames; base main b5583dbf (namespace-copying PR #269 merged after passing CI). Implementation: c937547a.

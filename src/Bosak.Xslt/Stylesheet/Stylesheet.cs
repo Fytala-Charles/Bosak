@@ -319,6 +319,7 @@
 //                      | Charles Korthout | 2.158 | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 //                      | Charles Korthout | 2.159 | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 2.160 | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
+//                      | Charles Korthout | 2.161 | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1101,6 +1102,12 @@ internal sealed class Stylesheet
     /// <returns>Whether the function belongs to a fixed-binding module.</returns>
     internal static bool UsesModuleFixedFunctionNamespaces(XElement element)
         => element.Name == XName.Get("function", XslNamespace) && HasModuleFixedNamespaces(element);
+
+    /// <summary>Gets whether a key declaration uses its module fixed bindings.</summary>
+    /// <param name="element">The key declaration.</param>
+    /// <returns>Whether the key belongs to a fixed-binding module.</returns>
+    internal static bool UsesModuleFixedKeyNamespaces(XElement element)
+        => element.Name == XName.Get("key", XslNamespace) && HasModuleFixedNamespaces(element);
 
     internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
     {
@@ -4631,6 +4638,7 @@ internal sealed class Stylesheet
                         ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
                             useApplicableNamespaces: localName is "template" or "call-template" or "function" or "key",
                             namespaceBindings: UsesModuleFixedTemplateNamespaces(elem) || UsesModuleFixedFunctionNamespaces(elem)
+                                || UsesModuleFixedKeyNamespaces(elem)
                                 ? GetApplicableStaticNamespaces(elem) : null);
                     }
                 }
