@@ -2,7 +2,7 @@
     "date":  "2026-10-14",
     "base":  "a9e6f94d",
     "branch":  "fix/xslt40-local-template-qnames",
-    "implementation":  "Uncommitted working tree",
+    "implementation":  "53757ede",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "scope":  "Module fixed QName identities for named-template declarations and call-template references under local earlier versions.",
