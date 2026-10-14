@@ -1,3 +1,11 @@
+# 1.2.1 publication - 2026-10-14
+
+User explicitly approved publication of verified main revision 70f5c5b2c1b18a238ad8b90b6cad204b840e460c. Annotated tag v1.2.1 pushed at that revision. Release workflow 38525706208 succeeded: all 8,170 tests pass, all ten 1.2.1 packages uploaded. GitHub release: https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.1. Publication source and tests match the fully verified preparation candidate ed5080b5; QT3 31,142/0/679, qt4 gate-only 8,278/0/1,894. Final main-based local consumer passed 60 checks.
+
+Published-package verification completed after NuGet indexing: all ten downloaded packages pass content/metadata/hash checks; a fresh-cache package-only consumer restored exclusively from nuget.org passes 60 checks and verifies all ten assembly versions 1.2.1.0. Evidence: docs/RELEASE-1.2.1-PUBLICATION.json. Integrate this documentation PR after CI. Preserve original preparation evidence and release tag. Upstream #29/#30 review and independent processor confirmation remain pending. No additional message or upstream submission in this step.
+
+Earlier records below are historical.
+
 # 1.2.1 release preparation - 2026-10-14
 
 Branch: release/1.2.1-preparation; scope frozen at cf8aae647cbe8dfe94c381d7e533f31afc57b1fd (PR #273 merged after CI). User authorized preparation, not publication. Published version remains 1.2.0; source version is already 1.2.1 for all ten public .NET 10 libraries.

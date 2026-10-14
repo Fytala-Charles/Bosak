@@ -5,6 +5,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**1.2.1 published - 2026-10-14:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.1) from `70f5c5b2`. All ten .NET 10 packages were published by the successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38525706208), passing 8,170 tests with zero failures/skips. All ten published packages pass content/metadata/hash checks; a fresh-cache consumer using only nuget.org passes 60 checks and verifies all ten assembly versions. See [release notes](RELEASE-NOTES-1.2.1.md). Earlier preparation and slice entries are historical. Upstream PR #29/#30 review and independent processor confirmation remain pending; broader REQ-126 work remains separate.
+
+
 **Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json).
 
 **1.2.0 published — 2026-10-13:** [Release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.2.0) from `56486e96`. All ten .NET 10 packages are available on nuget.org; the release workflow passes 7,676 tests with zero failures/skips, and a fresh-cache consumer restored exclusively from nuget.org passes 45 checks. REQ-125 acceptance is included. See [release notes](RELEASE-NOTES-1.2.0.md). Earlier preparation and slice entries below are historical. Additional focused fixes, authoring-context alignment and a new XSLT 4.0 contribution-area batch follow this release; Broader REQ-126 coverage and independent processor execution confirmation remain outstanding; upstream acceptance is recorded in the current milestone.
@@ -14,8 +17,8 @@
 <!-- Living document: updated with each significant Bosak change. -->
 
 > **Purpose:** Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack.
-> **Last updated:** 12 October 2026
-> **Bosak baseline:** 6,019 solution tests passed / 0 failed / 0 skipped (published 1.1.3)
+> **Last updated:** 14 October 2026
+> **Bosak baseline:** 8,170 solution tests passed / 0 failed / 0 skipped (published 1.2.1)
 > **Language-server baseline:** 72 passed / 0 failed / 0 skipped
 > **QT3 baseline (strict error codes):** **31,142 passed / 0 failed / 679 skipped** (97.87%) — **100%** of runnable tests pass.
 > **XSLT baseline:** `package` cluster **159 passed / 1 failed / 3 skipped**; `accept` cluster **50 passed / 0 failed / 0 skipped**; `expose` cluster **42 passed / 0 failed / 0 skipped**; `use-package` cluster **53 passed / 0 failed / 1 skipped**; `declared-modes` cluster **10 passed / 0 failed / 4 skipped**; full W3C XSLT 3.0 strict sweep (last full run) **11,054 passed / 1 failed / 3,546 skipped** — 99.6% pass rate among runnable tests (the single failure is type-functions-0401, a documented platform limitation)
