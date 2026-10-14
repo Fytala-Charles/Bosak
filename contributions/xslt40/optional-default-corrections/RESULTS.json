@@ -1,0 +1,24 @@
+{
+    "date":  "2026-10-14",
+    "bosakImplementationRevision":  "4eb9da6bac2aa85de0811739f2b5de739397e94f",
+    "sourceVersion":  "1.3.1 (unpublished)",
+    "upstreamPr":  "https://github.com/qt4cg/xslt40-test/pull/32",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstreamCommit":  "a3d39a7e1b99ef0d4ce88edd5a0bc31ef19ab75d",
+    "status":  "Submitted; acceptance and independent execution pending",
+    "changedCases":  [
+                         "function-40-012",
+                         "function-40-903"
+                     ],
+    "unchangedEngineRegression":  "function-40-904",
+    "exactPassed":  3,
+    "exactFailed":  0,
+    "negativeFailed":  2,
+    "familyPassed":  28,
+    "familyFailed":  8,
+    "familySkipped":  363,
+    "remainingFailures":  "Unsupported no-namespace functions 014-021",
+    "excludes":  "New-case PR31 is separate and not included in this master-based sample.",
+    "scope":  "Three-file fixture/catalog correction; existing 012 assertion and all other assertions unchanged.",
+    "basePolicy":  "Upstream fetched before branching and immediately before submission; exact base unchanged; final diff checked."
+}

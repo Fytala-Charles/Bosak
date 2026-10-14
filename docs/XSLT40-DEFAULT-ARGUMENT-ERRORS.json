@@ -1,0 +1,178 @@
+{
+    "date":  "2026-10-14",
+    "implementationRevision":  "4eb9da6bac2aa85de0811739f2b5de739397e94f",
+    "baseRevision":  "fd865cb3cdeb6bdc2294ae4f1d82235c97517988",
+    "sourceVersion":  "1.3.1",
+    "publishedLibraryVersion":  "1.2.1",
+    "publishedExtensionVersion":  "0.1.6",
+    "publicationAuthorized":  false,
+    "status":  "Verified source correction; CI integration pending",
+    "baseline":  {
+                     "snapshot":  ".Temp/BosakDefaultErrorBaseline-20261014",
+                     "version":  "1.3.0.0",
+                     "passed":  0,
+                     "failed":  10,
+                     "skipped":  0,
+                     "xsltAssemblySha256":  "265affb2141210fbcaaf0753acab3b1c0c9a46142946f5a625526946cd13f2ae",
+                     "scope":  "Ten filtered conversion regressions with newly compiled tests against pre-fix source."
+                 },
+    "optionalFamily":  {
+                           "passed":  61,
+                           "failed":  0,
+                           "skipped":  0,
+                           "addedCases":  11
+                       },
+    "solution":  {
+                     "passed":  8230,
+                     "failed":  0,
+                     "skipped":  0
+                 },
+    "xslt":  {
+                 "passed":  5344,
+                 "failed":  0,
+                 "skipped":  0
+             },
+    "languageServer":  {
+                           "passed":  77,
+                           "failed":  0,
+                           "skipped":  0
+                       },
+    "qt3":  "31142/0/679",
+    "qt4GateOnly":  "8278/0/1894",
+    "databaseSandboxRecovery":  "Initial sandboxed solution execution failed HttpListener initialization. Database rerun47/0/0 and complete solution8230/0/0 passed with required access.",
+    "upstreamPr":  "https://github.com/qt4cg/xslt40-test/pull/32",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstreamCommit":  "a3d39a7e1b99ef0d4ce88edd5a0bc31ef19ab75d",
+    "upstreamExact":  "012/903/904 each1/0",
+    "correctedUpstreamFamily":  "28/8/363; remaining eight unsupported no-namespace functions",
+    "independentConfirmation":  "Pending",
+    "scope":  "No new public APIs or gate membership; broader XSLT-host numeric coercion remains separate.",
+    "sources":  [
+                    {
+                        "path":  "src/Bosak.Xslt/Runtime/TransformEngine.cs",
+                        "sha256":  "960b5a5e5b583fa6088d93c09e6125b018337b9c7848e7d1f6af16af2aaa4aaa"
+                    },
+                    {
+                        "path":  "src/Directory.Build.props",
+                        "sha256":  "cac64dbbba10c69aff98198f4bc396ca0c7857c1fe7cfa81aa2dbbe53b4d8e49"
+                    },
+                    {
+                        "path":  "tests/Bosak.Xslt.Tests/Validation/Xslt40OptionalFunctionTests.cs",
+                        "sha256":  "f150b700fda5dbed0e874544021bfd7c3ea185591f0c3f6685b6681b85457f3f"
+                    }
+                ],
+    "assemblies":  [
+                       {
+                           "name":  "Bosak.XPath.Api.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "77cc0265c3a6ede26cc26ff8ec4dabf934442d3f2c4ab77ca62d9ae4f8b871d6"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Compiler.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "69255d18d6a3a416bee5b63d633e787bacf6414daac46bc8f3f2cea29ae271b0"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Core.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "9ca0e0501856cb886275e0a46edb5d70efe26e0c11a13e128e5769dd144c9821"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Parser.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "ac19bc5c1d13cf31788344aa2ab6a86c120ff86ea546fe65c9c6ddf8da4c18eb"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Providers.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "b3b9f8c0880abc14a1bcad3feead3925eaa1341f68ee34886ed0140bbbb670bf"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Runtime.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "dd368333a6cababb9379ef43d810d5c9cd82d11468c129ce6d077ec3913fd9e9"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Standard.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "d9689adab6102c03d315ceb219cdc887ea9b889e49bc21831bb37cbd1b9c8c23"
+                       },
+                       {
+                           "name":  "Bosak.XQuery.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "8a3f1c58daef29326bc4c08d8767782b589cc9ed564381e3b73f72b8d8efdf41"
+                       },
+                       {
+                           "name":  "Bosak.Xslt.dll",
+                           "version":  "1.3.1.0",
+                           "sha256":  "f869010218bbaca88fba3dd4292d234c9aef6a57e0ce9f6f570743c3d2eaa1c4"
+                       }
+                   ],
+    "logs":  [
+                 {
+                     "path":  ".guard-tmp/default-errors-baseline-focused.txt",
+                     "sha256":  "44015570648f0d47d0614e653e0de453c2590f05025f5e4f835040d6adaba34f"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-baseline-focused-error.txt",
+                     "sha256":  "06df2a6b70d2c0b37a2fbf30c375cd6a050735cfce10b1ce275f45db951994d2"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-focused-final.txt",
+                     "sha256":  "40b15544ea3da08f412e9fd29699fa44d5140697bb12bcffc05e6d3ae0f7c13d"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-xslt-full.txt",
+                     "sha256":  "23e93008ee92cfb39a22b26ee8c8ebf431d80da0edd9fa481455735d68d95d88"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-solution-final.log",
+                     "sha256":  "45b1bf1c7163e12e311438505e5bca56cb6cc5f4f373634305cce1e1ebed5e16"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-language-server.log",
+                     "sha256":  "68170e3179f75c7eb193a49e6c4162573c641fa3f9f85e097dd11dbe8b0146ac"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-qt3.log",
+                     "sha256":  "ce4d009054e2ddff92f78f2ad4efb61b8b28bc32b0482231a756d188b98e99aa"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-qt4.log",
+                     "sha256":  "581dfc024c0fd26da9c59f1c5041cda4e3bdcb9a119a55a760aad2e66a0080eb"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-build.log",
+                     "sha256":  "8794c84adbb4213b28e6c18a3625486498d8fa49c1c90c952b889bd476591534"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-focused-build.log",
+                     "sha256":  "9d14aa885bbb039b95e3f3b5c32b01dfde05daba69fce127166c1291aff567a3"
+                 },
+                 {
+                     "path":  ".guard-tmp/default-errors-database-final.log",
+                     "sha256":  "173bea94027a5a1b2df939915ceb1f3bcb825a674a3ac4b6615659119223ce06"
+                 }
+             ],
+    "specifications":  [
+                           {
+                               "url":  "https://qt4cg.org/specifications/xslt-40/Overview.html#function-arguments",
+                               "sections":  [
+                                                "10.3.2",
+                                                "10.3.3"
+                                            ],
+                               "snapshot":  ".guard-tmp/default-errors-xslt-spec.html",
+                               "sha256":  "931e6984d3de274dc49b1f9a75ef4e2556729b32497fa083e72af8bb4ce14e79"
+                           },
+                           {
+                               "url":  "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-eval-static-function-call",
+                               "sections":  [
+                                                "4.6.1.2",
+                                                "3.4",
+                                                "3.4.2"
+                                            ],
+                               "snapshot":  ".guard-tmp/default-errors-xpath-spec.html",
+                               "sha256":  "2b74a86d305f01cc533fa852b6cc1e84ad17dcb1f8d1350cd60df8d35d47ddfa"
+                           }
+                       ]
+}

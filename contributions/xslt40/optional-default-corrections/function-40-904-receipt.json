@@ -1,0 +1,38 @@
+﻿{
+    "timestampUtc":  "2026-10-14T14:06:36.8424901Z",
+    "upstream":  "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot":  "D:\\Development\\Bosak\\.upstream\\xslt40-test",
+    "suiteRevision":  "a3d39a7e1b99ef0d4ce88edd5a0bc31ef19ab75d",
+    "suiteStatus":  [
+
+                    ],
+    "bosakRevision":  "4eb9da6bac2aa85de0811739f2b5de739397e94f",
+    "bosakStatus":  [
+                        " M README.md",
+                        " M contributions/xslt40/README.md",
+                        " M docs/AGENT_HANDOVER.md",
+                        " M docs/ARCHITECTURE.md",
+                        " M docs/FEATURE_REQUESTS.md",
+                        " M docs/INTEGRATION.md",
+                        " M docs/XSLT40-OPTIONAL-FUNCTION-ARGUMENTS.md",
+                        "?? .Temp/",
+                        "?? .guard-tmp/",
+                        "?? .sweep-baselines/",
+                        "?? contributions/xslt40/optional-default-corrections/",
+                        "?? docs/XSLT40-DEFAULT-ARGUMENT-ERRORS.md"
+                    ],
+    "profile":  "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware":  false,
+    "testSet":  "function",
+    "testCase":  "function-40-904",
+    "runnerExitCode":  0,
+    "counts":  {
+                   "Failed":  0,
+                   "Skipped":  398,
+                   "Total":  399,
+                   "Passed":  1
+               },
+    "success":  true,
+    "scope":  "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log":  "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261014T140635912Z.log"
+}
