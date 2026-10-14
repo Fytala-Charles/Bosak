@@ -316,6 +316,7 @@
 //                      | Charles Korthout | 2.155 | 13-10-2026     | Use applicable key declaration bindings and share NCName validation.                     |
 //                      | Charles Korthout | 2.156 | 13-10-2026     | Share module fixed-binding policy independently of local expression grammar.              |
 //                      | Charles Korthout | 2.157 | 13-10-2026     | Retain fixed variable and parameter identities across local earlier profiles.              |
+//                      | Charles Korthout | 2.158 | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1083,6 +1084,14 @@ internal sealed class Stylesheet
     internal static bool UsesModuleFixedVariableNamespaces(XElement element)
         => element.Name.NamespaceName == XslNamespace
             && (element.Name.LocalName is "variable" or "param" or "with-param")
+            && HasModuleFixedNamespaces(element);
+
+    /// <summary>Gets whether a named template declaration or reference uses module fixed bindings.</summary>
+    /// <param name="element">The template declaration or call instruction.</param>
+    /// <returns>Whether the template construct belongs to a fixed-binding module.</returns>
+    internal static bool UsesModuleFixedTemplateNamespaces(XElement element)
+        => element.Name.NamespaceName == XslNamespace
+            && (element.Name.LocalName is "template" or "call-template")
             && HasModuleFixedNamespaces(element);
 
     internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
@@ -4611,7 +4620,8 @@ internal sealed class Stylesheet
                             ? StripAritySuffix(nameAttr.Value)
                             : nameAttr.Value;
                         ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
-                            useApplicableNamespaces: localName is "template" or "call-template" or "function" or "key");
+                            useApplicableNamespaces: localName is "template" or "call-template" or "function" or "key",
+                            namespaceBindings: UsesModuleFixedTemplateNamespaces(elem) ? GetApplicableStaticNamespaces(elem) : null);
                     }
                 }
 
@@ -6169,7 +6179,7 @@ internal sealed class Stylesheet
         // QName-valued attributes are whitespace-collapsed by the XSLT data model,
         // so leading and trailing space around a lexical or EQName must be ignored.
         name = name.Trim();
-        var moduleVariableBindings = UsesModuleFixedVariableNamespaces(element);
+        var moduleVariableBindings = UsesModuleFixedVariableNamespaces(element) || UsesModuleFixedTemplateNamespaces(element);
         if (UsesXPath40Namespaces(element) || moduleVariableBindings)
             return ValidateXsltName(element, name, "variable/parameter name", useApplicableNamespaces: true,
                 namespaceBindings: moduleVariableBindings ? GetApplicableStaticNamespaces(element) : null);
@@ -10072,7 +10082,9 @@ internal sealed class Stylesheet
                 if (prefix == "xml")
                     nsUri = "http://www.w3.org/XML/1998/namespace";
                 else
-                    nsUri = construct == "xsl:template" ? GetComponentNamespace(element, prefix) : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
+                    nsUri = construct == "xsl:template"
+                        ? UsesModuleFixedTemplateNamespaces(element) ? GetApplicableStaticNamespaces(element).GetValueOrDefault(prefix) : GetComponentNamespace(element, prefix)
+                        : element.GetNamespaceOfPrefix(prefix)?.NamespaceName;
             }
         }
 

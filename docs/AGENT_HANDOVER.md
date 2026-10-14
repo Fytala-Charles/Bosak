@@ -1,3 +1,14 @@
+# Local named-template QName identities - 2026-10-14
+
+Branch: fix/xslt40-local-template-qnames; base main `a9e6f94d` (PR #266 merged). Changes remain uncommitted.
+
+What was built: UsesModuleFixedTemplateNamespaces scopes module fixed QName binding to xsl:template/call-template names under local earlier grammar. Compilation and expanded identity lookup use module maps; authoring diagnostics use retained declaration contexts. Reserved template namespace validation follows the same identity. Ten new regressions cover fixed-only/rebound prefixes, aliases, explicit/no-namespace names, inherited local versions and XTSE0280/XTSE0020/XTSE0080 diagnostics. Existing earlier-root profiles remain covered. No public API or gate membership changes.
+
+Verification: Release solution build passes with 0 errors/81 warnings; all 24 focused template checks pass. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894. All 8,098 unit tests pass, including XSLT 5,212/0/0 from the temporary copy outside the sandbox. Evidence: docs/XSLT40-LOCAL-TEMPLATE-QNAME-RESULTS.json. Database tests require local HTTP listeners outside the sandbox; all 47 pass with that access. Original scratch evidence is preserved.
+
+Next: audit function declaration/reference component QNames under local versions; mode/key and other component paths remain separate scopes. Optional/default function execution, broader keyword/package linkage, named-type edit compilation and pattern/AVT replacement remain separate. Published version remains 1.2.0; candidate 1.2.1 remains unpublished. No external message, PR, merge or publication in this slice.
+
+Earlier records below are historical.
 # Local variable and parameter QName identities - 2026-10-13
 
 Branch: fix/xslt40-local-variable-qnames; base main `62bf89a4c5211370f727d56932f66c095c188fb4` (PR #265 merged); implementation `ab3674be331806b3efca145a4fea0f2d855f5a93`.
