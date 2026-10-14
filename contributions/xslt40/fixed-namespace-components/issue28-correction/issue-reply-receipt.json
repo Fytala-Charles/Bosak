@@ -1,0 +1,7 @@
+{
+    "author":  "Fytala-Charles",
+    "body":  "Thank you, Michael â€” you are right. I incorrectly treated the root `exclude-result-prefixes=\"#all\"` as covering descendant rebindings. It designates the namespace URIs in scope at the element carrying the attribute, and `fixed-namespaces` does not change native namespace copying for literal result elements.\n\nI have submitted https://github.com/qt4cg/xslt40-test/pull/29 against current master to avoid the earlier application conflicts. It corrects 013 to retain `xmlns:p=\"urn:other\"` on `hit` and 015 to retain `xmlns:p=\"urn:local\"` on `out`, while keeping the stylesheet fixtures and 014 unchanged. Both results now include explicit `namespace-uri-for-prefix` assertions as well as `assert-xml`, so a comparison that ignores namespace nodes cannot mask this requirement.\n\nThis also exposed a Bosak bug for 013; the source fix is in https://github.com/Fytala-Charles/Bosak/pull/269. The corrected family passes 16/0/0. As a negative control, incorrect namespace predicates fail exactly 013 and 015. The original contribution and execution receipts are preserved as historical evidence; they did not establish namespace-copying correctness. Independent processor confirmation of the correction is still welcome.",
+    "createdAt":  "2026-10-14T04:33:43Z",
+    "id":  6160961330,
+    "url":  "https://github.com/qt4cg/xslt40-test/issues/28#issuecomment-6160961330"
+}

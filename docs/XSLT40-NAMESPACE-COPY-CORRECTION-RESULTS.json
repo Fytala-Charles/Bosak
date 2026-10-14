@@ -60,5 +60,7 @@
                  ".guard-tmp/issue28-qt3.log",
                  ".guard-tmp/issue28-qt4.log"
              ],
-    "specification":  "https://qt4cg.org/specifications/xslt-40/Overview.html#literal-result-element-namespaces"
+    "specification":  "https://qt4cg.org/specifications/xslt-40/Overview.html#literal-result-element-namespaces",
+    "bosakPullRequest":  "https://github.com/Fytala-Charles/Bosak/pull/269",
+    "postedReply":  "https://github.com/qt4cg/xslt40-test/issues/28#issuecomment-6160961330"
 }
