@@ -2,7 +2,7 @@
     "date":  "2026-10-14",
     "base":  "b045ba0348cb9dcde66c25b45cbdacbf777d0c21",
     "branch":  "fix/xslt40-local-key-qnames",
-    "implementation":  "Pending commit",
+    "implementation":  "96923f1b",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "scope":  "Module fixed key declaration QName identity across compilation, registration and authoring under local earlier profiles; lookups retain existing expression namespace context and grammar gates.",

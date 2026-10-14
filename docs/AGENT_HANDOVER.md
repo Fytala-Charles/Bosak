@@ -1,6 +1,6 @@
 # Local key declaration QName identities - 2026-10-14
 
-Branch: fix/xslt40-local-key-qnames; base main b045ba03 (mode PR #270 merged after passing CI).
+Branch: fix/xslt40-local-key-qnames; base main b045ba03 (mode PR #270 merged after passing CI). Implementation: 96923f1b.
 
 What was built: UsesModuleFixedKeyNamespaces restricts module fixed name selection to xsl:key declarations under local earlier versions. Compilation/registration use applicable module bindings; authoring diagnostics use retained maps. Runtime key lookup code is unchanged: its existing expression context provides module bindings. Nineteen added cases cover fixed-only/native-rebound prefixes, aliases, explicit/no-namespace/whitespace names, both key arities, accumulated definitions, include/import modules with different principal bindings, unused QName diagnostics and namespace-document capture without validation retries. Earlier-root native profiles and existing argument grammar gates remain covered; source exports and public metadata are unchanged.
 
