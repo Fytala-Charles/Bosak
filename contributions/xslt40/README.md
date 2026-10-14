@@ -1,5 +1,7 @@
 # Native XSLT 4.0 contributions
 
+**Optional-default conversion correction - 2026-10-14:** Source candidate 1.3.1 reports XPTY0004 for invalid omitted function arguments through the existing function conversion path. The optional family passes 61/0/0; QT3 and qt4 gates retain their required totals. [Upstream PR #32](https://github.com/qt4cg/xslt40-test/pull/32) separately corrects two existing default fixtures; acceptance and independent confirmation are pending. [Fix and evidence](../../docs/XSLT40-DEFAULT-ARGUMENT-ERRORS.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.1 is unpublished. Earlier milestone entries below are historical.
+
 **Optional-function upstream tests - 2026-10-14:** [PR #31](https://github.com/qt4cg/xslt40-test/pull/31) submits three cases for keyword omission versus explicit empty values, shadowed global defaults, and function-item creation focus. Exact checks pass 3/0; all three negative controls and pre-feature replays fail as expected. The broader sample has 29 passes and ten unchanged existing failures. Prepared against refreshed upstream `91328fbf`; acceptance and independent confirmation are pending. [Contribution evidence](optional-function-boundaries/README.md). Implementation PR #278 merged after CI; source 1.3.0 remains unpublished, libraries 1.2.1 and extension 0.1.6 remain published.
 
 

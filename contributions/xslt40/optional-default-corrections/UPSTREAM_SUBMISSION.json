@@ -1,0 +1,29 @@
+{
+    "baseRefOid":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "createdAt":  "2026-10-14T14:00:46Z",
+    "files":  [
+                  {
+                      "path":  "tests/decl/function/_function-test-set.xml",
+                      "additions":  4,
+                      "deletions":  2,
+                      "changeType":  "MODIFIED"
+                  },
+                  {
+                      "path":  "tests/decl/function/function-40-012.xsl",
+                      "additions":  1,
+                      "deletions":  1,
+                      "changeType":  "MODIFIED"
+                  },
+                  {
+                      "path":  "tests/decl/function/function-40-903.xsl",
+                      "additions":  1,
+                      "deletions":  1,
+                      "changeType":  "MODIFIED"
+                  }
+              ],
+    "headRefOid":  "a3d39a7e1b99ef0d4ce88edd5a0bc31ef19ab75d",
+    "mergeable":  "MERGEABLE",
+    "number":  32,
+    "state":  "OPEN",
+    "url":  "https://github.com/qt4cg/xslt40-test/pull/32"
+}

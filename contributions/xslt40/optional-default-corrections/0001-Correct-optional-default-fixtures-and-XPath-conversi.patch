@@ -1,0 +1,69 @@
+From a3d39a7e1b99ef0d4ce88edd5a0bc31ef19ab75d Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Wed, 14 Oct 2026 15:59:49 +0200
+Subject: [PATCH] Correct optional default fixtures and XPath conversion error
+
+---
+ tests/decl/function/_function-test-set.xml | 6 ++++--
+ tests/decl/function/function-40-012.xsl    | 2 +-
+ tests/decl/function/function-40-903.xsl    | 2 +-
+ 3 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/tests/decl/function/_function-test-set.xml b/tests/decl/function/_function-test-set.xml
+index 565189a0..2be57b12 100644
+--- a/tests/decl/function/_function-test-set.xml
++++ b/tests/decl/function/_function-test-set.xml
+@@ -2156,6 +2156,7 @@
+    <test-case name="function-40-012">
+       <description>Function with default parameter, defaulting to a function of global variables</description>
+       <created by="Michael Kay" on="2022-03-01"/>
++      <modified by="Charles Korthout" on="2026-10-14" change="Select the element whose code attribute the function returns."/>
+       <dependencies>
+          <spec value="XSLT40+"/>
+       </dependencies>
+@@ -2361,8 +2362,9 @@
+    </test-case>
+    
+    <test-case name="function-40-903">
+-      <description>Default value invalid for type</description>
++      <description>Non-numeric default value invalid for parameter type</description>
+       <created by="Michael Kay" on="2022-10-24"/>
++      <modified by="Charles Korthout" on="2026-10-14" change="Use a non-coercible QName default and the XPath argument conversion error XPTY0004."/>
+       <dependencies>
+          <spec value="XSLT40+"/>
+       </dependencies>
+@@ -2370,7 +2372,7 @@
+          <stylesheet file="function-40-903.xsl"/>
+       </test>
+       <result>
+-         <error code="XTTE0600"/>
++         <error code="XPTY0004"/>
+       </result>
+    </test-case>
+    
+diff --git a/tests/decl/function/function-40-012.xsl b/tests/decl/function/function-40-012.xsl
+index b153b305..0903fc0f 100644
+--- a/tests/decl/function/function-40-012.xsl
++++ b/tests/decl/function/function-40-012.xsl
+@@ -2,7 +2,7 @@
+   xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:f="http://f/" exclude-result-prefixes="#all">
+ 
+   <xsl:function name="f:code" as="xs:string">
+-    <xsl:param name="node" as="node()" required="no" select="$data/a/@code"/>
++    <xsl:param name="node" as="node()" required="no" select="$data/a"/>
+     <xsl:sequence select="$node ! @code"/>
+   </xsl:function>
+ 
+diff --git a/tests/decl/function/function-40-903.xsl b/tests/decl/function/function-40-903.xsl
+index 8f6ea4e0..5f9c24fc 100644
+--- a/tests/decl/function/function-40-903.xsl
++++ b/tests/decl/function/function-40-903.xsl
+@@ -8,7 +8,7 @@
+   
+   <xsl:function name="f:add" as="xs:integer">
+     <xsl:param name="x" as="xs:integer*"/>
+-    <xsl:param name="y" as="xs:integer*" required="no" select="1e7"/>
++    <xsl:param name="y" as="xs:integer*" required="no" select="QName('urn:invalid', 'invalid')"/>
+     <xsl:sequence select="sum(($x, $y))"/>
+   </xsl:function>
+ 

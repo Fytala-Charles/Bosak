@@ -1,0 +1,21 @@
+[
+    {
+        "url":  "https://qt4cg.org/specifications/xslt-40/Overview.html#function-arguments",
+        "sections":  [
+                         "10.3.2",
+                         "10.3.3"
+                     ],
+        "snapshot":  ".guard-tmp/default-errors-xslt-spec.html",
+        "sha256":  "931e6984d3de274dc49b1f9a75ef4e2556729b32497fa083e72af8bb4ce14e79"
+    },
+    {
+        "url":  "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-eval-static-function-call",
+        "sections":  [
+                         "4.6.1.2",
+                         "3.4",
+                         "3.4.2"
+                     ],
+        "snapshot":  ".guard-tmp/default-errors-xpath-spec.html",
+        "sha256":  "2b74a86d305f01cc533fa852b6cc1e84ad17dcb1f8d1350cd60df8d35d47ddfa"
+    }
+]
