@@ -1,3 +1,17 @@
+# Optional-function upstream contribution - 2026-10-14
+
+Source main b6951cfa960628bf6ace6b5b7b765b57880a6bb0 includes PR #278, merged after successful CI 38549161397. User explicitly authorized the next upstream test contribution; no 1.3.0 publication authorization. Evidence branch test/xslt40-optional-function-contribution starts from that source main.
+
+Submitted https://github.com/qt4cg/xslt40-test/pull/31. Upstream master was fetched before branching and immediately before submission; unchanged exact base 91328fbf0fed4a5d2813eb3661808ee53cb961ba. Upstream branch bosak/optional-function-boundaries, head f78438899ec32d502501019fa0b7c213aac6d51e. Four-file additive diff: 23 catalog lines and three fixtures, no existing assertions changed. Submission metadata reports OPEN/MERGEABLE; acceptance and independent processor confirmation pending.
+
+Cases function-40-024/025/026 cover reordered keyword omissions versus explicit empty arguments and arrow calls; global binding shadowed by earlier function parameter/caller local for select/content defaults; creation item/position/size for named references, lookup and partial application under changed invocation focus. Exact 3/0; schema valid; three deliberate mutations each fail result comparison and originals restored byte-for-byte. Retained compatible 1.2.1 harness with all pre-feature Bosak library assemblies: 0/3, XTSE0020. A mixed current-harness/old-library attempt failed assembly loading and is excluded. Portable patch, receipts, hashes and logs: contributions/xslt40/optional-function-boundaries.
+
+Broader function-40 sample: 29/10/363 versus unmodified current upstream catalog 26/10/363. Same ten failures: eight pre-existing unsupported no-namespace function cases 014-021; 012 selects a code attribute then applies @code to it, returning empty; 904 expects XPTY0004 where Bosak reports XTTE0600 for an invalid empty default. Leave these fixtures/assertions unchanged; evaluate the two test/spec discrepancies separately before any correction proposal. Existing higher-order-functions-081 passes 1/0/84. Sample filter function also selects other function sets; skips are unselected or unsupported, not passes. Do not promote this family to a gate.
+
+No engine, API, gate, version or publication changes in this contribution. Source 1.3.0 remains unpublished; libraries 1.2.1, extension 0.1.6 published. Existing implementation checks remain authoritative: solution 8219/0/0, XSLT 5333, LS 77/0/0, QT3 31142/0/679, qt4 gate-only 8278/0/1894. Next: await upstream review/independent execution; assess the two observed test/spec discrepancies separately. Reassess a 1.3.0 release only after explicit release authorization and package/consumer verification. Preserve #29/#30 and all historical receipts.
+
+Earlier records below are historical.
+
 # Optional/default XSLT function arguments - 2026-10-14
 
 Base main 87bbaf0dd9a0ec193f9134c485c41eea79b85007 (extension 0.1.6 publication records integrated). Branch feat/xslt40-optional-function-arguments. User resumed the planned bounded optional/default argument slice after reviewing/publishing the extension. Source version 1.3.0 (minor new feature); published libraries 1.2.1 and Marketplace extension 0.1.6 unchanged.

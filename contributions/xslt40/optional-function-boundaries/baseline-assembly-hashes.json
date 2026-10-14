@@ -1,0 +1,63 @@
+﻿{
+    "baseline":  "Retained compatible 1.2.1 harness; all Bosak library assemblies copied from the pre-feature test snapshot. Not a fresh source checkout baseline.",
+    "snapshot":  ".Temp/BosakOptionalBaseline-20261014",
+    "harnessSnapshot":  ".guard-tmp/key-batch-pre-fix-harness",
+    "replayDirectory":  ".Temp/BosakOptionalUpstreamBaselineCompatible-20261014",
+    "assemblies":  [
+                       {
+                           "name":  "Bosak.XPath.Api.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "8b21f0175124117889a720b58c7e983296e86fb573ee42a09a2d5e7bf9847f56"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Compiler.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "9b675b6953854e0e6b50f777e8941dee871361fb222e68ff82728e97d73d8999"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Core.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "d269a170ef25b50a269cb63d68421c6a4133319cbb2ae31f77e004ffeb4993e8"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Parser.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "1be3d787cbf4198b3b32979cebd815c543da4fb8ba513e2db6b082d46d4dd92e"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Providers.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "a52e4430400fa8b567208ae6f5c6fc07bddb179009f544964e808fb9b2f2c45f"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Runtime.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "7bd84a304e78ab7e29d235a848a3075c7651cbef8bab18a0b20841a0087dcd43"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Standard.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "b087737bb56f47d215553c5694baeb1d2866971e33823e4f049594c1de6cbbe7"
+                       },
+                       {
+                           "name":  "Bosak.XQuery.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "d7b43ec9a3c1a0a6b86e4d28e9f9fba21d05405abb2f01fc221b85d85d7d4e1e"
+                       },
+                       {
+                           "name":  "Bosak.Xslt.Conformance.dll",
+                           "version":  "1.0.0.0",
+                           "sha256":  "67e7ead307981086ab5722b1ec0f047cc6084dd77d3823bb5cf9e7fd7bf3b695"
+                       },
+                       {
+                           "name":  "Bosak.Xslt.dll",
+                           "version":  "1.2.1.0",
+                           "sha256":  "9c1991873442cf566e0e407e1e5c748995cad8b7f4862a4b5e880b0b044ac04f"
+                       },
+                       {
+                           "name":  "Bosak.Xslt.Tests.dll",
+                           "version":  "1.0.0.0",
+                           "sha256":  "c21ef83c5f91a101d16ea81a8345c4ae65f6e116f3333f9fd707a412431f99a6"
+                       }
+                   ]
+}

@@ -4,6 +4,8 @@
   <p>Bounded source slice - 14 October 2026</p>
 </div>
 
+**Optional-function upstream tests - 2026-10-14:** [PR #31](https://github.com/qt4cg/xslt40-test/pull/31) submits three cases for keyword omission versus explicit empty values, shadowed global defaults, and function-item creation focus. Exact checks pass 3/0; all three negative controls and pre-feature replays fail as expected. The broader sample has 29 passes and ten unchanged existing failures. Prepared against refreshed upstream `91328fbf`; acceptance and independent confirmation are pending. [Contribution evidence](../contributions/xslt40/optional-function-boundaries/README.md). Implementation PR #278 merged after CI; source 1.3.0 remains unpublished, libraries 1.2.1 and extension 0.1.6 remain published.
+
 Source candidate **1.3.0** supports optional/default parameters on ordinary XSLT 4.0 stylesheet functions. This is new functionality, so the coordinated library source version advances by a minor version. Published libraries remain 1.2.1; Marketplace extension 0.1.6 is separate. No release is authorized or published by this implementation step.
 
 ```xml

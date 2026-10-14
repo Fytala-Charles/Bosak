@@ -1,5 +1,7 @@
 # Native XSLT 4.0 contributions
 
+**Optional-function upstream tests - 2026-10-14:** [PR #31](https://github.com/qt4cg/xslt40-test/pull/31) submits three cases for keyword omission versus explicit empty values, shadowed global defaults, and function-item creation focus. Exact checks pass 3/0; all three negative controls and pre-feature replays fail as expected. The broader sample has 29 passes and ten unchanged existing failures. Prepared against refreshed upstream `91328fbf`; acceptance and independent confirmation are pending. [Contribution evidence](optional-function-boundaries/README.md). Implementation PR #278 merged after CI; source 1.3.0 remains unpublished, libraries 1.2.1 and extension 0.1.6 remain published.
+
 
 **Current contribution status - 2026-10-14:** [PR #30](https://github.com/qt4cg/xslt40-test/pull/30) submits two key-indexing static-context cases; exact 2/0, expanded family 18/0/0. Both fail with retained pre-index-fix binaries, and namespace negative controls fail exactly the two new cases. [Evidence and base policy](key-index-contexts/README.md). Original seventeen accepted cases remain accepted; these two additional cases and correction PR #29 await upstream review and independent execution confirmation. Candidate 1.2.1 remains unpublished. Earlier milestones below are historical.
 
