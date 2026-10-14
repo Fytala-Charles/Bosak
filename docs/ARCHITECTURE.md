@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**VS Code 0.2.0 candidate - 2026-10-14:** Bundles Bosak 1.4.0 and connects XSLT diagnostics to retained stylesheet contexts. Coverage gaps remain warnings; external module resolution is deferred. DLL/apphost launching and runtime dependency packaging are corrected. [Scope and verification](VSCODE-0.2.0-PREPARATION.md). Marketplace remains 0.1.6 pending publication; NuGet remains 1.4.0.
+
 **1.4.0 published - 2026-10-14:** All ten .NET 10 libraries are published from approved tag `v1.4.0` (`1ebbc8ec`). Private XSLT 4.0 functions without a namespace are included. The release workflow passed 8,298 solution tests; a fresh nuget.org-only consumer passes 120 checks and verifies ten assembly versions as 1.4.0.0. [Scope, limitations and publication evidence](RELEASE-NOTES-1.4.0.md). The separately published extension remains 0.1.6. Earlier entries below are historical.
 
 **1.4.0 release preparation - 2026-10-14:** The private namespace-free function scope is frozen after PR #284. All ten local packages pass content/revision/provenance checks; a fresh package-only consumer passes 120 checks and verifies ten assembly versions. [Release scope and evidence](RELEASE-NOTES-1.4.0.md). Source 1.4.0 is unpublished; libraries remain released at 1.3.2 and extension at 0.1.6. Tagging/publication await approval of the exact final verified revision. Earlier entries below are historical.
