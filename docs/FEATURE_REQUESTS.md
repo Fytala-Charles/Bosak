@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Both slices integrated - 2026-10-14:** VS Code candidate 0.2.0 is verified at `ebd37910` with engine 1.4.0; used-package optional functions are integrated at `bfb050e5` as source candidate 1.5.0. PRs #287/#288 passed exact-head CI; all 8,331 solution and 84 language-server tests pass on the engine slice, with frozen gates unchanged. [Delivery and exact-revision package evidence](XSLT40-USED-PACKAGE-DELIVERY.json). Marketplace remains 0.1.6 and NuGet remains 1.4.0; neither new candidate has been published.
+
 **Used-package optional functions - 2026-10-14:** Source candidate 1.5.0 executes reduced-arity/default calls with declaring-package scope, caller focus and upper-bound accept/expose identities. Private helpers stay isolated. Optional overrides and overlapping adopted ranges remain explicit unsupported boundaries; authoring package coverage is unchanged. 33 new cases; solution 8,331/0/0, language server 84/0/0; frozen gates unchanged. [Contract and evidence](XSLT40-USED-PACKAGE-OPTIONAL-FUNCTIONS.md). NuGet remains 1.4.0; the verified VS Code 0.2.0 candidate remains pinned to engine 1.4.0, Marketplace 0.1.6. Earlier entries below are historical.
 
 **VS Code 0.2.0 candidate - 2026-10-14:** Bundles Bosak 1.4.0 and connects XSLT diagnostics to retained stylesheet contexts. Coverage gaps remain warnings; external module resolution is deferred. DLL/apphost launching and runtime dependency packaging are corrected. [Scope and verification](VSCODE-0.2.0-PREPARATION.md). Marketplace remains 0.1.6 pending publication; NuGet remains 1.4.0.
