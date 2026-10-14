@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-14",
+  "extension": "fytala.vscode-bosak",
+  "version": "0.1.6",
+  "status": "Published and downloaded from Marketplace",
+  "authorized": true,
+  "sourceRevision": "b57b03d33c0f82dbb343cdd0e2f28bd1e5fc0cb5",
+  "workflowRun": 38541679579,
+  "workflowConclusion": "success",
+  "marketplace": "https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak",
+  "publishedVsixSha256": "10ab1d2a60fd20350087ed6ec9363f97241700cb689ea1c9c3a74e83114084b4",
+  "ciVsixSha256": "a34c3a60b934f73c24f9aed88a8ef45b2b311deca74b102f9c282fe8b0a0b4dc",
+  "verifiedContents": {
+    "extension/package.json": "1a35e977518d06a050f451dcde007c440f0abcaf55b004df446036b2c0c681c8",
+    "extension/syntaxes/xslt.tmLanguage.json": "729a2170ab5aa891de8b045fedafe3c71de63c7dd1843bf945c7f06be20e88ca",
+    "extension/syntaxes/xpath.tmLanguage.json": "e9e6beae67c5ae9921275e10040b73dc79d4285e908f0b5aec70160e4beb8efd",
+    "extension/out/extension.js": "0801464bceb93be6e42a369875e715798dcfb0e9bd41b5dc65127a0a113933ea",
+    "extension/server/Bosak.LanguageServer.dll": "d3aea85009ad879e6f5975597aff79c78c6474f67e36bdf753e13ee50354cbb6"
+  },
+  "grammarMatchesReviewedSource": true,
+  "bundledServerMatchesCi": true,
+  "testsExcluded": true,
+  "libraryVersion": "1.2.1",
+  "libraryPublicationUnaffected": true,
+  "workflowLogSha256": "b47b040947cf7614abf69327adff6ace18afaf1185b776676c05b145ce2627b7"
+}

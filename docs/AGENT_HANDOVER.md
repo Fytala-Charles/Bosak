@@ -1,3 +1,13 @@
+# VS Code 0.1.6 Marketplace publication - 2026-10-14
+
+User reviewed the local VSIX and explicitly authorized Marketplace publication. Published fytala.vscode-bosak 0.1.6 from approved merged revision b57b03d33c0f82dbb343cdd0e2f28bd1e5fc0cb5 through workflow_dispatch run 38541679579, which succeeded. Downloaded public Marketplace VSIX and CI artifact; manifest publisher/name/version, corrected XPath/XSLT grammars, extension client and bundled server all match. Tests excluded from VSIX. Receipt: docs/VSCODE-0.1.6-PUBLICATION.json. Library release 1.2.1 unaffected; no new NuGet publication.
+
+vscode-bosak contains one extension supporting XPath, XSLT and XQuery. Existing 0.1.4/0.1.5 VSIX files are historical builds of that extension. Current Marketplace: https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak. User can update and reload VS Code.
+
+Canonical documentation synchronized. Next: integrate publication documentation after CI, then resume the planned optional/default XSLT function argument slice. Upstream #29/#30 review and independent processor confirmation remain pending; refresh upstream before contribution branching and submission. Preserve original preparation receipt and downloaded/CI artifacts.
+
+Earlier records below are historical.
+
 # VS Code XSLT highlighting - 2026-10-14
 
 Base main 8bba94dd (1.2.1 publication documentation integrated). Branch fix/vscode-xslt-highlighting. User requested distinct attribute name/value colors and function/string colors in select="concat('a','b')". Extension candidate version 0.1.6; library version remains published 1.2.1.

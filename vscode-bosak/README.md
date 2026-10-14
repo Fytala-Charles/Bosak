@@ -2,11 +2,11 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Highlighting correction (0.1.6 candidate)
+## Highlighting correction (0.1.6)
 
 XML attribute names and plain attribute values have separate scopes. In XSLT expression attributes such as `select="concat('a','b')"`, attribute names, function calls, strings, variables and numbers use distinct token categories. Both XML quote styles and multiline values are supported. Colors follow the active theme; Dark+ displays `select` light blue, `concat` yellow and the strings orange.
 
-The new 0.1.6 candidate is available as a local VSIX; Marketplace publication remains pending. Use **Extensions: Install from VSIX...**, select the candidate package, then **Developer: Reload Window**. The language mode for `.xsl`/`.xslt` files should be **XSLT**. Attribute value templates and arbitrary aliases of the XSLT namespace prefix remain outside this focused correction.
+Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the Bosak extension and reload VS Code. A local VSIX is also available. Use **Extensions: Install from VSIX...**, select the candidate package, then **Developer: Reload Window**. The language mode for `.xsl`/`.xslt` files should be **XSLT**. Attribute value templates and arbitrary aliases of the XSLT namespace prefix remain outside this focused correction.
 
 ## Features
 
@@ -41,7 +41,7 @@ The new 0.1.6 candidate is available as a local VSIX; Marketplace publication re
 
 Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
 [marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
-Published versions: **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+Published versions: **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
 
 ### Option 2 — Development / Sideload (recommended for contributors)
 
