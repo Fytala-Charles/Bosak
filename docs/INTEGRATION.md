@@ -5,6 +5,8 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Private namespace-free functions - 2026-10-14:** Source candidate 1.4.0 supports ordinary XSLT 4.0 private no-namespace functions with arity-aware fn fallback, explicit EQName identity, optional calls, authoring signatures and runtime pattern/AVT calls. Eight upstream cases and 39 focused cases pass; solution 8,298/0/0 and frozen gates unchanged. [Contract and evidence](XSLT40-NO-NAMESPACE-FUNCTIONS.md). Published libraries remain 1.3.2 and extension 0.1.6; this slice is unpublished. Earlier milestone entries below are historical.
+
 **1.3.2 published - 2026-10-14:** All ten .NET 10 libraries are published at 1.3.2 from approved tag `v1.3.2` (`3d90d346`). Optional/default XSLT function arguments and bounded conversion corrections are included. The release workflow passed 8,259 solution tests; a fresh nuget.org-only consumer passes 79 checks and verifies ten assembly versions. [Scope, limitations and publication evidence](RELEASE-NOTES-1.3.2.md). The separately published extension remains 0.1.6. Earlier entries below are historical.
 
 **1.3.2 release preparation - 2026-10-14:** Bounded optional/default XSLT function arguments, default error identity and primitive numeric coercion are integrated through PR #281. All ten local packages pass content/provenance checks; a fresh-cache consumer passes 79 checks. [Frozen scope and evidence](RELEASE-NOTES-1.3.2.md). Libraries remain published at 1.2.1 and extension at 0.1.6; tagging/publication await approval of the final verified revision. Earlier entries below are historical.

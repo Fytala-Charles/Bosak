@@ -1,0 +1,185 @@
+{
+  "implementationRevision": "f76052a8a8c7f81fccf01a2af02b074f22b2bad0",
+  "baseMain": "e4eab852dc2e53275b4135b0bc3d403bc7cfe194",
+  "version": "1.4.0",
+  "publication": "Unpublished source candidate; user authorized implementation, not publication",
+  "date": "2026-10-14",
+  "specification": {
+    "uri": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "sha256": "931e6984d3de274dc49b1f9a75ef4e2556729b32497fa083e72af8bb4ce14e79",
+    "retrievedAt": "Wed, 14 Oct 2026 16:32:54 GMT",
+    "sections": [
+      "10.3.1",
+      "10.3.4.3",
+      "24.2.1"
+    ],
+    "date": "2026-10-14"
+  },
+  "verification": {
+    "solution": {
+      "passed": 8298,
+      "failed": 0,
+      "skipped": 0
+    },
+    "xslt": {
+      "passed": 5412,
+      "failed": 0,
+      "skipped": 0
+    },
+    "focused": {
+      "passed": 39,
+      "failed": 0,
+      "skipped": 0
+    },
+    "languageServer": {
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ],
+    "nativeExact": [
+      8,
+      0
+    ],
+    "nativeBaseline": [
+      0,
+      8
+    ],
+    "nativeFunction40Family": [
+      36,
+      0,
+      363
+    ],
+    "nativeFamilyBaseline": [
+      28,
+      8,
+      363
+    ]
+  },
+  "nativeSuite": {
+    "remote": "https://github.com/qt4cg/xslt40-test",
+    "upstreamMaster": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "checkout": "acb80188d2ff98e69c27343b24f0b85ed00f1dfe",
+    "branch": "bosak/optional-default-corrections",
+    "note": "Family sample includes pending PR32 corrections to 012/903. All eight target fixtures are unchanged from upstream master; this is not acceptance or full-suite conformance. No upstream files modified by this slice."
+  },
+  "cases": [
+    {
+      "name": "function-40-014",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "e0dffb7206c1620f7af4248d8c9b50359a9e11095b6d636b920b85d9e94c6188",
+      "baselineLogSha256": "b0cdb8cafb101813c6820d8588b669c5e38c59ee49c881821f82b8f257a7390c",
+      "finalLogSha256": "0d3238dcc2463ccedc69adbcde22897e8503a44335e3fb8c71912aec56d60681",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-015",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "5174720833f6f03852620422ef393dda38204b3c61c6e69ebab55bda6a9edce1",
+      "baselineLogSha256": "0c6f9f8b5b5a14cb96169a4f4b286994ee5d6dbd75bb3072916e35ef7534bc7f",
+      "finalLogSha256": "f826bb865ee366ff08cd10dbdf8ec9299c8ad997a619a30d12361d106b9cde39",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-016",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "843bf9dbacf7d1d92d7dea3fdb30932c6f6107332ef3ceade9ca971d5f3bf564",
+      "baselineLogSha256": "a745972c1474365bf60be903c641a3f22ee951d6ec04e2fd73731bfe5042d4de",
+      "finalLogSha256": "5c2b63c453df45ed8de03db98b7c86a0bdc1a4aa76f64018d33df55824090bc4",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-017",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "0e8ff2e022b96ecd43f77493375eff0eb938d82b8780fb4f0dca727835989de5",
+      "baselineLogSha256": "0723e3c36dc436ba034eb06fa7463f4084d6cdf89f9843f32a58e385456e71ab",
+      "finalLogSha256": "c67ed1cc2f5d23f4d49463eb96cb8e8e9234ea33612bddb336f6e2561af7f2c4",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-018",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "0b973a4b76f62f394b16a032525884a016187a447fa0093a376b919aeb9edb77",
+      "baselineLogSha256": "15ffe2300cfd822390b383b1b964f15addae7db8bde7ef6d54a05d141bd9bf00",
+      "finalLogSha256": "ba37a886d74696b11d958d09ceb67aeae9b36ac8d8c3ef7c15f0491b2462fa31",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-019",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "413e0a87ee859775557fb42e95d9948c41a8781ca40523284f3c8839b012015f",
+      "baselineLogSha256": "cbadfd8e957f904321e4c10d4d031cb5b77888779498f21452b6abd9cf04570b",
+      "finalLogSha256": "a9e4a10d14a3cf03a63299f1ce68add36a08701d9b1d044f7de516671469163b",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-020",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "1ad38bbb455a72931c8a1cad9654f0c6591c5b639945c5922f9aab96634ac98c",
+      "baselineLogSha256": "1e17a9c5406e4f4b9c67cff011b59b2b4cfdb4ee4a541ffd0a7120df2fe95c69",
+      "finalLogSha256": "6288913200206b395d2235e486971b989d6dfb8a811141c2b22ec6532c9a4096",
+      "unchangedFromUpstreamMaster": true
+    },
+    {
+      "name": "function-40-021",
+      "baseline": "FAIL XTSE0740",
+      "final": "PASS",
+      "fixtureSha256": "7124fac7d926f25e945bdcdd24ebd4253bb439b5869ae931aed3b2357c51ea0c",
+      "baselineLogSha256": "87a574478b07f8d882d9ca8b66f82bc5683f3bf5803fa6a9b34990b7406aec20",
+      "finalLogSha256": "4f87706941549a60fe690a1e0d3b96ecb2682b562961d6f22e804377f1bfc83e",
+      "unchangedFromUpstreamMaster": true
+    }
+  ],
+  "baseline": {
+    "directory": ".Temp/BosakNoNamespaceBaseline-20261014",
+    "assemblyVersion": "1.3.2.0",
+    "xsltDllSha256": "5ae757ddcf6c9f16dabb1382f089be14835aa198c38f443d0c85d26a0f6ab5e8"
+  },
+  "finalBinaries": {
+    "src/Bosak.Xslt/bin/Release/net10.0/Bosak.Xslt.dll": "51def84ad8a7750926cba673c7ac1f91ffe47e9f31cd8483c3a03c5fdc49a1cc",
+    "src/Bosak.XPath.Api/bin/Release/net10.0/Bosak.XPath.Api.dll": "5689b9e6e576e47c6c3261bf036873d596570d7676fe6b05abd9307da13ff0de",
+    "src/Bosak.XPath.Compiler/bin/Release/net10.0/Bosak.XPath.Compiler.dll": "71a4a85b1dae54bd3f976fe6efd2d13981a9e92b8c52757dc7233b74d67ad92c"
+  },
+  "codeTrees": {
+    "src": "ea3a74c86b63c4cd5af06037c328da86f41b0936",
+    "tests": "1b95b11d098cbef4481217ae0b5885edb7dbd4a3"
+  },
+  "logs": {
+    ".guard-tmp/no-namespace-verified-build.log": "ceb620b0ec0e368a4161369a1c8149219c97413c81e4f6e11bc4bd44058e5dd5",
+    ".guard-tmp/no-namespace-solution-green.log": "9764184116bfcead3d7b59b66aca15fd996717bebd758593d80476a175001bb9",
+    ".guard-tmp/no-namespace-focused-verified.log": "dc320f67b40824dd66bc3b2585388f28206a76158710fc885c00c1bb32ca5b3c",
+    ".guard-tmp/no-namespace-qt3-final.log": "be8139865a081f7bce625589f6c2f37c9f73d556b8c806d03bc4f738d7b3a136",
+    ".guard-tmp/no-namespace-qt4-final.log": "622a59599f56fa45d70b1222f9d3061e28d15589471e2b5ac5d01c4f28e50288",
+    ".guard-tmp/no-namespace-language-server-final.log": "a4a0e42d9c78c4a775119e48c5711ba33d886c617a5677677eed85f5e13779ee",
+    ".guard-tmp/no-namespace-native-family.log": "fdb2ffab01b4931548497aaeb9ddc15664127894a82165b8947f646cd3e29049",
+    ".guard-tmp/no-namespace-baseline-family.log": "f403c07bdcd932ac24318064f6fac542b17f61d013dc252caf5f0dc1c9c7c363"
+  },
+  "excludedPreliminaryRuns": [
+    "First focused run exposed arrow lowering, earlier-profile validation and test descriptor traversal gaps.",
+    "First solution run retained two outdated all-no-namespace-invalid expectations; updated to public visibility errors.",
+    "Initial package tests lacked package registration; corrected and serialized in the existing package registry collection.",
+    "An editing helper used the Windows default encoding; original Unicode restored before final build/tests."
+  ],
+  "boundaries": [
+    "General keyword placeholder support is unchanged; positional placeholders plus keyword arguments are enabled for resolved no-namespace host calls.",
+    "Used-package optional ranges and optional xsl:override remain explicitly unsupported.",
+    "Broader expose/accept/override linkage, conditional/shadow/ambiguous authoring graphs and named-type/pattern/AVT replacement remain separate work.",
+    "No new public API or conformance gate membership."
+  ]
+}
