@@ -317,6 +317,7 @@
 //                      | Charles Korthout | 2.156 | 13-10-2026     | Share module fixed-binding policy independently of local expression grammar.              |
 //                      | Charles Korthout | 2.157 | 13-10-2026     | Retain fixed variable and parameter identities across local earlier profiles.              |
 //                      | Charles Korthout | 2.158 | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
+//                      | Charles Korthout | 2.159 | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1093,6 +1094,12 @@ internal sealed class Stylesheet
         => element.Name.NamespaceName == XslNamespace
             && (element.Name.LocalName is "template" or "call-template")
             && HasModuleFixedNamespaces(element);
+
+    /// <summary>Gets whether a function declaration uses its module fixed bindings.</summary>
+    /// <param name="element">The function declaration.</param>
+    /// <returns>Whether the function belongs to a fixed-binding module.</returns>
+    internal static bool UsesModuleFixedFunctionNamespaces(XElement element)
+        => element.Name == XName.Get("function", XslNamespace) && HasModuleFixedNamespaces(element);
 
     internal static Dictionary<string, string> GetApplicableStaticNamespaces(XElement element, IXsltUriResolver? resolver = null, string? baseUri = null)
     {
@@ -3724,6 +3731,7 @@ internal sealed class Stylesheet
                         baseName != "new-each-time" &&
                         baseName != "cache" &&
                         baseName != "identity-sensitive" &&
+                        baseName != "version" &&
                         baseName != "expand-text" &&
                         baseName != "streamability" &&
                         baseName != "use-when")
@@ -4621,7 +4629,8 @@ internal sealed class Stylesheet
                             : nameAttr.Value;
                         ValidateXsltName(elem, nameValue, $"xsl:{localName}/@name",
                             useApplicableNamespaces: localName is "template" or "call-template" or "function" or "key",
-                            namespaceBindings: UsesModuleFixedTemplateNamespaces(elem) ? GetApplicableStaticNamespaces(elem) : null);
+                            namespaceBindings: UsesModuleFixedTemplateNamespaces(elem) || UsesModuleFixedFunctionNamespaces(elem)
+                                ? GetApplicableStaticNamespaces(elem) : null);
                     }
                 }
 
@@ -6179,7 +6188,8 @@ internal sealed class Stylesheet
         // QName-valued attributes are whitespace-collapsed by the XSLT data model,
         // so leading and trailing space around a lexical or EQName must be ignored.
         name = name.Trim();
-        var moduleVariableBindings = UsesModuleFixedVariableNamespaces(element) || UsesModuleFixedTemplateNamespaces(element);
+        var moduleVariableBindings = UsesModuleFixedVariableNamespaces(element) || UsesModuleFixedTemplateNamespaces(element)
+            || UsesModuleFixedFunctionNamespaces(element);
         if (UsesXPath40Namespaces(element) || moduleVariableBindings)
             return ValidateXsltName(element, name, "variable/parameter name", useApplicableNamespaces: true,
                 namespaceBindings: moduleVariableBindings ? GetApplicableStaticNamespaces(element) : null);

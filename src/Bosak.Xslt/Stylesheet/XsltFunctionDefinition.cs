@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 1.0   | 30-09-2026     | REQ-114 (PB-3 C9): tolerate pre-E36 xsl:function/@name="#arity" suffix (package-021err) |
 //                      | Charles Korthout | 1.1   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.2   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -271,7 +272,7 @@ internal sealed class XsltFunctionDefinition
     /// </summary>
     private static (string nsUri, string localName) ResolveQNameString(string name, XElement element)
     {
-        if (Stylesheet.UsesXPath40Namespaces(element))
+        if (Stylesheet.UsesXPath40Namespaces(element) || Stylesheet.UsesModuleFixedFunctionNamespaces(element))
         {
             var (local, ns) = ValidateFunctionQName(element, name);
             return (ns, local);
@@ -309,10 +310,13 @@ internal sealed class XsltFunctionDefinition
     }
 
     /// <summary>Validates a function name against applicable namespace bindings and namespace restrictions.</summary>
-    internal static (string LocalName, string NamespaceUri) ValidateFunctionQName(XElement element, string name)
+    internal static (string LocalName, string NamespaceUri) ValidateFunctionQName(XElement element, string name,
+        IReadOnlyDictionary<string, string>? namespaceBindings = null)
     {
         var expanded = Stylesheet.ValidateXsltName(element, Stylesheet.StripAritySuffix(name.Trim()),
-            "xsl:function/@name", useApplicableNamespaces: true);
+            "xsl:function/@name", useApplicableNamespaces: true,
+            namespaceBindings: namespaceBindings ?? (Stylesheet.UsesModuleFixedFunctionNamespaces(element)
+                ? Stylesheet.GetApplicableStaticNamespaces(element) : null));
         if (expanded.namespaceUri.Length == 0)
             throw new InvalidOperationException("XTSE0740: xsl:function name must be in a namespace.");
         if (ReservedFunctionNamespaces.Contains(expanded.namespaceUri))

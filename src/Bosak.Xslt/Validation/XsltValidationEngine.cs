@@ -35,6 +35,7 @@
 //                      | Charles Korthout | 0.15  | 13-10-2026     | Apply retained module fixed bindings to locally earlier expression and pattern slots.     |
 //                      | Charles Korthout | 0.16  | 13-10-2026     | Bind and validate locally earlier variable/parameter names in retained module contexts.    |
 //                      | Charles Korthout | 0.17  | 14-10-2026     | Retain module fixed template identities across local earlier profiles.                     |
+//                      | Charles Korthout | 0.18  | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -308,7 +309,8 @@ internal sealed class XsltValidationEngine
             || element.Name.NamespaceName != AttributeSlotClassifier.XsltNamespace
             || element.Name.LocalName is not ("variable" or "param" or "with-param" or "template" or "call-template" or "function" or "mode" or "key")) return;
         bool moduleBindings = Stylesheet.Stylesheet.UsesModuleFixedVariableNamespaces(element)
-            || Stylesheet.Stylesheet.UsesModuleFixedTemplateNamespaces(element);
+            || Stylesheet.Stylesheet.UsesModuleFixedTemplateNamespaces(element)
+            || Stylesheet.Stylesheet.UsesModuleFixedFunctionNamespaces(element);
         if (GetEffectiveVersion(node) < 4.0 && !moduleBindings) return;
         var attribute = node.Attributes.FirstOrDefault(a => a.LocalName == "name" && a.NamespaceUri.Length == 0);
         if (attribute is null) return;
@@ -318,7 +320,8 @@ internal sealed class XsltValidationEngine
             if (element.Name.LocalName == "key" && attribute.ExpandedValue.Length == 0)
                 throw new InvalidOperationException("XTSE0010: xsl:key must have a name attribute.");
             if (element.Name.LocalName == "function")
-                _ = Stylesheet.XsltFunctionDefinition.ValidateFunctionQName(element, attribute.ExpandedValue);
+                _ = Stylesheet.XsltFunctionDefinition.ValidateFunctionQName(element, attribute.ExpandedValue,
+                    moduleBindings ? attribute.DeclarationContext?.StaticNamespaces : null);
             else
                 _ = Stylesheet.Stylesheet.ValidateXsltName(element, attribute.ExpandedValue, $"xsl:{element.Name.LocalName}/@name", useApplicableNamespaces: true,
                     namespaceBindings: moduleBindings ? attribute.DeclarationContext?.StaticNamespaces : null);

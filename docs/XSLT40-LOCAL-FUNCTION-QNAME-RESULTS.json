@@ -1,0 +1,53 @@
+{
+    "date":  "2026-10-14",
+    "base":  "b94ebbb069ff6417efc99d003655d92bcdb18cb3",
+    "branch":  "fix/xslt40-local-function-qnames",
+    "implementation":  "Working tree pending commit",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "scope":  "Module fixed QName identities for locally earlier function declarations, runtime registration and authoring keyword signature capture; acceptance of standard function version attribute.",
+    "verification":  {
+                         "newTestsPassed":  12,
+                         "focusedPassed":  31,
+                         "fullUnitPassed":  8110,
+                         "xsltUnitPassed":  5224,
+                         "failed":  0,
+                         "skipped":  0,
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  12
+                                   }
+                     },
+    "initialFocused":  "Seven new execution tests first failed XTSE0090 because the function attribute whitelist omitted the standard version attribute. After correcting the whitelist, all 31 focused checks pass. This is not an unmodified-base baseline.",
+    "environment":  "Non-XSLT solution tests run outside the sandbox for local HTTP listener access; full XSLT tests run outside the sandbox from a temporary copy to avoid Application Control issues.",
+    "architecture":  "Construct-specific module binding predicate; explicit retained namespace maps for function QName authoring diagnostics; captured function signature identities independent of local grammar. No public API or gate membership changes.",
+    "boundaries":  [
+                       "Mode/key and other component QName paths under local versions remain separate audits.",
+                       "Optional/default execution, broad package linkage, named-type edit compilation and pattern/AVT replacement remain separate.",
+                       "Shadow expression compilation and full shadow authoring validation are not expanded by this slice.",
+                       "No native suite rerun or upstream case modifications."
+                   ],
+    "specification":  [
+                          "https://qt4cg.org/specifications/xslt-40/Overview.html#fixed-namespaces",
+                          "https://qt4cg.org/specifications/xslt-40/Overview.html#standard-attributes"
+                      ],
+    "logs":  [
+                 ".guard-tmp/local-function-build.log",
+                 ".guard-tmp/local-function-focused.log",
+                 ".guard-tmp/local-function-unit.log",
+                 ".guard-tmp/local-function-xslt.log",
+                 ".guard-tmp/local-function-qt3.log",
+                 ".guard-tmp/local-function-qt4.log"
+             ]
+}

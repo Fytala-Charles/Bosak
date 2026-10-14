@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -26,6 +27,42 @@ namespace Bosak.Xslt.Tests.Validation;
 /// <summary>Tests function QName bindings across compilation, calls and authoring diagnostics.</summary>
 public class Xslt40FunctionQNameTests
 {
+    /// <summary>Local earlier declarations retain module identity for positional and keyword calls.</summary>
+    /// <param name="name">The declared name.</param>
+    /// <param name="call">The call expression.</param>
+    /// <param name="version">The local function version.</param>
+    [Theory]
+    [InlineData("p:f", "q:f(7)", "3.0")]
+    [InlineData("q:f", "p:f(7)", "2.0")]
+    [InlineData("Q{urn:fixed}f", "q:f(7)", "3.0")]
+    [InlineData("p:f", "Q{urn:fixed}f(7)", "2.0")]
+    [InlineData("q:f#1", "q:f(7)", "3.0")]
+    [InlineData("p:f", "q:f(q:v := 7)", "3.0")]
+    [InlineData("q:f", "p:f(Q{urn:fixed}v := 7)", "2.0")]
+    public void LocalEarlierFunctionNamesExecute(string name, string call, string version)
+    {
+        var text = Sheet("<xsl:function version='" + version + "' xmlns:p='urn:local' name='" + name + "'><xsl:param name='p:v'/><xsl:sequence select='$q:v'/></xsl:function><xsl:template match='/'><out><xsl:value-of select='" + call + "'/></out></xsl:template>");
+        Assert.Equal(XsltValidationOutcome.Valid, Validate(text).Outcome);
+        Assert.Equal("7", Transform(text));
+    }
+
+    /// <summary>Local earlier declarations report module-bound QName errors even when unused.</summary>
+    /// <param name="name">The invalid name.</param>
+    /// <param name="bindings">The module bindings.</param>
+    /// <param name="code">The expected static error.</param>
+    [Theory]
+    [InlineData("p:f", "#standard", "XTSE0280")]
+    [InlineData("a:b:c", "#standard", "XTSE0020")]
+    [InlineData("p:f", "#standard p=http://www.w3.org/2005/xpath-functions", "XTSE0080")]
+    [InlineData("f", "#standard", "XTSE0740")]
+    [InlineData("Q{}f", "#standard", "XTSE0740")]
+    public void LocalEarlierInvalidNamesAreRejected(string name, string bindings, string code)
+    {
+        var text = Sheet("<xsl:function version='3.0' name='" + name + "'><xsl:sequence select='7'/></xsl:function>", bindings);
+        Assert.Contains(Validate(text).Diagnostics, d => d.Code == code);
+        Assert.Contains(code, Assert.Throws<InvalidOperationException>(() => new Api.XsltCompiler().Compile(text)).Message);
+    }
+
     private static string Sheet(string body, string bindings = "#standard p=urn:fixed q=urn:fixed") => "<xsl:stylesheet version='4.0' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:p='urn:native' fixed-namespaces='" + bindings + "'>" + body + "</xsl:stylesheet>";
     private static XsltValidationResult Validate(string text) => XsltValidation.Validate(Encoding.UTF8.GetBytes(text), new Uri("file:///functions/main.xsl"));
     private static string Transform(string text) => XElement.Parse(new Api.XsltCompiler().Compile(text).TransformToString(new XDocumentNode(XDocument.Parse("<root/>")))).Value;

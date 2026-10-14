@@ -1,3 +1,14 @@
+# Local function QName identities - 2026-10-14
+
+Branch: fix/xslt40-local-function-qnames; base main `b94ebbb069ff6417efc99d003655d92bcdb18cb3` (template PR #267 merged after CI passed).
+
+What was built: UsesModuleFixedFunctionNamespaces retains module bindings for locally earlier function names across compilation, registration/runtime expansion and authoring diagnostics. ValidateFunctionQName accepts retained namespace maps; authoring keyword signature capture uses captured function name identities independently of local grammar. The function attribute whitelist now accepts standard version. Twelve new regressions cover fixed-only/rebound prefixes, aliases, EQNames, existing arity suffixes, positional/all-supplied keyword calls and unused XTSE0280/XTSE0020/XTSE0080/XTSE0740 diagnostics. Earlier-root native profiles retain existing coverage. No public API or gate membership changes.
+
+Verification: 31 focused checks pass; all 8,110 unit tests pass including XSLT 5,224/0/0. Release build 0 errors/12 warnings on the final incremental build. QT3 exactly 31,142/0/679; qt4 gate-only 8,278/0/1,894. Non-XSLT tests use required local listener access outside the sandbox; XSLT uses a temporary copy outside the sandbox. Seven initial focused execution failures exposed the standard version whitelist omission and pass after its correction; no unmodified-base baseline is claimed. Evidence: docs/XSLT40-LOCAL-FUNCTION-QNAME-RESULTS.json. Scratch evidence is preserved.
+
+Delivery: submit and merge after CI. Next: audit mode QName declarations/references under local version changes, then key names. Optional/default execution, broad package linkage, named-type edit compilation, shadow expression authoring and pattern/AVT replacement remain separate. Published version remains 1.2.0; candidate 1.2.1 remains unpublished. No external message or publication.
+
+Earlier records below are historical.
 # Local named-template QName identities - 2026-10-14
 
 Branch: fix/xslt40-local-template-qnames; base main `a9e6f94d` (PR #266 merged). Implementation: `53757ede`. Delivery: submit the verified branch and merge after CI.
