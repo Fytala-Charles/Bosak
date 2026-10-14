@@ -1,0 +1,7 @@
+{
+    "baselineAssemblySha256":  "A3B03D61ACA7EF942F8093FC8C5BAF0FDB14DC2001C8064B613136EC014DD07E",
+    "baselineSource":  "Retained local-key test copy built from implementation 96923f1b before the index-context fix",
+    "currentAssemblySha256":  "DE053FF44A543A84B3422A55D42BB553E7281721E37B39854296E00354BD4088",
+    "runner":  "Current conformance harness with only Bosak.Xslt.dll replaced by the retained pre-fix assembly",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba"
+}

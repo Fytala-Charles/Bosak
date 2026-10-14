@@ -1,0 +1,32 @@
+{
+    "date":  "2026-10-14",
+    "bosakRevision":  "836ec5a8",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstreamCommit":  "586d75d77c62b82d7a455a8a6095a2c59199a337",
+    "upstreamPr":  "https://github.com/qt4cg/xslt40-test/pull/30",
+    "status":  "Submitted; acceptance and independent execution confirmation pending",
+    "newCases":  [
+                     "fixed-namespaces-016",
+                     "fixed-namespaces-017"
+                 ],
+    "verification":  {
+                         "preFixFailed":  2,
+                         "exactPassed":  2,
+                         "familySkipped":  0,
+                         "namespaceNegativeFailed":  2,
+                         "preFixPassed":  0,
+                         "familyFailed":  0,
+                         "catalog":  "Valid XML",
+                         "exactFailed":  0,
+                         "ci":  "https://github.com/Fytala-Charles/Bosak/actions/runs/38515477922",
+                         "integratedEngineCiPassed":  8170,
+                         "familyPassed":  18,
+                         "namespaceNegativePassed":  16
+                     },
+    "baseline":  "Current harness replay with only the retained pre-index-fix Bosak.Xslt.dll replaced; hashes and exact failures preserved. Not a fresh source-checkout baseline.",
+    "basePolicy":  "Upstream fetched before branching and immediately before submission; its master remained unchanged; four-file diff checked against that base.",
+    "ownership":  "No existing fixtures, assertions, original receipts or acceptance records changed. New evidence is stored separately; PR #29 remains separate.",
+    "release":  "No engine source, public API, gate membership or publication changes in this batch."
+}

@@ -1,0 +1,59 @@
+Bosak XSLT Conformance Harness
+Catalog: D:\Development\Bosak\.upstream\xslt40-test\catalog.xml
+Test sets: 250
+Filter: fixed-namespaces
+Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage
+
+  Starting: fixed-namespaces ...
+  RUN  fixed-namespaces-001
+  PASS fixed-namespaces-001
+  RUN  fixed-namespaces-002
+  PASS fixed-namespaces-002
+  RUN  fixed-namespaces-003
+  PASS fixed-namespaces-003
+  RUN  fixed-namespaces-004
+  PASS fixed-namespaces-004
+  RUN  fixed-namespaces-005
+  PASS fixed-namespaces-005
+  RUN  fixed-namespaces-006
+  PASS fixed-namespaces-006
+  RUN  fixed-namespaces-007
+  PASS fixed-namespaces-007
+  RUN  fixed-namespaces-008
+  PASS fixed-namespaces-008
+  RUN  fixed-namespaces-009
+  PASS fixed-namespaces-009
+  RUN  fixed-namespaces-010
+  PASS fixed-namespaces-010
+  RUN  fixed-namespaces-011
+  PASS fixed-namespaces-011
+  RUN  fixed-namespaces-012
+  PASS fixed-namespaces-012
+  RUN  fixed-namespaces-013
+  PASS fixed-namespaces-013
+  RUN  fixed-namespaces-014
+  PASS fixed-namespaces-014
+  RUN  fixed-namespaces-015
+  PASS fixed-namespaces-015
+  RUN  fixed-namespaces-016
+  FAIL fixed-namespaces-016: Result mismatch
+    Expected: (complex assertion)
+    Got:      <?xml version="1.0" encoding="UTF-8"?><out xmlns:p="urn:unexpected" current="1" earlier="1" current-ns="urn:fixed" earlier-ns="urn:fixed"/>
+  RUN  fixed-namespaces-017
+  FAIL fixed-namespaces-017: Result mismatch
+    Expected: (complex assertion)
+    Got:      <?xml version="1.0" encoding="UTF-8"?><out xmlns:p="urn:unexpected" current="1" earlier="1"/>
+  RUN  fixed-namespaces-901
+  PASS fixed-namespaces-901
+  Done: fixed-namespaces (18 tests, 16 passed, 2 failed, 0 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   18
+Passed:  16
+Failed:  2
+Skipped: 0
+
+Pass rate: 88.9%
+Receipt: D:\Development\Bosak\.artifacts\xslt40\20261014T061803832Z.json
