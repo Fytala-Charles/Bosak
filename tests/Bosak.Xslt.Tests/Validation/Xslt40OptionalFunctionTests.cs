@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 14-10-2026     | Verify XPath conversion errors for omitted function arguments.                           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -146,7 +147,50 @@ public class Xslt40OptionalFunctionTests
 
     /// <summary>Default values must satisfy declared parameter types.</summary>
     [Fact]
-    public void TypedDefaultCannotBeEmpty() => Assert.Contains("XTTE0600", Assert.ThrowsAny<Exception>(() => Transform(Sheet("p:f()", "<xsl:param name='a' required='no' as='xs:integer'/>", "$a"))).Message);
+    public void TypedDefaultCannotBeEmpty() => Assert.Contains("XPTY0004", Assert.ThrowsAny<Exception>(() => Transform(Sheet("p:f()", "<xsl:param name='a' required='no' as='xs:integer'/>", "$a"))).Message);
+
+    /// <summary>Every call form reports a function conversion error for an invalid omitted default.</summary>
+    /// <param name="call">The direct or reduced-arity function call.</param>
+    [Theory]
+    [InlineData("p:f(1)")]
+    [InlineData("p:f(a := 1)")]
+    [InlineData("1 => p:f()")]
+    [InlineData("(p:f#1)(1)")]
+    [InlineData("function-lookup(QName('urn:functions','f'),1)(1)")]
+    [InlineData("let $f := p:f(?) return $f(1)")]
+    public void InvalidOmittedDefaultUsesFunctionError(string call)
+    {
+        const string parameters = "<xsl:param name='a' as='xs:integer'/><xsl:param name='b' as='xs:integer' required='no'/>";
+        var error = Assert.ThrowsAny<Exception>(() => Transform(Sheet(call, parameters, "$a + $b")));
+        Assert.Contains("XPTY0004", error.Message);
+        Assert.DoesNotContain("XTTE0600", error.Message);
+    }
+
+    /// <summary>Explicit select and constructor defaults use the same cardinality conversion errors.</summary>
+    /// <param name="parameter">The optional parameter declaration.</param>
+    [Theory]
+    [InlineData("<xsl:param name='a' required='no' as='xs:integer' select='()'/>")]
+    [InlineData("<xsl:param name='a' required='no' as='xs:integer' select='(1,2)'/>")]
+    [InlineData("<xsl:param name='a' required='no' as='xs:integer'><xsl:sequence select='(1,2)'/></xsl:param>")]
+    public void InvalidExplicitDefaultUsesFunctionError(string parameter)
+        => Assert.Contains("XPTY0004", Assert.ThrowsAny<Exception>(() => Transform(Sheet("p:f()", parameter, "$a"))).Message);
+
+    /// <summary>A supplied valid argument bypasses an invalid optional default.</summary>
+    [Fact]
+    public void SuppliedValueBypassesInvalidTypedDefault()
+    {
+        const string parameter = "<xsl:param name='a' required='no' as='xs:integer' select='(1,2)'/>";
+        Assert.Equal("7", Transform(Sheet("p:f(7)", parameter, "$a")));
+    }
+
+    /// <summary>Errors raised while evaluating a default retain their original identity.</summary>
+    [Fact]
+    public void DefaultEvaluationErrorIsPreserved()
+    {
+        const string parameter = "<xsl:param name='a' required='no' as='xs:integer' select='error()'/>";
+        var error = Assert.Throws<Bosak.XPath.Runtime.Vm.XPathErrorException>(() => Transform(Sheet("p:f()", parameter, "$a")));
+        Assert.Equal("FOER0000", error.CodeLocalName);
+    }
 
     /// <summary>An explicit empty keyword value does not request its default.</summary>
     [Fact]

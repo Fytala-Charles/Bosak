@@ -550,6 +550,7 @@
 //                      | Charles Korthout | 7.34  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 7.35  | 14-10-2026     | Compile key use expressions through the existing declaration-context host pipeline.         |
 //                      | Charles Korthout | 7.36  | 14-10-2026     | Evaluate reduced-arity defaults in global scope with caller focus.                       |
+//                      | Charles Korthout | 7.37  | 14-10-2026     | Apply XPath function conversion to optional defaults (source 1.3.1).                     |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -4803,8 +4804,8 @@ internal sealed class TransformEngine
                 value = XdmValue.FromSequence(XdmSequence.Empty);
             else
                 value = EvaluateSequenceConstructor(declaration, focus, wrapInDocumentNode: declaration.Attribute("as") is null);
-            return ConvertVariableValue(value, declaration.Attribute("as")?.Value, context: _context,
-                errorCodeOverride: "XTTE0600", declaration: declaration);
+            // XPath 4.0 4.6.1.2 applies argument coercion to defaults as well as supplied values.
+            return ConvertFunctionArgument(value, declaration.Attribute("as")?.Value, _context, declaration);
         }
         finally
         {
