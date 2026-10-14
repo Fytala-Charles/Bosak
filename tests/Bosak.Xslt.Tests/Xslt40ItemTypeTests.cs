@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 12-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 14-10-2026     | Assert native namespace retention separately from record/type result attributes.            |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -56,7 +57,8 @@ public class Xslt40ItemTypeTests
                 crossed="{'ready' instance of u:status}" braced="{'queued' instance of Q{urn:other}status}"/>
             </xsl:template>
             """));
-        Assert.Equal(new[] { "true", "true", "false", "true" }, output.Attributes().Select(a => a.Value));
+        Assert.Equal("urn:other", output.GetNamespaceOfPrefix("u")?.NamespaceName);
+        Assert.Equal(new[] { "true", "true", "false", "true" }, output.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => a.Value));
     }
 
     /// <summary>Uses the XPath default type namespace and leaves string contents unchanged.</summary>

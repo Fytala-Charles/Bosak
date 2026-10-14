@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Reject surplus map fields now that valid maps support nominative coercion                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Assert native namespace retention separately from record/type result attributes.            |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -95,7 +96,8 @@ public class Xslt40RecordConstructorTests
               <out value="{$r?id}" own="{$r instance of u:line}" crossed="{$r instance of t:line}"/>
             </xsl:template>
             """));
-        Assert.Equal(new[] { "2", "true", "false" }, output.Attributes().Select(a => a.Value));
+        Assert.Equal("urn:other", output.GetNamespaceOfPrefix("u")?.NamespaceName);
+        Assert.Equal(new[] { "2", "true", "false" }, output.Attributes().Where(a => !a.IsNamespaceDeclaration).Select(a => a.Value));
     }
 
     /// <summary>Field argument conversion performs numeric promotion.</summary>

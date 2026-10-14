@@ -1,0 +1,64 @@
+{
+    "date":  "2026-10-14",
+    "base":  "dc38d923",
+    "implementation":  "Pending implementation commit",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "issue":  "https://github.com/qt4cg/xslt40-test/issues/28",
+    "upstreamCorrection":  "https://github.com/qt4cg/xslt40-test/pull/29",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstreamCommit":  "0e3204d35a81f933cde0e01bd78f71d6cb17ff59",
+    "scope":  "Resolve #all exclusions to namespace URIs at their declaring element and copy native in-scope namespaces for all literal result elements, including nested ones.",
+    "verification":  {
+                         "newRegressionsPassed":  8,
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "skipped":  0,
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  10
+                                   },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "failed":  0,
+                         "fullUnitPassed":  8118,
+                         "correctedNativeFamily":  {
+                                                       "skipped":  0,
+                                                       "failed":  0,
+                                                       "passed":  16
+                                                   },
+                         "xsltUnitPassed":  5232,
+                         "negativeControl":  {
+                                                 "expectedFailures":  [
+                                                                          "fixed-namespaces-013",
+                                                                          "fixed-namespaces-015"
+                                                                      ],
+                                                 "skipped":  0,
+                                                 "failed":  2,
+                                                 "passed":  14
+                                             }
+                     },
+    "initialUnitFindings":  "Two existing type/record tests enumerated xmlns declarations as ordinary attributes. Their semantic checks now exclude namespace declarations and separately assert the correct retained u=urn:other binding. The final complete XSLT rerun passes.",
+    "expectedResults":  {
+                            "fixed-namespaces-013":  "\u003cout\u003e\u003chit xmlns:p=\"urn:other\"\u003efixed\u003c/hit\u003e\u003c/out\u003e",
+                            "fixed-namespaces-015":  "\u003cout xmlns:p=\"urn:local\" string=\"1\" qname=\"1\"/\u003e"
+                        },
+    "ownership":  "Original stylesheet fixtures, test 014, original portable patch, assertion/submission/acceptance and execution receipts are unchanged. New correction evidence is stored separately. The corrected catalog combines assert-xml with explicit namespace-uri-for-prefix predicates.",
+    "limitations":  "Prior assert-xml passes did not verify namespace nodes; independent processor confirmation remains pending. No new public API, gate membership, publication or REQ acceptance changes.",
+    "evidence":  "contributions/xslt40/fixed-namespace-components/issue28-correction",
+    "logs":  [
+                 ".guard-tmp/issue28-build.log",
+                 ".guard-tmp/issue28-unit.log",
+                 ".guard-tmp/issue28-xslt-final.log",
+                 ".guard-tmp/issue28-qt3.log",
+                 ".guard-tmp/issue28-qt4.log"
+             ],
+    "specification":  "https://qt4cg.org/specifications/xslt-40/Overview.html#literal-result-element-namespaces"
+}

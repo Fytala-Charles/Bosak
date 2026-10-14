@@ -546,6 +546,7 @@
 //                      | Charles Korthout | 7.30  | 13-10-2026     | Share XSLT 4.0 mode QName expansion for dispatch and scoped defaults.                    |
 //                      | Charles Korthout | 7.31  | 13-10-2026     | Align 4.0 key EQName and QName arguments with declaration identities.                    |
 //                      | Charles Korthout | 7.32  | 13-10-2026     | Supply XSLT function keyword signatures with declaration namespace identities.
+//                      | Charles Korthout | 7.33  | 14-10-2026     | Resolve #all exclusions at their owner and copy native namespaces on every literal element. |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -10082,12 +10083,11 @@ internal sealed class TransformEngine
         // Compute excluded namespace URIs in scope on this LRE. exclude-result-prefixes
         // suppresses namespace nodes by URI, not by prefix.
         var excludedNamespaceUris = lreInfo.ExcludedNamespaceUris;
-        bool excludeAllNamespaces = excludedNamespaceUris.Contains("#all");
 
         // Record the excluded URIs on the constructed element so that xsl:namespace can
         // distinguish a real namespace conflict from an excluded declaration that will be
         // removed later.
-        if (!excludeAllNamespaces && excludedNamespaceUris.Count > 0)
+        if (excludedNamespaceUris.Count > 0)
         {
             var excluded = new ExcludedNamespaceUris();
             foreach (var uri in excludedNamespaceUris)
@@ -10099,11 +10099,8 @@ internal sealed class TransformEngine
         // the stylesheet (except excluded URIs, source-alias URIs, and the XSLT namespace)
         // to the result element. This ensures namespace-uri-for-prefix() queries and
         // assertions such as those in attribute-0601 see prefixes declared on xsl:stylesheet.
-        bool isRootLevelLiteral = _currentContainer is XElement currentElem &&
-            (currentElem.Name.LocalName == "__xdm_doc__" ||
-             currentElem.Name.LocalName == "__temp__" ||
-             currentElem.Name.LocalName == "__result-document__");
-        if (isRootLevelLiteral && !excludeAllNamespaces)
+        // Every literal element copies its own native in-scope bindings, including
+        // bindings introduced on an enclosing instruction below the result parent.
         {
             foreach (var (prefix, styleNs) in lreInfo.InScopeDeclarations)
             {
@@ -12124,8 +12121,8 @@ internal sealed class TransformEngine
 
     /// <summary>
     /// Collects the namespace URIs that are excluded by <c>exclude-result-prefixes</c>
-    /// in scope on the given element. The special value <c>#all</c> is returned as the
-    /// literal string <c>#all</c> so callers can treat it as a wildcard. The target
+    /// in scope on the given element. <c>#all</c> resolves to the URIs in scope on
+    /// the element carrying that exclusion attribute, rather than a wildcard. The target
     /// namespace of an active <c>xsl:namespace-alias</c> is never excluded.
     /// </summary>
     private HashSet<string> GetExcludedNamespaceUris(XElement element)
@@ -12143,8 +12140,9 @@ internal sealed class TransformEngine
                     var prefix = token.Trim();
                     if (prefix == "#all")
                     {
-                        result.Add("#all");
-                        return result;
+                        foreach (var (_, ns) in GetInScopeNamespaceDeclarations(current))
+                            if (ns.NamespaceName.Length > 0) result.Add(ns.NamespaceName);
+                        continue;
                     }
 
                     string uri;

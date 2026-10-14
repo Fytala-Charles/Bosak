@@ -1,0 +1,30 @@
+﻿{
+    "timestampUtc":  "2026-10-14T04:27:27.6134736Z",
+    "upstream":  "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot":  "D:\\Development\\Bosak\\.upstream\\xslt40-test",
+    "suiteRevision":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "suiteStatus":  [
+                        " M tests/attr/fixed-namespaces/_fixed-namespaces-test-set.xml"
+                    ],
+    "bosakRevision":  "dc38d9238328a9bd9ebf3760a21d187a380708c3",
+    "bosakStatus":  [
+                        " M src/Bosak.Xslt/Runtime/TransformEngine.cs",
+                        "?? .guard-tmp/",
+                        "?? .sweep-baselines/",
+                        "?? tests/Bosak.Xslt.Tests/LiteralResultNamespaceExclusionTests.cs"
+                    ],
+    "profile":  "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware":  false,
+    "testSet":  "fixed-namespaces",
+    "testCase":  "",
+    "runnerExitCode":  1,
+    "counts":  {
+                   "Failed":  2,
+                   "Skipped":  0,
+                   "Total":  16,
+                   "Passed":  14
+               },
+    "success":  false,
+    "scope":  "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log":  "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261014T042726110Z.log"
+}
