@@ -1,0 +1,169 @@
+{
+    "date":  "2026-10-14",
+    "baseRevision":  "30d71aacf3433963579e31b2dc866bf56eae7df0",
+    "implementationRevision":  "ee8a5588ae3853c2c3a1615502aed71044e8cfb5",
+    "sourceVersion":  "1.3.2",
+    "publishedLibraries":  "1.2.1",
+    "publishedExtension":  "0.1.6",
+    "publicationAuthorized":  false,
+    "status":  "Verified implementation; CI integration pending",
+    "baseline":  {
+                     "snapshot":  ".Temp/BosakNumericBaseline-20261014",
+                     "caseCount":  27,
+                     "passed":  11,
+                     "failed":  16,
+                     "skipped":  0,
+                     "xsltAssemblySha256":  "07a99d9674a40bae0bcc68cc1ae811d587ad3abce3e3eddc748a2b8bbd68bcf5",
+                     "runtimeAssemblySha256":  "0d31c5b37762a36ef5fda3eed0c4fe0697c8227a248248eeea54c0e806e48565",
+                     "note":  "Initial 27-case definitions; expanded final set has two additional constructor/EQName boundaries."
+                 },
+    "numericFocused":  {
+                           "passed":  29,
+                           "failed":  0,
+                           "skipped":  0
+                       },
+    "relatedChecks":  {
+                          "passed":  2668,
+                          "failed":  0,
+                          "skipped":  0
+                      },
+    "solution":  {
+                     "passed":  8259,
+                     "failed":  0,
+                     "skipped":  0
+                 },
+    "xslt":  {
+                 "passed":  5373,
+                 "failed":  0,
+                 "skipped":  0
+             },
+    "languageServer":  {
+                           "passed":  77,
+                           "failed":  0,
+                           "skipped":  0
+                       },
+    "qt3":  "31142/0/679",
+    "qt4GateOnly":  "8278/0/1894",
+    "catalogCorrection":  "date-contract-seconds-double now expects PT1.25S; copied cases.json refreshed and hash-compared before final verification.",
+    "scope":  "Primitive numeric target pairs only; no double-to-integer, no promotion plus relabeling, no new public API/gate membership.",
+    "specification":  {
+                          "url":  "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules",
+                          "sections":  [
+                                           "3.4.2 rules4/6; implicit casting table and primitive-target exclusion"
+                                       ],
+                          "snapshot":  ".guard-tmp/default-errors-xpath-spec.html",
+                          "sha256":  "2b74a86d305f01cc533fa852b6cc1e84ad17dcb1f8d1350cd60df8d35d47ddfa"
+                      },
+    "upstreamPr":  "https://github.com/qt4cg/xslt40-test/pull/32",
+    "revisedUpstreamHead":  "acb80188d2ff98e69c27343b24f0b85ed00f1dfe",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstream":  "012/903/904 each1/0; revised903 fixture equals upstream; sample28/8/363",
+    "independentConfirmation":  "Pending",
+    "sources":  [
+                    {
+                        "path":  "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+                        "sha256":  "deacb42c651c27fd009d7f4981b323e80e9ab156bc3f324a1c0bfe259f7a34e6"
+                    },
+                    {
+                        "path":  "src/Bosak.Xslt/Runtime/TransformEngine.cs",
+                        "sha256":  "a6ec99272cbb75a5b3e476618498d7e3fa95641b64783f5ef3181edaa9d11037"
+                    },
+                    {
+                        "path":  "src/Directory.Build.props",
+                        "sha256":  "08c7efe391cab437a0b1e6a14d66f78664375066d2201fee285e25ae98758246"
+                    },
+                    {
+                        "path":  "tests/Bosak.Xslt.Tests/Validation/Xslt40NumericArgumentTests.cs",
+                        "sha256":  "d06e0beeb849e9420a17754512a8c59260687d33004148f69afcf4b6f552814e"
+                    },
+                    {
+                        "path":  "docs/xpath40-catalog/examples/cases.json",
+                        "sha256":  "1fbb935ca35cc57f8b8fb923d07bf282f9344aea9e37c7918f555875230ae186"
+                    }
+                ],
+    "assemblies":  [
+                       {
+                           "name":  "Bosak.XPath.Api.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "17b13748d68d8a9280548d30c7c882973db9318c245370171d0ba204ec45f93d"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Compiler.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "f0112439369a7fdd99a5fc8ab180dc2ebae5ae6a77ecdd2aa823af3e20d42e8e"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Core.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "fd75222eabf37283a6971a8a6fa5a1e5334fb7fc847e84cb1ee4c94f722bcf04"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Parser.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "bc95dab67f2c898a7f0548536b6c390414754cd109e907cca9986ac1828b14cf"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Providers.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "7e08f20fbdb4d42d756c4992e71c13eaaae2caf84cef3be64ed19c3554b6bb6a"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Runtime.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "577b57fe8193ebf353a0b1ec8dddab6dcdd84f7baa550d9f7da4ec8b486edea5"
+                       },
+                       {
+                           "name":  "Bosak.XPath.Standard.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "c73ea6f2ec5746869e246ea86b955e2ca5ce65401979e7418af7087b4188d9a0"
+                       },
+                       {
+                           "name":  "Bosak.XQuery.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "9757084a106ab7ae2cdcaa20e350560916eca3540d77e394d11e24e0baffa364"
+                       },
+                       {
+                           "name":  "Bosak.Xslt.dll",
+                           "version":  "1.3.2.0",
+                           "sha256":  "5ae757ddcf6c9f16dabb1382f089be14835aa198c38f443d0c85d26a0f6ab5e8"
+                       }
+                   ],
+    "logs":  [
+                 {
+                     "path":  ".guard-tmp/numeric-baseline-result.txt",
+                     "sha256":  "903fc12a8dc242294cb3494d0e87d73f2befea79df6bbad0405c832d5718efde"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-baseline-error.txt",
+                     "sha256":  "b0038ed57cb756681969045696ce3590720bd4a0184a131d8b33de816d3b7081"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-focused-result.txt",
+                     "sha256":  "b94c8d9a3f78693f0eb64b31d4ea2057e680a100b4924a5b0eb456c10486c3b1"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-related-verified.txt",
+                     "sha256":  "1fae0deffc424716dc79d56c5b3cafacdaffee353147f6e32a848a3cfe3b9b64"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-solution-green.log",
+                     "sha256":  "605f318885586938b1589f5c7686aed24b14140c99e8b5e042c0baddd1b86bac"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-qt3.log",
+                     "sha256":  "5bff0ac3d5b3e27b0f4e5739cdb028c886e87900db297ece47afc6454a45e8a5"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-qt4.log",
+                     "sha256":  "d7ddd33e8a1c8314a2bb2bd3b9aeae919b890b8a97e1f71099ef78e2596cade2"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-language-server.log",
+                     "sha256":  "823da2d870bc7c027b9498ec0f0cdb2a55b8c9faed9b65cdc25db7c10098f86c"
+                 },
+                 {
+                     "path":  ".guard-tmp/numeric-content-build.log",
+                     "sha256":  "90d7b3dc14d2a6c9d1047720963b508ad16e7fd580e8c145467ab35c53f83a14"
+                 }
+             ]
+}

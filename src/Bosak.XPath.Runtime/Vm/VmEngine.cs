@@ -413,6 +413,7 @@
 //                      | Charles Korthout | 2.186 | 13-10-2026     | Match node-name unions without splitting EQName namespace separators
 //                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
 //                      | Charles Korthout | 2.188 | 14-10-2026     | Defer optional host omission markers while preserving normal type conversion.            |
+//                      | Charles Korthout | 2.189 | 14-10-2026     | Share XPath 4.0 primitive numeric coercion with the XSLT argument host (1.3.2).            |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -14531,6 +14532,10 @@ internal static class VmEngine
         {
             converted.Add(promoted);
         }
+        else if (context?.IsXPath40 == true && TryCoercePrimitiveNumeric(atomic, type, context, out var numeric))
+        {
+            converted.Add(numeric);
+        }
         else if (context?.IsXPath40 == true && TryRelabelToDerivedNumeric(atomic, type, out var relabeled))
         {
             // XPath 4.0 §3.4.2 relabeling (PR 254, Issue 117 — letexprwith-30): when the
@@ -14588,6 +14593,32 @@ internal static class VmEngine
             return;
         }
         items.Add(item);
+    }
+
+    /// <summary>Applies only the primitive numeric pairs in XPath 4.0 section 3.4.2's implicit-casting table.</summary>
+    /// <param name="value">The atomic source value.</param>
+    /// <param name="type">The required item type without a cardinality indicator.</param>
+    /// <param name="context">The casting context.</param>
+    /// <param name="result">The converted value, when the pair is permitted.</param>
+    /// <returns>Whether this is a permitted primitive numeric pair.</returns>
+    internal static bool TryCoercePrimitiveNumeric(XdmValue value, string type, EvaluationContext? context, out XdmValue result)
+    {
+        result = value;
+        var normalized = NormalizeEQNameTypeName(type.Trim());
+        var target = normalized switch
+        {
+            "xs:decimal" or "xsd:decimal" or "decimal" => "xs:decimal",
+            "xs:float" or "xsd:float" or "float" => "xs:float",
+            "xs:double" or "xsd:double" or "double" => "xs:double",
+            _ => null
+        };
+        if (target is null || value.Kind is not (XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Float or XdmValueKind.Double))
+            return false;
+
+        // Derived targets are deliberately excluded: casting and relabeling are never combined.
+        // Cast preserves FOCA0002 for NaN/infinity to decimal and existing range limitations.
+        result = Cast(value, target, context);
+        return true;
     }
 
     private static bool TryPromoteNumericOrUri(XdmValue value, string type, out XdmValue result)

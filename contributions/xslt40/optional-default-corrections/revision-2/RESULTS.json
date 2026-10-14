@@ -1,0 +1,20 @@
+{
+    "date":  "2026-10-14",
+    "status":  "Revision submitted; acceptance and independent confirmation pending",
+    "supersedes":  "Original numeric rationale and QName replacement in a3d39a7e; original receipts remain historical.",
+    "upstreamPr":  "https://github.com/qt4cg/xslt40-test/pull/32",
+    "upstreamBase":  "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "upstreamCommit":  "acb80188d2ff98e69c27343b24f0b85ed00f1dfe",
+    "bosakImplementation":  "ee8a5588ae3853c2c3a1615502aed71044e8cfb5",
+    "sourceVersion":  "1.3.2 (unpublished)",
+    "exactPassed":  3,
+    "exactFailed":  0,
+    "negative903Failed":  1,
+    "familyPassed":  28,
+    "familyFailed":  8,
+    "familySkipped":  363,
+    "fixture903":  "Byte-for-byte original upstream fixture; only expected error changes to XPTY0004.",
+    "rule":  "Implicit numeric casts target primitive decimal/float/double. Double-to-integer is excluded; promotion and relabeling are never combined.",
+    "diff":  "Two files, four additions, two deletions",
+    "basePolicy":  "Fetched upstream before revision and immediately before push; master remained unchanged."
+}

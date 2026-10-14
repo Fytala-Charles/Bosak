@@ -4,6 +4,8 @@
   <p>Gregorian components, epoch milliseconds and retention seconds</p>
 </div>
 
+**Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](../XSLT40-PRIMITIVE-NUMERIC-COERCION.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.
+
 ## Scope and outcome
 
 Reviewed 2026-10-12 against Bosak `675d8f96facf1fc72ed3a05cb2781fa493fd1f01`, published version 1.1.3. Five Frozen 4.0 families have 108 new representative checks: 15 explicit keyword/mode refusals, 87 focused Gregorian/timezone/unit/type/cardinality checks and six complete normal/empty/reordered receipt-retention reports in XPath 3.1/4.0. **32 of the original 37 absent-keyword families are reviewed; five remain.** Metadata is unchanged. REQ-126 stays In Progress, D2 partial. Catalog: 67 entries, 1,988 feature + 24 chapter checks = 2,012; four worked chapters. No engine/API/harness change, gate promotion or release.
@@ -36,7 +38,7 @@ days-in-month applies the local year/month: March 1 at +02:00 returns 31 even th
 
 unix-dateTime uses milliseconds, not seconds: 1 gives 1970-01-01T00:00:00.001Z; 86400000 gives the next day. Omission and () mean epoch zero, not now. Stamp subtype and UTC are verified. Negative input refuses FOCA0002; the tested timestamp beyond year 9999 refuses FODT0001. Decimal 1.9 truncates to 1; string/untyped/double 1 and (1,2) are accepted, with the sequence selecting its first item. Map input refuses FOTY0013. Review conversion/cardinality enforcement separately from the validated nonnegative integer workflow.
 
-seconds and duration-to-seconds preserve empty input, signs and tested fractional values. seconds(86400) is P1D; seconds(-5400) is -PT1H30M. duration-to-seconds(PT1M30S) gives 90, not the seconds component 30; P1DT0.5S gives 86400.5. The 90.125 roundtrip succeeds. Tested string/double/boolean/multi-item/map seconds arguments refuse XPTY0004, while untyped '1.25' converts. The very large seconds count refuses FODT0002. Tested yearMonthDuration/general duration/string/multiple/map total-seconds arguments refuse XPTY0004, while untyped 'PT90S' converts. These examples do not establish unlimited decimal or duration precision.
+seconds and duration-to-seconds preserve empty input, signs and tested fractional values. seconds(86400) is P1D; seconds(-5400) is -PT1H30M. duration-to-seconds(PT1M30S) gives 90, not the seconds component 30; P1DT0.5S gives 86400.5. The 90.125 roundtrip succeeds. Tested string/boolean/multi-item/map seconds arguments refuse XPTY0004, while untyped '1.25' converts. Source candidate 1.3.2 also coerces the double 1.25e0 to decimal, so seconds(1.25e0) returns PT1.25S under XPath 4.0; the previous double refusal is historical. The very large seconds count refuses FODT0002. Tested yearMonthDuration/general duration/string/multiple/map total-seconds arguments refuse XPTY0004, while untyped 'PT90S' converts. These examples do not establish unlimited decimal or duration precision.
 
 ## Workflow and remaining work
 

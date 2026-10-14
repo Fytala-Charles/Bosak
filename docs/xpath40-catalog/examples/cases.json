@@ -14180,7 +14180,7 @@
     "kind": "xpath",
     "mode": "40",
     "file": "date-contracts/seconds-double.xpath",
-    "error": "XPTY0004"
+    "expected": "PT1.25S"
   },
   {
     "id": "date-contract-seconds-boolean",
