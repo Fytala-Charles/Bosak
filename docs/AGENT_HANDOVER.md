@@ -1,3 +1,15 @@
+# 1.5.0 library candidate preparation - 2026-10-14
+
+Candidate package revision ac891b16c8402c5614639898de5619434e45676d; source/test trees match integrated used-package feature PR #288. Ten packages verified; fresh mapped local-feed consumer passes 153 checks (120 retained + 33 package feature/boundary cases), ten assembly versions 1.5.0.0, matching archive/cache bytes and restore hashes. Build: zero errors/82 warnings; language server: 84/0/0; QT3: 31,142/0/679; qt4 gate-only: 8,278/0/1,894. Unrestricted local full suite passes 8,331/0/0, including 5,445 XSLT tests. Initial sandbox HTTP fixture failures/stopped run retained separately; subsequent unrestricted restore clears initial NU1900 metadata warning. Candidate source CI 38625061782 succeeds. Receipts docs/RELEASE-1.5.0-PREPARATION.json and docs/RELEASE-NOTES-1.5.0.md; original historical receipts are unchanged.
+
+Next: prepare a draft review PR and repack its exact commit with a second fresh cache; integrate preparation documentation after successful CI and review. Present the concrete revision for publication approval. Libraries remain published at 1.4.0; VS Code 0.2.0 is already published with engine 1.4.0. No tag, release dispatch or library publication is authorized in this preparation step. Retain optional override, overlapping-range and authoring package boundaries. Keep `.sweep-baselines/` pending; temporary folders are ignored and evidence remains on disk. Earlier entries below are historical.
+
+# Local Git temporary-file exclusions - 2026-10-14
+
+Added root `.Temp/` and `.guard-tmp/` exclusions to `.gitignore` after VS Code reported excessive Git changes. Existing build outputs, editor profiles and publication evidence remain on disk. Leave `.sweep-baselines/` untracked pending a later decision. This is repository housekeeping; engine and extension behavior are unchanged.
+
+Next: refresh VS Code Source Control, then prepare and verify the 1.5.0 library release candidate described below before requesting tag/publication approval.
+
 # VS Code 0.2.0 published - 2026-10-14
 
 User explicitly approved publication of the verified extension candidate. Tag vscode-v0.2.0 points to ebd37910835f50c83f377d6ad37f06e90fd90913, keeping engine 1.4.0. Publication workflow 38622389142 succeeded: 84 language-server tests and extension highlighting/launcher checks pass; Marketplace confirms fytala.vscode-bosak 0.2.0. Downloaded public VSIX and compared runtime, client, grammar and assets with the workflow artifact; bytes match for all checked content. Public package passes exact server revision, three stdio diagnostic checks and isolated VS Code valid/error/live-correction checks. Receipt docs/VSCODE-0.2.0-PUBLICATION.json; logs, artifacts and editor proof under .guard-tmp/vscode020-marketplace-* and vscode020-publication-*.
