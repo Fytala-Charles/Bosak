@@ -1,0 +1,149 @@
+{
+  "date": "2026-10-14",
+  "sourceVersion": "1.3.0",
+  "publishedLibraryVersion": "1.2.1",
+  "publishedExtensionVersion": "0.1.6",
+  "publicationAuthorized": false,
+  "implementationRevision": "0842b59abd25a72b7cce8446902b54c70091347a",
+  "baseRevision": "87bbaf0dd9a0ec193f9134c485c41eea79b85007",
+  "status": "Verified bounded slice; PR integration pending",
+  "solutionTests": {
+    "passed": 8219,
+    "failed": 0,
+    "skipped": 0
+  },
+  "xsltTests": {
+    "passed": 5333,
+    "failed": 0,
+    "skipped": 0
+  },
+  "languageServerTests": {
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0
+  },
+  "relatedFocusedTests": {
+    "passed": 154,
+    "failed": 0,
+    "skipped": 0
+  },
+  "newOptionalCases": 50,
+  "baseline": {
+    "passed": 3,
+    "failed": 22,
+    "skipped": 0
+  },
+  "baselineOriginalCaseCount": 25,
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4GateOnly": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "nativeFixedNamespaces": {
+    "passed": 18,
+    "failed": 0,
+    "skipped": 0
+  },
+  "gateMembershipChanged": false,
+  "publicApiChanged": false,
+  "initialFunctionApiProbe": "Reduced arity A|B verified through existing TransformFunction API",
+  "specification": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "date": "2026-10-14",
+    "sha256": "931e6984d3de274dc49b1f9a75ef4e2556729b32497fa083e72af8bb4ce14e79",
+    "sections": [
+      "10.3.1",
+      "10.3.2",
+      "10.3.3",
+      "10.3.4.1"
+    ]
+  },
+  "supportedScope": [
+    "ordinary function declarations and imports/includes",
+    "positional/keyword/arrow omissions",
+    "named references/function-lookup/positional partial applications",
+    "declaration defaults with caller focus and global scope",
+    "captured authoring validation and supported expression edits"
+  ],
+  "explicitUnsupportedProfiles": [
+    "used-package optional arity linkage including private optional declarations",
+    "optional xsl:override arity linkage",
+    "keyword argument placeholders retain the existing rejection"
+  ],
+  "upstream": {
+    "correction29": "OPEN, no comments or reviews",
+    "keyCases30": "OPEN, no comments or reviews",
+    "newSubmission": false,
+    "independentProcessorConfirmation": "Pending"
+  },
+  "codeTrees": {
+    "src": "39b0a52c5f577fba2517fcf44830b612deec7cdf",
+    "tests": "ff518e1f305c6683196563f7d13de715d5f7c650"
+  },
+  "sourceHashes": {
+    "src/Bosak.XPath.Api/CompileOptions.cs": "6184f9add843118a64d799ca5b0c9de3dbd8474a7462396f440d63e60c4ef2bb",
+    "src/Bosak.XPath.Api/XPath31Expression.cs": "cbf9ca47285fa70c48e4cef060cdfab459fddac8ba454d0bc45bf6bab24ca4b1",
+    "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs": "d41ef6cba705c4c3171808d096b5afa518c2340e87e16600f40a9b38dee1358c",
+    "src/Bosak.XPath.Parser/Ast/XPathAstNode.cs": "c005981b2528d361b9a7029624d430cd62e57ae78501dcc8e11cc5dcb249b4b9",
+    "src/Bosak.XPath.Runtime/Functions/XPathFunction.cs": "7928aada5160a6ea6a704d86d5ebe060b2469ab49e644a26c23545f592a9182d",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "bcf0a7501fcd507d7941fb1233711be82ad9d3ef00628a7f879b8990cd40c210",
+    "src/Bosak.Xslt/Authoring/AuthoringFunctionSignatures.cs": "0ae2eec6fb667e77c922fdf60dd00de117cbf5745c8c26f7a4943c5683b57b5b",
+    "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs": "939ce787d9d3588c8b79b94b0095d38758de006faebb7735e641041d65b18015",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "f1dabd37a68ca8bd9f7a107e4d4ea6fd8b6441a94a5e6c8b0e39c732501018de",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "43dda03b06c149e616b45fc7f9f2231ab8415f10ad448ce5840dccb9bc4c2537",
+    "src/Bosak.Xslt/Stylesheet/XsltFunctionDefinition.cs": "770fa62100cccc133ed9e2cd3dadd5fdbee52eeb9f97cbde2c058ff486f9d1ee",
+    "src/Bosak.Xslt/Validation/XsltValidationEngine.cs": "a7e25265a8d4d2c75cb8139d1f60df0e9f82c317c7ab1770b81db87e97f18bca",
+    "src/Directory.Build.props": "0a6b18cef16d2dedad22352d81e1797ecf908d295efb48988186c6cb4e7ef163",
+    "tests/Bosak.Xslt.Tests/Authoring/Xslt40ExpressionEditContextTests.cs": "19f2bf0185685d19c6209d4765fce8b46a5b77f06d1ee562866382fcfcc57f2b",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40AuthoringFunctionKeywordTests.cs": "61e2d68a04a801e22f62f5226b9295e551e14ffc3e54a12dbd2ee393dc199ccf",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40OptionalFunctionTests.cs": "71e0e705a1c2545127b31fa4650e9e200e78243175656b0de70a5ffe0b2d0934"
+  },
+  "logs": {
+    "optional-api-probe.log": "69684e7d6976719327b5d3c2b984058a073dd8bd9b972621e97efc5b0e2fd4d1",
+    "optional-baseline-build.log": "b402f0d20c1a1cc271ad453432b60d83779265010545806e33146994dc782cf4",
+    "optional-baseline.log": "1a99bc85fefdb86dc92de8da7fa9469c1b5fe76c5d5ba50c937097016fca60cb",
+    "optional-build.log": "02fd639fa48b25819879ede093fd9b6f104bbe781b3aae44e713664f817380af",
+    "optional-family-final.log": "140ca1819d38ad19b97ed75d0c9248ca572b96f0c17d9dc47cc25a14527a1e3a",
+    "optional-family.log": "557d55e2fad19ca65041aeef8a8fc212294e5257eeb278c95c1ee01bfb16725f",
+    "optional-final-build.log": "8b00ca6d6f42c94914757f1f40b39f752e9ec20d1ef755a839a59171fa2849a1",
+    "optional-focused.log": "325c5f633e95c309f8442f863ba9f269992ac03583c6c597425a67e5fbaf1817",
+    "optional-language-server.log": "c3f0e231b39b1401ed609a7f87fd92c5dc0f42a2fe1077a01bcb2772d2fa2d8b",
+    "optional-native.log": "fd8894eb90167c7fc7f837de00e6df12fa00b2677a226e77d9a65342998a709f",
+    "optional-qt3.log": "e639b8b5f0d4040846df63897ee47fecb881fc058f25afe9c8be8d693b136201",
+    "optional-qt4.log": "147a3f40a23b4f2417be2e3777a62e043d6003b1a42a95004d599960ec812af2",
+    "optional-range-debug.log": "849965b0951363e22da41197f9fb00255c731be508dd2e53241746036be5f732",
+    "optional-solution-build.log": "5d669181fe4bceebd41b06ca88f3bcdb6317526e57741fca0fab8693d49e0f92",
+    "optional-unit.log": "717eb07740d20ca507de98d9e5d85d9877b484dc256d5802bf795a92b6891878",
+    "optional-xslt-final.log": "e9420f02b3e05300f94d33aafee3977d947bc9304fc052607266e3ef1a923d89",
+    "optional-xslt.log": "5af09709783cb359bfe2563d5bbd3c8f3d95bb3c08d5ed6569fee1a78feb9d5e"
+  },
+  "baselineBinaryHashes": {
+    "Bosak.XPath.Api.dll": "8b21f0175124117889a720b58c7e983296e86fb573ee42a09a2d5e7bf9847f56",
+    "Bosak.XPath.Compiler.dll": "9b675b6953854e0e6b50f777e8941dee871361fb222e68ff82728e97d73d8999",
+    "Bosak.XPath.Core.dll": "d269a170ef25b50a269cb63d68421c6a4133319cbb2ae31f77e004ffeb4993e8",
+    "Bosak.XPath.Parser.dll": "1be3d787cbf4198b3b32979cebd815c543da4fb8ba513e2db6b082d46d4dd92e",
+    "Bosak.XPath.Providers.dll": "a52e4430400fa8b567208ae6f5c6fc07bddb179009f544964e808fb9b2f2c45f",
+    "Bosak.XPath.Runtime.dll": "7bd84a304e78ab7e29d235a848a3075c7651cbef8bab18a0b20841a0087dcd43",
+    "Bosak.XPath.Standard.dll": "b087737bb56f47d215553c5694baeb1d2866971e33823e4f049594c1de6cbbe7",
+    "Bosak.XQuery.dll": "d7b43ec9a3c1a0a6b86e4d28e9f9fba21d05405abb2f01fc221b85d85d7d4e1e",
+    "Bosak.Xslt.dll": "9c1991873442cf566e0e407e1e5c748995cad8b7f4862a4b5e880b0b044ac04f",
+    "Bosak.Xslt.Tests.dll": "c21ef83c5f91a101d16ea81a8345c4ae65f6e116f3333f9fd707a412431f99a6"
+  },
+  "finalBinaryHashes": {
+    "Bosak.XPath.Api.dll": "131fec5c615d290b1173f6dfd2d1ca573377330d950bfad8f87df3c8cd4bccdb",
+    "Bosak.XPath.Compiler.dll": "44d38240971170e3afd2d1bbbf6cc60f281220896abb15021d0cddfe100fc299",
+    "Bosak.XPath.Core.dll": "f9e3c8e82e60339793d5742e121fe0f783c3c67a2e04d53cfc294ab7195f98cf",
+    "Bosak.XPath.Parser.dll": "b5a0971f296b107b13b07adc1aa2dc70f86d17aeafd9a3361259f2fdf2f5ad31",
+    "Bosak.XPath.Providers.dll": "7eb1ed4574c024d0bf155418a21643ac406b5cdcdeff64be5d31fee1dd1489e7",
+    "Bosak.XPath.Runtime.dll": "ff5ca5ed486c38da8f034f484bfafa38549c156d228fd462c484c3356136a8e7",
+    "Bosak.XPath.Standard.dll": "5613d532a3956cffd074a709acd16717f9c3819bf41597e93887462c766a29c9",
+    "Bosak.XQuery.dll": "3049941b46d7ec08246f9a81bbcf793dec7acb63e47b0a1ecf264b98773ed7e4",
+    "Bosak.Xslt.dll": "5a4ca43401bd56b5a397d424b4262b3b7e18d6c2258f392a40a134e7665f8394",
+    "Bosak.Xslt.Tests.dll": "585865e5eef56657410caa526121f5ad2bf62f64d8ac24b6ba45b9c9df327d18"
+  }
+}
