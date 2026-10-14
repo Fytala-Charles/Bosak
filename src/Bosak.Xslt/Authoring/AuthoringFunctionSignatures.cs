@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 13-10-2026     | Retain optional ranges by winning arity and defer conditional parameters.                 |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain captured parameter bindings independently of local declaration grammar.              |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 // ===========================================================================================================================================================
 
 using System.Collections.Frozen;
@@ -98,7 +99,7 @@ internal sealed class AuthoringFunctionSignatures
                     var text = nameAttribute.Value.Trim();
                     var hash = text.LastIndexOf('#');
                     if (hash > 0 && int.TryParse(text[(hash + 1)..], out var declaredArity) && declaredArity >= 0) text = text[..hash];
-                    name = ExpandName(text, context);
+                    name = ExpandName(text, context, useCapturedNamespaces: true);
                 }
                 catch (InvalidOperationException) { continue; } // Declaration diagnostics are owned by the validator.
                 var parameters = function.Elements(XName.Get("param", XsltStylesheet.XslNamespace))
