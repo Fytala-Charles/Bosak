@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 14-10-2026     | Verify XPath conversion errors for omitted function arguments.                           |
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Verify reduced-arity execution across the supported used-package boundary.                |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -309,18 +310,18 @@ public class Xslt40OptionalFunctionTests
     [Fact]
     public void PreservedWhitespaceDefaultExecutes() => Assert.Equal("2", Transform(Sheet("p:f()", "<xsl:param name='a' required='no' xml:space='preserve'>  </xsl:param>", "string-length(string($a))")));
 
-    /// <summary>Used-package optional arity linkage remains an explicit unsupported profile.</summary>
+    /// <summary>Used-package optional arities execute with their declared empty default.</summary>
     [Fact]
-    public void OptionalUsedPackageLinkageIsDeferred()
+    public void OptionalUsedPackageReducedArityExecutes()
     {
         const string name = "urn:optional-profile";
         var package = "<xsl:package xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:p='urn:functions' name='" + name + "' package-version='1.0' version='4.0'><xsl:function name='p:f' visibility='public'><xsl:param name='a' required='no'/><xsl:sequence select='$a'/></xsl:function></xsl:package>";
         XsltFunctionLibrary.RegisterPackage(name, "1.0", "file:///optional/library.xsl");
         try
         {
-            var text = Sheet("'unused'", extra: "<xsl:use-package name='" + name + "' package-version='1.0'/>");
-            var error = Assert.Throws<NotSupportedException>(() => new XsltCompiler { UriResolver = new TextResolver(package) }.Compile(text));
-            Assert.Contains("supported profile", error.Message);
+            var text = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:p='urn:functions' version='4.0'><xsl:use-package name='" + name + "' package-version='1.0'/><xsl:template match='/'><out><xsl:value-of select='count(p:f())'/></out></xsl:template></xsl:stylesheet>";
+            var executable = new XsltCompiler { UriResolver = new TextResolver(package) }.Compile(text);
+            Assert.Equal("0", XElement.Parse(executable.TransformToString(new XDocumentNode(XDocument.Parse("<root/>")))).Value);
         }
         finally { XsltFunctionLibrary.ClearPackages(); }
     }

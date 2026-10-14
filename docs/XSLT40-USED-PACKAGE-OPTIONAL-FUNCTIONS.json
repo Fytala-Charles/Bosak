@@ -1,0 +1,58 @@
+{
+  "sourceCandidate": "1.5.0",
+  "publishedLibraries": "1.4.0",
+  "publicationPerformed": false,
+  "newCases": 33,
+  "focusedPassed": 133,
+  "solutionPassed": 8331,
+  "xsltPassed": 5445,
+  "languageServerPassed": 84,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "qt4GateOnly": [
+    8278,
+    0,
+    1894
+  ],
+  "gateMembershipChanged": false,
+  "publicAPIAdded": false,
+  "baselineSample": {
+    "version": "1.4.0",
+    "passed": 0,
+    "failed": 24,
+    "scope": "First 24 new focused cases, rejected at the blanket used-package optional profile guard",
+    "retainedOutput": ".Temp/BosakUsedPackageBaseline-20261014"
+  },
+  "extensionCandidate": {
+    "version": "0.2.0",
+    "engine": "1.4.0",
+    "integratedRevision": "ebd37910835f50c83f377d6ad37f06e90fd90913",
+    "ci": 38613559773,
+    "publicationPerformed": false
+  },
+  "deferred": [
+    "optional xsl:override and xsl:original linkage",
+    "overlapping adopted optional arity families",
+    "package-dependent authoring signatures"
+  ],
+  "spec": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+  "normalizedSourceSha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "59a77017feac533801caf334019e85388389ec27c2d2b300985fc69290243a84",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40UsedPackageOptionalFunctionTests.cs": "2962757092edbf39754c38a0c9bff5817e67cf98c40b850610852791b6051d42",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40OptionalFunctionTests.cs": "5652870890f135ecb5b84913eaa65c0c11b4a589a6beef3b7b1bd8ef515cbfaf",
+    "src/Directory.Build.props": "65b68c54f5e0fe99112f4dd869343f1fcc86994bd9d3c92eda2a466d263c9b89"
+  },
+  "logs": {
+    "used-package-optional-baseline.log": "b2ec7cf669f62fa772bcb3656c9e6ae903756ca69e396c1ab1b51f9b546d7ea7",
+    "used-package-optional-focused-final.log": "912bf5ac9a2599a539ce3dd44c50ad54bebc8d9c354302ed1502ef5d695148b5",
+    "used-package-optional-build.log": "940e732a6ff859889f40b5e034a93f1069cf170f72b5a868ac5b12888dcdcad1",
+    "used-package-optional-solution.log": "58a78873b9374e59b9c6909e79b59bc6347c871199616b6e7ecfece9670aab0f",
+    "used-package-optional-ls.log": "e037bf9cd73bf8ca6a4099e1a441c4e890ee9a414e1445ea5a958b37e8cbfba1",
+    "used-package-optional-qt3.log": "2b3a3dd85d23830ba47cd28b254042c871703a5262fdebd4b759e3958a63b47c",
+    "used-package-optional-qt4.log": "059a1e8c32f5bb8c251fea2c9d525cbdc24ddf994d6effbd9d6a57af647625a3"
+  },
+  "upstreamSubmissionPerformed": false
+}
