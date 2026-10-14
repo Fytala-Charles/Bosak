@@ -38,6 +38,7 @@
 //                      | Charles Korthout | 0.18  | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
 //                      | Charles Korthout | 0.19  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 0.20  | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
+//                      | Charles Korthout | 0.21  | 14-10-2026     | Validate host keyword omissions using captured optional signatures.                      |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -632,7 +633,7 @@ internal sealed class XsltValidationEngine
                 continue;
             }
 
-            VisitElement(state, child, siblingScope);
+            VisitElement(state, child, IsXslt(node, "function") && IsXslt(child, "param") ? _globals : siblingScope);
             if (IsXslt(child, "variable") || IsXslt(child, "param"))
             {
                 if (!IsExcludedByLiteralUseWhen(child) && TryReadQNameName(child, out var ns, out var local))
@@ -793,6 +794,27 @@ internal sealed class XsltValidationEngine
         if (isXsltElement && localName == "note")
         {
             return;
+        }
+
+        if (isXsltElement && localName == "function")
+        {
+            bool optionalSeen = false;
+            foreach (var parameter in node.Children.Where(c => IsXslt(c, "param") && !IsExcludedByLiteralUseWhen(c)))
+            {
+                if (parameter.BackingObject is not XElement backing) continue;
+                var required = backing.Attribute("required")?.Value.Trim() ?? "yes";
+                bool optional = required is "no" or "false" or "0";
+                bool hasContent = backing.Nodes().Any(n => n is XElement || n is XText t && !string.IsNullOrWhiteSpace(t.Value));
+                if (optional && GetEffectiveVersion(parameter) < 4.0)
+                    ReportStructureDiagnostic(state, parameter, "XTSE0020", "XTSE0020: Optional function parameters require XSLT 4.0.");
+                if (optionalSeen && !optional)
+                    ReportStructureDiagnostic(state, parameter, "XTSE0761", "XTSE0761: Required parameters cannot follow optional parameters.");
+                if (!optional && (backing.Attribute("select") is not null || hasContent))
+                    ReportStructureDiagnostic(state, parameter, "XTSE0760", "XTSE0760: Required function parameters cannot have defaults.");
+                if (backing.Attribute("select") is not null && hasContent)
+                    ReportStructureDiagnostic(state, parameter, "XTSE0620", "XTSE0620: A parameter cannot have both select and content.");
+                optionalSeen |= optional;
+            }
         }
 
         // XTSE0805 / XTSE0090: validate attributes in the XSLT namespace.
@@ -1314,6 +1336,8 @@ internal sealed class XsltValidationEngine
             Namespaces = BuildNamespaceMap(context),
             FunctionParameterNames = !isStatic && compatibility >= XPathCompatibility.XPath40 && _functionSignatures is not null
                 ? _functionSignatures.Resolve : null,
+            FunctionMinimumArity = !isStatic && compatibility >= XPathCompatibility.XPath40 && _functionSignatures is not null
+                ? _functionSignatures.ResolveMinimumArity : null,
             ItemTypeAliases = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Aliases : null,
             NamedRecordTypeNames = compatibility >= XPathCompatibility.XPath40 ? _namedTypes?.Records : null,
             DefaultElementNamespace = context.XpathDefaultNamespace,

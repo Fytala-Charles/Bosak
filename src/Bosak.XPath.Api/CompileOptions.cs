@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 0.9 | 13-10-2026     | Carry expanded XSLT item-type aliases through the internal host static context
 //                      | Charles Korthout | 0.10 | 13-10-2026     | Carry known nominative record names for host static type validation
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Carry internal host keyword parameter identities for exact-arity functions.
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Capture host required-prefix lengths without public API changes.                         |
 // ===========================================================================================================================================================
 
 using System.Xml.Schema;
@@ -66,9 +67,12 @@ public sealed class CompileOptions
     // the public enumeration-only option. Definitions contain no unresolved aliases.
     internal IReadOnlyDictionary<string, string>? ItemTypeAliases { get; init; }
 
-    // The XSLT host supplies fully expanded parameter EQNames for an exact-arity
-    // function. Null retains the standard-library keyword signature lookup.
+    // The XSLT host supplies expanded parameter EQNames for the declaration selected
+    // by supplied arity. Null retains the standard-library keyword signature lookup.
     internal Func<string, string, int, IReadOnlyList<string>?>? FunctionParameterNames { get; init; }
+
+    // Required prefix length for a host signature; defaults remain evaluated by the host.
+    internal Func<string, string, int, int?>? FunctionMinimumArity { get; init; }
 
     // Non-null enables host named-type validation, even when no records are declared.
     internal IReadOnlySet<string>? NamedRecordTypeNames { get; init; }

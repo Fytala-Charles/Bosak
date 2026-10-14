@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.2   | 11-10-2026     | Align captured expression version profiles with runtime frozen-version selection.       |
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Compile edits with retained applicable bindings and host keyword signatures.              |
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Keep module fixed bindings independent of local expression grammar.                       |
+//                      | Charles Korthout | 0.5   | 14-10-2026     | Compile supported edits with captured optional host signatures.                          |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -202,6 +203,9 @@ internal static class ExpressionEditPipeline
             FunctionParameterNames = compatibility >= XPathCompatibility.XPath40
                 && attribute.LocalName != "use-when" && snapshot.FunctionSignatures is not null
                 ? snapshot.FunctionSignatures.Resolve : null,
+            FunctionMinimumArity = compatibility >= XPathCompatibility.XPath40
+                && attribute.LocalName != "use-when" && snapshot.FunctionSignatures is not null
+                ? snapshot.FunctionSignatures.ResolveMinimumArity : null,
             DefaultElementNamespace = context.XpathDefaultNamespace,
             BaseUri = context.BaseUri.AbsoluteUri,
             Compatibility = compatibility,

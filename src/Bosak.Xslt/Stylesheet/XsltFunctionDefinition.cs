@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 1.1   | 13-10-2026     | Align function QNames with applicable fixed namespaces.                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.2   | 14-10-2026     | Retain module fixed function identities across local earlier profiles.                     |
+//                      | Charles Korthout | 0.3   | 14-10-2026     | Retain the optional parameter arity range.                                               |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -52,6 +53,9 @@ internal sealed class XsltFunctionDefinition
 
     /// <summary>Number of parameters.</summary>
     public int Arity { get; }
+
+    /// <summary>Number of required parameters; optional parameters form a trailing suffix.</summary>
+    public int MinimumArity { get; }
 
     /// <summary>Parameter names in declaration order.</summary>
     public IReadOnlyList<string> ParameterNames { get; }
@@ -96,6 +100,8 @@ internal sealed class XsltFunctionDefinition
         NamespaceUri = namespaceUri;
         LocalName = localName;
         Arity = arity;
+        MinimumArity = element.Elements(XName.Get("param", Stylesheet.XslNamespace))
+            .TakeWhile(p => p.Attribute("required")?.Value.Trim() is not ("no" or "false" or "0")).Count();
         ParameterNames = parameterNames;
         ReturnType = returnType;
         Element = element;

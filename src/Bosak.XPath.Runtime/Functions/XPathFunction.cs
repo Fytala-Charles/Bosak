@@ -25,6 +25,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.53  | 09-10-2026     | REQ-123: added IsXPath40ExperimentalOnly (4.0-Exp S1 level plumbing)                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.54  | 14-10-2026     | Keep host optional-argument metadata internal and retain precise types.                  |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -76,6 +77,9 @@ public sealed class FunctionSignature
 
     /// <summary>The function's declared arity.</summary>
     public required int Arity { get; init; }
+
+    // XSLT host signatures alone permit omitted-marker values after the required prefix.
+    internal int? MinimumHostArity { get; init; }
 
     /// <summary>The coarse parameter kinds used for dispatch, one entry per declared parameter.</summary>
     public required IReadOnlyList<XdmValueKind> ParameterTypes { get; init; }

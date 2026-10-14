@@ -67,6 +67,7 @@
 //                      | Charles Korthout | 0.33 | 13-10-2026     | Recognize xs:anyAtomicType in host-supplied item-type static contexts.
 //                      | Charles Korthout | 0.34  | 13-10-2026     | Expand XSLT host keyword calls using declared parameter QName identities.
 //                      | Charles Korthout | 0.35  | 13-10-2026     | Reject undeclared prefixes in host function keyword names.                               |
+//                      | Charles Korthout | 0.36  | 14-10-2026     | Preserve optional host keyword omissions for declaration-time defaults.                  |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -137,6 +138,7 @@ public sealed class XPath31Expression
             {
                 Compatibility = options.Compatibility, Namespaces = namespaces,
                 FunctionParameterNames = options.FunctionParameterNames,
+                FunctionMinimumArity = options.FunctionMinimumArity,
                 DefaultElementNamespace = declarations.DefaultNamespace ?? options.DefaultElementNamespace,
                 DefiningElementDefaultNamespace = options.DefiningElementDefaultNamespace,
                 EnumerationItemTypes = options.EnumerationItemTypes, ItemTypeAliases = options.ItemTypeAliases, NamedRecordTypeNames = options.NamedRecordTypeNames, SchemaSet = options.SchemaSet,
@@ -662,12 +664,14 @@ public sealed class XPath31Expression
         var suppliedArity = node.Arguments.Count + node.KeywordArguments!.Count + (arrowInsertsFirst ? 1 : 0);
         var hostNames = string.IsNullOrEmpty(nsUri) ? null
             : options.FunctionParameterNames?.Invoke(nsUri, node.LocalName, suppliedArity);
+        int minimumArity = hostNames is null ? int.MaxValue
+            : options.FunctionMinimumArity?.Invoke(nsUri!, node.LocalName, suppliedArity) ?? hostNames.Count;
         IReadOnlyList<string> names;
         IReadOnlyList<string?> defaults;
         if (hostNames is not null)
         {
             names = hostNames;
-            defaults = new string?[names.Count]; // This host path requires every argument.
+            defaults = new string?[names.Count]; // Host defaults are evaluated in the declaration context.
         }
         else if (!string.IsNullOrEmpty(nsUri) && FunctionLibrary.TryGetKeywordSignature(nsUri, node.LocalName, out var sig))
         {
@@ -733,7 +737,9 @@ public sealed class XPath31Expression
         {
             if (used[i])
                 continue;
-            if (defaults[i] is { } snippet)
+            if (hostNames is not null && i >= minimumArity)
+                filled[i] = new OmittedArgumentNode();
+            else if (defaults[i] is { } snippet)
                 filled[i] = ParseDefaultExpression(snippet);
             else
                 throw new InvalidOperationException(

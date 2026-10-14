@@ -412,6 +412,7 @@
 //                      | Charles Korthout | 2.185 | 13-10-2026     | Match element and attribute type tests with partial name wildcards
 //                      | Charles Korthout | 2.186 | 13-10-2026     | Match node-name unions without splitting EQName namespace separators
 //                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
+//                      | Charles Korthout | 2.188 | 14-10-2026     | Defer optional host omission markers while preserving normal type conversion.            |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -595,6 +596,8 @@ internal static class VmEngine
                         {
                             for (int i = 0; i < argCount && i < sig.ParameterTypeNames.Count; i++)
                             {
+                                if (args[i].IsUndefined && sig.MinimumHostArity is { } minimum && i >= minimum)
+                                    continue;
                                 var paramType = sig.ParameterTypeNames[i];
                                 if (!string.IsNullOrEmpty(paramType))
                                     args[i] = ApplyFunctionConversion(args[i], paramType!, context);
@@ -13918,6 +13921,11 @@ internal static class VmEngine
         var converted = new XdmValue[args.Length];
         for (int i = 0; i < args.Length; i++)
         {
+            if (args[i].IsUndefined && sig.MinimumHostArity is { } minimum && i >= minimum)
+            {
+                converted[i] = args[i];
+                continue;
+            }
             // User-declared functions register precise parameter type names: apply the full
             // function conversion rules (atomization, untypedAtomic casting, numeric/URI
             // promotion) — hof-043: xs:untypedAtomic against xs:double.
