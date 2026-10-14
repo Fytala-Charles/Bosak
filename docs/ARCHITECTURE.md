@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Used-package optional functions - 2026-10-14:** Source candidate 1.5.0 executes reduced-arity/default calls with declaring-package scope, caller focus and upper-bound accept/expose identities. Private helpers stay isolated. Optional overrides and overlapping adopted ranges remain explicit unsupported boundaries; authoring package coverage is unchanged. 33 new cases; solution 8,331/0/0, language server 84/0/0; frozen gates unchanged. [Contract and evidence](XSLT40-USED-PACKAGE-OPTIONAL-FUNCTIONS.md). NuGet remains 1.4.0; the verified VS Code 0.2.0 candidate remains pinned to engine 1.4.0, Marketplace 0.1.6. Earlier entries below are historical.
+
 **VS Code 0.2.0 candidate - 2026-10-14:** Bundles Bosak 1.4.0 and connects XSLT diagnostics to retained stylesheet contexts. Coverage gaps remain warnings; external module resolution is deferred. DLL/apphost launching and runtime dependency packaging are corrected. [Scope and verification](VSCODE-0.2.0-PREPARATION.md). Marketplace remains 0.1.6 pending publication; NuGet remains 1.4.0.
 
 **1.4.0 published - 2026-10-14:** All ten .NET 10 libraries are published from approved tag `v1.4.0` (`1ebbc8ec`). Private XSLT 4.0 functions without a namespace are included. The release workflow passed 8,298 solution tests; a fresh nuget.org-only consumer passes 120 checks and verifies ten assembly versions as 1.4.0.0. [Scope, limitations and publication evidence](RELEASE-NOTES-1.4.0.md). The separately published extension remains 0.1.6. Earlier entries below are historical.

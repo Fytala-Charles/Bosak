@@ -321,6 +321,8 @@
 //                      | Charles Korthout | 2.160 | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 2.161 | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 //                      | Charles Korthout | 0.10  | 14-10-2026     | Allow 4.0 optional function parameters and register reduced arities.                     |
+//                      | Charles Korthout | 2.162 | 14-10-2026     | Enable optional used-package functions through scoped reduced-arity registration.        |
+//                      | Charles Korthout | 2.163 | 14-10-2026     | Parse component arity before QName expansion; bound adopted range collisions.             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2501,7 +2503,11 @@ internal sealed class Stylesheet
 
         // Static validation: check for disallowed attributes and children on XSLT instructions
         ValidateInstructionTree(root);
-        if (_isRootStylesheet) ValidateOptionalFunctionRanges();
+        if (_isRootStylesheet)
+        {
+            ValidateOptionalFunctionRanges();
+            ValidateUsedPackageOptionalFunctionRanges();
+        }
 
         // Schema-aware compilation (REQ-097): every module in the import tree has now
         // been loaded and its xsl:import-schema declarations collected; compile the
@@ -2733,6 +2739,63 @@ internal sealed class Stylesheet
                     throw new InvalidOperationException($"{code}: Overlapping function arity ranges for '{{{a.NamespaceUri}}}{a.LocalName}'.");
                 }
         }
+    }
+
+    /// <summary>Rejects unresolved overlapping adopted optional families before registry keys collapse.</summary>
+    private void ValidateUsedPackageOptionalFunctionRanges()
+    {
+        var checkedPackages = new HashSet<Stylesheet>();
+        void Check(Stylesheet scope)
+        {
+            if (!checkedPackages.Add(scope)) return;
+            var definitions = new List<(XsltFunctionDefinition Definition, bool Adopted)>();
+            var modules = new HashSet<Stylesheet>();
+            void Collect(Stylesheet module)
+            {
+                if (!modules.Add(module)) return;
+                definitions.AddRange(module._functionDefinitions.Select(d => (d, false)));
+                foreach (var imported in module._imports) Collect(imported);
+                foreach (var included in module._includes) Collect(included);
+                foreach (var package in module._usedPackages)
+                {
+                    Check(package);
+                    var options = module._usedPackageOptions.GetValueOrDefault(package);
+                    if (options is not null)
+                        foreach (var element in options.OverrideFunctions)
+                        {
+                            var replacement = XsltFunctionDefinition.FromElement(element, module);
+                            if (replacement is null) continue;
+                            package.TryFindFunction(replacement.LocalName, replacement.NamespaceUri, replacement.Arity, out var original);
+                            if (replacement.MinimumArity < replacement.Arity || original is not null && original.MinimumArity < original.Arity)
+                                throw new NotSupportedException("Optional function arity ranges in xsl:override remain outside the supported profile.");
+                        }
+                    foreach (var definition in package.GetAllFunctionDefinitions().Values.Distinct())
+                    {
+                        var visibility = GetEffectiveVisibility(package, definition.Element, "function", options,
+                            definition.LocalName, definition.NamespaceUri, definition.Arity);
+                        if (visibility is "public" or "final" or "abstract" ||
+                            visibility == "private" && IsAcceptedAsPrivate(options, "function",
+                                definition.LocalName, definition.NamespaceUri, definition.Arity))
+                            definitions.Add((definition, true));
+                    }
+                }
+            }
+            Collect(scope);
+            foreach (var group in definitions.GroupBy(d => (d.Definition.NamespaceUri, d.Definition.LocalName)))
+            {
+                var candidates = group.ToArray();
+                for (int i = 0; i < candidates.Length; i++)
+                    for (int j = i + 1; j < candidates.Length; j++)
+                    {
+                        var a = candidates[i]; var b = candidates[j];
+                        if (!a.Adopted && !b.Adopted || ReferenceEquals(a.Definition, b.Definition)) continue;
+                        if (a.Definition.MinimumArity == a.Definition.Arity && b.Definition.MinimumArity == b.Definition.Arity) continue;
+                        if (a.Definition.Arity < b.Definition.MinimumArity || b.Definition.Arity < a.Definition.MinimumArity) continue;
+                        throw new NotSupportedException("Overlapping optional function arity ranges across used-package components remain outside the supported profile.");
+                    }
+            }
+        }
+        Check(this);
     }
 
     /// <summary>
@@ -6710,8 +6773,6 @@ internal sealed class Stylesheet
 
             var child = new Stylesheet(doc, location, _resolver, ImportPrecedence + 1, _resolvedUris, null, _externalStaticParameters, _rootStylesheet, this.OwningPackage, _packageVersionResolutionStrategy, schemaState: _schemaState, importDepth: ImportDepth + 1);
             child.ApplyImportsContextModule = child;
-            if (child.GetAllFunctionDefinitions(includePrivate: true).Values.Any(d => d.MinimumArity < d.Arity))
-                throw new NotSupportedException("Optional function arity ranges across used-package linkage remain outside the supported profile.");
             _usedPackages.Add(child);
             usePackageElement.AddAnnotation(new ResolvedModuleAnnotation { Module = child });
         }
@@ -6844,16 +6905,16 @@ internal sealed class Stylesheet
             else
             {
                 (string loc, string ns) expanded;
+                var tokenName = component == "function" ? ParseFunctionNameWithArity(t) : (t, -1);
                 try
                 {
-                    expanded = ExpandVariableName(context, t);
+                    expanded = ExpandVariableName(context, tokenName.Item1);
                 }
                 catch (InvalidOperationException ex) when (ex.Message.StartsWith("XPST0081"))
                 {
                     throw new InvalidOperationException($"XTSE0020: Invalid name token '{t}' in xsl:accept/@names: {ex.Message}");
                 }
-                var (fnLocal, arity) = component == "function" ? ParseFunctionNameWithArity(expanded.loc) : (expanded.loc, -1);
-                yield return new AcceptName(expanded.ns, fnLocal, arity);
+                yield return new AcceptName(expanded.ns, expanded.loc, tokenName.Item2);
             }
         }
     }
@@ -6952,9 +7013,10 @@ internal sealed class Stylesheet
             }
 
             (string localName, string nsUri) expandedName;
+            var tokenName = component == "function" ? ParseFunctionNameWithArity(t) : (t, -1);
             try
             {
-                expandedName = ExpandVariableName(context, t);
+                expandedName = ExpandVariableName(context, tokenName.Item1);
             }
             catch (InvalidOperationException ex) when (ex.Message.StartsWith("XPST0081"))
             {
@@ -6964,8 +7026,7 @@ internal sealed class Stylesheet
             var nsUri = expandedName.nsUri;
             if (component == "function")
             {
-                var (fnLocal, arity) = ParseFunctionNameWithArity(localName);
-                yield return new ExposeName(nsUri, fnLocal, arity);
+                yield return new ExposeName(nsUri, localName, tokenName.Item2);
             }
             else if (component is "template" or "variable")
             {
@@ -9180,7 +9241,7 @@ internal sealed class Stylesheet
                     result[key] = overrideDef;
                 }
                 else if (effectiveVis is "public" or "final" or "abstract" ||
-                         (usedIncludePrivate && acceptedAsPrivate))
+                         (acceptedAsPrivate && (usedIncludePrivate || !IsPackage)))
                 {
                     result[key] = def;
                 }
