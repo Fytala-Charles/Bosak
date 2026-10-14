@@ -15,6 +15,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.2   | 20-08-2026     | Added missing xsl:stylesheet version diagnostic                                          |
 //                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
+//                      | Charles Korthout | 0.4   | 14-10-2026     | Validate XSLT diagnostics in retained stylesheet contexts and report coverage gaps.       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using System;
@@ -23,11 +24,14 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using Bosak.XPath.Api;
 using Bosak.XPath.Compiler;
 using Bosak.XPath.Parser;
+using Bosak.Xslt.Authoring;
+using Bosak.Xslt.Validation;
 using MediatR;
 using OmniSharp.Extensions.LanguageServer.Protocol;
 using OmniSharp.Extensions.LanguageServer.Protocol.Client.Capabilities;
@@ -67,7 +71,7 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
         var uri = request.TextDocument.Uri;
         var diagnostics = GetDiagnostics(uri);
 
-        var report = new RelatedFullDocumentDiagnosticReport
+        var report = new SerializableDiagnosticReport
         {
             Items = new Container<Diagnostic>(diagnostics),
         };
@@ -85,7 +89,7 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
 
         if (path.EndsWith(".xsl") || path.EndsWith(".xslt"))
         {
-            ValidateXslt(text, diagnostics);
+            ValidateXslt(text, new Uri(uri.ToString()), diagnostics);
         }
         else if (path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery"))
         {
@@ -131,7 +135,7 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
         }
     }
 
-    private static void ValidateXslt(string text, List<Diagnostic> diagnostics)
+    private static void ValidateXslt(string text, Uri uri, List<Diagnostic> diagnostics)
     {
         // First check well-formedness
         XDocument? doc = null;
@@ -167,32 +171,36 @@ public class DiagnosticsHandler : DocumentDiagnosticHandlerBase
                 0, 0, DiagnosticSeverity.Warning));
         }
 
-        // Validate XPath expressions in select, test, match attributes
-        foreach (var element in root.DescendantsAndSelf())
-        {
-            if (element.Name.NamespaceName != xslNs)
-                continue;
+        if (root.Name.NamespaceName != xslNs ||
+            (root.Name.LocalName != "stylesheet" && root.Name.LocalName != "transform"))
+            return;
 
-            foreach (var attr in element.Attributes())
+        var result = XsltValidation.Validate(Encoding.UTF8.GetBytes(text), uri, new UnresolvedModuleResolver());
+        foreach (var item in result.Diagnostics)
+        {
+            var line = Math.Max(0, (item.Range?.StartLine ?? 1) - 1);
+            var column = Math.Max(0, (item.Range?.StartColumn ?? 1) - 1);
+            diagnostics.Add(new Diagnostic
             {
-                var attrName = attr.Name.LocalName;
-                if (attrName == "select" || attrName == "test" || attrName == "match" || attrName == "use-when")
-                {
-                    try
-                    {
-                        XPath31Expression.Compile(attr.Value);
-                    }
-                    catch (Exception ex)
-                    {
-                        var lineInfo = attr as IXmlLineInfo;
-                        var line = (lineInfo?.LineNumber ?? 1) - 1;
-                        var col = (lineInfo?.LinePosition ?? 1) - 1;
-                        diagnostics.Add(CreateDiagnostic(
-                            $"{attrName}: {ex.Message}", line, col, DiagnosticSeverity.Error));
-                    }
-                }
-            }
+                Message = $"{item.Code}: {item.Message}",
+                Code = item.Code,
+                Severity = item.Code == "XV0002" ? DiagnosticSeverity.Warning : DiagnosticSeverity.Error,
+                Source = "bosak",
+                Range = new OmniSharp.Extensions.LanguageServer.Protocol.Models.Range(
+                    new Position(line, column),
+                    item.Range is { } range ? new Position(range.EndLine - 1, range.EndColumn - 1)
+                        : new Position(line, column + 1))
+            });
         }
+        foreach (var gap in result.UnsupportedCoverage)
+            diagnostics.Add(CreateDiagnostic($"Validation coverage incomplete ({gap.Construct}): {gap.Description}",
+                0, 0, DiagnosticSeverity.Warning));
+    }
+
+    private sealed class UnresolvedModuleResolver : IAuthoringModuleResolver
+    {
+        /// <inheritdoc />
+        public AuthoringSource? ResolveModule(Uri absoluteUri, Uri referencingModuleUri) => null;
     }
 
     private static Diagnostic CreateDiagnostic(string message, int line, int character, DiagnosticSeverity severity)

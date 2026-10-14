@@ -2,7 +2,7 @@
   "name": "vscode-bosak",
   "displayName": "Bosak XPath / XSLT",
   "description": "Language support for XPath 3.1 and XSLT 3.0 using the Bosak engine",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "publisher": "fytala",
   "icon": "assets/logo.png",
   "repository": {
@@ -165,7 +165,7 @@
     "watch": "tsc -watch -p ./",
     "lint": "eslint src --ext ts",
     "vscode:prepublish": "npm run compile",
-    "test": "node test/highlighting.cjs"
+    "test": "node test/highlighting.cjs && node test/launch.cjs"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

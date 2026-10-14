@@ -2,6 +2,10 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
+## Engine alignment candidate (0.2.0)
+
+The candidate bundles Bosak 1.4.0, including bounded XSLT 4.0 optional/default arguments and private functions without a namespace. Editor diagnostics use the effective stylesheet context, refresh during editing and report incomplete validation coverage as warnings. External include/import resolution remains deferred in this editor integration. The .NET server launches through `dotnet` for DLL bundles; runtime language-client dependencies are included. Startup provider registration and diagnostic report serialization are corrected. Requires the .NET 10 runtime. Marketplace remains 0.1.6 until candidate publication.
+
 ## Highlighting correction (0.1.6)
 
 XML attribute names and plain attribute values have separate scopes. In XSLT expression attributes such as `select="concat('a','b')"`, attribute names, function calls, strings, variables and numbers use distinct token categories. Both XML quote styles and multiline values are supported. Colors follow the active theme; Dark+ displays `select` light blue, `concat` yellow and the strings orange.

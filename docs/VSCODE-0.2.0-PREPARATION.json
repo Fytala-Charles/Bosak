@@ -1,0 +1,83 @@
+{
+  "extensionVersion": "0.2.0",
+  "engineVersion": "1.4.0",
+  "archiveSha256": "28300eea1d7e0ce0171cca5d644a5a201f87fffddfc8f2f66adb320cfc37bbed",
+  "bundledProjects": [
+    "Bosak.LanguageServer/1.4.0",
+    "Bosak.XPath.Api/1.4.0",
+    "Bosak.XPath.Compiler/1.4.0",
+    "Bosak.XPath.Core/1.4.0",
+    "Bosak.XPath.Parser/1.4.0",
+    "Bosak.XPath.Providers/1.4.0",
+    "Bosak.XPath.Runtime/1.4.0",
+    "Bosak.XPath.Standard/1.4.0",
+    "Bosak.XQuery/1.4.0",
+    "Bosak.Xslt/1.4.0"
+  ],
+  "packagedStdioChecks": [
+    {
+      "expression": "divide(a := 9)",
+      "diagnostics": []
+    },
+    {
+      "expression": "divide(?, b := 3)(9)",
+      "diagnostics": []
+    },
+    {
+      "expression": "divide(unknown := 9)",
+      "diagnostics": [
+        {
+          "range": {
+            "start": {
+              "line": 0,
+              "character": 269
+            },
+            "end": {
+              "line": 0,
+              "character": 289
+            }
+          },
+          "severity": 1,
+          "code": "XPST0017",
+          "source": "bosak",
+          "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        }
+      ]
+    }
+  ],
+  "publication": "Candidate only; Marketplace remains 0.1.6",
+  "baseRevision": "f41386b6b0bd23518558a0132042752a44347cc3",
+  "solutionTestsPassed": 8298,
+  "languageServerTestsPassed": 84,
+  "editor": {
+    "extensionVersion": "0.2.0",
+    "results": [
+      {
+        "name": "valid",
+        "languageId": "xslt",
+        "diagnostics": []
+      },
+      {
+        "name": "invalid",
+        "languageId": "xslt",
+        "diagnostics": [
+          "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        ]
+      },
+      {
+        "name": "corrected-live",
+        "diagnostics": []
+      }
+    ]
+  },
+  "sourceHashes": {
+    "src\\Bosak.LanguageServer\\DiagnosticsHandler.cs": "90911080573389cf044ef6df3144caf5a21f07ed6e5ebb8af336359edd6ca951",
+    "src\\Bosak.LanguageServer\\SerializableDiagnosticReport.cs": "3e394cb111a66a36064306a7cdc47bb9539e0beac0d3f716606aa5140611748b",
+    "vscode-bosak\\src\\extension.ts": "d0293185b3db474ebd9d0d1f3ae8ba59edc8debe068db6fd7f0d5ee27ea0485b"
+  },
+  "logs": {
+    "vscode020-solution-final.log": "0979a8165d4c8b5822a1ec6c3c26fbdd31d165b917e0493a67131c08b5c099d1",
+    "vscode020-ls-final.log": "e57c0d7df236fee16e7fd110243b8252e3bdedc337b30be94c9ad49428646890",
+    "vscode020-package.log": "cfc89a18854571ead595658bc720edda3df957bdb7ee91affd77da265cbd34ec"
+  }
+}

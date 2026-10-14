@@ -4,10 +4,23 @@ import {
     LanguageClient,
     LanguageClientOptions,
     ServerOptions,
+    State,
     TransportKind,
+    InitializeParams,
 } from 'vscode-languageclient/node';
 
 let client: LanguageClient | undefined;
+
+class BosakLanguageClient extends LanguageClient {
+    protected fillInitializeParams(params: InitializeParams): void {
+        super.fillInitializeParams(params);
+        // These fixed providers do not need dynamic registration. Advertising them
+        // in initialize also lets diagnostics pull from documents already open.
+        const document = params.capabilities.textDocument;
+        if (document?.diagnostic) document.diagnostic.dynamicRegistration = false;
+        if (document?.synchronization) document.synchronization.dynamicRegistration = false;
+    }
+}
 
 export function activate(context: vscode.ExtensionContext): void {
     const serverModule = getServerPath(context);
@@ -18,19 +31,47 @@ export function activate(context: vscode.ExtensionContext): void {
         return;
     }
 
+    const serverCommand = serverModule.toLowerCase().endsWith('.dll') ? 'dotnet' : serverModule;
+    const serverArguments = serverCommand === 'dotnet' ? [serverModule] : [];
     const serverOptions: ServerOptions = {
         run: {
-            module: serverModule,
+            command: serverCommand,
+            args: serverArguments,
             transport: TransportKind.stdio,
         },
         debug: {
-            module: serverModule,
+            command: serverCommand,
+            args: serverArguments,
             transport: TransportKind.stdio,
             options: { env: { ...process.env, BOSAK_LSP_DEBUG: '1' } },
         },
     };
 
     const clientOptions: LanguageClientOptions = {
+        diagnosticPullOptions: { onChange: true, onSave: true, onTabs: true },
+        middleware: {
+            handleRegisterCapability: async (params, next) => {
+                // OmniSharp can register providers before the client finishes starting.
+                // The client otherwise acknowledges and discards those registrations.
+                if (client && !client.isRunning()) {
+                    await new Promise<void>(resolve => {
+                        const subscription = client!.onDidChangeState(event => {
+                            if (event.newState === State.Running || event.newState === State.Stopped) {
+                                subscription.dispose();
+                                resolve();
+                            }
+                        });
+                    });
+                }
+                const cancellation = new vscode.CancellationTokenSource();
+                try {
+                    const result = await next(params, cancellation.token);
+                    if (result) throw result;
+                } finally {
+                    cancellation.dispose();
+                }
+            }
+        },
         documentSelector: [
             { scheme: 'file', language: 'xpath' },
             { scheme: 'file', language: 'xslt' },
@@ -53,7 +94,7 @@ export function activate(context: vscode.ExtensionContext): void {
         },
     };
 
-    client = new LanguageClient(
+    client = new BosakLanguageClient(
         'bosak',
         'Bosak XPath / XSLT',
         serverOptions,
