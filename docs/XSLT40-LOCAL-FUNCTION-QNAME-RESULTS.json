@@ -2,7 +2,7 @@
     "date":  "2026-10-14",
     "base":  "b94ebbb069ff6417efc99d003655d92bcdb18cb3",
     "branch":  "fix/xslt40-local-function-qnames",
-    "implementation":  "Working tree pending commit",
+    "implementation":  "fc355323",
     "publishedVersion":  "1.2.0",
     "sourceVersion":  "1.2.1 (unpublished)",
     "scope":  "Module fixed QName identities for locally earlier function declarations, runtime registration and authoring keyword signature capture; acceptance of standard function version attribute.",

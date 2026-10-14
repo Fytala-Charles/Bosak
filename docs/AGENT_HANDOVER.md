@@ -1,6 +1,6 @@
 # Local function QName identities - 2026-10-14
 
-Branch: fix/xslt40-local-function-qnames; base main `b94ebbb069ff6417efc99d003655d92bcdb18cb3` (template PR #267 merged after CI passed).
+Branch: fix/xslt40-local-function-qnames; base main `b94ebbb069ff6417efc99d003655d92bcdb18cb3` (template PR #267 merged after CI passed). Implementation: `fc355323`.
 
 What was built: UsesModuleFixedFunctionNamespaces retains module bindings for locally earlier function names across compilation, registration/runtime expansion and authoring diagnostics. ValidateFunctionQName accepts retained namespace maps; authoring keyword signature capture uses captured function name identities independently of local grammar. The function attribute whitelist now accepts standard version. Twelve new regressions cover fixed-only/rebound prefixes, aliases, EQNames, existing arity suffixes, positional/all-supplied keyword calls and unused XTSE0280/XTSE0020/XTSE0080/XTSE0740 diagnostics. Earlier-root native profiles retain existing coverage. No public API or gate membership changes.
 
