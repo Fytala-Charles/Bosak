@@ -5,6 +5,8 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**1.3.2 published - 2026-10-14:** All ten .NET 10 libraries are published at 1.3.2 from approved tag `v1.3.2` (`3d90d346`). Optional/default XSLT function arguments and bounded conversion corrections are included. The release workflow passed 8,259 solution tests; a fresh nuget.org-only consumer passes 79 checks and verifies ten assembly versions. [Scope, limitations and publication evidence](RELEASE-NOTES-1.3.2.md). The separately published extension remains 0.1.6. Earlier entries below are historical.
+
 **1.3.2 release preparation - 2026-10-14:** Bounded optional/default XSLT function arguments, default error identity and primitive numeric coercion are integrated through PR #281. All ten local packages pass content/provenance checks; a fresh-cache consumer passes 79 checks. [Frozen scope and evidence](RELEASE-NOTES-1.3.2.md). Libraries remain published at 1.2.1 and extension at 0.1.6; tagging/publication await approval of the final verified revision. Earlier entries below are historical.
 
 **Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](XSLT40-PRIMITIVE-NUMERIC-COERCION.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.
