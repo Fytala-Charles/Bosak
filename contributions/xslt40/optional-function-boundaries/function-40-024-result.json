@@ -1,0 +1,29 @@
+﻿{
+    "timestampUtc":  "2026-10-14T10:45:01.9393427Z",
+    "upstream":  "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot":  "D:\\Development\\Bosak\\.upstream\\xslt40-test",
+    "suiteRevision":  "f78438899ec32d502501019fa0b7c213aac6d51e",
+    "suiteStatus":  [
+
+                    ],
+    "bosakRevision":  "b6951cfa960628bf6ace6b5b7b765b57880a6bb0",
+    "bosakStatus":  [
+                        "?? .Temp/",
+                        "?? .guard-tmp/",
+                        "?? .sweep-baselines/"
+                    ],
+    "profile":  "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware":  false,
+    "testSet":  "function",
+    "testCase":  "function-40-024",
+    "runnerExitCode":  0,
+    "counts":  {
+                   "Failed":  0,
+                   "Skipped":  401,
+                   "Total":  402,
+                   "Passed":  1
+               },
+    "success":  true,
+    "scope":  "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log":  "D:\\Development\\Bosak\\.artifacts\\xslt40\\20261014T104501010Z.log"
+}

@@ -1,0 +1,129 @@
+From f78438899ec32d502501019fa0b7c213aac6d51e Mon Sep 17 00:00:00 2001
+From: Charles Korthout <charles.korthout@fytala.nl>
+Date: Wed, 14 Oct 2026 12:44:34 +0200
+Subject: [PATCH] Add optional function argument binding and creation-focus
+ tests
+
+---
+ tests/decl/function/_function-test-set.xml | 23 +++++++++++++++++
+ tests/decl/function/function-40-024.xsl    | 16 ++++++++++++
+ tests/decl/function/function-40-025.xsl    | 18 ++++++++++++++
+ tests/decl/function/function-40-026.xsl    | 29 ++++++++++++++++++++++
+ 4 files changed, 86 insertions(+)
+ create mode 100644 tests/decl/function/function-40-024.xsl
+ create mode 100644 tests/decl/function/function-40-025.xsl
+ create mode 100644 tests/decl/function/function-40-026.xsl
+
+diff --git a/tests/decl/function/_function-test-set.xml b/tests/decl/function/_function-test-set.xml
+index 565189a0..8b03667e 100644
+--- a/tests/decl/function/_function-test-set.xml
++++ b/tests/decl/function/_function-test-set.xml
+@@ -2515,4 +2515,27 @@
+          <error code="XTSE0740"/>
+       </result>
+    </test-case>
++   <test-case name="function-40-024">
++      <description>Keyword omissions use defaults while explicit empty arguments do not, including an arrow call.</description>
++      <created by="Charles Korthout" on="2026-10-14"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="function-40-024.xsl"/></test>
++      <result><assert-xml><![CDATA[<out omitted="A|B|Y" empty="A||Y" arrow="A|B|Y"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="function-40-025">
++      <description>Select and sequence-constructor defaults resolve a global whose name is shadowed by an earlier parameter and a caller local.</description>
++      <created by="Charles Korthout" on="2026-10-14"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="function-40-025.xsl"/></test>
++      <result><assert-xml><![CDATA[<out defaults="SUPPLIED|GLOBAL|GLOBAL" supplied="CALLER|B|C"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="function-40-026">
++      <description>Named references, function-lookup and partial application retain creation focus for select and sequence-constructor defaults.</description>
++      <created by="Charles Korthout" on="2026-10-14"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="function-40-026.xsl"/></test>
++      <result><assert-xml><![CDATA[<out><r named="X:1/2|X:1/2" lookup="X:1/2|X:1/2" partial="X:1/2|X:1/2"/><r named="Y:2/2|Y:2/2" lookup="Y:2/2|Y:2/2" partial="Y:2/2|Y:2/2"/></out>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+diff --git a/tests/decl/function/function-40-024.xsl b/tests/decl/function/function-40-024.xsl
+new file mode 100644
+index 00000000..9149572c
+--- /dev/null
++++ b/tests/decl/function/function-40-024.xsl
+@@ -0,0 +1,16 @@
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"
++  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:f="urn:functions"
++  exclude-result-prefixes="#all">
++  <!-- An omitted keyword argument requests its default; () is a supplied value. -->
++  <xsl:function name="f:join" as="xs:string">
++    <xsl:param name="a" as="xs:string"/>
++    <xsl:param name="b" as="xs:string?" required="no" select="'B'"/>
++    <xsl:param name="c" as="xs:string" required="no" select="'C'"/>
++    <xsl:sequence select="$a || '|' || $b || '|' || $c"/>
++  </xsl:function>
++  <xsl:template name="xsl:initial-template">
++    <out omitted="{f:join(c := 'Y', a := 'A')}"
++         empty="{f:join(c := 'Y', a := 'A', b := ())}"
++         arrow="{'A' => f:join(c := 'Y')}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/decl/function/function-40-025.xsl b/tests/decl/function/function-40-025.xsl
+new file mode 100644
+index 00000000..6cde7222
+--- /dev/null
++++ b/tests/decl/function/function-40-025.xsl
+@@ -0,0 +1,18 @@
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"
++  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:f="urn:functions"
++  exclude-result-prefixes="#all">
++  <xsl:variable name="a" as="xs:string" select="'GLOBAL'"/>
++  <!-- Neither the earlier parameter nor a caller local is in scope in defaults. -->
++  <xsl:function name="f:scope" as="xs:string">
++    <xsl:param name="a" as="xs:string"/>
++    <xsl:param name="b" as="xs:string" required="no" select="$a"/>
++    <xsl:param name="c" as="xs:string" required="no">
++      <xsl:sequence select="$a"/>
++    </xsl:param>
++    <xsl:sequence select="$a || '|' || $b || '|' || $c"/>
++  </xsl:function>
++  <xsl:template name="xsl:initial-template">
++    <xsl:variable name="a" as="xs:string" select="'CALLER'"/>
++    <out defaults="{f:scope('SUPPLIED')}" supplied="{f:scope($a, 'B', 'C')}"/>
++  </xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/decl/function/function-40-026.xsl b/tests/decl/function/function-40-026.xsl
+new file mode 100644
+index 00000000..148870f7
+--- /dev/null
++++ b/tests/decl/function/function-40-026.xsl
+@@ -0,0 +1,29 @@
++<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"
++  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:f="urn:functions"
++  exclude-result-prefixes="#all">
++  <xsl:function name="f:focus" as="xs:string">
++    <xsl:param name="unused" as="xs:string"/>
++    <xsl:param name="a" as="xs:string" required="no"
++      select="string(.) || ':' || position() || '/' || last()"/>
++    <xsl:param name="b" as="xs:string" required="no">
++      <xsl:sequence select="string(.) || ':' || position() || '/' || last()"/>
++    </xsl:param>
++    <xsl:sequence select="$a || '|' || $b"/>
++  </xsl:function>
++  <xsl:template name="xsl:initial-template">
++    <out>
++      <xsl:for-each select="('X', 'Y')">
++        <xsl:variable name="named" select="f:focus#1"/>
++        <xsl:variable name="lookup" select="function-lookup(QName('urn:functions', 'focus'), 1)"/>
++        <xsl:variable name="partial" select="f:focus(?)"/>
++        <!-- Invocation has a different item, position and size from creation. -->
++        <xsl:for-each select="('OTHER', 'LAST', 'END')">
++          <xsl:if test="position() = 3">
++            <r named="{$named('unused')}" lookup="{$lookup('unused')}"
++               partial="{$partial('unused')}"/>
++          </xsl:if>
++        </xsl:for-each>
++      </xsl:for-each>
++    </out>
++  </xsl:template>
++</xsl:stylesheet>

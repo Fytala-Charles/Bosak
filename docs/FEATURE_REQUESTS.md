@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Optional-function upstream tests - 2026-10-14:** [PR #31](https://github.com/qt4cg/xslt40-test/pull/31) submits three cases for keyword omission versus explicit empty values, shadowed global defaults, and function-item creation focus. Exact checks pass 3/0; all three negative controls and pre-feature replays fail as expected. The broader sample has 29 passes and ten unchanged existing failures. Prepared against refreshed upstream `91328fbf`; acceptance and independent confirmation are pending. [Contribution evidence](../contributions/xslt40/optional-function-boundaries/README.md). Implementation PR #278 merged after CI; source 1.3.0 remains unpublished, libraries 1.2.1 and extension 0.1.6 remain published.
+
 **Optional XSLT function arguments - 2026-10-14:** Source candidate 1.3.0 supports trailing `required="no"` parameters in ordinary XSLT 4.0 functions, positional/keyword/arrow omissions and reduced-arity function items. Defaults use declaration namespaces/globals with caller focus; bodies retain absent focus. Captured authoring signatures and supported expression edits agree with execution. Used-package optional arity linkage and optional `xsl:override` remain explicit unsupported profiles. Published libraries remain 1.2.1 and Marketplace extension 0.1.6; no publication in this slice. [Contract and evidence](XSLT40-OPTIONAL-FUNCTION-ARGUMENTS.md). Earlier milestone entries below are historical.
 
 
