@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.5   | 21-09-2026     | API freeze stage B: internalized                                                       |
 //                      | Charles Korthout | 0.6   | 13-10-2026     | Expand XSLT 4.0 key names using applicable namespaces and EQNames.                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 14-10-2026     | Retain module fixed key declaration identities across local earlier profiles.               |
 // ===========================================================================================================================================================
 
 using System.Linq;
@@ -122,9 +123,10 @@ internal sealed class KeyDefinition
     /// </summary>
     private static string ExpandKeyName(string name, XElement element)
     {
-        if (Stylesheet.UsesXPath40Namespaces(element))
+        if (Stylesheet.UsesXPath40Namespaces(element) || Stylesheet.UsesModuleFixedKeyNamespaces(element))
         {
-            var (keyLocal, keyUri) = Stylesheet.ValidateXsltName(element, name, "xsl:key/@name", useApplicableNamespaces: true);
+            var (keyLocal, keyUri) = Stylesheet.ValidateXsltName(element, name, "xsl:key/@name", useApplicableNamespaces: true,
+                namespaceBindings: Stylesheet.UsesModuleFixedKeyNamespaces(element) ? Stylesheet.GetApplicableStaticNamespaces(element) : null);
             return $"{{{keyUri}}}{keyLocal}";
         }
 

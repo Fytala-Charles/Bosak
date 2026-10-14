@@ -1,0 +1,61 @@
+{
+    "date":  "2026-10-14",
+    "base":  "b045ba0348cb9dcde66c25b45cbdacbf777d0c21",
+    "branch":  "fix/xslt40-local-key-qnames",
+    "implementation":  "Pending commit",
+    "publishedVersion":  "1.2.0",
+    "sourceVersion":  "1.2.1 (unpublished)",
+    "scope":  "Module fixed key declaration QName identity across compilation, registration and authoring under local earlier profiles; lookups retain existing expression namespace context and grammar gates.",
+    "verification":  {
+                         "qt3":  {
+                                     "skipped":  679,
+                                     "failed":  0,
+                                     "passed":  31142
+                                 },
+                         "skipped":  0,
+                         "build":  {
+                                       "configuration":  "Release",
+                                       "errors":  0,
+                                       "warnings":  81
+                                   },
+                         "qt4GateOnly":  {
+                                             "skipped":  1894,
+                                             "failed":  0,
+                                             "passed":  8278
+                                         },
+                         "failed":  0,
+                         "fullUnitPassed":  8148,
+                         "correctedNativeFamily":  {
+                                                       "skipped":  0,
+                                                       "failed":  0,
+                                                       "passed":  16
+                                                   },
+                         "focusedPassed":  52,
+                         "xsltUnitPassed":  5262,
+                         "newCasesPassed":  19
+                     },
+    "architecture":  "UsesModuleFixedKeyNamespaces limits module binding selection to key declarations. Shared QName validation receives applicable module maps during compilation and retained inspection maps during validation. KeyDefinition registers the same expanded identity independently of local grammar. Runtime lookup code remains unchanged.",
+    "behavior":  "Fixed-only/native-rebound prefixes, aliases, explicit/no-namespace/whitespace names, both key arities, accumulated definitions and include/import modules with independent bindings are verified. Unused malformed/omitted-prefix declarations retain source-local XTSE0020/XTSE0280, empty names XTSE0010.",
+    "ownership":  "Source exports and public QName metadata remain unchanged. Namespace documents are captured during inspection; repeated validation does not request resources again. No native fixture or original receipt modification.",
+    "followUp":  {
+                     "scope":  "Key match/use static namespace contexts",
+                     "probe":  ".guard-tmp/local-key-pattern-probe.log",
+                     "finding":  "A p:item key match pattern with native p=urn:native and fixed p=urn:fixed returns zero instead of one for an input item in urn:fixed, under both local 3.0 and 4.0. KeyIndex.ResolveNamespacePrefixes uses native bindings."
+                 },
+    "boundaries":  [
+                       "Key match/use compilation and broader package linkage remain separate scopes.",
+                       "No new public API or gate membership changes; existing earlier-root and lookup argument grammar gates remain unchanged.",
+                       "Upstream PR #29 review and independent execution confirmation remain pending; refreshed upstream bases remain mandatory before contributions."
+                   ],
+    "logs":  [
+                 ".guard-tmp/local-key-build.log",
+                 ".guard-tmp/local-key-focused.log",
+                 ".guard-tmp/local-key-unit.log",
+                 ".guard-tmp/local-key-xslt.log",
+                 ".guard-tmp/local-key-qt3.log",
+                 ".guard-tmp/local-key-qt4.log",
+                 ".guard-tmp/local-key-native.log"
+             ],
+    "nativeSuiteRevision":  "0e3204d35a81f933cde0e01bd78f71d6cb17ff59",
+    "nativeReceipt":  ".artifacts/xslt40/20261014T045346077Z.json"
+}
