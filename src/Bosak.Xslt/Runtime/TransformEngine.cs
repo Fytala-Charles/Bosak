@@ -551,6 +551,7 @@
 //                      | Charles Korthout | 7.35  | 14-10-2026     | Compile key use expressions through the existing declaration-context host pipeline.         |
 //                      | Charles Korthout | 7.36  | 14-10-2026     | Evaluate reduced-arity defaults in global scope with caller focus.                       |
 //                      | Charles Korthout | 7.37  | 14-10-2026     | Apply XPath function conversion to optional defaults (source 1.3.1).                     |
+//                      | Charles Korthout | 7.38  | 14-10-2026     | Permit primitive numeric argument coercion in XSLT 4.0 (source 1.3.2).                   |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -16809,7 +16810,8 @@ internal sealed class TransformEngine
 
         try
         {
-            return ConvertVariableValue(value, asType, isParam: true, context, declaration: declaration);
+            return ConvertVariableValue(value, asType, isParam: true, context, declaration: declaration,
+                allowPrimitiveNumericCoercion: declaration is not null && AllowsItemTypeDeclarations(declaration));
         }
         catch (InvalidOperationException ex)
         {
@@ -16958,8 +16960,9 @@ internal sealed class TransformEngine
     /// <param name="context">Evaluation context carrying namespaces and the schema set.</param>
     /// <param name="errorCodeOverride">Optional error code overriding the default coercion error.</param>
     /// <param name="declaration">The element carrying the <c>as</c> attribute, used to resolve the in-scope <c>xpath-default-namespace</c>; may be null.</param>
+    /// <param name="allowPrimitiveNumericCoercion">Whether XSLT 4.0 function arguments allow primitive numeric casts.</param>
     /// <returns>The (possibly converted) value.</returns>
-    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null, string? errorCodeOverride = null, XElement? declaration = null)
+    internal static XdmValue ConvertVariableValue(XdmValue value, string? asType, bool isParam = false, EvaluationContext? context = null, string? errorCodeOverride = null, XElement? declaration = null, bool allowPrimitiveNumericCoercion = false)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
@@ -17009,7 +17012,7 @@ internal sealed class TransformEngine
                 context.DefaultElementNamespace = defaultNs;
                 try
                 {
-                    return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride);
+                    return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride, allowPrimitiveNumericCoercion);
                 }
                 finally
                 {
@@ -17018,10 +17021,10 @@ internal sealed class TransformEngine
             }
         }
 
-        return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride);
+        return ConvertVariableValueCore(value, asType, isParam, context, errorCodeOverride, allowPrimitiveNumericCoercion);
     }
 
-    private static XdmValue ConvertVariableValueCore(XdmValue value, string? asType, bool isParam, EvaluationContext? context, string? errorCodeOverride)
+    private static XdmValue ConvertVariableValueCore(XdmValue value, string? asType, bool isParam, EvaluationContext? context, string? errorCodeOverride, bool allowPrimitiveNumericCoercion)
     {
         if (string.IsNullOrEmpty(asType))
             return value;
@@ -17161,6 +17164,10 @@ internal sealed class TransformEngine
                     converted.Add(casted);
                 else
                     throw new InvalidOperationException($"{errorCode}: Cannot cast untypedAtomic to type {type}");
+            }
+            else if (allowPrimitiveNumericCoercion && VmEngine.TryCoercePrimitiveNumeric(atomic, type, context, out var numeric))
+            {
+                converted.Add(numeric);
             }
             else if (IsNumericPromotion(atomic, type))
             {
