@@ -2,9 +2,9 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Engine alignment candidate (0.2.0)
+## Engine alignment (0.2.0)
 
-The candidate bundles Bosak 1.4.0, including bounded XSLT 4.0 optional/default arguments and private functions without a namespace. Editor diagnostics use the effective stylesheet context, refresh during editing and report incomplete validation coverage as warnings. External include/import resolution remains deferred in this editor integration. The .NET server launches through `dotnet` for DLL bundles; runtime language-client dependencies are included. Startup provider registration and diagnostic report serialization are corrected. Requires the .NET 10 runtime. Marketplace remains 0.1.6 until candidate publication.
+Version 0.2.0 bundles Bosak 1.4.0, including bounded XSLT 4.0 optional/default arguments and private functions without a namespace. Editor diagnostics use the effective stylesheet context, refresh during editing and report incomplete validation coverage as warnings. External include/import resolution remains deferred in this editor integration. The .NET server launches through `dotnet` for DLL bundles; runtime language-client dependencies are included. Startup provider registration and diagnostic report serialization are corrected. Requires the .NET 10 runtime. Version 0.2.0 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the extension and reload VS Code.
 
 ## Highlighting correction (0.1.6)
 
@@ -45,7 +45,7 @@ Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visu
 
 Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
 [marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
-Published versions: **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+Published versions: **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
 
 ### Option 2 — Development / Sideload (recommended for contributors)
 

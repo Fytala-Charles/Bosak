@@ -1,3 +1,11 @@
+# VS Code 0.2.0 published - 2026-10-14
+
+User explicitly approved publication of the verified extension candidate. Tag vscode-v0.2.0 points to ebd37910835f50c83f377d6ad37f06e90fd90913, keeping engine 1.4.0. Publication workflow 38622389142 succeeded: 84 language-server tests and extension highlighting/launcher checks pass; Marketplace confirms fytala.vscode-bosak 0.2.0. Downloaded public VSIX and compared runtime, client, grammar and assets with the workflow artifact; bytes match for all checked content. Public package passes exact server revision, three stdio diagnostic checks and isolated VS Code valid/error/live-correction checks. Receipt docs/VSCODE-0.2.0-PUBLICATION.json; logs, artifacts and editor proof under .guard-tmp/vscode020-marketplace-* and vscode020-publication-*.
+
+Published extension 0.2.0; bundled engine and published NuGet libraries 1.4.0. Engine source 1.5.0 (bounded used-package optional/default arguments) is integrated but unpublished, retaining optional override/overlapping adopted-range/authoring package coverage boundaries. The old NuGet v* tag filter also triggered run 38622389556; all ten uploads were rejected as existing 1.4.0 packages, with zero new uploads. The filter is corrected to numeric v[0-9]* tags for future revisions. No library publication occurred. Original preparation/delivery evidence remains unchanged. Update extension release status in canonical docs and main extension README; keep release tags immutable.
+
+Next: prepare the 1.5.0 library release candidate and verify packages/consumer before any new tag/publication approval. Do not repeat extension publication. Upstream corrections still require freshly fetched current upstream. Earlier entries below are historical.
+
 # Both slices integrated and verified - 2026-10-14
 
 Engine PR #288 merged at bfb050e5c75752eb324263d456cc8676511c01e2 after exact-head CI 38615928472 passed 8,331 solution tests and 84 language-server tests; highlighting/launcher checks also passed. Source/tests/extension trees match reviewed head ea644f34199a0bb509abffbd2d0107b7bcf85523. Frozen gates remain 31,142/0/679 and 8,278/0/1,894. Candidate source version 1.5.0; optional overrides, overlapping adopted ranges and package-dependent authoring signatures remain deferred. No publication, API or gate membership change.

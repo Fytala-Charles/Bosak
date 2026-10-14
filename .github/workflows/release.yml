@@ -6,7 +6,8 @@ name: Release
 
 on:
   push:
-    tags: ['v*']
+    # Extension tags use vscode-v* and must not start a NuGet publication.
+    tags: ['v[0-9]*']
   workflow_dispatch:
 
 jobs:
