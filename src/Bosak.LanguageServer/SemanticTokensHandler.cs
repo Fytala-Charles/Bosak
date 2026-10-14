@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1.1 | 14-10-2026     | Scope XSLT expression highlighting and recognize unprefixed functions.                       |
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -33,15 +34,11 @@ namespace Bosak.LanguageServer;
 public class SemanticTokensHandler : SemanticTokensHandlerBase
 {
     private static readonly Regex FunctionCallRegex = new(
-        @"(?<prefix>[a-zA-Z_][a-zA-Z0-9._-]*):(?<local>[a-zA-Z_][a-zA-Z0-9._-]*)\s*\(",
+        @"(?<![\w:$.-])(?:(?<prefix>[a-zA-Z_][a-zA-Z0-9._-]*):)?(?<local>[a-zA-Z_][a-zA-Z0-9._-]*)\s*\(",
         RegexOptions.Compiled);
 
     private static readonly Regex VariableRegex = new(
         @"\$(?<name>[a-zA-Z_][a-zA-Z0-9._-]*(?::[a-zA-Z_][a-zA-Z0-9._-]*)?)",
-        RegexOptions.Compiled);
-
-    private static readonly Regex XsltInstructionRegex = new(
-        @"</?(?<prefix>xsl):(?<local>[a-zA-Z_][a-zA-Z0-9._-]*)",
         RegexOptions.Compiled);
 
     private static readonly Regex XQueryKeywordRegex = new(
@@ -95,7 +92,8 @@ public class SemanticTokensHandler : SemanticTokensHandlerBase
                     SemanticTokenType.Type,
                     SemanticTokenType.Namespace,
                     SemanticTokenType.Number,
-                    SemanticTokenType.Operator),
+                    SemanticTokenType.Operator,
+                    SemanticTokenType.String),
                 TokenModifiers = new Container<SemanticTokenModifier>(
                     SemanticTokenModifier.Declaration,
                     SemanticTokenModifier.Definition,
@@ -146,69 +144,151 @@ public class SemanticTokensHandler : SemanticTokensHandlerBase
     /// </summary>
     internal static List<SemanticTokenEntry> Tokenize(string text, bool isXslt, bool isXQuery, bool isXPath)
     {
-        var tokens = new List<SemanticTokenEntry>();
+        if (isXslt)
+            return TokenizeXslt(text);
 
-        foreach (Match m in FunctionCallRegex.Matches(text))
+        var tokens = new List<SemanticTokenEntry>();
+        var code = MaskStringsAndComments(text, tokens);
+
+        foreach (Match m in FunctionCallRegex.Matches(code))
         {
             var prefix = m.Groups["prefix"];
             var local = m.Groups["local"];
-            tokens.Add(new SemanticTokenEntry(prefix.Index, prefix.Length, SemanticTokenType.Namespace));
+            if (prefix.Success)
+                tokens.Add(new SemanticTokenEntry(prefix.Index, prefix.Length, SemanticTokenType.Namespace));
             tokens.Add(new SemanticTokenEntry(local.Index, local.Length, SemanticTokenType.Function));
         }
 
-        foreach (Match m in VariableRegex.Matches(text))
+        foreach (Match m in VariableRegex.Matches(code))
         {
             tokens.Add(new SemanticTokenEntry(m.Groups["name"].Index - 1, m.Length, SemanticTokenType.Variable));
         }
 
-        if (isXslt)
-        {
-            foreach (Match m in XsltInstructionRegex.Matches(text))
-            {
-                tokens.Add(new SemanticTokenEntry(m.Groups["prefix"].Index, m.Groups["prefix"].Length, SemanticTokenType.Namespace));
-                tokens.Add(new SemanticTokenEntry(m.Groups["local"].Index, m.Groups["local"].Length, SemanticTokenType.Keyword));
-            }
-        }
-
         if (isXQuery || isXPath)
         {
-            foreach (Match m in XQueryKeywordRegex.Matches(text))
+            foreach (Match m in XQueryKeywordRegex.Matches(code))
             {
                 tokens.Add(new SemanticTokenEntry(m.Index, m.Length, SemanticTokenType.Keyword));
             }
         }
 
-        foreach (Match m in TypeNameRegex.Matches(text))
+        foreach (Match m in TypeNameRegex.Matches(code))
         {
             tokens.Add(new SemanticTokenEntry(m.Groups["local"].Index, m.Groups["local"].Length, SemanticTokenType.Type));
         }
 
-        foreach (Match m in NumberLiteralRegex.Matches(text))
+        foreach (Match m in NumberLiteralRegex.Matches(code))
         {
             tokens.Add(new SemanticTokenEntry(m.Index, m.Length, SemanticTokenType.Number));
         }
 
         if (isXPath)
         {
-            foreach (Match m in AxisRegex.Matches(text))
+            foreach (Match m in AxisRegex.Matches(code))
             {
                 tokens.Add(new SemanticTokenEntry(m.Index, m.Length, SemanticTokenType.Operator));
             }
         }
 
-        tokens.Sort((a, b) =>
-        {
-            var (lineA, colA) = GetLineColumn(text, a.Start);
-            var (lineB, colB) = GetLineColumn(text, b.Start);
-            int cmp = lineA.CompareTo(lineB);
-            return cmp != 0 ? cmp : colA.CompareTo(colB);
-        });
+        tokens.Sort((a, b) => a.Start.CompareTo(b.Start));
 
+        var nonOverlapping = new List<SemanticTokenEntry>();
+        foreach (var token in tokens)
+        {
+            if (nonOverlapping.Count == 0 || token.Start >= nonOverlapping[^1].Start + nonOverlapping[^1].Length)
+                nonOverlapping.Add(token);
+        }
+        return nonOverlapping;
+    }
+
+    // Keep XML text, comments, namespace URIs and literal attribute values out of XPath tokenization.
+    private static readonly Regex XmlPartRegex = new(
+        @"<!--[\s\S]*?(?:-->|$)|<!\[CDATA\[[\s\S]*?(?:\]\]>|$)|<\?[\s\S]*?(?:\?>|$)|<(?<tag>/?[\w:.-]+)(?<attributes>(?:[^>""']|""[^""]*""|'[^']*')*)(?:>|$)",
+        RegexOptions.Compiled);
+
+    private static readonly Regex XmlAttributeRegex = new(
+        @"(?<name>[\w:.-]+)\s*=\s*(?<quote>[""'])(?<value>[\s\S]*?)\k<quote>",
+        RegexOptions.Compiled);
+
+    private static readonly HashSet<string> ExpressionAttributes = new(StringComparer.Ordinal)
+    {
+        "select", "test", "match", "use", "use-when", "count", "from", "group-by", "group-adjacent",
+        "group-starting-with", "group-ending-with", "initial-value", "for-each-source", "context-item", "as"
+    };
+
+    private static List<SemanticTokenEntry> TokenizeXslt(string text)
+    {
+        var tokens = new List<SemanticTokenEntry>();
+        foreach (Match part in XmlPartRegex.Matches(text))
+        {
+            var tag = part.Groups["tag"];
+            if (!tag.Success || !tag.Value.TrimStart('/').StartsWith("xsl:", StringComparison.Ordinal))
+                continue;
+            int start = tag.Index + (tag.Value.StartsWith('/') ? 1 : 0);
+            tokens.Add(new SemanticTokenEntry(start, 3, SemanticTokenType.Namespace));
+            tokens.Add(new SemanticTokenEntry(start + 4, tag.Length - (start - tag.Index) - 4, SemanticTokenType.Keyword));
+            foreach (Match attribute in XmlAttributeRegex.Matches(part.Groups["attributes"].Value))
+            {
+                if (!ExpressionAttributes.Contains(attribute.Groups["name"].Value))
+                    continue;
+                var value = attribute.Groups["value"];
+                int offset = part.Groups["attributes"].Index + value.Index;
+                foreach (var token in Tokenize(value.Value, false, false, true))
+                    tokens.Add(token with { Start = token.Start + offset });
+            }
+        }
+        tokens.Sort((a, b) => a.Start.CompareTo(b.Start));
         return tokens;
     }
 
+    private static string MaskStringsAndComments(string text, List<SemanticTokenEntry> tokens)
+    {
+        var code = text.ToCharArray();
+        for (int i = 0; i < text.Length;)
+        {
+            int start = i;
+            bool isString = text[i] is '\'' or '"';
+            if (isString)
+            {
+                char quote = text[i++];
+                while (i < text.Length)
+                {
+                    if (text[i++] != quote) continue;
+                    if (i < text.Length && text[i] == quote) { i++; continue; }
+                    break;
+                }
+            }
+            else if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':')
+            {
+                i += 2;
+                int depth = 1;
+                while (i < text.Length && depth > 0)
+                {
+                    if (i + 1 < text.Length && text[i] == '(' && text[i + 1] == ':') { depth++; i += 2; }
+                    else if (i + 1 < text.Length && text[i] == ':' && text[i + 1] == ')') { depth--; i += 2; }
+                    else i++;
+                }
+            }
+            else { i++; continue; }
+            int lineStart = start;
+            for (int j = start; j < i; j++)
+            {
+                if (text[j] is '\r' or '\n')
+                {
+                    if (isString && j > lineStart)
+                        tokens.Add(new SemanticTokenEntry(lineStart, j - lineStart, SemanticTokenType.String));
+                    lineStart = j + 1;
+                }
+                else code[j] = ' ';
+            }
+            if (isString && i > lineStart)
+                tokens.Add(new SemanticTokenEntry(lineStart, i - lineStart, SemanticTokenType.String));
+        }
+        return new string(code);
+    }
+
     private static readonly Regex AxisRegex = new(
-        @"::|@|//|/|\\||!|=|!=|<=|>=|<|>|\+|\-|\*|\band\b|\bor\b",
+        @"::|@|//|/|\|\||\||!=|<=|>=|!|=|<|>|\+|\-|\*|\band\b|\bor\b",
         RegexOptions.Compiled);
 
     /// <summary>

@@ -2,43 +2,207 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "XSLT",
   "scopeName": "text.xml.xsl",
-  "fileTypes": [".xsl", ".xslt"],
+  "fileTypes": [
+    "xsl",
+    "xslt"
+  ],
   "patterns": [
-    { "include": "text.xml" },
-    { "include": "#xslt-instruction" }
+    {
+      "name": "comment.block.xml",
+      "begin": "<!--",
+      "end": "-->"
+    },
+    {
+      "name": "string.unquoted.cdata.xml",
+      "begin": "<!\\[CDATA\\[",
+      "end": "\\]\\]>"
+    },
+    {
+      "name": "meta.tag.preprocessor.xml",
+      "begin": "<\\?",
+      "end": "\\?>"
+    },
+    {
+      "include": "#xslt-instruction"
+    },
+    {
+      "include": "#xml-tag"
+    },
+    {
+      "include": "text.xml"
+    }
   ],
   "repository": {
-    "xslt-instruction": {
+    "entity": {
+      "name": "constant.character.entity.xml",
+      "match": "&(?:#[0-9]+|#x[0-9a-fA-F]+|[\\w:.-]+);"
+    },
+    "xpath-attribute": {
       "patterns": [
         {
-          "begin": "(<)(xsl:[a-zA-Z-]+)",
+          "name": "meta.attribute.xpath.xslt",
+          "begin": "(?<![\\w:.-])(select|test|match|use|use-when|count|from|group-by|group-adjacent|group-starting-with|group-ending-with|initial-value|for-each-source|context-item|as)(\\s*=\\s*)(\")",
           "beginCaptures": {
-            "1": { "name": "punctuation.definition.tag.begin.xml" },
-            "2": { "name": "entity.name.tag.namespace.xml" }
+            "1": {
+              "name": "entity.other.attribute-name.xml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.xml"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.xml"
+            }
           },
-          "end": "(/?>)",
+          "end": "\"",
           "endCaptures": {
-            "1": { "name": "punctuation.definition.tag.end.xml" }
+            "0": {
+              "name": "punctuation.definition.string.end.xml"
+            }
           },
+          "contentName": "meta.embedded.block.xpath",
           "patterns": [
-            { "include": "#xslt-attribute" },
-            { "include": "text.xml#attribute" }
+            {
+              "include": "source.xpath"
+            }
+          ]
+        },
+        {
+          "name": "meta.attribute.xpath.xslt",
+          "begin": "(?<![\\w:.-])(select|test|match|use|use-when|count|from|group-by|group-adjacent|group-starting-with|group-ending-with|initial-value|for-each-source|context-item|as)(\\s*=\\s*)(')",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.xml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.xml"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.xml"
+            }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.xml"
+            }
+          },
+          "contentName": "meta.embedded.block.xpath",
+          "patterns": [
+            {
+              "include": "source.xpath"
+            }
           ]
         }
       ]
     },
-    "xslt-attribute": {
+    "attribute": {
       "patterns": [
         {
-          "name": "meta.attribute.xpath.xslt",
-          "begin": "(select|test|match|xpath-default-namespace|default-collation|use-when|as|name|mode|priority|visibility|streamability|(override|context-item|href|type|method|encoding|indent|omit-xml-declaration|standalone|doctype-public|doctype-system|media-type|normalization-form|use-character-maps|output-version|byte-order-mark|escape-uri-attributes|include-content-type|undeclare-prefixes)])\\s*=\\s*\\\"",
+          "name": "meta.attribute.xml",
+          "begin": "(?<![\\w:.-])([\\w:.-]+)(\\s*=\\s*)(\")",
           "beginCaptures": {
-            "1": { "name": "entity.other.attribute-name.local.xml" }
+            "1": {
+              "name": "entity.other.attribute-name.xml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.xml"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.xml"
+            }
           },
           "end": "\"",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.xml"
+            }
+          },
+          "contentName": "string.quoted.double.xml",
           "patterns": [
-            { "include": "source.xpath" }
+            {
+              "include": "#entity"
+            }
           ]
+        },
+        {
+          "name": "meta.attribute.xml",
+          "begin": "(?<![\\w:.-])([\\w:.-]+)(\\s*=\\s*)(')",
+          "beginCaptures": {
+            "1": {
+              "name": "entity.other.attribute-name.xml"
+            },
+            "2": {
+              "name": "punctuation.separator.key-value.xml"
+            },
+            "3": {
+              "name": "punctuation.definition.string.begin.xml"
+            }
+          },
+          "end": "'",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.string.end.xml"
+            }
+          },
+          "contentName": "string.quoted.single.xml",
+          "patterns": [
+            {
+              "include": "#entity"
+            }
+          ]
+        }
+      ]
+    },
+    "xslt-instruction": {
+      "begin": "(<)(/?)(xsl:[\\w.-]+)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.xml"
+        },
+        "2": {
+          "name": "punctuation.definition.tag.begin.xml"
+        },
+        "3": {
+          "name": "entity.name.tag.xml"
+        }
+      },
+      "end": "/?>",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag.end.xml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#xpath-attribute"
+        },
+        {
+          "include": "#attribute"
+        }
+      ]
+    },
+    "xml-tag": {
+      "begin": "(<)(/?)([\\w:.-]+)",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.tag.begin.xml"
+        },
+        "2": {
+          "name": "punctuation.definition.tag.begin.xml"
+        },
+        "3": {
+          "name": "entity.name.tag.xml"
+        }
+      },
+      "end": "/?>",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.tag.end.xml"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute"
         }
       ]
     }

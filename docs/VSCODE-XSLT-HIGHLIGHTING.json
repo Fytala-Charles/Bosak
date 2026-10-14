@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-14",
+  "baseRevision": "8bba94ddbe47273dafa2db6ce2ff9c3deb162d4c",
+  "extensionVersion": "0.1.6",
+  "marketplacePublished": false,
+  "libraryVersion": "1.2.1",
+  "solutionTests": {
+    "passed": 8170,
+    "failed": 0,
+    "skipped": 0
+  },
+  "languageServerTests": {
+    "passed": 77,
+    "failed": 0,
+    "skipped": 0,
+    "focusedPassed": 12
+  },
+  "textMateChecks": "Passed",
+  "typescriptCompile": "Passed",
+  "darkPlusColors": {
+    "select": "#9CDCFE",
+    "concat": "#DCDCAA",
+    "string": "#CE9178"
+  },
+  "vsix": {
+    "path": ".guard-tmp\\vscode-bosak-0.1.6.vsix",
+    "sha256": "5cf24a48edd42b3dac9ca7776e39a55eabfb353893b1daa0bcfa82acfe7578d2"
+  },
+  "sourceHashes": {
+    "src\\Bosak.LanguageServer\\SemanticTokensHandler.cs": "2fd9905aed354e1d0a9d962942aafd41b7630995356cb73d7272081a65d546ab",
+    "vscode-bosak\\syntaxes\\xslt.tmLanguage.json": "ed9dcf2f0d2934a6fa5ffefb83edd00f92f01c2782b5e0d59f6100fb6b906869",
+    "vscode-bosak\\syntaxes\\xpath.tmLanguage.json": "850dcc44ca6abf8adaac01ab1bd561c1de04ccbbae176e449c6badafe7c00280"
+  },
+  "logHashes": {
+    "highlight-build.log": "ee0d7aebb61cdaa450bfba44d0fcbbf646c317e15338b48eb1a553632cf63cab",
+    "highlight-focused.log": "71d70c413c9428634edf4db042bf32a819a575d87297ff7243632d2d10acf2d0",
+    "highlight-language-server.log": "e59446108a028cafd498af96b704ddbf73e4c178c64cce59a99798b9873ddae8",
+    "highlight-server.log": "b78fb76fa416c8fedaa4da04a916f9d9577de8ba0a1d92adba9cb1d0392b62d8",
+    "highlight-solution-build.log": "e3e5effcbd0c318143c00ea1d4fa388951586985856182f16fac146bd4f0caca",
+    "highlight-unit.log": "baa886d9731d2148383ed3003e6daf604916c6a11cbb18dda5e15a12baf8a647",
+    "highlight-vsix.log": "f5dd1e4143cf1bf66557674dc797c81747d7c2538cae7402e5edf9d25efbf2bf",
+    "highlight-xslt.log": "7d62759a3b608ac061ace17ee58faa3a9ee65f85227ddfdc82656d6b7d5a7356"
+  }
+}

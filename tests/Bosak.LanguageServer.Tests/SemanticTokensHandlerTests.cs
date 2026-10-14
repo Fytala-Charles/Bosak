@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1.1 | 14-10-2026     | Verify expression scopes, functions, strings and XML exclusions.                             |
 // ===========================================================================================================================================================
 using System.Linq;
 using System.Threading.Tasks;
@@ -87,6 +88,58 @@ public class SemanticTokensHandlerTests
 
         var numbers = tokens.Where(t => t.Type == SemanticTokenType.Number).ToList();
         Assert.Equal(2, numbers.Count);
+    }
+
+
+    [Theory]
+    [InlineData("<xsl:value-of select=\"concat('a','b')\"/>")]
+    /// <summary>Verifies distinct function and string tokens inside either XML quote style.</summary>
+    /// <param name="text">The stylesheet fragment to tokenize.</param>
+    [InlineData("<xsl:value-of select='concat(\"a\",\"b\")'/>")]
+    public void Tokenize_XsltSeparatesFunctionAndStringArguments(string text)
+    {
+        var tokens = SemanticTokensHandler.Tokenize(text, true, false, true);
+        Assert.Contains(tokens, t => t.Type == SemanticTokenType.Function && text.Substring(t.Start, t.Length) == "concat");
+        Assert.Equal(2, tokens.Count(t => t.Type == SemanticTokenType.String));
+        int attributeName = text.IndexOf("select");
+        Assert.DoesNotContain(tokens, t => t.Start <= attributeName && t.Start + t.Length > attributeName);
+        for (int i = 1; i < tokens.Count; i++)
+            Assert.True(tokens[i].Start >= tokens[i - 1].Start + tokens[i - 1].Length);
+    }
+
+    /// <summary>Verifies literal XML values, comments and text do not receive XPath tokens.</summary>
+    [Fact]
+    public void Tokenize_XsltIgnoresLiteralValuesCommentsAndText()
+    {
+        const string text = "<!-- <xsl:value-of select=\"bad(123)\"/> -->"
+            + "<xsl:include href=\"file:///for/123/fn:concat()\"/>"
+            + "<result select=\"fake(456)\" title=\"if $x fn:concat()\">fn:concat(789)</result>";
+        var tokens = SemanticTokensHandler.Tokenize(text, true, false, true);
+        Assert.DoesNotContain(tokens, t => t.Type is "function" or "number" or "variable");
+        Assert.Single(tokens.Where(t => t.Type == SemanticTokenType.Keyword));
+    }
+
+    /// <summary>Verifies string contents and nested comments do not emit code tokens.</summary>
+    [Fact]
+    public void Tokenize_XPathIgnoresCodeInsideStringsAndNestedComments()
+    {
+        const string text = "concat('fn:fake(123) $x and', (: outer (: inner :) fn:fake(456) :) 'it''s')";
+        var tokens = SemanticTokensHandler.Tokenize(text, false, false, true);
+        Assert.Single(tokens.Where(t => t.Type == SemanticTokenType.Function));
+        Assert.Equal(2, tokens.Count(t => t.Type == SemanticTokenType.String));
+        Assert.DoesNotContain(tokens, t => t.Type is "number" or "variable" or "operator");
+    }
+
+    /// <summary>Verifies multiline expression offsets and single-line semantic token ranges.</summary>
+    [Fact]
+    public void Tokenize_XsltPreservesMultilineOffsetsAndSingleLineTokens()
+    {
+        const string text = "<xsl:value-of\r\n select=\"concat(\r\n 'a\r\nb', $value)\"/>";
+        var tokens = SemanticTokensHandler.Tokenize(text, true, false, true);
+        Assert.Contains(tokens, t => t.Type == SemanticTokenType.Function && text.Substring(t.Start, t.Length) == "concat");
+        Assert.Contains(tokens, t => t.Type == SemanticTokenType.Variable && text.Substring(t.Start, t.Length) == "$value");
+        Assert.All(tokens, t => Assert.DoesNotContain('\n', text.Substring(t.Start, t.Length)));
+        Assert.All(tokens, t => Assert.DoesNotContain('\r', text.Substring(t.Start, t.Length)));
     }
 
     [Fact]
