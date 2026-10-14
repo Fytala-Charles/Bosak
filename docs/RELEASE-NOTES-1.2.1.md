@@ -6,7 +6,7 @@
 
 ## Release scope
 
-**Prepared scope; unpublished.** The user authorized preparation on 2026-10-14. Scope is frozen at integrated revision `cf8aae647cbe8dfe94c381d7e533f31afc57b1fd`, after PR #273. Published version remains 1.2.0. This is a coordinated patch release of the ten public .NET 10 libraries. No new public API or conformance gate membership is introduced, and the existing compatibility profiles continue to govern draft 4.0 syntax.
+**Published on 2026-10-14.** Tag `v1.2.1` points to approved revision `70f5c5b2c1b18a238ad8b90b6cad204b840e460c`. The successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38525706208) passed 8,170 unit tests and published all ten public .NET 10 libraries. This coordinated patch introduces no new public API or conformance gate membership; existing compatibility profiles continue to govern draft 4.0 syntax.
 
 The release includes the post-1.2.0 fixes integrated through PR #251-273:
 
@@ -32,4 +32,4 @@ Seventeen originally contributed cases remain accepted upstream in PR #22-27. As
 
 Broader package linkage, omitted/default host function execution, named-type expression-edit compilation, general pattern/AVT replacement, string-template interpolation and broader draft conformance remain separate work. REQ-125 acceptance and REQ-126 status are unchanged. Existing fixed-precision decimal, bounded date/time conversion and remote HTTP test limitations remain documented.
 
-The VS Code Marketplace release is separate from this library release. No tag, NuGet publication or GitHub release is authorized by preparation alone. After the verified candidate is integrated and final CI passes, present its exact revision for explicit publication approval; only that approval permits tagging/publishing.
+The VS Code Marketplace release is separate from this library release. The user explicitly approved tagging and publication after reviewing the exact verified revision. The tag and publication are complete.
