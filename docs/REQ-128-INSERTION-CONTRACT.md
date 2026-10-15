@@ -4,6 +4,8 @@
   <p>Accepted engine slice, 15 October 2026</p>
 </div>
 
+**Consumer review F1 - 2026-10-15:** The declared typed-test exclusion now checks step type metadata and nested document/schema tests across original and proposed slots. Untyped node tests retain support. [Correction and verification](REQ-128-CONSUMER-REVIEW-F1.md). Earlier candidate counts/receipts below describe their recorded revisions.
+
 ## Status and decision boundary
 
 The user authorized implementation of this bounded engine contract on 15 October 2026. REQ-128 is **In Progress**, owned by **Charles Korthout**, targeting the **unpublished 1.8.0** minor release. The source now implements the additive engine API below; public packages remain 1.7.1 and VS Code 0.2.3 still bundles 1.7.1. Braid ports, UI, Apply/history and production adoption remain separate. See [implementation and verification](REQ-128-IMPLEMENTATION.md) for exact coverage and delivery status.

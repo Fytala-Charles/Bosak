@@ -4,6 +4,8 @@
   <p>Unpublished candidate — 15 October 2026</p>
 </div>
 
+**Consumer review F1 - 2026-10-15:** The declared typed-test exclusion now checks step type metadata and nested document/schema tests across original and proposed slots. Untyped node tests retain support. [Correction and verification](REQ-128-CONSUMER-REVIEW-F1.md). Earlier candidate counts/receipts below describe their recorded revisions.
+
 1.8.0 adds bounded source-preserving `xsl:value-of` insertion to `Bosak.Xslt.Authoring`. The minor version reflects the new public API. Existing expression-edit APIs retain their behavior.
 
 - Discover snapshot-owned targets with `GetValueOfInsertionTarget` and submit `AuthoringValueOfInsertionProposal` through `ProposeValueOfInsertion`.

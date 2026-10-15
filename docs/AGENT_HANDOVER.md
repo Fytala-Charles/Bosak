@@ -1,3 +1,10 @@
+# REQ-128 consumer F1 correction - 2026-10-15
+
+Braid reviewed PR312 at 404d3096 and correctly requested changes: typed element/attribute and nested document tests bypassed the insertion StepNode guard. InsertionExpressionCoverage now rejects typed/schema node metadata before supplementary prefix validation, preserving the existing contract exclusion in original and proposed slots. No type support or API/version expansion. Fifty-six new public-only cases: baseline 6 pass/50 fail; corrected focused suite 141/0/0. Final full tests/gates/package evidence and exact-commit Braid re-review remain. See docs/REQ-128-CONSUMER-REVIEW-F1.md and docs/REQ-128-F1-VERIFICATION.json.
+
+Braid review/probes/working copies and pin 5bab4799783569d538cec9b03d37a57454f0eebc remain unchanged. REQ-128 In Progress, source 1.8.0 unpublished, libraries 1.7.1, VS Code 0.2.3 on engine 1.7.1. Previous candidate receipts are retained as historical evidence. No merge/publication/adoption during this correction. Earlier entries below are historical.
+
+
 # REQ-128 engine implementation candidate - 2026-10-15
 
 Verified implementation source commit 526924f0126c3c2eb3a401e1b97930883198a9cd. Implementation branch feat/req128-value-of-insertion starts from main 5e13e77d988f559bddaf220fcc45e7d0c8a8b078 in the isolated req128-implementation-source worktree. User authorized this engine slice. REQ-128 is In Progress, owner Charles Korthout, unpublished source version 1.8.0. Public libraries remain 1.7.1 and published VS Code 0.2.3 bundles 1.7.1. Original Braid checkout/pin and concurrent root changes remain preserved.

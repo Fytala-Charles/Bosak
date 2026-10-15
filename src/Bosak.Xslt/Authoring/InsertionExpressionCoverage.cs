@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Consumer F1: reject typed and schema node tests, including nested document tests.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -46,12 +47,12 @@ internal static class InsertionExpressionCoverage
             ["math"] = "http://www.w3.org/2005/xpath-functions/math",
         };
         foreach (var binding in context.InScopeNamespaces) namespaces[binding.Prefix] = binding.Uri;
-        Patterns.PatternCompiler.ValidateNamespacePrefixes(text, namespaces);
         XPathAstNode ast;
         try { ast = XPathParser.Parse(text, xpath40: context.EffectiveVersion == "4.0"); }
         catch (Exception) when (slot.SlotKind == AuthoringAttributeSlotKind.Pattern)
         { throw new CoverageException("This pattern needs static coverage beyond the insertion grammar."); }
         Visit(ast);
+        Patterns.PatternCompiler.ValidateNamespacePrefixes(text, namespaces);
 
         void Function(string? ns, string? prefix, string local, int arity)
         {
@@ -86,6 +87,12 @@ internal static class InsertionExpressionCoverage
                 case RangeExpressionNode r: Visit(r.From); Visit(r.To); return;
                 case PathExprNode p: Many(p.Steps); return;
                 case StepNode s:
+                    // document-node(element(..., T)) stores its nested type in this same field.
+                    // This slice excludes typed tests even when T names a known built-in type.
+                    if (s.NodeTest.Kind == NameTestKind.KindTest && (s.NodeTest.KindTestTypeName is not null
+                        || s.NodeTest.Name is "schema-element" or "schema-attribute"
+                        || s.NodeTest.KindTestInnerName is "schema-element" or "schema-attribute"))
+                        throw new CoverageException("Typed and schema node tests are outside proven insertion coverage.");
                     if (s.NodeTest.LookupExpression is not null) Visit(s.NodeTest.LookupExpression);
                     Many(s.Predicates); return;
                 case PredicateNode p: Visit(p.Expression); return;

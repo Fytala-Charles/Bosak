@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-15",
+  "finding": "F1",
+  "reviewedHead": "404d3096ad200052c28148087c4e004bcad877a3",
+  "consumerReviewSha256": "ae0c73038f8afe8fbf43203fdbd79ab5418f226d5ab6466c0e8fb1a7724bdb4a",
+  "status": "corrected in source; final verification in progress; consumer re-review pending",
+  "baseline": {
+    "passed": 6,
+    "failed": 50,
+    "total": 56
+  },
+  "focusedInsertionTests": {
+    "passed": 141,
+    "failed": 0
+  },
+  "publicVersion": "1.7.1",
+  "sourceVersion": "1.8.0 (unpublished)",
+  "braidPinUnchanged": "5bab4799783569d538cec9b03d37a57454f0eebc",
+  "logs": {
+    ".guard-f1-only-baseline.log": "983bebb28658f025a7ffe968d99131041223fa1776bf35a765fde1b2c228735a",
+    ".guard-f1-focused.log": "3bd17b02a9f3214419475b50c359aa22fe04cf4645e6bd0728e5b9f8b6d96333",
+    ".guard-f1-build.log": "532671d5f8ca26d44a0fab8efeb9936195dfb0ba4b9f56846640b7037eeba4cb"
+  }
+}

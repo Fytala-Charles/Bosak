@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Cover default inspection preprocessing without weakening source eligibility checks.      |
 //                      | Charles Korthout | 0.3   | 15-10-2026     | Distinguish ordinary result attributes and opaque metadata from XSLT annotations.        |
+//                      | Charles Korthout | 0.4   | 15-10-2026     | Consumer F1: typed node-test exclusions in original, proposed and pattern slots.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -524,6 +525,102 @@ public class AuthoringValueOfInsertionTests
     {
         var candidate = Insert(Inspect(Sheet("<out xmlns:v='urn:metadata' v:static='yes' v:use-when='opaque' v:type='opaque'></out>")));
         Assert.Contains("v:use-when='opaque'", Encoding.UTF8.GetString(candidate.ExportSource()), StringComparison.Ordinal);
+    }
+
+    /// <summary>Supplies typed step tests and nested tests in both supported stylesheet versions.</summary>
+    /// <returns>Expression, namespace declarations and effective stylesheet version.</returns>
+    public static IEnumerable<object[]> TypedNodeTestCases()
+    {
+        var cases = new (string Expression, string Namespaces)[]
+        {
+            ("child::element(*, p:Missing)", "xmlns:p='urn:missing'"),
+            ("child::element(*, xs:integer)", ""),
+            ("child::element(*, xs:integer)", "xmlns:xs='http://www.w3.org/2001/XMLSchema'"),
+            ("attribute::attribute(*, p:Missing)", "xmlns:p='urn:missing'"),
+            ("attribute::attribute(*, xs:integer)", ""),
+            ("attribute::attribute(*, xs:integer)", "xmlns:xs='http://www.w3.org/2001/XMLSchema'"),
+            ("child::document-node(element(*, p:Missing))", "xmlns:p='urn:missing'"),
+            ("child::document-node(element(*, xs:integer))", ""),
+            ("child::document-node(element(*, xs:integer))", "xmlns:xs='http://www.w3.org/2001/XMLSchema'"),
+            ("child::element(*, Missing)", ""),
+            ("child::element()[self::element(*, p:Missing)]", "xmlns:p='urn:missing'"),
+            ("child::document-node(element(*, p:Missing?))", ""),
+        };
+        foreach (var version in new[] { "3.0", "4.0" })
+            foreach (var test in cases) yield return new object[] { test.Expression, test.Namespaces, version };
+    }
+
+    /// <summary>Typed select steps refuse without returning any candidate or changing the input envelope.</summary>
+    /// <param name="expression">The excluded typed expression.</param>
+    /// <param name="namespaces">The original namespace declarations.</param>
+    /// <param name="version">The stylesheet version.</param>
+    [Theory]
+    [MemberData(nameof(TypedNodeTestCases))]
+    public void F1_ProposedTypedNodeTests_RefuseCoverage(string expression, string namespaces, string version)
+    {
+        var snapshot = Inspect(Sheet("<out></out>", namespaces, version));
+        var original = snapshot.ExportOriginal(ModuleUri);
+        var target = snapshot.GetValueOfInsertionTarget(Find(snapshot, "out"));
+        Assert.True(target.IsSuccess, target.Failure?.ToString());
+        var result = snapshot.ProposeValueOfInsertion(new(target.Target!, expression));
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Candidate);
+        Assert.Equal(AuthoringInsertionFailureKind.UnsupportedCoverage, result.Failure!.Kind);
+        Assert.Equal(original, snapshot.ExportOriginal(ModuleUri));
+    }
+
+    /// <summary>Typed expressions anywhere in the original stylesheet prevent issuing an insertion target.</summary>
+    /// <param name="expression">The excluded original expression.</param>
+    /// <param name="namespaces">The original namespace declarations.</param>
+    /// <param name="version">The stylesheet version.</param>
+    [Theory]
+    [MemberData(nameof(TypedNodeTestCases))]
+    public void F1_OriginalTypedNodeTests_RefuseCoverage(string expression, string namespaces, string version)
+    {
+        var snapshot = Inspect(Sheet($"<xsl:value-of select='{expression}'/><out></out>", namespaces, version));
+        var original = snapshot.ExportOriginal(ModuleUri);
+        var result = snapshot.GetValueOfInsertionTarget(Find(snapshot, "out"));
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Target);
+        Assert.Equal(AuthoringInsertionFailureKind.UnsupportedCoverage, result.Failure!.Kind);
+        Assert.Equal(original, snapshot.ExportOriginal(ModuleUri));
+    }
+
+    /// <summary>The same typed-test exclusion applies to an original pattern slot.</summary>
+    /// <param name="version">The stylesheet version.</param>
+    [Theory]
+    [InlineData("3.0")]
+    [InlineData("4.0")]
+    public void F1_OriginalTypedPattern_RefusesCoverage(string version)
+    {
+        var text = Sheet("<out></out>", "xmlns:xs='http://www.w3.org/2001/XMLSchema'", version)
+            .Replace("match='/'", "match='element(*, xs:integer)'");
+        var snapshot = Inspect(text);
+        var result = snapshot.GetValueOfInsertionTarget(Find(snapshot, "out"));
+        Assert.False(result.IsSuccess);
+        Assert.Null(result.Target);
+        Assert.Equal(AuthoringInsertionFailureKind.UnsupportedCoverage, result.Failure!.Kind);
+        Assert.Equal(Encoding.UTF8.GetBytes(text), snapshot.ExportOriginal(ModuleUri));
+    }
+
+    /// <summary>Untyped element, attribute and nested document tests retain insertion support.</summary>
+    /// <param name="expression">An untyped node-test expression.</param>
+    /// <param name="version">The stylesheet version.</param>
+    [Theory]
+    [InlineData("child::element(*)", "3.0")]
+    [InlineData("attribute::attribute(*)", "3.0")]
+    [InlineData("child::document-node(element(*))", "3.0")]
+    [InlineData("child::element(*)", "4.0")]
+    [InlineData("attribute::attribute(*)", "4.0")]
+    [InlineData("child::document-node(element(*))", "4.0")]
+    [InlineData("child::schema-element", "3.0")]
+    [InlineData("attribute::schema-attribute", "3.0")]
+    [InlineData("child::schema-element", "4.0")]
+    [InlineData("attribute::schema-attribute", "4.0")]
+    public void F1_UntypedNodeTests_RemainSupported(string expression, string version)
+    {
+        var candidate = Insert(Inspect(Sheet("<out></out>", version: version)), expression: expression);
+        Assert.Equal(expression, candidate.SelectSlot.ExpandedValue);
     }
 
     private sealed class CountingResolver : IAuthoringModuleResolver
