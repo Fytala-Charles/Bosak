@@ -1,3 +1,17 @@
+# PR #305 refreshed for integration - 2026-10-15
+
+Merged current main 5a9b3c4b into the reviewed 1.7.1 branch; resolved five documentation-only conflicts by retaining both delivery histories and correcting the current extension status. Source/test trees remain identical to reviewed 8e9c4984. Libraries 1.7.0 and VS Code 0.2.2 are already published; the user confirms restart. Next: successful refreshed-head CI, integration and separate 1.7.1 candidate preparation. No publication or tag movement. Preserve original receipts and concurrent REQ-128 work.
+
+# Escaping inline original closure correction - 2026-10-15
+
+Parent preparation head 93e23000d4a8d1d0c93374c23fca75df7d7b85df (PR #304 subsequently merged at f25474fd5f73d045d2d9bc2f8a22b56fb23491ab). Separate fix/escaping-inline-original worktree keeps the extension's source version at 1.7.0 while this correctness fix uses unpublished 1.7.1. The exact merged extension candidate remains f25474fd; never publish it from this engine branch.
+
+What was built: internal InlineFunctionItem alias snapshot, narrow EvaluationContext snapshot/restore and VM capture/body/finally restoration. No ordinary function registry capture or public API. Eighteen regressions cover escaped/nested direct/keyword/arrow/named/partial originals, defaults/private globals, caller restoration including errors, hidden dynamic lookup, absent focus and abstract static errors. Final public-1.7.0 baseline 6 pass/12 fail, original scope 3/5 preserved separately. Fixture source bytes match the executed expanded baseline snapshot. Contract/receipt docs/XSLT40-ESCAPING-INLINE-ORIGINALS.md/json; scratch .guard-tmp/closure-*.
+
+Verification: all 8,483 solution tests pass (XSLT 5,597), language server 84; frozen gates 31,142/0/679 and 8,278/0/1,894. QT3 pinned fixtures were copied before tests; no missing-fixture attempt is part of this run. Incremental solution build zero errors/two existing warnings, initial focused build warnings retained.
+
+Next: submit a separate draft review PR with exact committed-revision package metadata, fresh 185-case consumer/provenance and successful head CI. No engine publication or merge is claimed at recording. Review source and exception restoration before integration. Public libraries remain 1.7.0. Public Braid verification is 843 tests with original checkout/pin preserved; extension 0.2.2 is separately prepared with engine 1.7.0. General package graphs, overlapping families and editor signatures remain separate. REQ-126 In Progress; no gate/upstream/tag changes. Preserve all historical receipts, original Braid, concurrent REQ-128 work and .sweep-baselines/. Earlier entries below are historical.
+
 # VS Code 0.2.2 published, verified and installed locally - 2026-10-15
 
 User explicitly requested publication and local VSIX installation of exact verified revision f25474fd5f73d045d2d9bc2f8a22b56fb23491ab. Immutable vscode-v0.2.2 points there. Publication workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38758521326 succeeds: highlighting/launcher checks and 84 language-server tests, package artifact and Marketplace publication. No duplicate dispatch or tag movement.

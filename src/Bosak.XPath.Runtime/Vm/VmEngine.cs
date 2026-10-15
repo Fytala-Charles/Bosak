@@ -415,6 +415,7 @@
 //                      | Charles Korthout | 2.188 | 14-10-2026     | Defer optional host omission markers while preserving normal type conversion.            |
 //                      | Charles Korthout | 2.189 | 14-10-2026     | Share XPath 4.0 primitive numeric coercion with the XSLT argument host (1.3.2).            |
 //                      | Charles Korthout | 2.190  | 15-10-2026     | Capture lexical host targets and preserve bound original item identity.                  |
+//                      | Charles Korthout | 2.191 | 15-10-2026     | Retain lexical original aliases in escaping inline functions and restore callers on errors. |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -3899,7 +3900,8 @@ internal static class VmEngine
                             CompilerInlineFunction cif => new InlineFunctionItem(cif.Parameters, cif.Body, cif.ParameterTypes, cif.ReturnType)
                             {
                                 // Capture the defining variable environment for closure semantics.
-                                CapturedVariables = context.SnapshotVariables()
+                                CapturedVariables = context.SnapshotVariables(),
+                                CapturedBoundFunctionAliases = context.SnapshotBoundFunctionAliases()
                             },
                             ValueTuple<string, int> namedTuple => ResolveNamedFunctionTuple(namedTuple, context),
                             _ => throw new InvalidOperationException($"Unknown function item type: {raw.GetType().Name}")
@@ -5054,8 +5056,12 @@ internal static class VmEngine
                     var savedFocusItem = context.ContextItem;
                     var savedFocusPosition = context.ContextPosition;
                     var savedFocusSize = context.ContextSize;
+                    var savedAliases = inline.CapturedBoundFunctionAliases is null
+                        ? null : context.SnapshotBoundFunctionAliases();
                     try
                     {
+                        if (inline.CapturedBoundFunctionAliases is { } aliases)
+                            context.RestoreBoundFunctionAliases(aliases);
                         // XPath 3.1 §3.1.5 / XQuery: a user-defined function body (declared or
                         // inline) is evaluated with the context item, position, and size
                         // absent — the caller's focus must not propagate into the body
@@ -5073,6 +5079,8 @@ internal static class VmEngine
                     {
                         context.WithFocus(savedFocusItem, savedFocusPosition, savedFocusSize);
                         context.RestoreVariables(variableSnapshot);
+                        if (inline.CapturedBoundFunctionAliases is not null)
+                            context.RestoreBoundFunctionAliases(savedAliases);
                     }
                 }
 

@@ -4,6 +4,8 @@
   <p>Bounded correctness slice, 15 October 2026</p>
 </div>
 
+**Implementation follow-up - 2026-10-15:** The bounded lexical-original correction is implemented in unpublished source 1.7.1. [Contract and expanded evidence](XSLT40-ESCAPING-INLINE-ORIGINALS.md). The original eight-case scope baseline and its JSON receipt below are preserved unchanged; statements describing scope-only work are historical.
+
 ## Reproduced public baseline
 
 Eight isolated probes against public 1.7.0 give **3 pass / 5 fail**. Direct original calls, a captured named-original item and ordinary captured variables pass. Returning an inline function that calls `xsl:original` fails after the overriding frame exits: reduced optional calls, keyword calls and nested closures lose the lexical original. Calling the closure inside a different override incorrectly selects that override's original (`WRONG` rather than `ABC`). [Baseline evidence](XSLT40-ESCAPING-INLINE-CLOSURES-SCOPE.json) preserves the fixture/TRX hashes and fresh public-package provenance separately from all implementation results.

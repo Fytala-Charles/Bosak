@@ -1,0 +1,168 @@
+{
+  "date": "2026-10-15",
+  "version": "1.7.1",
+  "status": "Unpublished correctness fix; review and exact-head package proof pending",
+  "parent": "93e23000d4a8d1d0c93374c23fca75df7d7b85df",
+  "initialScopeBaseline": {
+    "cases": 8,
+    "passed": 3,
+    "failed": 5,
+    "receiptPreserved": "XSLT40-ESCAPING-INLINE-CLOSURES-SCOPE.json"
+  },
+  "expandedPublicBaseline": {
+    "cases": 18,
+    "passed": 6,
+    "failed": 12,
+    "version": "1.7.0",
+    "revision": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961",
+    "results": [
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-expanded-baseline-results\\charl_CHARLES_2026-10-15_16_52_25_net10.0.trx",
+        "passed": 6,
+        "failed": 12,
+        "total": 18,
+        "sha256": "986afd0658ec12e7f238599a7f2d40d873208eb2e9b26b2b077a3311fa9c271f"
+      }
+    ],
+    "executedFixtureSha256": "461510ca136fdf6179f3d0e2c046ee0548c5d9519ce3dc588941035a64655a70"
+  },
+  "solution": {
+    "passed": 8483,
+    "failed": 0,
+    "skipped": 0,
+    "results": [
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0.trx",
+        "passed": 66,
+        "failed": 0,
+        "total": 66,
+        "sha256": "2b4c99ead8ab9c30174dd35c50d7e05450f91ac2df169c947bf597236842a28e"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[1].trx",
+        "passed": 202,
+        "failed": 0,
+        "total": 202,
+        "sha256": "08bf95975ef9b7e672baab2698eb399f0af93d70c215b00fb70709fd465c398d"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[2].trx",
+        "passed": 269,
+        "failed": 0,
+        "total": 269,
+        "sha256": "6c07dc2d9eb26efe0db9b9f3d032dcb3f6d7f60e147242a0311c2cbc50af7833"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[3].trx",
+        "passed": 132,
+        "failed": 0,
+        "total": 132,
+        "sha256": "2091a747d343c4380013886d67ff1fb0968e1a6a1c3e0ee8398d5918da3eea7d"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[4].trx",
+        "passed": 411,
+        "failed": 0,
+        "total": 411,
+        "sha256": "37eee3eaa31397b5e3aa1587c3cf0c3f346d4afedc42e9b6f42d009696df4959"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[5].trx",
+        "passed": 1303,
+        "failed": 0,
+        "total": 1303,
+        "sha256": "dce1907b79f03ae7723450e6d70a510b2570c24b4fe691f725e7637141f0c228"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[6].trx",
+        "passed": 47,
+        "failed": 0,
+        "total": 47,
+        "sha256": "a2ebf5a136541a6ec3a2e71c5dd7b5f613fb604b20b60f84a17b7415dcc0c9a2"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[7].trx",
+        "passed": 153,
+        "failed": 0,
+        "total": 153,
+        "sha256": "6c6db7661f3c41a3e5dc1a3ba77538904034b5cd557a188515333a07169d9a24"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_14_net10.0[8].trx",
+        "passed": 5597,
+        "failed": 0,
+        "total": 5597,
+        "sha256": "d961575d4141fd6baa461647faddf4edb055c438ff17dce49191637a93a361a5"
+      },
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-solution-results\\charl_CHARLES_2026-10-15_16_54_15_net10.0.trx",
+        "passed": 303,
+        "failed": 0,
+        "total": 303,
+        "sha256": "50eaf0c0c1ac6d8dcddcbc355ac055cacb38008500f8447c6a539b57697061de"
+      }
+    ]
+  },
+  "xsltPassed": 5597,
+  "languageServer": {
+    "passed": 84,
+    "failed": 0,
+    "results": [
+      {
+        "file": "D:\\Development\\Bosak\\.guard-tmp\\closure-implementation-ls-results\\charl_CHARLES_2026-10-15_16_54_37_net10.0.trx",
+        "passed": 84,
+        "failed": 0,
+        "total": 84,
+        "sha256": "751a3d29d7e0637de1bb555168a6624112d267b3e553b53bc2d2efeea877e9c9"
+      }
+    ]
+  },
+  "gates": {
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679
+    },
+    "qt4GateOnly": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894
+    }
+  },
+  "files": {
+    "src/Bosak.XPath.Runtime/Functions/InlineFunctionItem.cs": "b1c8cc21542d0025b4a7210e8d37f402eeb3fcdc83a55065eb639354a2901d4f",
+    "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs": "cee1fbde2d56f6642bc9cc1d4f2fae42c2bf01ed3224f7bd48f82854f3bc990c",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "ed951def2422986588f90f026cbe4ad5ba878263a0e36fda4f256fe79fa2a5e5",
+    "src/Directory.Build.props": "7df7d7f109bc716a96275bc7f2df0dcb53126375a147f2a97707447d500b90c7",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40EscapingInlineOriginalTests.cs": "461510ca136fdf6179f3d0e2c046ee0548c5d9519ce3dc588941035a64655a70"
+  },
+  "build": {
+    "errors": 0,
+    "incrementalSolutionWarnings": 2,
+    "initialFocusedBuildWarningsPreserved": true
+  },
+  "publicApiAdded": false,
+  "generalFunctionRegistryCaptured": false,
+  "scope": [
+    "Concrete lexical xsl:original calls in escaped/nested inline bodies",
+    "Original optional defaults, keyword names, declaring globals/private helpers",
+    "Caller alias restoration after return/errors; dynamic pseudo-name stays hidden",
+    "Abstract XTSE3075 and absent inline-body focus preserved"
+  ],
+  "limits": [
+    "General package graph capture and overlapping families remain separate",
+    "No inline-closure binding support for arbitrary ordinary package references is claimed",
+    "No engine publication or Marketplace publication"
+  ],
+  "logs": {
+    "closure-implementation-focused.log": "0e8884acd576e38d511fa023108e4ee252b7aca683af371b7452c0dcc70f3111",
+    "closure-expanded-baseline.log": "d9f15bfac165e14fcfe27849ccc75af20a135dedd81b649b4a9e20443693ccb6",
+    "closure-implementation-build.log": "90434d664e12efe74ad5f82142677a72df9c635234ebeabd16f0c3432847ec78",
+    "closure-implementation-solution.log": "1056e71d1691ad767b4f3558d7e89601fd1a8457752fc02dd3f03e668d83970b",
+    "closure-implementation-ls.log": "2e2b9ba94f1c7fb773e33c059c4118320b06703b0bcfc1bbe0cdf65a8a8d09d2",
+    "closure-implementation-qt3.log": "08ead1a06d06b01b359510c31cee48712f44fd3366a86848ca1ef4b9da7e58c9",
+    "closure-implementation-qt4.log": "2f0c618eb1aa76b48df9d0327b324786e9415bcdf530ff44873006fa2bf4b02c"
+  },
+  "aliasDictionaryAllocatedWithoutBoundAliases": false,
+  "aliasAllocationScope": "All inline functions created while hidden bound aliases are registered capture those aliases; no alias dictionary is allocated when none are registered."
+}

@@ -17,10 +17,12 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.31  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.32  | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Compiler types)                |
+//                      | Charles Korthout | 0.33  | 15-10-2026     | Capture hidden lexical function aliases for escaped original calls (source 1.7.1).       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Compiler.Ir;
 using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
 
 namespace Bosak.XPath.Runtime.Functions;
 
@@ -59,4 +61,8 @@ public sealed record InlineFunctionItem : FunctionItem
     /// captured values are restored into the evaluation context for the duration of the call.
     /// </summary>
     public IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? CapturedVariables { get; init; }
+
+    /// <summary>Hidden bound function aliases in the defining lexical function scope.</summary>
+    internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? CapturedBoundFunctionAliases { get; init; }
+
 }
