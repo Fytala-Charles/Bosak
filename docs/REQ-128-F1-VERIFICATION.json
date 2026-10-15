@@ -1,0 +1,135 @@
+{
+  "date": "2026-10-15",
+  "finding": "F1",
+  "reviewedHead": "404d3096ad200052c28148087c4e004bcad877a3",
+  "consumerReviewSha256": "ae0c73038f8afe8fbf43203fdbd79ab5418f226d5ab6466c0e8fb1a7724bdb4a",
+  "status": "corrected and verified; exact-commit consumer re-review pending",
+  "baseline": {
+    "passed": 6,
+    "failed": 50,
+    "total": 56
+  },
+  "focusedInsertionTests": {
+    "passed": 141,
+    "failed": 0
+  },
+  "publicVersion": "1.7.1",
+  "sourceVersion": "1.8.0 (unpublished)",
+  "braidPinUnchanged": "5bab4799783569d538cec9b03d37a57454f0eebc",
+  "logs": {
+    ".guard-f1-only-baseline.log": "983bebb28658f025a7ffe968d99131041223fa1776bf35a765fde1b2c228735a",
+    ".guard-f1-focused-verified.log": "cf6032ffe16ced10f3bf3ff36d421b42b5c55548174af01a3dc8c20fc1afcd99",
+    ".guard-f1-clean-build.log": "f2adfa9a307300035f1d96b9129fc11eca32f396bbfadd17acd07461a39aff7c",
+    ".guard-f1-complete-tests.log": "8fabe0fc5f50874da17a71f65f65cd46922b97d856587cc2b4da405b33f8aed9",
+    ".guard-f1-verified-language-server.log": "5c34de27ce5b68f4e8fb1c4a0a5e6e6d6abd90804f336f99a315f47d57414507",
+    ".guard-f1-verified-qt3.log": "80a079b40ac404cfe8b54a7a709f7b61653d700dae1e80d7d54aa8588c3c77ed",
+    ".guard-f1-verified-qt4.log": "f7cbee4e774bd53f6d6fddec34812193fb06a65f39642c6153890d148a11d725",
+    ".guard-f1-pack.log": "b562c4b3586137dabd61a9308e88b71b401c5b81c7c235c3fde7c40885e3c669",
+    ".guard-f1-render.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
+  },
+  "verifiedSourceRevision": "7f051b2621f8b3bc3335b30396a3ad2443de4125",
+  "solution": {
+    "passed": 8624,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      {
+        "project": "Bosak.XPath.Api.Tests",
+        "passed": 411,
+        "failed": 0,
+        "total": 411,
+        "trxSha256": "c81951f2fe29825a14f2a97a80f800d5f1880eb5b1e2c570a12ceac50e8c4097"
+      },
+      {
+        "project": "Bosak.XPath.Compiler.Tests",
+        "passed": 66,
+        "failed": 0,
+        "total": 66,
+        "trxSha256": "ef6f7ba961b499a6a4fa1b6d8fd461e2a24bd2ef08d9e3c35447480fb695be0a"
+      },
+      {
+        "project": "Bosak.XPath.Core.Tests",
+        "passed": 132,
+        "failed": 0,
+        "total": 132,
+        "trxSha256": "85b16915e3a81e21f0152539da89b8ea31fd7b3b73b38d09c9fca3c3d363ce2e"
+      },
+      {
+        "project": "Bosak.XPath.Parser.Tests",
+        "passed": 202,
+        "failed": 0,
+        "total": 202,
+        "trxSha256": "219f36794675e16fc116006e22785b4508283bade61f9ade86f0fca84380523a"
+      },
+      {
+        "project": "Bosak.XPath.Providers.Database.Tests",
+        "passed": 47,
+        "failed": 0,
+        "total": 47,
+        "trxSha256": "f7bdf3d996917eb0cdbbbf1a2520ba875ada9fa26bad346d1e7d619199f86a41"
+      },
+      {
+        "project": "Bosak.XPath.Providers.Tests",
+        "passed": 153,
+        "failed": 0,
+        "total": 153,
+        "trxSha256": "025026d8de895054dc03c0647a2b422a9fa0a89c599f24b48a4f382db3c9aa9a"
+      },
+      {
+        "project": "Bosak.XPath.Runtime.Tests",
+        "passed": 269,
+        "failed": 0,
+        "total": 269,
+        "trxSha256": "e01835644ce848493417a794032e38f156f32d101c422dfbc5201177d26bbde4"
+      },
+      {
+        "project": "Bosak.XPath.Standard.Tests",
+        "passed": 1303,
+        "failed": 0,
+        "total": 1303,
+        "trxSha256": "ad8741dddd0a661c5e89e0b8d7515357b35011349ae5bd54c7aa46e05cec535a"
+      },
+      {
+        "project": "Bosak.XQuery.Tests",
+        "passed": 303,
+        "failed": 0,
+        "total": 303,
+        "trxSha256": "b073d1bf5335c9ca85bec593c5af1d23db673c8099403479bee805baa57a7218"
+      },
+      {
+        "project": "Bosak.Xslt.Tests",
+        "passed": 5738,
+        "failed": 0,
+        "total": 5738,
+        "trxSha256": "235b5d8f4a2ff16d70ca52512ee9ec78c5b09acf1996128ef864d66827f78e88"
+      }
+    ]
+  },
+  "languageServer": {
+    "passed": 84,
+    "failed": 0
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "freshPackageConsumer": {
+    "passed": 141,
+    "failed": 0,
+    "packageReceipt": "REQ-128-F1-PACKAGES.json"
+  },
+  "publicPackageBaseline": {
+    "sourceRevision": "526924f0126c3c2eb3a401e1b97930883198a9cd",
+    "sameSourceTreesAsReviewedHead": true,
+    "passed": 10,
+    "failed": 50,
+    "total": 60,
+    "trxSha256": "d30c756555ee8f2d913c4ae68be59b2c7e7072723f7de26d6f2539433b9425e8"
+  }
+}

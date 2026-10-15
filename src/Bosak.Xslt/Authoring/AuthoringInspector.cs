@@ -27,6 +27,7 @@
 //                      | Charles Korthout | 0.13  | 13-10-2026     | Capture key declaration namespaces without changing public metadata.                     |
 //                      | Charles Korthout | 0.14  | 13-10-2026     | Capture keyword signatures from retained declaration contexts.                           |
 //                      | Charles Korthout | 0.15  | 13-10-2026     | Retain module fixed bindings across locally earlier expression profiles.                  |
+//                      | Charles Korthout | 0.16  | 15-10-2026     | REQ-128: freeze inspected child collections at their production boundary.                 |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -549,7 +550,7 @@ public sealed class AuthoringInspector
                 text: null,
                 range,
                 Array.Empty<AuthoringAttributeDescriptor>(),
-                children,
+                children.AsReadOnly(),
                 backingObject: null);
         }
 
@@ -604,7 +605,7 @@ public sealed class AuthoringInspector
                 text: null,
                 range,
                 BuildAttributes(element, startOffset, startTagEnd),
-                children,
+                children.AsReadOnly(),
                 element);
         }
 

@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -65,7 +66,7 @@ public sealed class AuthoringNodeDescriptor
         ElementName = elementName;
         Text = text;
         Range = range;
-        Attributes = attributes;
+        Attributes = Array.AsReadOnly(attributes.ToArray());
         _children = children;
         BackingObject = backingObject;
     }

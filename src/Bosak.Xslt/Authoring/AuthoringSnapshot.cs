@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 Slice B: edit proposals (resolver/options retention, node lookup, entry point)   |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain immutable captured function keyword signatures.                                   |
+//                      | Charles Korthout | 0.4   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -48,12 +49,12 @@ public sealed class AuthoringSnapshot
         AuthoringInspectionOptions inspectionOptions,
         AuthoringFunctionSignatures? functionSignatures = null)
     {
-        _modules = modules;
+        _modules = Array.AsReadOnly(modules.ToArray());
         _modulesByUri = modulesByUri;
         _sourcesByUri = sourcesByUri;
         _nodeIds = nodeIds;
         IsCompilable = isCompilable;
-        CompilationDiagnostics = compilationDiagnostics;
+        CompilationDiagnostics = Array.AsReadOnly(compilationDiagnostics.ToArray());
         ModuleResolver = moduleResolver;
         InspectionOptions = inspectionOptions;
         FunctionSignatures = functionSignatures;
@@ -141,6 +142,33 @@ public sealed class AuthoringSnapshot
         ArgumentNullException.ThrowIfNull(proposal);
         return ExpressionEditPipeline.Run(this, proposal);
     }
+
+    /// <summary>Discovers a snapshot-owned append target beneath a supported template constructor.</summary>
+    /// <param name="parent">The exact descriptor issued by this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, observed between processing phases.</param>
+    /// <returns>An opaque target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="parent"/> is null.</exception>
+    public AuthoringValueOfInsertionTargetResult GetValueOfInsertionTarget(AuthoringNodeDescriptor parent,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        return ValueOfInsertionPipeline.Target(this, parent, cancellationToken);
+    }
+
+    /// <summary>Proposes one source-preserving value-of insertion without mutating this snapshot.</summary>
+    /// <param name="proposal">An engine-issued target and expanded select expression.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no candidate is returned once observed.</param>
+    /// <returns>A statically checked isolated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException"><paramref name="proposal"/> is null.</exception>
+    public AuthoringValueOfInsertionResult ProposeValueOfInsertion(AuthoringValueOfInsertionProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return ValueOfInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,
+        _nodeIds, true, Array.Empty<string>(), ModuleResolver, InspectionOptions, FunctionSignatures);
 
     internal AuthoringSource SourceFor(Uri moduleUri)
     {

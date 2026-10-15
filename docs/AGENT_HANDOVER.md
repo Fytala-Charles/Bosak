@@ -1,3 +1,22 @@
+# REQ-128 consumer F1 correction - 2026-10-15
+
+Braid reviewed PR312 at 404d3096 and correctly requested changes: typed element/attribute and nested document tests bypassed the insertion StepNode guard. InsertionExpressionCoverage now rejects typed/schema node metadata before supplementary prefix validation, preserving the existing contract exclusion in original and proposed slots. No type support or API/version expansion. Fifty-six new public-only cases: baseline 6 pass/50 fail; corrected focused suite 141/0/0. Verified code/test source 7f051b2621f8b3bc3335b30396a3ad2443de4125: 8,624 solution tests (XSLT 5,738), 84 LS tests and 141 fresh package-consumer cases pass; gates 31,142/0/679 and 8,278/0/1,894 unchanged. All ten package versions/revisions and nine transitive payload byte matches verify. Public-package F1 baseline 10 pass/50 fail is retained. Exact-commit Braid re-review remains. See docs/REQ-128-CONSUMER-REVIEW-F1.md and docs/REQ-128-F1-VERIFICATION.json.
+
+Braid review/probes/working copies and pin 5bab4799783569d538cec9b03d37a57454f0eebc remain unchanged. REQ-128 In Progress, source 1.8.0 unpublished, libraries 1.7.1, VS Code 0.2.3 on engine 1.7.1. Previous candidate receipts are retained as historical evidence. No merge/publication/adoption during this correction. Earlier entries below are historical.
+
+
+# REQ-128 engine implementation candidate - 2026-10-15
+
+Verified implementation source commit 526924f0126c3c2eb3a401e1b97930883198a9cd. Implementation branch feat/req128-value-of-insertion starts from main 5e13e77d988f559bddaf220fcc45e7d0c8a8b078 in the isolated req128-implementation-source worktree. User authorized this engine slice. REQ-128 is In Progress, owner Charles Korthout, unpublished source version 1.8.0. Public libraries remain 1.7.1 and published VS Code 0.2.3 bundles 1.7.1. Original Braid checkout/pin and concurrent root changes remain preserved.
+
+What was built: additive target/proposal/candidate/refusal API; snapshot-reference ownership; explicit template/LRE end eligibility; actual-closing-tag byte splice; strict insertion encodings and byte bounds; exact expanded select round-trip; original/candidate validation and controlled compilation; conservative whole-stylesheet/AST/signature proof; complete injective source-range provenance; defensive candidate exports and public inspection collections. Compiler preprocessing cannot evaluate caller static expressions. Existing expression edits retain their behavior. See docs/REQ-128-IMPLEMENTATION.md and the accepted contract for the exact restricted grammar/instruction coverage.
+
+Verification: 81 focused insertion tests, Release solution build and 84 language-server tests pass. Final reviewed solution passes 8,564/0/0 (XSLT 5,678); QT3 and qt4 gated pass 31,142/0/679 and 8,278/0/1,894 unchanged. docs/REQ-128-IMPLEMENTATION.json retains project/TRX/log hashes. Initial sandbox HTTP listener failures are preserved; the authorized network-fixture rerun passed. Collection freezing was moved into the inspector to preserve existing mid-walk cancellation instrumentation.
+
+Exact 526924f0 packages pass all 81 public API cases from an independent assembly/fresh cache, with all ten metadata versions/revisions and nine transitive archive/cache/output assembly byte matches. docs/REQ-128-PACKAGE-CANDIDATE.json preserves corrected evidence; prior 9f7daf5a evidence is explicitly superseded and retained separately.
+
+Next: draft PR review/CI; rebuild/reverify the final integrated revision before publication approval. Publication/tagging requires separate approval. REQ-128 stays In Progress until supported delivery; Braid Apply/history/native acceptance are not established by engine fixtures. Preserve every earlier release tag/receipt, original Braid files, root work and .sweep-baselines/. Earlier entries below are historical.
+
 # VS Code 0.2.3 published and verified - 2026-10-15
 
 User approved exact candidate 9c310d3fc2447b29bf3dfad134d05fe65c7b71ce. Immutable vscode-v0.2.3 points there, not later REQ-128 docs main. Single tag-triggered workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38775517616 succeeds: 84 LS tests, highlighting/launcher tests, artifact and Marketplace publication. No duplicate dispatch or tag movement; no library publication.

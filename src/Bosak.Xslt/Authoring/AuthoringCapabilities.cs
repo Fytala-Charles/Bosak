@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 acceptance F2: collections wrapped in Array.AsReadOnly over private storage      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 
 using System.Reflection;
@@ -40,6 +41,16 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded source-preserving value-of insertion is implemented.</summary>
+    public static bool SupportsValueOfInsertion => true;
+
+    /// <summary>Gets the separate insertion limit for both original and candidate bytes, including BOM.</summary>
+    public static int MaxValueOfInsertionSourceBytes => 8_388_608;
+
+    /// <summary>Gets the insertion encodings; UTF-16 requires a matching BOM.</summary>
+    public static IReadOnlyList<string> ValueOfInsertionSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
     /// <summary>Gets whether source-preserving inspection of a stylesheet and its modules is available.</summary>
     public static bool SupportsInspection => true;
 

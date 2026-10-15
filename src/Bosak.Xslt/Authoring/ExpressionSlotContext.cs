@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Document applicable namespace capture for validation and expression edits.               |
 //                      | Charles Korthout | 0.5   | 13-10-2026     | Distinguish module fixed bindings from the local expression grammar profile.               |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -73,7 +74,7 @@ public sealed class ExpressionSlotContext
     {
         OwningElement = owningElement;
         AttributeName = attributeName;
-        InScopeNamespaces = inScopeNamespaces;
+        InScopeNamespaces = Array.AsReadOnly(inScopeNamespaces.ToArray());
         XpathDefaultNamespace = xpathDefaultNamespace;
         BaseUri = baseUri;
         EffectiveVersion = effectiveVersion;
