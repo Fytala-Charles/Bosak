@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.6.0 release candidate">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.6.0 release publication">
   <br><br><h1>Bosak 1.6.0</h1>
   <p>Optional function overrides in used packages</p>
 </div>
 
 ## Release status
 
-**Prepared on 2026-10-15; unpublished.** This coordinated .NET 10 minor release adds bounded optional function overrides, integrated by [PR #293](https://github.com/Fytala-Charles/Bosak/pull/293) at `6dcc9671a7b28cd1b55ec80650e54249f3e44339`. Published NuGet libraries remain 1.5.0. VS Code 0.2.0 bundles engine 1.4.0.
+**Published on 2026-10-15.** Tag `v1.6.0` points to user-approved revision `3715b2f98bbf80883358d31234224cbb9cd94cad`. The successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38702411164) passes 8,372 solution tests and publishes all ten libraries. This coordinated .NET 10 minor release adds bounded optional function overrides, integrated by [PR #293](https://github.com/Fytala-Charles/Bosak/pull/293) at `6dcc9671a7b28cd1b55ec80650e54249f3e44339`. Published NuGet libraries are now 1.6.0. VS Code 0.2.0 bundles engine 1.4.0.
 
 ## Changes
 
@@ -19,11 +19,13 @@ For an original whose second parameter defaults to `'B'` and a replacement whose
 
 ## Verification
 
+All ten public 1.6.0 archives downloaded directly from nuget.org pass version, dependency, repository revision, net10 assets, XML documentation, README/license/icon and hash checks. A fresh nuget.org-only broad consumer passes **153 checks** and verifies all ten DLL versions as **1.6.0.0** with exact approved revision metadata; output DLLs match public archive bytes. A second fresh nuget.org-only consumer passes **74 focused tests**, overlapping 33 cases with the broad run. Both caches match the direct public downloads; signed archive SHA-512 and restore content hashes are verified separately. [Publication evidence](RELEASE-1.6.0-PUBLICATION.json) retains workflow uploads, feed indexing, downloads, metadata and provenance. These public checks completed after the preparation history below.
+
 [Merged-revision CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38685404777) passes **8,372 solution tests**, including **5,486 XSLT tests**, plus **84 language-server tests** and extension checks. The Release build has zero errors and 82 existing warnings. QT3 remains exactly **31,142/0/679**; qt4 gate-only remains **8,278/0/1,894**.
 
 Ten local 1.6.0 archives from that exact merge revision pass version, dependency, repository revision, net10 assets, XML documentation, README/license/icon and hash checks. A fresh package-only consumer passes **74 tests**: 41 override regressions and 33 existing used-package cases. Nine engine dependency assemblies have version **1.6.0.0**, exact merge-revision informational metadata and bytes matching the candidate archives. Source mapping, fresh-cache provenance and archive hashes are verified. Source and test Git trees match the reviewed implementation commit.
 
-[Preparation evidence](RELEASE-1.6.0-PREPARATION.json) preserves those results. The 41-case published 1.5.0 baseline passes one existing error case and fails 40. A separate fresh-cache broad consumer now passes **153 checks** against all ten 1.6.0 libraries. Its ten DLLs match the candidate archive bytes and exact engine-revision metadata. This rerun retains the earlier 120 broad checks and executes the 33 used-package checks from the current committed fixture, including the two updated direct/transitive override cases. The 74-test consumer overlaps those 33 cases; these are separate runs, not 227 distinct tests. The broad archives include the preparation README from the working tree; final merged-revision repacking remains required by the [publication checklist](RELEASE-1.6.0-CHECKLIST.md). Local candidate verification does not establish public-feed availability.
+[Preparation evidence](RELEASE-1.6.0-PREPARATION.json) preserves those results. The 41-case published 1.5.0 baseline passes one existing error case and fails 40. A separate fresh-cache broad consumer now passes **153 checks** against all ten 1.6.0 libraries. Its ten DLLs match the candidate archive bytes and exact engine-revision metadata. This rerun retains the earlier 120 broad checks and executes the 33 used-package checks from the current committed fixture, including the two updated direct/transitive override cases. The 74-test consumer overlaps those 33 cases; these are separate runs, not 227 distinct tests. The broad archives include the preparation README from the working tree; final merged-revision repacking and both consumer runs subsequently passed at `3715b2f98bbf80883358d31234224cbb9cd94cad`, followed by explicit user approval and publication. The [publication checklist](RELEASE-1.6.0-CHECKLIST.md) records completion. The local results above are historical; the public-feed checks above establish availability and provenance.
 
 ## Boundaries
 
