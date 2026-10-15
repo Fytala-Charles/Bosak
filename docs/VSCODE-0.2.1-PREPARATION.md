@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak VS Code 0.2.1 engine alignment candidate">
-  <br><br><h1>VS Code 0.2.1 candidate</h1>
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak VS Code 0.2.1 published engine alignment">
+  <br><br><h1>VS Code 0.2.1</h1>
   <p>Align the extension bundle with released engine 1.6.0</p>
 </div>
 
 ## Scope
 
-The unpublished 0.2.1 patch candidate refreshes the language-server bundle from engine 1.4.0 to released 1.6.0 source. The extension and lockfile versions agree. No editor feature, engine implementation or public API is added. The Marketplace extension remains 0.2.0 until separate publication approval.
+The published 0.2.1 patch release refreshes the language-server bundle from engine 1.4.0 to released 1.6.0 source. The extension and lockfile versions agree. No editor feature, engine implementation or public API is added. The user approved exact final revision `10433195569273474d328208dcf5c0cdd97caeaa`; tag `vscode-v0.2.1` and the successful [publication workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38709119901) publish this version to the Marketplace. [Publication evidence](VSCODE-0.2.1-PUBLICATION.json) verifies public VSIX contents, ten assembly versions/revisions and isolated editor behavior. The preparation history below is preserved.
 
 The runtime includes 1.5.0 used-package optional functions and 1.6.0 public optional overrides. Controlled editor validation still reports package-dependent signatures and unresolved external modules as coverage limits. Updating the bundle does not implement package acquisition or complete XSLT 4.0 editor validation. The .NET 10 runtime remains required.
 
@@ -18,7 +18,7 @@ Extension compilation, TextMate highlighting and DLL/apphost/startup-registratio
 
 The first editor launch inherited `ELECTRON_RUN_AS_NODE` and exited before loading the application; its log is retained and excluded from acceptance. Removing that variable only for the isolated test process yields a successful editor run. The user's editor profile and installed extension are unchanged.
 
-[Preparation evidence](VSCODE-0.2.1-PREPARATION.json) records source/manifest/archive hashes, bundled metadata and test/editor results. Engine and test trees match the published 1.6.0 source; existing frozen gates remain 31,142/0/679 and 8,278/0/1,894. Exact final merged-revision packaging and publication approval remain separate checkpoints. No Marketplace tag or workflow is triggered by preparation.
+[Preparation evidence](VSCODE-0.2.1-PREPARATION.json) records source/manifest/archive hashes, bundled metadata and test/editor results. Engine and test trees match the published 1.6.0 source; existing frozen gates remain 31,142/0/679 and 8,278/0/1,894. Exact final merged-revision packaging and protocol/editor checks subsequently passed at `10433195569273474d328208dcf5c0cdd97caeaa`, followed by explicit publication approval. Public-package verification is complete; original preparation evidence remains unchanged.
 
 ## Adjacent completed and proposed work
 

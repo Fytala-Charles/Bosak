@@ -1,3 +1,13 @@
+# VS Code 0.2.1 published and verified - 2026-10-15
+
+The user approved publication of exact verified revision 10433195569273474d328208dcf5c0cdd97caeaa. Immutable vscode-v0.2.1 points there. Successful publication workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38709119901 passes 84 language-server tests and highlighting/launcher checks, then publishes fytala.vscode-bosak 0.2.1. Marketplace confirms the version; public VSIX was downloaded and its complete runtime/client/grammar/assets/dependency file set and bytes match the workflow artifact. Ten bundled project assemblies are 1.6.0.0 with informational revision 1.6.0+10433195569273474d328208dcf5c0cdd97caeaa. Extracted public server passes initialization/hover request/three diagnostics probes; isolated VS Code verifies valid input, XPST0017 invalid keyword and live correction. User editor profile/installed extension untouched.
+
+What was built: published the 0.2.1 engine-alignment extension, retained workflow/Marketplace download/archive/assembly/protocol/editor evidence in docs/VSCODE-0.2.1-PUBLICATION.json, and synchronized canonical/extension documentation. Preparation receipts and exact merged candidate remain preserved under .guard-tmp/vscode021-*; no duplicate publish dispatch. Published NuGet libraries remain immutable 1.6.0 at 3715b2f9; extension now bundles engine 1.6.0. No library publication, engine/API/REQ/gate changes. Existing editor package-signature/module-acquisition limits remain explicit.
+
+Braid compatibility remains 836/0/0 against public 1.6.0 in an isolated snapshot, with original working tree and production pin preserved. Abstract optional overrides remain scoped in docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDE-SCOPE.md; no implementation or XTSE3075 coverage claimed. REQ-126 stays In Progress; overlapping families remain separate. Preserve .sweep-baselines/, Braid checkout, earlier receipts and both immutable release tags.
+
+Next: integrate publication docs after successful exact-head CI, then implement the scoped abstract-optional slice only as a separate bounded task with a public baseline, semantic static-reference checks and full frozen gates. Do not repeat extension publication. Upstream contributions require freshly fetched current upstream and exact base/rebase receipts. Earlier entries below are historical.
+
 # VS Code 0.2.1 candidate and abstract override scope - 2026-10-15
 
 Base main 1b8209cdc8b65eacf5c8676a6a6e321ca6d10039 includes merged Braid compatibility PR #296 after CI 38705916366. Agreed sequence now covers Braid verification, extension alignment preparation and a scoped abstract-optional follow-up. Published engine remains immutable 1.6.0 at 3715b2f9; Marketplace remains 0.2.0 with engine 1.4.0.
