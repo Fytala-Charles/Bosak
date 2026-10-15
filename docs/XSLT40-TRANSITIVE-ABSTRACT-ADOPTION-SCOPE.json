@@ -1,0 +1,179 @@
+{
+  "date": "2026-10-15",
+  "mergedBaseRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab",
+  "mergedPr": "https://github.com/Fytala-Charles/Bosak/pull/299",
+  "reviewedHead": "7a9422cfbf6a2a6f83d9e9e37ef56860c12bf566",
+  "sourceAndTestTreesMatchReviewedHead": true,
+  "sourceVersion": "1.7.0",
+  "publishedVersion": "1.6.0",
+  "scopeOnly": true,
+  "baseline": {
+    "passed": 1,
+    "failed": 7,
+    "skipped": 0,
+    "control": "DirectControl",
+    "failures": [
+      {
+        "test": "TransitiveScopeProbes.TransitiveMinimumArityError",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveOriginalIsStaticError",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveCalls(call: \"p:f(a := 'A', c := 'E')\", expected: \"AXE\")",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveCalls(call: \"p:f('A','D','E')\", expected: \"ADE\")",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveCalls(call: \"p:f('A')\", expected: \"AXY\")",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveCalls(call: \"p:from-b()\", expected: \"AXY\")",
+        "observedCode": "XTSE3058"
+      },
+      {
+        "test": "TransitiveScopeProbes.TransitiveCalls(call: \"p:from-a()\", expected: \"AXY\")",
+        "observedCode": "XTSE3058"
+      }
+    ],
+    "meaning": "All transitive acceptance/error probes stop at XTSE3058; downstream runtime behavior is not yet measured."
+  },
+  "packages": [
+    {
+      "package": "Bosak.XPath.Api/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "54f5916206c62d6c41c409ecd9bd73509a3585f1852e41ed81d18ddbfbdec363",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Compiler/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "437c1b70c0dc13a78f0f907d4317430f9ff4b2d75dff065d88b1bb6742107497",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Core/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "c99eaf58e3a174f98f4e1a024268d25434ca476d153e6a7e3a22320e55d7ae8d",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Parser/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "24c49fe73f067b38eb690575ea35645a43aefaaf34eb12d8c0a824bc1e6be382",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Providers/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "408bbcebcc14bd06327eb1ecdf04e44931f771260863ce0047dafa8dda57c0a8",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Runtime/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "2fc8bb4b95ad804de96e3100dc881086f53c28da4bfdf0b8f999e1a443d9708b",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XPath.Standard/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "b9c397941fdf9e8f9b0deffc2b44cfba63ac961e7f771de351e3ebfa11f02063",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.XQuery/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "dd8647f4ccf9a0a822787cfb00e5f515d64265572dde085b31c35b5bca13f401",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "package": "Bosak.Xslt/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\transitive-scope-merged-packages",
+      "sha256": "c65b18bcc608548fcf5a63a23626626b39458277c92b21e3a264332a0c7f1b1e",
+      "outputMatchesArchive": true,
+      "repositoryRevision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    }
+  ],
+  "assemblyVersions": [
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab"
+    }
+  ],
+  "files": {
+    ".guard-tmp/transitive-scope-probes/Probes.cs": "1e665d6dee63f042dc1423b34ebccc10d7d5b3f14e639debdd180dcf4ec9077e",
+    ".guard-tmp/transitive-scope-probes/Probes.csproj": "00ac43233292565eb9e9bb44896417a7e63e6640638f7001236451bf2dc851ed",
+    ".guard-tmp/transitive-scope-results/charl_CHARLES_2026-10-15_13_41_13_net10.0.trx": "d1aff7f2c71f8860638b185984f77a318f03ad456a7aa7225e255fbc7a8476cb",
+    ".guard-tmp/transitive-scope-probes.log": "45779d00e750682749c9d9fa35312d181153160058e40db939ab977e270babec",
+    ".guard-tmp/transitive-scope-merged-pack.log": "9c116be28b5cec9f830a40e48c1353e5b8879e430bb2adbc1c899079a729e31a",
+    ".guard-tmp/transitive-scope-versions.json": "286c671118e0eb156c424428361bfa7b2a94c712d9f5706a2216956af933bc08",
+    "docs/XSLT40-TRANSITIVE-ABSTRACT-ADOPTION-SCOPE.md": "99572a89053af9db4831843fed88c61146720e47d5607c472d842f1347120677",
+    "docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDE-SCOPE.md": "36d7117ef7d4a21665d774be2934ea51a70351ef1b33937c57d93e7f53a0dd46",
+    ".guard-tmp/transitive-scope-render.log": "c7f9c0e80dad46e2b35085d7d95a40eeae18e7b7ab90e4282bf0a44ed0ecfabc"
+  },
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html; sections 3.4.5.2-3.4.5.5 reviewed 2026-10-15",
+  "publication": "None; no implementation, version bump, REQ status change, gate promotion or upstream submission.",
+  "documentationEncodingRepair": {
+    "path": "docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDE-SCOPE.md",
+    "convertedFrom": "Windows-1252",
+    "convertedTo": "UTF-8",
+    "textUnchanged": true
+  },
+  "postMergeCiRun": 38728887514
+}
