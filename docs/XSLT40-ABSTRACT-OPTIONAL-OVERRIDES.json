@@ -288,5 +288,167 @@
     "Editor package signatures/acquisition"
   ],
   "earlierAttempts": "Preserved separately under .guard-tmp/abstract-optional-*; include sandbox HTTP failures, canceled superseded solution runs, locked-DLL builds and corrected unresolved-abstract fixture. Only complete-* runs and explicit language-server/render logs are accepted here.",
-  "publication": "Not performed; immutable release tags unchanged."
+  "publication": "Not performed; immutable release tags unchanged.",
+  "review": {
+    "pr": "https://github.com/Fytala-Charles/Bosak/pull/299",
+    "implementationRevision": "488aee94733576a008256e3bc38973ae8fa264c5",
+    "packageOnlyPassed": 110,
+    "packages": [
+      {
+        "id": "Bosak.XPath.Api",
+        "sha256": "504ada9023ec7758dce3a9cca9151f1453ebda09e5020c91a9967565d3f615af",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Compiler",
+        "sha256": "895c4738836e4990405718c0fa341561108328fdf9d0133dd2ef0233296d6cf6",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "sha256": "93ab40338b423868d2f16d7824002555eaddae1712807e1006edf020f3042afd",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "sha256": "8b704332b205109690c777bffddc4347f754104334fbeb92a4f38b341658d832",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "sha256": "752c1db87a6b070866e994a560a35370c25b73be36285868ccd96fe71e227194",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Providers.Database",
+        "sha256": "602de5da655991a92abede08c7d3d741aaece6897cc8db3d898c9e64e5ccb040",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "sha256": "e07063a459938677ebd747bfabfa204ea090c96827631daccca2d8d8c924316c",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "sha256": "69cb0d11efe9c1ad391b2709570bc03fb0bcd4f8b2fdb30d3b5a8f21e51dda10",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XQuery",
+        "sha256": "136b99cab3cc6d54e6a4f7b31b105485cd8bbc96bc9a4677971b0b0de6dcec2d",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.Xslt",
+        "sha256": "64512f4259e9d904d94b54f34b5e04b86c1eecaf540249e3087f4adc6f01e242",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      }
+    ],
+    "engineProvenance": [
+      {
+        "package": "Bosak.XPath.Api/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Compiler/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Core/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Parser/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Providers/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Runtime/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Standard/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XQuery/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.Xslt/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      }
+    ],
+    "assemblyVersions": [
+      {
+        "name": "Bosak.XPath.Api",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Compiler",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Core",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Parser",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Providers",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Runtime",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Standard",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XQuery",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.Xslt",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      }
+    ],
+    "ciRun": 38723291985,
+    "ciStatusAtRecording": "in_progress"
+  }
 }

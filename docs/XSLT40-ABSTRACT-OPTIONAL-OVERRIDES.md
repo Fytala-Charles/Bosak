@@ -22,6 +22,8 @@ The 36-case regression fixture runs against published 1.6.0: **4 pass / 32 fail*
 
 The source version is 1.7.0; published libraries remain 1.6.0 and VS Code 0.2.1 bundles 1.6.0. Solution **8,408/0/0**, XSLT **5,522/0/0**, language server **84/0/0**; QT3 **31,142/0/679** and qt4 gate-only **8,278/0/1,894**. Results are recorded in [the evidence receipt](XSLT40-ABSTRACT-OPTIONAL-OVERRIDES.json).
 
+Exact implementation revision `488aee94733576a008256e3bc38973ae8fa264c5` is under [draft review PR #299](https://github.com/Fytala-Charles/Bosak/pull/299). Ten rebuilt archives verify committed repository metadata; a second fresh consumer passes 110 tests and nine engine assemblies verify 1.7.0.0 with the exact informational revision. Final documentation commits retain the implementation source/test trees.
+
 ## Boundaries
 
 Transitive abstract adoption and escaping inline closures remain separate checkpoints. Overlapping adopted/local families, package acquisition and editor package signatures remain deferred. REQ-126 stays In Progress; no conformance test-set promotion, upstream submission or publication occurs in this slice. Earlier scope and release receipts are preserved.
