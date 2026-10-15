@@ -6,9 +6,9 @@
   "request": "REQ-128",
   "requestStatus": "In Progress",
   "owner": "Charles Korthout",
-  "focusedInsertionTests": 76,
+  "focusedInsertionTests": 81,
   "solution": {
-    "passed": 8559,
+    "passed": 8564,
     "failed": 0,
     "skipped": 0,
     "projects": [
@@ -17,70 +17,70 @@
         "passed": 411,
         "failed": 0,
         "total": 411,
-        "trxSha256": "3543ad9ed584713a49f9d041682fe26768f5105277e9e18d8cef7a6211d8ac69"
+        "trxSha256": "3a8a1ffafe89203f69332a157d388258534e7e0a10bcfea6c149cf7e572a8708"
       },
       {
         "project": "Bosak.XPath.Compiler.Tests",
         "passed": 66,
         "failed": 0,
         "total": 66,
-        "trxSha256": "acb1cd26d5a199f94f145f2565c51d9d7aba90893fadebbf691578a495f3dbdc"
+        "trxSha256": "df8661da843db73cd32f70d6cb8710f677642816e0295449cef287cdfc28dbd2"
       },
       {
         "project": "Bosak.XPath.Core.Tests",
         "passed": 132,
         "failed": 0,
         "total": 132,
-        "trxSha256": "f4da373d1edbab887db459b8adddf325089e651d28b1f5ac89aba53367867c65"
+        "trxSha256": "85a5e327451807458bcb9b61b26069468bc7795bb7c506faafa9c4020b63ea31"
       },
       {
         "project": "Bosak.XPath.Parser.Tests",
         "passed": 202,
         "failed": 0,
         "total": 202,
-        "trxSha256": "38b0253a416e5f7c777664cabbe10fe3ebbfdfa833000365e2c8ec748ccbc9b3"
+        "trxSha256": "f19319ea91a25f7ad3fb6162cc33ddc44554e7e05906e5df58ba171cb37f812b"
       },
       {
         "project": "Bosak.XPath.Providers.Database.Tests",
         "passed": 47,
         "failed": 0,
         "total": 47,
-        "trxSha256": "f2ceffd23ce05cecdd26e610625da840365f4dc644b94ba49cddcc656d5da05f"
+        "trxSha256": "9e7c624968de1d1b499fe1d931caac01a086b5ead8381302899edaa866ad5b9c"
       },
       {
         "project": "Bosak.XPath.Providers.Tests",
         "passed": 153,
         "failed": 0,
         "total": 153,
-        "trxSha256": "6747539942d6d109b24bed1893483d6c1d47bbb15d7f4d6124bfb3ac3f748543"
+        "trxSha256": "601550390dfca241f823d567308c6ac70f7de4aba45913ba486f3ab107a403ba"
       },
       {
         "project": "Bosak.XPath.Runtime.Tests",
         "passed": 269,
         "failed": 0,
         "total": 269,
-        "trxSha256": "f0f1123b9469c67e37f967c7e505c1913703a88f2b5dda08d950a9a8e735528f"
+        "trxSha256": "fd5628f0a9007d0e6e0890d9cc412b84838c05e3e08ee3da9a691a22417d58a6"
       },
       {
         "project": "Bosak.XPath.Standard.Tests",
         "passed": 1303,
         "failed": 0,
         "total": 1303,
-        "trxSha256": "af794553379b53c4a88f6d9c6cc0981b934f15c53fa441df6f5c07f99fbac8aa"
+        "trxSha256": "3cd6155c937848a170b1dd99218d99963c38a056fac526b7a8403eea427ee13e"
       },
       {
         "project": "Bosak.XQuery.Tests",
         "passed": 303,
         "failed": 0,
         "total": 303,
-        "trxSha256": "ea88d4acb31f16a8cb9252f7892e11e04bce743af7757d81a947e6a7c1082cd6"
+        "trxSha256": "dc6fa25bc4c7cbfb56bff06c646ef0f1424e784bd77a584e664a1efb68c06559"
       },
       {
         "project": "Bosak.Xslt.Tests",
-        "passed": 5673,
+        "passed": 5678,
         "failed": 0,
-        "total": 5673,
-        "trxSha256": "6a5fc4f39456ab54e63c1dd84c409258a31c6c8abfbab52f245aa84aab75e231"
+        "total": 5678,
+        "trxSha256": "d5d4b10d3bb06937e00f81e88e69a2ccb5dcb9c06554b3367f4aaa6a6c677fcc"
       }
     ]
   },
@@ -103,13 +103,13 @@
   "publishedExtension": "0.2.3 (engine 1.7.1)",
   "consumerAdoption": "separate",
   "logs": {
-    ".guard-retained-source-build.log": "8280eeda1eb80ce833798bd35f94ba1e3123dce22fcd5f6a7d41ebbc92a1b8aa",
-    ".guard-retained-source-tests.log": "f4f817a5b005349609f888b74befeb2faee85c3a76892b36df6c5eac2aaeeb9b",
-    ".guard-retained-source-focused-final.log": "ed3d6e1393612823bdb9f29b57166fc98a32c85cabdf8bfc34395bf7041055c6",
-    ".guard-retained-source-language-server.log": "722850f32df20246bed8e282c5915cf168bfbb56dcd6727bdc5679bdd04ac2aa",
-    ".guard-retained-source-qt3.log": "72fd36a102110e627833f280e2ca75ad154ae36834fdf65cec1072e0252ce4cd",
-    ".guard-retained-source-qt4.log": "914a7490bb2bade2d9b04cdabeff9a66afc8fb56d4b66d8f89cd467733c11464",
-    ".guard-doc-render-final.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
+    ".guard-annotation-build.log": "313539029d348f7f915f42cb4d3c055a03d0519e72fc51b52857c983e2451810",
+    ".guard-annotation-tests.log": "c36ad57c74a80a1f796335a5677c23f874a9feddb4fe3a19696e0e294dcc2149",
+    ".guard-annotation-focused-final.log": "ce44992cd42c039bd757d2061629b98ab420502bda8f9412709ab44ba87f12d4",
+    ".guard-annotation-language-server.log": "8b972bbbb853b978204974a5f8db0e8b2448e4ee48f8851955001f4a5a6aa121",
+    ".guard-annotation-qt3.log": "2708fa5e67a92abf262788bb5b03f241be3787b57e30761e929a4e2c845e5681",
+    ".guard-annotation-qt4.log": "c8238cf9f25b35dd182310a7d27103f63d3891a71063d9bf491b6792d6fb539d",
+    ".guard-doc-render-annotation-final.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
   },
   "sourceFiles": {
     "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66",
@@ -132,7 +132,7 @@
     "src/Bosak.Xslt/Authoring/InsertionExpressionCoverage.cs": "a7231a2dccd79a8b702e114183403f398b6d026877c2ad9f4a8e24a4da33fd6b",
     "src/Bosak.Xslt/Authoring/SourceRange.cs": "58fecd8a92a311c90f2c1e9578e44364bcf05cbbc2fab6de85b5cfecf3861f29",
     "src/Bosak.Xslt/Authoring/SourceTagScanner.cs": "20c4f021c8573518d2632ccf63fa2a5aad531af52cd0e5ca8d6ab06c009900bd",
-    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "3d611b6d1cbc5d8b4496ebd54dac97714a28f583050ba452896c781de2090bfd",
+    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "6b672936576cd0314095c55b1a74ac0bfd0385905ebd0ef325b1af6d553d4d38",
     "src/Bosak.Xslt/Authoring/XsltAuthoring.cs": "29cd5284b03dc9b315c3f03437ad4a393f525c09c2728058e694bedcc460ea49"
   },
   "priorReviewedRun": {
@@ -147,5 +147,17 @@
     "expectedFailure": "Shadow preprocessing removed an attribute from the derived tree and the old candidate incorrectly issued a target.",
     "trxSha256": "1217944997a4d88581bbbfdef2d5632ab922ec2cafd99f1662604e50723ff4c4"
   },
-  "verifiedImplementationRevision": "e3f69c94009d333de293c3057ad67fc0cd008b41"
+  "verifiedImplementationRevision": "526924f0126c3c2eb3a401e1b97930883198a9cd",
+  "priorRetainedSourceRun": {
+    "solutionPassed": 8559,
+    "focusedInsertionTests": 76,
+    "sourceRevision": "e3f69c94009d333de293c3057ad67fc0cd008b41"
+  },
+  "annotationRegressionBaseline": {
+    "candidateRevision": "e3f69c94009d333de293c3057ad67fc0cd008b41",
+    "passed": 0,
+    "failed": 5,
+    "expectedFailure": "Ordinary result attributes and opaque foreign metadata were incorrectly treated as XSLT annotations.",
+    "trxSha256": "7797d9ef8aa5eb5a91a9095f522d0ed0fe178afe9cb114337c307e37613114fb"
+  }
 }
