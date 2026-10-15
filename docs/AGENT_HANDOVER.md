@@ -1,3 +1,13 @@
+# 1.7.0 published and verified - 2026-10-15
+
+User approved exact revision 33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961; immutable v1.7.0 points there. One tag-triggered Release workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38737338912 succeeds: 8,465 solution tests and ten NuGet uploads. GitHub release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.7.0. No duplicate dispatch or tag movement.
+
+What was built: published ten libraries and GitHub release; verified all ten public archives, dependency versions, tagged README/license/icon and net10 DLL/XML assets. Fresh nuget.org-only consumers pass 153 broad checks and 167 focused tests (33 overlap). Archive/cache/output DLL bytes, assembly 1.7.0.0/exact informational revision, signed archive SHA-512 and restore content hashes verify separately. Receipt docs/RELEASE-1.7.0-PUBLICATION.json; new logs/downloads/caches under .guard-tmp/release170-public-* and release170-published-*. Preparation and final candidate receipts remain immutable. Original failed local fixture attempts remain separate from accepted verification.
+
+Release notes/checklist, Braid candidate report and canonical statuses are synchronized. No new engine/API/REQ/gate change. REQ-126 In Progress; frozen gates 31,142/0/679 and 8,278/0/1,894, language server 84 tests retained from approved preparation. Escaping inline closures, overlapping families and editor package signatures remain separate. VS Code 0.2.1 bundles 1.6.0. Braid candidate verification is 843 tests at this revision; public-package production adoption/native acceptance remain separate. Original Braid checkout and main worktree concurrent REQ-128 edits/.sweep-baselines/ are preserved.
+
+Next: integrate publication documentation after successful exact-head CI. Do not repeat 1.7.0 publication. Separate follow-up options are public-package Braid compatibility, extension engine alignment, or a scoped escaping-inline-closure engine slice. Preserve all historical receipts and immutable release tags; upstream contributions require freshly fetched current upstream and exact base/rebase receipts. Earlier entries below are historical.
+
 # 1.7.0 candidate prepared; PR #301 integrated - 2026-10-15
 
 Latest engine merge `7978e5d7cc0a3092f466bc4ac70d5deacb339764`, reviewed head a6867201. Review found no new blocking defects; four extra visibility/lookup cases pass with the 45 retained transitive cases against exact-head packages. PR #301 merged after successful head CI; post-merge CI 38734741163 succeeds.
