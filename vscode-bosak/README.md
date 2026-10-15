@@ -2,6 +2,10 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
+## Engine alignment candidate (0.2.1)
+
+The unpublished 0.2.1 candidate bundles engine 1.6.0. This refresh includes the released used-package optional argument and public optional override behavior in the runtime. Editor package-dependent signatures and external module acquisition retain their existing coverage limits; a newer bundle does not enable those editor checks. The .NET 10 runtime remains required. Marketplace publication is separate from candidate verification; the published extension remains 0.2.0.
+
 ## Engine alignment (0.2.0)
 
 Version 0.2.0 bundles Bosak 1.4.0, including bounded XSLT 4.0 optional/default arguments and private functions without a namespace. Editor diagnostics use the effective stylesheet context, refresh during editing and report incomplete validation coverage as warnings. External include/import resolution remains deferred in this editor integration. The .NET server launches through `dotnet` for DLL bundles; runtime language-client dependencies are included. Startup provider registration and diagnostic report serialization are corrected. Requires the .NET 10 runtime. Version 0.2.0 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the extension and reload VS Code.
