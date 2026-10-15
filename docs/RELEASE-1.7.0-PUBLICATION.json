@@ -1,0 +1,759 @@
+{
+  "date": "2026-10-15",
+  "version": "1.7.0",
+  "tag": "v1.7.0",
+  "revision": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961",
+  "publication": "Complete and verified from nuget.org",
+  "approval": "User explicitly approved publishing exact verified revision 33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961.",
+  "workflow": {
+    "conclusion": "success",
+    "databaseId": 38737338912,
+    "headSha": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961",
+    "status": "completed",
+    "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/38737338912"
+  },
+  "releaseUrl": "https://github.com/Fytala-Charles/Bosak/releases/tag/v1.7.0",
+  "releaseTests": {
+    "passed": 8465,
+    "failed": 0,
+    "skipped": 0
+  },
+  "confirmedSuccessfulUploads": 10,
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.7.0",
+      "sha256": "152c7441d2976efa5767f1e93a8bf478f53a75f4282035956dce1a4a0d0f8322",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Api.dll": "2d5c7827d0a28a7bf1d1d94aa988abcaf32fe8f78082aa0c0e6ad9718261ca34",
+        "lib/net10.0/Bosak.XPath.Api.xml": "0bedfe5de3f06e6f6ea9e53cf2c444bebf07b5a89077f9677f2fa6b525dc9f68"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.7.0",
+      "sha256": "43f447400735af13ac97011eb931da315aa2ca01f41b4240764f015aa9ee7aa8",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Compiler.dll": "3a516b544d0878ea1aa0f4f0517da9b0da98f55d8f53b42e7555a341e4c54425",
+        "lib/net10.0/Bosak.XPath.Compiler.xml": "e480fcc3ba5822f13406e24adcaed5dda26765076bd1947a95fda8fc7dd6c11c"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.7.0",
+      "sha256": "be85737705ecb9f8c529c6eaa9c836cea73b6951107607c94c2c306877903003",
+      "dependencies": [],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Core.dll": "686eafe1b3909d2879520b7a117c83a26a2994e98e050d27708a4296113f823e",
+        "lib/net10.0/Bosak.XPath.Core.xml": "c5ef172dc8b368a34b95451e125451fc5f9403c09957c321fb5835e7a5dd6a4a"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.7.0",
+      "sha256": "32348d9343b409d9acfb2290f88304b552733f63aaed2fa143e9d9eadfab4686",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Parser.dll": "a6b168fd685750a4f383279d16d76228fe64da3f67044e250b569f873e555bcb",
+        "lib/net10.0/Bosak.XPath.Parser.xml": "98e2f45d6a452a9206945adb288fb90ceec165b8577c09174fba9599a90a59e0"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.7.0",
+      "sha256": "99daebafc27eab0a303a60d97b6833b08a383ccbc88ffcc183f129b110495e6e",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Providers.dll": "682e57b7f0672a395bcf0c6c3fa7984a4adaf4f763a278987aeee2ab73088764",
+        "lib/net10.0/Bosak.XPath.Providers.xml": "1f2f0ba0a3f593f76b0ec5292a697b6bf1febba057d935039cf8295fa23ae9f3"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "version": "1.7.0",
+      "sha256": "622c87c66ffeb19db2bb28235cc3e22624919634a5efd42370cdc3d09d41d979",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Providers.Database.dll": "bb36576d709bd7d3332c54ae0d38b23d97684f776ce7dab4521b1561b3277902",
+        "lib/net10.0/Bosak.XPath.Providers.Database.xml": "d113c3476ae2088b4efe8f6fe0dac2e8b75d67c19f4fee8c848b6faef4b434ff"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.7.0",
+      "sha256": "44d418a58f5929070bcb57a955ed60cc4f7a565717ed99c423159f17ea9c7b01",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Runtime.dll": "acb2ae47d13603c8ed6fe22083f18d38bbddf2c36268f4f19638a007d4084efb",
+        "lib/net10.0/Bosak.XPath.Runtime.xml": "36991eda0a5a1036737c70dc28ea3abca112987bee0fe494cb6d478dc3b20103"
+      }
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.7.0",
+      "sha256": "7b73a906d54fb84da3f93024fb3a6890150c069bc16097e5f653668ba1d4926c",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XPath.Standard.dll": "d72976d435f0fd84fe125a8e180410956335195d1a25f14538843464794c0308",
+        "lib/net10.0/Bosak.XPath.Standard.xml": "91f166b1425e6b12e87db297e64782e0355c36f2155a6fa0eeb44f0c3eb63515"
+      }
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.7.0",
+      "sha256": "215e9e90ad0b8e735cc91dc3c81c1a8c9e9be5eff70c6ef6ae9ec56eedf327da",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.XQuery.dll": "ecbcb2c833f7000ef6671ae5b3d156707e9133a4bdd678ace086b12ad345471f",
+        "lib/net10.0/Bosak.XQuery.xml": "375134a18d3e0c0096f7619c2e98dd59694d55f7bf5eb77d476975b5997360d0"
+      }
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.7.0",
+      "sha256": "369a211bff200dc76d459390c710ab277b20066c4145fb8cf9cddc79d72117e1",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version": "1.7.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Fytala-Charles/Bosak.git",
+        "commit": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+      },
+      "contents": {
+        "README.md": "feadfd36a84e015c77e45987c58a3741e0c28aed9bf4b53d5471dfa7001f428f",
+        "license.md": "fd2b83e0570092ac2e27805e51153de320d1ee09760ee6e73eb75737548bb9da",
+        "icon.png": "b63b53d1fc68df24214d964392e57f66d439ac6a48175c78a5310dc7d7d61070",
+        "lib/net10.0/Bosak.Xslt.dll": "59b11f19a541c2177406cc33e3029b521c20c58b45db0bee6f89df5e6e3c0489",
+        "lib/net10.0/Bosak.Xslt.xml": "610ee08eb3e67a1c487e95a2cb5bcfff5d284f43bb74134302b48c8298962c72"
+      }
+    }
+  ],
+  "downloads": [
+    {
+      "id": "Bosak.XPath.Api",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/1.7.0/bosak.xpath.api.1.7.0.nupkg",
+      "bytes": 147043,
+      "sha256": "152c7441d2976efa5767f1e93a8bf478f53a75f4282035956dce1a4a0d0f8322"
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/1.7.0/bosak.xpath.compiler.1.7.0.nupkg",
+      "bytes": 183680,
+      "sha256": "43f447400735af13ac97011eb931da315aa2ca01f41b4240764f015aa9ee7aa8"
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/1.7.0/bosak.xpath.core.1.7.0.nupkg",
+      "bytes": 156330,
+      "sha256": "be85737705ecb9f8c529c6eaa9c836cea73b6951107607c94c2c306877903003"
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/1.7.0/bosak.xpath.parser.1.7.0.nupkg",
+      "bytes": 214233,
+      "sha256": "32348d9343b409d9acfb2290f88304b552733f63aaed2fa143e9d9eadfab4686"
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/1.7.0/bosak.xpath.providers.1.7.0.nupkg",
+      "bytes": 205401,
+      "sha256": "99daebafc27eab0a303a60d97b6833b08a383ccbc88ffcc183f129b110495e6e"
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/1.7.0/bosak.xpath.providers.database.1.7.0.nupkg",
+      "bytes": 135915,
+      "sha256": "622c87c66ffeb19db2bb28235cc3e22624919634a5efd42370cdc3d09d41d979"
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/1.7.0/bosak.xpath.runtime.1.7.0.nupkg",
+      "bytes": 290431,
+      "sha256": "44d418a58f5929070bcb57a955ed60cc4f7a565717ed99c423159f17ea9c7b01"
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/1.7.0/bosak.xpath.standard.1.7.0.nupkg",
+      "bytes": 383639,
+      "sha256": "7b73a906d54fb84da3f93024fb3a6890150c069bc16097e5f653668ba1d4926c"
+    },
+    {
+      "id": "Bosak.XQuery",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/1.7.0/bosak.xquery.1.7.0.nupkg",
+      "bytes": 180424,
+      "sha256": "215e9e90ad0b8e735cc91dc3c81c1a8c9e9be5eff70c6ef6ae9ec56eedf327da"
+    },
+    {
+      "id": "Bosak.Xslt",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/1.7.0/bosak.xslt.1.7.0.nupkg",
+      "bytes": 663386,
+      "sha256": "369a211bff200dc76d459390c710ab277b20066c4145fb8cf9cddc79d72117e1"
+    }
+  ],
+  "indexes": [
+    {
+      "id": "Bosak.XPath.Api",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json",
+      "indexed": true
+    },
+    {
+      "id": "Bosak.Xslt",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+      "indexed": true
+    }
+  ],
+  "publicConsumers": {
+    "broadChecks": 153,
+    "focusedTests": 167,
+    "overlap": 33,
+    "freshNugetOrgOnlyCaches": true,
+    "provenance": {
+      "broad": {
+        "dependencies": [
+          {
+            "package": "Bosak.XPath.Api/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "152c7441d2976efa5767f1e93a8bf478f53a75f4282035956dce1a4a0d0f8322",
+            "archiveSha512": "5cU16apsVl5UriFJzdXQ+/GXk4FblBXZAnABqIo4h8/GdgCGoFZmtPSUsIHRtSGJMYygLKTDhe9kp4KleUQZUw==",
+            "restoreContentHash": "q2B95BSted6Z4QawxlKqcaoLuwCmki2UcVDPIoCrGVzjA/Z3Zty1c/gJ5Dwy0Nd/LD9RThGRXk6Eohy778QHgA==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Compiler/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "43f447400735af13ac97011eb931da315aa2ca01f41b4240764f015aa9ee7aa8",
+            "archiveSha512": "Q1KVogo4zAqNFbYFu07nqvmf0Y9cB9EnCMOmFnNmIDF1cCYolC7XNvUfmzkGwkcVzvEBAevJImWEcXs9PJRjIQ==",
+            "restoreContentHash": "6+Svp6ScGhhRiwJU85TgxN/jaotqljzxyvhvXxDjg/kPFAIAnO6KmZROtHYb5Ebb6S7dm+PgKFvH2Qik3EEVhw==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Core/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "be85737705ecb9f8c529c6eaa9c836cea73b6951107607c94c2c306877903003",
+            "archiveSha512": "lkvLWrTwO209o3LdNjxySE9h43QrUt5nfuEjQT+CGfueSe70aWyo7hE69pjE7kD/Bl0kTN1z45Z3wY2rN5ik4w==",
+            "restoreContentHash": "db/q9Xo9w7AG83TP6w28akuaviNT/o4//jMGPzNbVqB84USOaCLo6Nxmo7PkBRg4bWIv2GnyHUTdb6r3sRl7dg==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Parser/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "32348d9343b409d9acfb2290f88304b552733f63aaed2fa143e9d9eadfab4686",
+            "archiveSha512": "sysmaAKdq7OymsYw1NBs/4WAw10y6J7N1M7/8HBXmrebxjo92qTU849GghQ3t0Jsm8gC5re3XTPbbmpAoM0cjQ==",
+            "restoreContentHash": "xhYcTFIgDqju30pCgJQ10cuGbwJ/7f0WepZCb6SwlIjBK3t5ipcZa7Yw3T33GFJkm2g+YqoRJD+c/QOFQ0FK1g==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Providers/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "99daebafc27eab0a303a60d97b6833b08a383ccbc88ffcc183f129b110495e6e",
+            "archiveSha512": "yDPWKYKePg5bvnwPyzRBeMvNdvAj4wDM8W91UyYpqow6o5O2+/spIjIs3It36AKhKwIhKGRadyro+sJygA6Y3A==",
+            "restoreContentHash": "N/gdf5JORZ3lIrvGk8OA/fVU2wg61OChDkuYZhWWDCF2xCDvOlkeY605plLikX2EsYNf/u8bNcG3ug5Eicg3ow==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Providers.Database/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "622c87c66ffeb19db2bb28235cc3e22624919634a5efd42370cdc3d09d41d979",
+            "archiveSha512": "/RPX1++lAmsif6DNu/8IISOrHn1dIq7DWClcqmVoCNc8QJfsGYQeFMtZ89WCBQRtzrWeQAesQ51fNzK3qcAKmQ==",
+            "restoreContentHash": "pobtXClK9x96w4G9zw29kZa1a9GXuKOfvbVTRp0M9jo7r5iKQNUkV+kjdDWvEHGnnEUY1+6GvbgG6GEsedEcCQ==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Runtime/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "44d418a58f5929070bcb57a955ed60cc4f7a565717ed99c423159f17ea9c7b01",
+            "archiveSha512": "02dVK6nqzpVhVsOW+/KgZmWoR9G276T92XludPFGgELpmlGVf+9lEDOVNIx8giy0UlBYcoCm9I9Afk/rG6lecA==",
+            "restoreContentHash": "agAsMbkHre/G/SLi0Z9FLizU9EMHr46AVxQ0aT+gAbubtEA+/j4PAEa4N5KjbjorvicFYciHlTAo9YkyK0PW3g==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Standard/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "7b73a906d54fb84da3f93024fb3a6890150c069bc16097e5f653668ba1d4926c",
+            "archiveSha512": "AX7phEUYe60BP2rKEtvfGFpEAGs3+rapZauccC8i75LpGVYumCCfDd7bd8geo2oNwF0CBSLdlkLRaMS4QuSoRA==",
+            "restoreContentHash": "ZZKDWi1O6YANY/yTahcPdaqgrE/bkyBbCjcAy2ZTPfmZvMZ9KGnFSZR11q+C7j0jccyQLdeDszjR6xi7PusjsA==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XQuery/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "215e9e90ad0b8e735cc91dc3c81c1a8c9e9be5eff70c6ef6ae9ec56eedf327da",
+            "archiveSha512": "hEKypd3w2+t3WliiY+/I8XnlTkzJErL0O9g8za5S+t7qKq5khQFqdO5iwR4oqe6DyPyPxR/gpozTPhfbG6PF7Q==",
+            "restoreContentHash": "UDMAsO72ck+9W0DAGR8gHAKuygyXK0sFNInW5bPDgO/2mB7KncXbmx6IN0mGn1CF8rNbAgxpcleIBtaLj0HJWw==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.Xslt/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "369a211bff200dc76d459390c710ab277b20066c4145fb8cf9cddc79d72117e1",
+            "archiveSha512": "nT2eskJkG1SjieED9OnTrqE3uBlOpYi4DeAzaUOwzAQwtOmLwQYDXpRScmjaXqxRhjXnPKmTogLVu1XnA8FRUQ==",
+            "restoreContentHash": "x5989C0KUJbwhPDuAEpZ5w5gIElZ8gExh/txwgFv/WK2y1ESwsSeNX9LbNPymyDBCgWrUsBP4ahMugiRZNKkkw==",
+            "cacheAndOutputBytesMatch": true
+          }
+        ],
+        "assemblyMetadata": [
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Providers.Database",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XQuery",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.Xslt",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          }
+        ]
+      },
+      "focused": {
+        "dependencies": [
+          {
+            "package": "Bosak.XPath.Api/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "152c7441d2976efa5767f1e93a8bf478f53a75f4282035956dce1a4a0d0f8322",
+            "archiveSha512": "5cU16apsVl5UriFJzdXQ+/GXk4FblBXZAnABqIo4h8/GdgCGoFZmtPSUsIHRtSGJMYygLKTDhe9kp4KleUQZUw==",
+            "restoreContentHash": "q2B95BSted6Z4QawxlKqcaoLuwCmki2UcVDPIoCrGVzjA/Z3Zty1c/gJ5Dwy0Nd/LD9RThGRXk6Eohy778QHgA==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Compiler/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "43f447400735af13ac97011eb931da315aa2ca01f41b4240764f015aa9ee7aa8",
+            "archiveSha512": "Q1KVogo4zAqNFbYFu07nqvmf0Y9cB9EnCMOmFnNmIDF1cCYolC7XNvUfmzkGwkcVzvEBAevJImWEcXs9PJRjIQ==",
+            "restoreContentHash": "6+Svp6ScGhhRiwJU85TgxN/jaotqljzxyvhvXxDjg/kPFAIAnO6KmZROtHYb5Ebb6S7dm+PgKFvH2Qik3EEVhw==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Core/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "be85737705ecb9f8c529c6eaa9c836cea73b6951107607c94c2c306877903003",
+            "archiveSha512": "lkvLWrTwO209o3LdNjxySE9h43QrUt5nfuEjQT+CGfueSe70aWyo7hE69pjE7kD/Bl0kTN1z45Z3wY2rN5ik4w==",
+            "restoreContentHash": "db/q9Xo9w7AG83TP6w28akuaviNT/o4//jMGPzNbVqB84USOaCLo6Nxmo7PkBRg4bWIv2GnyHUTdb6r3sRl7dg==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Parser/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "32348d9343b409d9acfb2290f88304b552733f63aaed2fa143e9d9eadfab4686",
+            "archiveSha512": "sysmaAKdq7OymsYw1NBs/4WAw10y6J7N1M7/8HBXmrebxjo92qTU849GghQ3t0Jsm8gC5re3XTPbbmpAoM0cjQ==",
+            "restoreContentHash": "xhYcTFIgDqju30pCgJQ10cuGbwJ/7f0WepZCb6SwlIjBK3t5ipcZa7Yw3T33GFJkm2g+YqoRJD+c/QOFQ0FK1g==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Providers/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "99daebafc27eab0a303a60d97b6833b08a383ccbc88ffcc183f129b110495e6e",
+            "archiveSha512": "yDPWKYKePg5bvnwPyzRBeMvNdvAj4wDM8W91UyYpqow6o5O2+/spIjIs3It36AKhKwIhKGRadyro+sJygA6Y3A==",
+            "restoreContentHash": "N/gdf5JORZ3lIrvGk8OA/fVU2wg61OChDkuYZhWWDCF2xCDvOlkeY605plLikX2EsYNf/u8bNcG3ug5Eicg3ow==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Runtime/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "44d418a58f5929070bcb57a955ed60cc4f7a565717ed99c423159f17ea9c7b01",
+            "archiveSha512": "02dVK6nqzpVhVsOW+/KgZmWoR9G276T92XludPFGgELpmlGVf+9lEDOVNIx8giy0UlBYcoCm9I9Afk/rG6lecA==",
+            "restoreContentHash": "agAsMbkHre/G/SLi0Z9FLizU9EMHr46AVxQ0aT+gAbubtEA+/j4PAEa4N5KjbjorvicFYciHlTAo9YkyK0PW3g==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XPath.Standard/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "7b73a906d54fb84da3f93024fb3a6890150c069bc16097e5f653668ba1d4926c",
+            "archiveSha512": "AX7phEUYe60BP2rKEtvfGFpEAGs3+rapZauccC8i75LpGVYumCCfDd7bd8geo2oNwF0CBSLdlkLRaMS4QuSoRA==",
+            "restoreContentHash": "ZZKDWi1O6YANY/yTahcPdaqgrE/bkyBbCjcAy2ZTPfmZvMZ9KGnFSZR11q+C7j0jccyQLdeDszjR6xi7PusjsA==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.XQuery/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "215e9e90ad0b8e735cc91dc3c81c1a8c9e9be5eff70c6ef6ae9ec56eedf327da",
+            "archiveSha512": "hEKypd3w2+t3WliiY+/I8XnlTkzJErL0O9g8za5S+t7qKq5khQFqdO5iwR4oqe6DyPyPxR/gpozTPhfbG6PF7Q==",
+            "restoreContentHash": "UDMAsO72ck+9W0DAGR8gHAKuygyXK0sFNInW5bPDgO/2mB7KncXbmx6IN0mGn1CF8rNbAgxpcleIBtaLj0HJWw==",
+            "cacheAndOutputBytesMatch": true
+          },
+          {
+            "package": "Bosak.Xslt/1.7.0",
+            "source": "https://api.nuget.org/v3/index.json",
+            "archiveSha256": "369a211bff200dc76d459390c710ab277b20066c4145fb8cf9cddc79d72117e1",
+            "archiveSha512": "nT2eskJkG1SjieED9OnTrqE3uBlOpYi4DeAzaUOwzAQwtOmLwQYDXpRScmjaXqxRhjXnPKmTogLVu1XnA8FRUQ==",
+            "restoreContentHash": "x5989C0KUJbwhPDuAEpZ5w5gIElZ8gExh/txwgFv/WK2y1ESwsSeNX9LbNPymyDBCgWrUsBP4ahMugiRZNKkkw==",
+            "cacheAndOutputBytesMatch": true
+          }
+        ],
+        "assemblyMetadata": [
+          {
+            "name": "Bosak.XPath.Api",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Compiler",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Core",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Parser",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Providers",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Runtime",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XPath.Standard",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.XQuery",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          },
+          {
+            "name": "Bosak.Xslt",
+            "version": "1.7.0.0",
+            "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+          }
+        ]
+      }
+    }
+  },
+  "assemblyVersion": "1.7.0.0",
+  "assemblyInformationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961",
+  "candidateReceiptSha256": "1170c415aa847b9ac0ac9fc3ecc5e1ebbfbd462ba8d2618c4a6863477523103e",
+  "preparationReceiptSha256": "cd48d18be1cead76aba3f18714493a2956b72deed3827d0cac26799ba8df2857",
+  "codeTrees": {
+    "src": "7744ba00e7f38530523ba85c6eb6094da9c550b7",
+    "tests": "f8b243c8cf36b94855428911eb409fd7908cf995"
+  },
+  "logs": {
+    ".guard-tmp/release170-release.log": "3fccbe1c1063505ff9d7295d9738325a26a74b96b811f1fe406b860370f67ff7",
+    ".guard-tmp/release170-public-broad.log": "e47f2a0bd5ca37e39d82bf1b37eb2f6e664109462f16fc5db34aac5730a433c1",
+    ".guard-tmp/release170-public-focused.log": "dd0dad5c705aac021867aa902eb1a669bbb2381c1654927ba4fde0f228b8c258",
+    ".guard-tmp/release170-public-broad-versions.json": "91ecc9d22bad6d5f5b9e942f7e2c7f41c492d0b78c6dae4b297cfacb204c7df6",
+    ".guard-tmp/release170-public-focused-versions.json": "55f1dbf6b74a86c7021c89b5610663cfd380a413bc98a248a2b8e0596b94810f"
+  },
+  "focusedTrxSha256": "570eb49beb50eab7ce392460b69a7afb2ef5fb1264d8aec098f5ac7e4b58d8a5",
+  "extension": "0.2.1 bundles engine 1.6.0",
+  "braid": "843 candidate-package tests; public-package production adoption/native acceptance not claimed",
+  "sourceChanges": false,
+  "gateMembershipChanges": false
+}
