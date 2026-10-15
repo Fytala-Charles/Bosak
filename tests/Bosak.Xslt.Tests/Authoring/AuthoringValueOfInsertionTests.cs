@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Cover default inspection preprocessing without weakening source eligibility checks.      |
+//                      | Charles Korthout | 0.3   | 15-10-2026     | Distinguish ordinary result attributes and opaque metadata from XSLT annotations.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -489,7 +490,7 @@ public class AuthoringValueOfInsertionTests
 
     /// <summary>Earlier derived compilation cannot hide a static preprocessing construct in retained source.</summary>
     [Theory]
-    [InlineData("use-when='true()'", "")]
+    [InlineData("xsl:use-when='true()'", "")]
     [InlineData("", "<xsl:param name='s' static='yes' select='1'/>")]
     [InlineData("", "<xsl:variable name='v' _select='{1}'/>")]
     public void PriorInspectionCompilation_DoesNotChangeSourceEligibility(string attribute, string declaration)
@@ -502,6 +503,27 @@ public class AuthoringValueOfInsertionTests
         Assert.False(result.IsSuccess);
         Assert.Equal(AuthoringInsertionFailureKind.UnsupportedCoverage, result.Failure!.Kind);
         Assert.Equal(Encoding.UTF8.GetBytes(text), snapshot.ExportOriginal(ModuleUri));
+    }
+
+    /// <summary>Ordinary result attributes with annotation-like names remain eligible and byte-preserved.</summary>
+    [Theory]
+    [InlineData("type")]
+    [InlineData("mode")]
+    [InlineData("static")]
+    [InlineData("use-when")]
+    public void LiteralResultAttributes_AreNotXsltAnnotations(string name)
+    {
+        var text = Sheet($"<out {name}='opaque'></out>");
+        var candidate = Insert(Inspect(text));
+        Assert.Contains($"{name}='opaque'", Encoding.UTF8.GetString(candidate.ExportSource()), StringComparison.Ordinal);
+    }
+
+    /// <summary>Foreign namespace metadata does not activate XSLT preprocessing or type rules.</summary>
+    [Fact]
+    public void ForeignMetadata_RemainsOpaque()
+    {
+        var candidate = Insert(Inspect(Sheet("<out xmlns:v='urn:metadata' v:static='yes' v:use-when='opaque' v:type='opaque'></out>")));
+        Assert.Contains("v:use-when='opaque'", Encoding.UTF8.GetString(candidate.ExportSource()), StringComparison.Ordinal);
     }
 
     private sealed class CountingResolver : IAuthoringModuleResolver

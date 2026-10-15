@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Resolve eligibility from retained source rather than a previously compiled backing tree. |
+//                      | Charles Korthout | 0.3   | 15-10-2026     | Apply coverage guards only to XSLT annotations, preserving ordinary result attributes.   |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -164,7 +165,7 @@ internal static class ValueOfInsertionPipeline
                 return Failure(AuthoringInsertionFailureKind.UnsupportedModule, "Module, package and schema dependencies are outside insertion coverage.");
             // These constructs can execute user code during compiler preprocessing. Refuse before compilation,
             // including literal-looking shadow attributes, rather than evaluating a caller's static expressions.
-            if (element.Attributes().Any(a => a.Name.LocalName is "fixed-namespaces" or "type-namespaces" or "extension-element-prefixes"
+            if (element.Attributes().Where(a => IsXsltAttribute(element, a)).Any(a => a.Name.LocalName is "fixed-namespaces" or "type-namespaces" or "extension-element-prefixes"
                 || a.Name.LocalName.StartsWith('_') && element.Name.Namespace == Xsl && a.Name.NamespaceName.Length == 0
                 || a.Name.LocalName == "static" && a.Value is not ("no" or "false" or "0")
                 || a.Name.LocalName == "use-when"))
@@ -195,7 +196,7 @@ internal static class ValueOfInsertionPipeline
         foreach (var element in root.DescendantsAndSelf())
         {
             token.ThrowIfCancellationRequested();
-            if (element.Attributes().Any(a => a.Name.LocalName is "as" or "type" or "validation" or "mode" or "default-mode" or "use-attribute-sets"))
+            if (element.Attributes().Where(a => IsXsltAttribute(element, a)).Any(a => a.Name.LocalName is "as" or "type" or "validation" or "mode" or "default-mode" or "use-attribute-sets"))
                 return Failure(AuthoringInsertionFailureKind.UnsupportedCoverage, "Type and component-reference annotations are outside insertion coverage.");
             var expandText = element.AncestorsAndSelf().Select(e =>
                 (string?)e.Attribute(e.Name.Namespace == Xsl ? XName.Get("expand-text") : Xsl + "expand-text"))
@@ -294,6 +295,9 @@ internal static class ValueOfInsertionPipeline
         using var reader = XmlReader.Create(text, new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null }, source.BaseUri.AbsoluteUri);
         return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
+
+    private static bool IsXsltAttribute(XElement owner, XAttribute attribute) =>
+        attribute.Name.Namespace == Xsl || owner.Name.Namespace == Xsl && attribute.Name.NamespaceName.Length == 0;
 
     private static Dictionary<string, string> NamespaceBindings(XElement element)
     {
