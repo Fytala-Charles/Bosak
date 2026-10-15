@@ -1,3 +1,13 @@
+# VS Code 0.2.1 candidate and abstract override scope - 2026-10-15
+
+Base main 1b8209cdc8b65eacf5c8676a6a6e321ca6d10039 includes merged Braid compatibility PR #296 after CI 38705916366. Agreed sequence now covers Braid verification, extension alignment preparation and a scoped abstract-optional follow-up. Published engine remains immutable 1.6.0 at 3715b2f9; Marketplace remains 0.2.0 with engine 1.4.0.
+
+What was built: extension manifest/lockfile candidate 0.2.1 and readme; isolated framework-dependent VSIX bundles engine 1.6.0 from unchanged src/tests at base main. Ten bundled assemblies verify 1.6.0.0 and informational base revision; package server bytes match fresh publish output and runtime client dependency is present. TypeScript/highlighting/DLL-apphost-registration checks pass; 84 language-server tests pass; extracted server initialization/hover request/three diagnostics probes pass. Actual isolated hidden VS Code profile verifies valid, XPST0017 invalid keyword and live correction. Initial application launch inherited ELECTRON_RUN_AS_NODE and exited before loading; preserved failure log is excluded, corrected isolated environment succeeds. No writes to user's editor profile/installed extension or Marketplace publication.
+
+Candidate report/evidence docs/VSCODE-0.2.1-PREPARATION.md/json preserve initial source/manifest/archive metadata. New docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDE-SCOPE.md records current-draft static XTSE3075 requirement and proposed regression checkpoints. No engine implementation/version/API/gate/REQ status changes. Overlapping families and editor package signatures/acquisition remain deferred; REQ-126 In Progress. Original Braid files/pin were preserved during its 836-test public-1.6.0 snapshot verification.
+
+Next: integrate candidate/scope after successful exact-head CI, then repackage and verify exact merged-revision VSIX and present it for separate Marketplace publication approval. Do not push vscode-v0.2.1 or dispatch publish during preparation. Abstract optional implementation is a later bounded task with public baseline/error/happy-path evidence and frozen gates. Preserve .sweep-baselines/, original Braid work, earlier logs/receipts and immutable engine release tag.
+
 # Braid 1.6.0 compatibility verified - 2026-10-15
 
 Bosak main base 17374b23 contains verified 1.6.0 publication; immutable release revision 3715b2f98bbf80883358d31234224cbb9cd94cad. User agreed to the proposed order: isolated Braid 1.6.0 verification, extension alignment, then scope abstract optional originals separately from overlapping families. This step completes the Braid compatibility check.

@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-15",
+  "extensionVersion": "0.2.1",
+  "engineVersion": "1.6.0",
+  "publication": "Unpublished; separate Marketplace release approval required",
+  "publishedExtension": "0.2.0",
+  "initialBundleSourceRevision": "1b8209cdc8b65eacf5c8676a6a6e321ca6d10039",
+  "initialCandidateManifestFromWorkingTree": true,
+  "files": {
+    "vscode-bosak/package.json": "a855eb76068580fc219f9ec0a6d62a79c937722eae0a0d732684f4857e943c61",
+    "vscode-bosak/package-lock.json": "79027120532240437f0c7d9c87eaf255da5deb96196cb7600c186775b5534d12",
+    "vscode-bosak/README.md": "a1091b6ec576ceda20149faa22ce3acbd5b294e8ae1f8277b6148703a2903666"
+  },
+  "archive": ".guard-tmp\\vscode-bosak-0.2.1-reviewed.vsix",
+  "archiveSha256": "308b4a6d39fdb8035c3e14dcff948d4d3b79b0f571567e2cc98de98119c41ac8",
+  "assemblyMetadata": [
+    {
+      "name": "Bosak.LanguageServer",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "version": "1.6.0.0",
+      "informationalVersion": "1.6.0+1b8209cdc8b65eacf5c8676a6a6e321ca6d10039"
+    }
+  ],
+  "codeTrees": {
+    "src": "89df2ed07edbf32ba7d4cf1cb4dd7fc57dd3d2f7",
+    "tests": "7125cf204f493356f6f55a1f3cb1d2d1d1ce4ff9"
+  },
+  "sourceAndTestsMatchReleasedEngine": true,
+  "languageServerTests": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0
+  },
+  "extensionChecks": [
+    "TypeScript compilation",
+    "TextMate highlighting",
+    "DLL/apphost launch selection",
+    "Startup registration"
+  ],
+  "protocol": {
+    "extensionVersion": "0.2.1",
+    "engineVersion": "1.6.0",
+    "archiveSha256": "308b4a6d39fdb8035c3e14dcff948d4d3b79b0f571567e2cc98de98119c41ac8",
+    "bundledProjects": [
+      "Bosak.LanguageServer/1.6.0",
+      "Bosak.XPath.Api/1.6.0",
+      "Bosak.XPath.Compiler/1.6.0",
+      "Bosak.XPath.Core/1.6.0",
+      "Bosak.XPath.Parser/1.6.0",
+      "Bosak.XPath.Providers/1.6.0",
+      "Bosak.XPath.Runtime/1.6.0",
+      "Bosak.XPath.Standard/1.6.0",
+      "Bosak.XQuery/1.6.0",
+      "Bosak.Xslt/1.6.0"
+    ],
+    "packagedStdioChecks": [
+      {
+        "expression": "divide(a := 9)",
+        "diagnostics": []
+      },
+      {
+        "expression": "divide(?, b := 3)(9)",
+        "diagnostics": []
+      },
+      {
+        "expression": "divide(unknown := 9)",
+        "diagnostics": [
+          {
+            "range": {
+              "start": {
+                "line": 0,
+                "character": 269
+              },
+              "end": {
+                "line": 0,
+                "character": 289
+              }
+            },
+            "severity": 1,
+            "code": "XPST0017",
+            "source": "bosak",
+            "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+          }
+        ]
+      }
+    ]
+  },
+  "isolatedEditor": {
+    "extensionVersion": "0.2.1",
+    "results": [
+      {
+        "name": "valid",
+        "languageId": "xslt",
+        "diagnostics": []
+      },
+      {
+        "name": "invalid",
+        "languageId": "xslt",
+        "diagnostics": [
+          "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        ]
+      },
+      {
+        "name": "corrected-live",
+        "diagnostics": []
+      }
+    ]
+  },
+  "initialEditorLaunch": "Inherited ELECTRON_RUN_AS_NODE prevented application startup; initial log retained and excluded from final acceptance",
+  "scopeDocument": "XSLT40-ABSTRACT-OPTIONAL-OVERRIDE-SCOPE.md",
+  "scopeOnly": true,
+  "remaining": [
+    "Integrate candidate and scope after exact-head CI",
+    "Repackage and verify exact final merged revision",
+    "Present final candidate for separate Marketplace publication approval"
+  ],
+  "logs": {
+    ".guard-tmp/vscode021-publish.log": "fbd9d20b7bcaae2987f59851ec1acfe9a82b3e8438f32ec6c89a8e1cc2cb6ea9",
+    ".guard-tmp/vscode021-package.log": "bf740a682a4e43cb8d586dc9a492c1e4c8c65521caa1a5e02a1f434246ed1412",
+    ".guard-tmp/vscode021-ls.log": "47351384e097322221aaca7db6257c38d5bec4877ac5d448fbd58e8f97391f33",
+    ".guard-tmp/vscode021-editor-stdout.log": "d970d2f31e3239f9e9ac4ac84ecb407b139ca9e0a4545f97c06730116e345848",
+    ".guard-tmp/vscode021-editor-stderr.log": "7f7325cc7536ede9f0d285f91a8f6ff49ebd229ea1fd96fde7afff5f76a6e075",
+    ".guard-tmp/vscode021-editor-initial-stderr.log": "8b16a46d4e2c5f6318d4ae947aa87566df7e266d952b7f7dc44af5246c02dc98",
+    ".guard-tmp/vscode021-ls-results/charl_CHARLES_2026-10-15_10_37_13_net10.0.trx": "1e278b31627c241c28b3cb1eeede9ee8066e221f69d834053c6a51e08fc549fc",
+    ".guard-tmp/vscode021-reviewed-editor-verification.json": "86ecf6602526a65b9d1da0696bfc2e2ca9bdc488419cf5a4b71b1523e571600a",
+    ".guard-tmp/vscode021-versions.json": "2bedbabe9f1b88dd22d85461fd6f705fb74cc5df4ad21d42b3c62fa7aa4ac856"
+  },
+  "serverPayloadMatchesDotnetPublishOutput": true
+}
