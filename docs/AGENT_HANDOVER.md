@@ -1,3 +1,11 @@
+# PR #305 integrated; 1.7.1 release preparation - 2026-10-15
+
+Engine merge 0c0e2a3a8aab42da6ab536dca51e5e8442824f8e; reviewed implementation 8e9c4984, refreshed head b886a53e. Refreshed-head CI 38763370136 succeeds. Five documentation-only main conflicts were reconciled; source/test trees match reviewed code. No new runtime edits in this preparation step.
+
+What was built: release notes, checklist and preparation receipt for unpublished 1.7.1. Full CI suite 8,483 (XSLT 5,597), language server 84; rerun frozen gates exactly 31,142/0/679 and 8,278/0/1,894. Ten refreshed-head archives verify full revision/README/assets/dependencies. Fresh package-only consumers pass 153 broad checks and 185 focused tests (33 overlap); cache/output bytes and exact assembly versions verify. Isolated 280-file Braid snapshot passes 843 tests, nine package archives/cache/both test-output DLLs and metadata verify. Original Braid files/status/pin unchanged. Initial short-revision pack, restricted restore and missing qt4 catalog attempts are separate from accepted evidence.
+
+Next: integrate preparation docs after successful exact-head CI, repack the final merged revision and repeat fresh consumers/provenance, then present that concrete revision for publication approval. Public libraries 1.7.0 and published/restarted VS Code 0.2.2 with engine 1.7.0 remain current. No tag/publication/upstream submission or REQ/gate membership change. Preserve original receipts, concurrent REQ-128 documents, .sweep-baselines/ and Braid checkout. REQ-126 In Progress; REQ-128 remains pending in the original worktree. Earlier entries below are historical.
+
 # PR #305 refreshed for integration - 2026-10-15
 
 Merged current main 5a9b3c4b into the reviewed 1.7.1 branch; resolved five documentation-only conflicts by retaining both delivery histories and correcting the current extension status. Source/test trees remain identical to reviewed 8e9c4984. Libraries 1.7.0 and VS Code 0.2.2 are already published; the user confirms restart. Next: successful refreshed-head CI, integration and separate 1.7.1 candidate preparation. No publication or tag movement. Preserve original receipts and concurrent REQ-128 work.
