@@ -2,9 +2,9 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
-## Engine alignment candidate (0.2.1)
+## Engine alignment (0.2.1)
 
-The unpublished 0.2.1 candidate bundles engine 1.6.0. This refresh includes the released used-package optional argument and public optional override behavior in the runtime. Editor package-dependent signatures and external module acquisition retain their existing coverage limits; a newer bundle does not enable those editor checks. The .NET 10 runtime remains required. Marketplace publication is separate from candidate verification; the published extension remains 0.2.0.
+Version 0.2.1 bundles engine 1.6.0. This refresh includes the released used-package optional argument and public optional override behavior in the runtime. Editor package-dependent signatures and external module acquisition retain their existing coverage limits; a newer bundle does not enable those editor checks. The .NET 10 runtime remains required. Version 0.2.1 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the extension and reload VS Code.
 
 ## Engine alignment (0.2.0)
 
@@ -49,7 +49,7 @@ Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visu
 
 Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
 [marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
-Published versions: **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+Published versions: **0.2.1** (2026-10-15) - engine 1.6.0 bundle alignment; **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
 
 ### Option 2 — Development / Sideload (recommended for contributors)
 
