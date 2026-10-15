@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Verify compatible abstract optional replacements.                                        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -155,12 +156,12 @@ public class Xslt40OptionalOverrideTests
     [Fact]
     public void DifferentParameterTypeIsRejected() => Assert.Contains("XTSE3070", Assert.ThrowsAny<Exception>(() => Run(Caller("'unused'", parameters: OverrideParameters.Replace("name='x'", "name='x' as='xs:integer'")))).Message);
 
-    /// <summary>Optional abstract overrides retain an explicit bounded-profile refusal.</summary>
+    /// <summary>Optional abstract functions accept compatible concrete replacements.</summary>
     [Fact]
-    public void AbstractOptionalOriginalRemainsDeferred()
+    public void AbstractOptionalOriginalAcceptsConcreteOverride()
     {
         var library = Library().Replace("visibility='public'", "visibility='abstract'").Replace("<xsl:sequence select=\"$a || $b || $c\"/>", "");
-        Assert.Contains("Abstract optional", Assert.Throws<NotSupportedException>(() => Run(Caller("'unused'"), library)).Message);
+        Assert.Equal("AXY", Run(Caller("p:f('A')"), library));
     }
 
     /// <summary>Package-private optional helpers remain visible only to the original default.</summary>

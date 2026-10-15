@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-15",
+  "parentRevision": "c1cde3b5137c55718c9dfaf1f0fcefae676e1709",
+  "pr": "https://github.com/Fytala-Charles/Bosak/pull/299",
+  "sourceVersion": "1.7.0",
+  "versionNote": "Corrections to the unpublished 1.7.0 feature candidate; published libraries remain immutable 1.6.0.",
+  "findingsFixed": [
+    "Validate missing XPath/AVT instruction slots before invocation",
+    "Treat foreign namespaced instruction attributes as annotations",
+    "Trim inherited expand-text values before interpreting booleans"
+  ],
+  "newCases": 12,
+  "abstractFixtureCases": 48,
+  "redBaseline": {
+    "revision": "c1cde3b5137c55718c9dfaf1f0fcefae676e1709",
+    "tests": {
+      "passed": 112,
+      "failed": 10,
+      "total": 122,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-reviewfix-red-results/charl_CHARLES_2026-10-15_13_22_55_net10.0.trx",
+          "passed": 112,
+          "failed": 10,
+          "total": 122
+        }
+      ]
+    },
+    "newCasesFailed": 10,
+    "newControlsAlreadyPassed": [
+      "ForeignAnnotationsArePlainText(with-params)",
+      "LocalExpandTextFalseKeepsLiteralText"
+    ],
+    "packageProof": ".guard-tmp/abstract-optional-finalhead-delivery.json"
+  },
+  "verification": {
+    "solution": {
+      "passed": 8420,
+      "failed": 0,
+      "total": 8420,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_09_net10.0.trx",
+          "passed": 202,
+          "failed": 0,
+          "total": 202
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0.trx",
+          "passed": 66,
+          "failed": 0,
+          "total": 66
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[1].trx",
+          "passed": 269,
+          "failed": 0,
+          "total": 269
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[2].trx",
+          "passed": 411,
+          "failed": 0,
+          "total": 411
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[3].trx",
+          "passed": 132,
+          "failed": 0,
+          "total": 132
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[4].trx",
+          "passed": 303,
+          "failed": 0,
+          "total": 303
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[5].trx",
+          "passed": 1303,
+          "failed": 0,
+          "total": 1303
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[6].trx",
+          "passed": 47,
+          "failed": 0,
+          "total": 47
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_10_net10.0[7].trx",
+          "passed": 153,
+          "failed": 0,
+          "total": 153
+        },
+        {
+          "file": ".guard-tmp/abstract-reviewfix-solution-results/charl_CHARLES_2026-10-15_13_24_11_net10.0.trx",
+          "passed": 5534,
+          "failed": 0,
+          "total": 5534
+        }
+      ]
+    },
+    "xslt": [
+      5534,
+      0,
+      0
+    ],
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "total": 84,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-reviewfix-ls-results/charl_CHARLES_2026-10-15_13_24_26_net10.0.trx",
+          "passed": 84,
+          "failed": 0,
+          "total": 84
+        }
+      ]
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ],
+    "focusedSelectionCases": 122,
+    "buildErrors": 0,
+    "existingBuildWarnings": 13
+  },
+  "files": {
+    "src/Bosak.Xslt/Stylesheet/AbstractOriginalReferenceValidator.cs": "bf5a2612266817118695cc1054a594c863d17dbe3df274068dabe8b9780ec0d3",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40AbstractOptionalOverrideTests.cs": "05482776a4f6320d459ed2eb69ec3caae7b66c4fea3e3dd7df43a2310d64ce86"
+  },
+  "originalImplementationReceipt": {
+    "path": "docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDES.json",
+    "sha256": "6feabe8f5ecbc5746507672073e68d0229da967c7d6d93b323fc9b69e21ba513",
+    "preservedUnchanged": true
+  },
+  "logs": {
+    ".guard-tmp/abstract-reviewfix-build.log": "4e07d2b71fbb6e32523ddbb42e8b4abf0bc8dc5a09ea4f8d3072e6e35aa75c7e",
+    ".guard-tmp/abstract-reviewfix-focused.log": "58d56bd65f4acacb3fab8feecbedfdf62ea7cb0b8ce18b0ecc67023cfa01b7b3",
+    ".guard-tmp/abstract-reviewfix-ls.log": "98784bf641d904a88d409a96b3139c13003f7c1da2faeeac295020b95d5e13ee",
+    ".guard-tmp/abstract-reviewfix-qt3.log": "99b03bb07279a297962887813a4b5a0f2333c09962927fff20b9419724cbd914",
+    ".guard-tmp/abstract-reviewfix-qt4.log": "77cf736b657d2df91794a2f9ebcb8b4a6f7d7f5ae0d17643fcc37036fe67d897",
+    ".guard-tmp/abstract-reviewfix-red.log": "84773906af53eb703fa2adb9f2103e4a22b8f3ba686da0fbcfc040e4eb8debf1",
+    ".guard-tmp/abstract-reviewfix-solution.log": "f3176374a2f221a31589e82747f6d1c6597e7636d99c0aad7461def380a29451"
+  },
+  "deliveryFollowup": ".guard-tmp/abstract-reviewfix-delivery.json records exact committed-revision packages, assembly versions and CI.",
+  "publication": "Not performed; no upstream submission, gate promotion or REQ status change."
+}

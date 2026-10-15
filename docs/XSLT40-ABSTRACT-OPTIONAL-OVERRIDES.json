@@ -1,0 +1,454 @@
+{
+  "date": "2026-10-15",
+  "baseRevision": "d61fe0c440cf2305e24b4527454f7cbf25dd84a1",
+  "sourceVersion": "1.7.0",
+  "publishedVersion": "1.6.0",
+  "implementation": "Direct abstract optional function overrides and compile-time XTSE3075 original-reference validation",
+  "newCases": 36,
+  "verification": {
+    "solution": {
+      "passed": 8408,
+      "failed": 0,
+      "total": 8408,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0.trx",
+          "passed": 202,
+          "failed": 0,
+          "total": 202
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[1].trx",
+          "passed": 66,
+          "failed": 0,
+          "total": 66
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[2].trx",
+          "passed": 269,
+          "failed": 0,
+          "total": 269
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[3].trx",
+          "passed": 132,
+          "failed": 0,
+          "total": 132
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[4].trx",
+          "passed": 411,
+          "failed": 0,
+          "total": 411
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[5].trx",
+          "passed": 303,
+          "failed": 0,
+          "total": 303
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[6].trx",
+          "passed": 1303,
+          "failed": 0,
+          "total": 1303
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[7].trx",
+          "passed": 47,
+          "failed": 0,
+          "total": 47
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_11_net10.0[8].trx",
+          "passed": 153,
+          "failed": 0,
+          "total": 153
+        },
+        {
+          "file": ".guard-tmp/abstract-optional-complete-solution-results/charl_CHARLES_2026-10-15_12_47_12_net10.0.trx",
+          "passed": 5522,
+          "failed": 0,
+          "total": 5522
+        }
+      ]
+    },
+    "xslt": {
+      "passed": 5522,
+      "failed": 0,
+      "skipped": 0
+    },
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "total": 84,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-optional-ls-results/charl_CHARLES_2026-10-15_12_42_58_net10.0.trx",
+          "passed": 84,
+          "failed": 0,
+          "total": 84
+        }
+      ]
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ],
+    "focused": {
+      "passed": 110,
+      "failed": 0,
+      "total": 110,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-optional-complete-focused-results/charl_CHARLES_2026-10-15_12_46_45_net10.0.trx",
+          "passed": 110,
+          "failed": 0,
+          "total": 110
+        }
+      ]
+    },
+    "packageOnlyConsumer": {
+      "passed": 110,
+      "failed": 0,
+      "total": 110,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-optional-complete-consumer-results/charl_CHARLES_2026-10-15_12_47_52_net10.0.trx",
+          "passed": 110,
+          "failed": 0,
+          "total": 110
+        }
+      ]
+    }
+  },
+  "baseline": {
+    "version": "1.6.0",
+    "tests": {
+      "passed": 4,
+      "failed": 32,
+      "total": 36,
+      "runs": [
+        {
+          "file": ".guard-tmp/abstract-optional-complete-baseline-results/charl_CHARLES_2026-10-15_12_47_21_net10.0.trx",
+          "passed": 4,
+          "failed": 32,
+          "total": 36
+        }
+      ]
+    },
+    "alreadyPassing": [
+      "IncompatibleTypesAreRejected",
+      "IncompatibleMinimumArityIsRejected",
+      "ReducedUpperBoundIsRejected",
+      "UnresolvedAbstractStillFails"
+    ],
+    "provenance": [
+      {
+        "package": "Bosak.XPath.Api/1.6.0",
+        "sha256": "b36c31399744389f4f866ebf228765249cd565756df0faa0a4c844cea8dfefaf",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Compiler/1.6.0",
+        "sha256": "132f5a0d1d74425c61975e0428b635a94938e12ffe0b647450b7a876a2b4efd6",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Core/1.6.0",
+        "sha256": "3524785044c2d6f8d03b9c31caa59db76d58f484464563b1b9381fb6c9ae2468",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Parser/1.6.0",
+        "sha256": "b2d0438a7c7c0813f4d342dc2efd97cb4cb75ce8ada988a6444a97b8c23f16c3",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Providers/1.6.0",
+        "sha256": "35be08c64a21afb273ffa9ac462342e71a951b1e510a1db11e921d7ec14acb17",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Runtime/1.6.0",
+        "sha256": "3235febf6b9d11caa27c56f104d2cde1b7f78b8f7f144a711a9a6f246fb73479",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Standard/1.6.0",
+        "sha256": "512bac1e15c7ba3c808495a7baa61ce59b8ee5259778e7aa44e18668cbfe9b51",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XQuery/1.6.0",
+        "sha256": "026938e4edd2492a9f411ba5cbc208fb9cec9b2ea40bc294e2004014f64e05c4",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      },
+      {
+        "package": "Bosak.Xslt/1.6.0",
+        "sha256": "d676c1e30817ec494f511f3d3dff503abc98a869d43c3fdbec1df9cf6a092fa3",
+        "matchesPublic160Receipt": true,
+        "outputMatchesArchive": true
+      }
+    ]
+  },
+  "candidateProvenance": [
+    {
+      "package": "Bosak.XPath.Api/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "061123ca1d400ed7dd1527ece55efb0056f163a2a678050e0a2bd564072756c0",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Compiler/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "d83dc6f6e7472e99397e74ff533af5a4904294c617712212d39f37da0db4f3c3",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Core/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "4fb0edfee7b6335d823c14d2769d725fb0f9e4942015516cf55df867d865ba81",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Parser/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "3657bba37b2d75f272c0167b9015b3f8e35ef4306a3b713ecd2d4617d36e74f3",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Providers/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "075cc31a6e20c2ad6d35c2ca9395b1eb1b4284577a18c4910c53a65363ed36cf",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Runtime/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "ecbe0032a92812c22dfb5b21bb4120e40158a8844059e76ef902ea62f8b7d68a",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XPath.Standard/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "a4d21abbb61f467faa073c446e9cc2a3477be52fc671244c94b2a4f78c26ce50",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.XQuery/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "6ff3eac98e1ab974dbdfd283790cd8ec0a994c48cd057c2e50eaf4d976ba708e",
+      "outputMatchesArchive": true
+    },
+    {
+      "package": "Bosak.Xslt/1.7.0",
+      "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-complete-packages",
+      "sha256": "194311e8c95c09b53c2ca5083b3d34ea16c73fff238359ee95c3a016db731c58",
+      "outputMatchesArchive": true
+    }
+  ],
+  "files": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "e1d4d8848e3e76ea6a4d9a0031923cdc130ce904a8d659299ac7e49d26476bc6",
+    "src/Bosak.Xslt/Stylesheet/AbstractOriginalReferenceValidator.cs": "6114e5f0ee6220e9d07ea4ee34d208360dc5014db56bacbadc7dbd8b5d721be1",
+    "src/Directory.Build.props": "23f2f6d849ec7d5cef821786ea4fb38c98b8aca48e4f3604bf8e41452aba0bce",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40OptionalOverrideTests.cs": "a6586bf5617de971d4cc626fe1bf2aefa91414566c6a1314bacde1ff5ec5cfdc",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40AbstractOptionalOverrideTests.cs": "f40cc53d0b198f5ace0d7fbaa6b19e8faa94cdd87cdc8bc29a18151cb66f5ed1"
+  },
+  "logs": {
+    ".guard-tmp/abstract-optional-complete-baseline.log": "f0fdc52d388129cba0f39a3e8ecd43bcdae53df99b659e63e7bc6d53ddb3b0d9",
+    ".guard-tmp/abstract-optional-complete-build.log": "1c4493c25eeef2e5f40bead5e0c5072b56296aa5db063c18389cf4c9a2a6ce4f",
+    ".guard-tmp/abstract-optional-complete-consumer.log": "dd377f66ffe874ebc0c616d3eef49d7b13b8355cd6cbb2295feb9231eebd2ba9",
+    ".guard-tmp/abstract-optional-complete-focused.log": "46c140741a5c2239a7d4f396008b510a0cdeaf584ace173902affb3d2434356a",
+    ".guard-tmp/abstract-optional-complete-pack.log": "e7acabb65841e3bd636bc1ea9c691b7b026a056d894edcc5243d1b146f5de188",
+    ".guard-tmp/abstract-optional-complete-qt3.log": "044afae780ea55cd601950f13d9ef638a85bc8bfa9161270c181c49724013969",
+    ".guard-tmp/abstract-optional-complete-qt4.log": "0bebae2b9a4c832e348d4378fb874f489adb21760089226098dd1c972bd54a26",
+    ".guard-tmp/abstract-optional-complete-solution.log": "be06ef2be3bbf7cd149511cb3f8e622c9f5d3aa5518132b4613f3d2757bb621f",
+    ".guard-tmp/abstract-optional-ls.log": "476c4038653e39e4455d68d063c3323d6a8787e94723670c75180691a774de8f",
+    ".guard-tmp/abstract-optional-render-success.log": "c7f9c0e80dad46e2b35085d7d95a40eeae18e7b7ab90e4282bf0a44ed0ecfabc"
+  },
+  "boundaries": [
+    "Transitive abstract adoption",
+    "Escaping inline closures",
+    "Overlapping adopted/local families",
+    "Editor package signatures/acquisition"
+  ],
+  "earlierAttempts": "Preserved separately under .guard-tmp/abstract-optional-*; include sandbox HTTP failures, canceled superseded solution runs, locked-DLL builds and corrected unresolved-abstract fixture. Only complete-* runs and explicit language-server/render logs are accepted here.",
+  "publication": "Not performed; immutable release tags unchanged.",
+  "review": {
+    "pr": "https://github.com/Fytala-Charles/Bosak/pull/299",
+    "implementationRevision": "488aee94733576a008256e3bc38973ae8fa264c5",
+    "packageOnlyPassed": 110,
+    "packages": [
+      {
+        "id": "Bosak.XPath.Api",
+        "sha256": "504ada9023ec7758dce3a9cca9151f1453ebda09e5020c91a9967565d3f615af",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Compiler",
+        "sha256": "895c4738836e4990405718c0fa341561108328fdf9d0133dd2ef0233296d6cf6",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "sha256": "93ab40338b423868d2f16d7824002555eaddae1712807e1006edf020f3042afd",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "sha256": "8b704332b205109690c777bffddc4347f754104334fbeb92a4f38b341658d832",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "sha256": "752c1db87a6b070866e994a560a35370c25b73be36285868ccd96fe71e227194",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Providers.Database",
+        "sha256": "602de5da655991a92abede08c7d3d741aaece6897cc8db3d898c9e64e5ccb040",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "sha256": "e07063a459938677ebd747bfabfa204ea090c96827631daccca2d8d8c924316c",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "sha256": "69cb0d11efe9c1ad391b2709570bc03fb0bcd4f8b2fdb30d3b5a8f21e51dda10",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.XQuery",
+        "sha256": "136b99cab3cc6d54e6a4f7b31b105485cd8bbc96bc9a4677971b0b0de6dcec2d",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "id": "Bosak.Xslt",
+        "sha256": "64512f4259e9d904d94b54f34b5e04b86c1eecaf540249e3087f4adc6f01e242",
+        "repositoryRevision": "488aee94733576a008256e3bc38973ae8fa264c5"
+      }
+    ],
+    "engineProvenance": [
+      {
+        "package": "Bosak.XPath.Api/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Compiler/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Core/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Parser/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Providers/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Runtime/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XPath.Standard/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.XQuery/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      },
+      {
+        "package": "Bosak.Xslt/1.7.0",
+        "source": "D:\\Development\\Bosak\\.guard-tmp\\abstract-optional-reviewed-packages",
+        "outputMatchesArchive": true,
+        "cacheMatchesArchive": true
+      }
+    ],
+    "assemblyVersions": [
+      {
+        "name": "Bosak.XPath.Api",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Compiler",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Core",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Parser",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Providers",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Runtime",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XPath.Standard",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.XQuery",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      },
+      {
+        "name": "Bosak.Xslt",
+        "version": "1.7.0.0",
+        "informationalVersion": "1.7.0+488aee94733576a008256e3bc38973ae8fa264c5"
+      }
+    ],
+    "ciRun": 38723291985,
+    "ciStatusAtRecording": "in_progress"
+  }
+}

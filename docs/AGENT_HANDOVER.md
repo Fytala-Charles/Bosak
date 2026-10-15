@@ -1,3 +1,25 @@
+# Abstract optional override review corrections - 2026-10-15
+
+Parent revision c1cde3b5137c55718c9dfaf1f0fcefae676e1709; branch feat/abstract-optional-overrides, draft PR https://github.com/Fytala-Charles/Bosak/pull/299. User authorized fixing three reproduced P2 findings. Missing expression/AVT slots now receive static XTSE3075 checks; foreign namespaced instruction annotations are ignored; expand-text normalization agrees with runtime, including local false inheritance overrides. The shared authoring classifier is unchanged; fixes are confined to reference validation and regressions. Source remains unpublished 1.7.0.
+
+What was built: 12 added regression cases (48 abstract-fixture cases, 122 focused cases). Pre-fix exact PR packages produce 112 pass/10 fail; the two newly added already-passing controls are the foreign with-params annotation and normalized local expand-text=false. Original implementation/public baseline receipts remain immutable; corrections use docs/XSLT40-ABSTRACT-OPTIONAL-REVIEW-FIXES.json and .guard-tmp/abstract-reviewfix-*.
+
+Verification: Release build zero errors/13 existing warnings; solution 8,420/0/0, XSLT 5,534/0/0, language server 84/0/0; QT3 exactly 31,142/0/679 and qt4 gate-only 8,278/0/1,894.
+
+Next: integrate only after successful exact-head CI and review. Final committed-revision archive/cache/output/assembly metadata proof is recorded with PR #299 and .guard-tmp/abstract-reviewfix-delivery.json. No publication, upstream submission, REQ status change or gate promotion. Transitive adoption, escaping inline closures, overlapping families and editor package signatures remain separate. Preserve .sweep-baselines/, Braid checkout, existing receipts and immutable release tags. Earlier entries below are historical.
+
+# Abstract optional overrides implemented - 2026-10-15
+
+Implementation commit 488aee94733576a008256e3bc38973ae8fa264c5 (draft PR #299); base d61fe0c4 (merged VS Code 0.2.1 publication docs). Unpublished source 1.7.0 supports one direct abstract optional family with compatible concrete replacement. Compile-time XTSE3075 validation covers original calls/items/partials/defaults/dead branches, namespace aliases/EQNames and template interpolations; literals/comments/escapes remain valid. Original metadata links preserve keywords when abstract declarations are absent from the exported view. No public API.
+
+What was built: 36 new regression cases and updated prior refusal test; public-1.6.0 baseline 4 pass/32 fail; candidate-only 110/0/0 with nine engine archives/cache/output DLLs verified. Contract docs/XSLT40-ABSTRACT-OPTIONAL-OVERRIDES.md and final receipt .json distinguish accepted evidence from earlier sandbox/fixture/locked-DLL attempts. New abstract-reference assertions invoke Compile without transforming. Unresolved-abstract fixture explicitly accepts the component as abstract (default visibility hides it); no new general unresolved-abstract behavior is claimed.
+
+Verification: solution 8,408/0/0, XSLT 5,522/0/0, language server 84/0/0; frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894. Incremental Release build zero warnings/errors.
+
+Draft PR https://github.com/Fytala-Charles/Bosak/pull/299 is open. Ten archives rebuilt from implementation commit 488aee94 verify revision/version/dependencies; a second fresh package-only consumer passes 110 tests, with nine engine archive/cache/output matches and assembly 1.7.0.0/exact informational revision. CI 38723291985 is in progress at recording.
+
+Next: verify final documentation-head CI and package metadata (source/test trees unchanged), then review. Integrate only after successful exact-head CI/review. Engine publication remains separate. REQ-126 In Progress; transitive abstract adoption, escaping inline closures, overlapping families and editor package signatures remain deferred. No upstream submission or gate promotion. Preserve .sweep-baselines/, Braid checkout, original receipts and immutable release tags. Published libraries remain 1.6.0; VS Code 0.2.1 bundles 1.6.0. Earlier entries below are historical.
+
 # VS Code 0.2.1 published and verified - 2026-10-15
 
 The user approved publication of exact verified revision 10433195569273474d328208dcf5c0cdd97caeaa. Immutable vscode-v0.2.1 points there. Successful publication workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38709119901 passes 84 language-server tests and highlighting/launcher checks, then publishes fytala.vscode-bosak 0.2.1. Marketplace confirms the version; public VSIX was downloaded and its complete runtime/client/grammar/assets/dependency file set and bytes match the workflow artifact. Ten bundled project assemblies are 1.6.0.0 with informational revision 1.6.0+10433195569273474d328208dcf5c0cdd97caeaa. Extracted public server passes initialization/hover request/three diagnostics probes; isolated VS Code verifies valid input, XPST0017 invalid keyword and live correction. User editor profile/installed extension untouched.
