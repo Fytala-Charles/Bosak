@@ -1,0 +1,180 @@
+{
+  "date": "2026-10-15",
+  "status": "Scope and public baseline only; no implementation",
+  "version": "1.7.0",
+  "revision": "33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961",
+  "passed": 3,
+  "failed": 5,
+  "results": [
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.DirectControl",
+      "outcome": "Passed",
+      "message": ""
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.DifferentOverrideCannotRetargetClosure",
+      "outcome": "Failed",
+      "message": "Assert.Equal() Failure: Strings differ\r\n           \u2193 (pos 0)\r\nExpected: \"ABC\"\r\nActual:   \"WRONG\"\r\n           \u2191 (pos 0)"
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"function($v) { $x || $v }\", call: \"let $f := p:f('CAPTURE') return $f('A')\", expected: \"CAPTUREA\")",
+      "outcome": "Passed",
+      "message": ""
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"function() { function($v) { xsl:original($v) } }\", call: \"let $outer := p:f('unused'), $f := $outer() return\"\u00b7\u00b7\u00b7, expected: \"ABC\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : XPST0017: Function {http://www.w3.org/1999/XSL/Transform}original#1 not found."
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"function($v) { xsl:original($v,'D') }\", call: \"let $f := p:f('unused') return $f('A')\", expected: \"ADC\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : XPST0017: Function {http://www.w3.org/1999/XSL/Transform}original#2 not found."
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"function($v) { xsl:original($v) }\", call: \"let $f := p:f('unused') return $f('A')\", expected: \"ABC\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : XPST0017: Function {http://www.w3.org/1999/XSL/Transform}original#1 not found."
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"let $original := xsl:original#1 return function($v\"\u00b7\u00b7\u00b7, call: \"let $f := p:f('unused') return $f('A')\", expected: \"ABC\")",
+      "outcome": "Passed",
+      "message": ""
+    },
+    {
+      "name": "Bosak.Xslt.Tests.Validation.EscapingInlineClosureScopeTests.EscapingClosure(body: \"function($v) { xsl:original(a := $v, c := 'E') }\", call: \"let $f := p:f('unused') return $f('A')\", expected: \"ABE\")",
+      "outcome": "Failed",
+      "message": "System.InvalidOperationException : XPST0017: Function {http://www.w3.org/1999/XSL/Transform}original#3 not found."
+    }
+  ],
+  "fixtureSha256": "340758d0893f214a8fbcfcaaed5d7544114ab70200eaac373fc80b6852fdecd9",
+  "trxSha256": "db30916a9066d5e33fdaa9e3306e98345881a288d1f0cd4fd0ade58a6d3e0bfa",
+  "provenance": {
+    "scope": {
+      "dependencies": [
+        {
+          "package": "Bosak.XPath.Api/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "152c7441d2976efa5767f1e93a8bf478f53a75f4282035956dce1a4a0d0f8322",
+          "archiveSha512": "5cU16apsVl5UriFJzdXQ+/GXk4FblBXZAnABqIo4h8/GdgCGoFZmtPSUsIHRtSGJMYygLKTDhe9kp4KleUQZUw==",
+          "restoreContentHash": "q2B95BSted6Z4QawxlKqcaoLuwCmki2UcVDPIoCrGVzjA/Z3Zty1c/gJ5Dwy0Nd/LD9RThGRXk6Eohy778QHgA==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Compiler/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "43f447400735af13ac97011eb931da315aa2ca01f41b4240764f015aa9ee7aa8",
+          "archiveSha512": "Q1KVogo4zAqNFbYFu07nqvmf0Y9cB9EnCMOmFnNmIDF1cCYolC7XNvUfmzkGwkcVzvEBAevJImWEcXs9PJRjIQ==",
+          "restoreContentHash": "6+Svp6ScGhhRiwJU85TgxN/jaotqljzxyvhvXxDjg/kPFAIAnO6KmZROtHYb5Ebb6S7dm+PgKFvH2Qik3EEVhw==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Core/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "be85737705ecb9f8c529c6eaa9c836cea73b6951107607c94c2c306877903003",
+          "archiveSha512": "lkvLWrTwO209o3LdNjxySE9h43QrUt5nfuEjQT+CGfueSe70aWyo7hE69pjE7kD/Bl0kTN1z45Z3wY2rN5ik4w==",
+          "restoreContentHash": "db/q9Xo9w7AG83TP6w28akuaviNT/o4//jMGPzNbVqB84USOaCLo6Nxmo7PkBRg4bWIv2GnyHUTdb6r3sRl7dg==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Parser/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "32348d9343b409d9acfb2290f88304b552733f63aaed2fa143e9d9eadfab4686",
+          "archiveSha512": "sysmaAKdq7OymsYw1NBs/4WAw10y6J7N1M7/8HBXmrebxjo92qTU849GghQ3t0Jsm8gC5re3XTPbbmpAoM0cjQ==",
+          "restoreContentHash": "xhYcTFIgDqju30pCgJQ10cuGbwJ/7f0WepZCb6SwlIjBK3t5ipcZa7Yw3T33GFJkm2g+YqoRJD+c/QOFQ0FK1g==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Providers/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "99daebafc27eab0a303a60d97b6833b08a383ccbc88ffcc183f129b110495e6e",
+          "archiveSha512": "yDPWKYKePg5bvnwPyzRBeMvNdvAj4wDM8W91UyYpqow6o5O2+/spIjIs3It36AKhKwIhKGRadyro+sJygA6Y3A==",
+          "restoreContentHash": "N/gdf5JORZ3lIrvGk8OA/fVU2wg61OChDkuYZhWWDCF2xCDvOlkeY605plLikX2EsYNf/u8bNcG3ug5Eicg3ow==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Runtime/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "44d418a58f5929070bcb57a955ed60cc4f7a565717ed99c423159f17ea9c7b01",
+          "archiveSha512": "02dVK6nqzpVhVsOW+/KgZmWoR9G276T92XludPFGgELpmlGVf+9lEDOVNIx8giy0UlBYcoCm9I9Afk/rG6lecA==",
+          "restoreContentHash": "agAsMbkHre/G/SLi0Z9FLizU9EMHr46AVxQ0aT+gAbubtEA+/j4PAEa4N5KjbjorvicFYciHlTAo9YkyK0PW3g==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Standard/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "7b73a906d54fb84da3f93024fb3a6890150c069bc16097e5f653668ba1d4926c",
+          "archiveSha512": "AX7phEUYe60BP2rKEtvfGFpEAGs3+rapZauccC8i75LpGVYumCCfDd7bd8geo2oNwF0CBSLdlkLRaMS4QuSoRA==",
+          "restoreContentHash": "ZZKDWi1O6YANY/yTahcPdaqgrE/bkyBbCjcAy2ZTPfmZvMZ9KGnFSZR11q+C7j0jccyQLdeDszjR6xi7PusjsA==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.XQuery/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "215e9e90ad0b8e735cc91dc3c81c1a8c9e9be5eff70c6ef6ae9ec56eedf327da",
+          "archiveSha512": "hEKypd3w2+t3WliiY+/I8XnlTkzJErL0O9g8za5S+t7qKq5khQFqdO5iwR4oqe6DyPyPxR/gpozTPhfbG6PF7Q==",
+          "restoreContentHash": "UDMAsO72ck+9W0DAGR8gHAKuygyXK0sFNInW5bPDgO/2mB7KncXbmx6IN0mGn1CF8rNbAgxpcleIBtaLj0HJWw==",
+          "cacheAndOutputBytesMatch": true
+        },
+        {
+          "package": "Bosak.Xslt/1.7.0",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveSha256": "369a211bff200dc76d459390c710ab277b20066c4145fb8cf9cddc79d72117e1",
+          "archiveSha512": "nT2eskJkG1SjieED9OnTrqE3uBlOpYi4DeAzaUOwzAQwtOmLwQYDXpRScmjaXqxRhjXnPKmTogLVu1XnA8FRUQ==",
+          "restoreContentHash": "x5989C0KUJbwhPDuAEpZ5w5gIElZ8gExh/txwgFv/WK2y1ESwsSeNX9LbNPymyDBCgWrUsBP4ahMugiRZNKkkw==",
+          "cacheAndOutputBytesMatch": true
+        }
+      ],
+      "assemblyMetadata": [
+        {
+          "name": "Bosak.XPath.Api",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Compiler",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Core",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Parser",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Providers",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Runtime",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XPath.Standard",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.XQuery",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        },
+        {
+          "name": "Bosak.Xslt",
+          "version": "1.7.0.0",
+          "informationalVersion": "1.7.0+33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961"
+        }
+      ]
+    }
+  },
+  "specification": "https://qt4cg.org/specifications/xslt-40/Overview.html#overriding-components",
+  "specificationChecked": "2026-10-15",
+  "implementationChanged": false
+}
