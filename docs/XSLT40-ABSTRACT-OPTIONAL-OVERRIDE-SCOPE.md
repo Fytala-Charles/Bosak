@@ -4,9 +4,11 @@
   <p>Proposed bounded follow-up, 15 October 2026</p>
 </div>
 
+**Implementation follow-up, 15 October 2026:** The direct-family slice is now implemented in unpublished source 1.7.0. See [delivered contract and evidence](XSLT40-ABSTRACT-OPTIONAL-OVERRIDES.md). The proposal below is retained as the original scope; its refusal description is historical.
+
 ## Specification checkpoint
 
-Reviewed the current [XSLT 4.0 draft](https://qt4cg.org/specifications/xslt-40/Overview.html), sections 3.4.5.2â€“3.4.5.4, on 2026-10-15. Abstract components may receive concrete overrides. Function compatibility requires matching arity ranges, parameter/return types and determinism, plus applicable streamability rules; keyword names come from the original declaration. Using `xsl:original` for an abstract target is static error **XTSE3075**. Invoking an unresolved abstract component is **XTDE3052**; unresolved abstract components in a top-level package raise **XTSE3080**.
+Reviewed the current [XSLT 4.0 draft](https://qt4cg.org/specifications/xslt-40/Overview.html), sections 3.4.5.2–3.4.5.4, on 2026-10-15. Abstract components may receive concrete overrides. Function compatibility requires matching arity ranges, parameter/return types and determinism, plus applicable streamability rules; keyword names come from the original declaration. Using `xsl:original` for an abstract target is static error **XTSE3075**. Invoking an unresolved abstract component is **XTDE3052**; unresolved abstract components in a top-level package raise **XTSE3080**.
 
 ## Current implementation
 

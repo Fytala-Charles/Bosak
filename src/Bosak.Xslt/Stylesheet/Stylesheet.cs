@@ -324,6 +324,7 @@
 //                      | Charles Korthout | 2.162 | 14-10-2026     | Enable optional used-package functions through scoped reduced-arity registration.        |
 //                      | Charles Korthout | 2.163 | 14-10-2026     | Parse component arity before QName expansion; bound adopted range collisions.             |
 //                      | Charles Korthout | 2.164  | 15-10-2026     | Validate and replace complete optional override arity families.                          |
+//                      | Charles Korthout | 2.165 | 15-10-2026     | Support abstract optional overrides with static XTSE3075 reference validation.           |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -5369,8 +5370,8 @@ internal sealed class Stylesheet
                 if (effective is not "public" and not "abstract")
                     throw new InvalidOperationException($"XTSE3060: Cannot override function '{nameAttr}' whose visibility is '{effective}'.");
                 ValidateFunctionOverrideSignature(overrideElem, def, nameAttr);
-                if (effective == "abstract" && def.MinimumArity < def.Arity)
-                    throw new NotSupportedException("Abstract optional function overrides remain outside the supported profile.");
+                if (effective == "abstract")
+                    AbstractOriginalReferenceValidator.Validate(overrideElem);
             }
         }
     }
@@ -9223,8 +9224,14 @@ internal sealed class Stylesheet
                 {
                     var overrideDef = XsltFunctionDefinition.FromElement(overrideElem, this);
                     if (overrideDef != null)
+                    {
+                        // Abstract declarations are absent from the exported callable view,
+                        // but still provide the keyword names of their concrete replacement.
+                        if (package.TryFindFunction(overrideDef.LocalName, overrideDef.NamespaceUri, overrideDef.Arity, out var original))
+                            overrideDef.OverriddenFunction = original;
                         for (int arity = overrideDef.MinimumArity; arity <= overrideDef.Arity; arity++)
                             overrides[(overrideDef.NamespaceUri, overrideDef.LocalName, arity)] = overrideDef;
+                    }
                 }
             }
 
