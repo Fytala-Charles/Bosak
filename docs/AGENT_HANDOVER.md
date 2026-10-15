@@ -1,3 +1,13 @@
+# REQ-128 engine implementation candidate - 2026-10-15
+
+Implementation branch feat/req128-value-of-insertion starts from main 5e13e77d988f559bddaf220fcc45e7d0c8a8b078 in the isolated req128-implementation-source worktree. User authorized this engine slice. REQ-128 is In Progress, owner Charles Korthout, unpublished source version 1.8.0. Public libraries remain 1.7.1 and published VS Code 0.2.3 bundles 1.7.1. Original Braid checkout/pin and concurrent root changes remain preserved.
+
+What was built: additive target/proposal/candidate/refusal API; snapshot-reference ownership; explicit template/LRE end eligibility; actual-closing-tag byte splice; strict insertion encodings and byte bounds; exact expanded select round-trip; original/candidate validation and controlled compilation; conservative whole-stylesheet/AST/signature proof; complete injective source-range provenance; defensive candidate exports and public inspection collections. Compiler preprocessing cannot evaluate caller static expressions. Existing expression edits retain their behavior. See docs/REQ-128-IMPLEMENTATION.md and the accepted contract for the exact restricted grammar/instruction coverage.
+
+Verification: 73 focused insertion tests, Release solution build and 84 language-server tests pass. Final reviewed solution passes 8,556/0/0 (XSLT 5,670); QT3 and qt4 gated pass 31,142/0/679 and 8,278/0/1,894 unchanged. docs/REQ-128-IMPLEMENTATION.json retains project/TRX/log hashes. Initial sandbox HTTP listener failures are preserved; the authorized network-fixture rerun passed. Collection freezing was moved into the inspector to preserve existing mid-walk cancellation instrumentation.
+
+Next: review/CI and exact-revision candidate packaging/fresh consumer checks. Publication/tagging requires separate approval. REQ-128 stays In Progress until supported delivery; Braid Apply/history/native acceptance are not established by engine fixtures. Preserve every earlier release tag/receipt, original Braid files, root work and .sweep-baselines/. Earlier entries below are historical.
+
 # VS Code 0.2.3 published and verified - 2026-10-15
 
 User approved exact candidate 9c310d3fc2447b29bf3dfad134d05fe65c7b71ce. Immutable vscode-v0.2.3 points there, not later REQ-128 docs main. Single tag-triggered workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38775517616 succeeds: 84 LS tests, highlighting/launcher tests, artifact and Marketplace publication. No duplicate dispatch or tag movement; no library publication.

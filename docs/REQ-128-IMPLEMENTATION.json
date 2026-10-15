@@ -1,0 +1,138 @@
+{
+  "date": "2026-10-15",
+  "status": "unpublished implementation candidate",
+  "sourceBase": "5e13e77d988f559bddaf220fcc45e7d0c8a8b078",
+  "version": "1.8.0",
+  "request": "REQ-128",
+  "requestStatus": "In Progress",
+  "owner": "Charles Korthout",
+  "focusedInsertionTests": 73,
+  "solution": {
+    "passed": 8556,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      {
+        "project": "Bosak.XPath.Api.Tests",
+        "passed": 411,
+        "failed": 0,
+        "total": 411,
+        "trxSha256": "eacdb898c206ad85346c4a5ea180baaad57a77f774f369b45036aae9a7cc4ba1"
+      },
+      {
+        "project": "Bosak.XPath.Compiler.Tests",
+        "passed": 66,
+        "failed": 0,
+        "total": 66,
+        "trxSha256": "c63b26918856525905109f991719014c574e572e2575d10a75fe2e20e5117a52"
+      },
+      {
+        "project": "Bosak.XPath.Core.Tests",
+        "passed": 132,
+        "failed": 0,
+        "total": 132,
+        "trxSha256": "868f6514bb3fb6549709a6dca028151cbe5c3ce16d7cefc2b27a405382d65add"
+      },
+      {
+        "project": "Bosak.XPath.Parser.Tests",
+        "passed": 202,
+        "failed": 0,
+        "total": 202,
+        "trxSha256": "434243ef4a33c29cd4d232dd76b377e912fe5cf5b1d30c6faa03268413187390"
+      },
+      {
+        "project": "Bosak.XPath.Providers.Database.Tests",
+        "passed": 47,
+        "failed": 0,
+        "total": 47,
+        "trxSha256": "b5e9e0027ec56644ad8f5ebc6d29e3790ccb7ff1b7eeec04f96912beb691ba18"
+      },
+      {
+        "project": "Bosak.XPath.Providers.Tests",
+        "passed": 153,
+        "failed": 0,
+        "total": 153,
+        "trxSha256": "98dee7c17cdb8079ac118402fea06a622d763ae3abb08bc8718f4fce957e5053"
+      },
+      {
+        "project": "Bosak.XPath.Runtime.Tests",
+        "passed": 269,
+        "failed": 0,
+        "total": 269,
+        "trxSha256": "32f93621eb7a67e8e92099ed7f912a36460de8605a871af9b58f983b9a356872"
+      },
+      {
+        "project": "Bosak.XPath.Standard.Tests",
+        "passed": 1303,
+        "failed": 0,
+        "total": 1303,
+        "trxSha256": "a457fa95680f99180757d61dc8c068f09f9474c7e4210ef9376ebf5a6c58d465"
+      },
+      {
+        "project": "Bosak.XQuery.Tests",
+        "passed": 303,
+        "failed": 0,
+        "total": 303,
+        "trxSha256": "fadcbe391b0662b575b0ecc984e4927e56f1d589e6a5c1153fc4d94ec1954979"
+      },
+      {
+        "project": "Bosak.Xslt.Tests",
+        "passed": 5670,
+        "failed": 0,
+        "total": 5670,
+        "trxSha256": "84373cb48691b868e1e33bf7d5b835168037974370dce50366e52ffe7985b6ee"
+      }
+    ]
+  },
+  "languageServer": {
+    "passed": 84,
+    "failed": 0
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "gateMembershipChanged": false,
+  "publicLibraries": "1.7.1",
+  "publishedExtension": "0.2.3 (engine 1.7.1)",
+  "consumerAdoption": "separate",
+  "logs": {
+    ".guard-build-reviewed-final.log": "44639620751fd1c7d06aa4041b27d30abb02123d0951f583ac257ea9ef4f7c39",
+    ".guard-tests-reviewed-final.log": "e24220b295aea514537f7c969a895b54fee85436a0981c86700242ea60595bfd",
+    ".guard-focused-reviewed.log": "9a6e0f893c3de46de799b62fcbb51469d6b93cb073f5eedd5d55662ced0005b7",
+    ".guard-language-server.log": "2dd27d657b123a667acf475e4a1c1ed87cfe73b563191e747fc58171775bb6c9",
+    ".guard-qt3-reviewed-final.log": "ef29c42a8e2a3d50dc2ee411e480d411d1f976e4f9d30980af6b9f452787c823",
+    ".guard-qt4-reviewed-final.log": "d6279efcab49343b85b3fb819aa86ec104738aad07f1ebc310a574cef7b19b22",
+    ".guard-doc-render.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
+  },
+  "sourceFiles": {
+    "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66",
+    "src/Bosak.Xslt/Authoring/AuthoringAttributeDescriptor.cs": "39189eea04136effb6fdacb8b9433acd03804d907b3b3a15e38206910d0317f8",
+    "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs": "d3d44a4310ed1ed53f81ce92bb6becf44e6dea2f91765cfe24ac6eba4d06da07",
+    "src/Bosak.Xslt/Authoring/AuthoringEdit.cs": "a4ad0237fdc636b1654ef2182f85e03ed2f008707b8cf6931c0bed65b242a353",
+    "src/Bosak.Xslt/Authoring/AuthoringFailure.cs": "ac484de436b62026860293c495230ece205c8677da50d44ea6b349d54074a2ba",
+    "src/Bosak.Xslt/Authoring/AuthoringFunctionSignatures.cs": "3fd53d8174da7a77fb16a82de5202a33b22b48a6a9a90bfbf5b3d18706da2e90",
+    "src/Bosak.Xslt/Authoring/AuthoringInspector.cs": "1e792d4e90fb27052685f4937d7e72b4406e13f29e148c0cb8b2919e26a49146",
+    "src/Bosak.Xslt/Authoring/AuthoringModuleDescriptor.cs": "4a97b3d55dbfa62f315c5ff9d0ee405673d07d7a1bb9737c35f92858b3e4664a",
+    "src/Bosak.Xslt/Authoring/AuthoringModuleUriResolverBridge.cs": "20c37a7e265af4247cdd1e01e1f67e92e530ade42e707015c64fd4f90bf313b8",
+    "src/Bosak.Xslt/Authoring/AuthoringNamedTypes.cs": "af6a965a7702058f910fe1e540c911a5d1aa1dc77860161e3b7f2748483e5481",
+    "src/Bosak.Xslt/Authoring/AuthoringNodeDescriptor.cs": "fb7bf92887f744cb7ad16b07f9393c69c1018ffc799eecb9b7f28fe457ea8acd",
+    "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs": "f5d1d5d5872f79a49866893564f77152b07dac7e93935fe19fba085182909e59",
+    "src/Bosak.Xslt/Authoring/AuthoringSource.cs": "fb2515302c222b9c0d621658a673719ecede0cd62016464eefdb372bcc175b27",
+    "src/Bosak.Xslt/Authoring/AuthoringValueOfInsertion.cs": "3594ad071fef9ecaf460dafd0dabc4ad1c334d2eef8e5ccf5a90007e01a253a1",
+    "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs": "939ce787d9d3588c8b79b94b0095d38758de006faebb7735e641041d65b18015",
+    "src/Bosak.Xslt/Authoring/ExpressionSlotContext.cs": "d8e39dddff9764a05d70835163356d5615ec80ddbc760f9874ba5f4624e8b22b",
+    "src/Bosak.Xslt/Authoring/IAuthoringModuleResolver.cs": "b94807cc19f4e0d10104edc3e8bc86d6f668d988d51f11b727eb0d6907ef2c52",
+    "src/Bosak.Xslt/Authoring/InsertionExpressionCoverage.cs": "a7231a2dccd79a8b702e114183403f398b6d026877c2ad9f4a8e24a4da33fd6b",
+    "src/Bosak.Xslt/Authoring/SourceRange.cs": "58fecd8a92a311c90f2c1e9578e44364bcf05cbbc2fab6de85b5cfecf3861f29",
+    "src/Bosak.Xslt/Authoring/SourceTagScanner.cs": "20c4f021c8573518d2632ccf63fa2a5aad531af52cd0e5ca8d6ab06c009900bd",
+    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "903aab2e9080560cc1db5e45116e38866a21fd9acf7e31bc6d3ed760f78ac994",
+    "src/Bosak.Xslt/Authoring/XsltAuthoring.cs": "29cd5284b03dc9b315c3f03437ad4a393f525c09c2728058e694bedcc460ea49"
+  }
+}

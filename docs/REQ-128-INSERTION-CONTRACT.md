@@ -1,12 +1,12 @@
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala REQ-128 source-preserving insertion design">
   <br><br><h1>REQ-128: value-of insertion contract</h1>
-  <p>Design for review, 15 October 2026</p>
+  <p>Accepted engine slice, 15 October 2026</p>
 </div>
 
 ## Status and decision boundary
 
-This resolves the design questions identified in the [consumer dossier](REQ-128-source-preserving-value-of-insertion.md). **No insertion API, capability, runtime port or UI is implemented.** REQ-128 remains Pending, target TBD, owner Unassigned; acceptance and implementation scheduling remain separate. API names below are proposed names, not available members. An additive API feature requires a minor release after acceptance; no version is reserved here.
+The user authorized implementation of this bounded engine contract on 15 October 2026. REQ-128 is **In Progress**, owned by **Charles Korthout**, targeting the **unpublished 1.8.0** minor release. The source now implements the additive engine API below; public packages remain 1.7.1 and VS Code 0.2.3 still bundles 1.7.1. Braid ports, UI, Apply/history and production adoption remain separate. See [implementation and verification](REQ-128-IMPLEMENTATION.md) for exact coverage and delivery status.
 
 Audit base: published engine 1.7.1 at `35e531c101bcbba13a2533f33a7decca5f18eddd`; source inspected at `d310b864aa5248d6c6c8fbd78aef51dd422a4dff`, whose source/test trees match that release. Existing `AuthoringSnapshot.ProposeExpressionEdit` replaces an existing attribute. `AuthoringEditCandidate` and its changed-slot marker cannot truthfully represent a newly inserted instruction. Integer descriptor IDs and old expression proposals remain unchanged by this design.
 
@@ -28,19 +28,27 @@ The engine decides eligibility and returns an opaque target; Braid never enables
 
 Children of a template can contain arbitrary constructs only when supported static validation covers them; eligibility is not a promise that all such constructs are supported. Inspect-only/unsupported regions elsewhere remain byte-preserved but cannot be silently treated as validated. Extending these boundaries needs separate fixtures and an explicit capability/coverage update.
 
-## Snapshot ownership and proposed API
+## Declared implementation coverage
+
+The first implementation deliberately refuses **all `use-when` attributes, static declarations requiring evaluation, shadow attributes on XSLT instructions, extension-element-prefixes and fixed/type namespace contexts** before calling a compiler. This includes literal use-when forms. Existing AVTs containing expressions, inline namespace declarations, keyword calls and AST constructs not explicitly walked by the insertion checker return `UnsupportedCoverage`. Literal AVTs, ordinary path/scalar/conditional/sequence/map/array expressions, for/let/quantified expressions and captured stylesheet function signatures are covered. Dynamic calls, arrows/pipelines, inline functions and unproven XSLT-only/schema-constructor signatures are deferred. Standard function signatures must exist in the engine function library; host extension registrations do not prove insertion eligibility.
+
+The declared XSLT instruction subset is `stylesheet`, `transform`, `output`, `template`, `param`, `variable`, `function`, `value-of`, `sequence`, `text`, `if`, `choose`, `when`, `otherwise`, `for-each`, `comment` and `processing-instruction`. Other instructions, type/component-reference annotations (`as`, `type`, `validation`, `mode`, `default-mode`, `use-attribute-sets`), typed XPath tests/casts and existing non-whitespace text under effective expand-text are outside proven insertion coverage. This closes deferred text-template, component and type binding paths without changing the general compiler.
+
+These conservative refusals prevent the existing compiler's runtime name resolution from being mistaken for complete static validation. They apply to the whole original and candidate stylesheet, not only the new select. Existing expression-edit APIs retain their previous behavior. Null arguments throw; unsupported coverage produces no candidate. Candidate `OriginalRange` is the zero-length old span; `InsertedRange` is the exact new instruction; `InsertedNode` and `SelectSlot` are actual candidate descriptors, and `ExportSource()` returns a defensive byte copy.
+
+## Snapshot ownership and engine API
 
 Use an additive structural contract instead of extending `AuthoringEditProposal` or changing expression-edit behavior.
 
-| Proposed member/type | Contract |
+| Member/type | Contract |
 |---|---|
 | `AuthoringCapabilities.SupportsValueOfInsertion` | Advertise true only after the entire declared engine slice is implemented and verified; no placeholder true flag |
-| Insertion encoding/size limits | Advertise independently of inspection's wider encoding list; the first-slice limits below are normative for this design |
+| `ValueOfInsertionSupportedEncodings` / `MaxValueOfInsertionSourceBytes` | Advertise independently of inspection's wider encoding list; the first-slice limits below are normative for this design |
 | `snapshot.GetValueOfInsertionTarget(parentDescriptor, cancellationToken)` | Return an eligible opaque target or a classified refusal for that exact descriptor/snapshot; discovery performs no new external IO |
-| `AuthoringInsertionTarget` | Immutable, engine-created, non-public constructor; internally retains its owning snapshot, module identity, parent identity and sole position `End` |
+| `AuthoringValueOfInsertionTarget` | Immutable, engine-created, non-public constructor; internally retains its owning snapshot, module identity, parent identity and sole position `End` |
 | `AuthoringValueOfInsertionProposal(target, selectExpressionText)` | Immutable target plus expanded XPath text; accepts no XML fragment, offset, QName, prefix, source range or caller-selected sibling position |
 | `snapshot.ProposeValueOfInsertion(proposal, cancellationToken)` | Return exactly one isolated structural candidate or one refusal, never a partially usable candidate |
-| `AuthoringStructuralEditCandidate` | Immutable input-snapshot identity, principal URI, candidate snapshot/source, affected ranges, complete surviving-node correspondence and explicit inserted instruction/select-slot identity |
+| `AuthoringValueOfInsertionCandidate` | Immutable input-snapshot identity, principal URI, candidate snapshot/source, affected ranges, complete surviving-node correspondence and explicit inserted instruction/select-slot identity |
 
 Null required arguments throw `ArgumentNullException`, consistently with the existing surface. Empty/incomplete expressions are classified proposal failures. Targets cannot be serialized, persisted across reopen or reconstructed from an integer ID. Out-of-process target transport is outside this slice.
 
@@ -131,4 +139,4 @@ Golden G1: an eligible explicit `<out></out>` under a template, with XML output,
 
 ## Delivery sequence and remaining acceptance
 
-The design decisions above are resolved for review. Next obtain maintainer acceptance of this bounded scope, API naming and ownership/scheduling; do not mark REQ-128 Accepted or reserve a release merely because this document exists. Implement the engine in a separate slice with real fixtures and explicit capability/coverage declarations, then deliver and verify a minor library release. Only after supported public delivery may Braid adapt its ports, acceptance/history and UI, with independent real-engine fidelity tests and native acceptance. No insertion button or fake capability ships in this design step.
+The bounded engine implementation is authorized and being prepared for 1.8.0. Complete review, exact-revision packaging and fresh consumer verification before requesting publication approval. Only after supported public delivery may Braid adapt its ports, acceptance/history and UI, with independent real-engine fidelity tests and native acceptance. The 38 groups above remain a cross-product acceptance plan: engine unit evidence does not establish the Braid-owned groups or native acceptance.

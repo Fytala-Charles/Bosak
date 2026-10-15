@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Capture standalone named-type contexts for authoring validation.                         |
 //                      | Charles Korthout | 0.4   | 13-10-2026     | Clarify discovery-order metadata versus module occurrence precedence.                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -110,7 +111,7 @@ public sealed class AuthoringModuleDescriptor
         EncodingName = encodingName;
         OriginalByteLength = originalByteLength;
         Version = version;
-        Edges = edges;
+        Edges = Array.AsReadOnly(edges.ToArray());
         Root = root;
         Precedence = precedence;
         NamedTypes = namedTypes;
