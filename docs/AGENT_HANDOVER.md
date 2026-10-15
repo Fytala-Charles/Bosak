@@ -1,3 +1,13 @@
+# Public 1.7.0 Braid verification; extension 0.2.2 prepared - 2026-10-15
+
+Parent main 87173bb9e115e0db97d8b9aea823962ef337c6a9 includes merged publication PR #303; immutable library v1.7.0 is 33efd8e5. Current Braid working-tree snapshot (280 files) builds cleanly and passes 843/0/0 tests against public nuget.org-only 1.7.0. Nine signed archives/cache/Infrastructure+Workbench output DLLs and exact approved assembly metadata verify. Original Braid files/status/pin unchanged. New public compatibility receipt/report are separate from the preserved candidate receipts.
+
+What was built: extension manifest/lockfile 0.2.2 and readme; isolated framework-dependent bundle at engine 1.7.0, with source/test trees equal released code. Compilation/highlighting/launcher/startup checks, 84 LS tests, packaged initialization/hover/three diagnostics cases and actual isolated hidden VS Code valid/XPST0017/live-correction checks pass. Initial manifest candidate and full payload/metadata evidence: docs/VSCODE-0.2.2-PREPARATION.json. No installed user extension/profile change or Marketplace publication.
+
+Eight fresh public-1.7.0 closure probes: 3 controls pass, 5 fail. Escaping direct/keyword/nested original calls lose lexical binding; cross-override execution retargets to WRONG. Scope report/receipt preserve the red baseline and nine public package/output metadata checks. No closure implementation claimed by this preparation step.
+
+Next: integrate preparation after exact-head CI, then rebuild/reverify exact merged VSIX before separate publication approval. Implement the bounded escaping-inline-original correction in a separate engine slice after preserving this baseline. Keep overlapping families/general package graphs separate. Source/public libraries 1.7.0; Marketplace 0.2.1 bundles 1.6.0. No public API/REQ/gate change; REQ-126 In Progress. Preserve original Braid, concurrent REQ-128 edits, .sweep-baselines/ and historical receipts. Earlier entries below are historical.
+
 # 1.7.0 published and verified - 2026-10-15
 
 User approved exact revision 33efd8e5a2dda2e16e4cdc69df87dbc01a8a1961; immutable v1.7.0 points there. One tag-triggered Release workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38737338912 succeeds: 8,465 solution tests and ten NuGet uploads. GitHub release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.7.0. No duplicate dispatch or tag movement.

@@ -1,0 +1,166 @@
+{
+  "date": "2026-10-15",
+  "extensionVersion": "0.2.2",
+  "engineVersion": "1.7.0",
+  "status": "Unpublished candidate; separate Marketplace approval required",
+  "initialEngineRevision": "87173bb9e115e0db97d8b9aea823962ef337c6a9",
+  "initialManifestFromWorkingTree": true,
+  "codeTrees": {
+    "src": "7744ba00e7f38530523ba85c6eb6094da9c550b7",
+    "tests": "f8b243c8cf36b94855428911eb409fd7908cf995"
+  },
+  "sourceAndTestTreesMatchReleasedEngine": true,
+  "archive": "D:\\Development\\Bosak\\.guard-tmp\\vscode-bosak-0.2.2-reviewed.vsix",
+  "archiveSha256": "07e21b56a9907bc941336723e5496deeabb1c2e220529ae3c86c6cdfabdd652a",
+  "serverPayloadMatchesPublishOutput": true,
+  "assemblyMetadata": [
+    {
+      "name": "Bosak.LanguageServer",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "version": "1.7.0.0",
+      "informationalVersion": "1.7.0+87173bb9e115e0db97d8b9aea823962ef337c6a9"
+    }
+  ],
+  "languageServerTests": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0
+  },
+  "protocol": {
+    "extensionVersion": "0.2.2",
+    "engineVersion": "1.7.0",
+    "archiveSha256": "07e21b56a9907bc941336723e5496deeabb1c2e220529ae3c86c6cdfabdd652a",
+    "bundledProjects": [
+      "Bosak.LanguageServer/1.7.0",
+      "Bosak.XPath.Api/1.7.0",
+      "Bosak.XPath.Compiler/1.7.0",
+      "Bosak.XPath.Core/1.7.0",
+      "Bosak.XPath.Parser/1.7.0",
+      "Bosak.XPath.Providers/1.7.0",
+      "Bosak.XPath.Runtime/1.7.0",
+      "Bosak.XPath.Standard/1.7.0",
+      "Bosak.XQuery/1.7.0",
+      "Bosak.Xslt/1.7.0"
+    ],
+    "packagedStdioChecks": [
+      {
+        "expression": "divide(a := 9)",
+        "diagnostics": []
+      },
+      {
+        "expression": "divide(?, b := 3)(9)",
+        "diagnostics": []
+      },
+      {
+        "expression": "divide(unknown := 9)",
+        "diagnostics": [
+          {
+            "range": {
+              "start": {
+                "line": 0,
+                "character": 269
+              },
+              "end": {
+                "line": 0,
+                "character": 289
+              }
+            },
+            "severity": 1,
+            "code": "XPST0017",
+            "source": "bosak",
+            "message": "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+          }
+        ]
+      }
+    ]
+  },
+  "isolatedEditor": {
+    "extensionVersion": "0.2.2",
+    "results": [
+      {
+        "name": "valid",
+        "languageId": "xslt",
+        "diagnostics": []
+      },
+      {
+        "name": "invalid",
+        "languageId": "xslt",
+        "diagnostics": [
+          "XPST0017: XPST0017: Unknown keyword argument 'unknown' in call of divide."
+        ]
+      },
+      {
+        "name": "corrected-live",
+        "diagnostics": []
+      }
+    ]
+  },
+  "extensionChecks": [
+    "TypeScript compilation",
+    "TextMate highlighting",
+    "DLL/apphost launch selection",
+    "Startup registration"
+  ],
+  "publishedExtension": "0.2.1 with engine 1.6.0",
+  "remaining": [
+    "Integrate after successful exact-head CI",
+    "Rebuild exact merged revision; repeat package/protocol/editor checks",
+    "Present exact merged candidate for separate Marketplace publication approval"
+  ],
+  "limits": [
+    "Package-dependent editor signatures and external module acquisition unchanged",
+    "No engine/API/gate/REQ status change"
+  ],
+  "logs": {
+    "vscode022-publish.log": "33dbffbd0b26dd636d591e573bce521a6fb04973ec348107b4f16e4f76bb890b",
+    "vscode022-package.log": "cf33eaf600156737111c5eebe379e63637da47aeceb13c3a012206a90bfe1dff",
+    "vscode022-ls.log": "5e671d19d24f3dbe4345f3a0d067d98088a3bedb1f8c07988609da30ce92e6b1",
+    "vscode022-editor-stdout.log": "51d74feab13f952f1e9466993e7650ace32e63a978a611379f97d2a6b5069d5e",
+    "vscode022-editor-stderr.log": "6a4230dccd226162649b1fc3bfdd9b16b95976a8d43ffc01db5f9794e1e9deb2",
+    "vscode022-ls-results/charl_CHARLES_2026-10-15_16_44_05_net10.0.trx": "3a89586183133f4ebc420f8471e9b5c3be93d240094f8301cf1bee156e6749b2"
+  }
+}
