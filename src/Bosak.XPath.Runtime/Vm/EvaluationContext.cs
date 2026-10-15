@@ -122,6 +122,7 @@
 //                      | Charles Korthout | 2.44 | 13-10-2026     | Store structural binding aliases alongside enumeration aliases
 //                      | Charles Korthout | 2.45 | 13-10-2026     | Carry a package-local host callback for nominative record coercion
 //                      | Charles Korthout | 2.46 | 13-10-2026     | Distinguish nominative record casting from coercion in the host callback
+//                      | Charles Korthout | 2.47  | 15-10-2026     | Snapshot and restore hidden bound aliases without capturing ordinary function registries. |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -1343,6 +1344,29 @@ public sealed class EvaluationContext
                 _variadicMinArity[(namespaceUri, localName)] = newMin.Value;
         }
         return removed;
+    }
+
+    /// <summary>Captures hidden aliases whose targets have lexical function-item identity.</summary>
+    /// <returns>The alias snapshot, or null when no lexical alias is registered.</returns>
+    internal Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? SnapshotBoundFunctionAliases()
+    {
+        Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? snapshot = null;
+        foreach (var (key, signature) in _functions)
+            if (signature.IsHiddenFromFunctionLookup && signature.FunctionItemTarget is { IsBoundFunctionItem: true })
+                (snapshot ??= new())[key] = signature;
+        return snapshot;
+    }
+
+    /// <summary>Restores only hidden lexical aliases, leaving ordinary function bindings intact.</summary>
+    /// <param name="snapshot">The aliases to restore, or null to remove the current aliases.</param>
+    internal void RestoreBoundFunctionAliases(Dictionary<(string NamespaceUri, string LocalName, int Arity), FunctionSignature>? snapshot)
+    {
+        if (SnapshotBoundFunctionAliases() is { } current)
+            foreach (var key in current.Keys)
+                UnregisterFunction(key.NamespaceUri, key.LocalName, key.Arity);
+        if (snapshot is not null)
+            foreach (var signature in snapshot.Values)
+                RegisterFunction(signature);
     }
 
     /// <summary>
