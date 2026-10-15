@@ -1,3 +1,15 @@
+# VS Code 0.2.2 published, verified and installed locally - 2026-10-15
+
+User explicitly requested publication and local VSIX installation of exact verified revision f25474fd5f73d045d2d9bc2f8a22b56fb23491ab. Immutable vscode-v0.2.2 points there. Publication workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38758521326 succeeds: highlighting/launcher checks and 84 language-server tests, package artifact and Marketplace publication. No duplicate dispatch or tag movement.
+
+What was built: public Marketplace 0.2.2 verified against the workflow VSIX file set and bytes (runtime/client/grammars/assets/dependencies); all ten bundled assemblies are 1.7.0.0 with informational revision 1.7.0+f25474fd5f73d045d2d9bc2f8a22b56fb23491ab. Downloaded public package passes initialization/hover handling/three diagnostics probes and isolated hidden VS Code valid/XPST0017/live-correction checks. docs/VSCODE-0.2.2-PUBLICATION.json preserves workflow/public download, payload hashes and installation evidence separately from original preparation/final-candidate receipts.
+
+The user-requested normal local installation was upgraded from fytala.vscode-bosak 0.2.1 to 0.2.2 using the published workflow VSIX. code --list-extensions confirms 0.2.2; installed manifest and all 286 runtime/client payload files match the workflow and public package. Existing user windows were not restarted; Developer: Reload Window activates the update there. Raw local path/installation record stays in ignored .guard-tmp/vscode022-local-installation.json; public receipt uses version/hash evidence. No user settings or original Braid files were edited.
+
+Canonical/extension documentation and preparation follow-up are synchronized. Public libraries remain immutable 1.7.0 at 33efd8e5; public Braid compatibility 843 tests remains separate from production adoption. Draft PR #305 contains unpublished 1.7.1 escaping-inline-original fix at 8e9c4984 and is not bundled or merged by this publication. REQ-126 In Progress; no API/gate changes. Package-dependent editor signatures/module acquisition limits remain explicit. Preserve concurrent REQ-128 work and .sweep-baselines/.
+
+Next: integrate publication documentation after successful exact-head CI, then review PR #305 separately. Do not repeat extension publication or move either release tag. Preserve all original receipts, Braid checkout and local settings. Earlier entries below are historical.
+
 # Public 1.7.0 Braid verification; extension 0.2.2 prepared - 2026-10-15
 
 Parent main 87173bb9e115e0db97d8b9aea823962ef337c6a9 includes merged publication PR #303; immutable library v1.7.0 is 33efd8e5. Current Braid working-tree snapshot (280 files) builds cleanly and passes 843/0/0 tests against public nuget.org-only 1.7.0. Nine signed archives/cache/Infrastructure+Workbench output DLLs and exact approved assembly metadata verify. Original Braid files/status/pin unchanged. New public compatibility receipt/report are separate from the preserved candidate receipts.
