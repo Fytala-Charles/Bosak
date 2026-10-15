@@ -1,3 +1,13 @@
+# Braid 1.6.0 compatibility verified - 2026-10-15
+
+Bosak main base 17374b23 contains verified 1.6.0 publication; immutable release revision 3715b2f98bbf80883358d31234224cbb9cd94cad. User agreed to the proposed order: isolated Braid 1.6.0 verification, extension alignment, then scope abstract optional originals separately from overlapping families. This step completes the Braid compatibility check.
+
+What was built: an isolated 279-file current Braid working-tree snapshot at HEAD 61bfd62f142470bac84278ade7690c7be603d997. Copy-only adaptations replace the engine ProjectReference with public Bosak.Xslt 1.6.0, remove engine projects/revision-check target, record release revision, disable MinVer and use a fresh nuget.org-only cache. Build zero warnings/errors; full copied solution 836/0/0 (Core 27, Application 291, Infrastructure 314, Workbench 204). Nine engine archives match the publication receipt; Infrastructure and Workbench test-output DLL bytes match package assets. Nine assembly versions are 1.6.0.0 and informational versions match the exact release revision.
+
+Receipt docs/BRAID-1.6.0-COMPATIBILITY.json and report .md; immutable original-file manifest, copy/logs/cache/TRX/version evidence retained under .guard-tmp/braid160-*. Original Braid source/test/project/docs files and Git status still match the snapshot; production pin remains 5bab4799783569d538cec9b03d37a57454f0eebc. No writes, commit or push in Braid. Its substantial local work is preserved. The previous 836-test 1.5.0 result remains unchanged; current evidence establishes automated compatibility only, not production adoption, native acceptance or independent consumer approval.
+
+Next: align the VS Code extension with released engine 1.6.0 and verify diagnostics/launcher/package/editor behavior before a separate extension publication approval. Then scope abstract optional originals against current specification with explicit error semantics and regression boundaries; keep overlapping families separate. No engine/API/REQ/gate changes here; REQ-126 In Progress. Preserve .sweep-baselines/, historical release receipts and immutable v1.6.0. Earlier entries below are historical.
+
 # 1.6.0 published and verified - 2026-10-15
 
 User explicitly approved tagging/publication of exact final revision 3715b2f98bbf80883358d31234224cbb9cd94cad after PR #294 integration and successful CI. Immutable v1.6.0 points there. Release workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38702411164 succeeds: 8,372 solution tests and ten NuGet uploads. GitHub release: https://github.com/Fytala-Charles/Bosak/releases/tag/v1.6.0. No duplicate workflow dispatch or tag movement.
