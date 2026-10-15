@@ -554,6 +554,7 @@
 //                      | Charles Korthout | 7.38  | 14-10-2026     | Permit primitive numeric argument coercion in XSLT 4.0 (source 1.3.2).                   |
 //                      | Charles Korthout | 7.39  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 //                      | Charles Korthout | 7.40   | 15-10-2026     | Bind original arity families, defaults, escaping items and distinct memoization.         |
+//                      | Charles Korthout | 7.41  | 15-10-2026     | Distinguish a containing package override from contributed bindings during lookup.         |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -4582,7 +4583,11 @@ internal sealed class TransformEngine
                 // internal alias, since its plain name now resolves to the override.
                 if (def.OverriddenFunction is { } original)
                 {
-                    overriddenKeys.Add(key);
+                    // Only contributions replacing this package's own declaration
+                    // redirect lookup to the original alias. An override declared in
+                    // this package is itself the package's own lookup target.
+                    if (ownView.TryGetValue(key, out var ownDefinition) && !ReferenceEquals(ownDefinition.Element, def.Element))
+                        overriddenKeys.Add(key);
                     _context.RegisterFunction(new FunctionSignature
                     {
                         NamespaceUri = original.NamespaceUri,

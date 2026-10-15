@@ -1,0 +1,182 @@
+{
+  "date": "2026-10-15",
+  "parentRevision": "e16851e1297758f9043a845134ad59ef293637fc",
+  "pr": "https://github.com/Fytala-Charles/Bosak/pull/301",
+  "sourceVersion": "1.7.0",
+  "publishedVersion": "1.6.0",
+  "correction": "Containing-package overrides remain their own dynamic lookup targets; only external contributions redirect own-view lookup to an original alias.",
+  "newCases": 5,
+  "transitiveFixtureCases": 45,
+  "preCorrectionCandidate": {
+    "revision": "e16851e1297758f9043a845134ad59ef293637fc",
+    "tests": {
+      "passed": 166,
+      "failed": 1,
+      "total": 167,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-principal-red-results/charl_CHARLES_2026-10-15_14_11_16_net10.0.trx",
+          "passed": 166,
+          "failed": 1,
+          "total": 167
+        }
+      ]
+    },
+    "initialDiscovery": {
+      "passed": 2,
+      "failed": 1,
+      "log": ".guard-tmp/transitive-explicit-probe.log"
+    }
+  },
+  "expandedBaseline": {
+    "revision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab",
+    "tests": {
+      "passed": 5,
+      "failed": 40,
+      "total": 45,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-principal-baseline-results/charl_CHARLES_2026-10-15_14_11_40_net10.0.trx",
+          "passed": 5,
+          "failed": 40,
+          "total": 45
+        }
+      ]
+    },
+    "note": "Distinct from the original 40-case 4/36 and eight-probe 1/7 baselines."
+  },
+  "verification": {
+    "solution": {
+      "passed": 8465,
+      "failed": 0,
+      "total": 8465,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_06_net10.0.trx",
+          "passed": 202,
+          "failed": 0,
+          "total": 202
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_06_net10.0[1].trx",
+          "passed": 66,
+          "failed": 0,
+          "total": 66
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0.trx",
+          "passed": 269,
+          "failed": 0,
+          "total": 269
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[1].trx",
+          "passed": 132,
+          "failed": 0,
+          "total": 132
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[2].trx",
+          "passed": 411,
+          "failed": 0,
+          "total": 411
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[3].trx",
+          "passed": 303,
+          "failed": 0,
+          "total": 303
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[4].trx",
+          "passed": 1303,
+          "failed": 0,
+          "total": 1303
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[5].trx",
+          "passed": 47,
+          "failed": 0,
+          "total": 47
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_07_net10.0[6].trx",
+          "passed": 153,
+          "failed": 0,
+          "total": 153
+        },
+        {
+          "file": ".guard-tmp/transitive-principal-solution-results/charl_CHARLES_2026-10-15_14_12_08_net10.0.trx",
+          "passed": 5579,
+          "failed": 0,
+          "total": 5579
+        }
+      ]
+    },
+    "xslt": [
+      5579,
+      0,
+      0
+    ],
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "total": 84,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-principal-ls-results/charl_CHARLES_2026-10-15_14_12_21_net10.0.trx",
+          "passed": 84,
+          "failed": 0,
+          "total": 84
+        }
+      ]
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ],
+    "focused": {
+      "passed": 167,
+      "failed": 0,
+      "total": 167,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-principal-focused-results/charl_CHARLES_2026-10-15_14_11_38_net10.0.trx",
+          "passed": 167,
+          "failed": 0,
+          "total": 167
+        }
+      ]
+    },
+    "combinedCases": 167,
+    "buildErrors": 0
+  },
+  "files": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "d894e3cc83b5e08d6b654bbd781f46ca2f594ed3225671787c99f45ccf8858fb",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "66829dae7a45a34819c0c66357f856a1f122db6928be7bcd2135635b07b9f854",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40TransitiveAbstractAdoptionTests.cs": "2a0be1e601a1b89a8d259dba741eed76830df28bc95ddd58c687c2fb2f4333ee"
+  },
+  "originalImplementationReceipt": {
+    "path": "docs/XSLT40-TRANSITIVE-ABSTRACT-ADOPTION.json",
+    "sha256": "3399cb3818509f18fa74eb307e2b3d99cfb5e6aaf3965ec7cf895127ec9fbd39",
+    "preservedUnchanged": true
+  },
+  "logs": {
+    ".guard-tmp/transitive-principal-baseline.log": "37601d738fc1182b6efa8a680d7fc7ce110146a49323683e9cd5c497a4df3cc4",
+    ".guard-tmp/transitive-principal-build.log": "f2300094988233062a8b62ad5927f09e257496ce645537a7f8dce088ff25d2ae",
+    ".guard-tmp/transitive-principal-focused.log": "49821518cfe3a3c79cfff0b50ebcd3058e3fc8439c89560548f3e0132b0888d3",
+    ".guard-tmp/transitive-principal-ls.log": "70feefa08a7b0e9be2ee143a08b8a8ab5320d75bfc96cdd0e8bc5331a92499d9",
+    ".guard-tmp/transitive-principal-qt3.log": "88911e659e89745f073b8531a95a74bb812aebd955478b8a34b64f8942b8332c",
+    ".guard-tmp/transitive-principal-qt4.log": "9c9d61d75f2c395b12f2d32948843d51ddf753aef4143f3a0fb32ddca4389b5b",
+    ".guard-tmp/transitive-principal-red.log": "5fd54b1cded962183b2bbee37d0768b4849b7b77f97f131287810ef3932fbd68",
+    ".guard-tmp/transitive-principal-solution.log": "0c794bc40deddc9bce03acf0dd0f8039ce27091358d546f004659b0acb0cfa71"
+  },
+  "deliveryFollowup": ".guard-tmp/transitive-principal-delivery.json records exact committed-revision package/assembly/CI proof.",
+  "publication": "Not performed; no API/version/REQ-status/gate or release-tag change."
+}

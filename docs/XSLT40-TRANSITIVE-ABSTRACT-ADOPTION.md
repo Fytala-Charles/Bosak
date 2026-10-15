@@ -14,19 +14,29 @@ Compatibility checks retain XTSE3070 for minimum-arity/type/return-type mismatch
 
 ## Implementation
 
-All engine changes are internal to `Stylesheet`:
+`Stylesheet` implements component selection and binding:
 
 - Abstract declarations participate in the component surface while dynamic lookup keeps its existing abstract filter.
 - Adopted abstract components carry the original declaration and their containing-package visibility separately. Override matching and explicit acceptance can resolve that view; hidden views are never exported as callable functions.
 - Concrete function contributions are forwarded through an adoption edge only when that edge accepts the matching abstract component as abstract. Local declarations and hidden/private edges preserve their bindings.
 
+The runtime lookup interceptor distinguishes replacements contributed to a package from overrides declared in that package. A concrete override declared in an explicit principal package remains its own dynamic lookup target; a used library still resolves its own public original when another package contributes a replacement.
+
 General public-component re-export, intermediate concrete override chains and arbitrary adoption graphs are not established by this slice. No public API is added. The authoring classifier, runtime public API and conformance gate membership are unchanged.
+
+## Explicit principal-package follow-up
+
+Final review added five cases: four call paths from an explicit principal `xsl:package` and a public-original lookup control in the declaring library. The earlier candidate passed four and failed one of these additions: principal dynamic lookup incorrectly selected the abstract original. The runtime correction preserves both the containing package's own override and the declaring library's public original.
+
+Final repeated verification passes **8,465/0/0** solution tests (XSLT **5,579/0/0**), language server **84/0/0**, and unchanged frozen gates **31,142/0/679** and **8,278/0/1,894**.
+
+The final fixture has 45 cases. Against the unchanged merged baseline it passes five controls and fails 40 feature cases; the combined selection has 167 cases. [Supplemental correction evidence](XSLT40-TRANSITIVE-PRINCIPAL-PACKAGE-FIX.json) preserves these results separately from the 40-case implementation receipt below. Both implicit stylesheet packages and explicit principal packages are covered. No escaping-inline-closure behavior is inferred from these function-item tests.
 
 ## Verification and preserved baselines
 
-The final 40-case fixture passes four controls and fails 36 feature probes against exact merged candidate `d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab` (unpublished 1.7.0). These results are distinct from the earlier eight-probe 1/7 scope baseline. The four existing controls cover the direct path, reduced-upper-bound rejection, hidden absent execution and principal abstract-exposure validation. A public-1.6.0 run of this final fixture is not claimed.
+The original 40-case fixture passes four controls and fails 36 feature probes against exact merged candidate `d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab` (unpublished 1.7.0). These results are distinct from the earlier eight-probe 1/7 scope baseline. The four existing controls cover the direct path, reduced-upper-bound rejection, hidden absent execution and principal abstract-exposure validation. A public-1.6.0 run of this final fixture is not claimed.
 
-Release verification passes **8,460/0/0** solution tests, including XSLT **5,574/0/0**, plus language server **84/0/0**. Frozen gates remain QT3 **31,142/0/679** and qt4 gate-only **8,278/0/1,894**.
+The original 40-case implementation verification passed **8,460/0/0** solution tests, including XSLT **5,574/0/0**, plus language server **84/0/0**. Frozen gates remain QT3 **31,142/0/679** and qt4 gate-only **8,278/0/1,894**.
 
 [Implementation evidence](XSLT40-TRANSITIVE-ABSTRACT-ADOPTION.json) records full-suite/gate results and fixture/source/log/TRX hashes. Earlier baseline and intermediate attempts remain under `.guard-tmp/transitive-implementation-*`; original scope and direct-override receipts are retained unchanged. Exact committed-revision package metadata and CI evidence are recorded with the implementation review PR and `.guard-tmp/transitive-implementation-delivery.json`.
 

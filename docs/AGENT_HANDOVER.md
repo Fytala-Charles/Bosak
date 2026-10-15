@@ -1,3 +1,13 @@
+# Transitive explicit-principal lookup corrected - 2026-10-15
+
+Parent implementation e16851e1297758f9043a845134ad59ef293637fc; draft PR https://github.com/Fytala-Charles/Bosak/pull/301. Final review found a runtime lookup difference with an explicit principal xsl:package: its own concrete override was redirected to the abstract original. The lookup interceptor now uses declaration identity to distinguish a containing package override from a replacement contributed by another package. Public-original lookup in the declaring library is preserved.
+
+What was built: five added cases (45 transitive fixture cases, 167 combined cases). Against the prior exact candidate, aggregate 166 pass/1 fail; all 167 focused source cases pass after correction. Expanded final fixture baseline against unchanged d6b984cb merged candidate is 5 pass/40 fail. Original 40-case 4/36 baseline, scope 1/7, implementation receipt and initial candidate package/CI proof remain separate. New evidence docs/XSLT40-TRANSITIVE-PRINCIPAL-PACKAGE-FIX.json; logs/TRX .guard-tmp/transitive-principal-* and initial discovery .guard-tmp/transitive-explicit-probe-*.
+
+Final verification: solution 8,465/0/0, XSLT 5,579/0/0, language server 84/0/0; frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894.
+
+Next: update PR #301 with exact-head package/assembly/CI proof before integration. Delivery receipt .guard-tmp/transitive-principal-delivery.json. No public API or source-version change beyond unpublished 1.7.0; published libraries and extension bundle remain 1.6.0. Escaping inline closures, overlapping families, intermediate concrete override chains/general re-export graphs and editor package signatures stay separate. REQ-126 In Progress; no publication, upstream submission, gate promotion or tag movement. Preserve .sweep-baselines/, Braid checkout and all earlier receipts. Earlier entries below are historical.
+
 # Transitive abstract optional adoption implemented - 2026-10-15
 
 Implementation parent e718914f60825b5c6f3a761037aba619cb0da1ec (merged scope PR #300 after successful head CI 38729486694); branch feat/transitive-abstract-adoption. Earlier engine PR #299 remains merged at d6b984cb. Source remains unpublished 1.7.0. One A-to-B-to-C abstract optional family resolves B's adopted identity/visibility separately from A's declaration and forwards C bindings only across explicitly abstract adoption edges. Principal/A/B calls, keywords, defaults/private scope and escaping named/partial items are covered. Local exposure validation retains declared visibility; hidden/default-hidden/private boundaries remain intact. No public API.

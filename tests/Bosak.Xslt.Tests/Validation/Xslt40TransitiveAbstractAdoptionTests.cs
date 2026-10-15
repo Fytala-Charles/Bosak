@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Verify explicit principal-package lookup and public-original lookup isolation.             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -211,6 +212,35 @@ public class Xslt40TransitiveAbstractAdoptionTests
     [Fact]
     public void DefaultHiddenAdoptionCannotBeOverridden() => Assert.Contains("XTSE3060", Assert.ThrowsAny<Exception>(() => Run(Principal("B", "'unused'"), true,
         libraryB: LibraryB.Replace("<xsl:accept component='function' names='p:f#3' visibility='abstract'/>", ""))).Message);
+
+    private static string ExplicitPrincipal(string principal)
+    {
+        var doc = XDocument.Parse(principal);
+        doc.Root!.Name = XName.Get("package", "http://www.w3.org/1999/XSL/Transform");
+        doc.Root.SetAttributeValue("name", "urn:transitive:C");
+        doc.Root.SetAttributeValue("package-version", "1.0");
+        doc.Root.SetAttributeValue("declared-modes", "no");
+        return doc.ToString();
+    }
+
+    /// <summary>Explicit principal packages preserve static and dynamic concrete bindings.</summary>
+    /// <param name="call">The principal or library call path.</param>
+    [Theory]
+    [InlineData("p:f('A')")]
+    [InlineData("p:from-a()")]
+    [InlineData("p:from-b()")]
+    [InlineData("function-lookup(QName('urn:transitive','f'),1)('A')")]
+    public void ExplicitPrincipalPackageKeepsConcreteBinding(string call) => Assert.Equal("AXY", Run(ExplicitPrincipal(Principal("B", call))));
+
+    /// <summary>Lookup in a declaring library still selects its own public declaration.</summary>
+    [Fact]
+    public void PublicOriginalLookupRemainsInDeclaringLibrary()
+    {
+        var original = LibraryA.Replace("visibility='abstract'", "visibility='public'")
+            .Replace("select=\"'C'\"/></xsl:function>", "select=\"'C'\"/><xsl:sequence select=\"'BASE'\"/></xsl:function>")
+            .Replace("p:f('A')", "function-lookup(QName('urn:transitive','f'),1)('A')");
+        Assert.Equal("BASE", Run(ExplicitPrincipal(Principal("A", "p:from-a()")), libraryA: original));
+    }
 
     private sealed class Resolver(string libraryA, string libraryB) : IXsltUriResolver
     {
