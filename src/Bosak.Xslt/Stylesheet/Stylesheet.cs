@@ -325,6 +325,7 @@
 //                      | Charles Korthout | 2.163 | 14-10-2026     | Parse component arity before QName expansion; bound adopted range collisions.             |
 //                      | Charles Korthout | 2.164  | 15-10-2026     | Validate and replace complete optional override arity families.                          |
 //                      | Charles Korthout | 2.165 | 15-10-2026     | Support abstract optional overrides with static XTSE3075 reference validation.           |
+//                      | Charles Korthout | 2.166 | 15-10-2026     | Resolve adopted abstract functions and propagate concrete bindings through adoption.     |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -1656,7 +1657,7 @@ internal sealed class Stylesheet
         if (!package.IsPackage) return true;
         var exposed = package.GetExposedVisibility("function", def.LocalName, def.NamespaceUri, def.Arity);
         var effective = exposed ?? def.Visibility;
-        return effective is "public" or "final";
+        return effective is "public" or "final" or "abstract";
     }
 
     /// <summary>
@@ -5362,10 +5363,8 @@ internal sealed class Stylesheet
                 if (!seenOverrides.Add((local, ns, arity)))
                     throw new InvalidOperationException($"XTSE0770: Duplicate overriding function declaration '{{{ns}}}{local}#{arity}'.");
                 // XTSE3058: the override must be homonymous with a component of the used package.
-                if (!package.TryFindFunction(local, ns, arity, out var def) || def == null || def.Arity != arity)
+                if (!package.TryFindFunctionForOverride(local, ns, arity, out var def, out var effective) || def == null || def.Arity != arity)
                     throw new InvalidOperationException($"XTSE3058: xsl:override function '{nameAttr}#{arity}' does not match any function in the used package.");
-                var exposed = package.GetExposedVisibility("function", local, ns, arity);
-                var effective = exposed ?? def.Visibility;
                 // XTSE3060: only public or abstract components may be overridden.
                 if (effective is not "public" and not "abstract")
                     throw new InvalidOperationException($"XTSE3060: Cannot override function '{nameAttr}' whose visibility is '{effective}'.");
@@ -6795,6 +6794,25 @@ internal sealed class Stylesheet
             options.OverrideAttributeSets.Count == 0)
             return;
         (_packageOverrideContributions ??= new()).Add((user, options));
+        // Forward only replacements of abstract functions adopted across this edge.
+        // Locally declared, hidden and private components keep their existing bindings.
+        foreach (var package in _usedPackages)
+        {
+            var adoption = _usedPackageOptions.GetValueOrDefault(package);
+            var forwarded = new PackageUseOptions();
+            foreach (var element in options.OverrideFunctions)
+            {
+                var (local, ns) = ExpandVariableName(element, element.Attribute("name")!.Value);
+                int arity = element.Elements(XName.Get("param", XslNamespace)).Count();
+                if (TryFindFunction(local, ns, arity, out _)) continue;
+                if (package.TryFindFunctionForOverride(local, ns, arity, out var original, out var visibility)
+                    && original?.Visibility == "abstract" && visibility == "abstract"
+                    && ApplyAcceptVisibility(visibility, adoption, "function", local, ns, arity) == "abstract")
+                    forwarded.OverrideFunctions.Add(element);
+            }
+            if (forwarded.OverrideFunctions.Count != 0)
+                package.RegisterPackageOverrideContribution(user, forwarded);
+        }
     }
 
     /// <summary>
@@ -7778,7 +7796,11 @@ internal sealed class Stylesheet
             var functions = new List<XsltFunctionDefinition>();
             CollectFunctions(name.LocalName, name.NamespaceUri, functions);
             if (functions.Count == 0)
-                return null;
+            {
+                var adopted = GetAbstractFunctionComponents().FirstOrDefault(c => c.Definition.LocalName == name.LocalName
+                    && c.Definition.NamespaceUri == (name.NamespaceUri ?? "") && c.Visibility == "abstract");
+                return adopted.Definition is null ? null : (adopted.Visibility, true, "function");
+            }
             var def = functions[0];
             var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
             return (def.Visibility, isExplicit, "function");
@@ -7788,6 +7810,8 @@ internal sealed class Stylesheet
             var isExplicit = foundDef.Element.Attribute("visibility")?.Value is not null;
             return (foundDef.Visibility, isExplicit, "function");
         }
+        if (TryFindFunctionForOverride(name.LocalName, name.NamespaceUri, name.Arity, out foundDef, out var visibility) && foundDef != null)
+            return (visibility ?? foundDef.Visibility, true, "function");
         return null;
     }
 
@@ -7876,11 +7900,16 @@ internal sealed class Stylesheet
         }
         if (componentType is "function" or "*")
         {
+            var declared = new HashSet<(string, string, int)>();
             foreach (var def in GetAllFunctionDefinitionsForExpose())
             {
+                declared.Add((def.NamespaceUri, def.LocalName, def.Arity));
                 var isExplicit = def.Element.Attribute("visibility")?.Value is not null;
                 yield return (def.Visibility, isExplicit, "function", def.LocalName, def.NamespaceUri, def.Arity);
             }
+            foreach (var (definition, visibility) in GetAbstractFunctionComponents())
+                if (visibility == "abstract" && declared.Add((definition.NamespaceUri, definition.LocalName, definition.Arity)))
+                    yield return (visibility, true, "function", definition.LocalName, definition.NamespaceUri, definition.Arity);
         }
         if (componentType is "variable" or "*")
         {
@@ -8001,6 +8030,51 @@ internal sealed class Stylesheet
             }
         }
         return def != null;
+    }
+
+    /// <summary>Enumerates abstract declarations with visibility in this containing package.</summary>
+    private IEnumerable<(XsltFunctionDefinition Definition, string Visibility)> GetAbstractFunctionComponents()
+    {
+        foreach (var definition in GetAllFunctionDefinitionsForExpose())
+            if (definition.Visibility == "abstract")
+                yield return (definition, GetExposedVisibility("function", definition.LocalName, definition.NamespaceUri, definition.Arity) ?? definition.Visibility);
+        foreach (var package in _usedPackages)
+        {
+            var options = _usedPackageOptions.GetValueOrDefault(package);
+            foreach (var (definition, visibility) in package.GetAbstractFunctionComponents())
+            {
+                // A concrete intermediate override terminates abstract adoption.
+                if (options?.OverrideFunctions.Any(e =>
+                    ExpandVariableName(e, e.Attribute("name")!.Value) == (definition.LocalName, definition.NamespaceUri)
+                    && e.Elements(XName.Get("param", XslNamespace)).Count() == definition.Arity) == true)
+                    continue;
+                var adopted = visibility is "private" or "hidden" ? "hidden"
+                    : ApplyAcceptVisibility(visibility, options, "function", definition.LocalName, definition.NamespaceUri, definition.Arity) ?? "hidden";
+                yield return (definition, adopted);
+            }
+        }
+    }
+
+    /// <summary>Resolves local or adopted abstract function identity without exporting hidden declarations.</summary>
+    private bool TryFindFunctionForOverride(string localName, string? namespaceUri, int arity,
+        out XsltFunctionDefinition? definition, out string? visibility)
+    {
+        if (TryFindFunction(localName, namespaceUri, arity, out definition) && definition is not null)
+        {
+            visibility = GetExposedVisibility("function", localName, namespaceUri, arity) ?? definition.Visibility;
+            return true;
+        }
+        foreach (var component in GetAbstractFunctionComponents())
+        {
+            if (component.Definition.LocalName != localName || component.Definition.NamespaceUri != (namespaceUri ?? "") || component.Definition.Arity != arity)
+                continue;
+            definition = component.Definition;
+            visibility = component.Visibility;
+            return true;
+        }
+        definition = null;
+        visibility = null;
+        return false;
     }
 
     private void CollectFunctions(string localName, string? namespaceUri, List<XsltFunctionDefinition> result)
@@ -9227,7 +9301,7 @@ internal sealed class Stylesheet
                     {
                         // Abstract declarations are absent from the exported callable view,
                         // but still provide the keyword names of their concrete replacement.
-                        if (package.TryFindFunction(overrideDef.LocalName, overrideDef.NamespaceUri, overrideDef.Arity, out var original))
+                        if (package.TryFindFunctionForOverride(overrideDef.LocalName, overrideDef.NamespaceUri, overrideDef.Arity, out var original, out _))
                             overrideDef.OverriddenFunction = original;
                         for (int arity = overrideDef.MinimumArity; arity <= overrideDef.Arity; arity++)
                             overrides[(overrideDef.NamespaceUri, overrideDef.LocalName, arity)] = overrideDef;

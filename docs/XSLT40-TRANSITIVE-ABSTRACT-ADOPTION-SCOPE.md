@@ -4,6 +4,8 @@
   <p>Bounded next-slice scope, 15 October 2026</p>
 </div>
 
+**Implementation follow-up, 15 October 2026:** The bounded three-package slice is implemented in unpublished source 1.7.0; see [the delivered contract and evidence](XSLT40-TRANSITIVE-ABSTRACT-ADOPTION.md). The original 1/7 scope baseline below is retained separately from the expanded 40-case baseline.
+
 ## Starting point
 
 [PR #299](https://github.com/Fytala-Charles/Bosak/pull/299) is merged at `d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab`. Its source/test trees match reviewed revision `7a9422cfbf6a2a6f83d9e9e37ef56860c12bf566`, whose full solution, language-server, frozen-gate and package verification are preserved in the original receipts. Source 1.7.0 remains unpublished; public libraries and the VS Code 0.2.1 bundle remain 1.6.0.

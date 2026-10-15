@@ -1,0 +1,212 @@
+{
+  "date": "2026-10-15",
+  "parentRevision": "e718914f60825b5c6f3a761037aba619cb0da1ec",
+  "sourceVersion": "1.7.0",
+  "publishedVersion": "1.6.0",
+  "implementation": "One optional abstract family adopted A-to-B and concretely overridden in C; visibility-aware metadata and forwarding across abstract edges",
+  "newCases": 40,
+  "baseline": {
+    "revision": "d6b984cb41ba3bfbb2a0d4aab6c8a162f5f2e6ab",
+    "version": "unpublished merged candidate 1.7.0",
+    "tests": {
+      "passed": 4,
+      "failed": 36,
+      "total": 40,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-implementation-final-baseline-results/charl_CHARLES_2026-10-15_13_58_48_net10.0.trx",
+          "passed": 4,
+          "failed": 36,
+          "total": 40
+        }
+      ]
+    },
+    "alreadyPassingControls": [
+      "Bosak.Xslt.Tests.Validation.Xslt40TransitiveAbstractAdoptionTests.AbstractExposureCannotMakeConcrete",
+      "Bosak.Xslt.Tests.Validation.Xslt40TransitiveAbstractAdoptionTests.HiddenAbsentImplementationRemainsDynamicError",
+      "Bosak.Xslt.Tests.Validation.Xslt40TransitiveAbstractAdoptionTests.TransitiveReducedUpperBoundIsRejected",
+      "Bosak.Xslt.Tests.Validation.Xslt40TransitiveAbstractAdoptionTests.DirectControl"
+    ],
+    "engineProvenance": [
+      {
+        "package": "Bosak.XPath.Api/1.7.0",
+        "sha256": "54f5916206c62d6c41c409ecd9bd73509a3585f1852e41ed81d18ddbfbdec363",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Compiler/1.7.0",
+        "sha256": "437c1b70c0dc13a78f0f907d4317430f9ff4b2d75dff065d88b1bb6742107497",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Core/1.7.0",
+        "sha256": "c99eaf58e3a174f98f4e1a024268d25434ca476d153e6a7e3a22320e55d7ae8d",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Parser/1.7.0",
+        "sha256": "24c49fe73f067b38eb690575ea35645a43aefaaf34eb12d8c0a824bc1e6be382",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Providers/1.7.0",
+        "sha256": "408bbcebcc14bd06327eb1ecdf04e44931f771260863ce0047dafa8dda57c0a8",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Runtime/1.7.0",
+        "sha256": "2fc8bb4b95ad804de96e3100dc881086f53c28da4bfdf0b8f999e1a443d9708b",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XPath.Standard/1.7.0",
+        "sha256": "b9c397941fdf9e8f9b0deffc2b44cfba63ac961e7f771de351e3ebfa11f02063",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.XQuery/1.7.0",
+        "sha256": "dd8647f4ccf9a0a822787cfb00e5f515d64265572dde085b31c35b5bca13f401",
+        "outputMatchesMergedCandidate": true
+      },
+      {
+        "package": "Bosak.Xslt/1.7.0",
+        "sha256": "c65b18bcc608548fcf5a63a23626626b39458277c92b21e3a264332a0c7f1b1e",
+        "outputMatchesMergedCandidate": true
+      }
+    ]
+  },
+  "verification": {
+    "solution": {
+      "passed": 8460,
+      "failed": 0,
+      "total": 8460,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0.trx",
+          "passed": 202,
+          "failed": 0,
+          "total": 202
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[1].trx",
+          "passed": 66,
+          "failed": 0,
+          "total": 66
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[2].trx",
+          "passed": 269,
+          "failed": 0,
+          "total": 269
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[3].trx",
+          "passed": 132,
+          "failed": 0,
+          "total": 132
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[4].trx",
+          "passed": 411,
+          "failed": 0,
+          "total": 411
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[5].trx",
+          "passed": 47,
+          "failed": 0,
+          "total": 47
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_01_net10.0[6].trx",
+          "passed": 153,
+          "failed": 0,
+          "total": 153
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_02_net10.0.trx",
+          "passed": 303,
+          "failed": 0,
+          "total": 303
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_02_net10.0[1].trx",
+          "passed": 1303,
+          "failed": 0,
+          "total": 1303
+        },
+        {
+          "file": ".guard-tmp/transitive-implementation-solution-results/charl_CHARLES_2026-10-15_13_59_02_net10.0[2].trx",
+          "passed": 5574,
+          "failed": 0,
+          "total": 5574
+        }
+      ]
+    },
+    "xslt": [
+      5574,
+      0,
+      0
+    ],
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "total": 84,
+      "runs": [
+        {
+          "file": ".guard-tmp/transitive-implementation-ls-results/charl_CHARLES_2026-10-15_13_59_16_net10.0.trx",
+          "passed": 84,
+          "failed": 0,
+          "total": 84
+        }
+      ]
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ],
+    "combinedFixtureCases": 162,
+    "buildErrors": 0,
+    "existingBuildWarnings": 13
+  },
+  "files": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "d894e3cc83b5e08d6b654bbd781f46ca2f594ed3225671787c99f45ccf8858fb",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40TransitiveAbstractAdoptionTests.cs": "753497b7a88d1e6d99b23b8e1caede2dc943c992cf0172742d811aa4d204f1b3"
+  },
+  "logs": {
+    ".guard-tmp/transitive-implementation-baseline-final.log": "75e3f6b64ae98341c675943b29dfdc0a27fdb7a7b601eb7d87db42bef736d1e7",
+    ".guard-tmp/transitive-implementation-baseline.log": "d5da9252628876960cf9b32a0cd5fc587bb65b38efdae88d8869d83fc70ed690",
+    ".guard-tmp/transitive-implementation-build.log": "608014afec4d82cdb3369a2518b0f56876f9baa29b6f90dd95db968c458b2a84",
+    ".guard-tmp/transitive-implementation-expanded-baseline.log": "6d454c59004744e5ec0da78b6340042af155cd6ac42c31f58f092a5096c2c7cb",
+    ".guard-tmp/transitive-implementation-final-baseline.log": "d7351b1c482eb001a8d19b9d4d818e056f20669034fa0bbd97ec411b259fd11c",
+    ".guard-tmp/transitive-implementation-final-focused.log": "42d9ad6f73f488d6dbb7a3ba29456c0cfc4602eee67176505f4432d8899f37a5",
+    ".guard-tmp/transitive-implementation-first.log": "1c127a6f97f9312d66f88ffb9e170d0218d758e00d65b665ee9ecb9ee7e4e4fa",
+    ".guard-tmp/transitive-implementation-focused.log": "8d99cb4183c402e9681711c9779fba334d66ffc29fa55e2b9237c7baa4c39b4d",
+    ".guard-tmp/transitive-implementation-ls.log": "f098023eb193da0b270f909c5d3d9309d3fa67158bb581f236f49709bd2c7141",
+    ".guard-tmp/transitive-implementation-qt3.log": "c42167eb5405cc7db2c6bba1b32c7e4bd9f6c2c1c6d64029b08459cad75632b1",
+    ".guard-tmp/transitive-implementation-qt4.log": "d518d4d5262cba99177d3b9334807b0ffe9e4b16c5292edde24d141798562885",
+    ".guard-tmp/transitive-implementation-second.log": "5559e5192693b11ba3048ba9161eaf91d4306379de61bac7bf819cb15e39f2e8",
+    ".guard-tmp/transitive-implementation-solution.log": "64ec6ae91e722b378d963d6701630f1c4f8f04969284ea9ba66ee9d6c792b27b"
+  },
+  "originalScopeReceipt": {
+    "path": "docs/XSLT40-TRANSITIVE-ABSTRACT-ADOPTION-SCOPE.json",
+    "sha256": "a26d436fb57e74606c540b4404ed450c40bf8ff237e57dbc5a8427e9c2dedbee",
+    "preservedUnchanged": true
+  },
+  "earlierAttempts": "Initial 32-case baseline 3/29, wrong-code unresolved acceptance, 39-case fixture and incorrectly placed used-package exposure control retained separately; final principal exposure control passes on baseline. Earlier scope 1/7 is unchanged.",
+  "boundaries": [
+    "Escaping inline closures",
+    "Overlapping adopted/local families",
+    "Intermediate concrete override chains and general re-export graphs",
+    "Editor package signatures/acquisition",
+    "General used-package exposure validation"
+  ],
+  "deliveryFollowup": ".guard-tmp/transitive-implementation-delivery.json and review PR preserve exact committed-revision package/assembly/CI proof.",
+  "publication": "Not performed; no upstream submission, REQ status change, gate promotion or tag change."
+}
