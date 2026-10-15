@@ -1,3 +1,11 @@
+# REQ-128 proposed insertion contract resolved for review - 2026-10-15
+
+What was built: registered the existing consumer request/dossier and added docs/REQ-128-INSERTION-CONTRACT.md. Proposed first slice: one explicit principal stylesheet module, supported 3.0/4.0 profile, template/LRE-only ancestor chain, explicit closing tag, no preserved/mixed raw content; snapshot-owned opaque targets; exact zero-length-old-range append before closing tag with no reformatting; complete surviving/new node evidence; strict UTF-8/BOM UTF-16 LE/BE, eight-MiB insertion bounds, prospective static context, Expression escaping without AVT brace doubling, cooperative cancellation and deny-by-default static resource access. Thirty-eight fixture groups and two exact-output goldens are planned, not executed evidence.
+
+Audit source d310b864 matches published 1.7.1 source/test trees; existing expression-edit APIs stay unchanged. REQ-128 remains Pending/TBD/Unassigned: no engine implementation, fake capability, UI, acceptance or release reservation. Canonical docs link the proposed contract and keep delivery boundaries explicit. Consumer original working files/pin are unchanged; root concurrent registration/dossier remains preserved separately.
+
+Next: maintainer acceptance/ownership/scheduling of the proposed contract, then a separate engine implementation/test/minor-release slice before Braid adoption. Keep extension candidate preparation/publication separate; no tag or publication in this design step. Preserve earlier release/preparation receipts, Braid checkout and .sweep-baselines/. Earlier entries below are historical.
+
 # Public 1.7.1 Braid verified; VS Code 0.2.3 prepared - 2026-10-15
 
 Parent main d310b864aa5248d6c6c8fbd78aef51dd422a4dff. Fresh 280-file Braid snapshot builds cleanly and passes 843/0/0 against public nuget.org-only 1.7.1. Nine signed archives/restore hashes/cache and both test-output DLLs match approved metadata. Original Braid files/status/pin unchanged. Separate public report/receipt preserves candidate evidence.
