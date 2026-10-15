@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Complete reference slots, ignore foreign annotations and normalize expand-text.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +34,10 @@ internal static class AbstractOriginalReferenceValidator
             foreach (var attribute in element.Attributes())
             {
                 if (attribute.IsNamespaceDeclaration) continue;
+                // Foreign attributes on XSLT instructions are annotations, even when
+                // their local names match expression-bearing instruction attributes.
+                if (element.Name.NamespaceName == Stylesheet.XslNamespace && attribute.Name.NamespaceName.Length != 0)
+                    continue;
                 var kind = AttributeSlotClassifier.Classify(element.Name.NamespaceName, element.Name.LocalName,
                     attribute.Name.LocalName, attribute.Name.NamespaceName, attribute.Value);
                 // Every literal result attribute outside the XSLT namespace is an AVT,
@@ -42,12 +47,15 @@ internal static class AbstractOriginalReferenceValidator
                 if (element.Name.NamespaceName == Stylesheet.XslNamespace && attribute.Name.NamespaceName.Length == 0
                     && IsAdditionalAvt(element.Name.LocalName, attribute.Name.LocalName))
                     kind = AuthoringAttributeSlotKind.Avt;
+                if (element.Name.NamespaceName == Stylesheet.XslNamespace && attribute.Name.NamespaceName.Length == 0
+                    && IsAdditionalExpression(element.Name.LocalName, attribute.Name.LocalName))
+                    kind = AuthoringAttributeSlotKind.Expression;
                 if (kind is AuthoringAttributeSlotKind.Expression or AuthoringAttributeSlotKind.Pattern)
                     CheckExpression(attribute.Value.AsSpan(), element);
                 else if (kind == AuthoringAttributeSlotKind.Avt)
                     CheckTemplate(attribute.Value.AsSpan(), element);
             }
-            var expand = element.AncestorsAndSelf().Select(e => e.Name.NamespaceName == Stylesheet.XslNamespace ? e.Attribute("expand-text") : e.Attribute(XName.Get("expand-text", Stylesheet.XslNamespace))).FirstOrDefault(a => a != null)?.Value;
+            var expand = element.AncestorsAndSelf().Select(e => e.Name.NamespaceName == Stylesheet.XslNamespace ? e.Attribute("expand-text") : e.Attribute(XName.Get("expand-text", Stylesheet.XslNamespace))).FirstOrDefault(a => a != null)?.Value.Trim();
             if (expand is "yes" or "true" or "1")
                 foreach (var text in element.Nodes().OfType<XText>()) CheckTemplate(text.Value.AsSpan(), element);
         }
@@ -58,11 +66,21 @@ internal static class AbstractOriginalReferenceValidator
         ("element" or "attribute", "namespace") => true,
         ("value-of" or "attribute" or "for-each" or "for-each-group" or "apply-templates" or "call-template", "separator") => true,
         ("sort", "order" or "data-type" or "case-order" or "collation" or "stable") => true,
+        ("for-each-group", "collation") => true,
+        ("merge-key", "lang" or "order" or "data-type" or "case-order" or "collation") => true,
         ("number", "letter-value" or "start-at") => true,
         ("message", "terminate" or "error-code") => true,
+        ("assert", "error-code") => true,
         ("evaluate", "base-uri" or "schema-aware") => true,
         ("analyze-string", "regex" or "flags") => true,
         ("result-document", _) => true,
+        _ => false
+    };
+
+    private static bool IsAdditionalExpression(string element, string attribute) => (element, attribute) switch
+    {
+        ("evaluate", "with-params" or "context-item" or "namespace-context") => true,
+        ("if", "then" or "else") => true,
         _ => false
     };
 

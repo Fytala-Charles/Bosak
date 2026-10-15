@@ -1,3 +1,13 @@
+# Abstract optional override review corrections - 2026-10-15
+
+Parent revision c1cde3b5137c55718c9dfaf1f0fcefae676e1709; branch feat/abstract-optional-overrides, draft PR https://github.com/Fytala-Charles/Bosak/pull/299. User authorized fixing three reproduced P2 findings. Missing expression/AVT slots now receive static XTSE3075 checks; foreign namespaced instruction annotations are ignored; expand-text normalization agrees with runtime, including local false inheritance overrides. The shared authoring classifier is unchanged; fixes are confined to reference validation and regressions. Source remains unpublished 1.7.0.
+
+What was built: 12 added regression cases (48 abstract-fixture cases, 122 focused cases). Pre-fix exact PR packages produce 112 pass/10 fail; the two newly added already-passing controls are the foreign with-params annotation and normalized local expand-text=false. Original implementation/public baseline receipts remain immutable; corrections use docs/XSLT40-ABSTRACT-OPTIONAL-REVIEW-FIXES.json and .guard-tmp/abstract-reviewfix-*.
+
+Verification: Release build zero errors/13 existing warnings; solution 8,420/0/0, XSLT 5,534/0/0, language server 84/0/0; QT3 exactly 31,142/0/679 and qt4 gate-only 8,278/0/1,894.
+
+Next: integrate only after successful exact-head CI and review. Final committed-revision archive/cache/output/assembly metadata proof is recorded with PR #299 and .guard-tmp/abstract-reviewfix-delivery.json. No publication, upstream submission, REQ status change or gate promotion. Transitive adoption, escaping inline closures, overlapping families and editor package signatures remain separate. Preserve .sweep-baselines/, Braid checkout, existing receipts and immutable release tags. Earlier entries below are historical.
+
 # Abstract optional overrides implemented - 2026-10-15
 
 Implementation commit 488aee94733576a008256e3bc38973ae8fa264c5 (draft PR #299); base d61fe0c4 (merged VS Code 0.2.1 publication docs). Unpublished source 1.7.0 supports one direct abstract optional family with compatible concrete replacement. Compile-time XTSE3075 validation covers original calls/items/partials/defaults/dead branches, namespace aliases/EQNames and template interpolations; literals/comments/escapes remain valid. Original metadata links preserve keywords when abstract declarations are absent from the exported view. No public API.

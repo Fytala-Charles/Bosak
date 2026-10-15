@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Cover review fixes for expression slots, foreign attributes and text expansion.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -165,6 +166,55 @@ public class Xslt40AbstractOptionalOverrideTests
         const string wrapper = "<xsl:function name='p:wrapper' visibility='public'><xsl:sequence select=\"p:f('A')\"/></xsl:function>";
         const string helper = "<xsl:function name='p:helper' visibility='private'><xsl:sequence select=\"'LOCAL'\"/></xsl:function>";
         Assert.Equal("ALOCALY", Run(Caller("p:wrapper()", parameters: OverrideParameters.Replace("'X'", "p:helper()"), extra: helper), Library(extra: wrapper)));
+    }
+
+    /// <summary>Additional expression and AVT slots reject originals before invocation.</summary>
+    /// <param name="content">The overriding constructor containing a reference.</param>
+    [Theory]
+    [InlineData("""<xsl:for-each-group select='1' group-by='.' collation="{xsl:original('A')}"><xsl:sequence select='.'/></xsl:for-each-group>""")]
+    [InlineData("""<xsl:evaluate xpath="'1'" with-params="map{'p': xsl:original#1}"/>""")]
+    [InlineData("""<xsl:evaluate xpath="'1'" context-item="xsl:original('A')"/>""")]
+    [InlineData("""<xsl:evaluate xpath="'1'" namespace-context="xsl:original('A')"/>""")]
+    [InlineData("""<xsl:if test='false()' then="xsl:original('A')"/>""")]
+    public void AdditionalSlotsRejectOriginal(string content)
+    {
+        var caller = Caller("'unused'").Replace("<xsl:sequence select=\"$x || $y || $z\"/>", content);
+        Assert.Contains("XTSE3075", Assert.ThrowsAny<Exception>(() => CompileOnly(caller)).Message);
+    }
+
+    /// <summary>Foreign annotations on instructions do not acquire XPath semantics.</summary>
+    /// <param name="attribute">An annotation whose local name matches an XPath-bearing slot.</param>
+    [Theory]
+    [InlineData("select")]
+    [InlineData("test")]
+    [InlineData("with-params")]
+    public void ForeignAnnotationsArePlainText(string attribute)
+    {
+        var caller = Caller("p:f('A')").Replace("<xsl:sequence select=\"$x || $y || $z\"/>",
+            "<xsl:sequence xmlns:a='urn:annotation' a:" + attribute + "='xsl:original#1' select=\"'ok'\"/>");
+        Assert.Equal("ok", Run(caller));
+    }
+
+    /// <summary>Whitespace normalization agrees with runtime text expansion.</summary>
+    /// <param name="expand">The inherited boolean spelling.</param>
+    [Theory]
+    [InlineData(" yes ")]
+    [InlineData(" true ")]
+    [InlineData(" 1 ")]
+    public void NormalizedExpandTextRejectsOriginal(string expand)
+    {
+        var caller = Caller("'unused'").Replace("<xsl:sequence select=\"$x || $y || $z\"/>",
+            "<out xsl:expand-text='" + expand + "'>{xsl:original('A')}</out>");
+        Assert.Contains("XTSE3075", Assert.ThrowsAny<Exception>(() => CompileOnly(caller)).Message);
+    }
+
+    /// <summary>A normalized local false value disables inherited expansion.</summary>
+    [Fact]
+    public void LocalExpandTextFalseKeepsLiteralText()
+    {
+        var caller = Caller("p:f('A')").Replace("<xsl:sequence select=\"$x || $y || $z\"/>",
+            "<out xsl:expand-text=' yes '><inner xsl:expand-text=' no '>{xsl:original('A')}</inner></out>");
+        Assert.Equal("{xsl:original('A')}", Run(caller));
     }
 
     private sealed class Resolver(string library) : IXsltUriResolver

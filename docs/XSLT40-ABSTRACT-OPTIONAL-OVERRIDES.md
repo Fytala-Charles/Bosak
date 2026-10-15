@@ -4,6 +4,14 @@
   <p>Bounded XSLT 4.0 implementation, 15 October 2026</p>
 </div>
 
+## PR review corrections, 15 October 2026
+
+Three review findings are corrected: reference validation now covers `xsl:for-each-group/@collation` and `xsl:evaluate/@with-params`, `@context-item` and `@namespace-context`, along with adjacent instruction expression/AVT slots; foreign namespaced attributes on XSLT instructions remain annotations; inherited `expand-text` values are trimmed before boolean interpretation, including local false overrides. Literal result attributes in application namespaces retain AVT behavior.
+
+Release solution verification passes **8,420/0/0**, including XSLT **5,534/0/0**; language server **84/0/0**. Frozen gates remain QT3 **31,142/0/679** and qt4 gate-only **8,278/0/1,894**.
+
+Twelve new regressions extend the abstract fixture to 48 cases and the focused selection to 122. Against exact pre-fix PR revision `c1cde3b5137c55718c9dfaf1f0fcefae676e1709`, ten new cases fail and two existing-behavior checks pass (aggregate 112 pass/10 fail). Source-version 1.7.0 remains the unpublished feature candidate. [Separate correction receipt](XSLT40-ABSTRACT-OPTIONAL-REVIEW-FIXES.json); the original baseline, implementation and review package receipts below remain historical and unchanged.
+
 ## Delivered contract
 
 Unpublished source 1.7.0 supports a direct concrete override of one abstract used-package function family with trailing optional parameters. Reduced and full calls, named items, dynamic lookup and keywords dispatch to the replacement. Keywords retain the abstract declaration's parameter names; defaults and private helpers execute in the replacement's declaring scope, including calls originating in the library.
