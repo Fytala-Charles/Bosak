@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.7.1 release preparation">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.7.1 release publication">
   <br><br><h1>Bosak 1.7.1</h1>
   <p>Lexical original binding in escaping inline functions</p>
 </div>
 
 ## Release status
 
-Prepared 15 October 2026; unpublished. Engine merge `0c0e2a3a8aab42da6ab536dca51e5e8442824f8e` integrates PR #305. Public libraries remain 1.7.0; the published VS Code extension 0.2.2 bundles 1.7.0. Publication requires approval of the final verified revision. [Preparation evidence](RELEASE-1.7.1-PREPARATION.json) and [checklist](RELEASE-1.7.1-CHECKLIST.md).
+**Published 15 October 2026.** Immutable `v1.7.1` points to user-approved revision `35e531c101bcbba13a2533f33a7decca5f18eddd`. The successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38768757675) passes all 8,483 solution tests and publishes ten .NET 10 libraries. Public libraries are now 1.7.1; VS Code 0.2.2 continues to bundle engine 1.7.0. [Publication evidence](RELEASE-1.7.1-PUBLICATION.json) preserves public packages, fresh consumer verification and original preparation provenance. [Preparation evidence](RELEASE-1.7.1-PREPARATION.json) remains unchanged.
 
 ## Correction
 
@@ -16,9 +16,11 @@ The fix covers nested closures, reduced/full optional arities, keyword/arrow cal
 
 ## Verification
 
+All ten direct nuget.org downloads verify versions, coordinated dependencies, approved repository revision, net10 DLL/XML assets and tagged README/license/icon. Fresh nuget.org-only caches pass **153 broad checks** and **185 focused tests** (33 overlap). Archive/cache/output DLL bytes and assembly **1.7.1.0** with the exact approved informational revision match; signed archive SHA-512 and restore content hashes are verified separately. The preparation results below remain historical.
+
 Refreshed-head CI passes the complete solution (8,483 tests, including 5,597 XSLT tests), 84 language-server tests and extension checks. Source/test trees match the reviewed implementation. Frozen gates rerun at the refreshed head remain exactly 31,142/0/679 and 8,278/0/1,894.
 
-Ten exact refreshed-head packages pass metadata/dependency/asset checks. Fresh mapped caches pass 153 broad checks and 185 focused tests (33 overlap); archive/cache/output DLL bytes and assembly 1.7.1.0/exact full revision match. An isolated Braid snapshot passes 843 tests with nine-package provenance; original files, Git status and production pin are unchanged. Final merged-documentation revision repacking and fresh consumer verification remain required before publication approval.
+Ten exact refreshed-head packages pass metadata/dependency/asset checks. Fresh mapped caches pass 153 broad checks and 185 focused tests (33 overlap); archive/cache/output DLL bytes and assembly 1.7.1.0/exact full revision match. An isolated Braid snapshot passes 843 tests with nine-package provenance; original files, Git status and production pin are unchanged. Final merged-revision repacking and fresh consumer verification passed before approval; the public-package checks above passed after publication.
 
 ## Boundaries
 

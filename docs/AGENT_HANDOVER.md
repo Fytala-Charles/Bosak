@@ -1,3 +1,13 @@
+# 1.7.1 published and public-feed verified - 2026-10-15
+
+User approved exact revision 35e531c101bcbba13a2533f33a7decca5f18eddd; immutable v1.7.1 points there. Single tag-triggered release workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38768757675 succeeds: 8,483 solution tests and ten successful NuGet uploads. GitHub release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.7.1. No duplicate workflow dispatch or tag movement.
+
+What was built: published ten libraries, created the GitHub release and verified all ten public archives/dependencies/net10 DLL+XML/tagged README/license/icon. Fresh nuget.org-only consumers pass 153 broad checks and 185 focused tests (33 overlap). All archive/cache/output DLL bytes, assembly 1.7.1.0 and exact approved informational revision verify. Signed archive SHA-512 and restore content hashes are recorded separately. docs/RELEASE-1.7.1-PUBLICATION.json preserves workflow, public downloads, consumer evidence and original candidate/preparation/implementation receipt hashes; original receipts remain unchanged.
+
+Canonical docs, release notes/checklist and implementation-contract publication follow-up are synchronized. Engine/API/REQ/gate membership unchanged; REQ-126 In Progress. Frozen gates 31,142/0/679 and 8,278/0/1,894 and 84 language-server tests remain the approved preparation evidence. Published/restarted VS Code 0.2.2 bundles 1.7.0; no extension change. Braid retains 843 final-candidate tests with original checkout/files/status/pin untouched; public-package Braid acceptance and production adoption remain separate.
+
+Next: integrate publication documentation after successful exact-head CI. Do not repeat publication. Separate follow-ups are public-package Braid compatibility and extension engine alignment. Preserve original Braid, concurrent REQ-128 work, .sweep-baselines/, all receipts and immutable release tags. REQ-128 remains pending in the original worktree. Earlier entries below are historical.
+
 # PR #305 integrated; 1.7.1 release preparation - 2026-10-15
 
 Engine merge 0c0e2a3a8aab42da6ab536dca51e5e8442824f8e; reviewed implementation 8e9c4984, refreshed head b886a53e. Refreshed-head CI 38763370136 succeeds. Five documentation-only main conflicts were reconciled; source/test trees match reviewed code. No new runtime edits in this preparation step.

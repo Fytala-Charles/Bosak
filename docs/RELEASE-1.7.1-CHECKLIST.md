@@ -1,6 +1,6 @@
 # Bosak 1.7.1 publication checklist
 
-Prepared 2026-10-15. Engine merge `0c0e2a3a8aab42da6ab536dca51e5e8442824f8e`. [Release notes](RELEASE-NOTES-1.7.1.md); [preparation receipt](RELEASE-1.7.1-PREPARATION.json). No publication or tag creation is authorized by preparation.
+Prepared 2026-10-15. Engine merge `0c0e2a3a8aab42da6ab536dca51e5e8442824f8e`. [Release notes](RELEASE-NOTES-1.7.1.md); [preparation receipt](RELEASE-1.7.1-PREPARATION.json). The user approved exact revision `35e531c101bcbba13a2533f33a7decca5f18eddd`. Tagging, publication and public verification are complete. [Publication receipt](RELEASE-1.7.1-PUBLICATION.json). Preparation checks describe their historical stage; final checks apply to the approved revision.
 
 ## Completed preparation
 
@@ -13,16 +13,16 @@ Prepared 2026-10-15. Engine merge `0c0e2a3a8aab42da6ab536dca51e5e8442824f8e`. [R
 
 ## Before publication approval
 
-- [ ] Integrate preparation documents after successful exact-head CI.
-- [ ] Repack the final merged documentation revision and repeat broad/focused consumers with fresh caches; verify exact revision, README, assets and DLL provenance.
-- [ ] Recheck unused tag/public versions and present the concrete revision for explicit publication approval.
+- [x] Integrate preparation documents after successful exact-head CI.
+- [x] Repack the final merged documentation revision and repeat broad/focused consumers with fresh caches; verify exact revision, README, assets and DLL provenance.
+- [x] Recheck unused tag/public versions and present the concrete revision for explicit publication approval.
 
 ## After explicit publication approval
 
-- [ ] Create/push only the approved immutable v1.7.1 tag; its push triggers release.yml. Do not also dispatch the workflow.
-- [ ] Verify exact workflow revision, complete tests and ten package uploads; preserve any partial-delivery evidence before retrying.
-- [ ] Create the GitHub release using reviewed notes.
-- [ ] Verify all ten public packages, signed archive hashes and fresh nuget.org-only broad/focused consumers with exact output metadata.
-- [ ] Record a separate publication receipt and synchronize canonical documentation; preserve original receipts.
+- [x] Create/push only the approved immutable v1.7.1 tag; its push triggers release.yml. Do not also dispatch the workflow.
+- [x] Verify exact workflow revision, complete tests and ten package uploads; preserve any partial-delivery evidence before retrying.
+- [x] Create the GitHub release using reviewed notes.
+- [x] Verify all ten public packages, signed archive hashes and fresh nuget.org-only broad/focused consumers with exact output metadata.
+- [x] Record a separate publication receipt and synchronize canonical documentation; preserve original receipts.
 
 VS Code alignment, Braid production adoption, REQ-128 acceptance and upstream submissions remain separate. Preserve concurrent work, .sweep-baselines/ and immutable existing release tags.
