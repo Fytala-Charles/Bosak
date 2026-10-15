@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-15",
+  "version": "1.7.1",
+  "releaseRevision": "35e531c101bcbba13a2533f33a7decca5f18eddd",
+  "consumer": "Bosak.Braid",
+  "consumerHead": "d863993b98f9795585c6f1712aa552b003c44121",
+  "consumerSource": "Snapshot of current uncommitted working tree; not an immutable adoption commit",
+  "originalDependencyPin": "5bab4799783569d538cec9b03d37a57454f0eebc",
+  "snapshotFileCount": 280,
+  "snapshotManifest": ".guard-tmp/braid171-public-snapshot.json",
+  "snapshotManifestSha256": "285f112540be3d5f8aaa3b2e9bd0acde86a272b23286fe91d84b840b114a5ac4",
+  "adaptations": [
+    "Replace Infrastructure source ProjectReference with published Bosak.Xslt 1.7.1 PackageReference",
+    "Replace source-checkout guard with approved package revision assembly metadata in isolated copy",
+    "Remove source engine projects from copied solution",
+    "Disable MinVer in copied props to avoid enclosing repository tags",
+    "nuget.org-only source; fresh package cache"
+  ],
+  "build": {
+    "errors": 0,
+    "warnings": 0
+  },
+  "tests": {
+    "Core": {
+      "passed": 27,
+      "failed": 0,
+      "skipped": 0
+    },
+    "Application": {
+      "passed": 291,
+      "failed": 0,
+      "skipped": 0
+    },
+    "Infrastructure": {
+      "passed": 314,
+      "failed": 0,
+      "skipped": 0
+    },
+    "Workbench": {
+      "passed": 211,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "totalPassed": 843,
+  "totalFailed": 0,
+  "totalSkipped": 0,
+  "enginePackageCount": 9,
+  "allEnginePackagesFromNugetOrg": true,
+  "allEngineTestOutputBytesMatchPublishedPackages": true,
+  "packageProvenance": [
+    {
+      "package": "Bosak.XPath.Api/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "64255edec61b4f15513154377c6b367906de2d8b0ba2d67a635210081166abac",
+      "restoreContentHash": "UovCt9ShL1Qi2arCgEqOZgZEdBRhcYTlmtaqlF4YqEHHGV1rpc8uQbeij+gkB2ar5bDZh8fmjNzXlYLGr3qoVg==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Compiler/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "18a6bfdc98c236d51778757fc0aec8fe98ab8b7a521d52f2e910c5ae2ef77d76",
+      "restoreContentHash": "K8DX8ueCM6J2OTEWNORpNYsiro0WqdY/Ppn9+EiB67YmbEyi5b1ylMcXNeLfv7VpMnzgS0sxA7/14FIOFkLZyw==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Core/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "71094c312b0c84870d556fa588af3a218453fb12f2331c8206a10772badc55a1",
+      "restoreContentHash": "rZ9ktEQPeCBzAy5qVqO7n73p/ibnuaE0XivTnvcNjGC7JPRxrxCq4r8Zi9wIc7bVkqS6a7D1lm2XQuv4jb26VQ==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Parser/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "707e1758e48c6e9d6593dd74ce0d6ad0daf33fa988d18cc3143c7c531a1c88d9",
+      "restoreContentHash": "jQYVT8UtpDVDCHPzh3Te7ZRmL8G9XgKSFIKP3S8EFSlwrIHKJQ7xOWuGmw+DnmUTX6HWfnpClcTJlErRWqe6VQ==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Providers/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "086b9bbc0f1063d973b56307bd71eb5e776b6c2f1a9a0b88f7db1806b4b89cbc",
+      "restoreContentHash": "+T25XVnq1WLswh/KmK4FF4R4MkSqzB204j/3kp/+bwNg1//l+GYGP231SZWd94UKvAsNhdS2WvPMLb/TFxj3mA==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Runtime/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "0975fa1d168a1a64769cadf80299ba571cb01be3efbf605eee242fa8b8911683",
+      "restoreContentHash": "AXGOpUaCFIqPEqYJIl1vFGnUemXFlty+RBHQsezpLnL9YIKlBw7tCAVHOkTBnEx92gEWaix56RTk9WEbDdXxVQ==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XPath.Standard/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "37b423b3ab1cf94b285de3a37e9c93816c522e79fe459c2f044783fa29ea207a",
+      "restoreContentHash": "lz+azgb0oARn1ELtiTO0WnPoxG7j4R4kAvQ4xri0Agi9dMTGOmeVgqVA2BbL9bp6ZvUmT0XLo8WUJ0VjOSerJw==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.XQuery/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "b84875fd318f90db34b94d4dd0b14facecb5eab15d2664c33eda6263d226ff10",
+      "restoreContentHash": "JsGu3nNL1TAQ8SFmtT+Wep+wddov4C8rPzPXWVqK+PkZXYCloteIhOQxNgZtvzc3qOcBpzvscietip//Sm6/fA==",
+      "testOutputBytesMatchPublishedPackage": true
+    },
+    {
+      "package": "Bosak.Xslt/1.7.1",
+      "source": "https://api.nuget.org/v3/index.json",
+      "sha256": "8294fe87055d2444c1935452b0cc81e5aea8160d3f5bdd3149d2d897eafe8be1",
+      "restoreContentHash": "YsNSqGapyKY2bU/zT8QPa4wB2Knp9dUWuE9M55y4nhhbi/l/96WLWftf0mMNF4XgJVLODGIKVxtTYXH1ZvPYTA==",
+      "testOutputBytesMatchPublishedPackage": true
+    }
+  ],
+  "productionPinChanged": false,
+  "independentAcceptanceClaimed": false,
+  "limits": [
+    "Isolated package-reference adaptation; production source-pin adoption is separate",
+    "Automated/headless tests; no native desktop or user acceptance claim",
+    "No engine behavior, gate membership or REQ status changed"
+  ],
+  "originalCheckoutModifiedByThisVerification": false,
+  "originalSourceAndTestFilesStillMatchSnapshot": true,
+  "originalGitStatusUnchanged": true,
+  "originalDocumentationChangedDuringVerification": [],
+  "logs": {
+    ".guard-tmp/braid171-public-restore.log": "5fd59eda21dfa1947a74d4a65a0e4fa4f7ea6fb82a4a8f1b8c5bfa7cdf535219",
+    ".guard-tmp/braid171-public-build.log": "a32ab31eea00511139e5c7d22d158bfeaf8ecbdbfa88a1a0dd38d8ba97fbbce5",
+    ".guard-tmp/braid171-public-tests.log": "7819f6b9dd93d008c1c7b027fe9a35af3c136cfdf7f9dbc0ef7214a876cbff26"
+  },
+  "trx": {
+    ".guard-tmp/braid171-public-test-results/charl_CHARLES_2026-10-15_18_48_50_net10.0.trx": "41a69d04023eebedb29e56cbde368e32ccf661afc4652c089de524feaf8e1612",
+    ".guard-tmp/braid171-public-test-results/charl_CHARLES_2026-10-15_18_48_50_net10.0[1].trx": "752852bc38d6d041a3f3ea93c6c6e9a1bc55e6ac560b6bc92bf113a29eee5c1e",
+    ".guard-tmp/braid171-public-test-results/charl_CHARLES_2026-10-15_18_48_50_net10.0[2].trx": "77dc3c7980196af0c79f0c1b2b73d27be80d320dc2b70960792b1129aac293ea",
+    ".guard-tmp/braid171-public-test-results/charl_CHARLES_2026-10-15_18_48_53_net10.0.trx": "ec9712f6dc5e9a349cb845024adcdc701dc9873721871d81c9a1846f84158c57"
+  },
+  "assemblyMetadata": [
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "version": "1.7.1.0",
+      "informationalVersion": "1.7.1+35e531c101bcbba13a2533f33a7decca5f18eddd"
+    }
+  ],
+  "candidateEvidencePreserved": "RELEASE-1.7.1-PREPARATION.json",
+  "allEngineCacheDllBytesMatchPublishedPackages": true
+}
