@@ -108,7 +108,8 @@
     ".guard-retained-source-focused-final.log": "ed3d6e1393612823bdb9f29b57166fc98a32c85cabdf8bfc34395bf7041055c6",
     ".guard-retained-source-language-server.log": "722850f32df20246bed8e282c5915cf168bfbb56dcd6727bdc5679bdd04ac2aa",
     ".guard-retained-source-qt3.log": "72fd36a102110e627833f280e2ca75ad154ae36834fdf65cec1072e0252ce4cd",
-    ".guard-retained-source-qt4.log": "914a7490bb2bade2d9b04cdabeff9a66afc8fb56d4b66d8f89cd467733c11464"
+    ".guard-retained-source-qt4.log": "914a7490bb2bade2d9b04cdabeff9a66afc8fb56d4b66d8f89cd467733c11464",
+    ".guard-doc-render-final.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
   },
   "sourceFiles": {
     "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66",
@@ -145,5 +146,6 @@
     "failed": 1,
     "expectedFailure": "Shadow preprocessing removed an attribute from the derived tree and the old candidate incorrectly issued a target.",
     "trxSha256": "1217944997a4d88581bbbfdef2d5632ab922ec2cafd99f1662604e50723ff4c4"
-  }
+  },
+  "verifiedImplementationRevision": "e3f69c94009d333de293c3057ad67fc0cd008b41"
 }
