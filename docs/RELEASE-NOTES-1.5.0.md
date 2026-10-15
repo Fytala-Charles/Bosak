@@ -1,12 +1,12 @@
 <div align="center">
-  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.5.0 release preparation">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.5.0 release publication">
   <br><br><h1>Bosak 1.5.0</h1>
   <p>Optional arguments in used-package functions</p>
 </div>
 
 ## Release scope
 
-**Candidate prepared on 2026-10-14; unpublished.** This coordinated .NET 10 minor release includes the bounded used-package optional/default function support integrated by PR #288. Published NuGet libraries remain 1.4.0. The separately published VS Code extension is 0.2.0 and bundles engine 1.4.0.
+**Published on 2026-10-15.** Tag `v1.5.0` points to user-approved revision `d5c3aa9ee39b95efd1e27c8cb990e1ce0da9689c`. The successful [release workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38675398450) passed 8,331 solution tests before publishing all ten libraries. This coordinated .NET 10 minor release includes the bounded used-package optional/default function support integrated by PR #288. Published NuGet libraries are now 1.5.0. The separately published VS Code extension is 0.2.0 and bundles engine 1.4.0.
 
 - Direct, arrow and keyword calls, named references, lookup and positional partial application expose the declared optional arity range of public/final functions in a used package.
 - Defaults retain the declaring package's namespaces, globals and private helpers while using the caller focus. Function items retain their creation focus. Constructor defaults and XPath conversion errors preserve the ordinary function contract.
@@ -17,11 +17,13 @@ For a public `p:join` with one required parameter and a second parameter default
 
 ## Verification
 
+All ten public 1.5.0 packages downloaded directly from nuget.org pass version, dependency, repository revision, net10 DLL/XML documentation, README/license/icon and hash checks. A separate fresh-cache consumer with nuget.org as its only source passes **153 checks** and verifies ten assembly versions as **1.5.0.0** and all ten informational versions as the exact approved release revision. Cached archives match direct downloads; signed archive SHA-512 and restore content hashes are verified separately. [Publication evidence](RELEASE-1.5.0-PUBLICATION.json) records hashes, downloads and feed provenance.
+
 The ten local 1.5.0 packages built from `ac891b16c8402c5614639898de5619434e45676d` pass version, internal dependency, repository revision, net10 assets, XML documentation, README/license/icon and SHA-256 checks. A fresh package-only consumer passes **153 checks**: the 120 retained 1.4.0 consumer checks plus all 33 used-package feature and boundary regressions executed against package references. All ten assembly versions are **1.5.0.0**. Package source mapping routes every Bosak package to the local candidate feed; cache bytes and SHA-512 records match the candidate archives. The initial sandbox restore reported NU1900; an unrestricted restore successfully retrieved metadata without that warning. Both logs are retained.
 
 Release build passes with zero errors and 82 existing warnings; language-server tests pass 84/0/0. Frozen QT3 remains exactly **31,142/0/679** and qt4 gate-only remains **8,278/0/1,894**, with zero gated failures. Integrated engine CI passed 8,331 solution tests. The unrestricted local full suite passes **8,331/0/0**, including **5,445 XSLT tests**. The initial sandbox run failed to start the database tests' local HTTP server and was stopped; its log is retained separately. [CI for the package source revision](https://github.com/Fytala-Charles/Bosak/actions/runs/38625061782) also passes all solution and language-server tests plus extension checks.
 
-[Preparation evidence](RELEASE-1.5.0-PREPARATION.json) records the exact candidate revision, package/content hashes, feed provenance, code trees and verification logs. The source and test trees match the integrated feature receipt. Preparation documentation must be integrated and the final release revision repacked and checked before publication approval.
+[Preparation evidence](RELEASE-1.5.0-PREPARATION.json) records the exact candidate revision, package/content hashes, feed provenance, code trees and verification logs. The source and test trees match the integrated feature receipt. These are historical preparation checks. PR #291 passed exact-head CI and merged at `d5c3aa9e`. All ten packages were repacked from that exact revision; a new cache repeated all 153 checks and verified DLL revision metadata. Source/test trees matched the tested candidate. The user explicitly approved tagging and publication; release and public-feed verification are complete.
 
 ## Boundaries
 
