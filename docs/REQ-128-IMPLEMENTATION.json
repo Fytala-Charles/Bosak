@@ -6,9 +6,9 @@
   "request": "REQ-128",
   "requestStatus": "In Progress",
   "owner": "Charles Korthout",
-  "focusedInsertionTests": 73,
+  "focusedInsertionTests": 76,
   "solution": {
-    "passed": 8556,
+    "passed": 8559,
     "failed": 0,
     "skipped": 0,
     "projects": [
@@ -17,70 +17,70 @@
         "passed": 411,
         "failed": 0,
         "total": 411,
-        "trxSha256": "eacdb898c206ad85346c4a5ea180baaad57a77f774f369b45036aae9a7cc4ba1"
+        "trxSha256": "3543ad9ed584713a49f9d041682fe26768f5105277e9e18d8cef7a6211d8ac69"
       },
       {
         "project": "Bosak.XPath.Compiler.Tests",
         "passed": 66,
         "failed": 0,
         "total": 66,
-        "trxSha256": "c63b26918856525905109f991719014c574e572e2575d10a75fe2e20e5117a52"
+        "trxSha256": "acb1cd26d5a199f94f145f2565c51d9d7aba90893fadebbf691578a495f3dbdc"
       },
       {
         "project": "Bosak.XPath.Core.Tests",
         "passed": 132,
         "failed": 0,
         "total": 132,
-        "trxSha256": "868f6514bb3fb6549709a6dca028151cbe5c3ce16d7cefc2b27a405382d65add"
+        "trxSha256": "f4da373d1edbab887db459b8adddf325089e651d28b1f5ac89aba53367867c65"
       },
       {
         "project": "Bosak.XPath.Parser.Tests",
         "passed": 202,
         "failed": 0,
         "total": 202,
-        "trxSha256": "434243ef4a33c29cd4d232dd76b377e912fe5cf5b1d30c6faa03268413187390"
+        "trxSha256": "38b0253a416e5f7c777664cabbe10fe3ebbfdfa833000365e2c8ec748ccbc9b3"
       },
       {
         "project": "Bosak.XPath.Providers.Database.Tests",
         "passed": 47,
         "failed": 0,
         "total": 47,
-        "trxSha256": "b5e9e0027ec56644ad8f5ebc6d29e3790ccb7ff1b7eeec04f96912beb691ba18"
+        "trxSha256": "f2ceffd23ce05cecdd26e610625da840365f4dc644b94ba49cddcc656d5da05f"
       },
       {
         "project": "Bosak.XPath.Providers.Tests",
         "passed": 153,
         "failed": 0,
         "total": 153,
-        "trxSha256": "98dee7c17cdb8079ac118402fea06a622d763ae3abb08bc8718f4fce957e5053"
+        "trxSha256": "6747539942d6d109b24bed1893483d6c1d47bbb15d7f4d6124bfb3ac3f748543"
       },
       {
         "project": "Bosak.XPath.Runtime.Tests",
         "passed": 269,
         "failed": 0,
         "total": 269,
-        "trxSha256": "32f93621eb7a67e8e92099ed7f912a36460de8605a871af9b58f983b9a356872"
+        "trxSha256": "f0f1123b9469c67e37f967c7e505c1913703a88f2b5dda08d950a9a8e735528f"
       },
       {
         "project": "Bosak.XPath.Standard.Tests",
         "passed": 1303,
         "failed": 0,
         "total": 1303,
-        "trxSha256": "a457fa95680f99180757d61dc8c068f09f9474c7e4210ef9376ebf5a6c58d465"
+        "trxSha256": "af794553379b53c4a88f6d9c6cc0981b934f15c53fa441df6f5c07f99fbac8aa"
       },
       {
         "project": "Bosak.XQuery.Tests",
         "passed": 303,
         "failed": 0,
         "total": 303,
-        "trxSha256": "fadcbe391b0662b575b0ecc984e4927e56f1d589e6a5c1153fc4d94ec1954979"
+        "trxSha256": "ea88d4acb31f16a8cb9252f7892e11e04bce743af7757d81a947e6a7c1082cd6"
       },
       {
         "project": "Bosak.Xslt.Tests",
-        "passed": 5670,
+        "passed": 5673,
         "failed": 0,
-        "total": 5670,
-        "trxSha256": "84373cb48691b868e1e33bf7d5b835168037974370dce50366e52ffe7985b6ee"
+        "total": 5673,
+        "trxSha256": "6a5fc4f39456ab54e63c1dd84c409258a31c6c8abfbab52f245aa84aab75e231"
       }
     ]
   },
@@ -103,13 +103,12 @@
   "publishedExtension": "0.2.3 (engine 1.7.1)",
   "consumerAdoption": "separate",
   "logs": {
-    ".guard-build-reviewed-final.log": "44639620751fd1c7d06aa4041b27d30abb02123d0951f583ac257ea9ef4f7c39",
-    ".guard-tests-reviewed-final.log": "e24220b295aea514537f7c969a895b54fee85436a0981c86700242ea60595bfd",
-    ".guard-focused-reviewed.log": "9a6e0f893c3de46de799b62fcbb51469d6b93cb073f5eedd5d55662ced0005b7",
-    ".guard-language-server.log": "2dd27d657b123a667acf475e4a1c1ed87cfe73b563191e747fc58171775bb6c9",
-    ".guard-qt3-reviewed-final.log": "ef29c42a8e2a3d50dc2ee411e480d411d1f976e4f9d30980af6b9f452787c823",
-    ".guard-qt4-reviewed-final.log": "d6279efcab49343b85b3fb819aa86ec104738aad07f1ebc310a574cef7b19b22",
-    ".guard-doc-render.log": "7c0955559287cf06930262d5fcaa10b11067e40ac8ff19ac16b3fcf13bd10918"
+    ".guard-retained-source-build.log": "8280eeda1eb80ce833798bd35f94ba1e3123dce22fcd5f6a7d41ebbc92a1b8aa",
+    ".guard-retained-source-tests.log": "f4f817a5b005349609f888b74befeb2faee85c3a76892b36df6c5eac2aaeeb9b",
+    ".guard-retained-source-focused-final.log": "ed3d6e1393612823bdb9f29b57166fc98a32c85cabdf8bfc34395bf7041055c6",
+    ".guard-retained-source-language-server.log": "722850f32df20246bed8e282c5915cf168bfbb56dcd6727bdc5679bdd04ac2aa",
+    ".guard-retained-source-qt3.log": "72fd36a102110e627833f280e2ca75ad154ae36834fdf65cec1072e0252ce4cd",
+    ".guard-retained-source-qt4.log": "914a7490bb2bade2d9b04cdabeff9a66afc8fb56d4b66d8f89cd467733c11464"
   },
   "sourceFiles": {
     "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs": "d13e2c5b79e6088558168cc139b0a9deea801c248c9b8c9886abb9c14d827d66",
@@ -125,14 +124,26 @@
     "src/Bosak.Xslt/Authoring/AuthoringNodeDescriptor.cs": "fb7bf92887f744cb7ad16b07f9393c69c1018ffc799eecb9b7f28fe457ea8acd",
     "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs": "f5d1d5d5872f79a49866893564f77152b07dac7e93935fe19fba085182909e59",
     "src/Bosak.Xslt/Authoring/AuthoringSource.cs": "fb2515302c222b9c0d621658a673719ecede0cd62016464eefdb372bcc175b27",
-    "src/Bosak.Xslt/Authoring/AuthoringValueOfInsertion.cs": "3594ad071fef9ecaf460dafd0dabc4ad1c334d2eef8e5ccf5a90007e01a253a1",
+    "src/Bosak.Xslt/Authoring/AuthoringValueOfInsertion.cs": "2b108c3cbade898ff49d7de545df4e35b09be224c7e94176b58a0e0999a8720f",
     "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs": "939ce787d9d3588c8b79b94b0095d38758de006faebb7735e641041d65b18015",
     "src/Bosak.Xslt/Authoring/ExpressionSlotContext.cs": "d8e39dddff9764a05d70835163356d5615ec80ddbc760f9874ba5f4624e8b22b",
     "src/Bosak.Xslt/Authoring/IAuthoringModuleResolver.cs": "b94807cc19f4e0d10104edc3e8bc86d6f668d988d51f11b727eb0d6907ef2c52",
     "src/Bosak.Xslt/Authoring/InsertionExpressionCoverage.cs": "a7231a2dccd79a8b702e114183403f398b6d026877c2ad9f4a8e24a4da33fd6b",
     "src/Bosak.Xslt/Authoring/SourceRange.cs": "58fecd8a92a311c90f2c1e9578e44364bcf05cbbc2fab6de85b5cfecf3861f29",
     "src/Bosak.Xslt/Authoring/SourceTagScanner.cs": "20c4f021c8573518d2632ccf63fa2a5aad531af52cd0e5ca8d6ab06c009900bd",
-    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "903aab2e9080560cc1db5e45116e38866a21fd9acf7e31bc6d3ed760f78ac994",
+    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "3d611b6d1cbc5d8b4496ebd54dac97714a28f583050ba452896c781de2090bfd",
     "src/Bosak.Xslt/Authoring/XsltAuthoring.cs": "29cd5284b03dc9b315c3f03437ad4a393f525c09c2728058e694bedcc460ea49"
+  },
+  "priorReviewedRun": {
+    "solutionPassed": 8556,
+    "focusedInsertionTests": 73,
+    "sourceRevision": "9f7daf5a5fcc1d0f14476d7a62091d636f551a39"
+  },
+  "priorInspectionRegressionBaseline": {
+    "candidateRevision": "9f7daf5a5fcc1d0f14476d7a62091d636f551a39",
+    "passed": 2,
+    "failed": 1,
+    "expectedFailure": "Shadow preprocessing removed an attribute from the derived tree and the old candidate incorrectly issued a target.",
+    "trxSha256": "1217944997a4d88581bbbfdef2d5632ab922ec2cafd99f1662604e50723ff4c4"
   }
 }

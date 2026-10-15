@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Retain private source-derived context independently of earlier inspection compilation.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -74,10 +75,11 @@ public sealed class AuthoringInsertionFailure
 /// <summary>An engine-issued append position bound by reference to one immutable input snapshot.</summary>
 public sealed class AuthoringValueOfInsertionTarget
 {
-    internal AuthoringValueOfInsertionTarget(AuthoringSnapshot owner, AuthoringNodeDescriptor parent, int offset)
-    { Owner = owner; Parent = parent; CharacterOffset = offset; }
+    internal AuthoringValueOfInsertionTarget(AuthoringSnapshot owner, AuthoringNodeDescriptor parent, int offset, System.Xml.Linq.XElement contextElement)
+    { Owner = owner; Parent = parent; CharacterOffset = offset; ContextElement = contextElement; }
     internal AuthoringSnapshot Owner { get; }
     internal int CharacterOffset { get; }
+    internal System.Xml.Linq.XElement ContextElement { get; }
     /// <summary>Gets the original parent descriptor; integer identities alone cannot recreate a target.</summary>
     public AuthoringNodeDescriptor Parent { get; }
     /// <summary>Gets the principal module URI.</summary>

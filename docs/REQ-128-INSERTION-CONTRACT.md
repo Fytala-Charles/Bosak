@@ -52,6 +52,8 @@ Use an additive structural contract instead of extending `AuthoringEditProposal`
 
 Null required arguments throw `ArgumentNullException`, consistently with the existing surface. Empty/incomplete expressions are classified proposal failures. Targets cannot be serialized, persisted across reopen or reconstructed from an integer ID. Out-of-process target transport is outside this slice.
 
+Eligibility and contextual bindings are resolved from a fresh, DTD-prohibited, resolver-free parse of retained source, independently of any earlier inspection compilation of a derived backing tree.
+
 Target discovery checks descriptor membership by engine-owned identity, not integer equality alone. A descriptor from another inspection with an equal integer ID is foreign. Proposal submission checks the target's owning snapshot before any node lookup. Repeating a proposal against its original immutable snapshot can still produce valid attached data after a newer candidate exists; the engine does not know Braid's accepted revision. Braid independently rejects stale sessions/revisions during review and Apply.
 
 ## Exact insertion and byte fidelity

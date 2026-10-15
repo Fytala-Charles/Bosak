@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Resolve eligibility from retained source rather than a previously compiled backing tree. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -43,11 +44,11 @@ internal static class ValueOfInsertionPipeline
             token.ThrowIfCancellationRequested();
             if (!ReferenceEquals(snapshot.FindNodeById(parent.Id), parent))
                 return new(null, Failure(AuthoringInsertionFailureKind.ForeignSnapshot, "The parent belongs to another snapshot."));
-            var failure = CheckScope(snapshot, parent, token, out var offset);
+            var failure = CheckScope(snapshot, parent, token, out var offset, out var contextElement);
             if (failure is not null) return new(null, failure);
             failure = Validate(snapshot, false, token);
             token.ThrowIfCancellationRequested();
-            return failure is null ? new(new(snapshot, parent, offset), null) : new(null, failure);
+            return failure is null ? new(new(snapshot, parent, offset, contextElement!), null) : new(null, failure);
         }
         catch (OperationCanceledException) { return new(null, Cancelled()); }
     }
@@ -71,7 +72,7 @@ internal static class ValueOfInsertionPipeline
             try { XmlConvert.VerifyXmlChars(text); }
             catch (XmlException ex) { return new(null, Failure(AuthoringInsertionFailureKind.InvalidExpression, ex.Message)); }
 
-            var parent = (XElement)target.Parent.BackingObject!;
+            var parent = checkedTarget.Target.ContextElement;
             var bindings = NamespaceBindings(parent);
             var prefix = bindings.Where(pair => pair.Key.Length != 0 && pair.Value == Xsl.NamespaceName)
                 .Select(pair => pair.Key).OrderBy(p => p == "xsl" ? 0 : 1).ThenBy(p => p, StringComparer.Ordinal).FirstOrDefault();
@@ -136,16 +137,21 @@ internal static class ValueOfInsertionPipeline
     }
 
     private static AuthoringInsertionFailure? CheckScope(AuthoringSnapshot snapshot, AuthoringNodeDescriptor parent,
-        CancellationToken token, out int offset)
+        CancellationToken token, out int offset, out XElement? retainedParent)
     {
         offset = 0;
+        retainedParent = null;
         var module = snapshot.PrincipalModule;
         if (snapshot.Modules.Count != 1 || module.Edges.Count != 0)
             return Failure(AuthoringInsertionFailureKind.UnsupportedModule, "Only a single principal module is supported.");
         var source = snapshot.SourceFor(module.ModuleUri);
         if (source.OriginalBytes.Length > AuthoringCapabilities.MaxValueOfInsertionSourceBytes)
             return Failure(AuthoringInsertionFailureKind.SizeLimit, "The original source exceeds the insertion byte limit.");
-        var root = module.Root.Children.FirstOrDefault(n => n.Kind == AuthoringNodeKind.Element)?.BackingObject as XElement;
+        XDocument document;
+        try { document = ReadDocument(source); }
+        catch (XmlException ex) { return Failure(AuthoringInsertionFailureKind.InvalidOriginal, ex.Message); }
+        token.ThrowIfCancellationRequested();
+        var root = document.Root;
         if (root is null || root.Name.Namespace != Xsl || root.Name.LocalName is not ("stylesheet" or "transform")
             || (string?)root.Attribute("version") is not ("3.0" or "4.0"))
             return Failure(AuthoringInsertionFailureKind.UnsupportedProfile, "An explicit XSLT 3.0 or 4.0 stylesheet is required.");
@@ -164,7 +170,17 @@ internal static class ValueOfInsertionPipeline
                 || a.Name.LocalName == "use-when"))
                 return Failure(AuthoringInsertionFailureKind.UnsupportedCoverage, "Static evaluation and fixed/type namespace contexts are outside insertion coverage.");
         }
-        if (parent.BackingObject is not XElement target || !target.AncestorsAndSelf().Contains(root))
+        var parentStartOffset = source.CoordinateMap.CharOffsetFromLineColumn(parent.Range.StartLine, parent.Range.StartColumn);
+        var target = parent.Kind == AuthoringNodeKind.Element ? root.DescendantsAndSelf().FirstOrDefault(element =>
+        {
+            token.ThrowIfCancellationRequested();
+            var info = (IXmlLineInfo)element;
+            var startOffset = source.CoordinateMap.CharOffsetFromLineColumn(info.LineNumber, info.LinePosition);
+            if (startOffset > 0 && source.Text[startOffset - 1] == '<') startOffset--;
+            return startOffset == parentStartOffset && element.Name.LocalName == parent.ElementName?.LocalName
+                && element.Name.NamespaceName == parent.ElementName.NamespaceUri;
+        }) : null;
+        if (target is null)
             return Failure(AuthoringInsertionFailureKind.IneligibleParent, "The target must be a template or literal result element.");
         XElement? template = target;
         while (template is not null && template.Name.Namespace != Xsl) template = template.Parent;
@@ -196,6 +212,7 @@ internal static class ValueOfInsertionPipeline
         if (offset <= start || !source.Text.AsSpan(offset).StartsWith("</", StringComparison.Ordinal)
             || source.CoordinateMap.ByteOffsetFromCharOffset(end) != parent.Range.StartByteOffset + parent.Range.ByteLength)
             return Failure(AuthoringInsertionFailureKind.SourceAlignmentFailure, "The parent closing tag does not align with retained source.");
+        retainedParent = target;
         return null;
     }
 
@@ -237,7 +254,7 @@ internal static class ValueOfInsertionPipeline
         try
         {
             var source = snapshot.SourceFor(snapshot.PrincipalModule.ModuleUri);
-            var document = XDocument.Parse(source.Text, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
+            var document = ReadDocument(source);
             token.ThrowIfCancellationRequested();
             new XsltCompiler { ResourcePolicy = policy, UriResolver = new DenyResolver() }
                 .Compile(document, source.BaseUri.AbsoluteUri);
@@ -269,6 +286,13 @@ internal static class ValueOfInsertionPipeline
             1201 => name.Equals("utf-16", StringComparison.OrdinalIgnoreCase) || name.Equals("utf-16be", StringComparison.OrdinalIgnoreCase),
             _ => false,
         };
+    }
+
+    private static XDocument ReadDocument(AuthoringSource source)
+    {
+        using var text = new StringReader(source.Text);
+        using var reader = XmlReader.Create(text, new XmlReaderSettings { DtdProcessing = DtdProcessing.Prohibit, XmlResolver = null }, source.BaseUri.AbsoluteUri);
+        return XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetLineInfo | LoadOptions.SetBaseUri);
     }
 
     private static Dictionary<string, string> NamespaceBindings(XElement element)

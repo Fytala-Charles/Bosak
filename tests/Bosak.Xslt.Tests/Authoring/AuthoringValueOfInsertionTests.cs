@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 15-10-2026     | Cover default inspection preprocessing without weakening source eligibility checks.      |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -484,6 +485,23 @@ public class AuthoringValueOfInsertionTests
         var result = snapshot.ProposeValueOfInsertion(new(target, expression));
         Assert.False(result.IsSuccess);
         Assert.Contains(result.Failure!.Kind, new[] { AuthoringInsertionFailureKind.UnsupportedCoverage, AuthoringInsertionFailureKind.InvalidExpression });
+    }
+
+    /// <summary>Earlier derived compilation cannot hide a static preprocessing construct in retained source.</summary>
+    [Theory]
+    [InlineData("use-when='true()'", "")]
+    [InlineData("", "<xsl:param name='s' static='yes' select='1'/>")]
+    [InlineData("", "<xsl:variable name='v' _select='{1}'/>")]
+    public void PriorInspectionCompilation_DoesNotChangeSourceEligibility(string attribute, string declaration)
+    {
+        var text = Sheet($"<out {attribute}></out>").Replace("<xsl:output", declaration + "<xsl:output");
+        Assert.True(AuthoringSource.TryCreate(Encoding.UTF8.GetBytes(text), ModuleUri, out var source, out _));
+        var snapshot = XsltAuthoring.Inspect(source!).Snapshot!;
+        Assert.True(snapshot.IsCompilable);
+        var result = snapshot.GetValueOfInsertionTarget(Find(snapshot, "out"));
+        Assert.False(result.IsSuccess);
+        Assert.Equal(AuthoringInsertionFailureKind.UnsupportedCoverage, result.Failure!.Kind);
+        Assert.Equal(Encoding.UTF8.GetBytes(text), snapshot.ExportOriginal(ModuleUri));
     }
 
     private sealed class CountingResolver : IAuthoringModuleResolver
