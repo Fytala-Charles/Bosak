@@ -1,3 +1,11 @@
+# Public 1.7.1 Braid verified; VS Code 0.2.3 prepared - 2026-10-15
+
+Parent main d310b864aa5248d6c6c8fbd78aef51dd422a4dff. Fresh 280-file Braid snapshot builds cleanly and passes 843/0/0 against public nuget.org-only 1.7.1. Nine signed archives/restore hashes/cache and both test-output DLLs match approved metadata. Original Braid files/status/pin unchanged. Separate public report/receipt preserves candidate evidence.
+
+What was built: extension 0.2.3 manifest/lockfile/readme; isolated fresh framework-dependent engine-1.7.1 bundle, ten assemblies/exact initial revision, package/protocol and actual isolated VS Code valid/error/live-correction proof. Compilation/highlighting/launcher/startup checks and 84 LS tests pass. docs/VSCODE-0.2.3-PREPARATION.json preserves initial working-manifest proof. Initial editor launch inherited Node-only mode; separate attempt retained, corrected process passes. No user extension/profile changes.
+
+Next: successful exact-head CI/review and integration, then rebuild/reverify exact merged VSIX and present it for separate Marketplace approval. Do not publish or tag during preparation. Public libraries 1.7.1, Marketplace 0.2.2 bundles 1.7.0. No engine/API/REQ/gate change; package-dependent editor signatures/module acquisition limits remain. Resolve REQ-128 design decisions separately without implementing or changing its pending status. Preserve original Braid, REQ-128 work, .sweep-baselines/ and all receipts. Earlier entries below are historical.
+
 # 1.7.1 published and public-feed verified - 2026-10-15
 
 User approved exact revision 35e531c101bcbba13a2533f33a7decca5f18eddd; immutable v1.7.1 points there. Single tag-triggered release workflow https://github.com/Fytala-Charles/Bosak/actions/runs/38768757675 succeeds: 8,483 solution tests and ten successful NuGet uploads. GitHub release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.7.1. No duplicate workflow dispatch or tag movement.

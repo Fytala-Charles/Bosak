@@ -2,6 +2,10 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
+## Engine alignment (0.2.3 candidate)
+
+Unpublished version 0.2.3 bundles released engine 1.7.1, including lexical original binding in escaping inline functions. Package-dependent editor signatures and external module acquisition keep their existing coverage limits. Requires the .NET 10 runtime. Marketplace publication requires separate approval; the published extension remains 0.2.2 with engine 1.7.0.
+
 ## Engine alignment (0.2.2)
 
 Version 0.2.2 bundles released engine 1.7.0, including bounded direct and transitive abstract optional function overrides. Package-dependent editor signatures and external module acquisition retain their existing coverage limits. Requires the .NET 10 runtime. Version 0.2.2 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the extension and reload VS Code.
@@ -53,7 +57,7 @@ Version 0.1.6 is published on the [VS Code Marketplace](https://marketplace.visu
 
 Search for **"Bosak XPath / XSLT"** in the Extensions view (`Ctrl+Shift+X`), or install directly from
 [marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak).
-Published versions: **0.2.1** (2026-10-15) - engine 1.6.0 bundle alignment; **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
+Published versions: **0.2.2** (2026-10-15) - engine 1.7.0 bundle alignment; **0.2.1** (2026-10-15) - engine 1.6.0 bundle alignment; **0.2.0** (2026-10-14) - engine 1.4.0, contextual XSLT diagnostics and executable/protocol packaging corrections; **0.1.6** (2026-10-14) - distinct XML attribute/value and embedded XPath highlighting; **0.1.5** (2026-10-07) — TextMate grammar JSON-escape fix; 0.1.4 (2026-10-05) — refreshed language-server bundle.
 
 ### Option 2 — Development / Sideload (recommended for contributors)
 
