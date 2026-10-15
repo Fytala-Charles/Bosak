@@ -4,6 +4,8 @@
   <p>Unpublished 1.7.1 correctness fix, 15 October 2026</p>
 </div>
 
+**Publication follow-up - 2026-10-15:** This bounded correction is now published in Bosak 1.7.1 at immutable tag `v1.7.1` (`35e531c1`). [Publication evidence](RELEASE-1.7.1-PUBLICATION.json). The original implementation-stage status and verification below are historical; VS Code 0.2.2 remains on engine 1.7.0.
+
 ## Result
 
 An inline function returned by a concrete overriding function retains the lexical `xsl:original` declaration after the override returns. It also retains that declaration when invoked inside a different override. For example, returning `function($v) { xsl:original($v) }` and later calling it with `'A'` produces the original's `'ABC'`, rather than an unresolved-function error or another override's original.
