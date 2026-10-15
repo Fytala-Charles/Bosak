@@ -1,0 +1,297 @@
+{
+  "date": "2026-10-15",
+  "candidateRevision": "7f051b2621f8b3bc3335b30396a3ad2443de4125",
+  "version": "1.8.0",
+  "published": false,
+  "freshCache": true,
+  "projectReferences": false,
+  "consumerAssembly": "Bosak.Req128.PackageConsumer.Tests",
+  "publicApiTests": {
+    "passed": 141,
+    "failed": 0,
+    "skipped": 0
+  },
+  "packageSourceMapping": "Bosak.* exclusively from local candidate feed; test dependencies from nuget.org",
+  "packageCount": 10,
+  "consumerPackageCount": 9,
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version": "1.8.0",
+      "archiveSha256": "08d2fde5dcc4533a554f01f4d7ce061bbf3cd1e2c6b3487738017a69925a5e3b",
+      "assemblySha256": "fd9ede4725fd89dfd020e08e9b7b20558f1302dbb107850ea212cf89f31a31ac",
+      "dependencies": [
+        [
+          "Bosak.XPath.Compiler",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Parser",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Runtime",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Standard",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version": "1.8.0",
+      "archiveSha256": "f6a46ad815311422278a59be22f62891a0bbef56bc267637aa54c487d4fbb8bf",
+      "assemblySha256": "12e52346d4713b2109735bced384a09084049ae847b0ce16e83e917ea8b3b384",
+      "dependencies": [
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Parser",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version": "1.8.0",
+      "archiveSha256": "7ffe40dd0c0e464b352fddeb4df7ffc6aede30369d780701964c8575d3413cb8",
+      "assemblySha256": "11970503a90455cc3568686b638aa19ecb02737375b90b5366313090a9aa1ff0",
+      "dependencies": [],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version": "1.8.0",
+      "archiveSha256": "ee35d13a85d89ee72a1a461b7eb7169e9019e80bbb28edd64b72d8a8858b4268",
+      "assemblySha256": "fa96ede2226b85056b85c4c084b90826ab82647d7463b29efc885c0ce3659108",
+      "dependencies": [
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version": "1.8.0",
+      "archiveSha256": "7ebb536287811b5316662b818e1788dfbea49028876ad4035172ac093b373c8c",
+      "assemblySha256": "62f4407b204a7cdd2be46d6da1debf4d90e3ae1ae83eb039052fa7af9a39ce51",
+      "dependencies": [
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "version": "1.8.0",
+      "archiveSha256": "e5cc7cd9c24ba5bb81636a97ba5291fd9ae6a86b81bead43b5dc4963885439d4",
+      "assemblySha256": "c7e70b98a5e1edaf883992e410245e9e805726ce7829f98860317d31e412c7a9",
+      "dependencies": [
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Providers",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": false
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version": "1.8.0",
+      "archiveSha256": "018c0162a3efa12748c0df556ec750c0eb8b50c1114c38e7e9d92e4833753587",
+      "assemblySha256": "ad5b916c9f5c4a3c06ad7c466ad39b1331985a2a645b8c0592f7f9fe230e2c2b",
+      "dependencies": [
+        [
+          "Bosak.XPath.Compiler",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Providers",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version": "1.8.0",
+      "archiveSha256": "984538b18ca852f0b5a1a65d4596baa9b028f723712b2fe42f1e6ca66dbe302e",
+      "assemblySha256": "a323d4b14396224863d7158af8bd3e427975f309afdc73a57f38e8efb5191194",
+      "dependencies": [
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Providers",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Runtime",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version": "1.8.0",
+      "archiveSha256": "fde1970de55967272db8eae991e8370f59c0a44a6c132757ea141f3f4db9c3da",
+      "assemblySha256": "08788f1528b218603dc013824cdde40a23fff4db29c3d52a4ec00f95ec0d9304",
+      "dependencies": [
+        [
+          "Bosak.XPath.Api",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Providers",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Runtime",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Standard",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version": "1.8.0",
+      "archiveSha256": "fe8acee990e12d516dae92b186388b8cd47dc6b92e1e42ebe96db38b849e1b69",
+      "assemblySha256": "6b7fdcb7a060da23b725d68ac20cae7f04e507ce9ad3c328ed1d4cae6b4d6f44",
+      "dependencies": [
+        [
+          "Bosak.XPath.Api",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Core",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Parser",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Providers",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Runtime",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XPath.Standard",
+          "1.8.0"
+        ],
+        [
+          "Bosak.XQuery",
+          "1.8.0"
+        ]
+      ],
+      "restoredByConsumer": true,
+      "archiveCacheOutputMatch": true
+    }
+  ],
+  "consumerTrxSha256": "9904bf221e790525fbb4b82bf8f6d8bd319352dd435d9b68f2210b60c7f06a25",
+  "consumerLogSha256": "4722efc35121dc210393993f26b6e99636f4f5cb7a922987ac96f4aedb313149",
+  "assemblyMetadata": [
+    {
+      "Name": "Bosak.XPath.Api",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "fd9ede4725fd89dfd020e08e9b7b20558f1302dbb107850ea212cf89f31a31ac"
+    },
+    {
+      "Name": "Bosak.XPath.Compiler",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "12e52346d4713b2109735bced384a09084049ae847b0ce16e83e917ea8b3b384"
+    },
+    {
+      "Name": "Bosak.XPath.Core",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "11970503a90455cc3568686b638aa19ecb02737375b90b5366313090a9aa1ff0"
+    },
+    {
+      "Name": "Bosak.XPath.Parser",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "fa96ede2226b85056b85c4c084b90826ab82647d7463b29efc885c0ce3659108"
+    },
+    {
+      "Name": "Bosak.XPath.Providers",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "62f4407b204a7cdd2be46d6da1debf4d90e3ae1ae83eb039052fa7af9a39ce51"
+    },
+    {
+      "Name": "Bosak.XPath.Providers.Database",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "c7e70b98a5e1edaf883992e410245e9e805726ce7829f98860317d31e412c7a9"
+    },
+    {
+      "Name": "Bosak.XPath.Runtime",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "ad5b916c9f5c4a3c06ad7c466ad39b1331985a2a645b8c0592f7f9fe230e2c2b"
+    },
+    {
+      "Name": "Bosak.XPath.Standard",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "a323d4b14396224863d7158af8bd3e427975f309afdc73a57f38e8efb5191194"
+    },
+    {
+      "Name": "Bosak.XQuery",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "08788f1528b218603dc013824cdde40a23fff4db29c3d52a4ec00f95ec0d9304"
+    },
+    {
+      "Name": "Bosak.Xslt",
+      "AssemblyVersion": "1.8.0.0",
+      "InformationalVersion": "1.8.0+7f051b2621f8b3bc3335b30396a3ad2443de4125",
+      "AssemblySha256": "6b7fdcb7a060da23b725d68ac20cae7f04e507ce9ad3c328ed1d4cae6b4d6f44"
+    }
+  ]
+}

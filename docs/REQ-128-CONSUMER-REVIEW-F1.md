@@ -20,7 +20,7 @@ Fifty typed/pattern regression cases cover XSLT 3.0 and 4.0, element/attribute t
 
 Against the reviewed implementation, the initial 56 cases produce **6 pass / 50 fail**. After the correction, all **141 insertion cases pass**, comprising the original 81 and the new 60. The original consumer probes and upstream working copies remain unchanged. Baseline and corrected TRX/log receipts are retained separately.
 
-Full solution, language-server, frozen-gate and fresh exact-revision package evidence will be recorded in [the verification receipt](REQ-128-F1-VERIFICATION.json) when complete. Previous candidate receipts remain historical and are not evidence of F1 closure.
+Verified implementation source **7f051b2621f8b3bc3335b30396a3ad2443de4125** passes **8,624/0/0** solution tests (XSLT **5,738**), **84/0/0** language-server tests and **141/0/0** public-only fresh package-consumer cases. QT3 remains **31,142/0/679**, qt4 gated **8,278/0/1,894**. All ten library assembly versions/revisions verify; nine transitive consumer archive/cache/output payloads byte-match. [Execution receipt](REQ-128-F1-VERIFICATION.json); [package receipt](REQ-128-F1-PACKAGES.json). The full 60-case F1 public-package baseline against source-equivalent 526924f0 produces **10 pass / 50 fail**. Previous candidate receipts remain historical and are not evidence of F1 closure.
 
 ## Adoption boundary
 
