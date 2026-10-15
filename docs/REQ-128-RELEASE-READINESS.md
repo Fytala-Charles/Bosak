@@ -14,13 +14,17 @@ Ten local 1.8.0 packages were rebuilt at the reviewed head. All ten assemblies c
 
 Braid's unchanged 19-probe program was also compiled against those packages from a separate Bosak scratch project. All 19 outcome lines match the reviewed results, including the four typed-test refusals and the successful fidelity controls. Probe output and build files were written only under Bosak's ignored scratch directory. These probes remain exploratory evidence, not a complete Braid acceptance suite.
 
-The exact-head [CI run](https://github.com/Fytala-Charles/Bosak/actions/runs/38793664720) passes 8,624 solution tests, 84 language-server tests and highlighting checks. Previously recorded frozen gates remain QT3 31,142/0/679 and qt4 gated 8,278/0/1,894. No engine source or test changes were made during this readiness step, so those checks were not needlessly repeated.
+The exact-head [CI run](https://github.com/Fytala-Charles/Bosak/actions/runs/38793664720) passes 8,624 solution tests, 84 language-server tests and highlighting checks. Previously recorded frozen gates remain QT3 31,142/0/679 and qt4 gated 8,278/0/1,894. No engine source or test changes were made during the reviewed-head readiness step. The later merged-revision verification reran both gates and retained the same totals.
 
 ## Integration and publication gates
 
-PR #312 is still a draft at the reviewed head; the default branch has not changed. Automatic approval review rejected marking the PR ready and merging it because the earlier authorization covered preparation/review rather than shared-default-branch mutation. The rejected command did not execute. Explicit approval of that exact ready/merge action is required before integration can continue.
+PR #312 was marked ready and merged with explicit user approval on 15 October 2026. Actual merge revision: **`20a5d9be757599848d7ceaa8885e59bea8dbb2ec`**. Its source and test trees exactly match reviewed head `b0cd2ef8`. The earlier automatic approval rejection is retained in the historical reviewed-head receipt; the subsequent explicit approval authorized this merge.
 
-After authorized integration, rebuild and verify packages from the actual merged revision. The reviewed-head packages above do **not** substitute for that merged-revision gate. Present the resulting immutable candidate for separate publication approval; do not create a release tag or run the publication workflow during preparation.
+Ten packages were rebuilt from the actual merge into a separate feed and fresh cache. All 141 public API consumer tests pass, all 19 unchanged Braid probe outcomes match, and all nine restored library payloads match archive/cache/output bytes. See [merged-revision package evidence](REQ-128-MERGED-PACKAGES.json). The reviewed-head receipt remains historical and is not rewritten as merged evidence.
+
+The actual merge [CI run](https://github.com/Fytala-Charles/Bosak/actions/runs/38805459550) passes all 8,624 solution tests, 84 language-server tests and highlighting checks. Both conformance gates were rerun: QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, with zero gated failures.
+
+Publication/tagging requires separate approval. No release tag, publication workflow, Braid pin or runtime adoption was changed. This follow-up branch contains documentation only; the candidate package revision remains the immutable merge above.
 
 REQ-128 remains In Progress for unpublished 1.8.0. Public libraries stay 1.7.1; VS Code 0.2.3 still bundles 1.7.1. Braid keeps pin `5bab4799783569d538cec9b03d37a57454f0eebc`. Its runtime adapter, operation discovery, Apply/history and native acceptance follow supported delivery independently.
 

@@ -1,3 +1,7 @@
+# REQ-128 approved integration - 2026-10-15
+
+User explicitly approved marking PR312 ready and merging exact reviewed head b0cd2ef8. PR312 merged at 20a5d9be757599848d7ceaa8885e59bea8dbb2ec; source/test trees equal the reviewed head. Ten actual merged-revision 1.8.0 packages built; fresh public consumer passes 141/0/0, nine restored library archive/cache/output payloads match, and all 19 unchanged Braid probe outcomes match. See REQ-128-MERGED-PACKAGES.json and REQ-128-RELEASE-READINESS.md. Current documentation reconciliation is on local docs/req128-merged-readiness; earlier entries and receipts are historical. No publication/tagging or Braid adoption. REQ128 remains In Progress; public libraries 1.7.1, VS Code 0.2.3 bundles 1.7.1, Braid pin unchanged. Actual merge CI run 38805459550 passes 8,624 solution + 84 LS tests and highlighting; rerun gates pass QT3 31,142/0/679 and qt4 8,278/0/1,894.
+
 # REQ-128 focused consumer clearance and ready-to-integrate baseline - 2026-10-15
 
 Local docs/req128-clearance branch starts from exact PR312 head b0cd2ef8e7600a62464c626f86260612a81c738a in D:/Development/Bosak/.guard-tmp/req128-clearance-source. The updated Braid report closes F1 in the declared value-of-only slice and reports no additional blocker; it does not approve merge or adoption. No further operation was requested by the report. A planning-only operation catalogue now distinguishes existing-source validation coverage from supported creation operations.
