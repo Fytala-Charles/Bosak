@@ -414,6 +414,7 @@
 //                      | Charles Korthout | 2.187 | 13-10-2026     | Reject empty values for required single structural record conversion
 //                      | Charles Korthout | 2.188 | 14-10-2026     | Defer optional host omission markers while preserving normal type conversion.            |
 //                      | Charles Korthout | 2.189 | 14-10-2026     | Share XPath 4.0 primitive numeric coercion with the XSLT argument host (1.3.2).            |
+//                      | Charles Korthout | 2.190  | 15-10-2026     | Capture lexical host targets and preserve bound original item identity.                  |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -4775,7 +4776,8 @@ internal static class VmEngine
             throw new InvalidOperationException($"FOAR0002: Function {{{nsUri}}}{localName}#{tuple.Item2} arity exceeds the implementation limit.");
         if (!context.TryResolveFunction(nsUri, localName, tuple.Item2, out var signature))
             throw new InvalidOperationException($"XPST0017: Function {{{nsUri}}}{localName}#{tuple.Item2} not found.");
-        return new NamedFunctionItem(nsUri, localName, tuple.Item2)
+        signature = signature.FunctionItemTarget ?? signature;
+        return new NamedFunctionItem(signature.NamespaceUri, signature.LocalName, tuple.Item2)
         {
             DefiningContext = context,
             CapturedContextItem = context.ContextItem,
@@ -4801,8 +4803,11 @@ internal static class VmEngine
             throw new InvalidOperationException($"FOAR0002: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} arity exceeds the implementation limit.");
         if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, named.Arity, out var signature))
             throw new InvalidOperationException($"XPST0017: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.Arity} not found.");
+        signature = signature.FunctionItemTarget ?? signature;
         return named with
         {
+            NamespaceUri = signature.NamespaceUri,
+            LocalName = signature.LocalName,
             DefiningContext = context,
             CapturedContextItem = context.ContextItem,
             CapturedContextPosition = context.ContextPosition,
@@ -4859,7 +4864,12 @@ internal static class VmEngine
                 // static calls resolved at compile time (xqhof7, for-each-901).
                 if (args.Length != named.ArityValue)
                     throw new InvalidOperationException($"XPTY0004: Function {{{named.NamespaceUri}}}{named.LocalName}#{named.ArityValue} cannot be called with {args.Length} argument(s).");
-                if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out var sig))
+                FunctionSignature sig;
+                if (named.CapturedSignature is FunctionSignature { IsBoundFunctionItem: true } bound)
+                {
+                    sig = bound;
+                }
+                else if (!context.TryResolveFunction(named.NamespaceUri, named.LocalName, args.Length, out sig))
                 {
                     // Fall back to the context in which the function item was created
                     // (function items returned by fn:transform delivery-format="raw").

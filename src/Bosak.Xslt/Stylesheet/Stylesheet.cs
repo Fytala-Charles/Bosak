@@ -323,6 +323,7 @@
 //                      | Charles Korthout | 0.10  | 14-10-2026     | Allow 4.0 optional function parameters and register reduced arities.                     |
 //                      | Charles Korthout | 2.162 | 14-10-2026     | Enable optional used-package functions through scoped reduced-arity registration.        |
 //                      | Charles Korthout | 2.163 | 14-10-2026     | Parse component arity before QName expansion; bound adopted range collisions.             |
+//                      | Charles Korthout | 2.164  | 15-10-2026     | Validate and replace complete optional override arity families.                          |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2760,15 +2761,6 @@ internal sealed class Stylesheet
                 {
                     Check(package);
                     var options = module._usedPackageOptions.GetValueOrDefault(package);
-                    if (options is not null)
-                        foreach (var element in options.OverrideFunctions)
-                        {
-                            var replacement = XsltFunctionDefinition.FromElement(element, module);
-                            if (replacement is null) continue;
-                            package.TryFindFunction(replacement.LocalName, replacement.NamespaceUri, replacement.Arity, out var original);
-                            if (replacement.MinimumArity < replacement.Arity || original is not null && original.MinimumArity < original.Arity)
-                                throw new NotSupportedException("Optional function arity ranges in xsl:override remain outside the supported profile.");
-                        }
                     foreach (var definition in package.GetAllFunctionDefinitions().Values.Distinct())
                     {
                         var visibility = GetEffectiveVisibility(package, definition.Element, "function", options,
@@ -5369,17 +5361,16 @@ internal sealed class Stylesheet
                 if (!seenOverrides.Add((local, ns, arity)))
                     throw new InvalidOperationException($"XTSE0770: Duplicate overriding function declaration '{{{ns}}}{local}#{arity}'.");
                 // XTSE3058: the override must be homonymous with a component of the used package.
-                if (!package.TryFindFunction(local, ns, arity, out var def) || def == null)
+                if (!package.TryFindFunction(local, ns, arity, out var def) || def == null || def.Arity != arity)
                     throw new InvalidOperationException($"XTSE3058: xsl:override function '{nameAttr}#{arity}' does not match any function in the used package.");
-                var overriding = XsltFunctionDefinition.FromElement(overrideElem, this);
-                if (def.MinimumArity < def.Arity || overriding is not null && overriding.MinimumArity < overriding.Arity)
-                    throw new NotSupportedException("Optional function arity ranges in xsl:override remain outside the supported profile.");
                 var exposed = package.GetExposedVisibility("function", local, ns, arity);
                 var effective = exposed ?? def.Visibility;
                 // XTSE3060: only public or abstract components may be overridden.
                 if (effective is not "public" and not "abstract")
                     throw new InvalidOperationException($"XTSE3060: Cannot override function '{nameAttr}' whose visibility is '{effective}'.");
                 ValidateFunctionOverrideSignature(overrideElem, def, nameAttr);
+                if (effective == "abstract" && def.MinimumArity < def.Arity)
+                    throw new NotSupportedException("Abstract optional function overrides remain outside the supported profile.");
             }
         }
     }
@@ -5391,6 +5382,9 @@ internal sealed class Stylesheet
     /// </summary>
     private void ValidateFunctionOverrideSignature(XElement overrideElem, XsltFunctionDefinition def, string displayName)
     {
+        var overriding = XsltFunctionDefinition.FromElement(overrideElem, this);
+        if (overriding is null || overriding.MinimumArity != def.MinimumArity || overriding.Arity != def.Arity)
+            throw new InvalidOperationException($"XTSE3070: The arity range of overriding function '{displayName}' differs from the overridden function.");
         var overrideParams = overrideElem.Elements(XName.Get("param", XslNamespace)).ToList();
         var baseParams = def.Element.Elements(XName.Get("param", XslNamespace)).ToList();
         for (int i = 0; i < baseParams.Count && i < overrideParams.Count; i++)
@@ -5411,6 +5405,9 @@ internal sealed class Stylesheet
         var baseDet = def.Element.Attribute("new-each-time")?.Value?.Trim()?.ToLowerInvariant() ?? "yes";
         if (overrideDet != baseDet)
             throw new InvalidOperationException($"XTSE3070: The new-each-time value of overriding function '{displayName}' differs from the overridden function.");
+        var baseStreamability = def.Element.Attribute("streamability")?.Value.Trim();
+        if (baseStreamability is not (null or "unspecified") && overrideElem.Attribute("streamability")?.Value.Trim() != baseStreamability)
+            throw new InvalidOperationException($"XTSE3070: The streamability of overriding function '{displayName}' differs from the overridden function.");
     }
 
     /// <summary>
@@ -9226,7 +9223,8 @@ internal sealed class Stylesheet
                 {
                     var overrideDef = XsltFunctionDefinition.FromElement(overrideElem, this);
                     if (overrideDef != null)
-                        overrides[(overrideDef.NamespaceUri, overrideDef.LocalName, overrideDef.Arity)] = overrideDef;
+                        for (int arity = overrideDef.MinimumArity; arity <= overrideDef.Arity; arity++)
+                            overrides[(overrideDef.NamespaceUri, overrideDef.LocalName, arity)] = overrideDef;
                 }
             }
 
@@ -9298,7 +9296,8 @@ internal sealed class Stylesheet
                 var key = (overrideDef.NamespaceUri, overrideDef.LocalName, overrideDef.Arity);
                 if (result.TryGetValue(key, out var original))
                     overrideDef.OverriddenFunction = original;
-                result[key] = overrideDef;
+                for (int arity = overrideDef.MinimumArity; arity <= overrideDef.Arity; arity++)
+                    result[(overrideDef.NamespaceUri, overrideDef.LocalName, arity)] = overrideDef;
             }
         }
     }

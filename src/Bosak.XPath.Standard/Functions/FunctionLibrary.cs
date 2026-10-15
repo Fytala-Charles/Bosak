@@ -115,6 +115,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.142   | 11-10-2026     | Return map:entries as a sequence; concatenate map:items values (REQ-118).                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.143  | 15-10-2026     | Hide lexical pseudo-functions from both availability overloads.                          |
 // ===========================================================================================================================================================
 // Change History:      |==================|=======|================|=========================================================================================
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
@@ -7238,7 +7239,7 @@ public static class FunctionLibrary
             if (!ctx.IsStaticEvaluation && IsXslt30FunctionReportedAvailable(nsUri, localName, arity))
                 return XdmValue.FromBoolean(true);
 
-            return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out _));
+            return XdmValue.FromBoolean(ctx.TryResolveFunction(nsUri, localName, arity, out var signature) && !signature.IsHiddenFromFunctionLookup);
         }
         else
         {
@@ -7247,7 +7248,7 @@ public static class FunctionLibrary
             {
                 if (!ctx.IsStaticEvaluation && IsXslt30FunctionReportedAvailable(nsUri, localName, a))
                     return XdmValue.FromBoolean(true);
-                if (ctx.TryResolveFunction(nsUri, localName, a, out _))
+                if (ctx.TryResolveFunction(nsUri, localName, a, out var signature) && !signature.IsHiddenFromFunctionLookup)
                     return XdmValue.FromBoolean(true);
             }
             return XdmValue.FromBoolean(false);

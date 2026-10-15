@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 0.53  | 09-10-2026     | REQ-123: added IsXPath40ExperimentalOnly (4.0-Exp S1 level plumbing)                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.54  | 14-10-2026     | Keep host optional-argument metadata internal and retain precise types.                  |
+//                      | Charles Korthout | 0.55   | 15-10-2026     | Retain internal declaration-bound host function item targets.                            |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -80,6 +81,12 @@ public sealed class FunctionSignature
 
     // XSLT host signatures alone permit omitted-marker values after the required prefix.
     internal int? MinimumHostArity { get; init; }
+
+    // A lexical host pseudo-name can create an item bound to its actual declaration.
+    internal FunctionSignature? FunctionItemTarget { get; init; }
+
+    // Such an item must keep that declaration even when its public name is overridden.
+    internal bool IsBoundFunctionItem { get; init; }
 
     /// <summary>The coarse parameter kinds used for dispatch, one entry per declared parameter.</summary>
     public required IReadOnlyList<XdmValueKind> ParameterTypes { get; init; }

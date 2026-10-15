@@ -1,0 +1,161 @@
+{
+  "date": "2026-10-15",
+  "sourceVersion": "1.6.0",
+  "publishedVersion": "1.5.0",
+  "baseRevision": "74eacdb5bdb2a2ef2905282cd01895a619621907",
+  "implementation": "Bounded public optional function overrides and declaration-bound original named/partial items",
+  "verification": {
+    "newCases": 41,
+    "newCasesPassed": 41,
+    "focusedSelectionPassed": 74,
+    "solution": {
+      "passed": 8372,
+      "failed": 0,
+      "skipped": 0
+    },
+    "xslt": {
+      "passed": 5486,
+      "failed": 0,
+      "skipped": 0
+    },
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "skipped": 0
+    },
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4GateOnly": [
+      8278,
+      0,
+      1894
+    ]
+  },
+  "baseline": {
+    "version": "1.5.0",
+    "passed": 1,
+    "failed": 40,
+    "skipped": 0,
+    "alreadyPassingCase": "ReducedUpperBoundDoesNotIdentifyOriginal",
+    "packages": [
+      {
+        "package": "Bosak.XPath.Api/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "5a50243ddf2a51f4103ffb4ab77e255478149c3e925d0302fc65fc9f481d05b1"
+      },
+      {
+        "package": "Bosak.XPath.Compiler/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "e0af55965a345cd828b37695dfbfd41ca677a52e7d4e25756ff3501e932f3e2f"
+      },
+      {
+        "package": "Bosak.XPath.Core/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "400ca3c52451c966fd361ac7a6f865192a0f893d5d8ed2a63fff30ccd1e63a85"
+      },
+      {
+        "package": "Bosak.XPath.Parser/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "e23f19a844e5c3aaa420c105f5cdc25ee7d4ffbd5d6aa9b2266d6d2c80be9ab9"
+      },
+      {
+        "package": "Bosak.XPath.Providers/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "527f95b57ca080b274b4fd4b7d1a47885090da609c17c175f9137bd935ec8d7e"
+      },
+      {
+        "package": "Bosak.XPath.Runtime/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "b99722e4ea3d83af8dd8cd8135da3a7fe72adb7281b4c65c78e904e570c544e6"
+      },
+      {
+        "package": "Bosak.XPath.Standard/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "e0713bfad0b60f74e6765df961cabd3b448805a9812854746633f9e817a9d73d"
+      },
+      {
+        "package": "Bosak.XQuery/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "2b8842f02282ad520589646fd0800346973574d4c96934017ae210b3e8e8470d"
+      },
+      {
+        "package": "Bosak.Xslt/1.5.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "sha256": "7b448725ae1226813899d9407daee14d6d3e13a5eef2e8a88eb7cd2ece9b285a"
+      }
+    ],
+    "initialMatrix": {
+      "passed": 0,
+      "failed": 24
+    },
+    "fixtureSha256": "cf19528ebf83573e44488bfe09c0857190577b43a2f4de3c701a2141a84b824e"
+  },
+  "files": {
+    "src/Directory.Build.props": "664eaf64fd94a06b125b142e7338f479c932ddc7c7b0d696dc4d952d2076c017",
+    "src/Bosak.XPath.Runtime/Functions/XPathFunction.cs": "6d8916b393a27025071ed23c0b95ec5662c171ab6c0c36166deefc427a7c60af",
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "92a7c44b7e17ad18f240887f5607534ad693c91df60dfe436ab6fb533eb0f462",
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "4bcf8134531e399338cdcebcb8b8ad2e68687513a22d9778b442ca14b6a8fd96",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "7d7f5bf4e34ca4c3f744dc59c93e17f93df6ad7aaa9ef76d45fe99322851c580",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "0d3250821b2522f64ecca96aade237b4da8acddcabd56e21b3561a2aaf42559f",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40OptionalOverrideTests.cs": "cf19528ebf83573e44488bfe09c0857190577b43a2f4de3c701a2141a84b824e",
+    "tests/Bosak.Xslt.Tests/Validation/Xslt40UsedPackageOptionalFunctionTests.cs": "c2835834e459da2ccc4aca11e8245932d41c2f2a661f9d6a8f08b787706e4697"
+  },
+  "boundaries": [
+    "Abstract optional original components explicitly unsupported",
+    "Adopted/local overlapping optional families explicitly unsupported",
+    "Package-dependent authoring signatures and module acquisition unchanged",
+    "Escaping inline closures that defer direct original calls are outside tested contract"
+  ],
+  "specReview": {
+    "url": "https://qt4cg.org/specifications/xslt-40/Overview.html",
+    "date": "2026-10-15",
+    "sha256": "931e6984d3de274dc49b1f9a75ef4e2556729b32497fa083e72af8bb4ce14e79"
+  },
+  "publicApiChanged": false,
+  "gateMembershipChanged": false,
+  "upstreamSubmission": null,
+  "publication": "Not authorized or performed; published 1.5.0 tag unchanged",
+  "priorStep": "BRAID-1.5.0-COMPATIBILITY.json",
+  "logs": {
+    ".guard-tmp/optional-override-baseline.log": "c8843249371f277821c41066c751dc8cefd8ccbbb1e25713836b6554cdf9937e",
+    ".guard-tmp/optional-override-focused-initial.log": "5afe651052a01700a72234eb8156b3207cd79f6fde3bdef3bb4a7f8dcf21723e",
+    ".guard-tmp/optional-override-focused-second.log": "260b0d8d9043ea126bdd7f458d6d88a5a24fea5fa4c814997592db76039af3e5",
+    ".guard-tmp/optional-override-focused-third.log": "fdb7ddd0e9d59c0fb5d876da9c7594a7a6600076a4d108af800c849a7bdba8c0",
+    ".guard-tmp/optional-override-focused-final.log": "0d3d27a06ccb7dcf72888fac6b38cad6612cff7d443a3ac6a25aca06d086d28d",
+    ".guard-tmp/optional-override-scope-probe.log": "ba6473947e66aa27592b240a84f1d432cb9717effdf38cb86acf660d30ce63cf",
+    ".guard-tmp/optional-override-scope-probe-isolated.log": "8706c52a3bb62ca456d6e5b90b6e468439a8483f6f942cd5419f07ac018a42a8",
+    ".guard-tmp/optional-override-focused-scope-fix.log": "d2106b92863c6dffe76f45b8125afec020e2c65c2b0a0b4419738aff306b5764",
+    ".guard-tmp/optional-override-focused-complete.log": "186cb31f8107aa949f3f5e76dcd6f7a74bea2b39b4504b6cb87a7c27d73a797c",
+    ".guard-tmp/optional-override-build.log": "692b1abd5b5acf77da57b4feec09594b5c892bd3a0a31757fdaac97cfa61815f",
+    ".guard-tmp/optional-override-solution.log": "5ed6ca3afd84d14f72d10180a2d4f169ead8c9e2ffc135cb9cd27fbbe76e8cd9",
+    ".guard-tmp/optional-override-build-final.log": "2814ac637e487836a26f4b184517653bd4f2522ca8161b3be314d2e904307cfd",
+    ".guard-tmp/optional-override-baseline-complete.log": "077ee9eb81b0e53021ee138d0487835cf3070c70d4a457c98d86f39a636ee7f3",
+    ".guard-tmp/optional-override-solution-final.log": "92fa4e9ccd1776b6432e95d0744a444c09047c81809ec0cc0daec8f3de626399",
+    ".guard-tmp/optional-override-language-server-final.log": "0797608bca516dfd354c176dde69f607460143172b46fcf98ef15ed01cdbf384",
+    ".guard-tmp/optional-override-qt3-final.log": "35e1afd77316d43628dee55183defb9ea47636a624f769618d7db4427ee58f5f",
+    ".guard-tmp/optional-override-qt4-final.log": "e2fd5f421a5b14655e5401414de2ecbf8b54f9f6a8b5e01d1fd0c2a77299f37b"
+  },
+  "trx": {
+    ".guard-tmp/optional-override-baseline-results/charl_CHARLES_2026-10-15_06_38_22_net10.0.trx": "54d4a2d71ec340c7cb6b50494eeee72f52beec49a1b2ac86bbc353d54632c11c",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0.trx": "92fe221c5bf8ee36662bfaa909ac6248e0035a53e4e91f7a158419f104024a8b",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[1].trx": "ba6bcf99b5b75959940c21f10657e1eedd03a73c8e3583facd9959f6dfbd3345",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[2].trx": "adc3681e941062dedbd9dabad0d32bf72d51b8f21217c1f040369003aa0f584f",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[3].trx": "5c6bf1c7ad97b41a60ab6ef31b84c118d938c3b0ecab726a2a1a57e6fc86816b",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[4].trx": "75ae3d3dbbadde5a89433187f37b7080eb4ca551fa3879e1ae756242d6f989be",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[5].trx": "31c2a198408069ecce8b60377d25dc5675e8dd610c93cbbda547922c650c2be6",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[6].trx": "a2caf925e001dd2f185acdda7a22b075e9851f23f7e851c06c52ab1b365af337",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[7].trx": "265e9886be5fe61ec9daf50da56464b6d2931ff7c8c57a37ef72a83014caff0a",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_34_net10.0[8].trx": "2b7f82e4f5dab0d8a7be890b8418972e3049af710280d49a8b35284f25d6c403",
+    ".guard-tmp/optional-override-final-results/charl_CHARLES_2026-10-15_06_38_35_net10.0.trx": "bccf5d3bfc6ad80e6afb5826964aa4a7b5d1878e09474428cef2f1287bb3a761"
+  },
+  "intermediateFindings": [
+    "Hidden pseudo-function availability corrected",
+    "Memoization keys separate original and replacement declarations",
+    "Reduced package-local original aliases registered at each arity",
+    "Late probe found library globals used for principal override defaults; scope re-entry corrected and final tests rerun",
+    "A concurrent test DLL rebuild failed with Windows file lock; excluded from final proof"
+  ]
+}
