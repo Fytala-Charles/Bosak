@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**REQ-128 insertion design - 2026-10-15:** The [proposed contract](REQ-128-INSERTION-CONTRACT.md) resolves snapshot-bound target eligibility, exact byte insertion/candidate identity, encoding/static-context/resource rules and planned acceptance fixtures for one value-of append. Design only: REQ-128 remains Pending/TBD/Unassigned; no insertion API/capability/UI, implementation acceptance, engine version or release is added. Public libraries remain 1.7.1; extension publication is separate. Earlier entries below are historical.
+
 **Public 1.7.1 Braid compatibility and VS Code 0.2.3 preparation - 2026-10-15:** Fresh isolated Braid verification passes 843 tests against public 1.7.1 with zero build warnings/errors and nine-package provenance; original files/status/pin are unchanged. [Braid evidence](BRAID-1.7.1-PUBLIC-COMPATIBILITY.md). Unpublished extension 0.2.3 bundles 1.7.1; 84 language-server tests, highlighting/launcher checks, packaged protocol and isolated editor checks pass. [Extension preparation](VSCODE-0.2.3-PREPARATION.md). Exact merged-revision rebuild and separate Marketplace approval remain. Public libraries remain 1.7.1; Marketplace 0.2.2 bundles 1.7.0. No engine/API/REQ/gate membership change. Earlier entries below are historical.
 
 **1.7.1 published - 2026-10-15:** Ten .NET 10 libraries are published from approved immutable tag `v1.7.1` (`35e531c1`), correcting lexical original binding in escaping inline functions. Release CI passes 8,483 solution tests. Fresh nuget.org-only consumers pass 153 broad checks and 185 focused tests (33 overlap); public archive/cache/output bytes, dependency versions and exact assembly revision metadata verify. [Release notes and publication evidence](RELEASE-NOTES-1.7.1.md). VS Code 0.2.2 still bundles engine 1.7.0. Braid retains 843 final-candidate tests; production adoption remains separate. REQ-126 stays In Progress; no public API or gate membership changes. Earlier entries below are historical.
@@ -319,6 +321,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-125 | Bosak.Braid | Complete static validation and controlled preview: resource policy, captured outputs and execution controls | Preliminary compilation cannot establish validation; designer preview needs supported public APIs without fallback IO | **Implemented and accepted** (Braid 2026-10-11, declared coverage/restricted profiles; C-F1/D-F1 closed; Slice A landed 2026-10-10 — static validation: additive `Bosak.Xslt.Validation` API composing with REQ-124 authoring envelopes; distinct outcomes Valid/Invalid/InvalidSource/UnsupportedCoverage/Refused (+Cancelled reserved for Slice D); full declared-surface check — Expression/Pattern/AVT slots incl. never-executed templates, real static context with variable scoping, use-when=false elision; explicit coverage gaps (import-schema, packages) never presented as pass; byte-preserving; 29 AC-mapped tests; Slice B landed 2026-10-10 — controlled resource policy: `Bosak.XPath.Runtime.Resources` (`ControlledResourcePolicy`/`IControlledResourceAuthority` over 14-route `ControlledResourceRoute`; approval beats disk alternatives, availability probes zero-IO, XV0004 refuse / XV0005 declared-unsupported, SHA-256 receipts with credential-redacted URIs, schema-import + source-document + streaming + nested-transform inheritance; extension functions permanently unsupported; 53 tests); Slice A consumer-review corrections landed 2026-10-10 — F1–F4 fixed: IO-free structural pass (unknown xsl: instructions, placement, must-be-empty, XTSE0090/0805 attribute rules → Invalid, never Valid); patterns compile with slot prefix bindings (undeclared prefixes → XPST0081); use-when elision ordered before slot checks with declared literal subset + UnsupportedCoverage degradation for non-literal exclusions; parameter defaults declaration-order scope for template/iterate; 38 regression tests); Slice C landed 2026-10-10 — captured output contract: `Bosak.Xslt.Capture` (`XsltExecutable.CaptureTransform`; principal+secondary identities + serialization bytes, no disk writes, bounded production, XTDE1490 collision + classified partial failures; 22 tests); Slice B consumer-review corrections landed 2026-10-10 — B-F1 (policy decision before cache service; cache key gains policy+route; per-access receipts) and B-F2 (static-phase acquisition uses StaticEvaluation purpose route with concrete-route evidence; availability-probe false vs explicit refusal; nested-compile phase inheritance) fixed; 15 tests incl. warm-approval→deny regression); B-F3 cache-provenance correction landed 2026-10-10 — digest-validated controlled cache hits (ServedFromCache receipts; digest/URI mismatch re-parses; receipts record post-parse; 5 tests); Slice D landed 2026-10-10 — limits + cancellation (ExecutionGate: token/wall-clock/operation budget; XV0011/12/13; Cancelled triggerable in both taxonomies; nested inheritance + run isolation; 12 tests); **all slices delivered and accepted within declared coverage/restricted profiles; ships in 1.1.0** | TBD | Unassigned | 2026-10-10 |
 | REQ-126 | *(internal)* | XPATH40-FEATURE-CATALOG — GoF-style catalog of every XPath/XSLT 4.0 syntax decision (template adapted from Design Patterns pp. 6–7): Name+Classification (frozen/experimental/deferred/rejected), Intent, Also Known As (spec PRs, renames), History/Supersedes (1.x–3.x idioms replaced + migration pair), Motivation, Language Alignment (prior art + semantic-drift warnings), Applicability, Structure, Participants, Collaborations, Consequences, Implementation, Sample Code, Performance Notes (cost class; measured deltas only from Bosak.Benchmarks with revision+date), Known Uses (qt4tests gate evidence), Related Features | 4.x syntax decisions are scattered across REQ-118 stability tiers, slice handovers and spec PRs; users choosing idioms and Bosak.Braid generating syntax need one searchable reference with drift warnings (`->` first-arg vs F# last, `??` empty-seq vs nullish, `=>>`→`=!>` rename) and a rejected-shapes graveyard so dropped syntax is never re-introduced; REQ-124 completion frees the authoring track that motivated it | **In Progress** (2026-10-12: four worked chapters; 67 entries; 2,578 feature and 24 chapter checks; representative all-name constructor audit supplied; signature/grammar coverage and acceptance evidence remain partial) | Post-1.0 (docs) | Charles Korthout | 2026-10-11 |
 | REQ-127 | Bosak.Braid | Source-preserving inspection of compact nested sibling elements | Valid compact XSLT was refused with source-alignment failure; exact retained ranges are required | Implemented — published 1.1.3, public artifacts verified; Braid verification reported | 1.1.3 | Charles Korthout | 2026-10-12 |
+| REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Pending | TBD | Unassigned | 2026-10-15 |
 
 
 > **Legend:
@@ -1419,6 +1422,52 @@ Full self-contained reproduction, boundary evidence, eight detailed criteria and
 
 Accepted and prioritized over the next REQ-126 documentation slice on 2026-10-12. Corrected SourceTagScanner's extra increment after the already-exclusive start-tag end. Added 206 exact containment/byte-coordinate/encoding/mixed-content/sibling-Expression-edit regressions (155 failed before, all pass after). Version 1.1.3 is published and its public artifacts verified. Full verification passed: 6,019 tests, QT3 31,142/0/679 and qt4 gated-only 8,278/0/1,894 with zero gated failures. Implementation CI passed; Braid verification was reported by the user. No public API/capability/profile changes. See the [dossier](REQ-127-compact-source-inspection.md) for criterion-level evidence and final delivery; Braid's pin/adoption remains separate.
 
+
+### REQ-128: Source-Preserving Value-of Insertion for Bosak.Braid
+
+**Requesting Application:** Bosak.Braid
+**Submitted:** 2026-10-15
+**Status:** Pending
+**Target Version:** TBD
+**Owner:** Unassigned
+
+#### Problem Statement
+
+Braid REQ-122 now supports graph/source review and contextual Expression replacement, but its first structural edit needs an engine-owned legal insertion boundary. The adopted pin and audited current authoring surface offer no structural proposal. REQ-124 deliberately deferred insert/delete/reorder; Braid must not implement a parallel parser or splice XML itself.
+
+#### Proposed Solution
+
+Add an advertised, bounded supported capability to propose one xsl:value-of with a contextual select Expression at the end of an eligible principal-module sequence constructor. Bosak owns target eligibility, prefix/escaping/static context, byte preservation, isolated candidate inspection and new/surviving node identity evidence. The proposed API, eligibility/refusal table, byte and identity rules, cancellation/resource boundary and 38 planned fixture groups are resolved for review in the [insertion contract](REQ-128-INSERTION-CONTRACT.md); maintainer acceptance and implementation remain separate. Self-closing parents may explicitly refuse initially. See the self-contained [consumer dossier](REQ-128-source-preserving-value-of-insertion.md).
+
+#### Acceptance Criteria
+
+- [ ] Advertise capability/limits and engine-owned eligible targets; reject unsupported/stale/foreign/illegal parents and dependency edits without mutation.
+- [ ] Propose contextual value-of insertion, preserve exact bytes outside declared affected ranges and define trivia/namespace/encoding fidelity.
+- [ ] Return isolated ordinary XSLT with fresh inspection, inserted-node identity, surviving-node correspondence and classified failures; rejected/cancelled proposals retain the original snapshot.
+- [ ] Cover UTF-8/BOM UTF-16 LE/BE, aliases/default/rebound namespaces, compact/indented/trivia/mixed-content inputs, static scope/version context and refusal cases.
+- [ ] Preserve existing compiler/runtime/REQ-124 APIs through additive delivery, required engine tests/gates and documented commit/version/release evidence for independent Braid adoption.
+
+#### Impact Analysis
+
+| Layer | Impact | Notes |
+|-------|--------|-------|
+| Parser | No new language syntax requested | Existing XPath/XSLT syntax and contextual semantics |
+| Compiler | No new IR requested | Authoring candidate remains separate from compilation |
+| Runtime | No new opcode requested | Ordinary existing value-of execution |
+| Standard | No new function | Existing XPath expressions |
+| XSLT | Bounded authoring capability | Engine-owned target/fidelity/insertion handling |
+| API | Additive proposal requested | Exact contract and packaging Bosak-owned |
+
+#### Related Requests and Ownership
+
+REQ-124 source-preserving authoring; REQ-125 validation/preview; Braid REQ-122. Local consumer specification: D:/Development/Bosak.Braid/docs/STRUCTURAL_AUTHORING.md. Braid owns UI/session/history/entitlement and consumer tests; Bosak owns acceptance, implementation, engine tests and release. No engine source changes are part of this submission.
+
+#### Decision Log
+
+| Date | Actor | Decision | Rationale |
+|------|-------|----------|-----------|
+| 2026-10-15 | Braid consumer agent | Registered Pending | Product owner authorized capability audit/specification and upstream request if unsupported; maintainer acceptance remains open |
+| 2026-10-15 | Bosak design review | Proposed contract resolved for review; status stays Pending | User authorized design work; no insertion API, implementation acceptance or release reservation |
 
 ## 6. Request Lifecycle
 
