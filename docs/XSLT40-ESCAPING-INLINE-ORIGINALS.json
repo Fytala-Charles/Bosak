@@ -143,7 +143,6 @@
   },
   "publicApiAdded": false,
   "generalFunctionRegistryCaptured": false,
-  "aliasDictionaryAllocatedForOrdinaryClosures": false,
   "scope": [
     "Concrete lexical xsl:original calls in escaped/nested inline bodies",
     "Original optional defaults, keyword names, declaring globals/private helpers",
@@ -163,5 +162,7 @@
     "closure-implementation-ls.log": "2e2b9ba94f1c7fb773e33c059c4118320b06703b0bcfc1bbe0cdf65a8a8d09d2",
     "closure-implementation-qt3.log": "08ead1a06d06b01b359510c31cee48712f44fd3366a86848ca1ef4b9da7e58c9",
     "closure-implementation-qt4.log": "2f0c618eb1aa76b48df9d0327b324786e9415bcdf530ff44873006fa2bf4b02c"
-  }
+  },
+  "aliasDictionaryAllocatedWithoutBoundAliases": false,
+  "aliasAllocationScope": "All inline functions created while hidden bound aliases are registered capture those aliases; no alias dictionary is allocated when none are registered."
 }

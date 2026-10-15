@@ -12,7 +12,7 @@ The bounded correction covers reduced/full optional arities, keywords/arrows, ne
 
 ## Implementation
 
-`InlineFunctionItem` has an internal alias snapshot. `EvaluationContext` snapshots only hidden aliases whose targets have bound function-item identity; ordinary function registrations are not copied. Ordinary closures receive no alias dictionary. `VmEngine` captures aliases when creating an inline item, restores them only for that item's body, and restores the caller's aliases in `finally`. No public API is added.
+`InlineFunctionItem` has an internal alias snapshot. `EvaluationContext` snapshots only hidden aliases whose targets have bound function-item identity; ordinary function registrations are not copied. Closures created without hidden bound aliases receive no alias dictionary; any inline item created while such aliases are registered captures them, even when its body does not reference an original. `VmEngine` captures aliases when creating an inline item, restores them only for that item's body, and restores the caller's aliases in `finally`. No public API is added.
 
 This deliberately avoids capturing the entire package/function registry. General package graph capture, arbitrary ordinary package references in escaping closures, overlapping optional families and editor package signatures remain separate. Source is unpublished 1.7.1 because this corrects lexical binding; public libraries remain 1.7.0. The separately prepared VS Code 0.2.2 candidate remains tied to engine 1.7.0 at its own approved-for-review revision, not this fix.
 
