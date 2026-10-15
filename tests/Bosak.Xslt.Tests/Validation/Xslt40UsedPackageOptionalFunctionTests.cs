@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2    | 15-10-2026     | Verify direct and transitive optional override execution.                                |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -148,12 +149,12 @@ public class Xslt40UsedPackageOptionalFunctionTests
         Assert.Equal("A|B|C",Run(Main("p:wrapper()"),library,inner:inner));
     }
 
-    /// <summary>Optional override linkage remains explicitly deferred.</summary>
+    /// <summary>Optional override linkage replaces the complete callable range.</summary>
     [Fact]
-    public void OptionalOverrideRemainsDeferred()
+    public void OptionalOverrideExecutes()
     {
         var overrides="<xsl:override>"+Function()+"</xsl:override>";
-        Assert.Contains("xsl:override",Assert.Throws<NotSupportedException>(()=>Run(Main("'unused'",overrides),Package(Function()))).Message);
+        Assert.Equal("A|B|C",Run(Main("p:f('A')",overrides),Package(Function())));
     }
 
     /// <summary>Private optional helpers do not become visible to callers.</summary>
@@ -225,13 +226,13 @@ public class Xslt40UsedPackageOptionalFunctionTests
         Assert.Contains("XPST0008",Assert.ThrowsAny<Exception>(()=>Run(Main("let $callerOnly := 'CALLER' return p:f()"),library)).Message);
     }
 
-    /// <summary>The optional override boundary also applies inside a transitively used package.</summary>
+    /// <summary>Optional override execution also applies inside a transitively used package.</summary>
     [Fact]
-    public void NestedOptionalOverrideRemainsDeferred()
+    public void NestedOptionalOverrideExecutes()
     {
         var inner=Package(Function(),"urn:optional-inner");
         var library=Package("<xsl:use-package name='urn:optional-inner' package-version='1.0'><xsl:override>"+Function()+"</xsl:override></xsl:use-package>");
-        Assert.Contains("xsl:override",Assert.Throws<NotSupportedException>(()=>Run(Main("'unused'"),library,inner:inner)).Message);
+        Assert.Equal("A|B|C",Run(Main("p:f('A')"),library,inner:inner));
     }
 
     private sealed class Resolver(string library,string? inner) : IXsltUriResolver

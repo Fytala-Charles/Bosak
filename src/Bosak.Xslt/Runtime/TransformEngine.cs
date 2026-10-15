@@ -553,6 +553,7 @@
 //                      | Charles Korthout | 7.37  | 14-10-2026     | Apply XPath function conversion to optional defaults (source 1.3.1).                     |
 //                      | Charles Korthout | 7.38  | 14-10-2026     | Permit primitive numeric argument coercion in XSLT 4.0 (source 1.3.2).                   |
 //                      | Charles Korthout | 7.39  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
+//                      | Charles Korthout | 7.40   | 15-10-2026     | Bind original arity families, defaults, escaping items and distinct memoization.         |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -3074,18 +3075,25 @@ internal sealed class TransformEngine
 
     private int? ResolveFunctionMinimumArity(string namespaceUri, string localName, int arity)
     {
+        return ResolveHostFunctionDefinition(namespaceUri, localName, arity)?.MinimumArity;
+    }
+
+    private Stylesheet.XsltFunctionDefinition? ResolveHostFunctionDefinition(string namespaceUri, string localName, int arity)
+    {
+        if (namespaceUri == Stylesheet.Stylesheet.XslNamespace && localName == "original" && _overriddenFunctionStack.Count > 0)
+        {
+            var original = _overriddenFunctionStack.Peek();
+            return arity >= original.MinimumArity && arity <= original.Arity ? original : null;
+        }
         var functions = _currentPackageScope is null ? _stylesheet.GetAllFunctionDefinitions()
             : CurrentStylesheet.GetPackageScopeFunctionDefinitions();
-        return functions.TryGetValue((namespaceUri, localName, arity), out var definition)
-            ? definition.MinimumArity : null;
+        return functions.GetValueOrDefault((namespaceUri, localName, arity));
     }
 
     private IReadOnlyList<string>? ResolveFunctionParameterNames(string namespaceUri, string localName, int arity)
     {
-        var functions = _currentPackageScope is null
-            ? _stylesheet.GetAllFunctionDefinitions()
-            : CurrentStylesheet.GetPackageScopeFunctionDefinitions();
-        if (!functions.TryGetValue((namespaceUri, localName, arity), out var definition))
+        var definition = ResolveHostFunctionDefinition(namespaceUri, localName, arity);
+        if (definition is null)
             return null;
         // Override calls retain the original public parameter names; execution binds
         // reordered values to the implementation's own parameter names.
@@ -3269,7 +3277,6 @@ internal sealed class TransformEngine
             _context.RegisterFunction(sig);
             _xsltFunctionKeys.Add((def.NamespaceUri, def.LocalName, key.arity));
         }
-        RegisterXslOriginalFunctions(allFuncs.Values);
     }
 
     private readonly Dictionary<XElement, XdmValue> _staticRecordFieldValues = new();
@@ -3428,44 +3435,52 @@ internal sealed class TransformEngine
         return XdmValue.FromSequence(MaterializedSequence.FromList(items));
     }
 
-    /// <summary>
-    /// Registers <c>xsl:original</c> function signatures for the arities of the supplied
-    /// definitions that override a used-package function. A call to <c>xsl:original</c>
-    /// dispatches to the overridden declaration of the override that is currently executing
-    /// (XSLT 3.0 §3.5.7.2).
-    /// </summary>
-    private void RegisterXslOriginalFunctions(IEnumerable<Stylesheet.XsltFunctionDefinition> definitions)
+    private readonly HashSet<int> _originalFunctionArities = new();
+
+    /// <summary>Binds original signatures to the declaration executing in this lexical function scope.</summary>
+    /// <param name="original">The overridden declaration, or null outside an overriding function.</param>
+    private void BindOriginalFunction(Stylesheet.XsltFunctionDefinition? original)
     {
-        foreach (var arity in definitions.Where(d => d.OverriddenFunction != null).Select(d => d.Arity).Distinct())
+        foreach (var arity in _originalFunctionArities)
+            _context.UnregisterFunction(Stylesheet.Stylesheet.XslNamespace, "original", arity);
+        if (original is null) return;
+        var parameters = original.Element.Elements(XName.Get("param", Stylesheet.Stylesheet.XslNamespace)).ToArray();
+        for (int arity = original.MinimumArity; arity <= original.Arity; arity++)
         {
+            _originalFunctionArities.Add(arity);
+            var target = new FunctionSignature
+            {
+                NamespaceUri = original.NamespaceUri,
+                LocalName = original.LocalName,
+                Arity = arity,
+                MinimumHostArity = original.MinimumArity < original.Arity ? original.MinimumArity : null,
+                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, arity).ToArray(),
+                ParameterTypeNames = IsAbsorbingFunction(original) ? null : parameters.Take(arity)
+                    .Select(p => ResolveBindingSequenceType(p.Attribute("as")?.Value, p,
+                        original.Stylesheet.GetBindingItemTypes())).ToArray(),
+                ReturnType = XdmValueKind.Sequence,
+                ReturnTypeName = ResolveBindingSequenceType(original.ReturnType, original.Element,
+                    original.Stylesheet.GetBindingItemTypes()),
+                IsBoundFunctionItem = true,
+                Implementation = (ctx, args) => ExecuteXsltFunction(original, args)
+            };
             _context.RegisterFunction(new FunctionSignature
             {
                 NamespaceUri = Stylesheet.Stylesheet.XslNamespace,
                 LocalName = "original",
                 Arity = arity,
-                ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, arity).ToList(),
-                ReturnType = XdmValueKind.Sequence,
-                // xsl:original is only available lexically inside an overriding component;
-                // fn:function-lookup must not expose it (function-lookup-006).
+                MinimumHostArity = target.MinimumHostArity,
+                ParameterTypes = target.ParameterTypes,
+                ParameterTypeNames = target.ParameterTypeNames,
+                ReturnType = target.ReturnType,
+                ReturnTypeName = target.ReturnTypeName,
                 IsHiddenFromFunctionLookup = true,
-                Implementation = (ctx, a) => ExecuteXslOriginalFunction(a)
+                FunctionItemTarget = target,
+                Implementation = target.Implementation
             });
         }
     }
 
-    /// <summary>
-    /// Dispatches an <c>xsl:original</c> call to the overridden used-package function of the
-    /// override that is currently executing.
-    /// </summary>
-    private XdmValue ExecuteXslOriginalFunction(ReadOnlySpan<XdmValue> args)
-    {
-        if (_overriddenFunctionStack.Count == 0)
-            throw new InvalidOperationException("XTDE0041: xsl:original is not available because no overriding function is currently executing.");
-        var original = _overriddenFunctionStack.Peek();
-        if (original.Arity != args.Length)
-            throw new InvalidOperationException($"XPST0017: xsl:original called with {args.Length} argument(s) does not match the arity {original.Arity} of the overridden function '{original.LocalName}'.");
-        return ExecuteXsltFunction(original, args);
-    }
 
     /// <summary>
     /// Internal alias prefix for the registration of a used-package original function whose
@@ -4508,10 +4523,19 @@ internal sealed class TransformEngine
         var namedRecordCoercionSnapshot = _context.NamedRecordCoercion;
         var enumerationTypesSnapshot = _context.BindingItemTypes;
 
-        if (package?.IsPackage == true && package != previousScope)
+        if (package is not null && (package.IsPackage ? package : null) != previousScope)
         {
-            _currentPackageScope = package;
+            _currentPackageScope = package.IsPackage ? package : null;
             _namespaceAliases = package.GetEffectiveNamespaceAliases();
+            if (!package.IsPackage)
+            {
+                // A principal-module override called by a used package re-enters its
+                // own registry; private library helpers must not replace its helpers.
+                foreach (var key in _xsltFunctionKeys)
+                    _context.UnregisterFunction(key.NamespaceUri, key.LocalName, key.Arity);
+                _context.RestoreDecimalFormats(new Dictionary<(string LocalName, string NamespaceUri), DecimalFormat>());
+                _context.DefaultDecimalFormat = new DecimalFormat();
+            }
 
             // Register the package's decimal formats so format-number inside the package
             // sees the package's own definitions.
@@ -4526,7 +4550,7 @@ internal sealed class TransformEngine
             // The package's own (unamended) function view drives fn:function-lookup; the
             // effective view adds xsl:override contributions from using packages and drives
             // static dispatch (XSLT 3.0 §3.5.7.2 and §9.9).
-            var ownView = package.GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: true);
+            var ownView = package.GetAllFunctionDefinitions(includePrivate: true, includeUsedPackagePrivate: package.IsPackage);
             var scopeFunctions = new Dictionary<(string ns, string name, int arity), Stylesheet.XsltFunctionDefinition>(ownView);
             package.ApplyPackageOverrideContributions(scopeFunctions);
             var overriddenKeys = new HashSet<(string ns, string name, int arity)>();
@@ -4563,8 +4587,9 @@ internal sealed class TransformEngine
                     {
                         NamespaceUri = original.NamespaceUri,
                         LocalName = OriginalAliasName(original.LocalName),
-                        Arity = original.Arity,
-                        ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, original.Arity).ToList(),
+                        Arity = key.arity,
+                        MinimumHostArity = original.MinimumArity < original.Arity ? original.MinimumArity : null,
+                        ParameterTypes = Enumerable.Repeat(XdmValueKind.Sequence, key.arity).ToList(),
                         ReturnType = XdmValueKind.Sequence,
                         IsHiddenFromFunctionLookup = true,
                         Implementation = (ctx, a) => ExecuteXsltFunction(original, a)
@@ -4572,13 +4597,14 @@ internal sealed class TransformEngine
                 }
             }
             RegisterRecordConstructors(package, scopeFunctions.Keys.Select(k => (k.ns, k.name, k.arity)).ToHashSet());
-            RegisterXslOriginalFunctions(scopeFunctions.Values);
 
             // Within a package, fn:function-lookup returns the package's own declarations,
             // not overrides contributed by using packages (function-lookup-005). An
             // interceptor is used because XPath evaluation re-populates the standard
             // function library, which would overwrite a registry-level replacement.
-            _context.FunctionLookupInterceptor = (ctx, ns, local, a) => PackageScopeFunctionLookup(ns, local, a, ownView, overriddenKeys, ctx);
+            _context.FunctionLookupInterceptor = package.IsPackage
+                ? (ctx, ns, local, a) => PackageScopeFunctionLookup(ns, local, a, ownView, overriddenKeys, ctx)
+                : null;
         }
 
         return new PackageScopeState
@@ -4666,11 +4692,12 @@ internal sealed class TransformEngine
         {
             // Enter the declaring package scope after binding parameters so private
             // functions and variables of the package are visible to the function body.
-            packageScopeState = EnterPackageScope(def.Stylesheet.OwningPackage);
+            packageScopeState = EnterPackageScope(def.Stylesheet.OwningPackage ?? (def.OverriddenFunction is not null ? _stylesheet : null));
             // An override's xsl:original calls dispatch to the overridden used-package
             // declaration for the duration of the overriding body (XSLT 3.0 §3.5.7.2).
             if (def.OverriddenFunction != null)
                 _overriddenFunctionStack.Push(def.OverriddenFunction);
+            BindOriginalFunction(def.OverriddenFunction);
             _context.CurrentOutputUri = null;
             using var temporaryOutputState = EnterTemporaryOutputState();
 
@@ -4692,7 +4719,7 @@ internal sealed class TransformEngine
                 }
                 if (completedArguments is not null) args = completedArguments;
             }
-            cacheKey = memoize ? new XsltFunctionCacheKey(def.NamespaceUri, def.LocalName, def.Arity, args) : null;
+            cacheKey = memoize ? new XsltFunctionCacheKey(def, args) : null;
             if (cacheKey.HasValue && _xsltFunctionCache.TryGetValue(cacheKey.Value, out var cached))
                 return cached;
 
@@ -16832,6 +16859,7 @@ internal sealed class TransformEngine
     /// </summary>
     private readonly struct XsltFunctionCacheKey : IEquatable<XsltFunctionCacheKey>
     {
+        private readonly XElement _declaration;
         /// <summary>The namespace URI of the function.</summary>
         public string NamespaceUri { get; }
         /// <summary>The local name of the function.</summary>
@@ -16844,15 +16872,14 @@ internal sealed class TransformEngine
         /// <summary>
         /// Creates a cache key for a function call with the supplied evaluated arguments.
         /// </summary>
-        /// <param name="ns">The namespace URI of the function.</param>
-        /// <param name="local">The local name of the function.</param>
-        /// <param name="arity">The arity of the function.</param>
+        /// <param name="definition">The declaring function, distinguishing overrides and originals.</param>
         /// <param name="args">The evaluated argument values.</param>
-        public XsltFunctionCacheKey(string ns, string local, int arity, ReadOnlySpan<XdmValue> args)
+        public XsltFunctionCacheKey(Stylesheet.XsltFunctionDefinition definition, ReadOnlySpan<XdmValue> args)
         {
-            NamespaceUri = ns;
-            LocalName = local;
-            Arity = arity;
+            _declaration = definition.Element;
+            NamespaceUri = definition.NamespaceUri;
+            LocalName = definition.LocalName;
+            Arity = definition.Arity;
             ArgumentKeys = new object?[args.Length];
             for (int i = 0; i < args.Length; i++)
                 ArgumentKeys[i] = BuildArgumentKey(args[i]);
@@ -16883,7 +16910,7 @@ internal sealed class TransformEngine
         /// <returns>True when both keys are equal.</returns>
         public bool Equals(XsltFunctionCacheKey other)
         {
-            if (NamespaceUri != other.NamespaceUri || LocalName != other.LocalName || Arity != other.Arity)
+            if (!ReferenceEquals(_declaration, other._declaration) || NamespaceUri != other.NamespaceUri || LocalName != other.LocalName || Arity != other.Arity)
                 return false;
             if (ArgumentKeys.Length != other.ArgumentKeys.Length)
                 return false;
@@ -16902,6 +16929,7 @@ internal sealed class TransformEngine
         public override int GetHashCode()
         {
             var h = new HashCode();
+            h.Add(_declaration);
             h.Add(NamespaceUri);
             h.Add(LocalName);
             h.Add(Arity);
