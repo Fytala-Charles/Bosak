@@ -5,6 +5,19 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+## 2026-10-16 - Explicit XSLT processor profile
+
+Unpublished source **1.15.0** adds `XsltCompiler.ProcessorProfile`: `Legacy` preserves existing behavior; opt-in `Xslt40Draft` selects a4.0 forward-compatibility ceiling and frozen XPath4.0 independently of stylesheet version. Copy/sequence unknown attributes follow the draft ceiling in the opt-in lane; fallback versions and imported/included/used-package modules share the captured profile. [Contract and evidence](XSLT40-PROCESSOR-PROFILE.md). Published versions, default runners, REQ statuses and independent Braid acceptance are unchanged. Earlier audit results remain historical baseline evidence.
+
+| Captured processor profile | Forward ceiling | XPath compilation | Module propagation |
+|---|---|---|---|
+| Legacy (default) |3.0 |XPath31 below effective4, otherwise frozen XPath40 |Root profile inherited |
+| Xslt40Draft (opt-in) |4.0 |Frozen XPath40 independent of effective version |Includes/imports/used packages inherit |
+
+The compiler validates the enum and passes its value into the root stylesheet before loading. Child modules capture the root's profile. Static use-when/shadow compilation, ordinary expressions, AVTs, function bodies and runtime lookup share the stylesheet helper. Runtime forward handling uses the same ceiling as static validation. The static string-based helper used by authoring/validation retains legacy semantics; those APIs do not expose the new profile yet. Direct instruction-specific validators beyond copy/sequence/fallback remain a follow-up inventory, with captured source contexts in the evidence artifacts.
+
+
+
 ## 2026-10-16 - Copy forward-compatibility audit
 
 The [forward-compatibility audit](XSLT40-COPY-FORWARD-COMPATIBILITY.md) reproduces five draft mismatches in a twelve-case compilation matrix. Copy rejects unknown attributes at effective versions 5/17; apply-templates accepts them at 4; sequence accepts them at 3/4. The shared supported-version ceiling deliberately remains 3.0 for frozen-catalog compatibility. A coordinated processor-capability design and separate sequence attribute validation are the next implementation work. This evidence-only step changes no engine behavior, version, REQ status or gate membership; source remains unpublished1.14.17.

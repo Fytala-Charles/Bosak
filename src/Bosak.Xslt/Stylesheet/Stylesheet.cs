@@ -329,6 +329,7 @@
 //                      | Charles Korthout | 2.167 | 16-10-2026     | Validate for-each attributes and required select statically, including unused bodies.      |
 //                      | Charles Korthout | 2.168 | 16-10-2026     | Classify namespace declarations and foreign attributes before xsl:copy option validation.  |
 //                      | Charles Korthout | 2.169 | 16-10-2026     | Accept supported standard attributes on copy while rejecting module-only attributes.       |
+//                      | Charles Korthout | 2.170 | 16-10-2026     | Apply host profiles to forward compatibility, XPath and copy/sequence validation.               |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -789,7 +790,9 @@ internal sealed class Stylesheet
     /// <param name="owningPackage">The package that owns this module, when loaded via xsl:use-package.</param>
     /// <param name="packageVersionResolutionStrategy">How to select among multiple matching package versions.</param>
     /// <param name="isPrincipalLevel">Whether this module is at the principal level of its package.</param>
-    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null, int importDepth = 0)
+    /// <param name="schemaState">Shared schema and controlled-resource state.</param>
+    /// <param name="processorProfile">Host-selected processor profile, inherited from the compilation root.</param>
+    public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null, int importDepth = 0, Api.XsltProcessorProfile processorProfile = Api.XsltProcessorProfile.Legacy)
     {
         _document = document;
         _baseUri = baseUri;
@@ -801,6 +804,7 @@ internal sealed class Stylesheet
         _isRootStylesheet = _resolvedUris.Count == 0;
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
         _rootStylesheet = rootStylesheet ?? this;
+        ProcessorProfile = rootStylesheet?.ProcessorProfile ?? processorProfile;
         _packageVersionResolutionStrategy = packageVersionResolutionStrategy;
         IsPrincipalLevel = isPrincipalLevel;
         // Schema-aware compilation state (REQ-097): shared across the whole import tree
@@ -3801,6 +3805,8 @@ internal sealed class Stylesheet
                     var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
                     if (!allowedCopyAttributes.Contains(baseName))
                     {
+                        if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft && IsForwardsCompatibleElement(elem))
+                            continue;
                         throw new InvalidOperationException("XTSE0090");
                     }
 
@@ -4458,7 +4464,13 @@ internal sealed class Stylesheet
 
                 // XTSE0090: validate allowed attributes on XSLT elements that do not yet
                 // have element-specific attribute whitelists elsewhere in this method.
-                if (localName is "stylesheet" or "transform")
+                if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft && localName is "sequence" or "fallback")
+                {
+                    var allowed = localName == "sequence" ? AllowedXsltAttributes("select") : AllowedXsltAttributes();
+                    allowed.Remove("input-type-annotations");
+                    ValidateAllowedAttributes(elem, localName, allowed, IsForwardsCompatibleElement(elem));
+                }
+                else if (localName is "stylesheet" or "transform")
                 {
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "id", "default-mode", "default-validation",
@@ -10183,25 +10195,27 @@ internal sealed class Stylesheet
             CollectEffectiveInputTypeAnnotations(include, ref effective);
     }
 
+    /// <summary>The host-selected profile captured for this compilation tree.</summary>
+    internal Api.XsltProcessorProfile ProcessorProfile { get; }
+
+    private double SupportedVersion => ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft ? 4.0 : 3.0;
+
     /// <summary>
-    /// Whether the stylesheet is in forwards-compatible mode (declared version greater
-    /// than the implementation supports). In this mode unknown attributes on XSLT
-    /// elements are ignored rather than rejected. The ceiling stays 3.0 deliberately:
-    /// the frozen W3C catalog exercises forward compatibility with version="4.0"/"3.3"
-    /// stylesheets, and XSLT 4.0 §3.8.2/§3.8.3 specifies that 4.0 features produce the
-    /// same results at any effective version — so the supported surface is decoupled
-    /// from the recognized version value (REQ-118 4.0-S7).
+    /// Whether the stylesheet version exceeds the host-selected processor ceiling.
+    /// Legacy retains the frozen catalog's 3.0 ceiling; the opt-in draft profile uses 4.0.
     /// </summary>
     public bool IsForwardsCompatible =>
         !string.IsNullOrEmpty(Version) &&
         decimal.TryParse(Version, NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out var v) &&
-        v > 3.0m;
+        v > (decimal)SupportedVersion;
 
     /// <summary>
     /// Returns the effective XSLT version for the given element, walking ancestors for
     /// an explicit <c>version</c> (XSLT elements) or <c>xsl:version</c> (literal result
     /// elements) attribute and falling back to the global stylesheet version.
     /// </summary>
+    /// <param name="element">The element whose effective XSLT version is needed.</param>
+    /// <returns>The nearest declared version, or the processor version for unversioned draft fallback.</returns>
     public double GetEffectiveVersion(XElement element)
     {
         var ancestor = element;
@@ -10218,6 +10232,11 @@ internal sealed class Stylesheet
                     return v;
                 break;
             }
+            // An unversioned fallback runs at the processor's supported version,
+            // rather than inheriting the unknown future instruction's version.
+            if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft &&
+                ancestor.Name == XName.Get("fallback", XslNamespace))
+                return SupportedVersion;
             ancestor = ancestor.Parent;
         }
         if (double.TryParse(Version, NumberStyles.Any, CultureInfo.InvariantCulture, out var sv))
@@ -10225,12 +10244,13 @@ internal sealed class Stylesheet
         return 3.0;
     }
 
-    /// <summary>Selects the frozen XPath profile for the owning element's effective version.</summary>
+    /// <summary>Selects frozen XPath from the host profile, using effective version only in legacy mode.</summary>
     internal XPathCompatibility GetXPathCompatibility(XElement element)
     {
         // xsl:output/@version is the serialization version, not an XSLT override.
         var owner = element.Name == XName.Get("output", XslNamespace) ? element.Parent ?? Root : element;
-        return GetEffectiveVersion(owner) >= 4.0 ? XPathCompatibility.XPath40 : XPathCompatibility.XPath31;
+        return ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft || GetEffectiveVersion(owner) >= 4.0
+            ? XPathCompatibility.XPath40 : XPathCompatibility.XPath31;
     }
 
     /// <summary>Selects the frozen profile from a captured effective-version string.</summary>
@@ -10240,10 +10260,11 @@ internal sealed class Stylesheet
 
     /// <summary>
     /// Determines whether the given element is in XSLT forwards-compatible mode
-    /// (effective version greater than the supported version 3.0; see
-    /// <see cref="IsForwardsCompatible"/> for why the ceiling is deliberately not 4.0).
+    /// according to the captured host profile and the element's effective version.
     /// </summary>
-    public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > 3.0;
+    /// <param name="element">The element to check.</param>
+    /// <returns>Whether its effective version exceeds the selected processor ceiling.</returns>
+    public bool IsForwardsCompatibleElement(XElement element) => GetEffectiveVersion(element) > SupportedVersion;
 
     /// <summary>
     /// The set of known XSLT element names (XSLT 3.0 plus the XSLT 4.0

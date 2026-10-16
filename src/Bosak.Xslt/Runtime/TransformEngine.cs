@@ -569,6 +569,7 @@
 //                      | Charles Korthout | 7.53  | 16-10-2026     | Reuse copy constructors in function bodies and preserve caller atomic adjacency.             |
 //                      | Charles Korthout | 7.54  | 16-10-2026     | Restore copy-select focus and template-rule state in both instruction dispatchers.           |
 //                      | Charles Korthout | 7.55  | 16-10-2026     | Preserve non-node copy values in raw sequences and use complex-content delivery otherwise.  |
+//                      | Charles Korthout | 7.56  | 16-10-2026     | Use the captured processor profile for runtime forward compatibility and fallback versions. |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -20439,6 +20440,8 @@ internal sealed class TransformEngine
     /// </summary>
     private double GetEffectiveVersion(XElement instruction)
     {
+        if (_stylesheet.ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft)
+            return _stylesheet.GetEffectiveVersion(instruction);
         var xslNs = XNamespace.Get("http://www.w3.org/1999/XSL/Transform");
         var ancestor = instruction;
         while (ancestor != null)
@@ -20467,15 +20470,9 @@ internal sealed class TransformEngine
         return _context.BackwardsCompatible ? 1.0 : 3.0;
     }
 
-    /// <summary>
-    /// Determines whether the given element is in XSLT forwards-compatible mode
-    /// (effective version greater than 3.0 — the ceiling is deliberately not 4.0;
-    /// see Stylesheet.IsForwardsCompatible for the REQ-118 4.0-S7 rationale).
-    /// </summary>
+    /// <summary>Determines forward compatibility using the compilation's captured processor profile.</summary>
     private bool IsForwardsCompatible(XElement instruction)
-    {
-        return GetEffectiveVersion(instruction) > 3.0;
-    }
+        => _stylesheet.IsForwardsCompatibleElement(instruction);
 
     /// <summary>
     /// Validates that all <c>xsl:sort</c> children of <c>xsl:for-each</c> or

@@ -129,3 +129,8 @@ Ten current documentation pages, including XSLT40-COPY-STANDARD-ATTRIBUTES.md, r
 ## 2026-10-16 copy forward-compatibility audit receipt
 
 Ten updated documentation pages rendered with markdown-it and canonical Fytala CSS into .guard-tmp/copy-forward-audit-render. Automated HTML generation only; no visual preview approval claimed.
+
+
+## 2026-10-16 processor-profile receipt
+
+Ten updated documentation pages rendered with markdown-it and canonical Fytala CSS into .guard-tmp/processor-profile-render. Automated HTML generation only; no visual approval claimed.
