@@ -1,0 +1,48 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 16 October 2026
+// PURPOSE              : Probes forward-compatible attribute validation across instruction kinds.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 16-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 16-10-2026     | Add an instruction using the shared validator                                             |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using Xunit;
+namespace Bosak.Xslt.Tests;
+/// <summary>Probes draft 4.0 forward compatibility without changing processor behavior.</summary>
+public class ForwardCompatibilityAuditProbe
+{
+    /// <summary>Records whether an unknown attribute is accepted at each effective version.</summary>
+    /// <param name="instruction">The instruction under audit.</param>
+    /// <param name="version">The effective version.</param>
+    /// <param name="expected">Whether the 4.0 draft requires acceptance.</param>
+    [Theory]
+    [InlineData("copy", "3.0", false)]
+    [InlineData("copy", "4.0", false)]
+    [InlineData("copy", "5.0", true)]
+    [InlineData("copy", "17.0", true)]
+    [InlineData("sequence", "3.0", false)]
+    [InlineData("sequence", "4.0", false)]
+    [InlineData("sequence", "5.0", true)]
+    [InlineData("sequence", "17.0", true)]
+    [InlineData("apply-templates", "3.0", false)]
+    [InlineData("apply-templates", "4.0", false)]
+    [InlineData("apply-templates", "5.0", true)]
+    [InlineData("apply-templates", "17.0", true)]
+    public void UnknownAttribute(string instruction, string version, bool expected)
+    {
+        var stylesheet = "<xsl:stylesheet xmlns:xsl='http://www.w3.org/1999/XSL/Transform' version='" + version + "'><xsl:template name='start'><xsl:" + instruction + " bogus='ignored'/></xsl:template></xsl:stylesheet>";
+        var error = Record.Exception(() => new Api.XsltCompiler().Compile(stylesheet));
+        if (expected) Assert.Null(error);
+        else Assert.Contains("XTSE0090", Assert.IsAssignableFrom<Exception>(error).ToString());
+    }
+}

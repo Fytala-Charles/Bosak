@@ -1,0 +1,102 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\Xslt40UsedPackageOptionalFunctionTests.cs(35,27): warning CS0028: 'Xslt40UsedPackageOptionalFunctionTests.Main(string, string, string, string)' has the wrong signature to be an entry point [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(120,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(128,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(136,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(144,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(152,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(160,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(168,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(200,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Validation\ControlledResourceRouteTests.cs(208,17): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Authoring\AuthoringInspectionTests.cs(214,9): warning xUnit2031: Do not use a Where clause to filter before calling Assert.Single. Use the overload of Assert.Single that accepts a filtering function. (https://xunit.net/xunit.analyzers/rules/xUnit2031) [D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\Bosak.Xslt.Tests.csproj]
+  Bosak.Xslt.Tests -> D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+dotnet : [xUnit.net 00:00:00.79]     Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction:
+"copy", version: "17.0", expected: True) [FAIL]
+At line:9 char:1
++ dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([xUnit.net 00:0...d: True) [FAIL]:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+[xUnit.net 00:00:00.81]     Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "sequence",
+version: "3.0", expected: False) [FAIL]
+[xUnit.net 00:00:00.81]     Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "copy",
+version: "5.0", expected: True) [FAIL]
+  Failed Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "copy", version: "17.0", expected: True) [63 ms]
+  Error Message:
+   Assert.Null() Failure: Value is not null
+Expected: null
+Actual:   System.InvalidOperationException: XTSE0090
+   at Bosak.Xslt.Stylesheet.Stylesheet.ValidateInstructionTree(XElement root) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 3804
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2511
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 833
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Api\XsltCompiler.cs:line 157
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Api\XsltCompiler.cs:line 137
+   at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.<>c__DisplayClass0_0.<UnknownAttribute>b__0() in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 44
+   at Xunit.Record.Exception(Func`1 testCode) in /_/src/xunit.core/Record.cs:line 47
+  Stack Trace:
+     at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(String instruction, String version, Boolean expected) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 45
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "sequence", version: "3.0", expected: False) [19 ms]
+  Error Message:
+   Assert.IsAssignableFrom() Failure: Value is null
+Expected: typeof(System.Exception)
+Actual:   null
+  Stack Trace:
+     at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(String instruction, String version, Boolean expected) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 46
+   at InvokeStub_ForwardCompatibilityAuditProbe.UnknownAttribute(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "copy", version: "5.0", expected: True) [< 1 ms]
+  Error Message:
+   Assert.Null() Failure: Value is not null
+Expected: null
+Actual:   System.InvalidOperationException: XTSE0090
+   at Bosak.Xslt.Stylesheet.Stylesheet.ValidateInstructionTree(XElement root) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 3804
+   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 2511
+   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Stylesheet\Stylesheet.cs:line 833
+   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Api\XsltCompiler.cs:line 157
+   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\src\Bosak.Xslt\Api\XsltCompiler.cs:line 137
+   at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.<>c__DisplayClass0_0.<UnknownAttribute>b__0() in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 44
+   at Xunit.Record.Exception(Func`1 testCode) in /_/src/xunit.core/Record.cs:line 47
+  Stack Trace:
+     at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(String instruction, String version, Boolean expected) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 45
+   at InvokeStub_ForwardCompatibilityAuditProbe.UnknownAttribute(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:00.85]     Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "sequence",
+version: "4.0", expected: False) [FAIL]
+[xUnit.net 00:00:00.85]     Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction:
+"apply-templates", version: "4.0", expected: False) [FAIL]
+  Failed Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "sequence", version: "4.0", expected: False) [< 1 ms]
+  Error Message:
+   Assert.IsAssignableFrom() Failure: Value is null
+Expected: typeof(System.Exception)
+Actual:   null
+  Stack Trace:
+     at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(String instruction, String version, Boolean expected) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 46
+   at InvokeStub_ForwardCompatibilityAuditProbe.UnknownAttribute(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(instruction: "apply-templates", version: "4.0", expected: False) [< 1 ms]
+  Error Message:
+   Assert.IsAssignableFrom() Failure: Value is null
+Expected: typeof(System.Exception)
+Actual:   null
+  Stack Trace:
+     at Bosak.Xslt.Tests.ForwardCompatibilityAuditProbe.UnknownAttribute(String instruction, String version, Boolean expected) in D:\Development\Bosak\.guard-tmp\copy-forward-audit\tests\Bosak.Xslt.Tests\ForwardCompatibilityAuditProbe.cs:line 46
+   at InvokeStub_ForwardCompatibilityAuditProbe.UnknownAttribute(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:     5, Passed:     7, Skipped:     0, Total:    12, Duration: 132 ms - Bosak.Xslt.Tests.dll (net10.0)

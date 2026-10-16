@@ -124,3 +124,8 @@ Ten current documentation pages, including XSLT40-COPY-NAMESPACE-VALIDATION.md, 
 ## Copy standard attributes receipt - 2026-10-16
 
 Ten current documentation pages, including XSLT40-COPY-STANDARD-ATTRIBUTES.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/copy-standard-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
+
+
+## 2026-10-16 copy forward-compatibility audit receipt
+
+Ten updated documentation pages rendered with markdown-it and canonical Fytala CSS into .guard-tmp/copy-forward-audit-render. Automated HTML generation only; no visual preview approval claimed.
