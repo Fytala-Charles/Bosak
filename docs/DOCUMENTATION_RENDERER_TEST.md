@@ -169,3 +169,8 @@ Ten pages rendered with markdown-it and canonical Fytala CSS. Automated HTML gen
 ## 2026-10-16 XSLT40-STRUCTURAL-RECORD-SUBTYPING
 
 Ten pages rendered with markdown-it and canonical Fytala CSS. Automated HTML generation only; no visual approval claimed.
+
+
+## 2026-10-16 XSLT40-RECORD-MAP-SUBTYPING
+
+Ten pages rendered with markdown-it and canonical Fytala CSS. Automated HTML generation only; no visual approval claimed.

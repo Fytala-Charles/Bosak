@@ -417,6 +417,7 @@
 //                      | Charles Korthout | 2.190  | 15-10-2026     | Capture lexical host targets and preserve bound original item identity.                  |
 //                      | Charles Korthout | 2.191 | 15-10-2026     | Retain lexical original aliases in escaping inline functions and restore callers on errors. |
 //                      | Charles Korthout | 2.192 | 16-10-2026     | Compare structural record signatures with case-sensitive fields and typed zero-arity results. |
+//                      | Charles Korthout | 2.193 | 16-10-2026     | Compare record fields against map value types and generic function supertypes.               |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -14775,6 +14776,12 @@ internal static class VmEngine
             test = test[..^1].TrimEnd();
         }
 
+        // Host aliases may parenthesize a function type to preserve precedence.
+        actual = UnwrapSubtypeType(actual);
+        test = UnwrapSubtypeType(test);
+        actualFamily = IsFunctionFamilyType(actual) || actual.StartsWith("record(", StringComparison.Ordinal);
+        testFamily = IsFunctionFamilyType(test) || test.StartsWith("record(", StringComparison.Ordinal);
+
         // Every sequence matching actual must also match test
         bool occOk = (actualOcc, testOcc) switch
         {
@@ -14799,7 +14806,8 @@ internal static class VmEngine
         var testRecord = TryGetRecordType(test);
         if (actualRecord is not null || testRecord is not null)
             return actualRecord is not null && (test == "item()" ||
-                testRecord is not null && IsStructuralRecordSubtype(actualRecord, testRecord, context));
+                (testRecord is not null ? IsStructuralRecordSubtype(actualRecord, testRecord, context) :
+                    IsRecordMapSubtype(actualRecord, test, context)));
 
         if (actualFamily || testFamily)
             return IsFunctionFamilySubtype(actual, test, context);
@@ -14828,6 +14836,27 @@ internal static class VmEngine
                 !IsSequenceTypeSubtype(field.SequenceTypeText, target!.SequenceTypeText, context))
                 return false;
         }
+        return true;
+    }
+
+    /// <summary>Removes grouping parentheses around a complete subtype operand.</summary>
+    private static string UnwrapSubtypeType(string text)
+    {
+        while (text.StartsWith('(') && FindMatchingParen(text, 0) == text.Length - 1)
+            text = text[1..^1].Trim();
+        return text;
+    }
+
+    /// <summary>Checks record-to-map covariance and the generic function supertype.</summary>
+    private static bool IsRecordMapSubtype(XdmRecordType actual, string test, EvaluationContext? context)
+    {
+        if (test is "map" or "map()" or "map(*)" or "function" or "function()" or "function(*)") return true;
+        if (!TryGetMapTypeParts(test, out var keyType, out var valueType) ||
+            !IsSequenceTypeSubtype("xs:string", keyType, context))
+            return false;
+        if (actual.IsAny) return IsSequenceTypeSubtype("item()*", valueType, context);
+        foreach (var field in actual.Fields)
+            if (!IsSequenceTypeSubtype(field.SequenceTypeText, valueType, context)) return false;
         return true;
     }
 

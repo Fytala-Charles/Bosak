@@ -900,5 +900,12 @@
     "report": "XSLT40-STRUCTURAL-RECORD-SUBTYPING.md",
     "status": "implemented/tested in source; review exact-head CI",
     "next": "At most one further engine PR: independently baseline record-to-map/function subtype rules; then stop engine work, reassess and validate exact-candidate packages/consumers. No publication."
+  },
+  "XSLT40-RECORD-MAP-SUBTYPING": {
+    "date": "2026-10-16",
+    "milestoneSlice": 2,
+    "report": "XSLT40-RECORD-MAP-SUBTYPING.md",
+    "status": "implemented/tested in source; review exact-head CI",
+    "next": "STOP engine work. Reassess remaining36 selected failures as33 catalog/draft drift plus3 unresolved contracts (array025,record121,record123); validate exact-revision ten-library packages and fresh broad/focused consumers. No publication."
   }
 }

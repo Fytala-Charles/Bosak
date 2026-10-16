@@ -5,6 +5,12 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+## 2026-10-16 - Record-to-map and generic function subtyping
+
+Record-subtyping milestone 2/2: unpublished patch1.16.5 compares structural record field types with map values and accepts generic function supertypes, including parenthesized host aliases. Five further native cases recover in both profiles. Stop engine work after integration; reassess and validate exact-revision packages with fresh consumers. [Contract and evidence](docs/XSLT40-RECORD-MAP-SUBTYPING.md). Record-subtyping milestone 2/2; stop engine work after at most two slices, then validate release packages. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Structural record subtyping in function signatures
 
 Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged. [Contract and evidence](docs/XSLT40-STRUCTURAL-RECORD-SUBTYPING.md). Record-subtyping milestone 1/2; stop engine work after at most two slices, then validate release packages. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
