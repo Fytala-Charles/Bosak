@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: apply-imports array fallback with independent controls; profile/pattern issues separate",
+    "selectedEngineReview": "Next: audit remaining array-021/022/024/025 version/profile declarations against current draft and runner behavior",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -669,6 +669,20 @@
       "scope": "next-match and ordinary unmatched arrays: implicit ?* application for text-only-copy and shallow-skip",
       "prioritiesChanged": false,
       "evidence": "XSLT40-ARRAY-TEMPLATE-FALLBACK.json",
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false
+    },
+    "arrayImportFallback": {
+      "sourceVersion": "1.14.6 unpublished",
+      "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "newNativePasses": [],
+      "lostNativePasses": [],
+      "arrayAggregate": "155/5/20",
+      "recordAggregate": "29/35/1",
+      "typeAlias": "23/8/1",
+      "scope": "Apply-imports array fallback in text-only-copy/shallow-skip; suspend and restore array caller import restriction during implicit member application",
+      "prioritiesChanged": false,
+      "evidence": "XSLT40-ARRAY-IMPORT-FALLBACK.json",
       "upstreamTestsChanged": false,
       "gateMembershipChanged": false
     }
