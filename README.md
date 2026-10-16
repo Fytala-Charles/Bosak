@@ -5,6 +5,12 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+## 2026-10-16 - Earlier-version fixed namespace contexts
+
+Milestone2/3: unpublished patch1.16.2 activates fixed bindings from the captured draft processor capability for module versions1.0-4.0. Draft modules own their mutable compilation trees and caches; reader base URI/line information and provider provenance are retained. Legacy behavior remains unchanged. [Contract and evidence](docs/XSLT40-EARLIER-FIXED-NAMESPACES.md). Milestone 2/3; stop and reassess after slice3. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Current record field contract audit
 
 Milestone1/3: pinned draft removed xsl:field/@required in March2026. Preserve the correct draft XTSE0090 rejection; add13 current-contract controls. Engine/source version1.16.1 unchanged. Original record-023 remains an unchanged upstream failure. [Contract and evidence](docs/XSLT40-FIELD-REQUIRED-AUDIT.md). Milestone 1/3; stop and reassess after slice3. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.

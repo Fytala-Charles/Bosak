@@ -1,3 +1,11 @@
+# Milestone 2/3 - 2026-10-16
+
+Milestone2/3: unpublished patch1.16.2 activates fixed bindings from the captured draft processor capability for module versions1.0-4.0. Draft modules own their mutable compilation trees and caches; reader base URI/line information and provider provenance are retained. Legacy behavior remains unchanged.
+
+Base375abcee7d025aa39bf5870c892460c8b383d06e; branchfix/earlier-fixed-namespaces; authoritative report XSLT40-EARLIER-FIXED-NAMESPACES.md/json. 33 new controls;140 focused pass. Initial30 baseline10/20; final33 baseline11/22; owned copy without provider metadata32/1 (XML1.1). First full9469 pass and prior gate runs retained under first-verification; final full9472 pending. Original ambiguous-prefix serialization probe fails on original engine too and remains outside milestone. After this PR, complete only slice3 (future/no-fallback), then STOP and reassess.
+
+All processes completed: Release build0errors/24 existing warnings; solution **9472/0/0** (XSLT6538), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
 # Milestone 1/3 - 2026-10-16
 
 Milestone1/3: pinned draft removed xsl:field/@required in March2026. Preserve the correct draft XTSE0090 rejection; add13 current-contract controls. Engine/source version1.16.1 unchanged. Original record-023 remains an unchanged upstream failure.

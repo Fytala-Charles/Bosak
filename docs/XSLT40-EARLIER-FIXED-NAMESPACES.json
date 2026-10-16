@@ -1,0 +1,250 @@
+{
+  "number": 2,
+  "slug": "XSLT40-EARLIER-FIXED-NAMESPACES",
+  "title": "Earlier-version fixed namespace contexts",
+  "summary": "Milestone2/3: unpublished patch1.16.2 activates fixed bindings from the captured draft processor capability for module versions1.0-4.0. Draft modules own their mutable compilation trees and caches; reader base URI/line information and provider provenance are retained. Legacy behavior remains unchanged.",
+  "base": "375abcee7d025aa39bf5870c892460c8b383d06e",
+  "branch": "fix/earlier-fixed-namespaces",
+  "handover": "33 new controls;140 focused pass. Initial30 baseline10/20; final33 baseline11/22; owned copy without provider metadata32/1 (XML1.1). First full9469 pass and prior gate runs retained under first-verification; final full9472 pending. Original ambiguous-prefix serialization probe fails on original engine too and remains outside milestone. After this PR, complete only slice3 (future/no-fallback), then STOP and reassess.",
+  "next": "Milestone3: unknown future instructions without fallback, then stop/reassess",
+  "solution": 9472,
+  "xslt": 6538,
+  "gates": true,
+  "sourceFiles": [
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+    "src/Directory.Build.props",
+    "tests/Bosak.Xslt.Tests/EarlierFixedNamespaceTests.cs"
+  ],
+  "nativeComparison": {
+    "Legacy/array": {
+      "beforeCounts": [
+        155,
+        5,
+        20
+      ],
+      "afterCounts": [
+        155,
+        5,
+        20
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183211473Z.json"
+    },
+    "Legacy/record": {
+      "beforeCounts": [
+        29,
+        35,
+        1
+      ],
+      "afterCounts": [
+        29,
+        35,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183214607Z.json"
+    },
+    "Legacy/type-alias": {
+      "beforeCounts": [
+        23,
+        8,
+        1
+      ],
+      "afterCounts": [
+        23,
+        8,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183216206Z.json"
+    },
+    "Xslt40Draft/array": {
+      "beforeCounts": [
+        158,
+        2,
+        20
+      ],
+      "afterCounts": [
+        158,
+        2,
+        20
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183217774Z.json"
+    },
+    "Xslt40Draft/record": {
+      "beforeCounts": [
+        29,
+        35,
+        1
+      ],
+      "afterCounts": [
+        29,
+        35,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183235898Z.json"
+    },
+    "Xslt40Draft/type-alias": {
+      "beforeCounts": [
+        23,
+        8,
+        1
+      ],
+      "afterCounts": [
+        23,
+        8,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T183237447Z.json"
+    }
+  },
+  "verification": {
+    "solution": [
+      9472,
+      0,
+      0
+    ],
+    "xslt": [
+      6538,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "cliControls": 10,
+    "buildWarnings": 24,
+    "freshGates": true,
+    "processesComplete": true,
+    "fixtureLinksRemoved": true
+  },
+  "sha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "53aa769f30f5e9c9e7dc1ba3612b39524dee4ae3c9ea5324828f82fe0064a7d7",
+    "src/Directory.Build.props": "5df35e00cb6b1529302232449f0e793498db8d2ecdaa2d1a405b89af30cd2473",
+    "tests/Bosak.Xslt.Tests/EarlierFixedNamespaceTests.cs": "e94303e22c898ffc7c99c0cf3b5ba5346926107f397fb3a52f86eaa2534133b9",
+    ".artifacts/baseline.log": "c2e18f34f1449dd57020df2de59ed6c1c0f66560601c4c446c61433464352a9b",
+    ".artifacts/build.log": "335bfe31300fb17b40ec5421107e5caa850ffb3714e0a3f0eb5e675210d26a44",
+    ".artifacts/expanded-baseline.log": "6334a19990e6f36d1c4f2fc5454627f0bc4e1987836f787e2530fe48789a0d24",
+    ".artifacts/expanded-tests.txt": "8bc632598e560d0524ee604ff929c04f75e57f879cc43df114f7d8f53f7128be",
+    ".artifacts/final-Stylesheet.cs": "53aa769f30f5e9c9e7dc1ba3612b39524dee4ae3c9ea5324828f82fe0064a7d7",
+    ".artifacts/final-tests.txt": "e94303e22c898ffc7c99c0cf3b5ba5346926107f397fb3a52f86eaa2534133b9",
+    ".artifacts/first-implemented-Stylesheet.cs": "5d609c07d5642df7d19bcc9a0ae10ebf5f1c1af27f8dae4f176bbbffc515affb",
+    ".artifacts/focused-expanded.log": "ad6df213edb115e0709a83987582c3005b55df7eccd508315ac16445fb8f38df",
+    ".artifacts/focused-final.log": "12e7e7c0e8755c1c2657099d91f3994960b9bd547d303d88f83ba9df57a8558b",
+    ".artifacts/focused.log": "5b9c8a51864ed55db5100c952c75b171de8f7fb9bf9816a44bf7d150f2c9c053",
+    ".artifacts/implemented-Stylesheet.cs": "5d609c07d5642df7d19bcc9a0ae10ebf5f1c1af27f8dae4f176bbbffc515affb",
+    ".artifacts/initial-tests.txt": "4d992e0c93a87252a8330da0415de03f564565bc5ed87e526e3da1153d7afa96",
+    ".artifacts/language-server.log": "cf97788363b497a189138e68a1db4c700a0215a4a397494998170a29f390d45d",
+    ".artifacts/milestone.json": "535f822b06bc2386d35b9546919781f5c4b6aff2f50ceb7798a8cb279c629eee",
+    ".artifacts/native-comparison.json": "bce860a2be107fa1dbe300ebe0f42a8b3094d8be9b5b0b957b05f1a6336589ff",
+    ".artifacts/native-Legacy-array.log": "7737f361488081c5b6a0da4575e71be08b3cc441d0810d7752253c63bdae651e",
+    ".artifacts/native-Legacy-record.log": "96996fcf9230d973a1fb3c6102c898773440aa999a63e25bbee2b31fe7e9638b",
+    ".artifacts/native-Legacy-type-alias.log": "912845de9c363d5f328ffe51b5660a8ff9e5c537308b88dbb15c4d38de4dbd98",
+    ".artifacts/native-Xslt40Draft-array.log": "72af94896a4dc64edd9338f9b78139dbe40c79963cc906b1a7dd2fcffc7b7481",
+    ".artifacts/native-Xslt40Draft-record.log": "4986fb4ced5621327aa7e25c08282a477123de09b19e688bb328b190e139502d",
+    ".artifacts/native-Xslt40Draft-type-alias.log": "cd495da084c73b9f1d09e9e9902011287a1ced892f5f9d4d676d418930ae1807",
+    ".artifacts/original-engine-serialization-probe.log": "38d27681877372e107a0efecc0784725aa57d241a3ba0f2e73c385acba208d5e",
+    ".artifacts/original-Stylesheet.cs": "a8bef8d43346e102bdff39f82987598a16799d6cc23718abeb22eaa90f3d31f4",
+    ".artifacts/original-tests.txt": "4d992e0c93a87252a8330da0415de03f564565bc5ed87e526e3da1153d7afa96",
+    ".artifacts/pr-body.md": "ca9bb4fc8e2418892e9bfe48f96ecb421a3fb74c84db1c8d8904ec122ea5f754",
+    ".artifacts/prefix-debug.log": "a278874e2a24ed7b8f3dc85fb4d3f7072f1e7a2536a3d0e259eeb1096fdbc803",
+    ".artifacts/prefix-first.log": "2aa6386dcbc682745d19f878c3dd7527afc057f2b55d69b99e55ca8d11e7b2c2",
+    ".artifacts/prefix-fixture-before-debug.txt": "8bc632598e560d0524ee604ff929c04f75e57f879cc43df114f7d8f53f7128be",
+    ".artifacts/provider-copy-Stylesheet.cs": "53aa769f30f5e9c9e7dc1ba3612b39524dee4ae3c9ea5324828f82fe0064a7d7",
+    ".artifacts/qt3.log": "6f7f1049f5257f4aa2ff673439cc6179ce6066ffb7be0d0570d24eee07752f3b",
+    ".artifacts/qt4.log": "1e793d41b8a41a633b40aae84fc3000994c84195185e5a2b6eadc32c7c44869f",
+    ".artifacts/render.cjs": "00e8142dacabcea8346e800ba06a57ea0fda281a9a2e52a66069ec0f3f767886",
+    ".artifacts/report-body.md": "1615e623ac4fb0780d82044dbb296f7f5bb6596f4ba7d64feb80e08f9f04bc82",
+    ".artifacts/runner-profile-smoke.log": "e1fa7fd954a4224298e4e1c32d007c805be1e08f3c17c6ffb177d477b6216323",
+    ".artifacts/serialization-probe-tests.txt": "c4535c3513e09e393a73abc3f3f9d4d4048e242822cd4b592a09cb0a70c81fd9",
+    ".artifacts/solution-tests.log": "ed3e4ac714b5abc31c8109ec10395aa0021c31a7ed6675d02344577f9e646d93",
+    ".artifacts/without-provider-metadata.log": "5e834bd731e95e4844a54a137f81099298a9b803223c5a218a1ff70a934cdd7a",
+    ".artifacts/first-verification/build.log": "53baa1eca58fe2ebda71b7c5decf661e91f2462d276a5c78a39a02f80492b997",
+    ".artifacts/first-verification/language-server.log": "00b641e7325781a1bad1c000708e61993f04c4e410ada7fb622511bafd3af4c6",
+    ".artifacts/first-verification/qt3.log": "63c54b099919a9cec166d8e2ec741ee810942b50af72372248107d0be36767ef",
+    ".artifacts/first-verification/qt4.log": "21560d56ee7151eda64a7a3ee3b98b9aba87a2590fc89099a99ead6ace20fcbc",
+    ".artifacts/first-verification/runner-profile-smoke.log": "e1fa7fd954a4224298e4e1c32d007c805be1e08f3c17c6ffb177d477b6216323",
+    ".artifacts/first-verification/solution-tests.log": "602d9d8e56ec25cec89dd6697d14bd1ad455106e7560f6fa2f2fe9084819726f",
+    ".artifacts/native-before/20261016T175821921Z.json": "cabcc38064dfe0974a837627a509715937d8a3d55b98913c7c9466038abf9a7d",
+    ".artifacts/native-before/20261016T175821921Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/native-before/20261016T175824894Z.json": "9c11784505fbc1a12a222622317f31892a442f68939783a9da7abc89bc279915",
+    ".artifacts/native-before/20261016T175824894Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/native-before/20261016T175826452Z.json": "26f75a4663b668e71986bcb028a11c2bfaa4949ae116131b6a6428f6b8ed3f3e",
+    ".artifacts/native-before/20261016T175826452Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/native-before/20261016T175827982Z.json": "520895119d647f19b036ad1b44e53aad70a080765c161edfe61d974a2ddd06d6",
+    ".artifacts/native-before/20261016T175827982Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/native-before/20261016T175844961Z.json": "9402c88edec6b3933a20884ebe8235a3b1d8b5cbcb8bac4e2008c75fc8dfde9d",
+    ".artifacts/native-before/20261016T175844961Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/native-before/20261016T175846452Z.json": "2b56d79d60cb4835dd44ad0843038dbe2bfeb49e41d4d0d1d0e48353a0dd869d",
+    ".artifacts/native-before/20261016T175846452Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06",
+    ".artifacts/runner-profile-smoke/adapter-draft.log": "4068a40118a61afa1a283e539543c8dfc73540f74d73e41d65b4f5b1f1bcc422",
+    ".artifacts/runner-profile-smoke/adapter-legacy.log": "a18bcd844fb6577b54cf897e7c145c306ea618906479b0a3a8f3f12abb2537d6",
+    ".artifacts/runner-profile-smoke/default-legacy.log": "985ce445c4aee77ac5ed547d8801f3dae1e195ff91faf5d03e55b0e2f9a7304d",
+    ".artifacts/runner-profile-smoke/draft-empty-selection.log": "4a3d5043e5927eea947e8e7a2a40221de8e0478d3e6e92ada80f9a0fdf4e6790",
+    ".artifacts/runner-profile-smoke/draft-independent-catalog.log": "2f3a923e0d111743a6c3b0e04fe9c4a4a8adfe794aa1c08a41dc7367c54045f6",
+    ".artifacts/runner-profile-smoke/draft.log": "46ab46fa908b032c982795a59aa63b14bcbe6b8e0cf56bf3941d8601011fc7b9",
+    ".artifacts/runner-profile-smoke/duplicate-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/runner-profile-smoke/explicit-legacy.log": "985ce445c4aee77ac5ed547d8801f3dae1e195ff91faf5d03e55b0e2f9a7304d",
+    ".artifacts/runner-profile-smoke/invalid-profile.log": "7faf5472fc84fd3ae3c7535497662b9ba39e27cddff9e924bcdec18ca4d058e6",
+    ".artifacts/runner-profile-smoke/missing-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/xslt40/20261016T182207069Z.json": "f7cd43da8d7e7b1f2848ec8c4c49f306df656f49ebbc25fbd9a32f1f422e54d2",
+    ".artifacts/xslt40/20261016T182207069Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/xslt40/20261016T182210156Z.json": "10b00b563b07e6513a7340cbaf6dec492ced9aac4e8165be757dae2ff8409f91",
+    ".artifacts/xslt40/20261016T182210156Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/xslt40/20261016T182211792Z.json": "5db6baf75e7f477ec8f31f6bb22b6f939e16b1ade52cd7c72e89e05ccb05a88b",
+    ".artifacts/xslt40/20261016T182211792Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/xslt40/20261016T182213322Z.json": "566062a2a3d6d3ed0bdc7aeb7bc910ed9438ab0ef6f534251cb756befd1c787d",
+    ".artifacts/xslt40/20261016T182213322Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/xslt40/20261016T182230719Z.json": "122e2a8f4c64a9a5aef46fb173b4dbdb5404c5360911a59c5ba81d2967b89a92",
+    ".artifacts/xslt40/20261016T182230719Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/xslt40/20261016T182232337Z.json": "b5b50472ab525b93ce1ea391aca63dd5de99e732699d85e9be2514fb0cacaaae",
+    ".artifacts/xslt40/20261016T182232337Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06",
+    ".artifacts/xslt40/20261016T183211473Z.json": "44c7c1acf9165ce81125fd9bdf104bcf107fcac456aa563a96326b28f8d57d71",
+    ".artifacts/xslt40/20261016T183211473Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/xslt40/20261016T183214607Z.json": "086db180a353b6038766a3d2c294ebb0696e9277fe0cbbc5c90d04dfeff3fd5d",
+    ".artifacts/xslt40/20261016T183214607Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/xslt40/20261016T183216206Z.json": "25ee46e042da9a9ba0f06cf645d98a78bba29feac9eda3432f52bbfbe170d5c6",
+    ".artifacts/xslt40/20261016T183216206Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/xslt40/20261016T183217774Z.json": "493ddf7bcfac71021ff2d31dfb3560f05abf8e35e9065b0744ff6ce0e59025b2",
+    ".artifacts/xslt40/20261016T183217774Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/xslt40/20261016T183235898Z.json": "3af7b784b953a58ee557201d374291dae6028035ca609e34d19cb79a3f18c624",
+    ".artifacts/xslt40/20261016T183235898Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/xslt40/20261016T183237447Z.json": "d86833a563e021a7db42f0df59fa6073fbb5506e95a500cdc38e3c0f4a16647d",
+    ".artifacts/xslt40/20261016T183237447Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06",
+    ".artifacts/first-verification/xslt40/20261016T182207069Z.json": "f7cd43da8d7e7b1f2848ec8c4c49f306df656f49ebbc25fbd9a32f1f422e54d2",
+    ".artifacts/first-verification/xslt40/20261016T182207069Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/first-verification/xslt40/20261016T182210156Z.json": "10b00b563b07e6513a7340cbaf6dec492ced9aac4e8165be757dae2ff8409f91",
+    ".artifacts/first-verification/xslt40/20261016T182210156Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/first-verification/xslt40/20261016T182211792Z.json": "5db6baf75e7f477ec8f31f6bb22b6f939e16b1ade52cd7c72e89e05ccb05a88b",
+    ".artifacts/first-verification/xslt40/20261016T182211792Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/first-verification/xslt40/20261016T182213322Z.json": "566062a2a3d6d3ed0bdc7aeb7bc910ed9438ab0ef6f534251cb756befd1c787d",
+    ".artifacts/first-verification/xslt40/20261016T182213322Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/first-verification/xslt40/20261016T182230719Z.json": "122e2a8f4c64a9a5aef46fb173b4dbdb5404c5360911a59c5ba81d2967b89a92",
+    ".artifacts/first-verification/xslt40/20261016T182230719Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/first-verification/xslt40/20261016T182232337Z.json": "b5b50472ab525b93ce1ea391aca63dd5de99e732699d85e9be2514fb0cacaaae",
+    ".artifacts/first-verification/xslt40/20261016T182232337Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06"
+  }
+}
