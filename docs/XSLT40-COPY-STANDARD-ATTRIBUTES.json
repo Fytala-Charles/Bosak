@@ -1,0 +1,185 @@
+{
+  "date": "2026-10-16",
+  "base": "331602e53a0934cd1596967577161645eb9a0cf4",
+  "sourceVersion": "1.14.17 unpublished",
+  "branch": "fix/copy-standard-attributes",
+  "worktree": "D:/Development/Bosak/.guard-tmp/copy-standard-source",
+  "prerequisite": {
+    "pr": 341,
+    "head": "02ca511c154dd9dcac33c65f8585f67f79437008",
+    "ciRun": 38934679051,
+    "conclusion": "success",
+    "merge": "331602e53a0934cd1596967577161645eb9a0cf4"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "sections": [
+      "standard-attributes",
+      "shallow-copy"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "Copy whitelist reuses supported standard attributes plus copy options; removes module-only input-type-annotations; existing runtime/value checks unchanged",
+  "publicApiChanged": false,
+  "profileSelectionChanged": false,
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "newNativePasses": [],
+  "lostNativePasses": [],
+  "publishedLibraries": "1.8.0 unchanged",
+  "publishedExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "publicationPerformed": false,
+  "testStartPrecursorHead": "02ca511c154dd9dcac33c65f8585f67f79437008",
+  "precursorAndMergeTree": "80a04f63659a2b63fe8d90a8bf4829cd7271be19",
+  "runtimeChanged": false,
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 3,
+      "fail": 24
+    },
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "implementation": ".artifacts/first-implementation.txt",
+      "log": ".artifacts/focused-after.log",
+      "pass": 284,
+      "fail": 0,
+      "composition": "27 new +257 previous controls"
+    },
+    {
+      "fixture": ".artifacts/expanded-tests.txt",
+      "log": ".artifacts/expanded-before.log",
+      "pass": 4,
+      "fail": 27
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/CopyStandardAttributeTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 288,
+      "fail": 0,
+      "composition": "31 new +257 previous controls"
+    }
+  ],
+  "fixtureCorrections": false,
+  "deferred": [
+    "copy forward-compatible attribute handling",
+    "new4.0 schema-role support",
+    "JNode copying",
+    "processor capability"
+  ],
+  "verification": {
+    "solution": [
+      9335,
+      0,
+      0
+    ],
+    "xslt": [
+      6401,
+      0,
+      0
+    ],
+    "focused": [
+      288,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "build": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "allProcessesComplete": true,
+    "fixtureJunctionsRemoved": true
+  },
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T165503496Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T165508052Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T165509975Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "sha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "6f12ae6b1ed7a7a4dc94b9e449c3a5660af0665ee41e9def40f0068331ab3b32",
+    "src/Directory.Build.props": "5186b611bbbc4337982a248116773f957b02127086f0dfa41a2e677c6699ade4",
+    "tests/Bosak.Xslt.Tests/CopyStandardAttributeTests.cs": "19a33abffbafe62b8178175f9973d83f449fad4bd765ef78a4e4035e674877ed",
+    ".artifacts/build.log": "c243c203461d9d183f0bf502a6248b8730a0a04a92e9137200012602187328ad",
+    ".artifacts/expanded-before.log": "4248505ea91e9de48e1890e06e13ba426d83815d5a4f69be0ab5027ec3aa4063",
+    ".artifacts/expanded-tests.txt": "19a33abffbafe62b8178175f9973d83f449fad4bd765ef78a4e4035e674877ed",
+    ".artifacts/finalize.py": "d1d6b05a755cf5a9392d2ca0b784061b0b3beb6496faf4cbf4e7d4cccd244139",
+    ".artifacts/first-implementation.txt": "6f12ae6b1ed7a7a4dc94b9e449c3a5660af0665ee41e9def40f0068331ab3b32",
+    ".artifacts/focused-after.log": "8a13eb1e9c06803e0795c0f4d4d757ad0afa4e62038aaa68bed2bc96a0c74393",
+    ".artifacts/focused-before.log": "6cb770c6ba3db3a80acc5433fe16ff70319844e26eafafecf056605a7349383c",
+    ".artifacts/focused-final.log": "4ff0dde3c71795b0dfb982736a56f5d3f5378ffdaaebab2840b4c6f8c157e490",
+    ".artifacts/language-server.log": "ef39641b1eecd61e6a53b14b9b2307b048fff1a4dbe82c021646f0f49732128b",
+    ".artifacts/native-array.log": "b481f74a1ff17389c60519b58211d500c3a1d2b7029354a1fe8bde2f8c012555",
+    ".artifacts/native-record.log": "36d6340146e906fbaebc1651f805f5afcedd4daea4f60e43324f9f5346bd19cc",
+    ".artifacts/native-type-alias.log": "3b05c1524ef1815f91058a95b2ae4c0cce0c576b5b2a66df2c7f4314a9e8fff1",
+    ".artifacts/original-tests.txt": "d7f24100330bc6d3053339435bb8b8f1f095d797ac775b27136ec0e42bf0ce20",
+    ".artifacts/pr-body.md": "1e1625d6856e23e9e4a771b9f330c9c91e0f91f03c39109ed24b495cd103ef58",
+    ".artifacts/qt3.log": "c7a644c6c70007c838cdd4c7bd94638ea4d2e565103d980650f5d92c5889336e",
+    ".artifacts/qt4.log": "e72bba6c0808a58cbba0787f6970d18e20c80d464db374d94dd06ad512ffbfb3",
+    ".artifacts/render.cjs": "4b6cc7e9c609333165128a93b6fb9150fd67f13c13d34a784e27c4704dc6d112",
+    ".artifacts/solution-tests.log": "07a4a0a66707df9448e562f27b9affcbfb02ad01fbf67bd7a0c1788a9eda4b97",
+    ".artifacts/native-before/20261016T164310627Z.json": "7ac401a5326e950c44ec44d7cb79422c3948f9b61d468aa952e57d8ab972dfa7",
+    ".artifacts/native-before/20261016T164310627Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T164315207Z.json": "a482faa05438a4715e737b64e9c4c962ebb3af80dc53fd78776f67f8feda1419",
+    ".artifacts/native-before/20261016T164315207Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T164317312Z.json": "9b99fbcb3a83238e6b85173a7bae516181338419c339af9f1bae0c2a49e61a10",
+    ".artifacts/native-before/20261016T164317312Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/native-before/native-array.log": "3271406fb289003418202a9ed4439b539d8338190c1c73831f484a53ba73b402",
+    ".artifacts/native-before/native-record.log": "ce525e03853d9f71a24baca0845c0c81d37734945902f1745e7513480c5c89d5",
+    ".artifacts/native-before/native-type-alias.log": "4c81f4d6d5445a53eb427ce38b3db78b7ca1a349f7929d45d220789a40679532",
+    ".artifacts/xslt40/20261016T165503496Z.json": "4c633b432818243468d958f11597ac5a781e6e823469ec417264056e36f60c1c",
+    ".artifacts/xslt40/20261016T165503496Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T165508052Z.json": "91b55b54d4705ce93071da94c93e54d03d15979332a964bebf24f41943f53a78",
+    ".artifacts/xslt40/20261016T165508052Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T165509975Z.json": "5017d600b410e8723d209e04f1627ecf65bb732eed115948fe90019b977ebb53",
+    ".artifacts/xslt40/20261016T165509975Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593"
+  }
+}
