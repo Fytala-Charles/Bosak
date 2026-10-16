@@ -1,0 +1,257 @@
+{
+  "date": "2026-10-16",
+  "baseRevision": "94c6d6519cd5b8b8d07c6690c014457166b3d888",
+  "beforeRunBase": "1e305f90f8fdd4445f0653e6aecca79b7fa091dc",
+  "sourceVersion": "1.12.0 unpublished",
+  "prerequisite": {
+    "pr": 321,
+    "head": "1e305f90f8fdd4445f0653e6aecca79b7fa091dc",
+    "ciRun": 38886368722,
+    "conclusion": "success",
+    "merge": "94c6d6519cd5b8b8d07c6690c014457166b3d888"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "gitBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "path": "specifications/xslt-40/src/xslt.xml",
+    "sections": [
+      "13240 record patterns",
+      "13855 record priorities",
+      "13753 filtered priorities"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "publicLibraries": "1.8.0 unchanged",
+  "publicExtension": "0.2.4/engine1.8.0 unchanged",
+  "verification": {
+    "solution": [
+      8804,
+      0,
+      0
+    ],
+    "xslt": [
+      5918,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focused": [
+      210,
+      0,
+      0
+    ],
+    "newRecordCases": 42,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "initialBuildWarnings": 22,
+    "finalIncrementalBuildWarnings": 20,
+    "allLocalJobsComplete": true
+  },
+  "native": {
+    "recordAggregate": [
+      29,
+      35,
+      1
+    ],
+    "recordSet": [
+      29,
+      18,
+      0
+    ],
+    "xslRecordSet": [
+      0,
+      17,
+      1
+    ],
+    "typeAlias": [
+      22,
+      9,
+      1
+    ],
+    "familyExitCodes": [
+      1,
+      1
+    ],
+    "newPasses": 0
+  },
+  "sourceSha256": {
+    "src/Directory.Build.props": "5a101002a8274b671df64d3d448fcf3ee51eeb3ccd706bb0124abe594da44e46",
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "16702632de089f73a86a3448667388d10395cbebf0b950b87bf33cb1fc8ee64e",
+    "src/Bosak.Xslt/Patterns/RecordPattern.cs": "c120d6847ca4ac216da8ca9b51fc798bc4071e294a24123eb6da85e813446890",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "22205fff2fef6b982c77422069c22941ad419728937538d6ad6421508a9bab6f",
+    "src/Bosak.Xslt/Stylesheet/ContextItemDeclaration.cs": "931308f1ab78107b532c4215d1ae0547a9398ec8f2893b992c7fadc5871f646f",
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "0c2a4d621f1f51723941e234ccab6c0f0b101485c3615581affba7c9a3bfb3cb",
+    "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs": "ec6a5b8ef15356f5772ae101be31442f2c830f7c60bba5ff38d7ee9ed92d7132"
+  },
+  "trackedSourcePatchSha256": "fec427c3f58d9425cd396caa98d687ffdbb2f73bec0e013c651bf26ba5a330bf",
+  "originalBaselineFixture": {
+    "path": ".artifacts/record-tests-before.txt",
+    "sha256": "55169e62a9d86a2f4599537b7749308b87525c28f87a373284cfadd72825e332",
+    "cases": 41,
+    "pass": 13,
+    "fail": 28
+  },
+  "executionLogs": [
+    {
+      "path": ".artifacts/build-final.log",
+      "sha256": "c14b5d89ed766f740147f302e0563cac9c8885f62f4cc4d63e6567e4b900c2a3"
+    },
+    {
+      "path": ".artifacts/build.log",
+      "sha256": "c3f2809433ca09ed29fceea3c7bbb389b4b893d17320dd9c558fcb6f2045d287"
+    },
+    {
+      "path": ".artifacts/focused-corrected-final.log",
+      "sha256": "69545cfa1e8aa8d591b001c135a1a9a2f3900f8b6437446fe8eb111c23c92364"
+    },
+    {
+      "path": ".artifacts/focused-final.log",
+      "sha256": "c4b99c8d082d78911de6230a522b3c3e286ac90bec39968dd61735ef89e83cac"
+    },
+    {
+      "path": ".artifacts/language-server.log",
+      "sha256": "fcc97b073deff17ea208f1092b79bc0917fa9e0b9153854181aa19492900c99a"
+    },
+    {
+      "path": ".artifacts/native-record.log",
+      "sha256": "9cb91043388c267be9f509c084884ebd4708f80885b8e3fb300269cf557279d9"
+    },
+    {
+      "path": ".artifacts/native-type-alias.log",
+      "sha256": "7cbf8963fed242bf8375b760155436f3a29169d52d4b35f79a0bc1bfb8e1c83f"
+    },
+    {
+      "path": ".artifacts/pattern-context-final.log",
+      "sha256": "7d6b0c0f5214c50a3e2f2dfa8324193ba22a44f9b4611d39b62a2681a75a7984"
+    },
+    {
+      "path": ".artifacts/pattern-context-second.log",
+      "sha256": "84023962858135d7236f7575025ffa204b9f3786d91ba97e0b1249f2120d36a8"
+    },
+    {
+      "path": ".artifacts/pattern-context-third.log",
+      "sha256": "3257443019d24154d7be82cf1be7af2d04faa3c57481ce366a1e1d8ceab2ee04"
+    },
+    {
+      "path": ".artifacts/pattern-final.log",
+      "sha256": "0a5c06af4395eb58c271a41c9bc1469c5b5c689192d8bf2e615c5d54a21ac3c5"
+    },
+    {
+      "path": ".artifacts/pattern-first.log",
+      "sha256": "859bf9ad935078afa6ce5e22d84519ce5aad13eab2a7b30c90ca00c8fbf79c61"
+    },
+    {
+      "path": ".artifacts/qt3.log",
+      "sha256": "a0b810e9a974f1b983befd260d2eb962046becc01dcaca140a514c8db2a51d5a"
+    },
+    {
+      "path": ".artifacts/qt4.log",
+      "sha256": "d055c13a2bf7b9b2540703da31a51fe7f77d1aa8346b56aeeb4c3225cb0cf902"
+    },
+    {
+      "path": ".artifacts/record-before.log",
+      "sha256": "1316f637fad420e2e2ac4295763908e38f017f7d4ec233b09f9335d8ee0d9915"
+    },
+    {
+      "path": ".artifacts/solution-tests.log",
+      "sha256": "030caa319837cd09da3ec5305a6156f10c22f763d7a1eb7c87480c1a09dced1a"
+    }
+  ],
+  "rawNativeReceipts": [
+    {
+      "path": ".artifacts/xslt40/20261016T103018786Z.json",
+      "sha256": "7208977a273799ec4685211a75be700dcda0ea685d99296410437e019e2b90e0",
+      "receipt": {
+        "timestampUtc": "2026-10-16T10:30:21.1384909Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "94c6d6519cd5b8b8d07c6690c014457166b3d888",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+          " M src/Bosak.Xslt/Runtime/TransformEngine.cs",
+          " M src/Bosak.Xslt/Stylesheet/ContextItemDeclaration.cs",
+          " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? src/Bosak.Xslt/Patterns/RecordPattern.cs",
+          "?? tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "record",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 35,
+          "Skipped": 1,
+          "Total": 65,
+          "Passed": 29
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\record-pattern-source\\.artifacts\\xslt40\\20261016T103018786Z.log"
+      }
+    },
+    {
+      "path": ".artifacts/xslt40/20261016T103021776Z.json",
+      "sha256": "80c18885e65bb8e81a4765d84bbf0a7b182bccf96b69e3fdec897e6f219db770",
+      "receipt": {
+        "timestampUtc": "2026-10-16T10:30:23.0206112Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "94c6d6519cd5b8b8d07c6690c014457166b3d888",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+          " M src/Bosak.Xslt/Runtime/TransformEngine.cs",
+          " M src/Bosak.Xslt/Stylesheet/ContextItemDeclaration.cs",
+          " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? src/Bosak.Xslt/Patterns/RecordPattern.cs",
+          "?? tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "type-alias",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 9,
+          "Skipped": 1,
+          "Total": 32,
+          "Passed": 22
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\record-pattern-source\\.artifacts\\xslt40\\20261016T103021776Z.log"
+      }
+    }
+  ],
+  "limitations": [
+    "No inheritance or record conversion change",
+    "Array/JNode pattern families remain separate",
+    "No native conformance gain, upstream submission, gate promotion or publication"
+  ],
+  "corrections": [
+    "Added context declaration test exposed the pre-existing named-type binding gap; corrected static binding and runtime identity checks",
+    "Intermediate compile logs retained separately",
+    "Alias fixture string replacement accidentally made a self-reference; replacement order corrected with expected match unchanged"
+  ]
+}

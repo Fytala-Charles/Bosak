@@ -1,3 +1,13 @@
+# Named record pattern candidate - 2026-10-16
+
+PR321 passed both exact-head CI checks at 1e305f90 and merged at 94c6d6519cd5b8b8d07c6690c014457166b3d888. Active isolated worktree D:/Development/Bosak/.guard-tmp/record-pattern-source on feat/record-patterns, based on that merge. Read docs/XSLT40-RECORD-PATTERNS.md/json for the contract and execution receipts. The delivery commit is the latest feat/record-patterns commit containing this entry; source hashes identify the tested implementation.
+
+Unpublished source 1.12.0 adds record(TypeName), nominative and structural aliases, predicates, namespace resolution and map entry sequence use. Nominal identity and structural instance behavior are retained without map coercion. Bare default priority 0; filtered 0.5. A required context test exposed the existing named-type gap: unsupported 4.0 context item types now bind against declaring namespaces/package types and retain runtime mismatch checks. Legacy ~type behavior remains unchanged.
+
+Release builds pass with zero errors (initial 22 warnings; final incremental 20). Solution 8,804/0/0 (XSLT 5,918), language server 84/0/0, focused patterns/context checks 210/0/0 (42 new record cases). Frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894, both exit 0. Native record aggregate 29/35/1 and type-alias 22/9/1 retain exit 1 because failures remain. All local jobs have completed.
+
+Original 41-case baseline 13 pass/28 fail, every intermediate log, context-declaration gap and accidental circular-alias fixture correction remain preserved separately. No native gain, catalog/expectation change, upstream submission or gate promotion. Docs rendered using markdown-it and Fytala CSS; AGENTS.md conventions still apply. Next: check exact-head CI/review before integration, then review array patterns, member sequence matching and recursive priorities. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance remain unchanged. Preserve original root edits/dossiers/.sweep-baselines/, every worktree and all original receipts. Earlier entries below are historical.
+
 # Atomic pattern candidate - 2026-10-16
 
 PR320 passed both exact-head CI checks at 55689f8c and merged at ea78df7dd1b790607745a07171f83c17ccd0d32d. Active isolated worktree D:/Development/Bosak/.guard-tmp/atomic-pattern-source on feat/atomic-patterns, based on that merge. Read docs/XSLT40-ATOMIC-PATTERNS.md/json for the bounded contract and preserved execution receipts. The delivery commit is the latest feat/atomic-patterns commit containing this entry; the source hashes identify the tested implementation.

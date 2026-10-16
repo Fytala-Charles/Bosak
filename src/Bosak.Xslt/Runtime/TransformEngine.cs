@@ -555,6 +555,7 @@
 //                      | Charles Korthout | 7.39  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 //                      | Charles Korthout | 7.40   | 15-10-2026     | Bind original arity families, defaults, escaping items and distinct memoization.         |
 //                      | Charles Korthout | 7.41  | 15-10-2026     | Distinguish a containing package override from contributed bindings during lookup.         |
+//                      | Charles Korthout | 7.42  | 16-10-2026     | Check bound named context types without coercion while preserving caller focus.            |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -7203,7 +7204,7 @@ internal sealed class TransformEngine
             else
             {
                 if (!string.IsNullOrEmpty(contextItemDecl.AsType)
-                    && !XdmConversions.ValueMatchesType(contextItem, contextItemDecl.AsType))
+                    && !contextItemDecl.MatchesType(contextItem, _context))
                     throw new InvalidOperationException($"XTTE0590: Supplied context item does not match required type '{contextItemDecl.AsType}'.");
             }
 
