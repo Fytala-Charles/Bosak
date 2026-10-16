@@ -564,6 +564,7 @@
 //                      | Charles Korthout | 7.48  | 16-10-2026     | Isolate document construction from raw template capture and restore caller state.         |
 //                      | Charles Korthout | 7.49  | 16-10-2026     | Isolate computed-element content and attribute sets from raw template capture.             |
 //                      | Charles Korthout | 7.50  | 16-10-2026     | Isolate literal-element capture and restore literal depth on every exit.                   |
+//                      | Charles Korthout | 7.51  | 16-10-2026     | Isolate copied-element content capture and restore construction state on errors.           |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -11551,44 +11552,55 @@ internal sealed class TransformEngine
                     // namespace bindings, but not the attributes or children of the source node.
                     // Attributes and children must be produced by the contained sequence constructor.
 
-                    // Apply any attribute sets specified on xsl:copy
-                    ApplyAttributeSets(instruction, copy);
-
-                    // Suspend the outer sequence accumulator while constructing the content
-                    // of the copied element, so children are added to the copy rather than
-                    // escaping to the enclosing variable sequence.
+                    // Content belongs to the new element, independently of caller capture.
                     var savedSequenceAccumulator = _sequenceAccumulator;
+                    var savedPreserveAtomicItems = _preserveAtomicSequenceItems;
+                    var savedPreserveDocumentNodes = _preserveDocumentNodes;
+                    var savedTypedRawItems = _typedResultRawItems;
                     _sequenceAccumulator = null;
-
-                    if (ContainsConditionalInstruction(instruction))
+                    _preserveAtomicSequenceItems = false;
+                    _preserveDocumentNodes = false;
+                    _typedResultRawItems = null;
+                    try
                     {
-                        EvaluateSequenceConstructorIntoContainer(instruction, copy, XdmValue.FromNode(nodeToCopy));
-                    }
-                    else
-                    {
-                        foreach (var childNode in instruction.Nodes())
+                        ApplyAttributeSets(instruction, copy);
+                        if (ContainsConditionalInstruction(instruction))
                         {
-                            switch (childNode)
+                            EvaluateSequenceConstructorIntoContainer(instruction, copy, XdmValue.FromNode(nodeToCopy));
+                        }
+                        else
+                        {
+                            foreach (var childNode in instruction.Nodes())
                             {
-                                case XText text:
-                                    ProcessSequenceText(text, instruction);
-                                    break;
-                                case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                    ExecuteXsltInstruction(elem, nodeToCopy);
-                                    break;
-                                case XElement elem:
-                                    CopyLiteralElement(elem);
-                                    break;
+                                switch (childNode)
+                                {
+                                    case XText text:
+                                        ProcessSequenceText(text, instruction);
+                                        break;
+                                    case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
+                                        ExecuteXsltInstruction(elem, nodeToCopy);
+                                        break;
+                                    case XElement elem:
+                                        CopyLiteralElement(elem);
+                                        break;
+                                }
                             }
                         }
-                    }
 
-                    _sequenceAccumulator = savedSequenceAccumulator;
-                    NormalizeElementContent(copy);
-                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the copy.
-                    ApplyConstructedElementValidation(copy, instruction, isLiteralResultElement: false);
-                    FinalizeConstructedElement(copy);
-                    _currentContainer = prev;
+                        NormalizeElementContent(copy);
+                        // REQ-099 seam H4: validation/@type on xsl:copy applies to the copy.
+                        ApplyConstructedElementValidation(copy, instruction, isLiteralResultElement: false);
+                        FinalizeConstructedElement(copy);
+                    }
+                    finally
+                    {
+                        _currentContainer = prev;
+                        _sequenceAccumulator = savedSequenceAccumulator;
+                        _preserveAtomicSequenceItems = savedPreserveAtomicItems;
+                        _preserveDocumentNodes = savedPreserveDocumentNodes;
+                        _typedResultRawItems = savedTypedRawItems;
+                        _lastAddedWasAtomic = false;
+                    }
                     break;
                 }
             case XdmNodeKind.Text:

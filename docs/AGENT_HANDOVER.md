@@ -1,5 +1,17 @@
 # Current isolated delivery - 2026-10-16
 
+PR335 passed exact-head CI run38915461447 atfd512d4ef2df0817a1cea2c1d17abb86644111ad and merged at50fbfedb79a644c914f91fc8014a301c21d92621. Current branch fix/copy-construction-capture starts on that merge; this delivery's commit is `git rev-parse HEAD`. Isolated worktree D:/Development/Bosak/.guard-tmp/copy-capture-source; root historical worktree remains preserved.
+
+Unpublished source candidate **1.14.11** isolates element content constructed by `xsl:copy` from raw/typed template capture, protects attribute-set/content/validation cleanup with `finally`, and ends atomic adjacency at the copied-element boundary. Atomic spaces, nested-document flattening, illegal map/function errors and caught-error output are covered. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases.
+
+Initial fixture compile failure (XdmSequence passed to Assert.Empty) and original source/log are retained. Only that attribute enumeration was corrected, with no expectation changes. Compilable22-case baseline4/18 and expanded28-case5/23 are retained; final112 focused controls pass (28 new +26 literal +21 computed +21 document +16 raw entry). Element branch only: document copying, separate CopyNodeForFunctionBody path, and broader copy-select focus/template-rule restoration remain independent reviews. Read [contract/evidence](XSLT40-COPY-ELEMENT-CAPTURE.md) and companion JSON for final verification and receipts.
+
+All local jobs completed: Release build zero errors/22 warnings; solution **9,159/0/0** (XSLT6,225), focused combined **112/0/0**, language server **84/0/0**, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**, both exit0. All test processes completed; fixture junctions were verified and removed.
+
+Next: exact-head CI/review before integration, then audit xsl:copy document construction under raw/typed capture. Nonraw text-only delivery kind, processor-capability architecture, obsolete patterns/functions and complex-content JNode semantics remain separate. No upstream edits, aliases, skips/gate promotions or publication. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve all root edits/dossiers/.sweep-baselines/, worktrees and original receipts. Earlier entries below are historical.
+
+# Current isolated delivery - 2026-10-16
+
 PR334 passed exact-head CI run38912410632 at2087bea9f562f90a5a4f18a0e6f8758815f7b4d9 and merged at4ad9ad5fbf3ea4059933edb58b7d6459aebb7a51. Current branch fix/literal-element-capture starts on that merge; this delivery's commit is `git rev-parse HEAD`. Isolated worktree D:/Development/Bosak/.guard-tmp/literal-element-source; root historical worktree remains preserved.
 
 Unpublished source candidate **1.14.10** isolates literal-result-element children from raw/typed document preservation and function-item capture, restores caller state, and ends atomic adjacency at the element boundary. Nested documents flatten and illegal maps/functions raise XTDE0450. Native array155/5/20, record29/35/1 and type-alias23/8/1 remain unchanged, with identical pass identities.

@@ -89,3 +89,8 @@ Canonical documents, queue, upstream guide and XSLT40-COMPUTED-ELEMENT-CAPTURE.m
 ## Literal-result-element capture receipt - 2026-10-16
 
 Ten current documentation pages, including XSLT40-LITERAL-ELEMENT-CAPTURE.md, rendered successfully using markdown-it and canonical Fytala CSS to `.guard-tmp/literal-element-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
+
+
+## Copied-element capture receipt - 2026-10-16
+
+Ten current documentation pages, including XSLT40-COPY-ELEMENT-CAPTURE.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/copy-capture-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
