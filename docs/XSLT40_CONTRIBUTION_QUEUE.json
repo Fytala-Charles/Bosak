@@ -860,5 +860,12 @@
     ],
     "lostPasses": [],
     "next": "Audit record field/@required against the pinned draft"
+  },
+  "XSLT40-FIELD-REQUIRED-AUDIT": {
+    "date": "2026-10-16",
+    "milestoneSlice": 1,
+    "report": "XSLT40-FIELD-REQUIRED-AUDIT.md",
+    "status": "implemented/tested in source; review exact-head CI",
+    "next": "Milestone2: earlier-version fixed namespaces under draft processor"
   }
 }

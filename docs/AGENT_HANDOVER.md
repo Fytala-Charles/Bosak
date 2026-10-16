@@ -1,3 +1,11 @@
+# Milestone 1/3 - 2026-10-16
+
+Milestone1/3: pinned draft removed xsl:field/@required in March2026. Preserve the correct draft XTSE0090 rejection; add13 current-contract controls. Engine/source version1.16.1 unchanged. Original record-023 remains an unchanged upstream failure.
+
+Base5be7d95b6f264c63ab234dd7c115a5133f92e5fc; branchdocs/field-required-audit; authoritative report XSLT40-FIELD-REQUIRED-AUDIT.md/json. All71 focused controls pass, including13 new tests. Complete the remaining two agreed PRs (earlier-version fixed namespaces, future/no-fallback errors), then STOP and reassess. No fourth feature slice authorized by this milestone.
+
+All processes completed: Release build0errors/2 existing warnings; solution **9439/0/0** (XSLT6505), language-server **84/0/0**, ten CLI controls pass. No engine change: prior PR346 QT3 31,142/0/679 and qt4 gated8,278/0/1,894 receipts retained; not rerun in this audit. Verified fixture links removed; canonical documents synchronized and rendered.
+
 # Current isolated validation correction - 2026-10-16
 
 Branch fix/fixed-namespace-validation, worktree D:/Development/Bosak/.guard-tmp/fixed-namespace-validation-source, base3c02eca7a9ee1ac8308e37b4f91f57d4dc4c0d1b (PR345 exact-head CI38941231250 green at2f6e711d8255d60efda1deda4a464dc2ceef27ec, including Ubuntu/pwsh controls). Read docs/XSLT40-FIXED-NAMESPACE-VALIDATION.md/json.
