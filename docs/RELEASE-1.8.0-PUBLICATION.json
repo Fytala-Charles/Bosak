@@ -1,0 +1,404 @@
+{
+  "date": "2026-10-16",
+  "version": "1.8.0",
+  "tag": "v1.8.0",
+  "revision": "20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+  "publication": "Complete and verified from nuget.org",
+  "approval": "User explicitly approved publication of the verified 20a5d9be candidate.",
+  "workflow": {
+    "conclusion": "success",
+    "headSha": "20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+    "jobs": [
+      {
+        "completedAt": "2026-10-16T03:40:10Z",
+        "conclusion": "success",
+        "databaseId": 116797571716,
+        "name": "publish",
+        "startedAt": "2026-10-16T03:36:05Z",
+        "status": "completed",
+        "steps": [
+          {
+            "completedAt": "2026-10-16T03:36:06Z",
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "startedAt": "2026-10-16T03:36:05Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:36:13Z",
+            "conclusion": "success",
+            "name": "Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)",
+            "number": 2,
+            "startedAt": "2026-10-16T03:36:06Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:36:22Z",
+            "conclusion": "success",
+            "name": "Setup .NET 10",
+            "number": 3,
+            "startedAt": "2026-10-16T03:36:13Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:36:47Z",
+            "conclusion": "success",
+            "name": "Restore & build",
+            "number": 4,
+            "startedAt": "2026-10-16T03:36:22Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:39:59Z",
+            "conclusion": "success",
+            "name": "Test",
+            "number": 5,
+            "startedAt": "2026-10-16T03:36:47Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:01Z",
+            "conclusion": "success",
+            "name": "Pack",
+            "number": 6,
+            "startedAt": "2026-10-16T03:39:59Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:02Z",
+            "conclusion": "success",
+            "name": "NuGet login (OIDC)",
+            "number": 7,
+            "startedAt": "2026-10-16T03:40:01Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:08Z",
+            "conclusion": "success",
+            "name": "NuGet push",
+            "number": 8,
+            "startedAt": "2026-10-16T03:40:02Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:08Z",
+            "conclusion": "success",
+            "name": "Post Setup .NET 10",
+            "number": 15,
+            "startedAt": "2026-10-16T03:40:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:08Z",
+            "conclusion": "success",
+            "name": "Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)",
+            "number": 16,
+            "startedAt": "2026-10-16T03:40:08Z",
+            "status": "completed"
+          },
+          {
+            "completedAt": "2026-10-16T03:40:08Z",
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "startedAt": "2026-10-16T03:40:08Z",
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/38846326481/job/116797571716"
+      }
+    ],
+    "status": "completed",
+    "url": "https://github.com/Fytala-Charles/Bosak/actions/runs/38846326481"
+  },
+  "confirmedSuccessfulUploads": 10,
+  "releaseSolutionTestsPassed": 8624,
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/1.8.0/bosak.xpath.api.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "0de5e4ad9a990d232fe3c403d1295e527066338960f9b1f3d0cddcb449768931",
+      "assemblySha256": "e2cba5ebcac9c163afb0903c8180b78c4a5bb5da858fab9a58a0cdeebc899321",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/1.8.0/bosak.xpath.compiler.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "a5c84fa14076574553b7013f13d16268ff6ffbecd5530249f670957d48b0d495",
+      "assemblySha256": "64901ac73737185184ecda7d39a084024a4c794dcf62653c9a4af267b2dc05aa",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/1.8.0/bosak.xpath.core.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "a6b7a739c0a980ddad401e4d802dd7a8ace471b6a38d827bccd618366867488d",
+      "assemblySha256": "35f20cb812513a4afdb1209c04790331b3f9eebd8ed90eefdb7d1c6113323249",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/1.8.0/bosak.xpath.parser.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "65073a28ea13f74cc85faf02c266a50b7b9b9361737cfc76fab265b3a0e3fca4",
+      "assemblySha256": "7fdfaeeb6736f869faaa9b2e699e505c56aac7a3751818fa14dd4d71bb80e25c",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/1.8.0/bosak.xpath.providers.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "2dd4f0f7147cddb0ba9c82f696585cce774017052cfe1cc1474acd979f165ede",
+      "assemblySha256": "06e245d892624cb9cad79e0fb0345f846154c39f7bff21930da559b5da9e73dd",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/1.8.0/bosak.xpath.providers.database.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "e543a0292996f0ff0f5f3045857603d882b0c9f18d02bc73db2eda5cf7d8d5f1",
+      "assemblySha256": "2796abf3d4b53a9815fd0603db9a336cbf7829e0977b1786d04e3a4f1e370e4e",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/1.8.0/bosak.xpath.runtime.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "ac1accb435b077e0a130b862d6e7547f767a5466408fc0f91e3f351894d84e7c",
+      "assemblySha256": "8f3847e5c8ccb4440c902495cba959a862f39882f3b8204454613caf99b1259a",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/1.8.0/bosak.xpath.standard.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "355784f96bd8d295806402366482e43ad91ba4b7e15f6382558ee8ef9d597fdf",
+      "assemblySha256": "bc69e31aba22f7fe16b5d91f2156e4db99f7dd05accc6f604f6d2bb10f8f11a4",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XQuery",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/1.8.0/bosak.xquery.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "2eee5a0533f947f3b22b4c55eeb20dc43d43bc8de67910c7db3c429016061f77",
+      "assemblySha256": "760022d43e0ea1a49d0aec9ca9188f7fd7f7ba16a3ab753b39bc89c69d59cb02",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    },
+    {
+      "id": "Bosak.Xslt",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/1.8.0/bosak.xslt.1.8.0.nupkg",
+      "indexed": true,
+      "archiveSha256": "370eef685bd76bda8635b62368fef4bde0ce5b200a42a5136c050082e4c41fcb",
+      "assemblySha256": "45bca8e4ca4f48927cffdf473b3a5b578363908e2c13a15b37fc2dfab176e138",
+      "verifiedConsumers": [
+        {
+          "consumer": "release180-public-consumer",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        },
+        {
+          "consumer": "release180-public-broad",
+          "source": "https://api.nuget.org/v3/index.json",
+          "archiveCacheOutputMatch": true
+        }
+      ]
+    }
+  ],
+  "assemblyMetadata": [
+    {
+      "name": "Bosak.XPath.Api",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "E2CBA5EBCAC9C163AFB0903C8180B78C4A5BB5DA858FAB9A58A0CDEEBC899321"
+    },
+    {
+      "name": "Bosak.XPath.Compiler",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "64901AC73737185184ECDA7D39A084024A4C794DCF62653C9A4AF267B2DC05AA"
+    },
+    {
+      "name": "Bosak.XPath.Core",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "35F20CB812513A4AFDB1209C04790331B3F9EEBD8ED90EEFDB7D1C6113323249"
+    },
+    {
+      "name": "Bosak.XPath.Parser",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "7FDFAEEB6736F869FAAA9B2E699E505C56AAC7A3751818FA14DD4D71BB80E25C"
+    },
+    {
+      "name": "Bosak.XPath.Providers.Database",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "2796ABF3D4B53A9815FD0603DB9A336CBF7829E0977B1786D04E3A4F1E370E4E"
+    },
+    {
+      "name": "Bosak.XPath.Providers",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "06E245D892624CB9CAD79E0FB0345F846154C39F7BFF21930DA559B5DA9E73DD"
+    },
+    {
+      "name": "Bosak.XPath.Runtime",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "8F3847E5C8CCB4440C902495CBA959A862F39882F3B8204454613CAF99B1259A"
+    },
+    {
+      "name": "Bosak.XPath.Standard",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "BC69E31ABA22F7FE16B5D91F2156E4DB99F7DD05ACCC6F604F6D2BB10F8F11A4"
+    },
+    {
+      "name": "Bosak.XQuery",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "760022D43E0EA1A49D0AEC9CA9188F7FD7F7BA16A3AB753B39BC89C69D59CB02"
+    },
+    {
+      "name": "Bosak.Xslt",
+      "version": "1.8.0.0",
+      "informationalVersion": "1.8.0+20a5d9be757599848d7ceaa8885e59bea8dbb2ec",
+      "sha256": "45BCA8E4CA4F48927CFFDF473B3A5B578363908E2C13A15B37FC2DFAB176E138"
+    }
+  ],
+  "focusedConsumer": {
+    "passed": 141,
+    "failed": 0,
+    "skipped": 0,
+    "freshCache": true,
+    "nugetOrgOnly": true
+  },
+  "broadConsumer": {
+    "checksPassed": 153,
+    "freshCache": true,
+    "nugetOrgOnly": true
+  },
+  "braidProbes": {
+    "outcomes": 19,
+    "unchangedSource": true,
+    "allOutcomesMatch": true,
+    "resultsSha256": "1c5529b4baf75c7d27c89307b4e3c817856299a85121d5519bf1f5c6f88a1fc5"
+  },
+  "indexingDelay": "All ten versions were indexed before public downloads and fresh restores.",
+  "braidProductionPin": "5bab4799783569d538cec9b03d37a57454f0eebc",
+  "braidAdopted": false,
+  "publishedVsCode": {
+    "version": "0.2.3",
+    "engineVersion": "1.7.1"
+  },
+  "logs": {
+    "release180-workflow.log": "132601f54d69ef8eb6af4e4c7c6c63a98f3e684bda5621db7b3eabfac26b7349",
+    "release180-public-consumer/consumer.log": "6213f9faaf11f30069d7a419e1cddd674821b77ce8b24f7dff45ec13284c63ae",
+    "release180-public-consumer/probes/build.log": "eed7e2dccc8dd7a01ef06ccad8112130be1845956bea292fe7634f22014c354e",
+    "release180-public-consumer/probes/results.txt": "1c5529b4baf75c7d27c89307b4e3c817856299a85121d5519bf1f5c6f88a1fc5",
+    "release180-public-broad/consumer.log": "f12e32ac5510ae1b60aff1d6dcda69c2ab7fd721d013f44bcaef306b5d85ab6a",
+    "release180-public-consumer/TestResults/req128-corrected-package-consumer.trx": "6d93b466faf0bfc546f66bf41e1c7f0c535fda801a06e89319518c940c184228"
+  },
+  "githubRelease": "https://github.com/Fytala-Charles/Bosak/releases/tag/v1.8.0",
+  "verificationHarnessCorrection": {
+    "description": "Copied broad consumer initially retained numeric 1.7.1 assembly assertions; updated generated harness to 1.8.0, preserved failed log, final 153 checks pass.",
+    "failedLogSha256": "5E971A4632A8B900EE8168CAAA4438B62F54FACFA38690A7015EA99C2E27EC01"
+  }
+}

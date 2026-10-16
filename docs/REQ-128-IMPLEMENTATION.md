@@ -1,8 +1,10 @@
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala source-preserving value-of insertion implementation">
-  <br><br><h1>REQ-128: engine insertion candidate</h1>
-  <p>Unpublished 1.8.0 — 15 October 2026</p>
+  <br><br><h1>REQ-128: engine insertion implementation</h1>
+  <p>Published 1.8.0 — 16 October 2026</p>
 </div>
+
+**1.8.0 published - 2026-10-16:** Ten .NET 10 libraries are published from approved immutable tag `v1.8.0` (`20a5d9be`), adding bounded source-preserving value-of insertion. Release CI passes 8,624 solution tests. Fresh nuget.org-only consumers pass 141 insertion cases, 153 broad regression checks and all 19 unchanged Braid probe outcomes; public archive/cache/output payloads and exact assembly revisions verify. [Publication evidence](RELEASE-1.8.0-PUBLICATION.json). REQ-128 engine delivery is implemented; independent Braid adoption/acceptance remains separate. VS Code 0.2.3 still bundles engine 1.7.1, and Braid retains its existing production pin. Earlier entries below are historical.
 
 **Consumer re-review - 2026-10-15:** Braid closes F1 for exact head b0cd2ef8 with no additional blocker in its focused value-of-only review. Fresh reviewed-head packages pass 141 cases and reproduce all 19 reviewed probe outcomes. [Current readiness and remaining integration gates](REQ-128-RELEASE-READINESS.md). Integration, publication and Braid adoption remain separate; previous entries below retain their original revision context.
 
