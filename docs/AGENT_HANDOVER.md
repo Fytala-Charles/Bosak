@@ -1,3 +1,11 @@
+# Release readiness review - 2026-10-16
+
+Reviewed base48d636c2c2cc66b76bc3e6a5da038bafccdb18e4; branchdocs/draft-release-readiness. ## 2026-10-16 - Release readiness and draft failure review
+
+Review of integrated source1.16.3:33 catalog/draft mismatches,11 record-subtyping engine candidates and1 unresolved function contract account for all45 selected failures. Seven reduced probes confirm a record-signature subtype gap. Engineering checks support candidate preparation; package/consumer/provenance and release checks remain pending. Recommend at most two focused engine PRs, then reassess; recommendation only, no new implementation or publication. [Review and case inventory](XSLT40-RELEASE-READINESS-REVIEW.md). Public versions, REQ statuses and Braid acceptance unchanged.
+
+No engine/test changes. Prior exact-source CI and gates retained; fresh seven-probe diagnostic evidence in .artifacts/reduced-probes.log. Recommendation only: select package preparation or at most two record-subtyping PRs in a new authorized milestone. Preserve root edits and historical worktrees/receipts.
+
 # Milestone 3/3 - 2026-10-16
 
 Milestone 3/3: unpublished patch 1.16.3 requires fallback statically for unknown future instructions in the draft processor, and evaluates valid function-body fallbacks with raw item preservation and isolated variable scope. Legacy behavior is preserved. The approved three-PR milestone ends here.

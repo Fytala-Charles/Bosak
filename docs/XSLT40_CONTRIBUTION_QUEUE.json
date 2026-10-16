@@ -881,5 +881,17 @@
     "report": "XSLT40-FUTURE-FALLBACK.md",
     "status": "implemented/tested in source; review exact-head CI",
     "next": "STOP and reassess. Review release readiness and classify remaining native failures against the pinned draft before authorizing another milestone."
+  },
+  "XSLT40-RELEASE-READINESS-REVIEW": {
+    "date": "2026-10-16",
+    "reviewedRevision": "48d636c2c2cc66b76bc3e6a5da038bafccdb18e4",
+    "status": "Review complete; next milestone recommended only",
+    "classificationCounts": {
+      "catalog/draft drift": 33,
+      "unresolved contract": 1,
+      "engine candidate": 11
+    },
+    "report": "XSLT40-RELEASE-READINESS-REVIEW.md",
+    "next": "Choose package preparation or authorize at most two focused record-subtyping PRs; no automatic implementation."
   }
 }

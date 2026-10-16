@@ -1,0 +1,870 @@
+{
+  "reviewDate": "2026-10-16",
+  "reviewedRevision": "48d636c2c2cc66b76bc3e6a5da038bafccdb18e4",
+  "sourceVersion": "1.16.3",
+  "publishedLibraries": "1.8.0",
+  "extension": "0.2.4 (bundles 1.8.0)",
+  "upstreamSuite": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "qtspecs": "72f222929768b411d8e88d96a1a8740483290078",
+  "suiteRefresh": "upstream/master unchanged; fork origin/master is not the contribution base",
+  "nativeCounts": {
+    "passed": 210,
+    "failed": 45,
+    "skipped": 22,
+    "selectedCases": 277
+  },
+  "classificationCounts": {
+    "catalog/draft drift": 33,
+    "unresolved contract": 1,
+    "engine candidate": 11
+  },
+  "cases": [
+    {
+      "case": "array-017",
+      "family": "array",
+      "classification": "catalog/draft drift",
+      "group": "array-error-code",
+      "assessment": "Expected XTDE4060; current normative code is XTTE4060.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#ERRXTTE4060",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\array\\array-017.xsl",
+          "sha256": "77718ba5eb1b60e8c7a750028dc8aca31c9961671ddc1330d269de170fb6d5a3"
+        }
+      ]
+    },
+    {
+      "case": "array-025",
+      "family": "array",
+      "classification": "unresolved contract",
+      "group": "jposition-contract",
+      "assessment": "Fixture invokes jposition#1; no declaration found in the pinned FO function catalog. Audit JNode semantics before proposing a replacement.",
+      "confidence": "unresolved",
+      "diagnostic": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.",
+      "specReference": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xpath-functions-40/src/function-catalog.xml",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\array\\array-025.xsl",
+          "sha256": "279f999f5e1df9f2645b0c0f7ac17ecfcca4a956a361019196d4da2897bc0a5b"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-001",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-001.xsl",
+          "sha256": "e42fa96f87999840d572c012d1a73068faee4a29caba541f595b92beb8b5bb98"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-002",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-002.xsl",
+          "sha256": "5380f76f3b483e28d29c9a1916922de9ac9380a2676591720a9123f40e6aa87c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-003",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTDE0450, got: XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-003.xsl",
+          "sha256": "e6de73c17a1e63fccdbfc33140bc9b8efd2e91bb3491c881a329a6d8ca669a80"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-004",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTTE3375, got: XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-004.xsl",
+          "sha256": "98ba03a0249657b8fb4d883cdeee3c44b993b89d3468a4ef9637ec0f3084c2e5"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-005",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-005.xsl",
+          "sha256": "7bac2026b57576ae45160a3cdb5a079348ff27d2315b0e7e9b6cb4842cff765f"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-006",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE1430: Prefix ''f' in xsl:record/@extension-element-prefixes is not bound to a namespace.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-006.xsl",
+          "sha256": "0c4e9242d9b69d8563158bb9dc9c87ac9f5bcdd4b4910a4867149fd482affea8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-008",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-008.xsl",
+          "sha256": "8082ec48639e72820bd7e382b6c597210e18812b3a2518581f42083d3bc5d245"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-009",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-009.xsl",
+          "sha256": "dbf3b0e156d2718daa254f1e331b946f2542771da83061de33650f61632d7a9b"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-401",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-401.xsl",
+          "sha256": "71e066bb4dfe90793cea660134b3065601bfdbabb4c5f710324a019c8f8e0f4a"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-402",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-402.xsl",
+          "sha256": "1a0f43fa90a64753bc6a0d5a4824fe9cf175c7a0dfd3f90ef94263631529767a"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-403",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-403.xsl",
+          "sha256": "6a32618f475dbda3119533b4735edf1d1e02041badb9467f9be0b89b1c1928f8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-404",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-404.xsl",
+          "sha256": "a0b64a27ba0d0c14b4796daaf376fb03fcbe3bad463935d80c3478da41ec6e4c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-405",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error Q{http://example.com/}dupe, got: XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-405.xsl",
+          "sha256": "f3377e9ab2af17ff1b01b61061f8b2955dfcc5758fa57b14922f90598d8679a8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-407",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-407.xsl",
+          "sha256": "0af6528de7eaa0fb6c9c3882e99042f51ccc74aaec893529de9ad61a486db039"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-408",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-408.xsl",
+          "sha256": "9b61af2017183641b1dd0b2895e6f08b8e14cd97aef7fcec66a075bf11795edc"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-409",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-409.xsl",
+          "sha256": "0c361e273d7412e44a7db02f0f40b70a48e6dea90f2ac206f79918a2f81f2c6c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-410",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error Q{http://example.com/}dupe, got: XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-410.xsl",
+          "sha256": "36f166e672d939ebcdec1a44c48f98b5239c73d6abf0506ee810140a6edd93fc"
+        }
+      ]
+    },
+    {
+      "case": "record-003",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "surplus-record-entries",
+      "assessment": "Success expectation supplies surplus x to a narrower record parameter; current coercion rejects surplus entries.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-003.xsl",
+          "sha256": "87d234463511632c639b3ed025ffbcc8de3c0072a8215ddd9f89b186e12af49b"
+        }
+      ]
+    },
+    {
+      "case": "record-004",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "Fixture still uses record(..., *), preventing its expected dynamic error.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPTY0004, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-004.xsl",
+          "sha256": "346965db87918e98cde273fe0e2d458cdb0c5511a335134b346bd44c5be9fc85"
+        }
+      ]
+    },
+    {
+      "case": "record-005",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "surplus-record-entries",
+      "assessment": "Same surplus-entry success expectation as record-003.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-005.xsl",
+          "sha256": "87d234463511632c639b3ed025ffbcc8de3c0072a8215ddd9f89b186e12af49b"
+        }
+      ]
+    },
+    {
+      "case": "record-009",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "An unused parameter still has record(..., *), preventing its expected dynamic error.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPDY0050, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-009.xsl",
+          "sha256": "98a79362c055956e87a1f11313e1980fde7a031edc98693ddafcb5e182c3992e"
+        }
+      ]
+    },
+    {
+      "case": "record-016",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "undeclared-record-key",
+      "assessment": "Fixture expects an empty result when an annotated record is called with an undeclared key.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The key 'xyz' is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-016.xsl",
+          "sha256": "1fce0939db891192b268df9a936dd541b2f4c37c05b06f1ddfed72d876241986"
+        }
+      ]
+    },
+    {
+      "case": "record-020",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "duplicate-field-error",
+      "assessment": "Expected XPST0003; current duplicate-field code is XPST0021.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPST0003, got: Parse error at position 0: XPST0021: The record type declares the field 'middle' more than once.",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#ERRXPST0021",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-020.xsl",
+          "sha256": "844a9111bf109d15448325321014d346d06e64a2f2b127cf3c107d198a3a308d"
+        }
+      ]
+    },
+    {
+      "case": "record-023",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "retired-field-required",
+      "assessment": "Uses retired xsl:field/@required; correct XTSE0090 retained by PR347.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090: Attribute 'required' is not permitted on xsl:field.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-023.xsl",
+          "sha256": "d9159f3f43e0436504fa7171fe2563576ae6d567fb41d3e3f5374a474280518f"
+        }
+      ]
+    },
+    {
+      "case": "record-100",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": true,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-101",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-104",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-105",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-110",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-111",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-112",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-113",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-120",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-121",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-123",
+      "family": "record",
+      "classification": "engine candidate",
+      "group": "record-subtyping",
+      "assessment": "Expected true, observed false in function-signature subtyping. Reduce record/record, record/map and record/function relationships separately.",
+      "confidence": "candidate",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-003",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "nonstandard-alias-errors",
+      "assessment": "Expected SXTA0001; unresolved type references are diagnosed with XPST0051.",
+      "confidence": "high",
+      "diagnostic": "Expected error SXTA0001, got: XPST0051: Unknown item type 'cx:treble' in an item-type definition.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-003.xsl",
+          "sha256": "d6af9dd10cd8e425d1f3ce3318c9de527797303ec87841421a08c03819e923ca"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-004",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "nonstandard-alias-errors",
+      "assessment": "Expected SXTA0001; current circular-alias code is XTSE4035.",
+      "confidence": "high",
+      "diagnostic": "Expected error SXTA0001, got: XTSE4035: Circular item-type alias definition.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-004.xsl",
+          "sha256": "0ad7ac94f9d7bdd830df54c1e224d335d8a31a34715f58ead53e9f6017eecb25"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-006",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "plain-map-instance-test",
+      "assessment": "Unannotated map literals yield false; annotation requirement makes success expectations stale.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-006.xsl",
+          "sha256": "e8b3bc54b5232ea44ff9e3a82bb7e60b6ac1346b47c8811525134a7ffdf561df"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-007",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-type-wrapper",
+      "assessment": "Function signatures still use type(c:complex). Observed XTTE0780 is an earlier failure, not proof that intended substring type checking is correct.",
+      "confidence": "mixed",
+      "diagnostic": "Expected error XPTY0004, got: XTTE0780: Cannot convert value to type type(c:complex)",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-007.xsl",
+          "sha256": "da7011ffccb3e074ae1232ec0c08eed1e7adeb38669af92f17eb21bad6d8f631"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-010",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-pattern-syntax",
+      "assessment": "Uses ~faculty/~course/~student aliases over plain JSON maps. Needs migration to the current map-pattern contract before judging output.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-010.xsl",
+          "sha256": "438c9fc316d7faf153c22e7b8eeb32e176752c5f792b9953acb6036ac52d6026"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-012",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "One instance-of expression still contains d? as xs:date despite its modification note.",
+      "confidence": "high",
+      "diagnostic": "Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-012.xsl",
+          "sha256": "62343e76edc820f2ac9f78551d16f6406d112595016f4b602d809ff70a355214"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-013",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-pattern-syntax",
+      "assessment": "Uses ~person on an unannotated parsed map; historical output is not a current-pattern acceptance criterion.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-013.xsl",
+          "sha256": "2a98c122188185a38c5cc5fb9252ce41dab8599f0801623dbc133f7b1b0d1597"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-014",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "multiple-static-errors",
+      "assessment": "Duplicate fields and obsolete type(person) pattern coexist. No exact diagnostic correction proposed without isolating each error.",
+      "confidence": "mixed",
+      "diagnostic": "Expected error XPST0003, got: XTSE0340: Function call not allowed at the start of a pattern.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-014.xsl",
+          "sha256": "2658908262a9f6ce128bb79ab294596bfee73daa8dfd87313f503941dafc546c"
+        }
+      ]
+    }
+  ],
+  "reducedProbes": [
+    {
+      "Name": "atomic-direct",
+      "Expression": "function($a as xs:decimal) as xs:integer {3} instance of function(xs:integer) as xs:integer",
+      "Observed": "true"
+    },
+    {
+      "Name": "atomic-alias",
+      "Expression": "function($a as S) as xs:integer {3} instance of function(T) as xs:integer",
+      "Observed": "true"
+    },
+    {
+      "Name": "record-identical-direct",
+      "Expression": "function($a as record(i as xs:decimal)) as xs:integer {3} instance of function(record(i as xs:decimal)) as xs:integer",
+      "Observed": "true"
+    },
+    {
+      "Name": "record-covariant-direct",
+      "Expression": "function($a as record(i as xs:decimal)) as xs:integer {3} instance of function(record(i as xs:integer)) as xs:integer",
+      "Observed": "false"
+    },
+    {
+      "Name": "record-covariant-alias",
+      "Expression": "function($a as S) as xs:integer {3} instance of function(T) as xs:integer",
+      "Observed": "false"
+    },
+    {
+      "Name": "plain-map-is-record",
+      "Expression": "map{'i':1} instance of record(i as xs:integer)",
+      "Observed": "false"
+    },
+    {
+      "Name": "coerced-record-is-record",
+      "Expression": "(let $r as record(i as xs:integer) := map{'i':1} return $r) instance of record(i as xs:integer)",
+      "Observed": "true"
+    }
+  ],
+  "verification": {
+    "historicalExactSourceSolution": [
+      9509,
+      0,
+      0
+    ],
+    "historicalExactSourceLanguageServer": [
+      84,
+      0,
+      0
+    ],
+    "historicalExactSourceQt3": [
+      31142,
+      0,
+      679
+    ],
+    "historicalExactSourceQt4Gate": [
+      8278,
+      0,
+      1894
+    ],
+    "ciRun": 38950028063,
+    "ciHead": "77c14d8d6da0255afc54304071415b30c51de582",
+    "mergeSourceTree": "0df962d19f58e7accfb63caa7530991724fde039",
+    "freshEngineSuiteRerun": false,
+    "freshReducedDiagnosticProbes": 7,
+    "reviewChangesEngineOrTests": false
+  },
+  "releaseDecision": "Engineering verification supports a release candidate; publication readiness is not established. Exact-candidate package/consumer/provenance checks, release notes, dependency audit and version availability remain pending. XSLT4 remains experimental.",
+  "recommendedMilestone": {
+    "maximumEnginePrs": 2,
+    "first": "Structural record subtyping in function signatures: same field sets, field-type/cardinality variance, aliases and negative controls.",
+    "second": "Record-to-map and record-to-function subtyping, only after an independent reduced baseline supports each relation.",
+    "stop": "Rerun unchanged gates/native selections and reassess. No catalog corrections mixed into engine PRs.",
+    "authorization": "Recommendation only; no implementation or upstream submission performed by this review."
+  },
+  "publicationPerformed": false,
+  "evidenceSha256": {
+    ".artifacts\\failures-raw.json": "0529f9b7ddefa9018c882212cbec112e2ef2d67f6de689d537a65a113ba0f455",
+    ".artifacts\\reduced-probes.log": "4e332c98cd15ba96d2f60b82b9ec09ceb1a64c1ce5b82de6c3e4921e3a70eecd",
+    ".artifacts\\function-catalog.xml": "eeeaa98c00c50b406b3e917b0a23892b8de8a749d1dafccc991a16cb4843403f",
+    ".artifacts\\ci-349.json": "a65129ce89fd43c78d4b7fa7b0bd5b18d9e3ae2b7e06fd0b2fe9e54d9c889c5c",
+    ".artifacts\\public-release.json": "8e5b731b95bd03b972b7e64c4e88ee5b4e6c55973b53d32af752a1b30c5a5f4a",
+    ".artifacts\\probe\\Program.cs": "7a829cb405f1e9d0e109da10302e2f00e613257f1448abde132c7b17e70276a4"
+  }
+}
