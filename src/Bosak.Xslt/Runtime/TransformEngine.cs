@@ -567,6 +567,7 @@
 //                      | Charles Korthout | 7.51  | 16-10-2026     | Isolate copied-element content capture and restore construction state on errors.           |
 //                      | Charles Korthout | 7.52  | 16-10-2026     | Construct copied documents through the shared document-content pipeline.                   |
 //                      | Charles Korthout | 7.53  | 16-10-2026     | Reuse copy constructors in function bodies and preserve caller atomic adjacency.             |
+//                      | Charles Korthout | 7.54  | 16-10-2026     | Restore copy-select focus and template-rule state in both instruction dispatchers.           |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -6050,69 +6051,85 @@ internal sealed class TransformEngine
                     }
                 case "copy":
                     {
-                        IXdmNode? nodeToCopy = null;
-                        var copySelect = instruction.Attribute("select")?.Value;
-                        if (!string.IsNullOrEmpty(copySelect))
+                        var savedCopyFocus = _context.ContextItem;
+                        var savedCopyPosition = _context.ContextPosition;
+                        var savedCopySize = _context.ContextSize;
+                        var savedCopyTemplateRule = _currentTemplateRule;
+                        var savedCopyExcluded = _nextMatchExcluded;
+                        try
                         {
-                            var compiled = CompileWithSchemaContext(copySelect, instruction);
-                            var result = compiled.Evaluate(_context);
-                            if (result.IsNode && result.NodeValue != null)
+                            IXdmNode? nodeToCopy = null;
+                            var copySelect = instruction.Attribute("select")?.Value;
+                            if (!string.IsNullOrEmpty(copySelect))
                             {
-                                nodeToCopy = result.NodeValue;
-                                _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
-                            }
-                            else if (result.IsSequence && result.SequenceValue != null)
-                            {
-                                var items = new List<XdmValue>();
-                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
-                                    items.Add(item);
-                                if (items.Count > 1)
-                                    throw new InvalidOperationException("XTTE3180");
-                                if (items.Count == 1)
+                                _currentTemplateRule = null;
+                                _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+                                var compiled = CompileWithSchemaContext(copySelect, instruction);
+                                var result = compiled.Evaluate(_context);
+                                if (result.IsNode && result.NodeValue != null)
                                 {
-                                    if (items[0].IsNode && items[0].NodeValue != null)
-                                    {
-                                        _context.WithFocus(items[0], 1, 1);
-                                        var fnCopied = CopyNodeForFunctionBody(items[0].NodeValue, instruction);
-                                        if (fnCopied != null)
-                                            results.Add(XdmValue.FromNode(fnCopied));
-                                    }
-                                    else if (!items[0].IsUndefined)
-                                    {
-                                        // Copying an atomic value contributes the atomic
-                                        // itself to the function result sequence.
-                                        results.Add(items[0]);
-                                    }
+                                    nodeToCopy = result.NodeValue;
+                                    _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
                                 }
-                                break;
+                                else if (result.IsSequence && result.SequenceValue != null)
+                                {
+                                    var items = new List<XdmValue>();
+                                    foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                        items.Add(item);
+                                    if (items.Count > 1)
+                                        throw new InvalidOperationException("XTTE3180");
+                                    if (items.Count == 1)
+                                    {
+                                        if (items[0].IsNode && items[0].NodeValue != null)
+                                        {
+                                            _context.WithFocus(items[0], 1, 1);
+                                            var fnCopied = CopyNodeForFunctionBody(items[0].NodeValue, instruction);
+                                            if (fnCopied != null)
+                                                results.Add(XdmValue.FromNode(fnCopied));
+                                        }
+                                        else if (!items[0].IsUndefined)
+                                        {
+                                            // Copying an atomic value contributes the atomic
+                                            // itself to the function result sequence.
+                                            results.Add(items[0]);
+                                        }
+                                    }
+                                    break;
+                                }
+                                else if (!result.IsUndefined)
+                                {
+                                    // A single atomic (non-sequence) select result is copied
+                                    // as the atomic value itself.
+                                    results.Add(result);
+                                    break;
+                                }
                             }
-                            else if (!result.IsUndefined)
+                            else
                             {
-                                // A single atomic (non-sequence) select result is copied
-                                // as the atomic value itself.
-                                results.Add(result);
+                                nodeToCopy = contextItem.IsNode ? contextItem.NodeValue : null;
+                            }
+
+                            if (nodeToCopy == null)
+                            {
+                                // XSLT 3.0 permits copying an atomic context item; only an
+                                // absent context item raises XTTE0945.
+                                if (contextItem.IsUndefined)
+                                    throw new InvalidOperationException("XTTE0945");
+                                results.Add(contextItem);
                                 break;
                             }
-                        }
-                        else
-                        {
-                            nodeToCopy = contextItem.IsNode ? contextItem.NodeValue : null;
-                        }
 
-                        if (nodeToCopy == null)
-                        {
-                            // XSLT 3.0 permits copying an atomic context item; only an
-                            // absent context item raises XTTE0945.
-                            if (contextItem.IsUndefined)
-                                throw new InvalidOperationException("XTTE0945");
-                            results.Add(contextItem);
+                            var copied = CopyNodeForFunctionBody(nodeToCopy, instruction);
+                            if (copied != null)
+                                results.Add(XdmValue.FromNode(copied));
                             break;
                         }
-
-                        var copied = CopyNodeForFunctionBody(nodeToCopy, instruction);
-                        if (copied != null)
-                            results.Add(XdmValue.FromNode(copied));
-                        break;
+                        finally
+                        {
+                            _context.WithFocus(savedCopyFocus, savedCopyPosition, savedCopySize);
+                            _currentTemplateRule = savedCopyTemplateRule;
+                            _nextMatchExcluded = savedCopyExcluded;
+                        }
                     }
                 case "text":
                     {
@@ -8363,47 +8380,57 @@ internal sealed class TransformEngine
 
                     if (hasSelect)
                     {
-                        _currentTemplateRule = null;
-                        _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
-                        var compiled = CompileXPath(copySelect!, instruction);
-                        var result = compiled.Evaluate(_context);
-
-                        if (result.IsSequence && result.SequenceValue != null)
+                        var savedCopyFocus = _context.ContextItem;
+                        var savedCopyPosition = _context.ContextPosition;
+                        var savedCopySize = _context.ContextSize;
+                        try
                         {
-                            var items = new List<XdmValue>();
-                            foreach (var item in XdmSequence.FromSource(result.SequenceValue))
-                                items.Add(item);
-                            if (items.Count > 1)
-                                throw new InvalidOperationException("XTTE3180");
-                            if (items.Count == 1)
+                            _currentTemplateRule = null;
+                            _nextMatchExcluded = new HashSet<Stylesheet.TemplateRule>();
+                            var compiled = CompileXPath(copySelect!, instruction);
+                            var result = compiled.Evaluate(_context);
+
+                            if (result.IsSequence && result.SequenceValue != null)
                             {
-                                var item = items[0];
-                                _context.WithFocus(item, 1, 1);
-                                if (item.IsNode && item.NodeValue != null)
-                                    ExecuteSingleCopy(item.NodeValue, instruction);
-                                else if (!item.IsUndefined)
+                                var items = new List<XdmValue>();
+                                foreach (var item in XdmSequence.FromSource(result.SequenceValue))
+                                    items.Add(item);
+                                if (items.Count > 1)
+                                    throw new InvalidOperationException("XTTE3180");
+                                if (items.Count == 1)
                                 {
-                                    // Copying an atomic value behaves like supplying the
-                                    // atomic to the complex content rules: adjacent atomic
-                                    // copies are separated by a single space (XSLT 3.0
-                                    // §11.9.1, si-copy-001).
-                                    AppendAtomicText(item.ToString());
+                                    var item = items[0];
+                                    _context.WithFocus(item, 1, 1);
+                                    if (item.IsNode && item.NodeValue != null)
+                                        ExecuteSingleCopy(item.NodeValue, instruction);
+                                    else if (!item.IsUndefined)
+                                    {
+                                        // Copying an atomic value behaves like supplying the
+                                        // atomic to the complex content rules: adjacent atomic
+                                        // copies are separated by a single space (XSLT 3.0
+                                        // §11.9.1, si-copy-001).
+                                        AppendAtomicText(item.ToString());
+                                    }
                                 }
                             }
-                        }
-                        else if (result.IsNode && result.NodeValue != null)
-                        {
-                            nodeToCopy = result.NodeValue;
-                            _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
-                            ExecuteSingleCopy(nodeToCopy, instruction);
-                        }
-                        else if (!result.IsUndefined)
-                        {
-                            AppendAtomicText(result.ToString());
-                        }
+                            else if (result.IsNode && result.NodeValue != null)
+                            {
+                                nodeToCopy = result.NodeValue;
+                                _context.WithFocus(XdmValue.FromNode(nodeToCopy), 1, 1);
+                                ExecuteSingleCopy(nodeToCopy, instruction);
+                            }
+                            else if (!result.IsUndefined)
+                            {
+                                AppendAtomicText(result.ToString());
+                            }
 
-                        _currentTemplateRule = savedCopyTemplateRule;
-                        _nextMatchExcluded = savedCopyExcluded;
+                        }
+                        finally
+                        {
+                            _context.WithFocus(savedCopyFocus, savedCopyPosition, savedCopySize);
+                            _currentTemplateRule = savedCopyTemplateRule;
+                            _nextMatchExcluded = savedCopyExcluded;
+                        }
                     }
                     else
                     {
