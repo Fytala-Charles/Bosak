@@ -5,6 +5,10 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Restart checkpoint - 2026-10-16:** Bosak libraries 1.8.0 and VS Code 0.2.4 (bundled engine 1.8.0) are published and publicly verified; publication docs are merged via PR315 at `453392802b9a48be08e9a930a17c9badd00e4c72`. Next planned work is a fresh upstream-native XSLT 4.0 `type-alias`/`record` baseline (N04/N05), then the smallest coherent failing cluster with reliability checks. No new baseline or engine work has begun. See [planned slice](XSLT40_CONTRIBUTION_QUEUE.md) and [restart handover](AGENT_HANDOVER.md). Braid acceptance remains independent; preserve its files/pin and all existing receipts. No REQ status/gate/release change in this documentation step.
+
+
+
 **VS Code 0.2.4 published - 2026-10-16:** The [Marketplace extension](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) is published from approved immutable tag `vscode-v0.2.4` at `c1d4594dad2b030e104be068eb7e91fb10a9013f`, bundling engine 1.8.0. The single [publication workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/38859537270) passes 84 language-server tests and highlighting/launcher checks. Public VSIX payloads match the workflow artifact; ten assembly versions/revisions, packaged protocol and isolated editor live correction verify. [Publication receipt](VSCODE-0.2.4-PUBLICATION.json). Public libraries remain immutable 1.8.0; Braid acceptance and production adoption are independent. This task did not change the installed extension or user settings. Earlier candidate entries below are historical.
 
 

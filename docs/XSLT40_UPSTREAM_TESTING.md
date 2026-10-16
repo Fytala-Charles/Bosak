@@ -4,6 +4,12 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+## Restart plan - 16 October 2026
+
+The next bounded baseline is the unchanged native `type-alias` and `record` families (N04/N05), followed by one evidence-selected implementation/reliability cluster. See the [planned slice and acceptance checkpoints](XSLT40_CONTRIBUTION_QUEUE.md#next-planned-slice-n04n05-conformance-and-reliability---16-october-2026) and [machine-readable queue](XSLT40_CONTRIBUTION_QUEUE.json). No fresh baseline has run yet. The initial arrangement and counts below remain historical: refresh upstream's default branch and record the exact new base before preparing any new contribution; fetch/rebase/recheck again immediately before submission. Preserve the existing checkout, branches and receipts. This checkpoint authorizes documentation/planning only, not upstream submission.
+
+
+
 ## Local arrangement
 
 The upstream suite is an independent Git checkout at `.upstream/xslt40-test`, ignored by Bosak. Its baseline is `6205faf9f32ace6338ac245c41f8eb9a1447926f` from [qt4cg/xslt40-test](https://github.com/qt4cg/xslt40-test). The remote is named `upstream`; local contribution branch: `bosak/schema-awareness-review`. No upstream test modifications, fork, upstream PR or external message have been made in this setup step.
