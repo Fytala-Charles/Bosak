@@ -1,3 +1,11 @@
+# Record draft review and cancellation reliability ? 2026-10-16
+
+PR317 passed both exact-head checks and merged at dfda6ab2; active isolated worktree D:/Development/Bosak/.guard-tmp/record-draft-cancellation-source on fix/record-draft-cancellation, based on that merge. Root edits, baseline source worktree, unchanged upstream suite and all receipts remain preserved.
+
+Pinned qtspecs 72f222929768b411d8e88d96a1a8740483290078 requires surplus-field coercion and unknown record-as-function keys to raise type errors. record-003/005/016 are upstream/current-draft alignment discrepancies, not engine defects to fix. No upstream expectations/checkout changes or external submission. See docs/XSLT40-RECORD-DRAFT-RELIABILITY.md/json. Fresh upstream default remains 91328fbf0fed4a5d2813eb3661808ee53cb961ba.
+
+The flaky Task.Run/CancelAfter(1) test now cancels synchronously during descriptor traversal after public target discovery starts, with a no-cancellation control. Existing internal constructors provide a test-local seam; no production code/public hook/API/version change. Release build zero errors/22 warnings; solution 8,625/0/0 (XSLT 5,739), LS 84/0/0. Focused pair and 20 repetitions (40 cases) pass. Canonical docs rendered with Fytala CSS; AGENTS.md conventions unchanged. Prior failed/successful CI receipts stay unchanged. Review remaining record/named-type patterns against the pinned draft before choosing another engine slice. Publications/REQ statuses/gates/Braid unchanged; engine gates need no rerun for tests/docs only. Earlier entries below are historical.
+
 # N04/N05 unchanged baseline and adapter correction — 2026-10-16
 
 PR316 merged at cdcd517d627a9e8f975ec5b378963692f9ab8f91. Active isolated worktree D:/Development/Bosak/.guard-tmp/n04-n05-source, branch work/n04-n05-baseline. Refreshed upstream default master is 91328fbf0fed4a5d2813eb3661808ee53cb961ba; detached unchanged suite D:/Development/Bosak/.guard-tmp/n04-n05-upstream. Root edits, original upstream branches and every earlier receipt remain preserved.

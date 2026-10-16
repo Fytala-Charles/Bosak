@@ -4,6 +4,8 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**Record draft review and reliability - 2026-10-16:** Pinned current draft `72f22292` requires the errors observed in record-003/005/016; these are upstream/draft alignment discrepancies, not confirmed engine defects. A deterministic descriptor-traversal cancellation test replaces the one-millisecond timer race and adds a normal-completion control, using existing internal test construction only. [Review and evidence](XSLT40-RECORD-DRAFT-RELIABILITY.md). Native expectations, engine behavior, public versions, REQ statuses and gates remain unchanged; Braid acceptance stays independent.
+
 **N04/N05 baseline - 2026-10-16:** Fresh unchanged upstream `91328fbf` yields type-alias 22/9/1 after correcting whitespace-separated specification dependency selection (initial 22/10/0). The record filter remains 26/38/1: record itself 26/21/0, xsl-record 0/17/1. Eight adapter controls pass; no engine change or conformance pass gain. Next engine review: extra-field matching/conversion in record-003/005/016, after current-draft review. [Baseline, triage and evidence](XSLT40-N04-N05-BASELINE.md). Published versions, REQ statuses, gates and independent Braid acceptance are unchanged.
 
 ## Next planned slice: N04/N05 conformance and reliability - 16 October 2026

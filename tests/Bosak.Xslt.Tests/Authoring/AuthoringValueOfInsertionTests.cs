@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Cover default inspection preprocessing without weakening source eligibility checks.      |
 //                      | Charles Korthout | 0.3   | 15-10-2026     | Distinguish ordinary result attributes and opaque metadata from XSLT annotations.        |
 //                      | Charles Korthout | 0.4   | 15-10-2026     | Consumer F1: typed node-test exclusions in original, proposed and pattern slots.          |
+//                      | Charles Korthout | 0.5   | 16-10-2026     | Cancel deterministically during descriptor traversal; retain an uncancelled control.    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -447,19 +448,88 @@ public class AuthoringValueOfInsertionTests
         else Assert.Equal(AuthoringInsertionFailureKind.SizeLimit, result.Failure!.Kind);
     }
 
-    /// <summary>Cancellation during substantial processing leaves the original envelope intact.</summary>
-    [Fact]
-    public async Task Cancellation_DuringProcessingReturnsNoTarget()
+    /// <summary>Cancellation after target discovery starts returns no target and preserves source bytes.</summary>
+    /// <param name="cancel">Whether descriptor traversal requests cancellation.</param>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public void TargetTraversal_ObservesCancellationWithoutMutatingSource(bool cancel)
     {
-        var snapshot = Inspect(Sheet("<!--" + new string('a', 7_000_000) + "--><out></out>"));
-        var original = snapshot.ExportOriginal(ModuleUri);
+        var inspected = Inspect(Sheet("<out></out>"));
+        var parent = Find(inspected, "out");
         using var cancellation = new CancellationTokenSource();
-        var pending = Task.Run(() => snapshot.GetValueOfInsertionTarget(Find(snapshot, "out"), cancellation.Token));
-        cancellation.CancelAfter(1);
-        var result = await pending;
-        Assert.Equal(AuthoringInsertionFailureKind.Cancelled, result.Failure!.Kind);
-        Assert.Null(result.Target);
+        var traversed = false;
+        // Existing internal constructors provide a test-local seam: enumeration happens
+        // inside GetValueOfInsertionTarget, after its initial cancellation check. No
+        // production callback, shared hook, worker scheduling or wall-clock delay is needed.
+        var snapshot = WithRootTraversal(inspected, () =>
+        {
+            Assert.False(cancellation.IsCancellationRequested);
+            traversed = true;
+            if (cancel) cancellation.Cancel();
+        });
+        var original = snapshot.ExportOriginal(ModuleUri);
+        Assert.False(cancellation.IsCancellationRequested);
+        var result = snapshot.GetValueOfInsertionTarget(parent, cancellation.Token);
+        Assert.True(traversed);
+        Assert.Equal(cancel, cancellation.IsCancellationRequested);
+        if (cancel)
+        {
+            Assert.Equal(AuthoringInsertionFailureKind.Cancelled, result.Failure!.Kind);
+            Assert.Null(result.Target);
+        }
+        else
+        {
+            Assert.True(result.IsSuccess, result.Failure?.ToString());
+            Assert.Same(parent, result.Target!.Parent);
+        }
         Assert.Equal(original, snapshot.ExportOriginal(ModuleUri));
+        Assert.Equal(original, inspected.ExportOriginal(ModuleUri));
+    }
+
+    private static AuthoringSnapshot WithRootTraversal(AuthoringSnapshot snapshot, Action onTraversal)
+    {
+        var module = snapshot.PrincipalModule;
+        var root = module.Root;
+        var wrappedRoot = new AuthoringNodeDescriptor(root.Id, root.Kind, root.ElementName, root.Text,
+            root.Range, root.Attributes, new TraversalList(root.Children, onTraversal), root.BackingObject);
+        var wrappedModule = new AuthoringModuleDescriptor(module.ModuleUri, module.IsPrincipal,
+            module.EncodingName, module.OriginalByteLength, module.Version, module.Edges,
+            wrappedRoot, module.Precedence, module.NamedTypes);
+        var identities = Nodes(root).Where(n => n.BackingObject is not null)
+            .ToDictionary(n => n.BackingObject!, n => n.Id);
+        return new AuthoringSnapshot([wrappedModule], new() { [module.ModuleUri] = wrappedModule },
+            new() { [module.ModuleUri] = snapshot.SourceFor(module.ModuleUri) }, identities,
+            snapshot.IsCompilable, snapshot.CompilationDiagnostics, snapshot.ModuleResolver,
+            snapshot.InspectionOptions, snapshot.FunctionSignatures);
+    }
+
+    private sealed class TraversalList(IReadOnlyList<AuthoringNodeDescriptor> children, Action onTraversal)
+        : IReadOnlyList<AuthoringNodeDescriptor>
+    {
+        private bool _observed;
+
+        /// <summary>Gets the number of unchanged child descriptors.</summary>
+        public int Count => children.Count;
+
+        /// <summary>Gets the unchanged child at the requested index.</summary>
+        /// <param name="index">The zero-based child index.</param>
+        /// <returns>The original child descriptor.</returns>
+        public AuthoringNodeDescriptor this[int index] => children[index];
+
+        /// <summary>Invokes the test callback once, then traverses the original children.</summary>
+        /// <returns>The original child enumerator.</returns>
+        public IEnumerator<AuthoringNodeDescriptor> GetEnumerator()
+        {
+            if (!_observed)
+            {
+                _observed = true;
+                onTraversal();
+            }
+            return children.GetEnumerator();
+        }
+
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
     }
 
     /// <summary>Unproven original text templates, components and type contexts cannot masquerade as valid.</summary>

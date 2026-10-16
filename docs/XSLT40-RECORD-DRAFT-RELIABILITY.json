@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-16",
+  "baseRevision": "dfda6ab2d653c0853a9e5cabdd6c8ff459fe0fcd",
+  "baseSourceTreesEqualToTestBuildBase": "e95f96ebef69dd51d027a81761ea65995c6e3247 (PR317 merge adds no tree changes)",
+  "prerequisite": {
+    "pr": 317,
+    "head": "e95f96ebef69dd51d027a81761ea65995c6e3247",
+    "ciRun": 38878565631,
+    "ciConclusion": "success",
+    "merge": "dfda6ab2d653c0853a9e5cabdd6c8ff459fe0fcd"
+  },
+  "specification": {
+    "repository": "https://github.com/qt4cg/qtspecs",
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "path": "specifications/xquery-40/src/expressions.xml",
+    "gitBlob": "b13e9f35f86c3b5bb318d07d81c085534e8ca2df",
+    "savedResponseEncoding": "utf-8-sig",
+    "savedResponseSha256": "55ab46532fb2f68ab1a7259e8563da151ce68b05f4c7b50cd6883f7bce1c49cb",
+    "decodedUtf8Sha256": "55ab46532fb2f68ab1a7259e8563da151ce68b05f4c7b50cd6883f7bce1c49cb",
+    "preservedSource": "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\pinned-expressions.xml",
+    "clauses": {
+      "surplusFieldCoercion": {
+        "id": "id-item-coercion-rules",
+        "lines": [
+          8578,
+          8619
+        ]
+      },
+      "recordAsFunction": {
+        "id": "id-records-as-functions",
+        "lines": [
+          22525,
+          22554
+        ]
+      }
+    }
+  },
+  "upstream": {
+    "revision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "default": "master",
+    "refreshed": true,
+    "changed": false,
+    "contributionBranchCreated": false,
+    "submissionPerformed": false
+  },
+  "observations": [
+    {
+      "cases": [
+        "record-003",
+        "record-005"
+      ],
+      "actual": "XPTY0004: surplus x during narrower structural-record coercion",
+      "classification": "Observed behavior agrees with current draft; upstream expected success differs"
+    },
+    {
+      "cases": [
+        "record-016"
+      ],
+      "actual": "XPTY0004: xyz is not a declared field",
+      "classification": "Observed behavior agrees with current records-as-functions clause; upstream expected empty result differs"
+    }
+  ],
+  "originalEvidence": "XSLT40-N04-N05-BASELINE.json (unchanged)",
+  "engineChanged": false,
+  "publicApiChanged": false,
+  "packageVersionChanged": false,
+  "assertionsWeakened": false,
+  "newPassesClaimed": 0,
+  "cancellation": {
+    "ordering": "Test-local IReadOnlyList traversal callback requests cancellation after public operation initial check",
+    "productionHookAdded": false,
+    "testPatch": "diff --git a/tests/Bosak.Xslt.Tests/Authoring/AuthoringValueOfInsertionTests.cs b/tests/Bosak.Xslt.Tests/Authoring/AuthoringValueOfInsertionTests.cs\nindex ee5068df..5ff4483e 100644\n--- a/tests/Bosak.Xslt.Tests/Authoring/AuthoringValueOfInsertionTests.cs\n+++ b/tests/Bosak.Xslt.Tests/Authoring/AuthoringValueOfInsertionTests.cs\n@@ -15,6 +15,7 @@\n //                      | Charles Korthout | 0.2   | 15-10-2026     | Cover default inspection preprocessing without weakening source eligibility checks.      |\n //                      | Charles Korthout | 0.3   | 15-10-2026     | Distinguish ordinary result attributes and opaque metadata from XSLT annotations.        |\n //                      | Charles Korthout | 0.4   | 15-10-2026     | Consumer F1: typed node-test exclusions in original, proposed and pattern slots.          |\n+//                      | Charles Korthout | 0.5   | 16-10-2026     | Cancel deterministically during descriptor traversal; retain an uncancelled control.    |\n //                      |==================|=======|================|=========================================================================================\n // ===========================================================================================================================================================\n \n@@ -447,19 +448,88 @@ public class AuthoringValueOfInsertionTests\n         else Assert.Equal(AuthoringInsertionFailureKind.SizeLimit, result.Failure!.Kind);\n     }\n \n-    /// <summary>Cancellation during substantial processing leaves the original envelope intact.</summary>\n-    [Fact]\n-    public async Task Cancellation_DuringProcessingReturnsNoTarget()\n+    /// <summary>Cancellation after target discovery starts returns no target and preserves source bytes.</summary>\n+    /// <param name=\"cancel\">Whether descriptor traversal requests cancellation.</param>\n+    [Theory]\n+    [InlineData(true)]\n+    [InlineData(false)]\n+    public void TargetTraversal_ObservesCancellationWithoutMutatingSource(bool cancel)\n     {\n-        var snapshot = Inspect(Sheet(\"<!--\" + new string('a', 7_000_000) + \"--><out></out>\"));\n-        var original = snapshot.ExportOriginal(ModuleUri);\n+        var inspected = Inspect(Sheet(\"<out></out>\"));\n+        var parent = Find(inspected, \"out\");\n         using var cancellation = new CancellationTokenSource();\n-        var pending = Task.Run(() => snapshot.GetValueOfInsertionTarget(Find(snapshot, \"out\"), cancellation.Token));\n-        cancellation.CancelAfter(1);\n-        var result = await pending;\n-        Assert.Equal(AuthoringInsertionFailureKind.Cancelled, result.Failure!.Kind);\n-        Assert.Null(result.Target);\n+        var traversed = false;\n+        // Existing internal constructors provide a test-local seam: enumeration happens\n+        // inside GetValueOfInsertionTarget, after its initial cancellation check. No\n+        // production callback, shared hook, worker scheduling or wall-clock delay is needed.\n+        var snapshot = WithRootTraversal(inspected, () =>\n+        {\n+            Assert.False(cancellation.IsCancellationRequested);\n+            traversed = true;\n+            if (cancel) cancellation.Cancel();\n+        });\n+        var original = snapshot.ExportOriginal(ModuleUri);\n+        Assert.False(cancellation.IsCancellationRequested);\n+        var result = snapshot.GetValueOfInsertionTarget(parent, cancellation.Token);\n+        Assert.True(traversed);\n+        Assert.Equal(cancel, cancellation.IsCancellationRequested);\n+        if (cancel)\n+        {\n+            Assert.Equal(AuthoringInsertionFailureKind.Cancelled, result.Failure!.Kind);\n+            Assert.Null(result.Target);\n+        }\n+        else\n+        {\n+            Assert.True(result.IsSuccess, result.Failure?.ToString());\n+            Assert.Same(parent, result.Target!.Parent);\n+        }\n         Assert.Equal(original, snapshot.ExportOriginal(ModuleUri));\n+        Assert.Equal(original, inspected.ExportOriginal(ModuleUri));\n+    }\n+\n+    private static AuthoringSnapshot WithRootTraversal(AuthoringSnapshot snapshot, Action onTraversal)\n+    {\n+        var module = snapshot.PrincipalModule;\n+        var root = module.Root;\n+        var wrappedRoot = new AuthoringNodeDescriptor(root.Id, root.Kind, root.ElementName, root.Text,\n+            root.Range, root.Attributes, new TraversalList(root.Children, onTraversal), root.BackingObject);\n+        var wrappedModule = new AuthoringModuleDescriptor(module.ModuleUri, module.IsPrincipal,\n+            module.EncodingName, module.OriginalByteLength, module.Version, module.Edges,\n+            wrappedRoot, module.Precedence, module.NamedTypes);\n+        var identities = Nodes(root).Where(n => n.BackingObject is not null)\n+            .ToDictionary(n => n.BackingObject!, n => n.Id);\n+        return new AuthoringSnapshot([wrappedModule], new() { [module.ModuleUri] = wrappedModule },\n+            new() { [module.ModuleUri] = snapshot.SourceFor(module.ModuleUri) }, identities,\n+            snapshot.IsCompilable, snapshot.CompilationDiagnostics, snapshot.ModuleResolver,\n+            snapshot.InspectionOptions, snapshot.FunctionSignatures);\n+    }\n+\n+    private sealed class TraversalList(IReadOnlyList<AuthoringNodeDescriptor> children, Action onTraversal)\n+        : IReadOnlyList<AuthoringNodeDescriptor>\n+    {\n+        private bool _observed;\n+\n+        /// <summary>Gets the number of unchanged child descriptors.</summary>\n+        public int Count => children.Count;\n+\n+        /// <summary>Gets the unchanged child at the requested index.</summary>\n+        /// <param name=\"index\">The zero-based child index.</param>\n+        /// <returns>The original child descriptor.</returns>\n+        public AuthoringNodeDescriptor this[int index] => children[index];\n+\n+        /// <summary>Invokes the test callback once, then traverses the original children.</summary>\n+        /// <returns>The original child enumerator.</returns>\n+        public IEnumerator<AuthoringNodeDescriptor> GetEnumerator()\n+        {\n+            if (!_observed)\n+            {\n+                _observed = true;\n+                onTraversal();\n+            }\n+            return children.GetEnumerator();\n+        }\n+\n+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();\n     }\n \n     /// <summary>Unproven original text templates, components and type contexts cannot masquerade as valid.</summary>\n",
+    "testPatchSha256": "d5beba13e1fd3582f23507bc9e9b12a425400629cbcb242127207deba02471d6",
+    "focusedCases": 2,
+    "repeatRuns": 20,
+    "repeatCases": 40,
+    "scope": "Cancellation during descriptor traversal; no claim for all later pipeline phases"
+  },
+  "verification": {
+    "buildErrors": 0,
+    "buildWarnings": 22,
+    "solution": {
+      "passed": 8625,
+      "failed": 0,
+      "skipped": 0,
+      "projects": 10
+    },
+    "languageServer": {
+      "passed": 84,
+      "failed": 0
+    },
+    "engineGatesRerun": false,
+    "reason": "Only tests and documentation changed; historical gate results remain historical",
+    "logSha256": {
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-focused.log": "8417fe84834a84b03a48074944b087911e7d537615b5cc0a014ce085f1ff89c1",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\build.log": "7ad77d2abd84cf13e1ff1261932335559cf15a311dd117ef8c87014da29338f5",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\language-server-tests.log": "e88678745357f2cb6fca03789aae5f9ead4ac2a47d30f809e2b088be0c324c2d",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-1.log": "2fd970ba415a2f93112fc409364739e2ffd587e8ecbb04dd3de496647e7db871",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-10.log": "28a7a2d8790876641d96d07b84b9fc1ed51d43a071b1efea6b17fe71b9c5e063",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-11.log": "581bd2ae7050d8490cd26b4d29604cc133dd75e26527b38cf68007b3de221693",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-12.log": "18f97927bb62147cca5084a58eac4d32c4bc501f1560e9dad3b3e5dd1948f5bf",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-13.log": "69c077749a2e5615dad3113135e7aca01e6234c65bd3a41c072776a3a50991b4",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-14.log": "2fd970ba415a2f93112fc409364739e2ffd587e8ecbb04dd3de496647e7db871",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-15.log": "18f97927bb62147cca5084a58eac4d32c4bc501f1560e9dad3b3e5dd1948f5bf",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-16.log": "fdbb769d8672d58a785c657dce73405dc4c8351ce8440f1656b722f9afec9989",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-17.log": "2fd970ba415a2f93112fc409364739e2ffd587e8ecbb04dd3de496647e7db871",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-18.log": "569215a97a9acef60d364d92a3b0379b6c5494b6fe2dbb9c63e0a898dda5a4d8",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-19.log": "473942f857db7b7e459e072200ac4cfd4b0ac1fa3ce5fdd6783b0198ae39c2a9",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-2.log": "581bd2ae7050d8490cd26b4d29604cc133dd75e26527b38cf68007b3de221693",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-20.log": "2a19ea3e4d9c3e6e9fe99b1e91845c69e6c4853f1518127ce8ba27680d79c51c",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-3.log": "24e5aa714999e8d9afcb0045537c1d95b95dfade0ea735cf2862808048227352",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-4.log": "569215a97a9acef60d364d92a3b0379b6c5494b6fe2dbb9c63e0a898dda5a4d8",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-5.log": "6467a985e699715c0b9b9f4866159058bf173eb5906faf950887fd8ab9d528d2",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-6.log": "581bd2ae7050d8490cd26b4d29604cc133dd75e26527b38cf68007b3de221693",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-7.log": "473942f857db7b7e459e072200ac4cfd4b0ac1fa3ce5fdd6783b0198ae39c2a9",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-8.log": "9d6bb62ac6fbc5f511f6ba4622c8737785190679f4a9bdbe13cf2dc0541bce0d",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\cancellation-repeat-9.log": "992b6cb7abb29ff0492376cd237b54cb473dd23eef807c4751f85b00fa92ee5f",
+      "D:\\Development\\Bosak\\.guard-tmp\\record-draft-cancellation-source\\.artifacts\\solution-tests.log": "9f461468e1de96fff0d6d6ddcf8d739e37abe072671b212807f526fbe262fe82"
+    },
+    "documentation": "Rendered with markdown-it and canonical Fytala stylesheet; local references and evidence structure checked"
+  }
+}
