@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit literal-result-element content for nested-document and map/function capture leakage; xsl:copy and processor capability remain separate",
+    "selectedEngineReview": "Next: audit xsl:copy construction under raw/typed capture; literal-element content isolated in unpublished1.14.10; processor capability remains separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -741,5 +741,12 @@
       "gateMembershipChanged": false,
       "evidence": "XSLT40-COMPUTED-ELEMENT-CAPTURE.json"
     }
+  },
+  "literalElementCapture": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.14.10 unpublished",
+    "base": "4ad9ad5fbf3ea4059933edb58b7d6459aebb7a51",
+    "evidence": "XSLT40-LITERAL-ELEMENT-CAPTURE.json",
+    "nativePassesChanged": false
   }
 }

@@ -84,3 +84,8 @@ Canonical documents, queue, upstream guide and XSLT40-DOCUMENT-CONSTRUCTION-CAPT
 ## Computed-element capture verification - 2026-10-16
 
 Canonical documents, queue, upstream guide and XSLT40-COMPUTED-ELEMENT-CAPTURE.md were rendered using markdown-it and canonical Fytala CSS. HTML artifacts are retained under D:/Development/Bosak/.guard-tmp/computed-element-render. This is a render check, not a screenshot review. Kit-managed assets are unchanged.
+
+
+## Literal-result-element capture receipt - 2026-10-16
+
+Ten current documentation pages, including XSLT40-LITERAL-ELEMENT-CAPTURE.md, rendered successfully using markdown-it and canonical Fytala CSS to `.guard-tmp/literal-element-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
