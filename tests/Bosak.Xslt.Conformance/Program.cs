@@ -241,6 +241,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 3.75  | 16-10-2026     | Match whitespace-separated catalog specification alternatives independently              |
+//                      | Charles Korthout | 3.76  | 16-10-2026     | Add explicit processor-profile selection independently of catalog dependencies.             |
 //                      |==================|=======|================|=========================================================================================
 
 using System.Xml.Linq;
@@ -287,6 +288,7 @@ class Program
     static string? _testNameFilter = null;
     static string? _testSetFilter = null;
     static bool _xslt40 = false;
+    static Bosak.Xslt.Api.XsltProcessorProfile _processorProfile = Bosak.Xslt.Api.XsltProcessorProfile.Legacy;
 
     // Resume support (--resume-file <path>): the file lists test-set names that completed
     // in earlier (possibly killed) sweep runs; those sets are skipped and every set that
@@ -539,12 +541,34 @@ class Program
         // Schema-aware mode: any "--schema-aware" flag un-gates the schema features and
         // switches every compile to XsltCompiler.SchemaAware (see RunTestCase).
         var positional = new List<string>();
+        bool processorProfileSpecified = false;
         for (int i = 0; i < args.Length; i++)
         {
             var arg = args[i];
             if (arg == "--xslt40")
             {
                 _xslt40 = true;
+            }
+            else if (arg == "--processor-profile")
+            {
+                if (processorProfileSpecified || i + 1 >= args.Length)
+                {
+                    Console.WriteLine("Usage: --processor-profile legacy|xslt40-draft (specify once).");
+                    Environment.ExitCode = 2;
+                    return;
+                }
+                var profileArgument = args[++i];
+                if (profileArgument == "legacy")
+                    _processorProfile = Bosak.Xslt.Api.XsltProcessorProfile.Legacy;
+                else if (profileArgument == "xslt40-draft")
+                    _processorProfile = Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft;
+                else
+                {
+                    Console.WriteLine($"Unknown processor profile '{profileArgument}'. Expected legacy or xslt40-draft.");
+                    Environment.ExitCode = 2;
+                    return;
+                }
+                processorProfileSpecified = true;
             }
             else if (arg is "--schema-aware" or "-s")
             {
@@ -591,6 +615,7 @@ class Program
 
         Console.WriteLine($"Bosak XSLT Conformance Harness");
         Console.WriteLine($"Catalog: {catalogPath}");
+        Console.WriteLine($"Processor profile: {_processorProfile}");
         Console.WriteLine($"Test sets: {testSets.Count}");
         if (filter != null) Console.WriteLine($"Filter: {filter}");
         if (_schemaAware) Console.WriteLine($"Mode: schema-aware (schema_aware / schema-import features un-gated)");
@@ -640,7 +665,7 @@ class Program
         Console.WriteLine($"Skipped: {Skipped}");
         Console.WriteLine();
         Console.WriteLine($"Pass rate: {(Passed * 100.0 / Math.Max(1, Passed + Failed)):F1}%");
-        if (_xslt40)
+        if (_xslt40 || _processorProfile == Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft)
             Environment.ExitCode = Failed > 0 || Passed + Failed == 0 ? 1 : 0;
     }
 
@@ -1387,6 +1412,7 @@ class Program
             var compiler = new Bosak.Xslt.Api.XsltCompiler
             {
                 UriResolver = resolver,
+                ProcessorProfile = _processorProfile,
                 MessageListener = messageListener,
                 StaticParameters = staticParamValues,
                 TreatRecoverableAmbiguousMatchAsError = treatAmbiguousMatchAsError,

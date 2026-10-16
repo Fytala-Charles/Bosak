@@ -818,5 +818,29 @@
     "profile": "Xslt40Draft",
     "newControls": 49,
     "next": "Explicit native-runner profile option; compare original upstream fixtures by identity"
+  },
+  "runnerProcessorProfileSlice": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.16.0",
+    "report": "XSLT40-RUNNER-PROFILE.md",
+    "defaultChanged": false,
+    "draftNative": {
+      "array": [
+        158,
+        2,
+        20
+      ],
+      "record": [
+        29,
+        35,
+        1
+      ],
+      "type-alias": [
+        16,
+        15,
+        1
+      ]
+    },
+    "next": "Fix module fixed-namespaces validation causing seven lost draft type-alias passes"
   }
 }

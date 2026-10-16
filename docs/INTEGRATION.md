@@ -5,6 +5,27 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## 2026-10-16 - Conformance runner processor profiles
+
+Unpublished source **1.16.0** adds explicit `--processor-profile legacy|xslt40-draft` and wrapper `-ProcessorProfile Legacy|Xslt40Draft`, with separate receipt fields for catalog and processor profiles. Defaults remain legacy. Ten permanent CLI controls run in CI. Unchanged upstream fixtures reveal draft array158/2/20, record29/35/1 and type-alias16/15/1; legacy counts and passing identities are retained. [Comparison and evidence](XSLT40-RUNNER-PROFILE.md). Next: fix module fixed-namespaces validation causing seven lost draft type-alias passes. No engine implementation or upstream fixture edits; published versions, REQ statuses and Braid acceptance are unchanged.
+
+### Explicit native-runner profile
+
+```powershell
+# Existing invocation: legacy compiler, XSLT40 catalog dependencies.
+./run-xslt40-tests.ps1 -SuiteRoot .upstream/xslt40-test -TestSet array -NoBuild
+# Opt-in draft compiler; retains the upstream stylesheet versions and exact errors.
+./run-xslt40-tests.ps1 -SuiteRoot .upstream/xslt40-test -TestSet array -ProcessorProfile Xslt40Draft -NoBuild
+# Direct runner: compiler and catalog profile are independent choices.
+dotnet run --project tests/Bosak.Xslt.Conformance -c Release -- --xslt40 --processor-profile xslt40-draft .upstream/xslt40-test/catalog.xml array
+# Permanent local controls (after the Release build).
+powershell -NoProfile -ExecutionPolicy Bypass -File tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1
+```
+
+`--xslt40` selects catalog dependencies and exact-error accounting. `--processor-profile` selects `XsltCompiler.ProcessorProfile`; it does not change catalog dependencies. Invalid, missing or repeated direct profile arguments exit2 before catalog loading. Draft runs exit1 for any failure or no executed tests, even without `--xslt40`; historical legacy exit behavior outside `--xslt40` is unchanged. Wrapper ValidateSet rejects unknown profile names. Receipts retain the historical profile field and add catalogProfile, processorProfile and runnerArguments. All-skipped selections remain unsuccessful.
+
+
+
 ## 2026-10-16 - Explicit XSLT processor profile
 
 Unpublished source **1.15.0** adds `XsltCompiler.ProcessorProfile`: `Legacy` preserves existing behavior; opt-in `Xslt40Draft` selects a4.0 forward-compatibility ceiling and frozen XPath4.0 independently of stylesheet version. Copy/sequence unknown attributes follow the draft ceiling in the opt-in lane; fallback versions and imported/included/used-package modules share the captured profile. [Contract and evidence](XSLT40-PROCESSOR-PROFILE.md). Published versions, default runners, REQ statuses and independent Braid acceptance are unchanged. Earlier audit results remain historical baseline evidence.
