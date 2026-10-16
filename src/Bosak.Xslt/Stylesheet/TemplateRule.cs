@@ -61,6 +61,7 @@
 //                      | Charles Korthout | 2.17  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 2.18  | 16-10-2026     | Admit XSLT 4.0 map-pattern braces and compute string-key map default priorities.          |
 //                      | Charles Korthout | 2.19  | 16-10-2026     | Compute atomic pattern priorities using resolved types and minimum alternatives.          |
+//                      | Charles Korthout | 2.20  | 16-10-2026     | Compute named record pattern priorities independently of record shape.                   |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -183,7 +184,7 @@ internal sealed class TemplateRule
     /// </summary>
     public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
-        var contextItem = ContextItemDeclaration.FromTemplate(element);
+        var contextItem = ContextItemDeclaration.FromTemplate(element, stylesheet);
         ValidateContextItemAgainstMatch(element, contextItem, stylesheet.GetXPathCompatibility(element));
 
         var match = element.Attribute("match")?.Value;
@@ -305,7 +306,8 @@ internal sealed class TemplateRule
         }
 
         if (compatibility >= XPathCompatibility.XPath40 &&
-            Patterns.AtomicPattern.StartsAtomicPattern(StripXPathComments(match).Trim())) return;
+            (Patterns.AtomicPattern.StartsAtomicPattern(StripXPathComments(match).Trim()) ||
+             Patterns.RecordPattern.StartsRecordPattern(StripXPathComments(match).Trim()))) return;
 
         // Any other type is atomic; no node can satisfy an atomic required type.
         // This static check applies only when the match pattern can match nodes only:
@@ -655,6 +657,9 @@ internal sealed class TemplateRule
 
         if (xpath40 && Patterns.AtomicPattern.StartsAtomicPattern(trimmed))
             return Patterns.AtomicPattern.Parse(trimmed).DefaultPriority(typeResolver);
+
+        if (xpath40 && Patterns.RecordPattern.StartsRecordPattern(trimmed))
+            return Patterns.RecordPattern.Parse(trimmed).DefaultPriority;
 
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))

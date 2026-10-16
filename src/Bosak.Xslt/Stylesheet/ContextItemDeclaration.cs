@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.3   | 07-09-2026     | use="absent" with @as raises XTSE3088, not XTSE3089 (XTSE3089 is for                      |
 //                      |                  |       |                | xsl:global-context-item); context-item-010 (REQ-082)                                     |
 //                      | Charles Korthout | 0.4   | 21-09-2026     | API freeze stage B: internalized                                                       |
+//                      | Charles Korthout | 0.5   | 16-10-2026     | Bind XSLT 4.0 named context item types and preserve instance validation at runtime.        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -26,6 +27,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Parser.Ast;
 
 namespace Bosak.Xslt.Stylesheet;
 
@@ -56,17 +61,20 @@ internal sealed class ContextItemDeclaration
     /// <summary>The required item type, or <c>null</c> if no type was declared.</summary>
     public string? AsType { get; }
 
-    private ContextItemDeclaration(ContextItemUse use, string? asType)
+    private readonly XPath31Expression? _typeTest;
+
+    private ContextItemDeclaration(ContextItemUse use, string? asType, XPath31Expression? typeTest = null)
     {
         Use = use;
         AsType = asType;
+        _typeTest = typeTest;
     }
 
     /// <summary>
     /// Parses the optional &lt;xsl:context-item&gt; child of an &lt;xsl:template&gt; element,
     /// performing the static validation required by XSLT 3.0 §10.1.1.
     /// </summary>
-    internal static ContextItemDeclaration? FromTemplate(XElement template)
+    internal static ContextItemDeclaration? FromTemplate(XElement template, Stylesheet stylesheet)
     {
         var contextItems = template.Elements(XName.Get("context-item", Stylesheet.XslNamespace)).ToList();
         if (contextItems.Count == 0)
@@ -135,6 +143,7 @@ internal sealed class ContextItemDeclaration
             throw new InvalidOperationException("XTSE3088: xsl:context-item must not have an as attribute when use is absent.");
 
         string? validatedAs = null;
+        XPath31Expression? typeTest = null;
         if (!string.IsNullOrEmpty(asAttr))
         {
             var stripped = StripXPathComments(asAttr).Trim();
@@ -143,12 +152,39 @@ internal sealed class ContextItemDeclaration
                 throw new InvalidOperationException("XTSE0020: An occurrence indicator is not allowed in xsl:context-item/@as.");
 
             if (!IsKnownItemType(normalized, element))
-                throw new InvalidOperationException($"XTSE0020: Unknown type '{asAttr}' in xsl:context-item/@as.");
+            {
+                if (stylesheet.GetXPathCompatibility(element) < XPathCompatibility.XPath40)
+                    throw new InvalidOperationException($"XTSE0020: Unknown type '{asAttr}' in xsl:context-item/@as.");
+                if (XPathParser.Parse("() instance of " + normalized, xpath40: true) is not
+                    InstanceOfNode { Occurrence: OccurrenceIndicator.One } parsed || parsed.TypeName == "empty-sequence()")
+                    throw new InvalidOperationException("XTSE0020: xsl:context-item/@as requires a single item type.");
+                var owner = stylesheet.OwningPackage ?? stylesheet;
+                typeTest = XPath31Expression.Compile(". instance of " + normalized, new CompileOptions
+                {
+                    Compatibility = XPathCompatibility.XPath40,
+                    DefaultElementNamespace = Stylesheet.GetXPathDefaultNamespace(element),
+                    Namespaces = Stylesheet.GetApplicableStaticNamespaces(element),
+                    ItemTypeAliases = owner.GetBindingItemTypes(),
+                    NamedRecordTypeNames = owner.GetNamedRecordTypes().Keys.ToHashSet(StringComparer.Ordinal),
+                    SchemaSet = stylesheet.CompiledSchemaSet
+                });
+            }
 
             validatedAs = normalized;
         }
 
-        return new ContextItemDeclaration(use, validatedAs);
+        return new ContextItemDeclaration(use, validatedAs, typeTest);
+    }
+
+    /// <summary>Checks the supplied item without coercion and restores the caller focus.</summary>
+    internal bool MatchesType(XdmValue item, EvaluationContext context)
+    {
+        if (_typeTest is null) return XdmConversions.ValueMatchesType(item, AsType!);
+        var savedItem = context.ContextItem;
+        var savedPosition = context.ContextPosition;
+        var savedSize = context.ContextSize;
+        try { return _typeTest.Evaluate(context.WithFocus(item, 1, 1)).BooleanValue; }
+        finally { context.WithFocus(savedItem, savedPosition, savedSize); }
     }
 
     /// <summary>

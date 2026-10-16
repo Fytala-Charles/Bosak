@@ -101,6 +101,7 @@
 //                      | Charles Korthout | 3.29  | 16-10-2026     | Compile bounded string-key map patterns in the XSLT 4.0 profile.                         |
 //                      | Charles Korthout | 3.30  | 16-10-2026     | Compose map entry sequence cardinality, nested patterns and map-focus predicates.         |
 //                      | Charles Korthout | 3.31  | 16-10-2026     | Match current atomic type patterns and validate atomic alternatives.                      |
+//                      | Charles Korthout | 3.32  | 16-10-2026     | Match named record patterns using existing record identity and instance checks.           |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -210,8 +211,8 @@ internal sealed class PatternCompiler
             foreach (var op in new[] { "|", "union", "intersect", "except" })
             {
                 var operands = SplitPatternTopLevel(trimmed, op);
-                if (operands.Length > 1 && operands.Any(p => StringKeyMapPattern.StartsMapPattern(p) || AtomicPattern.StartsAtomicPattern(p)))
-                    throw new InvalidOperationException("XTSE0340: Set-pattern operands require node patterns; enclose map patterns in parentheses.");
+                if (operands.Length > 1 && operands.Any(p => StringKeyMapPattern.StartsMapPattern(p) || AtomicPattern.StartsAtomicPattern(p) || RecordPattern.StartsRecordPattern(p)))
+                    throw new InvalidOperationException("XTSE0340: Set-pattern operands require node patterns; enclose non-node patterns in parentheses.");
             }
         }
         if (StringKeyMapPattern.StartsMapPattern(trimmed))
@@ -226,6 +227,13 @@ internal sealed class PatternCompiler
             if (compatibility < XPathCompatibility.XPath40)
                 throw new InvalidOperationException("XTSE0340: Atomic patterns require XSLT 4.0.");
             _ = AtomicPattern.Parse(trimmed);
+            return;
+        }
+        if (RecordPattern.StartsRecordPattern(trimmed))
+        {
+            if (compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Record patterns require XSLT 4.0.");
+            _ = RecordPattern.Parse(trimmed);
             return;
         }
         // 1.  Disallowed functions at pattern start (XTSE0340).
@@ -1072,26 +1080,30 @@ internal sealed class PatternCompiler
             if (_compatibility < XPathCompatibility.XPath40)
                 throw new InvalidOperationException("XTSE0340: Atomic patterns require XSLT 4.0.");
             var atomic = AtomicPattern.Parse(trimmed);
-            string Resolve(string name)
-            {
-                string key;
-                if (name.StartsWith("Q{", StringComparison.Ordinal)) key = name;
-                else
-                {
-                    var colon = name.IndexOf(':');
-                    var prefix = colon < 0 ? "" : name[..colon];
-                    var ns = colon < 0 ? _defaultElementNamespace ?? "" :
-                        _namespaces?.GetValueOrDefault(prefix) ?? (prefix == "xs" ? XmlSchema.Namespace : null);
-                    if (ns is null) throw new InvalidOperationException("XPST0081: Unknown atomic type prefix: " + prefix);
-                    key = "Q{" + ns + "}" + (colon < 0 ? name : name[(colon + 1)..]);
-                }
-                return _itemTypeAliases?.GetValueOrDefault(key) ?? key;
-            }
-            var types = atomic.ResolveTypes(Resolve);
+            var types = atomic.ResolveTypes(ResolvePatternTypeName);
             var type = types.Length == 1 ? types[0] : "(" + string.Join("|", types) + ")";
             var test = CompilePatternXPath(". instance of " + type);
             var outer = atomic.Predicates.Length > 0 ? CompileAtomicMatch("." + atomic.Predicates) : null;
             return (item, context) => !item.IsNode && !item.IsMap && !item.IsArray && !item.IsFunction &&
+                test.Evaluate(context.WithFocus(item, 1, 1)).BooleanValue && (outer is null || outer(item, context));
+        }
+
+        if (RecordPattern.StartsRecordPattern(trimmed))
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Record patterns require XSLT 4.0.");
+            var record = RecordPattern.Parse(trimmed);
+            var type = ResolvePatternTypeName(record.Name).Trim();
+            while (type.StartsWith('(') && FindMatchingParen(type, 0) == type.Length - 1)
+                type = type[1..^1].Trim();
+            var parsed = XPathParser.Parse("() instance of " + type, schemaAware: HasSchemaSet, xpath40: true);
+            if (parsed is not InstanceOfNode { Occurrence: OccurrenceIndicator.One } instance ||
+                (_namedRecordTypeNames?.Contains(instance.TypeName) != true && !Regex.IsMatch(instance.TypeName, @"^record\s*\(")))
+                throw new InvalidOperationException("XTSE0340: A record pattern name must resolve to a record type.");
+            // The type compiler validates the complete structural type and retains nominal identity.
+            var test = CompilePatternXPath(". instance of " + type);
+            var outer = record.Predicates.Length > 0 ? CompileAtomicMatch("." + record.Predicates) : null;
+            return (item, context) => item.IsMap &&
                 test.Evaluate(context.WithFocus(item, 1, 1)).BooleanValue && (outer is null || outer(item, context));
         }
 
@@ -1228,6 +1240,23 @@ internal sealed class PatternCompiler
                 ctx.WithFocus(savedItem, savedPos, savedSize);
             }
         };
+    }
+
+    /// <summary>Resolves a pattern type EQName and expands a bound item-type alias.</summary>
+    private string ResolvePatternTypeName(string name)
+    {
+        string key;
+        if (name.StartsWith("Q{", StringComparison.Ordinal)) key = name;
+        else
+        {
+            var colon = name.IndexOf(':');
+            var prefix = colon < 0 ? "" : name[..colon];
+            var ns = colon < 0 ? _defaultElementNamespace ?? "" :
+                _namespaces?.GetValueOrDefault(prefix) ?? (prefix == "xs" ? XmlSchema.Namespace : null);
+            if (ns is null) throw new InvalidOperationException("XPST0081: Unknown pattern type prefix: " + prefix);
+            key = "Q{" + ns + "}" + (colon < 0 ? name : name[(colon + 1)..]);
+        }
+        return _itemTypeAliases?.GetValueOrDefault(key) ?? key;
     }
 
     /// <summary>Compiles a nested sequence pattern, checking cardinality without coercing its items.</summary>
