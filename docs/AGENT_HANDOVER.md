@@ -1,3 +1,15 @@
+# Current isolated delivery - 2026-10-16
+
+PR334 passed exact-head CI run38912410632 at2087bea9f562f90a5a4f18a0e6f8758815f7b4d9 and merged at4ad9ad5fbf3ea4059933edb58b7d6459aebb7a51. Current branch fix/literal-element-capture starts on that merge; this delivery's commit is `git rev-parse HEAD`. Isolated worktree D:/Development/Bosak/.guard-tmp/literal-element-source; root historical worktree remains preserved.
+
+Unpublished source candidate **1.14.10** isolates literal-result-element children from raw/typed document preservation and function-item capture, restores caller state, and ends atomic adjacency at the element boundary. Nested documents flatten and illegal maps/functions raise XTDE0450. Native array155/5/20, record29/35/1 and type-alias23/8/1 remain unchanged, with identical pass identities.
+
+Original22-case17/5 and expanded26-case21/5 baselines are retained byte-for-byte, with no expectation corrections. Final combined84 controls pass (26 new literal +21 computed +21 document +16 raw entry). Early attribute/extension-error and fallback controls already passed before; depth cleanup is a static exception-safety correction, not an additional reproduced output failure. All literal-depth exits now share finally cleanup; default-mode name expansion precedes capture-state mutation. Read [contract/evidence](XSLT40-LITERAL-ELEMENT-CAPTURE.md) and companion JSON for final verification and receipts.
+
+All local jobs completed: Release build zero errors/22 warnings; solution **9,131/0/0** (XSLT6,197), focused combined **84/0/0**, language server **84/0/0**, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**, both exit0. All test processes completed; fixture junctions were verified and removed.
+
+Next: exact-head CI/review before integration, then audit xsl:copy construction under raw/typed capture. Nonraw text-only delivery kind, processor-capability architecture, obsolete patterns/functions and complex-content JNode semantics remain separate. No upstream edits, skips, error aliases, gate promotions or publication. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve all root edits/dossiers/.sweep-baselines/, worktrees and original receipts. Earlier entries below are historical.
+
 # Computed-element capture candidate - 2026-10-16
 
 PR333 passed exact-head CI run38911001715 at8d9d8909351607dca20685d94484d6112086b020 and merged at8da3b3ddb1701d7ca3dd6a79e8c44c3aa26e7b59, final branch base. Work began on the locally verified precursor while CI ran; tests/native receipts retain that head. Entire precursor/merged trees verified identical before fast-forward alignment, no source changes from alignment. Active worktree D:/Development/Bosak/.guard-tmp/computed-element-source, branch fix/computed-element-capture. Delivery is latest branch commit containing this entry; source hashes identify tested implementation. Read docs/XSLT40-COMPUTED-ELEMENT-CAPTURE.md/json.

@@ -563,6 +563,7 @@
 //                      | Charles Korthout | 7.47  | 16-10-2026     | Atomize complete JNode payloads for AVTs, value-of and simple-content strings.             |
 //                      | Charles Korthout | 7.48  | 16-10-2026     | Isolate document construction from raw template capture and restore caller state.         |
 //                      | Charles Korthout | 7.49  | 16-10-2026     | Isolate computed-element content and attribute sets from raw template capture.             |
+//                      | Charles Korthout | 7.50  | 16-10-2026     | Isolate literal-element capture and restore literal depth on every exit.                   |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -10110,7 +10111,18 @@ internal sealed class TransformEngine
     private void CopyLiteralElement(XElement source)
     {
         _literalElementDepth++;
+        try
+        {
+            CopyLiteralElementCore(source);
+        }
+        finally
+        {
+            _literalElementDepth--;
+        }
+    }
 
+    private void CopyLiteralElementCore(XElement source)
+    {
         var lreInfo = LreStaticInfoCache.GetValue(source, s => new LreStaticInfo
         {
             ExtensionNamespaces = GetExtensionElementPrefixes(s),
@@ -10141,7 +10153,6 @@ internal sealed class TransformEngine
             if (source.Name.NamespaceName == ExsltCommonNamespace && source.Name.LocalName == "document")
             {
                 ExecuteResultDocument(source, _context.ContextItem, isPrincipal: false);
-                _literalElementDepth--;
                 return;
             }
 
@@ -10156,7 +10167,6 @@ internal sealed class TransformEngine
             {
                 throw new InvalidOperationException("XTDE1450");
             }
-            _literalElementDepth--;
             return;
         }
 
@@ -10366,6 +10376,16 @@ internal sealed class TransformEngine
             Xml11Attribute.SetValue(copy, mappedAttrName, attrValue);
         }
 
+        // Variables declared in the content of a literal result element are scoped to that
+        // element and must not leak to following siblings in the containing sequence.
+        // Skip the snapshot entirely when the content cannot declare variables.
+        var savedVariables = lreInfo.MayDeclareVariables ? _context.SnapshotVariables() : null;
+
+        // Push xsl:default-mode for this literal result element scope
+        var lreDefaultMode = source.Attribute(XName.Get("default-mode", Stylesheet.Stylesheet.XslNamespace))?.Value;
+        var expandedDefaultMode = !string.IsNullOrEmpty(lreDefaultMode)
+            ? ExpandModeName(lreDefaultMode, source) : null;
+
         var collectAsRawItem = IsRawCollectionTopLevel;
         if (!collectAsRawItem)
             AddElementToContainer(copy, _currentContainer);
@@ -10377,19 +10397,17 @@ internal sealed class TransformEngine
         // namespace nodes) attach to the element being constructed, so the placeholder
         // accumulator used for raw sequence constructors must be suspended.
         var savedAccumulator = _sequenceAccumulator;
+        var savedPreserveAtomicItems = _preserveAtomicSequenceItems;
+        var savedPreserveDocumentNodes = _preserveDocumentNodes;
+        var savedTypedRawItems = _typedResultRawItems;
         _sequenceAccumulator = null;
+        // Element children follow complex-content rules, independently of raw delivery.
+        _preserveAtomicSequenceItems = false;
+        _preserveDocumentNodes = false;
+        _typedResultRawItems = null;
 
-        // Variables declared in the content of a literal result element are scoped to that
-        // element and must not leak to following siblings in the containing sequence.
-        // Skip the snapshot entirely when the content cannot declare variables.
-        var savedVariables = lreInfo.MayDeclareVariables ? _context.SnapshotVariables() : null;
-
-        // Push xsl:default-mode for this literal result element scope
-        var lreDefaultMode = source.Attribute(XName.Get("default-mode", Stylesheet.Stylesheet.XslNamespace))?.Value;
-        if (!string.IsNullOrEmpty(lreDefaultMode))
-        {
-            _defaultModeStack.Push(ExpandModeName(lreDefaultMode, source));
-        }
+        if (expandedDefaultMode != null)
+            _defaultModeStack.Push(expandedDefaultMode);
 
         try
         {
@@ -10446,7 +10464,10 @@ internal sealed class TransformEngine
                 _context.RestoreVariables(savedVariables);
             _currentContainer = prev;
             _sequenceAccumulator = savedAccumulator;
-            _literalElementDepth--;
+            _preserveAtomicSequenceItems = savedPreserveAtomicItems;
+            _preserveDocumentNodes = savedPreserveDocumentNodes;
+            _typedResultRawItems = savedTypedRawItems;
+            _lastAddedWasAtomic = false;
         }
     }
 
