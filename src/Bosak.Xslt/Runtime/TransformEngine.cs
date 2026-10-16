@@ -562,6 +562,7 @@
 //                      | Charles Korthout | 7.46  | 16-10-2026     | Route apply-imports arrays to member templates and isolate member import restrictions.    |
 //                      | Charles Korthout | 7.47  | 16-10-2026     | Atomize complete JNode payloads for AVTs, value-of and simple-content strings.             |
 //                      | Charles Korthout | 7.48  | 16-10-2026     | Isolate document construction from raw template capture and restore caller state.         |
+//                      | Charles Korthout | 7.49  | 16-10-2026     | Isolate computed-element content and attribute sets from raw template capture.             |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -7957,13 +7958,19 @@ internal sealed class TransformEngine
                     // of the element, so xsl:sequence items attach to the element being
                     // constructed rather than escaping as placeholders into it.
                     var savedElemAccumulator = _sequenceAccumulator;
+                    var savedElemPreserveAtomics = _preserveAtomicSequenceItems;
+                    var savedElemPreserveDocuments = _preserveDocumentNodes;
+                    var savedElemTypedRawItems = _typedResultRawItems;
                     _sequenceAccumulator = null;
-
-                    // Apply attribute sets; xsl:attribute children in the element body override them.
-                    ApplyAttributeSets(instruction, elem);
+                    _preserveAtomicSequenceItems = false;
+                    _preserveDocumentNodes = false;
+                    _typedResultRawItems = null;
 
                     try
                     {
+                        // Attribute sets share the constructor scope and may raise errors.
+                        // Explicit body attributes still override the supplied attributes.
+                        ApplyAttributeSets(instruction, elem);
                         if (ContainsConditionalInstruction(instruction))
                         {
                             // xsl:on-empty / xsl:on-non-empty as direct children require the
@@ -7998,7 +8005,11 @@ internal sealed class TransformEngine
                     finally
                     {
                         _sequenceAccumulator = savedElemAccumulator;
+                        _preserveAtomicSequenceItems = savedElemPreserveAtomics;
+                        _preserveDocumentNodes = savedElemPreserveDocuments;
+                        _typedResultRawItems = savedElemTypedRawItems;
                         _currentContainer = prev;
+                        _lastAddedWasAtomic = false; // The constructed element ends atomic adjacency.
                     }
                     break;
                 }
