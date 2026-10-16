@@ -1,0 +1,67 @@
+{
+  "number": 1,
+  "slug": "XSLT40-FIELD-REQUIRED-AUDIT",
+  "title": "Current record field contract audit",
+  "summary": "Milestone1/3: pinned draft removed xsl:field/@required in March2026. Preserve the correct draft XTSE0090 rejection; add13 current-contract controls. Engine/source version1.16.1 unchanged. Original record-023 remains an unchanged upstream failure.",
+  "base": "5be7d95b6f264c63ab234dd7c115a5133f92e5fc",
+  "branch": "docs/field-required-audit",
+  "handover": "All71 focused controls pass, including13 new tests. Complete the remaining two agreed PRs (earlier-version fixed namespaces, future/no-fallback errors), then STOP and reassess. No fourth feature slice authorized by this milestone.",
+  "next": "Milestone2: earlier-version fixed namespaces under draft processor",
+  "solution": 9439,
+  "xslt": 6505,
+  "gates": false,
+  "sourceFiles": [
+    "tests/Bosak.Xslt.Tests/FieldRequiredAuditTests.cs"
+  ],
+  "verification": {
+    "solution": [
+      9439,
+      0,
+      0
+    ],
+    "xslt": [
+      6505,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "cliControls": 10,
+    "buildWarnings": 2,
+    "freshGates": false,
+    "processesComplete": true,
+    "fixtureLinksRemoved": true
+  },
+  "sha256": {
+    "tests/Bosak.Xslt.Tests/FieldRequiredAuditTests.cs": "0973dea0be0ce4d265412cea1b18f3e7a81ce4acfd3423bde674e2429477ec3f",
+    ".artifacts/build.log": "df6d09a72b2ec1dc166383db3fcefed1379f6e0e8f5e54ddfae25de48e7b82d7",
+    ".artifacts/focused.log": "94f9a91ff78e0672d724fc3005df9497c476066341621828ad47f2ff5d73beac",
+    ".artifacts/language-server.log": "e37a26f292355e9b10b6ecdc06d83f679e23ee9d5ff9ef38e13c5084a8353872",
+    ".artifacts/milestone.json": "4b152a8120b23fbad4f298e928887321dd76922fcd4a63a788a43f4c221fa091",
+    ".artifacts/native-Legacy-record-023.log": "567f9813514004ca875c4775a0c6db87b421e028a2a84aebbeda4fe90f96ceb7",
+    ".artifacts/native-Xslt40Draft-record-023.log": "9f8fc5f235b6abaa0177719e2fb5fbbab50efd42e3dc69f58bed6ebd0058fccb",
+    ".artifacts/original-tests.txt": "0973dea0be0ce4d265412cea1b18f3e7a81ce4acfd3423bde674e2429477ec3f",
+    ".artifacts/pr-body.md": "704060c437c67b2dbc93b2a26fc2325ca3f77b4b7a25f1748c34fc8a31a26b11",
+    ".artifacts/render.cjs": "78a1e37359ab75ddc2136970b834155e11fe17b86875e1aaf7ab6e9690f9a868",
+    ".artifacts/report-body.md": "7c53ac78c81888ca449890b8558e4cb7a610bfec9b5b2677af498effa655cb42",
+    ".artifacts/runner-profile-smoke.log": "e1fa7fd954a4224298e4e1c32d007c805be1e08f3c17c6ffb177d477b6216323",
+    ".artifacts/solution-tests.log": "7177995398f80ca6f41692b513d4f333a6fdec544f9f1c2eaf093c868d7b6356",
+    ".artifacts/runner-profile-smoke/adapter-draft.log": "07af039bc85dc0bb5f171bdb32bedfdf831df1cd130b0f4f8c452b9bb051f2cd",
+    ".artifacts/runner-profile-smoke/adapter-legacy.log": "d4b4ad09e33ac07021a5f69a48839649600393715e92ca7e2ded6ccc47fd0b11",
+    ".artifacts/runner-profile-smoke/default-legacy.log": "8598cbffe22ff0d1d23f8696e4ac2d9b8518051919e9abd31773136cc61a973f",
+    ".artifacts/runner-profile-smoke/draft-empty-selection.log": "6b8d2fcdd184227b91bb434459a698d9c28e8ec09e1b94269b46052ec3a9a71b",
+    ".artifacts/runner-profile-smoke/draft-independent-catalog.log": "e36cad71f68473021128e996de6fbba450b93935fd50a6603b8cf2f19a5d9d9b",
+    ".artifacts/runner-profile-smoke/draft.log": "8d459f522fa6b3eb8df7573c93370491dffa45df557c3b5115ceec69910f40a8",
+    ".artifacts/runner-profile-smoke/duplicate-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/runner-profile-smoke/explicit-legacy.log": "8598cbffe22ff0d1d23f8696e4ac2d9b8518051919e9abd31773136cc61a973f",
+    ".artifacts/runner-profile-smoke/invalid-profile.log": "7faf5472fc84fd3ae3c7535497662b9ba39e27cddff9e924bcdec18ca4d058e6",
+    ".artifacts/runner-profile-smoke/missing-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/xslt40/20261016T181442104Z.json": "707ef56c09e56ebdfe45c04a01e8392a8d0c8c547e6ef7728c4f496fdb80d4c7",
+    ".artifacts/xslt40/20261016T181442104Z.log": "75fd36913d73b20f710169557c073bee77155146afe6bbbdb330010b39764717",
+    ".artifacts/xslt40/20261016T181443493Z.json": "11c4e357ec538c96f6a5a776ace387f95558b864dd080e8325e77b7cf287e16a",
+    ".artifacts/xslt40/20261016T181443493Z.log": "d3fb01f068bf5a624aa59ead9ccd6daf29aebceebbd4177bb02bd121feb12ada"
+  }
+}

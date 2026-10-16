@@ -5,6 +5,12 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+## 2026-10-16 - Current record field contract audit
+
+Milestone1/3: pinned draft removed xsl:field/@required in March2026. Preserve the correct draft XTSE0090 rejection; add13 current-contract controls. Engine/source version1.16.1 unchanged. Original record-023 remains an unchanged upstream failure. [Contract and evidence](XSLT40-FIELD-REQUIRED-AUDIT.md). Milestone 1/3; stop and reassess after slice3. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Fixed namespace module validation
 
 Unpublished source **1.16.1** admits fixed-namespaces on version4.0-or-later stylesheet/transform/package roots, matching the existing binding handler. All seven lost draft type-alias passes (016..022) are restored: draft23/8/1, with no other native status or diagnostic changes in either profile. The handler activation threshold and shared instruction whitelist are unchanged. [Contract and evidence](XSLT40-FIXED-NAMESPACE-VALIDATION.md). Earlier module-version activation remains a separate profile gap. Published versions, REQ statuses, gates and Braid acceptance are unchanged.
