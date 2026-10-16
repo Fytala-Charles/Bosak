@@ -326,6 +326,7 @@
 //                      | Charles Korthout | 2.164  | 15-10-2026     | Validate and replace complete optional override arity families.                          |
 //                      | Charles Korthout | 2.165 | 15-10-2026     | Support abstract optional overrides with static XTSE3075 reference validation.           |
 //                      | Charles Korthout | 2.166 | 15-10-2026     | Resolve adopted abstract functions and propagate concrete bindings through adoption.     |
+//                      | Charles Korthout | 2.167 | 16-10-2026     | Validate for-each attributes and required select statically, including unused bodies.      |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4477,6 +4478,13 @@ internal sealed class Stylesheet
                     ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
                         "select", "mode", "separator"),
                         IsForwardsCompatibleElement(elem));
+                }
+                else if (localName == "for-each")
+                {
+                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes("select", "separator"),
+                        IsForwardsCompatibleElement(elem));
+                    if (elem.Attribute("select") is null && elem.Attribute("_select") is null)
+                        throw new InvalidOperationException("XTSE0010: xsl:for-each requires a select attribute.");
                 }
                 else if (localName == "apply-imports")
                 {

@@ -1,3 +1,15 @@
+# Static for-each validation candidate - 2026-10-16
+
+PR325 passed exact-head CI run38891357065 at e98384e1 and merged at 9326d8acc4ef6f13af7160c886c3c6ebde5246c0. Active worktree D:/Development/Bosak/.guard-tmp/for-each-validation-source, branch fix/for-each-static-validation. Read docs/XSLT40-FOR-EACH-VALIDATION.md/json. Delivery is the latest branch commit containing this entry; source hashes identify the tested implementation.
+
+Unpublished source1.14.2 adds for-each static allowed-attribute and required-select checks using common validators and existing local forward-compatibility policy. Missing select is detected even in unreachable bodies; illegal strict-profile attributes are detected with valid select too. Existing separator3.0 behavior, shadow/standard/foreign attributes and use-when pruning are preserved. The original arrays-021 has multiple errors; draft permits implementation-dependent selection, so native code mismatch alone was not proof of a precedence defect. Independent controls confirm the static validation gaps.
+
+Release build passes with zero errors and22 warnings. Solution8,933/0/0 (XSLT5,999), language server84/0/0, focused static/surface checks56/0/0 (17 new cases). Frozen QT3 31,142/0/679 and qt4 gated8,278/0/1,894, both exit0. Native array aggregate improves to147/13/20, only arrays-021 newly passing, no lost passes; arrays type set75/0/12, record29/35/1 and type-alias22/9/1 unchanged. All aggregate family exits remain1. All local jobs complete.
+
+Original fixture compile-error bytes/log, diagnostic17-case5/12 baseline (one shadow fixture error), initial combined55/1 and corrected final56/0 are preserved separately. Shadow fixture correction retains expected output12. Native breakdown array16/13/8, square-array56/0/0, arrays75/0/12. No skipped test promoted to pass, expectation edit, upstream contribution, new skip/error alias, gate promotion or publication. Docs synced/rendered using markdown-it/Fytala CSS; AGENTS.md remains applicable.
+
+Next: check exact-head CI/review before integration, then trace native array-010/011/012 serialization failures against declared output/result assertions before runner or engine changes. Other aggregate/JNode atomization and profile issues remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, all worktrees and original receipts. Earlier entries below are historical.
+
 # Complete sum atomization candidate - 2026-10-16
 
 PR324 passed exact-head CI run38890469504 at24ec2b88 and merged at af0d2e1cea4c4b156d1c547566aaa3be6bbf387a. Active isolated worktree D:/Development/Bosak/.guard-tmp/jnode-sum-source on fix/jnode-sum-atomization. Read docs/XSLT40-JNODE-SUM.md/json. The delivery commit is the latest branch commit containing this entry; source hashes identify the tested implementation. Tests/native runs began on source-equivalent prerequisite head24ec2b88 before merge alignment.
