@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 2.18  | 16-10-2026     | Admit XSLT 4.0 map-pattern braces and compute string-key map default priorities.          |
 //                      | Charles Korthout | 2.19  | 16-10-2026     | Compute atomic pattern priorities using resolved types and minimum alternatives.          |
 //                      | Charles Korthout | 2.20  | 16-10-2026     | Compute named record pattern priorities independently of record shape.                   |
+//                      | Charles Korthout | 2.21  | 16-10-2026     | Compute array priorities recursively with lexical predicate detection.                    |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -660,6 +661,13 @@ internal sealed class TemplateRule
 
         if (xpath40 && Patterns.RecordPattern.StartsRecordPattern(trimmed))
             return Patterns.RecordPattern.Parse(trimmed).DefaultPriority;
+
+        if (xpath40 && Patterns.ArrayPattern.StartsArrayPattern(trimmed))
+        {
+            var array = Patterns.ArrayPattern.Parse(trimmed);
+            return array.HasPredicates || Patterns.ArrayPattern.IsEmptySequence(array.Members)
+                ? 0.5 : ComputeDefaultPriority(array.ItemPattern, xpath40: true, typeResolver: typeResolver);
+        }
 
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))
