@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit CopyNodeForFunctionBody capture; copied-document construction isolated in unpublished1.14.12; broader copy-select state and processor capability remain separate",
+    "selectedEngineReview": "Next: audit copy-select focus/template-rule restoration in both dispatch paths; function-body copy construction uses shared paths in unpublished1.14.13; processor capability remains separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -761,6 +761,13 @@
     "sourceVersion": "1.14.12 unpublished",
     "base": "30382e25c07dcefc09a29a506103f947dfc38c31",
     "evidence": "XSLT40-COPY-DOCUMENT-CAPTURE.json",
+    "nativePassesChanged": false
+  },
+  "functionCopyCapture": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.14.13 unpublished",
+    "base": "c3936a24d6cf97ead1923c9b84678cf0f3475a98",
+    "evidence": "XSLT40-FUNCTION-COPY-CAPTURE.json",
     "nativePassesChanged": false
   }
 }
