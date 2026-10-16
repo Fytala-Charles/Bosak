@@ -5,6 +5,18 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+## 2026-10-16 - 1.16.5 release preparation
+
+The single documentation/preparation PR integrates the record-subtyping checkpoint and finalized candidate release notes. Engine and test source remain unchanged. After exact-head CI and integration, repack the exact merged revision and repeat fresh package-only consumers, provenance, dependency audits and availability checks before publication approval. [Publication checklist](RELEASE-1.16.5-CHECKLIST.md); [candidate notes](RELEASE-NOTES-1.16.5-CANDIDATE.md). Public libraries 1.8.0, extension 0.2.4/engine 1.8.0, REQ statuses and Braid acceptance remain unchanged. No further engine PR is planned.
+
+
+
+## 2026-10-16 - Record-subtyping milestone and validated release candidate
+
+Both engine PRs350/351 are integrated after exact-head CI. Source1.16.5 candidatec95b56c0b18e4493c31f2285bbe98621c1027655 verifies ten local archives,153 fresh broad checks and338 public focused tests with package-only provenance and no reported dependency vulnerabilities. Source9577 tests and both frozen gates pass. Remaining selected draft results219/36/22 classify as33 catalog/draft drift plus3 unresolved contracts. Engine work stops; no publication. [Validation](RELEASE-1.16.5-CANDIDATE-VALIDATION.md) and [candidate release notes](RELEASE-NOTES-1.16.5-CANDIDATE.md). Public versions, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Record-to-map and generic function subtyping
 
 Record-subtyping milestone 2/2: unpublished patch1.16.5 compares structural record field types with map values and accepts generic function supertypes, including parenthesized host aliases. Five further native cases recover in both profiles. Stop engine work after integration; reassess and validate exact-revision packages with fresh consumers. [Contract and evidence](XSLT40-RECORD-MAP-SUBTYPING.md). Record-subtyping milestone 2/2; stop engine work after at most two slices, then validate release packages. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.

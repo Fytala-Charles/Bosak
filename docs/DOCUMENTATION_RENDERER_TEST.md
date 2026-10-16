@@ -174,3 +174,13 @@ Ten pages rendered with markdown-it and canonical Fytala CSS. Automated HTML gen
 ## 2026-10-16 XSLT40-RECORD-MAP-SUBTYPING
 
 Ten pages rendered with markdown-it and canonical Fytala CSS. Automated HTML generation only; no visual approval claimed.
+
+
+## 2026-10-16 Record-subtyping candidate checkpoint
+
+Candidate validation, release notes and canonical pages rendered with markdown-it and canonical Fytala CSS. Automated HTML generation only; no visual approval claimed. Package-only provenance,338 public focused tests,153 broad controls and all36 remaining case dispositions validated. Engine/tests unchanged by this checkpoint.
+
+
+## 2026-10-16 Release preparation
+
+Eleven pages rendered with markdown-it and canonical Fytala CSS in a fresh output directory. The candidate banner contains a valid h1 element; malformed heading tags are rejected by the renderer check. Relative links and unchanged engine/test trees are checked. Automated rendering only; no visual approval claimed. Prior renderer output is preserved.
