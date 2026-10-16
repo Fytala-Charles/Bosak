@@ -556,6 +556,7 @@
 //                      | Charles Korthout | 7.40   | 15-10-2026     | Bind original arity families, defaults, escaping items and distinct memoization.         |
 //                      | Charles Korthout | 7.41  | 15-10-2026     | Distinguish a containing package override from contributed bindings during lookup.         |
 //                      | Charles Korthout | 7.42  | 16-10-2026     | Check bound named context types without coercion while preserving caller focus.            |
+//                      | Charles Korthout | 7.43  | 16-10-2026     | Capture untyped raw initial results once; nested typed calls deliver to their caller.      |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -757,6 +758,7 @@ internal sealed class TransformEngine
     // (rather than the serialized result tree), the converted sequence is stored here.
     private bool _returnRawInitialTemplateResult;
     private XdmValue? _rawInitialTemplateResult;
+    private bool _rawInitialTemplateCapturePending;
 
     // Set while the initial named template (the transformation entry point) is executing,
     // so ExecuteTemplate can capture its typed result instead of copying it to the result tree.
@@ -1208,6 +1210,7 @@ internal sealed class TransformEngine
             : ExpandModeName(initialMode, _stylesheet.Root);
         _startedWithNamedTemplate = false;
         _returnRawInitialTemplateResult = rawResult;
+        _rawInitialTemplateCapturePending = rawResult;
         _rawInitialTemplateResult = null;
         _returnRawTransformResult = rawTransformResult;
         _captureResultDocuments = captureResultDocuments;
@@ -7139,6 +7142,14 @@ internal sealed class TransformEngine
     private void ExecuteTemplateCore(Stylesheet.TemplateRule rule, XdmValue contextItem, Dictionary<string, XdmValue>? callParams, Dictionary<string, XdmValue>? incomingTunnelParams, int position, int last, bool setCurrentRule)
     {
         var asType = rule.Element.Attribute("as")?.Value;
+        // Claim the raw entry result once. Recursive or nested calls must still deliver
+        // their values into the entry template's sequence constructor.
+        bool captureRawInitialResult = _isExecutingInitialTemplate && _rawInitialTemplateCapturePending;
+        if (captureRawInitialResult)
+        {
+            _rawInitialTemplateCapturePending = false;
+            asType ??= "item()*";
+        }
         var savedContainer = _currentContainer;
         var savedAccumulator = _sequenceAccumulator;
         var savedPreserveAtomics = _preserveAtomicSequenceItems;
@@ -7467,7 +7478,7 @@ internal sealed class TransformEngine
                         typedResult = ConvertVariableValue(XdmValue.FromSequence(XdmSequence.Empty), asType, context: _context, errorCodeOverride: "XTTE0505", declaration: rule.Element);
                     }
 
-                    if (_returnRawInitialTemplateResult && _isExecutingInitialTemplate)
+                    if (captureRawInitialResult)
                         _rawInitialTemplateResult = typedResult;
                     else if (_sequenceAccumulator != null)
                     {
