@@ -1,3 +1,15 @@
+# Array template fallback candidate - 2026-10-16
+
+PR328 passed exact-head CI run38896975893 at20e290160f030e3901784d7b974558f33ef2dfc3 and merged at5997653914322e88c0d8b5efa8014c45a3c81d6c, this branch's base. Active worktree D:/Development/Bosak/.guard-tmp/array-pattern-priority-source, branch fix/array-template-fallback. Delivery is the latest branch commit containing this entry; source hashes identify the tested implementation. Read docs/XSLT40-ARRAY-TEMPLATE-FALLBACK.md/json. The initial priority hypothesis determined the worktree name; no priority change was needed.
+
+Unpublished source1.14.5 applies member templates after next-match exhausts an array's rules in text-only-copy or shallow-skip. Ordinary unmatched arrays in those modes share the implicit ?* application. Normal dispatch handles flattened sequences, node members, named modes, ordinary/tunnel params and fresh next-match chains. Caller context/current item/position/size are restored. Atomic fallback and next-match deep-skip control remain intact. Apply-imports, copy-mode and other function-item fallback paths remain separate. No API, serializer, conformance adapter, grammar or JNode representation change.
+
+All local jobs complete: Release build0errors/2incremental warnings; solution8,990/0/0 (XSLT6,056), focused16/0/0, language server84/0/0; QT3 31,142/0/679 and qt4 gated8,278/0/1,894, both exit0. Native array155/5/20: only array-023 newly passes, no losses. Array instruction24/5/8, square-array56/0/0, arrays75/0/12; record29/35/1 and type-alias23/8/1 unchanged. Native family exits remain1. Temporary fixture junctions removed after checks.
+
+Native array-023's legacy ~array(Type) syntax is in a commented-out current-spec section. No legacy expectation was used to redefine modern priorities. Its D/I/L value was (array), now42; current-syntax controls independently prove fallback bug. Original11-case1/10 before and11/0 after fixture/logs retained, unchanged expectations; five more controls make final16/0. No fixture corrections, upstream edits, aliases, skip/gate promotions, publication or Braid changes. Canonical docs synchronized/rendered with markdown-it and canonical CSS; AGENTS.md remains applicable.
+
+Next: exact-head CI/review before integration, then apply-imports array fallback with independent controls. Profile/pattern issues and earlier explicit-document multi-atomic spacing observation remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, every worktree and receipt. Earlier entries below are historical.
+
 # Implicit variable-binding documents candidate - 2026-10-16
 
 PR327 passed exact-head CI run38894712063 at ee524484adc2b9d1ba3cd70d8c61c342477f8bca and merged at 2b926bb794735d0c3ab64c95a7a7427d57179cd0, this branch's base. Active worktree D:/Development/Bosak/.guard-tmp/variable-default-source, branch fix/xslt40-variable-default-type. Delivery is the latest branch commit containing this entry; source hashes identify the tested implementation. Read docs/XSLT40-IMPLICIT-BINDING-DOCUMENTS.md/json.
