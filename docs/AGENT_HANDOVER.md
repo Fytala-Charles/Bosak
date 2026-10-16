@@ -1,3 +1,11 @@
+# 1.16.5 published and verified — 2026-10-16
+
+Approved release revision`09940e90f702566107bb2eed521b7f8d789a6410`; tag`v1.16.5`; single workflow38958389011 succeeds. ## 2026-10-16 - 1.16.5 published and verified
+
+All ten .NET10 libraries are published as1.16.5 from approved immutable `v1.16.5` at`09940e90f702566107bb2eed521b7f8d789a6410`. The single release workflow passes9,577 solution tests and all ten uploads. Fresh nuget.org-only consumers pass153 broad checks and338 public focused tests; public signatures, archive/cache/output hashes, restore hashes and exact assembly revisions verify. Dependency audits report no vulnerable packages. [Publication verification](RELEASE-1.16.5-PUBLICATION.md); [release notes](RELEASE-NOTES-1.16.5.md). VS Code0.2.4 still bundles1.8.0; Braid adoption, REQ acceptance and upstream work are unchanged. No further engine PR is planned.
+
+Read docs/RELEASE-1.16.5-PUBLICATION.md/json and RELEASE-NOTES-1.16.5.md. Local artifacts .guard-tmp/release1165-publication; public verification has153 broad/338 focused passes, valid signatures and exact public archive/cache/output/assembly provenance. This docs-only publication record does not change the immutable release tag. All prior receipts and root edits are retained. Stop: approved publication is complete; no further engine/extension/upstream/Braid action authorized. Entries below historical.
+
 # 1.16.5 release preparation - 2026-10-16
 
 Branch `docs/record-release-checkpoint`; engineering base `fc759cc25626eefe402a95bbd9296d70e876d465`. ## 2026-10-16 - 1.16.5 release preparation

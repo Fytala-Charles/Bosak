@@ -33,3 +33,5 @@ The unresolved contracts are array 025's missing jposition#1 and record 121/123'
 ## Delivery boundary
 
 Candidate engineering and package-consumer verification are complete within the declared scope. Public libraries remain 1.8.0; public VS Code 0.2.4 still bundles 1.8.0. Nothing was tagged, uploaded or published; Braid acceptance/adoption and REQ statuses are unchanged. No third engine PR is planned. Review this exact candidate and its release notes before any separate publication instruction. Upstream catalog contributions and specification clarification are independent follow-up work.
+
+**Publication completed — 16 October 2026.** [Published release notes](RELEASE-NOTES-1.16.5.md) and [public-package verification](RELEASE-1.16.5-PUBLICATION.md) supersede the preparation status below. Earlier candidate revisions and executions remain historical evidence.

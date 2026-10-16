@@ -4,6 +4,10 @@
   <p>Experimental XSLT 4 profiles and record subtype corrections</p>
 </div>
 
+**Publication completed — 16 October 2026.** [Published release notes](RELEASE-NOTES-1.16.5.md) and [public-package verification](RELEASE-1.16.5-PUBLICATION.md) supersede the preparation status below. Earlier candidate revisions and executions remain historical evidence.
+
+
+
 **Unpublished release candidate**, prepared 16 October 2026. These notes cover changes since published 1.8.0. The [preliminary candidate verification](RELEASE-1.16.5-CANDIDATE-VALIDATION.md) identifies the tested engine revision. The [publication checklist](RELEASE-1.16.5-CHECKLIST.md) requires new packages and fresh-consumer verification of the final merged preparation revision before publication approval.
 
 ## New capability

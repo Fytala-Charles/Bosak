@@ -5,6 +5,12 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+## 2026-10-16 - 1.16.5 published and verified
+
+All ten .NET10 libraries are published as1.16.5 from approved immutable `v1.16.5` at`09940e90f702566107bb2eed521b7f8d789a6410`. The single release workflow passes9,577 solution tests and all ten uploads. Fresh nuget.org-only consumers pass153 broad checks and338 public focused tests; public signatures, archive/cache/output hashes, restore hashes and exact assembly revisions verify. Dependency audits report no vulnerable packages. [Publication verification](RELEASE-1.16.5-PUBLICATION.md); [release notes](RELEASE-NOTES-1.16.5.md). VS Code0.2.4 still bundles1.8.0; Braid adoption, REQ acceptance and upstream work are unchanged. No further engine PR is planned.
+
+
+
 ## 2026-10-16 - 1.16.5 release preparation
 
 The single documentation/preparation PR integrates the record-subtyping checkpoint and finalized candidate release notes. Engine and test source remain unchanged. After exact-head CI and integration, repack the exact merged revision and repeat fresh package-only consumers, provenance, dependency audits and availability checks before publication approval. [Publication checklist](RELEASE-1.16.5-CHECKLIST.md); [candidate notes](RELEASE-NOTES-1.16.5-CANDIDATE.md). Public libraries 1.8.0, extension 0.2.4/engine 1.8.0, REQ statuses and Braid acceptance remain unchanged. No further engine PR is planned.
