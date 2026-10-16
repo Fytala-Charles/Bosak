@@ -1,3 +1,11 @@
+# Milestone 3/3 - 2026-10-16
+
+Milestone 3/3: unpublished patch 1.16.3 requires fallback statically for unknown future instructions in the draft processor, and evaluates valid function-body fallbacks with raw item preservation and isolated variable scope. Legacy behavior is preserved. The approved three-PR milestone ends here.
+
+Base0bb60bf837769ac2bcf489169d4aec817a9c0b26; branchfix/future-fallback; authoritative report XSLT40-FUTURE-FALLBACK.md/json. 37 new controls; 156 focused pass. Original 32-case baseline 16/16; expanded 37-case baseline 16/21. Original fixtures and execution receipts retained. STOP after exact-head CI and integration; no fourth feature PR.
+
+All processes completed: Release build0errors/2 existing warnings; solution **9509/0/0** (XSLT6575), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
 # Milestone 2/3 - 2026-10-16
 
 Milestone2/3: unpublished patch1.16.2 activates fixed bindings from the captured draft processor capability for module versions1.0-4.0. Draft modules own their mutable compilation trees and caches; reader base URI/line information and provider provenance are retained. Legacy behavior remains unchanged.
