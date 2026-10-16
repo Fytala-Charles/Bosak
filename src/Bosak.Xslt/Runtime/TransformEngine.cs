@@ -565,6 +565,7 @@
 //                      | Charles Korthout | 7.49  | 16-10-2026     | Isolate computed-element content and attribute sets from raw template capture.             |
 //                      | Charles Korthout | 7.50  | 16-10-2026     | Isolate literal-element capture and restore literal depth on every exit.                   |
 //                      | Charles Korthout | 7.51  | 16-10-2026     | Isolate copied-element content capture and restore construction state on errors.           |
+//                      | Charles Korthout | 7.52  | 16-10-2026     | Construct copied documents through the shared document-content pipeline.                   |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -11675,119 +11676,23 @@ internal sealed class TransformEngine
                 break;
             case XdmNodeKind.Document:
                 {
-                    // XSLT 3.0 §11.8.1: xsl:copy on a document node creates a new document node;
-                    // its children come from the sequence constructor, not the original.
-                    var srcBaseUri = nodeToCopy.BaseUri;
+                    // Document copies use the same complex-content construction rules as
+                    // xsl:document, including raw/typed capture isolation and mixed content.
+                    var documentValue = EvaluateSequenceConstructor(instruction,
+                        XdmValue.FromNode(nodeToCopy), wrapInDocumentNode: true, rejectDocumentNamespaceNodes: true);
+                    if (documentValue.NodeValue is XDocumentNode { UnderlyingObject: XDocument copiedDocument })
+                    {
+                        copiedDocument.RemoveAnnotations<string>();
+                        if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
+                            copiedDocument.AddAnnotation(nodeToCopy.BaseUri);
+                        XDocumentNode.CopyUnparsedEntities(nodeToCopy, copiedDocument);
+                        ApplyConstructedDocumentValidation(copiedDocument, instruction);
+                    }
 
                     if (_sequenceAccumulator != null)
-                    {
-                        // In a sequence-returning context (e.g. xsl:variable with @as),
-                        // produce an actual document node so base-uri() works correctly.
-                        var newDoc = new XDocument();
-                        XDocumentNode.RegisterTree(newDoc);
-                        if (!string.IsNullOrEmpty(srcBaseUri))
-                            newDoc.AddAnnotation(srcBaseUri);
-                        XDocumentNode.CopyUnparsedEntities(nodeToCopy, newDoc);
-
-                        var savedDocAccumulator = _sequenceAccumulator;
-                        if (ContainsConditionalInstruction(instruction))
-                        {
-                            EvaluateSequenceConstructorIntoContainer(instruction, newDoc, XdmValue.FromNode(nodeToCopy));
-                        }
-                        else
-                        {
-                            var savedContainer = _currentContainer;
-                            _currentContainer = newDoc;
-                            _sequenceAccumulator = null;
-                            try
-                            {
-                                foreach (var childNode in instruction.Nodes())
-                                {
-                                    switch (childNode)
-                                    {
-                                        case XText text:
-                                            ProcessSequenceText(text, instruction);
-                                            break;
-                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                            ExecuteXsltInstruction(elem, nodeToCopy);
-                                            break;
-                                        case XElement elem:
-                                            CopyLiteralElement(elem);
-                                            break;
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                _currentContainer = savedContainer;
-                                _sequenceAccumulator = savedDocAccumulator;
-                            }
-                        }
-
-                        // REQ-099 seam H4: validation/@type on xsl:copy applies to the
-                        // constructed document content (XSLT 3.0 §25.4.2).
-                        ApplyConstructedDocumentValidation(newDoc, instruction);
-                        _sequenceAccumulator!.Add(XdmValue.FromNode(XDocumentNode.Wrap(newDoc)));
-                    }
+                        _sequenceAccumulator.Add(documentValue);
                     else
-                    {
-                        // Direct result tree: document node in complex content is replaced
-                        // by its children (XSLT 3.0 §5.7.1). Process children into a temp
-                        // collector and then move them to the result container, preserving
-                        // the source document's base URI on child elements.
-                        var savedContainer = _currentContainer;
-                        var tempCollector = new XElement("__doc_temp__");
-
-                        if (ContainsConditionalInstruction(instruction))
-                        {
-                            EvaluateSequenceConstructorIntoContainer(instruction, tempCollector, XdmValue.FromNode(nodeToCopy));
-                        }
-                        else
-                        {
-                            _currentContainer = tempCollector;
-                            try
-                            {
-                                foreach (var childNode in instruction.Nodes())
-                                {
-                                    switch (childNode)
-                                    {
-                                        case XText text:
-                                            ProcessSequenceText(text, instruction);
-                                            break;
-                                        case XElement elem when elem.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace:
-                                            ExecuteXsltInstruction(elem, nodeToCopy);
-                                            break;
-                                        case XElement elem:
-                                            CopyLiteralElement(elem);
-                                            break;
-                                    }
-                                }
-                            }
-                            finally
-                            {
-                                _currentContainer = savedContainer;
-                            }
-                        }
-
-                        // Attribute and namespace nodes are not allowed on document nodes (XTDE0420)
-                        if (tempCollector.Attributes().Any())
-                        {
-                            throw new InvalidOperationException("XTDE0420");
-                        }
-
-                        // REQ-099/REQ-114 seam H4: validation/[xsl:]type on the copied document
-                        // applies to the constructed document content before it is spliced into
-                        // the enclosing result tree (import-schema-075 success, -163 XTTE1540).
-                        ApplyConstructedDocumentValidation(tempCollector, instruction);
-
-                        foreach (var node in tempCollector.Nodes().ToList())
-                        {
-                            node.Remove();
-                            if (node is XElement elem && !string.IsNullOrEmpty(srcBaseUri) && elem.Annotation<string>() == null)
-                                elem.AddAnnotation(srcBaseUri);
-                            _currentContainer.Add(node);
-                        }
-                    }
+                        CopyToResult(documentValue);
                     break;
                 }
             default:
@@ -17569,7 +17474,7 @@ internal sealed class TransformEngine
     /// Evaluates a sequence constructor (child nodes of an xsl:variable, xsl:param, etc.)
     /// and returns the resulting XDM value.
     /// </summary>
-    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true, bool preserveEmptySequencePositions = false)
+    private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true, bool preserveEmptySequencePositions = false, bool rejectDocumentNamespaceNodes = false)
     {
         // XSLT 4.0 variable values / implicit document nodes: only direct children
         // disqualify a binding from temporary-tree construction. Explicit document
@@ -17645,6 +17550,8 @@ internal sealed class TransformEngine
                         {
                             if (item.IsNode && item.NodeValue != null && item.NodeValue.NodeKind == XdmNodeKind.Namespace)
                             {
+                                if (rejectDocumentNamespaceNodes)
+                                    throw new InvalidOperationException("XTDE0420");
                                 var nsNode = item.NodeValue;
                                 if (nsNode is XDocumentNode xdn && xdn.UnderlyingObject is XAttribute attr)
                                 {
@@ -17732,6 +17639,9 @@ internal sealed class TransformEngine
                 attributes = wrapper.Attributes().ToList();
                 accumulatorItems = _sequenceAccumulator?.Items ?? new List<XdmValue>();
             }
+
+            if (rejectDocumentNamespaceNodes && attributes.Any(a => a.IsNamespaceDeclaration))
+                throw new InvalidOperationException("XTDE0420");
 
             return BuildResultFromNodesAndAccumulator(nodes, attributes, accumulatorItems, wrapper, parent, wrapInDocumentNode, preserveEmptySequencePositions);
         }

@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit xsl:copy document construction under raw/typed capture; copied-element content isolated in unpublished1.14.11; function-body path and processor capability remain separate",
+    "selectedEngineReview": "Next: audit CopyNodeForFunctionBody capture; copied-document construction isolated in unpublished1.14.12; broader copy-select state and processor capability remain separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -754,6 +754,13 @@
     "sourceVersion": "1.14.11 unpublished",
     "base": "50fbfedb79a644c914f91fc8014a301c21d92621",
     "evidence": "XSLT40-COPY-ELEMENT-CAPTURE.json",
+    "nativePassesChanged": false
+  },
+  "copyDocumentCapture": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.14.12 unpublished",
+    "base": "30382e25c07dcefc09a29a506103f947dfc38c31",
+    "evidence": "XSLT40-COPY-DOCUMENT-CAPTURE.json",
     "nativePassesChanged": false
   }
 }
