@@ -114,3 +114,8 @@ Ten current documentation pages, including XSLT40-COPY-SELECT-STATE.md, rendered
 ## Non-node copy values receipt - 2026-10-16
 
 Ten current documentation pages, including XSLT40-COPY-NON-NODE-VALUES.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/copy-values-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
+
+
+## Copy namespace validation receipt - 2026-10-16
+
+Ten current documentation pages, including XSLT40-COPY-NAMESPACE-VALIDATION.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/copy-xmlns-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
