@@ -566,6 +566,7 @@
 //                      | Charles Korthout | 7.50  | 16-10-2026     | Isolate literal-element capture and restore literal depth on every exit.                   |
 //                      | Charles Korthout | 7.51  | 16-10-2026     | Isolate copied-element content capture and restore construction state on errors.           |
 //                      | Charles Korthout | 7.52  | 16-10-2026     | Construct copied documents through the shared document-content pipeline.                   |
+//                      | Charles Korthout | 7.53  | 16-10-2026     | Reuse copy constructors in function bodies and preserve caller atomic adjacency.             |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -11375,107 +11376,90 @@ internal sealed class TransformEngine
     /// </summary>
     private IXdmNode? CopyNodeForFunctionBody(IXdmNode nodeToCopy, XElement copyInstruction)
     {
-        switch (nodeToCopy.NodeKind)
+        var savedLastAtomic = _lastAddedWasAtomic;
+        try
         {
-            case XdmNodeKind.Element:
-                {
-                    var copy = new XElement(XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri));
-                    // Copy namespace declarations
-                    foreach (var ns in nodeToCopy.Axis(XdmAxis.Namespace))
+            switch (nodeToCopy.NodeKind)
+            {
+                case XdmNodeKind.Element:
                     {
-                        if (ns.IsNode && ns.NodeValue != null && ns.NodeValue.LocalName != "xml")
+                        // Reuse the result-tree constructor for attributes, text, conditional
+                        // content, namespace options and raw/typed capture isolation.
+                        var collector = new XElement("__function_copy__");
+                        var savedContainer = _currentContainer;
+                        var savedAccumulator = _sequenceAccumulator;
+                        _currentContainer = collector;
+                        _sequenceAccumulator = null;
+                        try
                         {
-                            if (ns.NodeValue.LocalName == "")
-                                copy.SetAttributeValue("xmlns", ns.NodeValue.StringValue);
-                            else
-                                copy.SetAttributeValue(XNamespace.Xmlns + ns.NodeValue.EncodedLocalName, ns.NodeValue.StringValue);
+                            ExecuteSingleCopy(nodeToCopy, copyInstruction);
+                            var copy = collector.Elements().Single();
+                            copy.Remove();
+                            return XDocumentNode.Wrap(copy);
+                        }
+                        finally
+                        {
+                            _currentContainer = savedContainer;
+                            _sequenceAccumulator = savedAccumulator;
                         }
                     }
-                    // Process children of xsl:copy into the copied element
-                    var savedContainer = _currentContainer;
-                    var savedAccumulator = _sequenceAccumulator;
-                    _currentContainer = copy;
-                    _sequenceAccumulator = null;
-                    try
+                case XdmNodeKind.Text:
+                    return XDocumentNode.Wrap(CreateTextNodeCopy(nodeToCopy));
+                case XdmNodeKind.Comment:
+                    return XDocumentNode.Wrap(new XComment(nodeToCopy.StringValue));
+                case XdmNodeKind.ProcessingInstruction:
+                    return XDocumentNode.Wrap(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
+                case XdmNodeKind.Attribute:
                     {
-                        foreach (var child in copyInstruction.Elements())
+                        var attrCopy = new XAttribute(
+                            XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri),
+                            nodeToCopy.StringValue);
+                        // REQ-099 seam H4: preserve the source annotation unless validation is
+                        // requested (a copied attribute is parentless: failures are XTTE1555).
+                        var attrDirectives = GetConstructionValidation(copyInstruction, isLiteralResultElement: false);
+                        if (attrDirectives is null
+                            || (attrDirectives.Value.Mode == XdmValidationMode.Preserve && attrDirectives.Value.TypeName is null))
                         {
-                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                ExecuteXsltInstruction(child, nodeToCopy);
-                            else
-                                CopyLiteralElement(child);
+                            CopyAttributeSchemaInfo(nodeToCopy, attrCopy);
                         }
-                    }
-                    finally
-                    {
-                        _currentContainer = savedContainer;
-                        _sequenceAccumulator = savedAccumulator;
-                    }
-                    NormalizeElementContent(copy);
-                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the copy.
-                    ApplyConstructedElementValidation(copy, copyInstruction, isLiteralResultElement: false);
-                    return XDocumentNode.Wrap(copy);
-                }
-            case XdmNodeKind.Text:
-                return XDocumentNode.Wrap(CreateTextNodeCopy(nodeToCopy));
-            case XdmNodeKind.Comment:
-                return XDocumentNode.Wrap(new XComment(nodeToCopy.StringValue));
-            case XdmNodeKind.ProcessingInstruction:
-                return XDocumentNode.Wrap(new XProcessingInstruction(nodeToCopy.LocalName, nodeToCopy.StringValue));
-            case XdmNodeKind.Attribute:
-                {
-                    var attrCopy = new XAttribute(
-                        XName.Get(nodeToCopy.EncodedLocalName, nodeToCopy.NamespaceUri),
-                        nodeToCopy.StringValue);
-                    // REQ-099 seam H4: preserve the source annotation unless validation is
-                    // requested (a copied attribute is parentless: failures are XTTE1555).
-                    var attrDirectives = GetConstructionValidation(copyInstruction, isLiteralResultElement: false);
-                    if (attrDirectives is null
-                        || (attrDirectives.Value.Mode == XdmValidationMode.Preserve && attrDirectives.Value.TypeName is null))
-                    {
-                        CopyAttributeSchemaInfo(nodeToCopy, attrCopy);
-                    }
-                    else
-                    {
-                        ApplyAttributeValidationDirectives(attrCopy, attrDirectives.Value.Mode,
-                            attrDirectives.Value.TypeName, "XTTE1535", copied: true);
-                    }
-                    return XDocumentNode.Wrap(attrCopy);
-                }
-            case XdmNodeKind.Document:
-                {
-                    var newDoc = new XDocument();
-                    XDocumentNode.RegisterTree(newDoc);
-                    if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
-                        newDoc.AddAnnotation(nodeToCopy.BaseUri);
-                    XDocumentNode.CopyUnparsedEntities(nodeToCopy, newDoc);
-                    var savedContainer = _currentContainer;
-                    var savedAccumulator = _sequenceAccumulator;
-                    _currentContainer = newDoc;
-                    _sequenceAccumulator = null;
-                    try
-                    {
-                        foreach (var child in copyInstruction.Elements())
+                        else
                         {
-                            if (child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace)
-                                ExecuteXsltInstruction(child, nodeToCopy);
-                            else
-                                CopyLiteralElement(child);
+                            ApplyAttributeValidationDirectives(attrCopy, attrDirectives.Value.Mode,
+                                attrDirectives.Value.TypeName, "XTTE1535", copied: true);
                         }
+                        return XDocumentNode.Wrap(attrCopy);
                     }
-                    finally
-                    {
-                        _currentContainer = savedContainer;
-                        _sequenceAccumulator = savedAccumulator;
-                    }
-                    // REQ-099 seam H4: validation/@type on xsl:copy applies to the
-                    // constructed document content (XSLT 3.0 §25.4.2).
-                    ApplyConstructedDocumentValidation(newDoc, copyInstruction);
-                    return XDocumentNode.Wrap(newDoc);
-                }
-            default:
-                return null;
+                case XdmNodeKind.Document:
+                    return ConstructCopiedDocument(nodeToCopy, copyInstruction).NodeValue;
+                default:
+                    return null;
+            }
         }
+        finally
+        {
+            // Constructing a function result must not change atomic adjacency in
+            // the caller that may use only its string value in another expression.
+            _lastAddedWasAtomic = savedLastAtomic;
+        }
+    }
+
+    /// <summary>Constructs copied-document content and retains source metadata and validation.</summary>
+    private XdmValue ConstructCopiedDocument(IXdmNode nodeToCopy, XElement instruction)
+    {
+        // Document copies use the same complex-content construction rules as
+        // xsl:document, including raw/typed capture isolation and mixed content.
+        var documentValue = EvaluateSequenceConstructor(instruction,
+            XdmValue.FromNode(nodeToCopy), wrapInDocumentNode: true, rejectDocumentNamespaceNodes: true);
+        if (documentValue.NodeValue is XDocumentNode { UnderlyingObject: XDocument copiedDocument })
+        {
+            copiedDocument.RemoveAnnotations<string>();
+            if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
+                copiedDocument.AddAnnotation(nodeToCopy.BaseUri);
+            XDocumentNode.CopyUnparsedEntities(nodeToCopy, copiedDocument);
+            ApplyConstructedDocumentValidation(copiedDocument, instruction);
+        }
+
+        return documentValue;
     }
 
     /// <summary>
@@ -11676,18 +11660,7 @@ internal sealed class TransformEngine
                 break;
             case XdmNodeKind.Document:
                 {
-                    // Document copies use the same complex-content construction rules as
-                    // xsl:document, including raw/typed capture isolation and mixed content.
-                    var documentValue = EvaluateSequenceConstructor(instruction,
-                        XdmValue.FromNode(nodeToCopy), wrapInDocumentNode: true, rejectDocumentNamespaceNodes: true);
-                    if (documentValue.NodeValue is XDocumentNode { UnderlyingObject: XDocument copiedDocument })
-                    {
-                        copiedDocument.RemoveAnnotations<string>();
-                        if (!string.IsNullOrEmpty(nodeToCopy.BaseUri))
-                            copiedDocument.AddAnnotation(nodeToCopy.BaseUri);
-                        XDocumentNode.CopyUnparsedEntities(nodeToCopy, copiedDocument);
-                        ApplyConstructedDocumentValidation(copiedDocument, instruction);
-                    }
+                    var documentValue = ConstructCopiedDocument(nodeToCopy, instruction);
 
                     if (_sequenceAccumulator != null)
                         _sequenceAccumulator.Add(documentValue);

@@ -99,3 +99,8 @@ Ten current documentation pages, including XSLT40-COPY-ELEMENT-CAPTURE.md, rende
 ## Copied-document capture receipt - 2026-10-16
 
 Ten current documentation pages, including XSLT40-COPY-DOCUMENT-CAPTURE.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/copy-document-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.
+
+
+## Function-body copy capture receipt - 2026-10-16
+
+Ten current documentation pages, including XSLT40-FUNCTION-COPY-CAPTURE.md, rendered using markdown-it and canonical Fytala CSS to `.guard-tmp/function-copy-render`. This verifies Markdown/HTML generation; it is not a visual approval or screenshot receipt. Kit-managed assets were untouched.

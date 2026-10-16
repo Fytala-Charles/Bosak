@@ -1,0 +1,184 @@
+{
+  "date": "2026-10-16",
+  "base": "c3936a24d6cf97ead1923c9b84678cf0f3475a98",
+  "sourceVersion": "1.14.13 unpublished",
+  "branch": "fix/function-copy-capture",
+  "worktree": "D:/Development/Bosak/.guard-tmp/function-copy-source",
+  "prerequisite": {
+    "pr": 337,
+    "head": "1c815ba990ede3cd50c92713e17296e4e0f0cce9",
+    "ciRun": 38921552083,
+    "conclusion": "success",
+    "merge": "c3936a24d6cf97ead1923c9b84678cf0f3475a98"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "sections": [
+      "shallow-copy",
+      "constructing-complex-content"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "Function element copies delegate to existing constructor; function/normal document copies share construction helper; function helper restores caller atomic adjacency",
+  "publicApiChanged": false,
+  "profileSelectionChanged": false,
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "newNativePasses": [],
+  "lostNativePasses": [],
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T152054342Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T152058951Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T152101146Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 2,
+      "fail": 20
+    },
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "implementation": ".artifacts/first-implementation.txt",
+      "log": ".artifacts/focused-after.log",
+      "pass": 166,
+      "fail": 1,
+      "composition": "22 new +145 previous controls",
+      "remainingFailure": "fixture Attributes() enumeration includes namespace declaration; ordinary-attribute expectation retained with XDM attribute axis"
+    },
+    {
+      "fixture": ".artifacts/expanded-tests.txt",
+      "log": ".artifacts/expanded-before.log",
+      "pass": 6,
+      "fail": 25
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/FunctionCopyCaptureTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 176,
+      "fail": 0,
+      "composition": "31 new +145 previous construction/raw controls"
+    }
+  ],
+  "fixtureCorrections": [
+    "Use XDM attribute axis to exclude namespace declarations; same ordinary-attribute assertions"
+  ],
+  "deferred": [
+    "copy-select focus/template-rule restoration in both dispatchers",
+    "other constructors namespace handling",
+    "processor capability"
+  ],
+  "publishedLibraries": "1.8.0 unchanged",
+  "publishedExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "publicationPerformed": false,
+  "verification": {
+    "solution": [
+      9223,
+      0,
+      0
+    ],
+    "xslt": [
+      6289,
+      0,
+      0
+    ],
+    "focused": [
+      176,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "build": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "allProcessesComplete": true,
+    "fixtureJunctionsRemoved": true
+  },
+  "sha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "d20ffb609c8b6a034fb245898ee8a2fceeea3c9859e43b17c4e12a7c02bb5a7d",
+    "src/Directory.Build.props": "cd8b9d19a2ee6ad4574c8f019f57e4b5e62f198c9b4ec345cac1acad983a7496",
+    "tests/Bosak.Xslt.Tests/FunctionCopyCaptureTests.cs": "3aba1d827052a7862421bb081c029883b1e6f3df0d1da21e774eef3e704b8a06",
+    ".artifacts/build.log": "6b19a828f77aa25d2036821be6c95f8cef0df4e41685304c55532c248d2200ec",
+    ".artifacts/expanded-before.log": "6f076a801317557d748a438f26712230bd9a1300d6b69a93e0e416ed099fc798",
+    ".artifacts/expanded-tests.txt": "3aba1d827052a7862421bb081c029883b1e6f3df0d1da21e774eef3e704b8a06",
+    ".artifacts/finalize.py": "f711a47cf1509b573766bf359afd51859f8c7a2937c7312954648957d06b6150",
+    ".artifacts/first-implementation.txt": "d20ffb609c8b6a034fb245898ee8a2fceeea3c9859e43b17c4e12a7c02bb5a7d",
+    ".artifacts/focused-after.log": "b90b984f7a55e82acfc2cb536f8804959a0b2f775898245f93e74133b48b314d",
+    ".artifacts/focused-before.log": "de457dcbbbf9b73360d151b6b2dd78bb6da6724786af75995eed70fac2152d66",
+    ".artifacts/focused-final.log": "edf0162ff59c87159837b7cb5373f138adaad735fdaa72599c955818c6152f27",
+    ".artifacts/language-server.log": "233059cce083e116b7cf508f7acc738bb6c13ce3e2e2417c3f613ecc13a84ea2",
+    ".artifacts/native-array.log": "2fb4378282c25f6f7201a8bcc9e5551aaf03091257c78bac0b18b1d79c097310",
+    ".artifacts/native-record.log": "9f68497c6aacd5c5a9371c02208beb4a5df23a42b9039aeb7eb0fd575ac7f8fb",
+    ".artifacts/native-type-alias.log": "3e730980f07bb1364f27ca6ff509b491f9673da3d788ab8c88f5597cfd38a9ca",
+    ".artifacts/original-tests.txt": "67e0f06a92f6b5c66611691ddff7ee75ec8b8315c1dfd45a58b9d5b31c1e3837",
+    ".artifacts/pr-body.md": "4d5b9ed3a64b94057605d6bdec9bb124e5d122ad0afa78c8ca4d3311cd633675",
+    ".artifacts/qt3.log": "d969040c611db851bdc467836850d6a2d23baf35273ed6153e0a47e6736c3ebb",
+    ".artifacts/qt4.log": "dfe5f837d2e78fa24df746d1a33d084af115c4d7ef4dddb674fc60308899456a",
+    ".artifacts/render.cjs": "b2a1fb17cc20e598e089702070cec151139a14c52dd63ee02aba8e9f01dab863",
+    ".artifacts/solution-tests.log": "dc4569f2c450ef2c56f11e6be5fe15e90874c7652f56c520480bdc7d35920cad",
+    ".artifacts/native-before/20261016T150454157Z.json": "32b1ac6d065c9b74e59329177b21567329da2af87ef751eeb29359c26d03662f",
+    ".artifacts/native-before/20261016T150454157Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T150458526Z.json": "46bd54b83d5db06e74a48dc00761ff024c1455bfc64bee6c96f61cb41ad09660",
+    ".artifacts/native-before/20261016T150458526Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T150500380Z.json": "193e19278297d7364987cd10154a71a524c860be99abfe45f8d463de25463c00",
+    ".artifacts/native-before/20261016T150500380Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/native-before/native-array.log": "265dcef9adb456afb7e4ddd0c5016f2e105396dfec48398496bb53449b9d2583",
+    ".artifacts/native-before/native-record.log": "5e17a0629b1a4b36265ddb27adea601eb33d3f2abb0d51d72fb0caf14e6641d9",
+    ".artifacts/native-before/native-type-alias.log": "18179a701947f528201651be56669a64c4ee544a79686519048ea72323c985fc",
+    ".artifacts/xslt40/20261016T152054342Z.json": "34b96a5439b8ef5651f6ac0bb3abc78bd4cae7c346524033206c3005f6539ab1",
+    ".artifacts/xslt40/20261016T152054342Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T152058951Z.json": "145c4e629717bb35655a926482fd466ab2eaab2e79364bebdc6534b49d536ae3",
+    ".artifacts/xslt40/20261016T152058951Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T152101146Z.json": "3cb8c4629928f5ddb65b9f57bc62e3508cbbb3ed191bf3f0192ae99c998d9e8e",
+    ".artifacts/xslt40/20261016T152101146Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593"
+  }
+}
