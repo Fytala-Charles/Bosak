@@ -5,6 +5,14 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## VS Code 0.2.4 candidate - 16 October 2026
+
+Unpublished extension 0.2.4 bundles released engine 1.8.0. Release build, 8,624 solution tests, 84 language-server tests, TypeScript/highlighting/launcher checks, packaged protocol diagnostics and isolated VS Code live correction pass. Ten bundled assemblies and archive payloads verify against source revision `915f344bb979e7f43c340c0c9d6c4310aa3f5162`; source/test trees match v1.8.0. The transitive brace-expansion lock is updated from 2.1.1 to 2.1.7; production dependency audit reports zero vulnerabilities.
+
+See [preparation report](VSCODE-0.2.4-PREPARATION.md) and [immutable candidate evidence](VSCODE-0.2.4-PREPARATION.json). Marketplace remains at the previously verified 0.2.3/engine 1.7.1. Integration and exact merged-revision repackaging/verification precede separate publication approval. Installed extension and Braid files/pin are unchanged. REQ-128 engine delivery remains Implemented; Braid acceptance is independent. Package-dependent editor signatures and external module acquisition retain their existing limits; engine insertion APIs do not add an editor insertion UI.
+
+
+
 **1.8.0 published - 2026-10-16:** Ten .NET 10 libraries are published from approved immutable tag `v1.8.0` (`20a5d9be`), adding bounded source-preserving value-of insertion. Release CI passes 8,624 solution tests. Fresh nuget.org-only consumers pass 141 insertion cases, 153 broad regression checks and all 19 unchanged Braid probe outcomes; public archive/cache/output payloads and exact assembly revisions verify. [Publication evidence](RELEASE-1.8.0-PUBLICATION.json). REQ-128 engine delivery is implemented; independent Braid adoption/acceptance remains separate. VS Code 0.2.3 still bundles engine 1.7.1, and Braid retains its existing production pin. Earlier entries below are historical.
 
 **REQ-128 focused consumer clearance - 2026-10-15:** Braid closes F1 at reviewed head b0cd2ef8, with no additional blocker in the value-of-only slice. Exact-head packages pass 141 public API cases; all 19 replayed probe outcomes match the consumer report. [Readiness and integration gates](REQ-128-RELEASE-READINESS.md). Later operations remain [planning candidates](STRUCTURAL-AUTHORING-ROADMAP.md), not implemented creation capabilities. PR312 merged with explicit user approval at 20a5d9be; actual merged-revision packages pass 141 public API tests and all 19 probe outcomes match. Source 1.8.0 is unpublished; public packages and Braid pin are unchanged. Earlier entries below are historical.

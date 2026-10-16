@@ -2,6 +2,10 @@
 
 Language support for **XPath 3.1** and **XSLT 3.0** powered by the Bosak engine.
 
+## Engine alignment (0.2.4 candidate)
+
+Unpublished version 0.2.4 bundles released engine 1.8.0 and updates the transitive brace-expansion dependency to 2.1.7. Requires .NET 10. Package-dependent editor signatures and external module acquisition retain their existing limits. This engine refresh does not add an insertion UI. Preparation, package diagnostics and isolated editor checks pass; integration and separate Marketplace publication approval remain pending.
+
 ## Engine alignment (0.2.3)
 
 Version 0.2.3 bundles released engine 1.7.1, including lexical original binding in escaping inline functions. Package-dependent editor signatures and external module acquisition keep their existing coverage limits. Requires the .NET 10 runtime. Version 0.2.3 is published on the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak). Update the extension and reload VS Code.
