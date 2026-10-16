@@ -1,3 +1,11 @@
+# Record-subtyping milestone 2/2 - 2026-10-16
+
+Record-subtyping milestone 2/2: unpublished patch1.16.5 compares structural record field types with map values and accepts generic function supertypes, including parenthesized host aliases. Five further native cases recover in both profiles. Stop engine work after integration; reassess and validate exact-revision packages with fresh consumers.
+
+Baseebd98f623f25603a2d6627d0e3c2f13361864eb2; branchfix/record-map-subtyping; authoritative report XSLT40-RECORD-MAP-SUBTYPING.md/json. 32 new controls; baseline15pass/17fail. First focused180pass/2fail exposed alias grouping; diagnostic receipts retained. Final182 focused pass with the original fixture byte-identical. PR350 exact-head CI38953868476 passed atd366590ee2d699ce8e493ddad34f86c54cbf1619; mergedebd98f623f25603a2d6627d0e3c2f13361864eb2. Precursor/merge whole trees matchfec8f5d1d68f124f4af7ce6a5e562adff38d6cb7 before fast-forward alignment. After this PR stop engine work and validate release packages.
+
+All processes completed: Release build0errors/2 existing warnings; solution **9577/0/0** (XSLT6643), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
 # Record-subtyping milestone 1/2 - 2026-10-16
 
 Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged.

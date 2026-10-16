@@ -1,0 +1,20 @@
+# Record-to-map and generic function subtyping
+
+Unpublished patch1.16.5; second and final engine PR in the approved record-subtyping milestone. Shared VM rules now relate a structural record to map types when the key domain admits strings and every field sequence type is a subtype of the map value type. record(*) has arbitrary item()* values. Generic map(*) and function(*) accept records. Map-to-record conversion and instance-test annotations are unchanged. No public API or default-profile changes.
+
+The comparator unwraps balanced grouping around complete type operands after separating outer occurrences. This is needed because host aliases parenthesize generic function types to preserve precedence. First focused180pass/2fail and a generic-spelling attempt are preserved; a temporary diagnostic trace identified (function(*)) on the alias path. The trace was removed from final source. Final182 focused pass, including32 new controls; initial baseline15pass/17fail. The final fixture is byte-identical to original-tests.txt; no assertion or expected outcome changed.
+
+The [structural record subtype rules](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records) support record/map covariance. Typed callable-record supertypes remain unresolved: the separate [records-as-functions contract](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-records-as-functions) restricts domains to declared-key enumerations, while map subtyping/transitivity suggests wider callable domains. The historical record121/123 expectations use string/anyAtomicType callable domains and narrower results. This slice deliberately adds only the unambiguous generic function relation and does not claim full typed-callable-record conformance. No aliases or test expectations are changed to force these cases green.
+
+Fresh six-selection comparison recovers exactly record-110,record-111,record-112,record-113 and record-120 in both profiles. Every other status and diagnostic detail remains identical to PR350. Legacy array155/5/20,record38/26/1,type-alias23/8/1; Draft array158/2/20,record38/26/1,type-alias23/8/1. Draft total219pass/36fail/22skip across277 selected cases. All six family runs still exit1. No fixture edits, aliases, skips or gate promotions.
+
+Reassessment after both engine slices:9 of the11 initial engine candidates now pass. The remaining2 candidates, record121/123, move to unresolved-contract review for the reason above, not to passing or skipped outcomes. The36 remaining selected failures comprise33 catalog/draft drift and3 unresolved contracts, including array025's jposition#1. The original45-case readiness inventory remains an immutable historical assessment; this report supersedes its current candidate counts. No full-suite XSLT4 conformance claim is made.
+
+PR350 exact-head CI38953868476 passed atd366590ee2d699ce8e493ddad34f86c54cbf1619 and mergedebd98f623f25603a2d6627d0e3c2f13361864eb2. Its precursor/merge whole trees matchfec8f5d1d68f124f4af7ce6a5e562adff38d6cb7; this branch was fast-forward aligned before submission.
+
+STOP engine work after this PR. Validate all ten exact-revision libraries through isolated local packages and fresh package-only broad/focused consumers; prove archive/cache/output DLL and assembly metadata provenance, and audit dependencies. Keep public libraries1.8.0 and extension0.2.4/engine1.8.0 unchanged. No tag, publication, upstream submission or Braid pin change.
+
+
+All processes completed: Release build0errors/2 existing warnings; solution **9577/0/0** (XSLT6643), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
+Refreshed suite91328fbf0fed4a5d2813eb3661808ee53cb961ba; qtspecs72f222929768b411d8e88d96a1a8740483290078; xslt.xml blob59b9bdc79dca23b0c18fdd3e94130bc59037db3e. No upstream edits, aliases, skips or gate promotions. Source remains unpublished; public versions and independent acceptance unchanged.
