@@ -1,3 +1,13 @@
+# Map entry sequence pattern candidate ? 2026-10-16
+
+PR319 passed both exact-head CI checks and merged at 305cac469855e38542e5010d195fadd2bd42f984. Active isolated worktree D:/Development/Bosak/.guard-tmp/map-entry-source on feat/map-entry-patterns, based on that merge. Original root edits, every earlier worktree and all baseline/execution receipts remain preserved.
+
+Final-source verification complete: solution 8,715/0/0 (XSLT 5,829), LS 84/0/0, focused/repeated 90/0/0. Frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894 exit 0; native counts repeat. Initial build zero errors/22 warnings; final incremental zero errors/21 warnings. Canonical docs rendered with Fytala CSS, AGENTS.md unchanged. Original intermediate/initial/final logs and receipts preserved separately. All local verification jobs complete.
+
+Unpublished source 1.10.0 extends string-key map patterns with entry sequence constraints using existing node/predicate patterns, empty-sequence(), occurrence indicators, repeated conjunctive constraints, nested maps and outer predicates. Singleton focus/current-item state is restored by existing wrappers; no coercion is performed. Constrained map priority is 0.25, outer predicates 0.5. Atomic(TypeName), record(TypeName), other new pattern families, non-string keys, trailing commas and map path suffixes remain outside this slice.
+
+Native record-011/012 now pass: record filter 29/35/1 (record set 29/18/0, xsl-record 0/17/1), type-alias 22/9/1 unchanged; both family exits remain 1. Initial exact 43-case fixture on prior source: 6/37; final new fixture 53 plus retained key fixture 37 yield 90 focused passes. Original intermediate two-failure run is retained, with trailing comma/unclosed-pattern corrections separate. See docs/XSLT40-MAP-ENTRY-PATTERNS.md/json. Upstream default91328fbf and qtspecs72f22292 remain pinned; no upstream changes/submission. Next review: current atomic(TypeName) patterns and priorities, including map entry use. Public libraries1.8.0 and VS Code0.2.4/engine1.8.0 remain immutable; REQ statuses/gate membership/Braid unchanged. Earlier entries below are historical.
+
 # String-key map patterns candidate ? 2026-10-16
 
 PR318 passed exact-head CI and merged at dfe0ed08afc7eaeb000f1d410bff73b3d90168ae. Active isolated worktree D:/Development/Bosak/.guard-tmp/map-pattern-source on feat/string-key-map-patterns, based on that merge. Root edits, earlier worktrees, upstream expectations and original receipts remain preserved.

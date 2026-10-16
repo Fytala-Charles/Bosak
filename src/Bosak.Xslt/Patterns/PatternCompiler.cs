@@ -99,6 +99,7 @@
 //                      | Charles Korthout | 3.27  | 13-10-2026     | Validate 4.0 template pattern prefixes eagerly using lexer tokens.                     |
 //                      | Charles Korthout | 3.28  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 //                      | Charles Korthout | 3.29  | 16-10-2026     | Compile bounded string-key map patterns in the XSLT 4.0 profile.                         |
+//                      | Charles Korthout | 3.30  | 16-10-2026     | Compose map entry sequence cardinality, nested patterns and map-focus predicates.         |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1054,7 +1055,8 @@ internal sealed class PatternCompiler
             if (_compatibility < XPathCompatibility.XPath40)
                 throw new InvalidOperationException("XTSE0340: Map patterns require XSLT 4.0.");
             var map = StringKeyMapPattern.Parse(trimmed);
-            return (item, _) => map.Matches(item);
+            var outer = map.Predicates.Length > 0 ? CompileAtomicMatch("." + map.Predicates) : null;
+            return map.Compile(CompileMapEntrySequence, outer);
         }
 
         // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.
@@ -1190,6 +1192,83 @@ internal sealed class PatternCompiler
                 ctx.WithFocus(savedItem, savedPos, savedSize);
             }
         };
+    }
+
+    /// <summary>Compiles a nested sequence pattern, checking cardinality without coercing its items.</summary>
+    private PatternPredicate CompileMapEntrySequence(string text)
+    {
+        text = text.Trim();
+        static bool IsEmptySequence(string pattern) => Regex.IsMatch(pattern,
+            @"\Aempty-sequence[ \t\r\n]*\([ \t\r\n]*\)\z", RegexOptions.CultureInvariant);
+        int minimum = 1, maximum = 1;
+        PatternPredicate? matcher;
+        if (IsEmptySequence(text))
+        {
+            minimum = maximum = 0;
+            matcher = null;
+        }
+        else
+        {
+            if (text.Length > 1 && (text[^1] is '?' or '+' ||
+                (text[^1] == '*' && !text.EndsWith(":*", StringComparison.Ordinal) && !text.EndsWith("}*", StringComparison.Ordinal))))
+            {
+                char occurrence = text[^1];
+                text = text[..^1].TrimEnd();
+                minimum = occurrence == '+' ? 1 : 0;
+                maximum = occurrence == '?' ? 1 : int.MaxValue;
+            }
+            if (text.Length == 0 || IsEmptySequence(text))
+                throw new InvalidOperationException("XTSE0340: Invalid map entry sequence pattern.");
+            ValidateMapEntryDelimiters(text);
+            matcher = Compile(text, _defaultElementNamespace, _typedMode, _namespaces, _compatibility,
+                _itemTypeAliases, _namedRecordTypeNames);
+        }
+        return (value, context) =>
+        {
+            if (value.IsUndefined) return minimum == 0;
+            if (!value.IsSequence)
+                return maximum >= 1 && matcher is not null && matcher(value, context);
+            int count = 0;
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue!))
+            {
+                if (count == maximum || matcher is null || !matcher(item, context)) return false;
+                count++;
+            }
+            return count >= minimum;
+        };
+    }
+
+    /// <summary>Rejects incomplete nested patterns before the permissive legacy node-pattern compiler.</summary>
+    private static void ValidateMapEntryDelimiters(string text)
+    {
+        var delimiters = new Stack<char>();
+        char quote = '\0';
+        bool uri = false;
+        for (int i = 0; i < text.Length; i++)
+        {
+            char c = text[i];
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < text.Length && text[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (uri) { if (c == '}') uri = false; continue; }
+            if (c == 'Q' && i + 1 < text.Length && text[i + 1] == '{') { uri = true; i++; continue; }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c is '(' or '[' or '{') delimiters.Push(c);
+            else if (c is ')' or ']' or '}')
+            {
+                char expected = c == ')' ? '(' : c == ']' ? '[' : '{';
+                if (delimiters.Count == 0 || delimiters.Pop() != expected)
+                    throw new InvalidOperationException("XTSE0340: Unbalanced map entry pattern delimiters.");
+            }
+        }
+        if (delimiters.Count != 0 || quote != '\0' || uri)
+            throw new InvalidOperationException("XTSE0340: Unclosed map entry pattern delimiter.");
     }
 
     /// <summary>
