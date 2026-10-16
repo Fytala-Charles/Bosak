@@ -1,0 +1,162 @@
+{
+  "date": "2026-10-16",
+  "base": "41ba033b20e79124bbeffd5cbdf1540185ecfcfa",
+  "sourceVersion": "1.14.8 unpublished",
+  "branch": "fix/document-construction-capture",
+  "worktree": "D:/Development/Bosak/.guard-tmp/select-spacing-source",
+  "prerequisite": {
+    "pr": 332,
+    "head": "02994062fa6b01aba8608af7ee865883a4c6acd5",
+    "ciRun": 38908581751,
+    "conclusion": "success",
+    "merge": "41ba033b20e79124bbeffd5cbdf1540185ecfcfa"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "section": "constructing-complex-content"
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "Suspend preserve-atomic, preserve-document and typed raw-item side-channel state during document-wrapped sequence construction; restore in finally",
+  "selectImplementationChanged": false,
+  "publicApiChanged": false,
+  "profileSelectionChanged": false,
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "newNativePasses": [],
+  "lostNativePasses": [],
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T134537126Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T134541291Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T134542996Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 1,
+      "fail": 17,
+      "fixtureIssue": "Incorrectly required Document kind for nonraw text-only delivery; constructor kind assertion now scoped to raw results; spacing expectation retained"
+    },
+    {
+      "fixture": ".artifacts/corrected-tests.txt",
+      "log": ".artifacts/focused-before-corrected.log",
+      "pass": 3,
+      "fail": 15
+    },
+    {
+      "log": ".artifacts/focused-after.log",
+      "pass": 18,
+      "fail": 0
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/DocumentConstructionCaptureTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 55,
+      "fail": 0,
+      "composition": "21 new +16 RawInitialTemplate +18 Xslt40Select controls"
+    }
+  ],
+  "publishedLibraries": "1.8.0 unchanged",
+  "publishedExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "publicationPerformed": false,
+  "verification": {
+    "solution": [
+      9084,
+      0,
+      0
+    ],
+    "xslt": [
+      6150,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focusedCombined": [
+      55,
+      0,
+      0
+    ],
+    "newCases": 21,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "incrementalBuildWarnings": 2,
+    "allLocalJobsComplete": true
+  },
+  "sha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "9977f3a53f7d893915b0224050e12ffc6eb1390dc432132b152fb24d5b45bfbe",
+    "src/Directory.Build.props": "966f78a05572b4f3653b20ab92e68c67c8cd112b6218ed7b44bf57581e98cf54",
+    "tests/Bosak.Xslt.Tests/DocumentConstructionCaptureTests.cs": "add351e512ef2140280704e0c31bbe1629e2cc2b07805a12f8d231577f0f221c",
+    ".artifacts/build.log": "2152775df2a4720f9afde8ec888974386aa9f7168bf45cc3bdbdceecd3d7fe47",
+    ".artifacts/focused-after.log": "30488d83695ffd47d38bfe36bcee8b64af9cfcc457237852ce83c399c4dfa7f2",
+    ".artifacts/focused-before-corrected.log": "f49cd0bdc57cafdfefda04662db0493535a9229dc54f8581586e86eb1bef4897",
+    ".artifacts/focused-before.log": "63aa83b9233a8d1c5d4c676291714974ee32e00596a3535766a24069bbbc759c",
+    ".artifacts/focused-final.log": "fb41ba3168d811ce77c669f7ab67f15b687b69f532d274b880a1af02a31afdb6",
+    ".artifacts/language-server.log": "c708713df9b02eb6701497d8bc7992d0ba10ebe92db208440958048e6bc3fb7e",
+    ".artifacts/native-array.log": "8435f40a7cfb19c3a9e5b9217abbfb432180234bdd09309ffbd46c901c1ad852",
+    ".artifacts/native-record.log": "af9927f473a9ad45fddaff48a68c1819ef6a2abe5d1a38fd13e1fe816f22e768",
+    ".artifacts/native-type-alias.log": "a214f73b14632c28dc5f8db3459a122310e31200c16c2e5056585ef7fee7696d",
+    ".artifacts/qt3.log": "a14d8a3a7de84d2124f51d423b4a43b1fb83d96f75daea48a0e97f13641ae5c0",
+    ".artifacts/qt4.log": "c22c9cd4e2dc90b9f0506ebf1bc44c2767e7f33778b17c4fe557f4220cb85981",
+    ".artifacts/solution-tests.log": "3950ae2b2d7706872fee65c54ea8c3e11a5cd8fb078a5f3dfd37b38f57d454d1",
+    ".artifacts/corrected-tests.txt": "cacf4e621dbf72fd7921b1bd2791b4952265de199c079e7a451b21659c41f08e",
+    ".artifacts/original-tests.txt": "bf069b9f9b206f75d9b4a249890592052dfeed2a6eac9a8f9da0da7fc0d6926b",
+    ".artifacts/native-before/20261016T132659412Z.json": "0dbf294615e23e3f9591babc4046cf9dcad785ac38576bdebdca781ff3e123f9",
+    ".artifacts/native-before/20261016T132659412Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T132703653Z.json": "ed82dd959ffd5e5a885a11c762fffa0ac60bea538e45d1bf0f1fdb04757cab80",
+    ".artifacts/native-before/20261016T132703653Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T132705377Z.json": "40a07688115fc4de987cb12f533aa0b99523cb7aa702c08b8082471ecb91cfef",
+    ".artifacts/native-before/20261016T132705377Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/xslt40/20261016T134537126Z.json": "97c0b1b797070a28709451f61ff3e1bb4cb974e5505b1eea2496e1d0d21d663b",
+    ".artifacts/xslt40/20261016T134537126Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T134541291Z.json": "8c9a7ad060527fa9d162a70c024f4459404878ab8b99a6dea8e2a553a21ebeda",
+    ".artifacts/xslt40/20261016T134541291Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T134542996Z.json": "2eb596e5d52be8f73aa6f966490677f27e6ac68983f5d50b20f05c7b60d24a96",
+    ".artifacts/xslt40/20261016T134542996Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593"
+  }
+}

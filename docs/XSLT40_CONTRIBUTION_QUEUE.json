@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: reproduce deferred explicit-document multi-atomic spacing against current draft; processor-capability architecture remains separate",
+    "selectedEngineReview": "Next: audit computed-element content construction under raw/typed capture; nonraw text-only delivery kind and processor-capability architecture separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -714,6 +714,19 @@
       "upstreamTestsChanged": false,
       "gateMembershipChanged": false,
       "evidence": "XSLT40-JNODE-TEXT-ATOMIZATION.json"
+    },
+    "documentConstructionCapture": {
+      "sourceVersion": "1.14.8 unpublished",
+      "scope": "Suspend raw template atomic/document preservation and typed-item side channel while building document content; restore caller state in finally",
+      "newNativePasses": [],
+      "lostNativePasses": [],
+      "arrayAggregate": "155/5/20",
+      "recordAggregate": "29/35/1",
+      "typeAlias": "23/8/1",
+      "profileSelectionChanged": false,
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false,
+      "evidence": "XSLT40-DOCUMENT-CONSTRUCTION-CAPTURE.json"
     }
   }
 }
