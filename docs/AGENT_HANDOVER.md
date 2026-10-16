@@ -1,3 +1,9 @@
+# VS Code 0.2.4 exact merged candidate verified - 2026-10-16
+
+**VS Code 0.2.4 ready for publication approval - 2026-10-16:** [PR #314](https://github.com/Fytala-Charles/Bosak/pull/314) is merged at `c1d4594dad2b030e104be068eb7e91fb10a9013f`. Exact merged-revision [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38858362612) passes 8,624 solution tests, 84 language-server tests and highlighting. The rebuilt VSIX verifies ten engine-1.8.0 assemblies at that revision, 286 payload files, packaged diagnostics and isolated VS Code live correction. Locked restore reports zero vulnerabilities. [Merged verification](VSCODE-0.2.4-MERGED-VERIFICATION.md) and [receipt](VSCODE-0.2.4-MERGED-VERIFICATION.json). Marketplace remains 0.2.3; 0.2.4 and its tag are unused. Publication requires separate approval. Installed extension and Braid files/pin are unchanged. Earlier preparation entries are historical.
+
+Publication candidate is c1d4594dad2b030e104be068eb7e91fb10a9013f. Verification/docs worktree D:/Development/Bosak/.guard-tmp/vscode024-merged-source on docs/vscode024-merged-verification. Initial receipt remains immutable. No release tag, publication workflow, Marketplace upload or local extension install performed. Root edits and all previous worktrees/receipts are preserved.
+
 # VS Code 0.2.4 prepared - 2026-10-16
 
 Base main 915f344bb979e7f43c340c0c9d6c4310aa3f5162; candidate worktree D:/Development/Bosak/.guard-tmp/alignment180-source on feat/vscode024-alignment.

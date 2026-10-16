@@ -5,6 +5,10 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**VS Code 0.2.4 ready for publication approval - 2026-10-16:** [PR #314](https://github.com/Fytala-Charles/Bosak/pull/314) is merged at `c1d4594dad2b030e104be068eb7e91fb10a9013f`. Exact merged-revision [CI](https://github.com/Fytala-Charles/Bosak/actions/runs/38858362612) passes 8,624 solution tests, 84 language-server tests and highlighting. The rebuilt VSIX verifies ten engine-1.8.0 assemblies at that revision, 286 payload files, packaged diagnostics and isolated VS Code live correction. Locked restore reports zero vulnerabilities. [Merged verification](VSCODE-0.2.4-MERGED-VERIFICATION.md) and [receipt](VSCODE-0.2.4-MERGED-VERIFICATION.json). Marketplace remains 0.2.3; 0.2.4 and its tag are unused. Publication requires separate approval. Installed extension and Braid files/pin are unchanged. Earlier preparation entries are historical.
+
+
+
 ## VS Code 0.2.4 candidate - 16 October 2026
 
 Unpublished extension 0.2.4 bundles released engine 1.8.0. Release build, 8,624 solution tests, 84 language-server tests, TypeScript/highlighting/launcher checks, packaged protocol diagnostics and isolated VS Code live correction pass. Ten bundled assemblies and archive payloads verify against source revision `915f344bb979e7f43c340c0c9d6c4310aa3f5162`; source/test trees match v1.8.0. The transitive brace-expansion lock is updated from 2.1.1 to 2.1.7; production dependency audit reports zero vulnerabilities.
