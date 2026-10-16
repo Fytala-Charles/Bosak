@@ -1,0 +1,247 @@
+{
+  "date": "2026-10-16",
+  "base": "67301df038b799a6d93817c913018a653f4a4d6a",
+  "sourceVersion": "1.14.7 unpublished",
+  "prerequisite": {
+    "pr": 331,
+    "head": "0971af0cbb653af801573d812217076fbaa11f2e",
+    "ciRun": 38906120624,
+    "conclusion": "success",
+    "merge": "67301df038b799a6d93817c913018a653f4a4d6a"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "sections": [
+      "constructing-simple-content",
+      "attribute-value-templates",
+      "text-value-templates"
+    ],
+    "functionCatalogBlob": "930edc7ade2bdf7afecdf8019b93e5b450d9f10e"
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "JNode payload atomization in XSLT string output helpers, value-of and simple-content construction; typed payload nodes recurse through their typed values",
+  "profileSelectionChanged": false,
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "newNativePasses": [],
+  "lostNativePasses": [],
+  "root4Diagnostics": [
+    {
+      "id": "array-021",
+      "variant": "original",
+      "result": "",
+      "code": "XPST0017",
+      "error": "System.InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r\n   at Bosak.XPath.Api.XPath31Expression.ThrowIfXPath40OnlyFunction(String nsUri, String localName, Int32 arity, String prefix, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 250\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionCall(FunctionCallNode node, CompileOptions options, Boolean arrowInsertsFirst) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 643\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 291\r\n   at Bosak.XPath.Api.XPath31Expression.Compile(String expression, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 158\r\n   at Bosak.Xslt.Runtime.TransformEngine.CompileXPathUncached(String expression, XElement instruction) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3080\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass162_0.<CompileXPath>b__1(String expr) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3030\r\n   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)\r\n   at Bosak.Xslt.Runtime.TransformEngine.CompileXPath(String expression, XElement instruction) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3030\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 8560\r\n   at Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElement(XElement source) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10397\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7371\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7136\r\n   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 19547\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7135\r\n   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7632\r\n   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 1419\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 500\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 811\r\n--- End of stack trace from previous location ---\r\n   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 821\r\n   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 497\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    },
+    {
+      "id": "array-021",
+      "variant": "root-version-4-only",
+      "result": "",
+      "code": "XPTY0004",
+      "error": "System.InvalidOperationException: XPTY0004: Cardinality does not match array(*)\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ApplyFunctionConversion(XdmValue value, String targetType, EvaluationContext context) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 14230\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 606\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 455\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 854\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 8560\r\n   at Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElement(XElement source) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10397\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7371\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7136\r\n   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 19547\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7135\r\n   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7632\r\n   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 1419\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 500\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 811\r\n--- End of stack trace from previous location ---\r\n   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 821\r\n   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 497\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    },
+    {
+      "id": "array-022",
+      "variant": "original",
+      "result": "",
+      "code": "XPST0017",
+      "error": "System.InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r\n   at Bosak.XPath.Api.XPath31Expression.ThrowIfXPath40OnlyFunction(String nsUri, String localName, Int32 arity, String prefix, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 250\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionCall(FunctionCallNode node, CompileOptions options, Boolean arrowInsertsFirst) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 643\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 291\r\n   at Bosak.XPath.Api.XPath31Expression.Compile(String expression, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 158\r\n   at Bosak.Xslt.Runtime.TransformEngine.CompileXPathUncached(String expression, XElement instruction) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3080\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass162_0.<CompileXPath>b__1(String expr) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3030\r\n   at System.Collections.Concurrent.ConcurrentDictionary`2.GetOrAdd(TKey key, Func`2 valueFactory)\r\n   at Bosak.Xslt.Runtime.TransformEngine.CompileXPath(String expression, XElement instruction) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 3030\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 8560\r\n   at Bosak.Xslt.Runtime.TransformEngine.EvaluateSequenceConstructorToItems(XElement parent, XdmValue contextItem, Func`2 additionalSkip) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 18170\r\n   at Bosak.Xslt.Runtime.TransformEngine.EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, Boolean wrapInDocumentNode, Boolean preserveEmptySequencePositions) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 17574\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteXsltInstruction(XElement instruction, XdmValue contextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 8920\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7368\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7136\r\n   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 19547\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7135\r\n   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7632\r\n   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 1419\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 500\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 811\r\n--- End of stack trace from previous location ---\r\n   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 821\r\n   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 497\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    },
+    {
+      "id": "array-022",
+      "variant": "root-version-4-only",
+      "result": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><out>RU TJ</out>",
+      "code": "",
+      "error": ""
+    },
+    {
+      "id": "array-024",
+      "variant": "original",
+      "result": "",
+      "code": "XTSE0340",
+      "error": "System.InvalidOperationException: XTSE0340: The match attribute of xsl:template must not contain an attribute value template\r\n   at Bosak.Xslt.Stylesheet.TemplateRule.FromElement(XElement element, Stylesheet stylesheet) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Stylesheet\\TemplateRule.cs:line 193\r\n   at Bosak.Xslt.Stylesheet.Stylesheet.Load() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Stylesheet\\Stylesheet.cs:line 2409\r\n   at Bosak.Xslt.Stylesheet.Stylesheet..ctor(XDocument document, String baseUri, IXsltUriResolver resolver, Int32 importPrecedence, HashSet`1 resolvedUris, Object inheritedStaticContext, IReadOnlyDictionary`2 externalStaticParameters, Stylesheet rootStylesheet, Stylesheet owningPackage, PackageVersionResolutionStrategy packageVersionResolutionStrategy, Boolean isPrincipalLevel, SchemaImportState schemaState, Int32 importDepth) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Stylesheet\\Stylesheet.cs:line 831\r\n   at Bosak.Xslt.Api.XsltCompiler.Compile(XDocument document, String baseUri) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltCompiler.cs:line 157\r\n   at Bosak.Xslt.Api.XsltCompiler.Compile(String xsl, String baseUri) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltCompiler.cs:line 137\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    },
+    {
+      "id": "array-024",
+      "variant": "root-version-4-only",
+      "result": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><out><AT><P first=\"Sue\" last=\"Schreiber\"/><P first=\"Debbie\" last=\"Lockett\"/></AT></out>",
+      "code": "",
+      "error": ""
+    },
+    {
+      "id": "array-025",
+      "variant": "original",
+      "result": "",
+      "code": "XPST0017",
+      "error": "System.InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r\n   at Bosak.XPath.Api.XPath31Expression.ThrowIfXPath40OnlyFunction(String nsUri, String localName, Int32 arity, String prefix, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 250\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionCall(FunctionCallNode node, CompileOptions options, Boolean arrowInsertsFirst) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 643\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 291\r\n   at Bosak.XPath.Api.XPath31Expression.<>c__DisplayClass31_0.<ResolveFunctionCall>b__1(XPathAstNode a) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 638\r\n   at System.Linq.Enumerable.ToList[TSource](IEnumerable`1 source)\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionCall(FunctionCallNode node, CompileOptions options, Boolean arrowInsertsFirst) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 636\r\n   at Bosak.XPath.Api.XPath31Expression.ResolveFunctionNamespaces(XPathAstNode node, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 291\r\n   at Bosak.XPath.Api.XPath31Expression.Compile(String expression, CompileOptions options) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 158\r\n   at Bosak.Xslt.Runtime.TransformEngine.EvaluateAvt(String value, XElement contextElement) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10513\r\n   at Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElement(XElement source) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10354\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7371\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7136\r\n   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 19547\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7135\r\n   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7632\r\n   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 1419\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 500\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 811\r\n--- End of stack trace from previous location ---\r\n   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 821\r\n   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 497\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    },
+    {
+      "id": "array-025",
+      "variant": "root-version-4-only",
+      "result": "",
+      "code": "XPST0017",
+      "error": "System.InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 637\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 455\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 854\r\n   at Bosak.Xslt.Runtime.TransformEngine.EvaluateAvt(String value, XElement contextElement) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10525\r\n   at Bosak.Xslt.Runtime.TransformEngine.CopyLiteralElement(XElement source) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 10354\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplateCore(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7371\r\n   at Bosak.Xslt.Runtime.TransformEngine.<>c__DisplayClass251_0.<ExecuteTemplate>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7136\r\n   at Bosak.Xslt.Runtime.TransformEngine.WithComponentLoadPolicy(Stylesheet declaringStylesheet, Action action) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 19547\r\n   at Bosak.Xslt.Runtime.TransformEngine.ExecuteTemplate(TemplateRule rule, XdmValue contextItem, Dictionary`2 callParams, Dictionary`2 incomingTunnelParams, Int32 position, Int32 last, Boolean setCurrentRule) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7135\r\n   at Bosak.Xslt.Runtime.TransformEngine.CallTemplate(String name, XdmValue contextItem, Dictionary`2 withParams, Dictionary`2 incomingTunnelParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 7632\r\n   at Bosak.Xslt.Runtime.TransformEngine.Transform(IXdmNode source, String initialTemplate, String initialMode, Boolean rawResult, String baseOutputUri, Nullable`1 initialMatchSelection, Boolean captureResultDocuments, Boolean rawTransformResult, IXdmNode globalContextItem) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Runtime\\TransformEngine.cs:line 1419\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass19_0.<TransformToString>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 500\r\n   at Bosak.Xslt.Api.XsltExecutable.<>c__DisplayClass27_0`1.<RunWithStack>b__0() in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 811\r\n--- End of stack trace from previous location ---\r\n   at Bosak.Xslt.Api.XsltExecutable.RunWithStack[T](Func`1 action, Int32 stackSize) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 821\r\n   at Bosak.Xslt.Api.XsltExecutable.TransformToString(IXdmNode source, EvaluationContext context, String initialTemplate, String initialMode, String baseOutputUri, OutputProperties serializationParams) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\src\\Bosak.Xslt\\Api\\XsltExecutable.cs:line 497\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\jnode-text-source\\.artifacts\\profile-probe\\Program.cs:line 35"
+    }
+  ],
+  "minimalContentProbe": {
+    "result": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><out children=\"1\" key=\"name\" data=\"Moskva\" avt=\"Moskva\">Moskva</out>"
+  },
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T132659412Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T132703653Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T132705377Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 0,
+      "fail": 52,
+      "fixtureIssue": "NoTypedValue initially used mixed xs:anyType; replaced before implementation with explicit element-only schema type"
+    },
+    {
+      "fixture": ".artifacts/corrected-tests.txt",
+      "log": ".artifacts/focused-before-corrected.log",
+      "pass": 0,
+      "fail": 52
+    },
+    {
+      "fixture": ".artifacts/first-implementation-tests.txt",
+      "log": ".artifacts/focused-after.log",
+      "pass": 48,
+      "fail": 4,
+      "fixtureIssue": "Attribute content default separator is empty; cross-surface fixture now explicitly requests spaces, with separate default-empty-separator guard"
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/JNodeTextAtomizationTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 56,
+      "fail": 0
+    }
+  ],
+  "publishedLibraries": "1.8.0 unchanged",
+  "publishedExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "publicationPerformed": false,
+  "verification": {
+    "solution": [
+      9063,
+      0,
+      0
+    ],
+    "xslt": [
+      6129,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focused": [
+      56,
+      0,
+      0
+    ],
+    "newCases": 56,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "incrementalBuildWarnings": 22,
+    "allLocalJobsComplete": true
+  },
+  "sha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "1583a10a801008e6f53afc22eae007c7d767e52e23428479e3b190149ec72d45",
+    "src/Directory.Build.props": "b983802a7f267f12103aef61b240913808686bf04074b02db87dce8a47690bfb",
+    "tests/Bosak.Xslt.Tests/JNodeTextAtomizationTests.cs": "2680b48ca57b07c8cb70d1ee535cfaa005934ffb6a55282c32b34cb84ed00a8c",
+    ".artifacts/build.log": "a62ffb6657ced40ae23f6c0998f65d62b36b46ea0b5f022db3820262c8e14802",
+    ".artifacts/content-probe-build.log": "a5d2edc6c8893012eb18dbea6e40be7fb90b88a41eae23102af55d6050f407fe",
+    ".artifacts/content-probe-results.log": "7731c205eab82394f9eb61ca2a8a638a8d3d3a835f4b624b9e4e6bcde9cf7167",
+    ".artifacts/focused-after.log": "5e1ada8f638ecaa9ef687d592741a2a54f865123bff9ca1d145be8d022f9ef38",
+    ".artifacts/focused-before-corrected.log": "0df47a7a48ada499f6430af180f624c7ee0ed4bcb694e2c4cb5a1cc91e9df30c",
+    ".artifacts/focused-before.log": "e482e0e8a686b5e5f9a5cea005a5d1742bb25fc356ab1acbe6de06bbb288d1ea",
+    ".artifacts/focused-final.log": "2720d96cd5bfea92bd5bd48aae0d5507ed754a5834a7db4422f2a3c5c742d512",
+    ".artifacts/language-server.log": "e7fbaa88a2cfb86c6cedfa341ec3eaba3a24d1b2a99d49babdf75536b8fd66ba",
+    ".artifacts/native-array.log": "a96f1623f80215c3315ffbb2719a1a10444ca62914b0acd0399e17557e6b373e",
+    ".artifacts/native-record.log": "1ac9729c5afcd8e4388ff2f42252f635491e70653bd55476c3a663bb91cad65b",
+    ".artifacts/native-type-alias.log": "ebec7ad44da2425f7ec3cc4ff07fa45a06b18008d853fb10b5dea6df46b0bccd",
+    ".artifacts/probe-build.log": "ce40cfd984a59b901c9ff35f5b86cf096b6f330c33d2346924ba2ed2d5ca4e91",
+    ".artifacts/probe-results-raw.log": "371d7f1dc46d742b0a0522a742375c551fe6505447ee1262d80cf6be6915b542",
+    ".artifacts/qt3.log": "b89d8152b7884ab77925cce84536d9174ff74bd88da3ee11c8b0e6522893d53b",
+    ".artifacts/qt4.log": "1b4cb0bbb80f5f28bb3e7b3f918805b9f2ccfbe004774392e73077de2d5fca7b",
+    ".artifacts/solution-tests.log": "5c311f968d0c6a4f1ddec8b70ab89e255ba94150045d576bd78948154cfb373e",
+    ".artifacts/corrected-tests.txt": "44b4ae075469883b597fdb8d7909ab85e0f1dbc735681ed46f613cd62a4c9759",
+    ".artifacts/first-implementation-tests.txt": "44b4ae075469883b597fdb8d7909ab85e0f1dbc735681ed46f613cd62a4c9759",
+    ".artifacts/original-tests.txt": "972bbb291475857a5f30def2c322aa2f377793f16e79f93d41a8526c14afa84c",
+    ".artifacts/probe-results.json": "9ec9543ead7743287fc119fb2914cc84f11bf378ad27fd4dfbd86aae463250f5",
+    ".artifacts/native-before/20261016T124745748Z.json": "5a921be2ab89731ddf19149eee6fa0a1be256724db5005c066c8cb887c821398",
+    ".artifacts/native-before/20261016T124745748Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T124750227Z.json": "4bdafc434f4d421f909a504350d485fef7c37b705f088febf6e8c55c40722ede",
+    ".artifacts/native-before/20261016T124750227Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T124752061Z.json": "2f90121f2a788921a5d7661e00e3c1d2288b96fb041c1092a659309a35ba891e",
+    ".artifacts/native-before/20261016T124752061Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/diagnostic-before/content-probe-results.log": "b8c81e7e885f95775403839052d8e7772df18c23231ba42e4bbf4cd4fd7a63f8",
+    ".artifacts/diagnostic-before/probe-results-raw.log": "f90fd4b116143712c818cba7bc36cbaba517f3b9aac30d0c6a92f3bcf7aee529",
+    ".artifacts/diagnostic-before/probe-results.json": "31d9cd95bf746c7bd66dbe04f24c4cd34bc299402956a2612507f072e6be2d08",
+    ".artifacts/xslt40/20261016T132659412Z.json": "0dbf294615e23e3f9591babc4046cf9dcad785ac38576bdebdca781ff3e123f9",
+    ".artifacts/xslt40/20261016T132659412Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T132703653Z.json": "ed82dd959ffd5e5a885a11c762fffa0ac60bea538e45d1bf0f1fdb04757cab80",
+    ".artifacts/xslt40/20261016T132703653Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T132705377Z.json": "40a07688115fc4de987cb12f533aa0b99523cb7aa702c08b8082471ecb91cfef",
+    ".artifacts/xslt40/20261016T132705377Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/profile-probe/array-021-original.xsl": "8fd9c4cd8df82879afe65b563a0bacb3ed3027e182c6136248136c41e2de3094",
+    ".artifacts/profile-probe/array-021-root-version-4-only.xsl": "2968e9b1e4280c72e53cb0349046a589ac93f10b3244951cec8929b360342dfc",
+    ".artifacts/profile-probe/array-022-original.xsl": "e9bbe555bebf66db2ac10959e91fe11ccbcea077610b88475c1455edcb7af7e8",
+    ".artifacts/profile-probe/array-022-root-version-4-only.xsl": "33d3c7ccbcbb0e6450b705911c3a62b4dcfbcd5e59ef5205f21561c9e65b0c4b",
+    ".artifacts/profile-probe/array-024-original.xsl": "1bfd4135671be1e035bffd8ca31ec1a5a70ceb4ad73532954561688a9ebe26bb",
+    ".artifacts/profile-probe/array-024-root-version-4-only.xsl": "ee7707623bdb912856e8727429eeddd62d6174360c0982dd7b1eb0c02b5a2ad0",
+    ".artifacts/profile-probe/array-025-original.xsl": "279f999f5e1df9f2645b0c0f7ac17ecfcca4a956a361019196d4da2897bc0a5b",
+    ".artifacts/profile-probe/array-025-root-version-4-only.xsl": "8e78963d10802522c59ba758840084202e383ad0acdb5e50f6972795c6a0a030",
+    ".artifacts/profile-probe/ProfileProbe.csproj": "881836e381e89851a02a9038ea34273025676a1cd103e022bdd2051da56f84a3",
+    ".artifacts/profile-probe/Program.cs": "b3c9fe15af6fb83fc220e0b49b859cb5a4ff8815f89288ebef8a664128f9c2f0",
+    ".artifacts/content-probe/ContentProbe.csproj": "881836e381e89851a02a9038ea34273025676a1cd103e022bdd2051da56f84a3",
+    ".artifacts/content-probe/probe.xsl": "175c5d931a72e035650ea7fc824b90c43b549ac9aa3d5ab755cbfd6329ceaeb4",
+    ".artifacts/content-probe/Program.cs": "00333dd9c3df7810432c4865d2f0876309ed6cedfab047eb2f52c95e57d98472"
+  }
+}

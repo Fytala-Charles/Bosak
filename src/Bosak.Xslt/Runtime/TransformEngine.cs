@@ -560,6 +560,7 @@
 //                      | Charles Korthout | 7.44  | 16-10-2026     | Suppress implicit binding documents for direct XSLT 4.0 disqualifying children.          |
 //                      | Charles Korthout | 7.45  | 16-10-2026     | Apply array member templates after next-match and ordinary text/skip fallback.             |
 //                      | Charles Korthout | 7.46  | 16-10-2026     | Route apply-imports arrays to member templates and isolate member import restrictions.    |
+//                      | Charles Korthout | 7.47  | 16-10-2026     | Atomize complete JNode payloads for AVTs, value-of and simple-content strings.             |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -14506,7 +14507,7 @@ internal sealed class TransformEngine
 
             sawNonText = true;
             FlushPendingText();
-            if (item.IsArray)
+            if (item.IsArray || item.IsJNode)
             {
                 foreach (var atom in AtomizeForString(item))
                     slots.Add(atom);
@@ -14572,10 +14573,19 @@ internal sealed class TransformEngine
     /// Atomizes an XDM value for string output, recursively expanding sequences and arrays.
     /// Map and function items raise <c>FOTY0013</c>.
     /// </summary>
-    private static IEnumerable<string> AtomizeForString(XdmValue value)
+    private static IEnumerable<string> AtomizeForString(XdmValue value, bool atomizeNodes = false)
     {
         if (value.IsUndefined)
             yield break;
+
+        if (value.IsJNode)
+        {
+            // Atomize the complete jvalue, including typed XNodes nested in payload
+            // sequences/arrays. Ordinary XNode output keeps its existing paths.
+            foreach (var atom in AtomizeForString(value.JNodeValue.Value, atomizeNodes: true))
+                yield return atom;
+            yield break;
+        }
 
         if (value.IsMap || value.IsFunction)
             throw new InvalidOperationException("FOTY0013: Cannot atomize a map, array, or function item");
@@ -14584,7 +14594,7 @@ internal sealed class TransformEngine
         {
             foreach (var member in value.ArrayValue.Values)
             {
-                foreach (var atom in AtomizeForString(member))
+                foreach (var atom in AtomizeForString(member, atomizeNodes))
                     yield return atom;
             }
             yield break;
@@ -14596,9 +14606,19 @@ internal sealed class TransformEngine
             {
                 if (item.IsUndefined)
                     continue;
-                foreach (var atom in AtomizeForString(item))
+                foreach (var atom in AtomizeForString(item, atomizeNodes))
                     yield return atom;
             }
+            yield break;
+        }
+
+        if (atomizeNodes && value.IsNode)
+        {
+            var node = value.NodeValue;
+            if (node.HasNoTypedValue)
+                throw new InvalidOperationException("FOTY0012: Cannot atomize a node that has no typed value.");
+            foreach (var atom in AtomizeForString(node.TypedValue, atomizeNodes: true))
+                yield return atom;
             yield break;
         }
 
@@ -18877,7 +18897,7 @@ internal sealed class TransformEngine
                 }
                 // Atomize and cast to string. Arrays are recursively flattened so that
                 // text value templates such as {array{1,2,3}} produce "1 2 3" (cvt-041).
-                if (item.IsArray)
+                if (item.IsArray || item.IsJNode)
                 {
                     foreach (var atom in AtomizeForString(item))
                         currentGroup.Add(atom);

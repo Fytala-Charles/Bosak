@@ -69,3 +69,8 @@ Canonical documents, queue, upstream guide and XSLT40-ARRAY-IMPORT-FALLBACK.md w
 ## Array profile audit verification - 2026-10-16
 
 Canonical documents, queue, upstream guide and XSLT40-ARRAY-PROFILE-AUDIT.md were rendered using markdown-it and canonical Fytala CSS. HTML artifacts are retained under D:/Development/Bosak/.guard-tmp/array-profile-audit-render. This is a render check, not a screenshot review. Kit-managed assets are unchanged.
+
+
+## JNode text atomization verification - 2026-10-16
+
+Canonical documents, queue, upstream guide and XSLT40-JNODE-TEXT-ATOMIZATION.md were rendered using markdown-it and canonical Fytala CSS. HTML artifacts are retained under D:/Development/Bosak/.guard-tmp/jnode-text-render. This is a render check, not a screenshot review. Kit-managed assets are unchanged.
