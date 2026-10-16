@@ -100,6 +100,7 @@
 //                      | Charles Korthout | 3.28  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
 //                      | Charles Korthout | 3.29  | 16-10-2026     | Compile bounded string-key map patterns in the XSLT 4.0 profile.                         |
 //                      | Charles Korthout | 3.30  | 16-10-2026     | Compose map entry sequence cardinality, nested patterns and map-focus predicates.         |
+//                      | Charles Korthout | 3.31  | 16-10-2026     | Match current atomic type patterns and validate atomic alternatives.                      |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -209,7 +210,7 @@ internal sealed class PatternCompiler
             foreach (var op in new[] { "|", "union", "intersect", "except" })
             {
                 var operands = SplitPatternTopLevel(trimmed, op);
-                if (operands.Length > 1 && operands.Any(StringKeyMapPattern.StartsMapPattern))
+                if (operands.Length > 1 && operands.Any(p => StringKeyMapPattern.StartsMapPattern(p) || AtomicPattern.StartsAtomicPattern(p)))
                     throw new InvalidOperationException("XTSE0340: Set-pattern operands require node patterns; enclose map patterns in parentheses.");
             }
         }
@@ -218,6 +219,13 @@ internal sealed class PatternCompiler
             if (compatibility < XPathCompatibility.XPath40)
                 throw new InvalidOperationException("XTSE0340: Map patterns require XSLT 4.0.");
             _ = StringKeyMapPattern.Parse(trimmed);
+            return;
+        }
+        if (AtomicPattern.StartsAtomicPattern(trimmed))
+        {
+            if (compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Atomic patterns require XSLT 4.0.");
+            _ = AtomicPattern.Parse(trimmed);
             return;
         }
         // 1.  Disallowed functions at pattern start (XTSE0340).
@@ -1057,6 +1065,34 @@ internal sealed class PatternCompiler
             var map = StringKeyMapPattern.Parse(trimmed);
             var outer = map.Predicates.Length > 0 ? CompileAtomicMatch("." + map.Predicates) : null;
             return map.Compile(CompileMapEntrySequence, outer);
+        }
+
+        if (AtomicPattern.StartsAtomicPattern(trimmed))
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Atomic patterns require XSLT 4.0.");
+            var atomic = AtomicPattern.Parse(trimmed);
+            string Resolve(string name)
+            {
+                string key;
+                if (name.StartsWith("Q{", StringComparison.Ordinal)) key = name;
+                else
+                {
+                    var colon = name.IndexOf(':');
+                    var prefix = colon < 0 ? "" : name[..colon];
+                    var ns = colon < 0 ? _defaultElementNamespace ?? "" :
+                        _namespaces?.GetValueOrDefault(prefix) ?? (prefix == "xs" ? XmlSchema.Namespace : null);
+                    if (ns is null) throw new InvalidOperationException("XPST0081: Unknown atomic type prefix: " + prefix);
+                    key = "Q{" + ns + "}" + (colon < 0 ? name : name[(colon + 1)..]);
+                }
+                return _itemTypeAliases?.GetValueOrDefault(key) ?? key;
+            }
+            var types = atomic.ResolveTypes(Resolve);
+            var type = types.Length == 1 ? types[0] : "(" + string.Join("|", types) + ")";
+            var test = CompilePatternXPath(". instance of " + type);
+            var outer = atomic.Predicates.Length > 0 ? CompileAtomicMatch("." + atomic.Predicates) : null;
+            return (item, context) => !item.IsNode && !item.IsMap && !item.IsArray && !item.IsFunction &&
+                test.Evaluate(context.WithFocus(item, 1, 1)).BooleanValue && (outer is null || outer(item, context));
         }
 
         // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.

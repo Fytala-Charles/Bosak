@@ -60,6 +60,7 @@
 //                      | Charles Korthout | 2.16  | 13-10-2026     | Preserve module fixed bindings in locally earlier template match patterns.                 |
 //                      | Charles Korthout | 2.17  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
 //                      | Charles Korthout | 2.18  | 16-10-2026     | Admit XSLT 4.0 map-pattern braces and compute string-key map default priorities.          |
+//                      | Charles Korthout | 2.19  | 16-10-2026     | Compute atomic pattern priorities using resolved types and minimum alternatives.          |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -183,7 +184,7 @@ internal sealed class TemplateRule
     public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
         var contextItem = ContextItemDeclaration.FromTemplate(element);
-        ValidateContextItemAgainstMatch(element, contextItem);
+        ValidateContextItemAgainstMatch(element, contextItem, stylesheet.GetXPathCompatibility(element));
 
         var match = element.Attribute("match")?.Value;
         if (!string.IsNullOrEmpty(match) && stylesheet.GetXPathCompatibility(element) < XPathCompatibility.XPath40 && ContainsAvtExpression(match))
@@ -271,7 +272,7 @@ internal sealed class TemplateRule
     /// context item type is an atomic/item type that cannot match any node selected
     /// by the match pattern, the processor may (and does) report XTTE0590 at compile time.
     /// </summary>
-    private static void ValidateContextItemAgainstMatch(XElement element, ContextItemDeclaration? contextItem)
+    private static void ValidateContextItemAgainstMatch(XElement element, ContextItemDeclaration? contextItem, XPathCompatibility compatibility)
     {
         if (contextItem == null || string.IsNullOrEmpty(contextItem.AsType))
             return;
@@ -302,6 +303,9 @@ internal sealed class TemplateRule
                 || asType.StartsWith("map(") || asType.StartsWith("array("))
                 return;
         }
+
+        if (compatibility >= XPathCompatibility.XPath40 &&
+            Patterns.AtomicPattern.StartsAtomicPattern(StripXPathComments(match).Trim())) return;
 
         // Any other type is atomic; no node can satisfy an atomic required type.
         // This static check applies only when the match pattern can match nodes only:
@@ -648,6 +652,9 @@ internal sealed class TemplateRule
 
         if (xpath40 && Patterns.StringKeyMapPattern.StartsMapPattern(trimmed))
             return Patterns.StringKeyMapPattern.Parse(trimmed).DefaultPriority;
+
+        if (xpath40 && Patterns.AtomicPattern.StartsAtomicPattern(trimmed))
+            return Patterns.AtomicPattern.Parse(trimmed).DefaultPriority(typeResolver);
 
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))

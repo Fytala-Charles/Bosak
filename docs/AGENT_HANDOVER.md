@@ -1,3 +1,15 @@
+# Atomic pattern candidate - 2026-10-16
+
+PR320 passed both exact-head CI checks at 55689f8c and merged at ea78df7dd1b790607745a07171f83c17ccd0d32d. Active isolated worktree D:/Development/Bosak/.guard-tmp/atomic-pattern-source on feat/atomic-patterns, based on that merge. Read docs/XSLT40-ATOMIC-PATTERNS.md/json for the bounded contract and preserved execution receipts. The delivery commit is the latest feat/atomic-patterns commit containing this entry; the source hashes identify the tested implementation.
+
+Unpublished source 1.11.0 adds atomic(TypeName), built-in atomic types, atomic-only aliases/alternatives, predicates, namespace resolution and map entry sequence use. Priorities follow derivation depth and minimum alternative priority. Matching never coerces or atomizes nodes. Existing legacy ~type remains unchanged. Schema-defined atomic/union types and record(TypeName) remain separate.
+
+Release build: zero errors, two incremental warnings. Solution 8,762/0/0 (XSLT 5,876), language server 84/0/0, focused pattern suites 165/0/0 (47 new atomic cases). Frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894, both exit 0. Sequential native record aggregate 29/35/1 and type-alias 22/9/1 retain exit 1 because failures remain. All local jobs have completed.
+
+Original diagnostic fixture/logs, intermediate compile/parser/test-fixture corrections and concurrent native timestamp collision are retained separately. The corrected final native runs are sequential. No catalog/expectation changes, upstream submission, gate promotion or native pass gain is claimed. Docs rendered using markdown-it and canonical Fytala CSS; AGENTS.md conventions still apply.
+
+Next: check this branch's exact-head CI/review before integration, then review current record(TypeName) patterns and priorities, including nominative/structural identity and map entry use. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance remain unchanged. Preserve original root edits/dossier/.sweep-baselines/, every worktree and all original receipts. Earlier entries below are historical.
+
 # Map entry sequence pattern candidate ? 2026-10-16
 
 PR319 passed both exact-head CI checks and merged at 305cac469855e38542e5010d195fadd2bd42f984. Active isolated worktree D:/Development/Bosak/.guard-tmp/map-entry-source on feat/map-entry-patterns, based on that merge. Original root edits, every earlier worktree and all baseline/execution receipts remain preserved.

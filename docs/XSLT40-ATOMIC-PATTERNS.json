@@ -1,0 +1,295 @@
+{
+  "date": "2026-10-16",
+  "baseRevision": "ea78df7dd1b790607745a07171f83c17ccd0d32d",
+  "beforeRunBase": "55689f8c1fd2d27dfad4bc478f7a4cc0d23405f7",
+  "sourceVersion": "1.11.0 unpublished",
+  "prerequisite": {
+    "pr": 320,
+    "head": "55689f8c1fd2d27dfad4bc478f7a4cc0d23405f7",
+    "ciRun": 38884697054,
+    "conclusion": "success",
+    "merge": "ea78df7dd1b790607745a07171f83c17ccd0d32d"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "gitBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "path": "specifications/xslt-40/src/xslt.xml",
+    "sections": [
+      "12986 atomic patterns",
+      "13767 atomic priorities",
+      "13753 filtered priorities"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "publicLibraries": "1.8.0 unchanged",
+  "publicExtension": "0.2.4/engine1.8.0 unchanged",
+  "verification": {
+    "solution": [
+      8762,
+      0,
+      0
+    ],
+    "xslt": [
+      5876,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focused": [
+      165,
+      0,
+      0
+    ],
+    "newAtomicCases": 47,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "buildWarnings": 2,
+    "allLocalJobsComplete": true
+  },
+  "native": {
+    "recordAggregate": [
+      29,
+      35,
+      1
+    ],
+    "recordSet": [
+      29,
+      18,
+      0
+    ],
+    "xslRecordSet": [
+      0,
+      17,
+      1
+    ],
+    "typeAlias": [
+      22,
+      9,
+      1
+    ],
+    "familyExitCodes": [
+      1,
+      1
+    ],
+    "newPasses": 0
+  },
+  "sourceSha256": {
+    "src/Directory.Build.props": "8a12b833911906b178294a5fa13ef54409e8f966560cf77585ce01e5f7bfe061",
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "d7bc1d4d0f3323251ec15a99af72c84e7f82be889ab4ed1c00bdd7941e9e0e70",
+    "src/Bosak.Xslt/Patterns/AtomicPattern.cs": "76773ce6a0a2ce6f2975a7ed172c88e59cb8b4334e479d02a05acbb72dfad4e3",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "789d1dda4a3dc95ac93fac9cad174ee9107b9989fcd20dfdfc39cd61dc80fb46",
+    "tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs": "9d0f80dd8e896ac35bc7ea4edae7a2141f640e036e02909213175c8ae1e6bc87"
+  },
+  "trackedSourcePatchSha256": "6f9f8147df88aa7bd394db61805e20b5022457d4d010cafa801c805532249951",
+  "originalDiagnosticFixture": {
+    "path": ".artifacts/atomic-tests-before.txt",
+    "sha256": "012fa26e100f5ca6a54bb0d0344e53adaf0a00ddd37a4b0694be067449fba1cb",
+    "cases": 43,
+    "pass": 13,
+    "fail": 30,
+    "limitation": "Original priority competitor matched document nodes; diagnostic counts are not an engine-only baseline. Exact original bytes/log retained."
+  },
+  "executionLogs": [
+    {
+      "path": ".artifacts/atomic-before.log",
+      "sha256": "d6fc10c0671366173bd797d9504ef64622370b1b7c582eaa034b80c9e961255d"
+    },
+    {
+      "path": ".artifacts/atomic-first.log",
+      "sha256": "54162e33713cd503ed0b4ff527c95bb681678dfc30959e7d5c252a609eccf761"
+    },
+    {
+      "path": ".artifacts/atomic-fourth.log",
+      "sha256": "ce101834907c80ea1b46f8ee494e2bc3dc2510d2a7435b2acf49e4b6cdd2a94e"
+    },
+    {
+      "path": ".artifacts/atomic-second.log",
+      "sha256": "c0f615a71fd36e0d3d43d43465e274e6c7567e1f52904ddec962cc6cd421a95a"
+    },
+    {
+      "path": ".artifacts/atomic-third.log",
+      "sha256": "e5420236dd85c6d86a7e386212a6209aafe001126de43c6bfa758a5fb7cdb4cd"
+    },
+    {
+      "path": ".artifacts/build.log",
+      "sha256": "45eb7f949a9656c1a7513ffefa32fac75b73719a4844917b736cda5f1b430552"
+    },
+    {
+      "path": ".artifacts/language-server.log",
+      "sha256": "0944280c3f467facf26c63b6d9d1a34801fccd1feed4091b618d47824ebe5c62"
+    },
+    {
+      "path": ".artifacts/native-record-final.log",
+      "sha256": "d3f1cbe8a129f1dd1f3f6e07034b00c1889d159a5c02c7ef1ec4650387cece54"
+    },
+    {
+      "path": ".artifacts/native-record.log",
+      "sha256": "ac6b6eccc1a7076150587a533175f3c82594124add0e41e310648e8e89c23a18"
+    },
+    {
+      "path": ".artifacts/native-type-alias-final.log",
+      "sha256": "55b050ff8f6a5104c6b327287159db9e781590e2ae2b8f32fc6f0dc6b429008c"
+    },
+    {
+      "path": ".artifacts/native-type-alias.log",
+      "sha256": "314ecd2fa2052f0d8af30da888372d3feb8a7c4c617ca4786366a171ad85f23c"
+    },
+    {
+      "path": ".artifacts/pattern-focused.log",
+      "sha256": "cf272ac0db3822982ed84fe0a98d92aa4568cb53151547e0971ce50b6c5775b2"
+    },
+    {
+      "path": ".artifacts/qt3.log",
+      "sha256": "f33e24bdaeffbd87716f7a392376273b065d4022a86625542e8cfaa487ceadfc"
+    },
+    {
+      "path": ".artifacts/qt4.log",
+      "sha256": "e0b5da087492369b11815c903f8c110a03a48ee1dc7eb518d3edd9b15d443ead"
+    },
+    {
+      "path": ".artifacts/solution-tests.log",
+      "sha256": "85ce262b1f9731e6cb2a026200618c5597212f26dcca0a042e1e758b0c8ae5db"
+    }
+  ],
+  "rawNativeReceipts": [
+    {
+      "path": ".artifacts/xslt40/20261016T101316245Z.json",
+      "sha256": "87e95a6a1e577972a35a207a1d629a5049796c0a84b2f4c1d7e6cef71237a0ff",
+      "receipt": {
+        "timestampUtc": "2026-10-16T10:13:18.6256442Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "ea78df7dd1b790607745a07171f83c17ccd0d32d",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+          " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? src/Bosak.Xslt/Patterns/AtomicPattern.cs",
+          "?? tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "record",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 35,
+          "Skipped": 1,
+          "Total": 65,
+          "Passed": 29
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\atomic-pattern-source\\.artifacts\\xslt40\\20261016T101316245Z.log"
+      }
+    },
+    {
+      "path": ".artifacts/xslt40/20261016T101722232Z.json",
+      "sha256": "b74aad4169a54c2410dacb5799a59974e88ef5a1b2f77031e6149eb3c1d4f2cb",
+      "receipt": {
+        "timestampUtc": "2026-10-16T10:17:23.4964905Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "ea78df7dd1b790607745a07171f83c17ccd0d32d",
+        "bosakStatus": [
+          " M README.md",
+          " M docs/ARCHITECTURE.md",
+          " M docs/FEATURE_REQUESTS.md",
+          " M docs/INTEGRATION.md",
+          " M docs/XSLT40_CONTRIBUTION_QUEUE.md",
+          " M docs/XSLT40_UPSTREAM_TESTING.md",
+          " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+          " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? docs/XSLT40-ATOMIC-PATTERNS.md",
+          "?? src/Bosak.Xslt/Patterns/AtomicPattern.cs",
+          "?? tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "type-alias",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 9,
+          "Skipped": 1,
+          "Total": 32,
+          "Passed": 22
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\atomic-pattern-source\\.artifacts\\xslt40\\20261016T101722232Z.log"
+      }
+    },
+    {
+      "path": ".artifacts/xslt40/20261016T101724304Z.json",
+      "sha256": "d6067878e2b69ef7bbf8b72a7a86a60b5cfe051854e254c29815ff5c64aec972",
+      "receipt": {
+        "timestampUtc": "2026-10-16T10:17:25.5814330Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "ea78df7dd1b790607745a07171f83c17ccd0d32d",
+        "bosakStatus": [
+          " M README.md",
+          " M docs/ARCHITECTURE.md",
+          " M docs/FEATURE_REQUESTS.md",
+          " M docs/INTEGRATION.md",
+          " M docs/XSLT40_CONTRIBUTION_QUEUE.md",
+          " M docs/XSLT40_UPSTREAM_TESTING.md",
+          " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+          " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? docs/XSLT40-ATOMIC-PATTERNS.md",
+          "?? src/Bosak.Xslt/Patterns/AtomicPattern.cs",
+          "?? tests/Bosak.Xslt.Tests/Xslt40AtomicPatternTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "record",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 35,
+          "Skipped": 1,
+          "Total": 65,
+          "Passed": 29
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\atomic-pattern-source\\.artifacts\\xslt40\\20261016T101724304Z.log"
+      }
+    }
+  ],
+  "limitations": [
+    "Schema-defined atomic/union types not implemented in this slice",
+    "Record(TypeName), array/JNode pattern families remain separate",
+    "No native conformance gain, upstream submission, gate promotion or publication"
+  ],
+  "corrections": [
+    "Intermediate compile fixes and malformed trailing-alternative correction retained in original logs",
+    "Priority-test competitor restricted to atomic candidates; assertions retained",
+    "Concurrent native wrappers collided on timestamp filename; original failure retained and both families rerun sequentially"
+  ]
+}
