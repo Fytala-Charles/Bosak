@@ -4,6 +4,21 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+## Next planned slice: N04/N05 conformance and reliability - 16 October 2026
+
+The next agreed direction is broader XSLT 4.0 coverage against the upstream-native `qt4cg/xslt40-test` suite, starting with a fresh bounded `type-alias` and `record` baseline. This is planned work: no new baseline, engine implementation, upstream test addition or conformance gain is claimed in this checkpoint. Historical counts and source pins below remain dated evidence, not current results. REQ-126 and the broader N04/N05 work remain In Progress; no REQ status or gate membership changes.
+
+1. Refresh the upstream default branch before creating any contribution branch. Record its exact revision, clean/dirty state and applicable specification revision. Preserve the original checkout, contribution branches and submission/execution receipts; use an isolated current-default checkout for the new slice.
+2. Run the unchanged native `type-alias` and `record` families with the XSLT 4.0 adapter. Record exact selections, environment/dependencies, pass/fail/skip counts, actual error codes, logs, exit status and timeouts. Filtered-out cases must not be presented as unsupported features. Existing adapter configuration/review pins are historical until explicitly reviewed and updated.
+3. Classify failures as engine defects, adapter/assertion problems, unsupported features or possible upstream/draft issues. Review coercion/conversion boundaries first; recursive type and package-visibility boundaries are candidates whose priority depends on this fresh evidence. Select the smallest coherent failing cluster rather than committing to the entire family.
+4. For that cluster, add specification-derived happy-path and edge/error regressions, fix the responsible behavior and repeat the focused slice to check stable outcomes. Keep exact error matching, reproducible receipts and bounded execution; do not weaken assertions to obtain green results. The prior one-millisecond cancellation test failure is a separate deterministic-test stabilization candidate, with original failure and successful rerun evidence retained.
+5. After engine changes, require the full solution and language-server checks, frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894. Preserve XSLT native-family before/after receipts separately. No new XSLT 4.0 gate is claimed; promote future gated coverage only under an explicit reviewed policy and wholly green evidence.
+6. Add upstream-native tests only for a demonstrated coverage gap. Validate touched catalogs against upstream schema; derive expectations from the reviewed specification and seek independent processor confirmation where available. Fetch upstream again immediately before submission, rebase onto its refreshed default branch if needed, record the exact final base and recheck the final diff. Preserve original submission/execution receipts and record corrections separately. No upstream submission or external message is authorized by this planning checkpoint.
+
+Braid continues its independent public-1.8.0 acceptance checks. Its files, production pin and adoption/UI/history decisions remain separate from this slice. No new release or additional insertion operation is planned here.
+
+
+
 **Upstream acceptance — 2026-10-13:** Michael Kay (`michaelhkay`) merged xslt40-test PRs #22–27: fourteen cases across the original five areas plus three fixed-namespace cases, **17 accepted cases**. Independent processor execution confirmation remains pending. Published Bosak version is 1.2.0; source candidate 1.2.1 remains unpublished. [Merge records](../contributions/xslt40/UPSTREAM_ACCEPTANCE.json). N01–N05 keep their broader coverage work; submission/acceptance milestones are complete. Older queue entries below retain their original dates and evidence.
 
 ## Decision and ranking

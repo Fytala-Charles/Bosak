@@ -1,3 +1,25 @@
+# Restart checkpoint: XSLT 4.0 N04/N05 next - 2026-10-16
+
+Latest integrated base is 453392802b9a48be08e9a930a17c9badd00e4c72 (publication documentation PR315 merged). This documentation checkpoint is on docs/restart-xslt40-n04-n05 in D:/Development/Bosak/.guard-tmp/vscode024-merged-source; resolve its current pushed head before resuming. Root remains on feat/transitive-abstract-adoption with concurrent uncommitted documents/dossier and .sweep-baselines/ preserved. Do not reset root or overwrite those changes. Earlier entries below are historical.
+
+## Completed and verified
+
+- Libraries 1.8.0 remain immutable at v1.8.0 / 20a5d9be757599848d7ceaa8885e59bea8dbb2ec.
+- VS Code 0.2.4 is published at immutable vscode-v0.2.4 / c1d4594dad2b030e104be068eb7e91fb10a9013f; single publication workflow 38859537270 succeeds. Marketplace now indexes 0.2.4. Indexed download equals the verified official version-specific download; all 286 runtime payload files match the workflow, ten engine assemblies verify, and packaged diagnostics/isolated editor live correction pass.
+- Final publication-docs CI 38860137707 passes 8,624 solution +84 language-server tests and highlighting. PR315 is merged; publication delivery receipt is D:/Development/Bosak/.guard-tmp/vscode024-publication-delivery.json. Original cancellation-test failure and successful rerun (38859050651 attempt 2) are preserved separately.
+- Verified local public VSIX copy: D:/Development/Bosak/vscode-bosak/vscode-bosak-0.2.4.vsix (4,447,607 bytes). SHA-256 8a78fab4d04ed852662b9520e94cfc7ef5e49860f08234b3e45809af74062780. Normal local installation/settings were not changed by this session.
+- Braid is checking independently. Its files, production pin and adoption/UI/history decisions were not changed. REQ128 engine delivery remains Implemented; broader REQ126 remains In Progress.
+
+## Resume here
+
+User selected expansion of the upstream-native XSLT 4.0 tests alongside reliability work. The next planned slice is N04/N05: fresh unchanged `type-alias` and `record` baselines, classify outcomes and select the smallest coherent failing cluster. Coercion/conversion, recursive types and package visibility are candidates, not confirmed current defects. The full plan, evidence/acceptance requirements and upstream refresh rules are in docs/XSLT40_CONTRIBUTION_QUEUE.md and its JSON counterpart; adapter notes in docs/XSLT40_UPSTREAM_TESTING.md are synchronized. No new baseline, engine change, contribution branch or upstream submission has been performed for this slice.
+
+Refresh upstream default before creating a contribution branch and again immediately before submission; record exact base and final diff, rebase if required and preserve original receipts. Review current specification and existing coverage before adding tests. Keep engine bugs, adapter issues, unsupported coverage and upstream/draft questions distinct. Improve repeatability, timeout/error/skip receipts and deterministic tests as evidence requires; do not weaken expected results. After engine changes run all unit checks and frozen QT3 31,142/0/679 plus qt4 gated 8,278/0/1,894. Do not repeat publication, move release tags, promote gates or infer Braid acceptance.
+
+## Shutdown safety
+
+No local build, test, publish, browser or editor verification job needs to survive restart. GitHub documentation CI may continue remotely and must be checked before integration; it does not require this Windows session. All local worktrees, public packages, feeds/caches and receipts are durable. Preserve original root edits and every .guard-tmp worktree; perform future implementation in isolation from root. This step changes documentation only; prior engine verification is preserved and no new engine test result is claimed.
+
 # VS Code 0.2.4 published and publicly verified - 2026-10-16
 
 User approved publication of exact merged candidate c1d4594dad2b030e104be068eb7e91fb10a9013f. Immutable vscode-v0.2.4 points there. Single tag-triggered workflow 38859537270 passes 84 LS tests, highlighting/launcher checks, packaging and Marketplace upload. Official version-specific Marketplace download serves 0.2.4; downloaded VSIX matches the workflow's complete runtime/client/grammar/assets/dependency payload. Ten assemblies are 1.8.0.0 with exact approved informational revision. Public initialization/hover/three diagnostic cases and isolated VS Code valid/XPST0017/live-correction checks pass. No duplicate dispatch or tag movement; no normal local installation/settings change. Initial searchable-listing propagation lag and the first gzip-encoded download probe are preserved separately; decoded public archive bytes verify.
