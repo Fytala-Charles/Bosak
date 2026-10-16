@@ -330,6 +330,7 @@
 //                      | Charles Korthout | 2.168 | 16-10-2026     | Classify namespace declarations and foreign attributes before xsl:copy option validation.  |
 //                      | Charles Korthout | 2.169 | 16-10-2026     | Accept supported standard attributes on copy while rejecting module-only attributes.       |
 //                      | Charles Korthout | 2.170 | 16-10-2026     | Apply host profiles to forward compatibility, XPath and copy/sequence validation.               |
+//                      | Charles Korthout | 2.171 | 16-10-2026     | Admit fixed-namespaces on module roots in the existing supported version range.             |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4472,18 +4473,21 @@ internal sealed class Stylesheet
                 }
                 else if (localName is "stylesheet" or "transform")
                 {
-                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                    var allowed = AllowedXsltAttributes(
                         "id", "default-mode", "default-validation",
-                        "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes"),
-                        IsForwardsCompatibleElement(elem));
+                        "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes");
+                    // Match the version range already handled by fixed namespace processing.
+                    if (GetEffectiveVersion(elem) >= 4.0) allowed.Add("fixed-namespaces");
+                    ValidateAllowedAttributes(elem, localName, allowed, IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "package")
                 {
-                    ValidateAllowedAttributes(elem, localName, AllowedXsltAttributes(
+                    var allowed = AllowedXsltAttributes(
                         "id", "default-mode", "default-validation",
                         "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes",
-                        "name", "package-version", "declared-modes"),
-                        IsForwardsCompatibleElement(elem));
+                        "name", "package-version", "declared-modes");
+                    if (GetEffectiveVersion(elem) >= 4.0) allowed.Add("fixed-namespaces");
+                    ValidateAllowedAttributes(elem, localName, allowed, IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "template")
                 {
