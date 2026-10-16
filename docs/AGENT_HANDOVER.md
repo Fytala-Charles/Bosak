@@ -1,3 +1,11 @@
+# Record-subtyping milestone 1/2 - 2026-10-16
+
+Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged.
+
+Base48d636c2c2cc66b76bc3e6a5da038bafccdb18e4; branchfix/structural-record-subtyping; authoritative report XSLT40-STRUCTURAL-RECORD-SUBTYPING.md/json. Includes the preceding local readiness review24a775027f19d34b699ed5bb319beee1462403f5 without altering its historical evidence. Original34 baseline2pass/32fail included invalid item-type occurrence fixtures. Corrected36 baseline5pass/31fail; no expected outcome weakened. All36 final controls and150 focused pass. Complete only the conditional record/map/function slice next, then stop engine work and validate release packages with fresh consumers.
+
+All processes completed: Release build0errors/2 existing warnings; solution **9545/0/0** (XSLT6611), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
 # Release readiness review - 2026-10-16
 
 Reviewed base48d636c2c2cc66b76bc3e6a5da038bafccdb18e4; branchdocs/draft-release-readiness. ## 2026-10-16 - Release readiness and draft failure review

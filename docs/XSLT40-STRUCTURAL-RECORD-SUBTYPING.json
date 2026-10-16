@@ -1,0 +1,297 @@
+{
+  "number": 1,
+  "slug": "XSLT40-STRUCTURAL-RECORD-SUBTYPING",
+  "title": "Structural record subtyping in function signatures",
+  "summary": "Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged.",
+  "base": "48d636c2c2cc66b76bc3e6a5da038bafccdb18e4",
+  "branch": "fix/structural-record-subtyping",
+  "handover": "Includes the preceding local readiness review24a775027f19d34b699ed5bb319beee1462403f5 without altering its historical evidence. Original34 baseline2pass/32fail included invalid item-type occurrence fixtures. Corrected36 baseline5pass/31fail; no expected outcome weakened. All36 final controls and150 focused pass. Complete only the conditional record/map/function slice next, then stop engine work and validate release packages with fresh consumers.",
+  "next": "At most one further engine PR: independently baseline record-to-map/function subtype rules; then stop engine work, reassess and validate exact-candidate packages/consumers. No publication.",
+  "solution": 9545,
+  "xslt": 6611,
+  "gates": true,
+  "sourceFiles": [
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+    "src/Directory.Build.props",
+    "tests/Bosak.Xslt.Tests/StructuralRecordSubtypingTests.cs"
+  ],
+  "nativeComparison": {
+    "Legacy/array": {
+      "beforeCounts": [
+        155,
+        5,
+        20
+      ],
+      "afterCounts": [
+        155,
+        5,
+        20
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T191337392Z.json"
+    },
+    "Legacy/record": {
+      "beforeCounts": [
+        29,
+        35,
+        1
+      ],
+      "afterCounts": [
+        33,
+        31,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [
+        "record-100",
+        "record-101",
+        "record-104",
+        "record-105"
+      ],
+      "lostPasses": [],
+      "changes": {
+        "record-100": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-101": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-104": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-105": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        }
+      },
+      "receipt": ".artifacts/xslt40/20261016T191341457Z.json"
+    },
+    "Legacy/type-alias": {
+      "beforeCounts": [
+        23,
+        8,
+        1
+      ],
+      "afterCounts": [
+        23,
+        8,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T191343042Z.json"
+    },
+    "Xslt40Draft/array": {
+      "beforeCounts": [
+        158,
+        2,
+        20
+      ],
+      "afterCounts": [
+        158,
+        2,
+        20
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T191344590Z.json"
+    },
+    "Xslt40Draft/record": {
+      "beforeCounts": [
+        29,
+        35,
+        1
+      ],
+      "afterCounts": [
+        33,
+        31,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [
+        "record-100",
+        "record-101",
+        "record-104",
+        "record-105"
+      ],
+      "lostPasses": [],
+      "changes": {
+        "record-100": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-101": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-104": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "record-105": {
+          "before": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "after": {
+            "status": "PASS",
+            "detail": ""
+          }
+        }
+      },
+      "receipt": ".artifacts/xslt40/20261016T191402644Z.json"
+    },
+    "Xslt40Draft/type-alias": {
+      "beforeCounts": [
+        23,
+        8,
+        1
+      ],
+      "afterCounts": [
+        23,
+        8,
+        1
+      ],
+      "exitCode": 1,
+      "gainedPasses": [],
+      "lostPasses": [],
+      "changes": {},
+      "receipt": ".artifacts/xslt40/20261016T191404157Z.json"
+    }
+  },
+  "verification": {
+    "solution": [
+      9545,
+      0,
+      0
+    ],
+    "xslt": [
+      6611,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "cliControls": 10,
+    "buildWarnings": 2,
+    "freshGates": true,
+    "processesComplete": true,
+    "fixtureLinksRemoved": true
+  },
+  "sha256": {
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "fcfd799dad03abc4d30ca97fa1e393c0cc848856aec9f376fd679ad0a1cd2a23",
+    "src/Directory.Build.props": "4166dc3b8b618d9b4524f7350c871103f830fdd5b0a26db5f9deefda3bd951b7",
+    "tests/Bosak.Xslt.Tests/StructuralRecordSubtypingTests.cs": "ed76e2c3c56c7d93dc00f6f8657d9a8f9fdbd378e3c498396acda048fdaae5e1",
+    ".artifacts/baseline.log": "812b87fbea09875bdd7735a8a6c2d0e1f9288cc91a9857cd5499899528ee743c",
+    ".artifacts/build.log": "2454954779b968ae66d401c5787207e59a72322837d5321dbc1751d330ec3826",
+    ".artifacts/corrected-baseline.log": "4d0229da3421e66fd4cf541ddade8f05493f00a857143fdec85c5f6e1e4148d7",
+    ".artifacts/corrected-tests.txt": "ed76e2c3c56c7d93dc00f6f8657d9a8f9fdbd378e3c498396acda048fdaae5e1",
+    ".artifacts/focused.log": "ed7620baf74e37e1e1d61534728b71f6a886e10bcde8c83b04345bd1404567c1",
+    ".artifacts/language-server.log": "57a3d8fed4b79955510e20eaa6fc86cb252073c53a74fe2cc23d810836d46f3a",
+    ".artifacts/milestone.json": "6273002c853e98020eb0567301fd7ff7385654a433ec9f02fcf3a29d47048abf",
+    ".artifacts/native-comparison.json": "63334a081aaf0b32d79d9b7c0da965d8c06c30d63a8172ea17edc34b83553c1f",
+    ".artifacts/native-Legacy-array.log": "c82ad873930b8f9406301653cf90850046b905e29140802022d21cdc5e34815d",
+    ".artifacts/native-Legacy-record.log": "6d351944e83e2f4ab5a6eee4f11538cd6ca09d1f83761b26d31a0270b65052bf",
+    ".artifacts/native-Legacy-type-alias.log": "a2ea7920cce5e51cd93f177e86a6b0059ad4c53713d5f6a7aa8beac7076555a5",
+    ".artifacts/native-Xslt40Draft-array.log": "7dbf06981ecb76c0c321740000609c2ab52cdec4f33c981c6ec145e41ec995a7",
+    ".artifacts/native-Xslt40Draft-record.log": "194b3a3e21e2f3483929bb27615f8f12a8a6671e324fd594c1067f7f54767adc",
+    ".artifacts/native-Xslt40Draft-type-alias.log": "1b78cc50ffcfb6eba120c64ef1d9e9e4f3f78a832236ddd3c3010ac5a3c130fa",
+    ".artifacts/original-tests.txt": "32b595da3387806bbb3e9985a1faf20c4eb371fc30066c3f58a564c0ca7eee0e",
+    ".artifacts/pr-body.md": "c1bb7fdf39a2852f2c417df802875a1d4009896292b90824bae02ac7b2221023",
+    ".artifacts/qt3.log": "0aa638e378119516519b61c8436f53b5acfa3d69363b2ea2d91958f60d9adc8e",
+    ".artifacts/qt4.log": "4a257ad67660f65616904731a154459799d2a046e0f811a44d5f736c44b4d787",
+    ".artifacts/render.cjs": "46496622fda70bfe3b705f5cb1efda7572cb261d7086346f1e5c7934af20ee56",
+    ".artifacts/report-body.md": "ba670b5dd547c2b06a8e33f4586229079823e4d8aac52b808b36d4c07cb457af",
+    ".artifacts/runner-profile-smoke.log": "e1fa7fd954a4224298e4e1c32d007c805be1e08f3c17c6ffb177d477b6216323",
+    ".artifacts/solution-tests.log": "3c33c1f6267a92da6fb21c2c3260da9e5d9215d120352ae662456103dea465e6",
+    ".artifacts/native-before/20261016T184305428Z.json": "ba32e42843ada8872b3c555ddf913037d05e381e3ff1b700069d88f77eb4f03f",
+    ".artifacts/native-before/20261016T184305428Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/native-before/20261016T184309473Z.json": "bcbe30543fcc436ba0eaf68c077af9c928e479336a81348198c4380495f062d6",
+    ".artifacts/native-before/20261016T184309473Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/native-before/20261016T184311024Z.json": "05ff21bc15a5719b2de6c2ba65bef69a8832857d1eca04eccbf9f13b6c5b083f",
+    ".artifacts/native-before/20261016T184311024Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/native-before/20261016T184312687Z.json": "35170476fba384ff050c91bef7866af5b56859a1978de56ee0cabd9713205fa3",
+    ".artifacts/native-before/20261016T184312687Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/native-before/20261016T184329975Z.json": "2f0beb92472c4946fccd4b5b7092d34381bd4362b68bf9c7aedb96f6c994fc1b",
+    ".artifacts/native-before/20261016T184329975Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/native-before/20261016T184331447Z.json": "3c41c5b952307e319adb23a4669a32e1c7b66151cf448cd779ce05dd10b0da85",
+    ".artifacts/native-before/20261016T184331447Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06",
+    ".artifacts/runner-profile-smoke/adapter-draft.log": "12e38c7dfe77c3226f8d3a0ac347820fb440699600dd0879a290224ba44afc29",
+    ".artifacts/runner-profile-smoke/adapter-legacy.log": "822b8954e3ae396e6b04eae51a223a186d49737874f723a09032b43649309a8a",
+    ".artifacts/runner-profile-smoke/default-legacy.log": "e0dcd8dacb4759b5a41a3f5e1724d3af55975139ea1c7fd115ef5e5446775ceb",
+    ".artifacts/runner-profile-smoke/draft-empty-selection.log": "cf73ddbd4df99187d9f38ed27b6c9377129a0b0cba499ead0eba62b957c63146",
+    ".artifacts/runner-profile-smoke/draft-independent-catalog.log": "1eea4f59d45f8fb51fa12ada65c5c7af6849af02e1e1b8ec948be692d5059139",
+    ".artifacts/runner-profile-smoke/draft.log": "8500933d537a61e3183bb8700374774e4c4882ed442cedc583359fb19310df78",
+    ".artifacts/runner-profile-smoke/duplicate-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/runner-profile-smoke/explicit-legacy.log": "e0dcd8dacb4759b5a41a3f5e1724d3af55975139ea1c7fd115ef5e5446775ceb",
+    ".artifacts/runner-profile-smoke/invalid-profile.log": "7faf5472fc84fd3ae3c7535497662b9ba39e27cddff9e924bcdec18ca4d058e6",
+    ".artifacts/runner-profile-smoke/missing-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/xslt40/20261016T191337392Z.json": "b7cbf95f52bfec5c3cb9db3e646819034850fdc0e763a55f12107c716b3656ad",
+    ".artifacts/xslt40/20261016T191337392Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/xslt40/20261016T191341457Z.json": "8c965cc26adfb651e04967c491407b92c7b83bba40b8d8b60866d52b150db821",
+    ".artifacts/xslt40/20261016T191341457Z.log": "c49b2e4f983515f8e93fb67721ada26a85a7b0c33be857b74a0555b5f2d6c702",
+    ".artifacts/xslt40/20261016T191343042Z.json": "18b6d2b0f1ade30a023315c22b566e67e7df11856032fda2ff68f466e2416819",
+    ".artifacts/xslt40/20261016T191343042Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/xslt40/20261016T191344590Z.json": "74057aae1e39fba24c9ceecebb0e0b5dc030ec9383b3fb0a2a83fa8713d3db17",
+    ".artifacts/xslt40/20261016T191344590Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/xslt40/20261016T191402644Z.json": "45c88449b001d42d6fd6e505ed3c269d040e7008a14d75b27a94c1ff8f85f7cc",
+    ".artifacts/xslt40/20261016T191402644Z.log": "d4720b847357510761607ebe1078311826a6193ddf44f48c9e4e73197017d569",
+    ".artifacts/xslt40/20261016T191404157Z.json": "574d719d0b742f7ae4e5f241f2544380abe0b6b45b3b6ebb058bc0b3d97d6448",
+    ".artifacts/xslt40/20261016T191404157Z.log": "9165caf71368424e27581314748c21a9984bb687014a6599408a5c70cc284b06"
+  }
+}

@@ -5,6 +5,12 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+## 2026-10-16 - Structural record subtyping in function signatures
+
+Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged. [Contract and evidence](XSLT40-STRUCTURAL-RECORD-SUBTYPING.md). Record-subtyping milestone 1/2; stop engine work after at most two slices, then validate release packages. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Release readiness and draft failure review
 
 Review of integrated source1.16.3:33 catalog/draft mismatches,11 record-subtyping engine candidates and1 unresolved function contract account for all45 selected failures. Seven reduced probes confirm a record-signature subtype gap. Engineering checks support candidate preparation; package/consumer/provenance and release checks remain pending. Recommend at most two focused engine PRs, then reassess; recommendation only, no new implementation or publication. [Review and case inventory](XSLT40-RELEASE-READINESS-REVIEW.md). Public versions, REQ statuses and Braid acceptance unchanged.

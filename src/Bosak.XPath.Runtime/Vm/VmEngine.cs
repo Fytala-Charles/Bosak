@@ -416,6 +416,7 @@
 //                      | Charles Korthout | 2.189 | 14-10-2026     | Share XPath 4.0 primitive numeric coercion with the XSLT argument host (1.3.2).            |
 //                      | Charles Korthout | 2.190  | 15-10-2026     | Capture lexical host targets and preserve bound original item identity.                  |
 //                      | Charles Korthout | 2.191 | 15-10-2026     | Retain lexical original aliases in escaping inline functions and restore callers on errors. |
+//                      | Charles Korthout | 2.192 | 16-10-2026     | Compare structural record signatures with case-sensitive fields and typed zero-arity results. |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -10932,7 +10933,7 @@ internal static class VmEngine
         // Function, map, array and item tests are valid regardless of the default namespace.
         if (effective is "function" or "function(*)" or "function()")
         {
-            if (HasNonGenericParameters(typeName))
+            if (HasNonGenericParameters(typeName) || TryParseFunctionType(typeName.Trim(), out _, out _))
             {
                 // Typed function test function(A) as R: delegate per item (maps and
                 // arrays are matched against their implied function signature).
@@ -14743,8 +14744,9 @@ internal static class VmEngine
     /// </summary>
     private static bool IsSequenceTypeSubtype(string actualType, string testType, EvaluationContext? context = null)
     {
-        string actual = actualType.Trim().ToLowerInvariant();
-        string test = testType.Trim().ToLowerInvariant();
+        // Structured types contain case-sensitive field names and type QNames.
+        string actual = actualType.Trim();
+        string test = testType.Trim();
 
         if (actual.StartsWith("xs:")) actual = actual[3..];
         if (test.StartsWith("xs:")) test = test[3..];
@@ -14753,8 +14755,8 @@ internal static class VmEngine
         // an occurrence indicator at the end of such a type only counts as an outer
         // occurrence when it directly follows the closing parenthesis (otherwise it
         // belongs to the return type or the map/array member type).
-        bool actualFamily = IsFunctionFamilyType(actual);
-        bool testFamily = IsFunctionFamilyType(test);
+        bool actualFamily = IsFunctionFamilyType(actual) || actual.StartsWith("record(", StringComparison.Ordinal);
+        bool testFamily = IsFunctionFamilyType(test) || test.StartsWith("record(", StringComparison.Ordinal);
 
         char actualOcc = '\0';
         char testOcc = '\0';
@@ -14793,6 +14795,12 @@ internal static class VmEngine
         // empty-sequence() is a subtype of every sequence type (xs-015/016).
         if (actual is "empty-sequence" or "empty-sequence()") return true;
 
+        var actualRecord = TryGetRecordType(actual);
+        var testRecord = TryGetRecordType(test);
+        if (actualRecord is not null || testRecord is not null)
+            return actualRecord is not null && (test == "item()" ||
+                testRecord is not null && IsStructuralRecordSubtype(actualRecord, testRecord, context));
+
         if (actualFamily || testFamily)
             return IsFunctionFamilySubtype(actual, test, context);
 
@@ -14806,7 +14814,21 @@ internal static class VmEngine
         if (context is not null && IsElementOrAttributeSchemaSubtype(actualType, testType, context))
             return true;
 
-        return IsBaseTypeSubtype(actual, test);
+        return IsBaseTypeSubtype(actual.ToLowerInvariant(), test.ToLowerInvariant());
+    }
+
+    /// <summary>Compares structural record field sets and covariant field sequence types.</summary>
+    private static bool IsStructuralRecordSubtype(XdmRecordType actual, XdmRecordType test, EvaluationContext? context)
+    {
+        if (test.IsAny) return true;
+        if (actual.IsAny || actual.Fields.Count != test.Fields.Count) return false;
+        foreach (var field in actual.Fields)
+        {
+            if (!test.TryGetField(field.Name, out var target) ||
+                !IsSequenceTypeSubtype(field.SequenceTypeText, target!.SequenceTypeText, context))
+                return false;
+        }
+        return true;
     }
 
     /// <summary>

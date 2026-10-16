@@ -893,5 +893,12 @@
     },
     "report": "XSLT40-RELEASE-READINESS-REVIEW.md",
     "next": "Choose package preparation or authorize at most two focused record-subtyping PRs; no automatic implementation."
+  },
+  "XSLT40-STRUCTURAL-RECORD-SUBTYPING": {
+    "date": "2026-10-16",
+    "milestoneSlice": 1,
+    "report": "XSLT40-STRUCTURAL-RECORD-SUBTYPING.md",
+    "status": "implemented/tested in source; review exact-head CI",
+    "next": "At most one further engine PR: independently baseline record-to-map/function subtype rules; then stop engine work, reassess and validate exact-candidate packages/consumers. No publication."
   }
 }
