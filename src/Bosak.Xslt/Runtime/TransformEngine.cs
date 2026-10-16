@@ -559,6 +559,7 @@
 //                      | Charles Korthout | 7.43  | 16-10-2026     | Capture untyped raw initial results once; nested typed calls deliver to their caller.      |
 //                      | Charles Korthout | 7.44  | 16-10-2026     | Suppress implicit binding documents for direct XSLT 4.0 disqualifying children.          |
 //                      | Charles Korthout | 7.45  | 16-10-2026     | Apply array member templates after next-match and ordinary text/skip fallback.             |
+//                      | Charles Korthout | 7.46  | 16-10-2026     | Route apply-imports arrays to member templates and isolate member import restrictions.    |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -9455,7 +9456,8 @@ internal sealed class TransformEngine
                         }
                         else if (!contextItem.IsUndefined)
                         {
-                            ApplyBuiltInRulesForAtomic(contextItem, applyImportsMode);
+                            if (!TryApplyBuiltInArrayMembers(contextItem, applyImportsMode, applyImportsParams, currentTunnelParams))
+                                ApplyBuiltInRulesForAtomic(contextItem, applyImportsMode);
                         }
                     }
                     finally
@@ -12657,6 +12659,8 @@ internal sealed class TransformEngine
         var savedCurrent = _context.CurrentItem;
         var savedPosition = _context.ContextPosition;
         var savedSize = _context.ContextSize;
+        var savedImportPrecedences = _applyImportsPrecedenceStack.ToArray();
+        _applyImportsPrecedenceStack.Clear();
         try
         {
             // Reuse normal application: flatten member sequences, dispatch nodes, pass
@@ -12667,6 +12671,9 @@ internal sealed class TransformEngine
         {
             _context.WithFocus(savedItem, savedPosition, savedSize);
             _context.WithCurrentItem(savedCurrent);
+            _applyImportsPrecedenceStack.Clear();
+            for (int i = savedImportPrecedences.Length - 1; i >= 0; i--)
+                _applyImportsPrecedenceStack.Push(savedImportPrecedences[i]);
         }
         return true;
     }

@@ -1,0 +1,167 @@
+{
+  "date": "2026-10-16",
+  "base": "1e7dac4dd427615623dcfd20e74ea5eea143a9e6",
+  "sourceVersion": "1.14.6 unpublished",
+  "branch": "fix/array-import-fallback",
+  "worktree": "D:/Development/Bosak/.guard-tmp/array-import-fallback-source",
+  "prerequisite": {
+    "pr": 329,
+    "head": "3d7e978238426555e50678b244be0d9f8f1dc5da",
+    "ciRun": 38900094138,
+    "conclusion": "success",
+    "merge": "1e7dac4dd427615623dcfd20e74ea5eea143a9e6"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "sections": [
+      "apply-imports",
+      "built-in-templates-text-only-copy",
+      "built-in-templates-shallow-skip"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "Apply-imports array member fallback in text-only-copy/shallow-skip; isolate and restore enclosing import restrictions for member applications",
+  "newPasses": [],
+  "lostPasses": [],
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T124745748Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T124750227Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T124752061Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "publicLibraries": "1.8.0 unchanged",
+  "publicExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "publicationPerformed": false,
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 3,
+      "fail": 12
+    },
+    {
+      "engine": ".artifacts/route-only-engine.txt",
+      "log": ".artifacts/focused-route-only.log",
+      "pass": 14,
+      "fail": 1,
+      "diagnostic": "MemberNextMatch expected HL but got H1; expectation retained"
+    },
+    {
+      "log": ".artifacts/focused-after.log",
+      "pass": 31,
+      "fail": 0,
+      "composition": "15 new +16 previous controls"
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/ArrayImportFallbackTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 33,
+      "fail": 0,
+      "composition": "17 new +16 previous controls"
+    }
+  ],
+  "verification": {
+    "solution": [
+      9007,
+      0,
+      0
+    ],
+    "xslt": [
+      6073,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focusedCombined": [
+      33,
+      0,
+      0
+    ],
+    "newCases": 17,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "finalIncrementalBuildWarnings": 20,
+    "buildWarningNote": "Includes NU1900 package vulnerability-data lookup failures against api.nuget.org; build completed with zero errors.",
+    "allLocalJobsComplete": true
+  },
+  "sha256": {
+    "src/Bosak.Xslt/Runtime/TransformEngine.cs": "79187dbb971ec687fb418954623ac1173ce027ec4e51ef8a93d6f6778fbf2b78",
+    "src/Directory.Build.props": "00a7819a600cb4a436374a1aa6f41d0f101a3040b65c54c9ebe2fa02820d3a87",
+    "tests/Bosak.Xslt.Tests/ArrayImportFallbackTests.cs": "b07f0ba41e90b68e7934b771ae524b235facd55e1fc4c68f9d377df1b80001c6",
+    "tests/Bosak.Xslt.Tests/ArrayTemplateFallbackTests.cs": "1e363e531613109c5a1c5ea8b1e5a665268f68aa426d1e1f61047b1994407248",
+    ".artifacts/build-final.log": "437339b6e66e68b09f15044a8199b374b04c8ad246c5d843593dd5afef608a2c",
+    ".artifacts/build.log": "1d33e86e28b0e03d2d2b9dab230c1d526cd86b2d37bace920c9c0fd2085cdbb3",
+    ".artifacts/focused-after.log": "f22b8885f64a63362b64626e4fdfad3937758f919c008bda231151a261d2ef36",
+    ".artifacts/focused-before.log": "fa8e17d872666796482962ebbdf8766e9749658804b43202e5b0585f73a7ba93",
+    ".artifacts/focused-final.log": "1414eaa514e4b6f721b53c7593e259b0c14fb37732a91d003b62af51ec0aba46",
+    ".artifacts/focused-route-only.log": "a5cd23f854a0d5360299e1fcfe021af5345386510f712631d65aa7492547ed69",
+    ".artifacts/language-server.log": "202ef1ccc69a25e8bd7e7eb79ed232b6f6b190dde54317fc106e5d827c39c9bc",
+    ".artifacts/native-array.log": "016d199403cc2ee56123ba143759c753842b10f1cabcac02352d741f6cbfcac7",
+    ".artifacts/native-record.log": "f35a72392b6a607254251482a8fa4b8ee86bdeed69b273752b547f0aea986d6e",
+    ".artifacts/native-type-alias.log": "8fee3fdc10faa096a0c3aa03d6dc08c62e6f25bc579230e7e17de7b45b7f0ff9",
+    ".artifacts/qt3.log": "1f01cf0715dba524dd00124e885634aeaf833a362542f7e5143811f25fb6c1c5",
+    ".artifacts/qt4.log": "0c6436b1982e008e3af9b7e0a7494c5099b82fcc5d18570a09f5040dabd2ef62",
+    ".artifacts/solution-tests.log": "2b380f94588c45fc30d7aef027aac17922656079a5c0637ebf154a8777206a62",
+    ".artifacts/original-tests.txt": "2eadfe45734673c0aefa0daedeb40f2f05aaff1980421e862aea9d4bb5ef8445",
+    ".artifacts/route-only-engine.txt": "1fb4d5932e0627c0f8772732c7c68f716a24c8a943d7e5acaaf657a2d2fff477",
+    ".artifacts/native-before/20261016T121822844Z.json": "ae55962abea852272c75bf52acb0eebe3059d322dd4973f1c2796d25c3381011",
+    ".artifacts/native-before/20261016T121822844Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T121826984Z.json": "73412c9c067c58446b6a6e87ee92a671c6e4c5ab15b5837bf08a23f7812da854",
+    ".artifacts/native-before/20261016T121826984Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T121828777Z.json": "fed098d2bf0b5e3310799f62a5a354e9edb3a26e3fbea76dd4b31de2944a54e3",
+    ".artifacts/native-before/20261016T121828777Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/xslt40/20261016T124745748Z.json": "5a921be2ab89731ddf19149eee6fa0a1be256724db5005c066c8cb887c821398",
+    ".artifacts/xslt40/20261016T124745748Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T124750227Z.json": "4bdafc434f4d421f909a504350d485fef7c37b705f088febf6e8c55c40722ede",
+    ".artifacts/xslt40/20261016T124750227Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T124752061Z.json": "2f90121f2a788921a5d7661e00e3c1d2288b96fb041c1092a659309a35ba891e",
+    ".artifacts/xslt40/20261016T124752061Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593"
+  }
+}
