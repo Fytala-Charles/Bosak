@@ -1,0 +1,389 @@
+{
+  "date": "2026-10-16",
+  "baseRevision": "dfe0ed08afc7eaeb000f1d410bff73b3d90168ae",
+  "sourceVersion": "1.9.0 unpublished",
+  "publicLibraries": "1.8.0 unchanged",
+  "publicExtension": "0.2.4/engine1.8.0 unchanged",
+  "specification": {
+    "repository": "qt4cg/qtspecs",
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "path": "specifications/xslt-40/src/xslt.xml",
+    "gitBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "savedResponseSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "savedResponseEncoding": "utf-8-sig",
+    "clauses": {
+      "mapPatterns": [
+        13075,
+        13139
+      ],
+      "priorities": [
+        13836,
+        13852
+      ],
+      "commentedFormerTypePatterns": 12275,
+      "recordPatterns": [
+        13240,
+        13260
+      ]
+    }
+  },
+  "upstream": {
+    "revision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "default": "master",
+    "refreshed": true,
+    "unchanged": true,
+    "contributionBranchCreated": false,
+    "submitted": false
+  },
+  "beforeEvidence": "XSLT40-N04-N05-BASELINE.json (unchanged engine baseline; source trees unchanged by PR318 tests/docs)",
+  "nativeRuns": [
+    {
+      "timestampUtc": "2026-10-16T09:35:24.8932446Z",
+      "upstream": "https://github.com/qt4cg/xslt40-test",
+      "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+      "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+      "suiteStatus": [],
+      "bosakRevision": "dfe0ed08afc7eaeb000f1d410bff73b3d90168ae",
+      "bosakStatus": [
+        " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+        " M src/Directory.Build.props",
+        "?? src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+        "?? tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs"
+      ],
+      "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+      "schemaAware": false,
+      "testSet": "record",
+      "testCase": "",
+      "runnerExitCode": 1,
+      "counts": {
+        "Failed": 37,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 27
+      },
+      "success": false,
+      "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093522521Z.log",
+      "logSha256": "28515a29a114661729b85ad7383c064835abb496a08bbb751533450195e3fdab",
+      "setSummaries": [
+        "Done: xsl-record (18 tests, 0 passed, 17 failed, 1 skipped)",
+        "Done: record (47 tests, 27 passed, 20 failed, 0 skipped)"
+      ],
+      "passNames": [
+        "record-001",
+        "record-002",
+        "record-006",
+        "record-007",
+        "record-008",
+        "record-010",
+        "record-013",
+        "record-014",
+        "record-015",
+        "record-017",
+        "record-018",
+        "record-019",
+        "record-021",
+        "record-022",
+        "record-024",
+        "record-025",
+        "record-102",
+        "record-103",
+        "record-114",
+        "record-115",
+        "record-122",
+        "record-124",
+        "record-125",
+        "record-150",
+        "record-151",
+        "record-026",
+        "record-027"
+      ],
+      "receiptFile": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093522521Z.json"
+    },
+    {
+      "timestampUtc": "2026-10-16T09:35:26.6135306Z",
+      "upstream": "https://github.com/qt4cg/xslt40-test",
+      "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+      "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+      "suiteStatus": [],
+      "bosakRevision": "dfe0ed08afc7eaeb000f1d410bff73b3d90168ae",
+      "bosakStatus": [
+        " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+        " M src/Directory.Build.props",
+        "?? src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+        "?? tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs"
+      ],
+      "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+      "schemaAware": false,
+      "testSet": "type-alias",
+      "testCase": "",
+      "runnerExitCode": 1,
+      "counts": {
+        "Failed": 9,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 22
+      },
+      "success": false,
+      "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093525363Z.log",
+      "logSha256": "47b4dec15080e816110dd3e861f8f4825f0b31697e8067cafb1e8d1fdc82c2bc",
+      "setSummaries": [
+        "Done: type-alias (32 tests, 22 passed, 9 failed, 1 skipped)"
+      ],
+      "passNames": [
+        "type-alias-001",
+        "type-alias-002",
+        "type-alias-005",
+        "type-alias-008",
+        "type-alias-009",
+        "type-alias-011",
+        "type-alias-015",
+        "type-alias-016",
+        "type-alias-017",
+        "type-alias-018",
+        "type-alias-019",
+        "type-alias-020",
+        "type-alias-021",
+        "type-alias-022",
+        "wildcard-type-001",
+        "wildcard-type-002",
+        "wildcard-type-003",
+        "wildcard-type-004",
+        "wildcard-type-005",
+        "wildcard-type-006",
+        "type-alias-023",
+        "type-alias-024"
+      ],
+      "receiptFile": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093525363Z.json"
+    },
+    {
+      "timestampUtc": "2026-10-16T09:39:42.5617827Z",
+      "upstream": "https://github.com/qt4cg/xslt40-test",
+      "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+      "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+      "suiteStatus": [],
+      "bosakRevision": "dfe0ed08afc7eaeb000f1d410bff73b3d90168ae",
+      "bosakStatus": [
+        " M README.md",
+        " M docs/AGENT_HANDOVER.md",
+        " M docs/ARCHITECTURE.md",
+        " M docs/FEATURE_REQUESTS.md",
+        " M docs/INTEGRATION.md",
+        " M docs/XSLT40_CONTRIBUTION_QUEUE.json",
+        " M docs/XSLT40_CONTRIBUTION_QUEUE.md",
+        " M docs/XSLT40_UPSTREAM_TESTING.md",
+        " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+        " M src/Directory.Build.props",
+        "?? .artifacts/",
+        "?? docs/XSLT40-STRING-KEY-MAP-PATTERNS.json",
+        "?? docs/XSLT40-STRING-KEY-MAP-PATTERNS.md",
+        "?? src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+        "?? tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs"
+      ],
+      "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+      "schemaAware": false,
+      "testSet": "record",
+      "testCase": "",
+      "runnerExitCode": 1,
+      "counts": {
+        "Failed": 37,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 27
+      },
+      "success": false,
+      "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093941286Z.log",
+      "logSha256": "28515a29a114661729b85ad7383c064835abb496a08bbb751533450195e3fdab",
+      "setSummaries": [
+        "Done: xsl-record (18 tests, 0 passed, 17 failed, 1 skipped)",
+        "Done: record (47 tests, 27 passed, 20 failed, 0 skipped)"
+      ],
+      "passNames": [
+        "record-001",
+        "record-002",
+        "record-006",
+        "record-007",
+        "record-008",
+        "record-010",
+        "record-013",
+        "record-014",
+        "record-015",
+        "record-017",
+        "record-018",
+        "record-019",
+        "record-021",
+        "record-022",
+        "record-024",
+        "record-025",
+        "record-102",
+        "record-103",
+        "record-114",
+        "record-115",
+        "record-122",
+        "record-124",
+        "record-125",
+        "record-150",
+        "record-151",
+        "record-026",
+        "record-027"
+      ],
+      "receiptFile": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093941286Z.json"
+    },
+    {
+      "timestampUtc": "2026-10-16T09:39:44.3543055Z",
+      "upstream": "https://github.com/qt4cg/xslt40-test",
+      "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+      "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+      "suiteStatus": [],
+      "bosakRevision": "dfe0ed08afc7eaeb000f1d410bff73b3d90168ae",
+      "bosakStatus": [
+        " M README.md",
+        " M docs/AGENT_HANDOVER.md",
+        " M docs/ARCHITECTURE.md",
+        " M docs/FEATURE_REQUESTS.md",
+        " M docs/INTEGRATION.md",
+        " M docs/XSLT40_CONTRIBUTION_QUEUE.json",
+        " M docs/XSLT40_CONTRIBUTION_QUEUE.md",
+        " M docs/XSLT40_UPSTREAM_TESTING.md",
+        " M src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        " M src/Bosak.Xslt/Stylesheet/TemplateRule.cs",
+        " M src/Directory.Build.props",
+        "?? .artifacts/",
+        "?? docs/XSLT40-STRING-KEY-MAP-PATTERNS.json",
+        "?? docs/XSLT40-STRING-KEY-MAP-PATTERNS.md",
+        "?? src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+        "?? tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs"
+      ],
+      "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+      "schemaAware": false,
+      "testSet": "type-alias",
+      "testCase": "",
+      "runnerExitCode": 1,
+      "counts": {
+        "Failed": 9,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 22
+      },
+      "success": false,
+      "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093943045Z.log",
+      "logSha256": "47b4dec15080e816110dd3e861f8f4825f0b31697e8067cafb1e8d1fdc82c2bc",
+      "setSummaries": [
+        "Done: type-alias (32 tests, 22 passed, 9 failed, 1 skipped)"
+      ],
+      "passNames": [
+        "type-alias-001",
+        "type-alias-002",
+        "type-alias-005",
+        "type-alias-008",
+        "type-alias-009",
+        "type-alias-011",
+        "type-alias-015",
+        "type-alias-016",
+        "type-alias-017",
+        "type-alias-018",
+        "type-alias-019",
+        "type-alias-020",
+        "type-alias-021",
+        "type-alias-022",
+        "wildcard-type-001",
+        "wildcard-type-002",
+        "wildcard-type-003",
+        "wildcard-type-004",
+        "wildcard-type-005",
+        "wildcard-type-006",
+        "type-alias-023",
+        "type-alias-024"
+      ],
+      "receiptFile": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\xslt40\\20261016T093943045Z.json"
+    }
+  ],
+  "newNativePasses": [
+    "record-010"
+  ],
+  "nativeFamilyExits": 1,
+  "initialFocusedFixture": {
+    "total": 34,
+    "passed": 10,
+    "failed": 24,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\map-pattern-before.log",
+    "scope": "Before engine changes; final fixture adds five negative/profile controls"
+  },
+  "finalFocusedFixture": {
+    "total": 39,
+    "passed": 39,
+    "failed": 0
+  },
+  "sourceSha256": {
+    "src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs": "18580d9ccd94fb98fb51a67fe9e5bf4060c1464f7824acb8ea37411f33c13b13",
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "973df94eb1e10c9c260149f25327ae7424a62da61e8c8d647548f92868fb47fc",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "0be20128c4a94c1331e39b886abc7cc36fb9117ba2785ddacdf7334cb550746c",
+    "src/Directory.Build.props": "771cd810e6fe734ab69c0984da636fd12b9167293a3df3a163dca02e97c90cad",
+    "tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs": "c9a15dcaa494160e905a7591fde95cca664748f7ccf7bb3bd24d6d534e7dae34"
+  },
+  "trackedCodePatchSha256": "40079dca249646c81fbd19fd66be9f8a918477c8291602ace60ed7ace56328bd",
+  "newSourceFiles": [
+    "src/Bosak.Xslt/Patterns/StringKeyMapPattern.cs",
+    "tests/Bosak.Xslt.Tests/Xslt40StringKeyMapPatternTests.cs"
+  ],
+  "limitations": [
+    "string key constants only",
+    "standalone complete patterns only",
+    "no entry-value/sequence constraints",
+    "no outer predicates/path suffixes",
+    "no trailing commas",
+    "no new record(TypeName) syntax",
+    "legacy ~type behavior unchanged"
+  ],
+  "publicApiAdded": false,
+  "gateMembershipChanged": false,
+  "independentProcessorExecuted": false,
+  "verification": {
+    "buildErrors": 0,
+    "buildWarnings": 22,
+    "solution": {
+      "passed": 8664,
+      "failed": 0,
+      "skipped": 0,
+      "projects": 10,
+      "xslt": 5778
+    },
+    "languageServer": {
+      "passed": 84,
+      "failed": 0,
+      "skipped": 0
+    },
+    "qt3": {
+      "passed": 31142,
+      "failed": 0,
+      "skipped": 679,
+      "exitCode": 0
+    },
+    "qt4Gated": {
+      "passed": 8278,
+      "failed": 0,
+      "skipped": 1894,
+      "exitCode": 0
+    },
+    "logSha256": {
+      "build.log": "948df32a22754299990dd97dcc986bd5e7c54b77d38813d4c4da19e0707666de",
+      "map-pattern-before.log": "1defa26bc1204b2fe1d5703e57b7507d7d0da36b118533eeecfa017bfb2b1eeb",
+      "map-pattern-after.log": "3d84839b9b40949e4b4eca74b5b238d9ff5b97c45506ae03de76907cd6776ee0",
+      "map-pattern-after-final.log": "1a017060434c5eb326e5867aa9651319b30431bbe4fe5935837d35373f7cc278",
+      "qt3.log": "2d7fbf9a431194d3f2165ec19c13ea05eb197c03b042c86691065b49358df5f8",
+      "qt4.log": "efa3082e063cb50a536f5ef387522e62450e6e5262ca905ccd18c8c9f1d8bdc3",
+      "language-server-tests.log": "26ff1d7dce36786ec14a0e37744d6e6215f53b67b19c974fb67f2b6426b5bb4f",
+      "D:\\Development\\Bosak\\.guard-tmp\\map-pattern-source\\.artifacts\\solution-tests.log": "1f8854a8fd13e6d4bd4c59e3d7a40a2cee46be72792c1c18b2d1e3810945839b",
+      "map-pattern-repeat.log": "9484f9fbf464bb1f7be27c7798719195e90b4670f8d032004c29fe05a11439c6"
+    },
+    "repeatFocusedPassed": 39,
+    "repeatNativeCountsStable": true,
+    "documentation": "Rendered with markdown-it and canonical Fytala CSS; local report references checked"
+  }
+}

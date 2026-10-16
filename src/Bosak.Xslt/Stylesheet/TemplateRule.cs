@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 2.15  | 13-10-2026     | Resolve XSLT 4.0 template mode membership using applicable namespaces.                   |
 //                      | Charles Korthout | 2.16  | 13-10-2026     | Preserve module fixed bindings in locally earlier template match patterns.                 |
 //                      | Charles Korthout | 2.17  | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
+//                      | Charles Korthout | 2.18  | 16-10-2026     | Admit XSLT 4.0 map-pattern braces and compute string-key map default priorities.          |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -185,7 +186,7 @@ internal sealed class TemplateRule
         ValidateContextItemAgainstMatch(element, contextItem);
 
         var match = element.Attribute("match")?.Value;
-        if (!string.IsNullOrEmpty(match) && ContainsAvtExpression(match))
+        if (!string.IsNullOrEmpty(match) && stylesheet.GetXPathCompatibility(element) < XPathCompatibility.XPath40 && ContainsAvtExpression(match))
             throw new InvalidOperationException("XTSE0340: The match attribute of xsl:template must not contain an attribute value template");
         if (string.IsNullOrEmpty(match))
             match = element.Attribute("_match")?.Value;
@@ -644,6 +645,9 @@ internal sealed class TemplateRule
             return 0.5;
 
         var trimmed = StripXPathComments(match).Trim();
+
+        if (xpath40 && Patterns.StringKeyMapPattern.StartsMapPattern(trimmed))
+            return Patterns.StringKeyMapPattern.Parse(trimmed).DefaultPriority;
 
         // Strip outer parentheses: (pattern) has same priority as pattern
         if (trimmed.StartsWith('('))
