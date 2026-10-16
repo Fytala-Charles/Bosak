@@ -1,3 +1,13 @@
+# VS Code 0.2.4 prepared - 2026-10-16
+
+Base main 915f344bb979e7f43c340c0c9d6c4310aa3f5162; candidate worktree D:/Development/Bosak/.guard-tmp/alignment180-source on feat/vscode024-alignment.
+
+## VS Code 0.2.4 candidate - 16 October 2026
+
+Unpublished extension 0.2.4 bundles released engine 1.8.0. Release build, 8,624 solution tests, 84 language-server tests, TypeScript/highlighting/launcher checks, packaged protocol diagnostics and isolated VS Code live correction pass. Ten bundled assemblies and archive payloads verify against source revision `915f344bb979e7f43c340c0c9d6c4310aa3f5162`; source/test trees match v1.8.0. The transitive brace-expansion lock is updated from 2.1.1 to 2.1.7; production dependency audit reports zero vulnerabilities.
+
+See [preparation report](VSCODE-0.2.4-PREPARATION.md) and [immutable candidate evidence](VSCODE-0.2.4-PREPARATION.json). Marketplace remains at the previously verified 0.2.3/engine 1.7.1. Integration and exact merged-revision repackaging/verification precede separate publication approval. Installed extension and Braid files/pin are unchanged. REQ-128 engine delivery remains Implemented; Braid acceptance is independent. Package-dependent editor signatures and external module acquisition retain their existing limits; engine insertion APIs do not add an editor insertion UI.
+
 # Restart checkpoint - 2026-10-16
 
 Bosak 1.8.0 is published and publicly verified at immutable v1.8.0 / 20a5d9be757599848d7ceaa8885e59bea8dbb2ec. Documentation synchronization is carried by PR313 (docs/req128-merged-readiness), including canonical overview, architecture, registry, integration, release notes, dossier, roadmap and immutable evidence. Resume from refreshed origin/main after PR313 integration; do not recreate the release/tag or rerun publication. Release CI: 8,624 tests; public consumers: 141 insertion cases, 153 broad checks, 19 matching probes. Gates: QT3 31,142/0/679; qt4 8,278/0/1,894. No source/test changes in this documentation step; AGENTS.md build/test/convention guidance remains applicable.
