@@ -5,6 +5,12 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+## 2026-10-16 - Conformance runner processor profiles
+
+Unpublished source **1.16.0** adds explicit `--processor-profile legacy|xslt40-draft` and wrapper `-ProcessorProfile Legacy|Xslt40Draft`, with separate receipt fields for catalog and processor profiles. Defaults remain legacy. Ten permanent CLI controls run in CI. Unchanged upstream fixtures reveal draft array158/2/20, record29/35/1 and type-alias16/15/1; legacy counts and passing identities are retained. [Comparison and evidence](XSLT40-RUNNER-PROFILE.md). Next: fix module fixed-namespaces validation causing seven lost draft type-alias passes. No engine implementation or upstream fixture edits; published versions, REQ statuses and Braid acceptance are unchanged.
+
+
+
 ## 2026-10-16 - Explicit XSLT processor profile
 
 Unpublished source **1.15.0** adds `XsltCompiler.ProcessorProfile`: `Legacy` preserves existing behavior; opt-in `Xslt40Draft` selects a4.0 forward-compatibility ceiling and frozen XPath4.0 independently of stylesheet version. Copy/sequence unknown attributes follow the draft ceiling in the opt-in lane; fallback versions and imported/included/used-package modules share the captured profile. [Contract and evidence](XSLT40-PROCESSOR-PROFILE.md). Published versions, default runners, REQ statuses and independent Braid acceptance are unchanged. Earlier audit results remain historical baseline evidence.

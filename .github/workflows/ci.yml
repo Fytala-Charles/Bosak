@@ -27,6 +27,10 @@ jobs:
       - name: Build
         run: dotnet build Bosak.sln -c Release --no-restore
 
+      - name: Runner processor-profile controls
+        shell: pwsh
+        run: ./tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1
+
       - name: Test
         run: dotnet test Bosak.sln -c Release --no-build --logger trx --results-directory TestResults
 
@@ -38,7 +42,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: test-results
-          path: TestResults
+          include-hidden-files: true
+          path: |
+            TestResults
+            .artifacts/runner-profile-smoke
           retention-days: 14
 
   extension-highlighting:

@@ -1,0 +1,421 @@
+{
+  "date": "2026-10-16",
+  "sourceVersion": "1.16.0",
+  "base": "bcbffa69f3040c9d72657f7221554e34ff9d5cf3",
+  "prerequisiteCi": 38939354663,
+  "engineImplementationChanged": false,
+  "defaultChanged": false,
+  "cliControls": 10,
+  "localCatalogCases": 5,
+  "nativeComparison": {
+    "array": {
+      "changes": {
+        "array-021": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+          },
+          "draft": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "array-022": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+          },
+          "draft": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "array-024": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XTSE0340: The match attribute of xsl:template must not contain an attribute value template"
+          },
+          "draft": {
+            "status": "PASS",
+            "detail": ""
+          }
+        },
+        "array-025": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found."
+          }
+        }
+      },
+      "gainedPasses": [
+        "array-021",
+        "array-022",
+        "array-024"
+      ],
+      "lostPasses": []
+    },
+    "record": {
+      "changes": {
+        "record-023": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'required' is not permitted on xsl:field."
+          }
+        },
+        "xsl-record-001": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-002": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-003": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Result mismatch"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "Expected error XTDE0450, got: XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-004": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "Expected error XTTE3375, got: XTTE0570: Empty sequence not allowed for type item()"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "Expected error XTTE3375, got: XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-005": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XTTE0570: Empty sequence not allowed for type item()"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-006": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XTTE0570: Empty sequence not allowed for type item()"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE1430: Prefix ''f' in xsl:record/@extension-element-prefixes is not bound to a namespace."
+          }
+        },
+        "xsl-record-008": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XTTE0570: Empty sequence not allowed for type item()"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0010: Unknown XSLT element xsl:record."
+          }
+        },
+        "xsl-record-009": {
+          "legacy": {
+            "status": "FAIL",
+            "detail": "XTTE0570: Sequence of more than one item not allowed for type item()"
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0010: Unknown XSLT element xsl:record."
+          }
+        }
+      },
+      "gainedPasses": [],
+      "lostPasses": []
+    },
+    "type-alias": {
+      "changes": {
+        "type-alias-016": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:stylesheet."
+          }
+        },
+        "type-alias-017": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:stylesheet."
+          }
+        },
+        "type-alias-018": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:package."
+          }
+        },
+        "type-alias-019": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "Expected error XPST0051, got: XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:package."
+          }
+        },
+        "type-alias-020": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:package."
+          }
+        },
+        "type-alias-021": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:package."
+          }
+        },
+        "type-alias-022": {
+          "legacy": {
+            "status": "PASS",
+            "detail": ""
+          },
+          "draft": {
+            "status": "FAIL",
+            "detail": "XTSE0090: Attribute 'fixed-namespaces' is not permitted on xsl:package."
+          }
+        }
+      },
+      "gainedPasses": [],
+      "lostPasses": [
+        "type-alias-016",
+        "type-alias-017",
+        "type-alias-018",
+        "type-alias-019",
+        "type-alias-020",
+        "type-alias-021",
+        "type-alias-022"
+      ]
+    }
+  },
+  "verification": {
+    "solution": [
+      9384,
+      0,
+      0
+    ],
+    "xslt": [
+      6450,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "cliControls": 10,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "build": {
+      "errors": 0,
+      "warnings": 81
+    },
+    "fixtureJunctionsRemoved": true,
+    "allProcessesComplete": true
+  },
+  "published": false,
+  "nativeRuns": {
+    "Legacy": {
+      "array": {
+        "counts": [
+          155,
+          5,
+          20
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173258563Z.json"
+      },
+      "record": {
+        "counts": [
+          29,
+          35,
+          1
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173301615Z.json"
+      },
+      "type-alias": {
+        "counts": [
+          23,
+          8,
+          1
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173303461Z.json"
+      }
+    },
+    "Xslt40Draft": {
+      "array": {
+        "counts": [
+          158,
+          2,
+          20
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173305040Z.json"
+      },
+      "record": {
+        "counts": [
+          29,
+          35,
+          1
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173324213Z.json"
+      },
+      "type-alias": {
+        "counts": [
+          16,
+          15,
+          1
+        ],
+        "exitCode": 1,
+        "receipt": ".artifacts/xslt40/20261016T173325796Z.json"
+      }
+    }
+  },
+  "sha256": {
+    ".github/workflows/ci.yml": "ca048328c632e9f7021af07919a6822ddac9c84fbfb496ced520eb594a892765",
+    "run-xslt40-tests.ps1": "1186b0fc13a66dccac5ecf16c7b6f2e4380ea61a6812eed4ea15556d8c700929",
+    "src/Directory.Build.props": "6d736e99f221535589783f07c01ccca4e5edc749792b38a48dc477c1db430f39",
+    "tests/Bosak.Xslt.Conformance/Program.cs": "30bfd6ec897140fadb5f08454f7df461ad00f92c7887362ff1db47778d32c49f",
+    "tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1": "5e3ec55ffe3045d8f41f03ae014a82c7b336457d6224ecbb31ea2ecdf1380d46",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/catalog.xml": "dde84853bf45b0e9a1cb09b7af6d74a37e96f347cc0e989363ac2a66793836ea",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/common.xsl": "4a401320c61e10361e7b6be771fa308eaafe378f7821f1ab53ad8236333d1471",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/copy-v17.xsl": "8bdebff4d65bc9a2929e5ec451108b0a0a2cc7a3fda5a948dc73706de616e6ff",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/sequence-v4.xsl": "d31d306b66a3df65bb5237913638035eb75c28eb100afbb9971f520b9fdba67c",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/xpath-v3.xsl": "8616007b692b4f2e887cf78c7eb24bee27b176e597d32f5df33869c860498280",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ProcessorProfile/_profile-test-set.xml": "6fc8218cb7f1bb01010cf430766f7d2a49385445341f45f6d352efd18de44275",
+    ".artifacts/baseline-build.log": "ba5e0d1f7dfd0ee7a84fdf8fc2ce07044000de34e69b67294f07e8ed95ba0507",
+    ".artifacts/build.log": "43a24b25dd928c882539ab80535a4026dfb775b6887f17baff4a714936f125e8",
+    ".artifacts/comparison-array-normalized.json": "1f7b6b5e6e4e0747651d35a7ca4332ee54f048b78f5c53d82be7f8a1de86e6a0",
+    ".artifacts/comparison-array.json": "42ca054171b5a7b02cac4cadbc4f3d1ca76bd4ae13ef391b251addcc1286f52f",
+    ".artifacts/comparison-record-normalized.json": "7a961da77642469b78d95c63f5cf03f6d07937437a7e6a925ed442d992874642",
+    ".artifacts/comparison-record.json": "e10615daa64f9e45b071aa0783b146e32e7be562e93f60bdcbe1160b00de3e6a",
+    ".artifacts/comparison-type-alias-normalized.json": "a078c0622cd23cab57f269c014c3f28a6f4cef9eb02965664c563463b310ee96",
+    ".artifacts/comparison-type-alias.json": "8bd977b03a4ba72a01ca520919bd017c88afc9b2c170e6691edae837d5d0ab81",
+    ".artifacts/first-smoke-script.txt": "77edcc8f2eccd901bd0733f0c2ebbe61848c6530c97098931d908f2735d98025",
+    ".artifacts/language-server.log": "956ff3e2e240973e399fb845c6a7ca3b85fbbd9c3f9303d2287631d2a2a4e813",
+    ".artifacts/native-comparison-normalized.json": "749c83beeb0ab922a605aba4da39d3a57e16e806ed6d27662a2446926a7db99f",
+    ".artifacts/native-Legacy-array.log": "c9541b565032a8c172ebcfa80873b61db6299bd311cedb8785c173dcb3a2f8fe",
+    ".artifacts/native-Legacy-record.log": "37bac69fe7631de9eea962c60982fecd3a4b78da9e0c66fc894688eb1f0f45dd",
+    ".artifacts/native-Legacy-type-alias.log": "c676a2f994152b944d19d9c41c7c479e22e429ee91384a551a9ae885061887b7",
+    ".artifacts/native-Xslt40Draft-array.log": "50fdc115fd46ca125543f0850d7687ffb016c602de65f75e0bc3f6c5a5c34243",
+    ".artifacts/native-Xslt40Draft-record.log": "67b3a33abdeae93347341693694996783f93285e34633423b9ff2c9f7415de6c",
+    ".artifacts/native-Xslt40Draft-type-alias.log": "4825014123b7647a578dd49d8d2fbad1afc66c614562bd633a168017b477bfcd",
+    ".artifacts/original-Program.cs": "93e8d50553f4bd95174fd3ede66360568607eaf32ed50c5bee8bed2b61f78bf4",
+    ".artifacts/original-smoke-script.txt": "46a4e3d2fe1559110f7f16d5bf640fa002c1e5a47aff77fe75a2f3f0e5aed667",
+    ".artifacts/original-wrapper.txt": "e103f724e3b5648193d4dae4e2389b33f2f048a9a6b84b7947e236e50cbb9f95",
+    ".artifacts/qt3.log": "ccb96bed0238c68b155cd31e46407102eec4285277775ed7d0d3b226744642a3",
+    ".artifacts/qt4.log": "082ddcc1c319cc18bab349292eb45370e4059c2cbe6f822720ad1725c54b423a",
+    ".artifacts/render.cjs": "4bfb0edabda6b89d85225236cca762ea90f360a6a9c34a57f7fefef86177767e",
+    ".artifacts/runner-profile-baseline.log": "e8ffb9739eb1933632854e2d5053f96d20de8f28d323b5d7329fe7c8226c095f",
+    ".artifacts/runner-profile-corrected-baseline.log": "e126887b745cf34c6ac72b58023f9af4d67d4d5c0090809bccb856e1eda5cb00",
+    ".artifacts/runner-profile-smoke-final.log": "e1fa7fd954a4224298e4e1c32d007c805be1e08f3c17c6ffb177d477b6216323",
+    ".artifacts/runner-profile-smoke.log": "ea6e27f0f275a4c57f7bc06d122a8f4c642ad44c5f2af9ad0157446fc75d0918",
+    ".artifacts/solution-tests.log": "db1c63dc4611e8d8d61778a41f0a0bf9fd900f5c25b5013a2e19cf0e286a4601",
+    ".artifacts/wrapper-explicit-draft.log": "f003c10ff559c1d0be0bc7f62628c576633526004f7152bb997172d4b8dbbce9",
+    ".artifacts/wrapper-explicit-legacy.log": "d51997c5bb552f87455728d3ce67cbdaec3d2a5b4c40bd9190f579dfa1cb49e1",
+    ".artifacts/wrapper-invalid-profile.log": "9fe1f27b5c40a3481c65c276e748f934f1dc9845c9ed2c38c539f1161fffe7dc",
+    ".artifacts/native-before/20261016T172209599Z.json": "f73fa626975f0b6ebd613566e39ba5b1bd75aa3e0818348a4939bddc8163a850",
+    ".artifacts/native-before/20261016T172209599Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T172213797Z.json": "56410a6c7f41322a8bf66ae69bd80edcb35b70e39a72990841d703f0555bf787",
+    ".artifacts/native-before/20261016T172213797Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T172215434Z.json": "e2f4880ba158bafa359e7cac020607a39e85b87ee4216a070b997dac9176c3c7",
+    ".artifacts/native-before/20261016T172215434Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/runner-profile-baseline/default-legacy.log": "02c5831b732051f9f3b3d73af0484f4e96cbdaab686bc042300100da01db3196",
+    ".artifacts/runner-profile-corrected-baseline/default-legacy.log": "02c5831b732051f9f3b3d73af0484f4e96cbdaab686bc042300100da01db3196",
+    ".artifacts/runner-profile-corrected-baseline/explicit-legacy.log": "1368e51c593e58d4e242f5aabbcfc9379bd073e8c58762bb56b6adb3b106c361",
+    ".artifacts/runner-profile-smoke/default-legacy.log": "3161b2f01300a47d98aaee868450a1b616924848a935a34fa35fbc9fa4404ebd",
+    ".artifacts/runner-profile-smoke/draft-empty-selection.log": "f7db7a5693c67ed1e1738da18b266e4867a467c961d4a01b8cade8a8bc9855c3",
+    ".artifacts/runner-profile-smoke/draft-independent-catalog.log": "98d55819b79218727516652c8eb09af9cf406495372d7c413924f9b9daed424c",
+    ".artifacts/runner-profile-smoke/draft.log": "98df2cd1f7221271fbde4d1ab3629d9b0f07952bffb5e53b7194752e69c97053",
+    ".artifacts/runner-profile-smoke/explicit-legacy.log": "3161b2f01300a47d98aaee868450a1b616924848a935a34fa35fbc9fa4404ebd",
+    ".artifacts/runner-profile-smoke-final/adapter-draft.log": "2504f4e41bb3e0a58c34f4ff78d25e7a679545cebe136445989190cd962bff50",
+    ".artifacts/runner-profile-smoke-final/adapter-legacy.log": "1fa5ac4583c28a76d40ca6affaf506c3848d1da248d1d089cbd935656b35229a",
+    ".artifacts/runner-profile-smoke-final/default-legacy.log": "3161b2f01300a47d98aaee868450a1b616924848a935a34fa35fbc9fa4404ebd",
+    ".artifacts/runner-profile-smoke-final/draft-empty-selection.log": "f7db7a5693c67ed1e1738da18b266e4867a467c961d4a01b8cade8a8bc9855c3",
+    ".artifacts/runner-profile-smoke-final/draft-independent-catalog.log": "98d55819b79218727516652c8eb09af9cf406495372d7c413924f9b9daed424c",
+    ".artifacts/runner-profile-smoke-final/draft.log": "98df2cd1f7221271fbde4d1ab3629d9b0f07952bffb5e53b7194752e69c97053",
+    ".artifacts/runner-profile-smoke-final/duplicate-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/runner-profile-smoke-final/explicit-legacy.log": "3161b2f01300a47d98aaee868450a1b616924848a935a34fa35fbc9fa4404ebd",
+    ".artifacts/runner-profile-smoke-final/invalid-profile.log": "7faf5472fc84fd3ae3c7535497662b9ba39e27cddff9e924bcdec18ca4d058e6",
+    ".artifacts/runner-profile-smoke-final/missing-profile.log": "5dd25316fcc6af6a398ef9baf463cf236494395c63662d70a16e7a7053df94a2",
+    ".artifacts/xslt40/20261016T173258563Z.json": "74dd5253486aaa6ecb3e4f3cae39270686934c8397095356d15348b2cc916587",
+    ".artifacts/xslt40/20261016T173258563Z.log": "e5aace59c37bf53e59a158955d9eef811e9d943a59676863efea39c61d97f82c",
+    ".artifacts/xslt40/20261016T173301615Z.json": "50308b7f8514f91ed9d3b50511e32f52210dd7354e1cbb142838785e113fa855",
+    ".artifacts/xslt40/20261016T173301615Z.log": "aa667652c6e4eddb556ce37985ccb659cc95b81d483f981e5daed6623981e0ef",
+    ".artifacts/xslt40/20261016T173303461Z.json": "bfc62d429356f34655bbc7862fa9fde588d4d0752140bd3d8c7b7325f1e6cd3d",
+    ".artifacts/xslt40/20261016T173303461Z.log": "85da18a51ce1c12fcba3f789fef7f359436ad8b069c8bdf1be2f9d92eb68dc04",
+    ".artifacts/xslt40/20261016T173305040Z.json": "a35e49d4be1ad1991f7546c46ac0790e60ed0c0ce31a0372ca5a204acbe59382",
+    ".artifacts/xslt40/20261016T173305040Z.log": "3fff22fee2506d024d005e4b7d6edb13f6ab71da6aa7b8b4354ec12994915641",
+    ".artifacts/xslt40/20261016T173324213Z.json": "bbb9d1a2b63bb93fcc2ff914d9313a680a4c48efd36b1d2125706ac1f5ae4a7d",
+    ".artifacts/xslt40/20261016T173324213Z.log": "835a02254ef0bb358e866acca6eb07db90341a23619314c32b6f25a72cb02d9d",
+    ".artifacts/xslt40/20261016T173325796Z.json": "6074a66df4d2790cfc4a1204102c3d568753693fe54ded7407b002449b2e73a9",
+    ".artifacts/xslt40/20261016T173325796Z.log": "8a0f8e486b91cd8ec90ed2115e82cbaa601eabfb8f04acb4954cfa0b11df3a10",
+    ".artifacts/xslt40/20261016T173503161Z.json": "9d572c38f73aba57b94cdb92bfeff5a86c0e4ac64f481e868e2cb73b04c77916",
+    ".artifacts/xslt40/20261016T173503161Z.log": "09639e9478953c85a62df56275300d2239fc31e59007ef53134113146e243807",
+    ".artifacts/xslt40/20261016T173504658Z.json": "e595e97db8fd58fe082a9a44e56d6b536dde3520bbfcfbc93187263b5fe3f3ea",
+    ".artifacts/xslt40/20261016T173504658Z.log": "6702b3a92cdb5d0a638c088e5b063e82cf0fc2a2ecc804ed02f400085a384090"
+  }
+}

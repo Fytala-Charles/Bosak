@@ -2,6 +2,8 @@ param(
     [string]$SuiteRoot = (Join-Path $PSScriptRoot '.upstream/xslt40-test'),
     [string]$TestSet = 'select',
     [string]$TestCase = '',
+    [ValidateSet('Legacy', 'Xslt40Draft')]
+    [string]$ProcessorProfile = 'Legacy',
     [switch]$SchemaAware,
     [switch]$NoBuild
 )
@@ -23,7 +25,8 @@ $logPath = Join-Path $outputRoot "$runId.log"
 $receiptPath = Join-Path $outputRoot "$runId.json"
 $runnerArgs = @('run', '--project', (Join-Path $PSScriptRoot 'tests/Bosak.Xslt.Conformance'), '-c', 'Release')
 if ($NoBuild) { $runnerArgs += '--no-build' }
-$runnerArgs += @('--', '--xslt40')
+$processorProfileArgument = if ($ProcessorProfile -eq 'Xslt40Draft') { 'xslt40-draft' } else { 'legacy' }
+$runnerArgs += @('--', '--xslt40', '--processor-profile', $processorProfileArgument)
 if ($SchemaAware) { $runnerArgs += '--schema-aware' }
 $runnerArgs += @($catalogPath, $TestSet)
 if ($TestCase) { $runnerArgs += $TestCase }
@@ -46,6 +49,9 @@ $receipt = [ordered]@{
     bosakRevision = $bosakRevision
     bosakStatus = $bosakStatus
     profile = 'XSLT40 catalog dependencies; stylesheet versions retained; exact error codes'
+    catalogProfile = 'Xslt40'
+    processorProfile = if ($ProcessorProfile -eq 'Xslt40Draft') { 'Xslt40Draft' } else { 'Legacy' }
+    runnerArguments = $runnerArgs
     schemaAware = [bool]$SchemaAware
     testSet = $TestSet
     testCase = $TestCase

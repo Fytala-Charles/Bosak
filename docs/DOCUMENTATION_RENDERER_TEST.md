@@ -134,3 +134,8 @@ Ten updated documentation pages rendered with markdown-it and canonical Fytala C
 ## 2026-10-16 processor-profile receipt
 
 Ten updated documentation pages rendered with markdown-it and canonical Fytala CSS into .guard-tmp/processor-profile-render. Automated HTML generation only; no visual approval claimed.
+
+
+## 2026-10-16 runner-profile receipt
+
+Ten updated pages rendered with markdown-it and canonical Fytala CSS into .guard-tmp/runner-profile-render. Automated HTML generation only; no visual approval claimed.

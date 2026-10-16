@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="17.0"><xsl:template name="xsl:initial-template"><result><xsl:copy select='9' bogus='ignored'/></result></xsl:template></xsl:stylesheet>
