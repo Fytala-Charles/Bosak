@@ -566,7 +566,7 @@
   "upstreamAcceptanceEvidence": "../contributions/xslt40/UPSTREAM_ACCEPTANCE.json",
   "nextPlannedSlice": {
     "recordedDate": "2026-10-16",
-    "status": "Bounded string-key map patterns implemented and verified against native record-010; broader N04/N05 remains In Progress",
+    "status": "String-key map entry sequence constraints implemented; native record-011/012 pass; broader N04/N05 remains In Progress",
     "families": [
       "type-alias",
       "record"
@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: entry-value/sequence map-pattern constraints and priorities after reviewing current draft",
+    "selectedEngineReview": "Next: current atomic(TypeName) patterns and priorities, including map entry use, after draft review",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -624,6 +624,21 @@
       "typeAlias": "22/9/1",
       "scope": "Standalone string-key presence/exact sets/trailing wildcard; no entry constraints, suffixes or non-string constants",
       "evidence": "XSLT40-STRING-KEY-MAP-PATTERNS.json",
+      "gateMembershipChanged": false,
+      "upstreamTestsChanged": false
+    },
+    "mapEntryPatterns": {
+      "sourceVersion": "1.10.0 unpublished",
+      "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "newNativePasses": [
+        "record-011",
+        "record-012"
+      ],
+      "recordFilter": "29/35/1",
+      "recordSet": "29/18/0",
+      "typeAlias": "22/9/1",
+      "scope": "Existing node/predicate patterns, empty-sequence and occurrence indicators, repeated constraints, nested maps, outer predicates and priorities",
+      "evidence": "XSLT40-MAP-ENTRY-PATTERNS.json",
       "gateMembershipChanged": false,
       "upstreamTestsChanged": false
     }

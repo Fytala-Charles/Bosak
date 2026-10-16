@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 16-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 16-10-2026     | Move supported entry constraints and outer predicates to the sequence-pattern fixture.  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -93,7 +94,7 @@ public class Xslt40StringKeyMapPatternTests
             """));
     }
 
-    /// <summary>Rejects invalid syntax and entry constraints outside this bounded slice at compilation.</summary>
+    /// <summary>Rejects invalid syntax and unsupported paths/constants at compilation.</summary>
     /// <param name="pattern">The invalid or unsupported pattern.</param>
     [Theory]
     [InlineData("{a}")]
@@ -101,9 +102,7 @@ public class Xslt40StringKeyMapPatternTests
     [InlineData("{'a',}")]
     [InlineData("{*,'a'}")]
     [InlineData("{'a',*,*}")]
-    [InlineData("{'a':element()}")]
     [InlineData("{1}")]
-    [InlineData("{'a'}[true()]")]
     [InlineData("{'a'}|root")]
     [InlineData("root|{'a'}")]
     [InlineData("root union map{'a'}")]
