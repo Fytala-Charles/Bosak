@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit computed-element content construction under raw/typed capture; nonraw text-only delivery kind and processor-capability architecture separate",
+    "selectedEngineReview": "Next: audit literal-result-element content for nested-document and map/function capture leakage; xsl:copy and processor capability remain separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -727,6 +727,19 @@
       "upstreamTestsChanged": false,
       "gateMembershipChanged": false,
       "evidence": "XSLT40-DOCUMENT-CONSTRUCTION-CAPTURE.json"
+    },
+    "computedElementCapture": {
+      "sourceVersion": "1.14.9 unpublished",
+      "scope": "Computed-element attribute/content construction suspends raw template capture; finally restores state; node boundary ends atomic adjacency",
+      "newNativePasses": [],
+      "lostNativePasses": [],
+      "arrayAggregate": "155/5/20",
+      "recordAggregate": "29/35/1",
+      "typeAlias": "23/8/1",
+      "profileSelectionChanged": false,
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false,
+      "evidence": "XSLT40-COMPUTED-ELEMENT-CAPTURE.json"
     }
   }
 }
