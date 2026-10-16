@@ -867,5 +867,12 @@
     "report": "XSLT40-FIELD-REQUIRED-AUDIT.md",
     "status": "implemented/tested in source; review exact-head CI",
     "next": "Milestone2: earlier-version fixed namespaces under draft processor"
+  },
+  "XSLT40-EARLIER-FIXED-NAMESPACES": {
+    "date": "2026-10-16",
+    "milestoneSlice": 2,
+    "report": "XSLT40-EARLIER-FIXED-NAMESPACES.md",
+    "status": "implemented/tested in source; review exact-head CI",
+    "next": "Milestone3: unknown future instructions without fallback, then stop/reassess"
   }
 }

@@ -331,6 +331,7 @@
 //                      | Charles Korthout | 2.169 | 16-10-2026     | Accept supported standard attributes on copy while rejecting module-only attributes.       |
 //                      | Charles Korthout | 2.170 | 16-10-2026     | Apply host profiles to forward compatibility, XPath and copy/sequence validation.               |
 //                      | Charles Korthout | 2.171 | 16-10-2026     | Admit fixed-namespaces on module roots in the existing supported version range.             |
+//                      | Charles Korthout | 2.172 | 16-10-2026     | Isolate draft modules and activate fixed bindings independently of declared version.        |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -795,7 +796,15 @@ internal sealed class Stylesheet
     /// <param name="processorProfile">Host-selected processor profile, inherited from the compilation root.</param>
     public Stylesheet(XDocument document, string? baseUri, IXsltUriResolver resolver, int importPrecedence = 0, HashSet<string>? resolvedUris = null, object? inheritedStaticContext = null, IReadOnlyDictionary<(string LocalName, string NamespaceUri), XdmValue>? externalStaticParameters = null, Stylesheet? rootStylesheet = null, Stylesheet? owningPackage = null, Api.PackageVersionResolutionStrategy packageVersionResolutionStrategy = Api.PackageVersionResolutionStrategy.Highest, bool isPrincipalLevel = true, SchemaImportState? schemaState = null, int importDepth = 0, Api.XsltProcessorProfile processorProfile = Api.XsltProcessorProfile.Legacy)
     {
-        _document = document;
+        ProcessorProfile = rootStylesheet?.ProcessorProfile ?? processorProfile;
+        if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft)
+        {
+            // Own mutable loader annotations/caches without losing XML reader metadata.
+            using var reader = document.CreateReader();
+            _document = XDocument.Load(reader, LoadOptions.PreserveWhitespace | LoadOptions.SetBaseUri | LoadOptions.SetLineInfo);
+            CopyProviderMetadata(document, _document);
+        }
+        else _document = document;
         _baseUri = baseUri;
         _resolver = resolver;
         ImportPrecedence = importPrecedence;
@@ -805,7 +814,6 @@ internal sealed class Stylesheet
         _isRootStylesheet = _resolvedUris.Count == 0;
         _externalStaticParameters = externalStaticParameters ?? EmptyExternalStaticParameters;
         _rootStylesheet = rootStylesheet ?? this;
-        ProcessorProfile = rootStylesheet?.ProcessorProfile ?? processorProfile;
         _packageVersionResolutionStrategy = packageVersionResolutionStrategy;
         IsPrincipalLevel = isPrincipalLevel;
         // Schema-aware compilation state (REQ-097): shared across the whole import tree
@@ -1081,18 +1089,51 @@ internal sealed class Stylesheet
         return _namedRecordTypes = result;
     }
 
+    /// <summary>Retains XML provider provenance without reusing compiler-owned module annotations.</summary>
+    private static void CopyProviderMetadata(XObject source, XObject target)
+    {
+        foreach (var annotation in source.Annotations<object>())
+        {
+            if (annotation.GetType().Assembly != typeof(XDocumentNode).Assembly) continue;
+            if (annotation is PrefixedNamespaceUndeclarations undeclarations)
+            {
+                var copy = new PrefixedNamespaceUndeclarations();
+                copy.Prefixes.AddRange(undeclarations.Prefixes);
+                target.AddAnnotation(copy);
+            }
+            else if (annotation is UnparsedEntityAnnotation entities)
+            {
+                var copy = new UnparsedEntityAnnotation { BaseUri = entities.BaseUri };
+                foreach (var (name, entity) in entities.Entities)
+                    copy.Entities[name] = new UnparsedEntityAnnotation.EntityInfo
+                    { SystemId = entity.SystemId, PublicId = entity.PublicId, NotationName = entity.NotationName };
+                target.AddAnnotation(copy);
+            }
+            else target.AddAnnotation(annotation);
+        }
+        if (source is XElement sourceElement && target is XElement targetElement)
+            foreach (var attribute in sourceElement.Attributes())
+                if (targetElement.Attribute(attribute.Name) is { } copiedAttribute)
+                    CopyProviderMetadata(attribute, copiedAttribute);
+        if (source is XContainer sourceContainer && target is XContainer targetContainer)
+            foreach (var (original, copy) in sourceContainer.Elements().Zip(targetContainer.Elements()))
+                CopyProviderMetadata(original, copy);
+    }
+
     private sealed record StaticNamespaceResolver(IXsltUriResolver? Resolver, string? BaseUri);
     private sealed record FixedNamespaceBindings(Dictionary<string, string> Bindings);
+    private sealed class DraftNamespaceContext { }
 
     /// <summary>Gets whether the module enables fixed bindings independently of local XPath grammar.</summary>
     /// <param name="element">An element in the declaring stylesheet module.</param>
-    /// <returns>Whether a 4.0-or-later module root declares fixed namespace bindings.</returns>
+    /// <returns>Whether the module declares bindings supported by its captured processor profile.</returns>
     internal static bool HasModuleFixedNamespaces(XElement element)
     {
         var root = element.AncestorsAndSelf().Last();
         return root.Attribute("fixed-namespaces") is not null
-            && double.TryParse(root.Attribute("version")?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var version)
-            && version >= 4.0;
+            && (root.Annotation<DraftNamespaceContext>() is not null
+                || double.TryParse(root.Attribute("version")?.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out var version)
+                    && version >= 4.0);
     }
 
     /// <summary>Gets whether a variable or parameter name uses its module fixed bindings.</summary>
@@ -2015,6 +2056,8 @@ internal sealed class Stylesheet
         if (root == null)
             throw new InvalidOperationException("Stylesheet document has no root element.");
 
+        if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft)
+            root.AddAnnotation(new DraftNamespaceContext());
         root.AddAnnotation(new StaticNamespaceResolver(_resolver, _baseUri));
         _ = GetApplicableStaticNamespaces(root);
         var rootName = root.Name;
@@ -4476,8 +4519,8 @@ internal sealed class Stylesheet
                     var allowed = AllowedXsltAttributes(
                         "id", "default-mode", "default-validation",
                         "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes");
-                    // Match the version range already handled by fixed namespace processing.
-                    if (GetEffectiveVersion(elem) >= 4.0) allowed.Add("fixed-namespaces");
+                    // Match activation to the module's captured processor capability.
+                    if (HasModuleFixedNamespaces(elem)) allowed.Add("fixed-namespaces");
                     ValidateAllowedAttributes(elem, localName, allowed, IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "package")
@@ -4486,7 +4529,7 @@ internal sealed class Stylesheet
                         "id", "default-mode", "default-validation",
                         "input-type-annotations", "extension-element-prefixes", "exclude-result-prefixes",
                         "name", "package-version", "declared-modes");
-                    if (GetEffectiveVersion(elem) >= 4.0) allowed.Add("fixed-namespaces");
+                    if (HasModuleFixedNamespaces(elem)) allowed.Add("fixed-namespaces");
                     ValidateAllowedAttributes(elem, localName, allowed, IsForwardsCompatibleElement(elem));
                 }
                 else if (localName == "template")
