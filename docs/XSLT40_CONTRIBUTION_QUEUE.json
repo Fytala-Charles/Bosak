@@ -919,5 +919,11 @@
       "unresolvedContracts": 3
     },
     "next": "Review exact candidate/release notes; separate publication instruction required."
+  },
+  "release1165-preparation": {
+    "date": "2026-10-16",
+    "status": "Single preparation PR; final merged-revision verification pending at this stage",
+    "checklist": "RELEASE-1.16.5-CHECKLIST.md",
+    "next": "Merge after green exact-head CI, repack final merge, run fresh consumers/provenance and present publication approval. No engine work or publication."
   }
 }

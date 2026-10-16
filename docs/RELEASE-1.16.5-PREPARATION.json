@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-16",
+  "version": "1.16.5",
+  "status": "Preparation stage: integrate notes/checkpoint; exact merged-revision packaging and publication approval follow separately",
+  "engineeringRevision": "fc759cc25626eefe402a95bbd9296d70e876d465",
+  "preliminaryPackageRevision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+  "solution": [
+    9577,
+    0,
+    0
+  ],
+  "languageServer": [
+    84,
+    0,
+    0
+  ],
+  "cliControls": 10,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "qt4Gate": [
+    8278,
+    0,
+    1894
+  ],
+  "preliminaryConsumerChecks": {
+    "broad": 153,
+    "publicFocused": 338
+  },
+  "finalArtifacts": "D:/Development/Bosak/.guard-tmp/release1165-final",
+  "finalVerification": "Must certify the exact preparation merge revision, not the preliminary archive revision",
+  "publicationAuthorized": false,
+  "sourceChanges": false,
+  "testChanges": false,
+  "remainingSelectedDraft": [
+    219,
+    36,
+    22
+  ],
+  "knownRemainingContracts": [
+    "array-025 jposition#1",
+    "record-121 typed callable-record domain/result",
+    "record-123 typed callable-record domain/result"
+  ]
+}

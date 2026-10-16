@@ -1,3 +1,11 @@
+# 1.16.5 release preparation - 2026-10-16
+
+Branch `docs/record-release-checkpoint`; engineering base `fc759cc25626eefe402a95bbd9296d70e876d465`. ## 2026-10-16 - 1.16.5 release preparation
+
+The single documentation/preparation PR integrates the record-subtyping checkpoint and finalized candidate release notes. Engine and test source remain unchanged. After exact-head CI and integration, repack the exact merged revision and repeat fresh package-only consumers, provenance, dependency audits and availability checks before publication approval. [Publication checklist](RELEASE-1.16.5-CHECKLIST.md); [candidate notes](RELEASE-NOTES-1.16.5-CANDIDATE.md). Public libraries 1.8.0, extension 0.2.4/engine 1.8.0, REQ statuses and Braid acceptance remain unchanged. No further engine PR is planned.
+
+Final merged-revision artifacts will be kept separately in .guard-tmp/release1165-final. Read docs/RELEASE-1.16.5-CHECKLIST.md and RELEASE-1.16.5-PREPARATION.json. Complete one preparation PR and merged-revision verification, then present the exact candidate for publication approval. Do not tag or publish during preparation. Preserve the historical root branch/edits and all preliminary receipts. Entries below are historical.
+
 # Record-subtyping milestone completed - 2026-10-16
 
 Integrated mainfc759cc25626eefe402a95bbd9296d70e876d465; validated candidatec95b56c0b18e4493c31f2285bbe98621c1027655 has identical whole tree. ## 2026-10-16 - Record-subtyping milestone and validated release candidate
