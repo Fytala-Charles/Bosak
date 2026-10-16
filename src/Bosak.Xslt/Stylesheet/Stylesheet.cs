@@ -327,6 +327,7 @@
 //                      | Charles Korthout | 2.165 | 15-10-2026     | Support abstract optional overrides with static XTSE3075 reference validation.           |
 //                      | Charles Korthout | 2.166 | 15-10-2026     | Resolve adopted abstract functions and propagate concrete bindings through adoption.     |
 //                      | Charles Korthout | 2.167 | 16-10-2026     | Validate for-each attributes and required select statically, including unused bodies.      |
+//                      | Charles Korthout | 2.168 | 16-10-2026     | Classify namespace declarations and foreign attributes before xsl:copy option validation.  |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3784,6 +3785,11 @@ internal sealed class Stylesheet
                 // XTSE0090: xsl:copy does not allow invalid attributes
                 foreach (var attr in elem.Attributes())
                 {
+                    // Namespace declarations are not XDM attributes. Qualified metadata
+                    // is not an unqualified xsl:copy option, even with the same local name.
+                    if (attr.IsNamespaceDeclaration || attr.Name.NamespaceName.Length != 0)
+                        continue;
+
                     var attrName = attr.Name.LocalName;
                     var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
                     if (attr.Name.NamespaceName == "" &&

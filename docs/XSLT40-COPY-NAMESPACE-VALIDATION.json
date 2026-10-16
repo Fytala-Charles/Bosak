@@ -1,0 +1,175 @@
+{
+  "date": "2026-10-16",
+  "base": "a73345fa6258d4255e171f2792230695ad570e51",
+  "sourceVersion": "1.14.16 unpublished",
+  "branch": "fix/copy-namespace-validation",
+  "worktree": "D:/Development/Bosak/.guard-tmp/copy-xmlns-source",
+  "prerequisite": {
+    "pr": 340,
+    "head": "aea095eb853b8f6c1772a594e5c21c0bacf2b46a",
+    "ciRun": 38933454715,
+    "conclusion": "success",
+    "merge": "a73345fa6258d4255e171f2792230695ad570e51"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "sections": [
+      "standard-attributes",
+      "shallow-copy"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "scope": "Stylesheet copy-specific validation skips namespace declarations and qualified metadata; real unqualified option checks retained",
+  "publicApiChanged": false,
+  "profileSelectionChanged": false,
+  "upstreamEdits": false,
+  "gatePromotions": false,
+  "newNativePasses": [],
+  "lostNativePasses": [],
+  "publishedLibraries": "1.8.0 unchanged",
+  "publishedExtension": "0.2.4/engine1.8.0 unchanged",
+  "reqStatuses": "unchanged",
+  "braidAcceptance": "independent unchanged",
+  "publicationPerformed": false,
+  "testStartPrecursorHead": "aea095eb853b8f6c1772a594e5c21c0bacf2b46a",
+  "precursorAndMergeTree": "4c85a2b2e36899e3efb3557d150b7b751daa11ec",
+  "runtimeChanged": false,
+  "attempts": [
+    {
+      "fixture": ".artifacts/original-tests.txt",
+      "log": ".artifacts/focused-before.log",
+      "pass": 5,
+      "fail": 16
+    },
+    {
+      "fixture": ".artifacts/expanded-tests.txt",
+      "log": ".artifacts/expanded-before.log",
+      "pass": 6,
+      "fail": 17
+    },
+    {
+      "fixture": "tests/Bosak.Xslt.Tests/CopyNamespaceValidationTests.cs",
+      "log": ".artifacts/focused-final.log",
+      "pass": 257,
+      "fail": 0,
+      "composition": "23 new +234 previous controls"
+    }
+  ],
+  "fixtureCorrections": false,
+  "deferred": [
+    "xsl:copy standard XSLT attribute whitelist audit",
+    "JNode copying",
+    "broader constructor namespace semantics",
+    "processor capability"
+  ],
+  "verification": {
+    "solution": [
+      9304,
+      0,
+      0
+    ],
+    "xslt": [
+      6370,
+      0,
+      0
+    ],
+    "focused": [
+      257,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "build": {
+      "errors": 0,
+      "warnings": 2
+    },
+    "allProcessesComplete": true,
+    "fixtureJunctionsRemoved": true
+  },
+  "native": [
+    {
+      "receipt": ".artifacts/xslt40/20261016T164310627Z.json",
+      "testSet": "array",
+      "counts": {
+        "Failed": 5,
+        "Skipped": 20,
+        "Total": 180,
+        "Passed": 155
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T164315207Z.json",
+      "testSet": "record",
+      "counts": {
+        "Failed": 35,
+        "Skipped": 1,
+        "Total": 65,
+        "Passed": 29
+      },
+      "exit": 1
+    },
+    {
+      "receipt": ".artifacts/xslt40/20261016T164317312Z.json",
+      "testSet": "type-alias",
+      "counts": {
+        "Failed": 8,
+        "Skipped": 1,
+        "Total": 32,
+        "Passed": 23
+      },
+      "exit": 1
+    }
+  ],
+  "sha256": {
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "fecb89c3400828d21fed1378ba1f363784b46a42e0ad50134ffa3a242e0a3185",
+    "src/Directory.Build.props": "a6a4aecbb7c7f2bcbb350fa18b5d0328e04b8d1dfc71cde32375e2ddd29a507e",
+    "tests/Bosak.Xslt.Tests/CopyNamespaceValidationTests.cs": "ebda8510468f77e45bb33903504ff57702e6c33e2cd9574f92237518e71d1ad0",
+    ".artifacts/build.log": "c982244be2ccbf20b193863cf102a1abcc9388391682b0ffde6bfde7ac241f3f",
+    ".artifacts/expanded-before.log": "cc5a0d48fa8047436019a2e3f11f12b0d2c5feddb44c021077310cb641e2f845",
+    ".artifacts/expanded-tests.txt": "ebda8510468f77e45bb33903504ff57702e6c33e2cd9574f92237518e71d1ad0",
+    ".artifacts/finalize.py": "a7a08c6555f7a83e9b7a6f92b8e2b54c5a6c0d8cd5dd0ed7fe80584e9c74bd2b",
+    ".artifacts/focused-before.log": "9494e689d8f7accc1a0e7ce3376bfcecda1554b05da3cdeb1df30609d703e14b",
+    ".artifacts/focused-final.log": "f431ca4a185655f6391df8d9db68962c4f2f87f64023d970f6474f1b1180ff52",
+    ".artifacts/language-server.log": "86e4ca44b6cd555b50a03971d9235a3c855d62de72aca2131607d1120f5b5586",
+    ".artifacts/native-array.log": "3271406fb289003418202a9ed4439b539d8338190c1c73831f484a53ba73b402",
+    ".artifacts/native-record.log": "ce525e03853d9f71a24baca0845c0c81d37734945902f1745e7513480c5c89d5",
+    ".artifacts/native-type-alias.log": "4c81f4d6d5445a53eb427ce38b3db78b7ca1a349f7929d45d220789a40679532",
+    ".artifacts/original-tests.txt": "1bea8d2d0fb7b88cfd42a92f30db86e908171c7921a854d4cf4030b8c5185d1b",
+    ".artifacts/pr-body.md": "df685f1efe312b3b3aef910cea7bdb03c65b0872dfc881d4ecaeae470a7ebae4",
+    ".artifacts/qt3.log": "0b29f84333a7c1f07be222ace74f7d98cf8bfe795b4211a0305d7c62259c89b3",
+    ".artifacts/qt4.log": "4be68243e890c4922a887bf19ab67e4ff3fe461b0583dbaed36752a285cda3f7",
+    ".artifacts/render.cjs": "114a6b1aea0a854f171bf70bfb9f4992ef7cb3e5ddc15da84b0260affed6a51f",
+    ".artifacts/solution-tests.log": "919ec6ad5b83d9a83ce019140bbfec5eea271554c5531d45ebb796aca7e28846",
+    ".artifacts/native-before/20261016T163330268Z.json": "05f706648b30a98aae0e83fcb45186fcb009ce976ab7bd19e4a2c5b0ae52f0e9",
+    ".artifacts/native-before/20261016T163330268Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/native-before/20261016T163334959Z.json": "4e5c4cb408d48bf0de2b9a42c3f3960f89b60974418fd9f8dd2f22b63f17fdf1",
+    ".artifacts/native-before/20261016T163334959Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/native-before/20261016T163337220Z.json": "4576d7109cc968193a4d3eeb420a294609d795407b8f5535f7a1800a2474a038",
+    ".artifacts/native-before/20261016T163337220Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593",
+    ".artifacts/native-before/native-array.log": "5945c6d589b04599e320d1afdbc7f3ca6ee8f7887184af3c1d66fdc522a2e2f1",
+    ".artifacts/native-before/native-record.log": "3166ecfc755ff3fe3ed723923767fadcaad4098f346a25f2ab0e645b31baaec5",
+    ".artifacts/native-before/native-type-alias.log": "8d7236f022c6450f8f5822b66716bb6ee8ce8fb01c3f8e77fbc37d39ae3b6bb4",
+    ".artifacts/xslt40/20261016T164310627Z.json": "7ac401a5326e950c44ec44d7cb79422c3948f9b61d468aa952e57d8ab972dfa7",
+    ".artifacts/xslt40/20261016T164310627Z.log": "c19b2380e132ad8e12a4911f123b54357ec9c19f3bb3413eca4def66223e9008",
+    ".artifacts/xslt40/20261016T164315207Z.json": "a482faa05438a4715e737b64e9c4c962ebb3af80dc53fd78776f67f8feda1419",
+    ".artifacts/xslt40/20261016T164315207Z.log": "29fcec9204709952e1ad00d919d7a3936acac55bb3353501f1548fdef5a54cd5",
+    ".artifacts/xslt40/20261016T164317312Z.json": "9b99fbcb3a83238e6b85173a7bae516181338419c339af9f1bae0c2a49e61a10",
+    ".artifacts/xslt40/20261016T164317312Z.log": "530c1d857740150d325a840ed1ef592b4ef8f077c8ded40bb915a041f547a593"
+  }
+}

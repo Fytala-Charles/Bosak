@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: fix default xmlns incorrectly rejected by xsl:copy validation; raw non-node values fixed in unpublished1.14.15; JNode construction and processor capability remain separate",
+    "selectedEngineReview": "Next: audit xsl:copy standard XSLT attributes against the shared whitelist; namespace classification fixed in unpublished1.14.16; JNode construction and processor capability remain separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -782,6 +782,13 @@
     "sourceVersion": "1.14.15 unpublished",
     "base": "798b9eae1f15e50b77695e8047c28a573d30fb0d",
     "evidence": "XSLT40-COPY-NON-NODE-VALUES.json",
+    "nativePassesChanged": false
+  },
+  "copyNamespaceValidation": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.14.16 unpublished",
+    "base": "a73345fa6258d4255e171f2792230695ad570e51",
+    "evidence": "XSLT40-COPY-NAMESPACE-VALIDATION.json",
     "nativePassesChanged": false
   }
 }
