@@ -49,3 +49,8 @@ flowchart LR
 - The Mermaid canvas is white while semantic node colors remain visible.
 - Code blocks, blockquotes, links, and captions remain legible.
 - PDF output preserves local images, page margins, and diagram boundaries.
+
+
+## Implicit binding documents verification - 2026-10-16
+
+The canonical documents, queue, upstream guide and XSLT40-IMPLICIT-BINDING-DOCUMENTS.md were rendered using markdown-it and the canonical Fytala CSS. HTML artifacts are retained under D:/Development/Bosak/.guard-tmp/variable-binding-render. This is a render check, not a visual screenshot review. Kit-managed assets were unchanged.
