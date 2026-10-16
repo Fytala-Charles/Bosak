@@ -4,6 +4,8 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+**N04/N05 baseline - 2026-10-16:** Fresh unchanged upstream `91328fbf` yields type-alias 22/9/1 after correcting whitespace-separated specification dependency selection (initial 22/10/0). The record filter remains 26/38/1: record itself 26/21/0, xsl-record 0/17/1. Eight adapter controls pass; no engine change or conformance pass gain. Next engine review: extra-field matching/conversion in record-003/005/016, after current-draft review. [Baseline, triage and evidence](XSLT40-N04-N05-BASELINE.md). Published versions, REQ statuses, gates and independent Braid acceptance are unchanged.
+
 ## Restart plan - 16 October 2026
 
 The next bounded baseline is the unchanged native `type-alias` and `record` families (N04/N05), followed by one evidence-selected implementation/reliability cluster. See the [planned slice and acceptance checkpoints](XSLT40_CONTRIBUTION_QUEUE.md#next-planned-slice-n04n05-conformance-and-reliability---16-october-2026) and [machine-readable queue](XSLT40_CONTRIBUTION_QUEUE.json). No fresh baseline has run yet. The initial arrangement and counts below remain historical: refresh upstream's default branch and record the exact new base before preparing any new contribution; fetch/rebase/recheck again immediately before submission. Preserve the existing checkout, branches and receipts. This checkpoint authorizes documentation/planning only, not upstream submission.

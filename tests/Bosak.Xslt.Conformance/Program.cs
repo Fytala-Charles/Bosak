@@ -240,6 +240,9 @@
 //                      | Charles Korthout | 3.74  | 12-10-2026     | Opt-in XSLT 4.0 dependencies, exact errors and failure/zero-execution exit status          |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 3.75  | 16-10-2026     | Match whitespace-separated catalog specification alternatives independently              |
+//                      |==================|=======|================|=========================================================================================
+
 using System.Xml.Linq;
 using System.Xml;
 using System.Xml.Schema;
@@ -1927,6 +1930,13 @@ class Program
 
     static bool IsSpecSupported(string specValue)
     {
+        // Catalog values are alternatives, separated by XML whitespace.
+        var alternatives = specValue.Split(new[] { ' ', '\t', '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        if (alternatives.Length > 1)
+            return alternatives.Any(IsSpecSupported);
+        if (alternatives.Length == 1)
+            specValue = alternatives[0];
+
         // We support XSLT 3.0 (and by backward compatibility, XSLT 2.0/1.0 features).
         if (specValue.StartsWith("XSLT", StringComparison.OrdinalIgnoreCase))
         {

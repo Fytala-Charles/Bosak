@@ -566,7 +566,7 @@
   "upstreamAcceptanceEvidence": "../contributions/xslt40/UPSTREAM_ACCEPTANCE.json",
   "nextPlannedSlice": {
     "recordedDate": "2026-10-16",
-    "status": "Planned; baseline not yet run",
+    "status": "Baseline complete; specification-list adapter correction implemented; engine slice selected for review",
     "families": [
       "type-alias",
       "record"
@@ -576,7 +576,7 @@
       "N05"
     ],
     "objective": "Expand upstream-native XSLT 4.0 coverage while improving reproducibility and test reliability",
-    "baselineRevision": null,
+    "baselineRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
     "selectionPolicy": "Refresh upstream default and record exact base; select smallest coherent failing cluster after unchanged-family baseline",
     "candidateBoundaries": [
       "coercion/conversion",
@@ -598,6 +598,8 @@
     "upstreamPolicy": "Fetch before contribution branch and immediately before submission; refreshed-default base, exact base receipt and final diff check",
     "implementationPerformed": false,
     "upstreamSubmissionAuthorized": false,
-    "braidAdoptionSeparate": true
+    "braidAdoptionSeparate": true,
+    "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
+    "selectedEngineReview": "record-003/005/016 extra-field matching/conversion; current pinned draft review required before implementation"
   }
 }
