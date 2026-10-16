@@ -1,3 +1,15 @@
+# Untyped raw initial-template result candidate - 2026-10-16
+
+PR326 passed exact-head CI run38893551100 at3b939a73 and merged at b38c2580822bb069e8c0e8fd00640e5982af7400. Active worktree D:/Development/Bosak/.guard-tmp/raw-array-output-source, branch fix/xslt40-raw-array-output. Read docs/XSLT40-RAW-INITIAL-RESULTS.md/json. Delivery is latest branch commit containing this entry; source hashes identify tested implementation. Tests/native runs began on source-equivalent prerequisite head3b939a73 before merge alignment.
+
+Unpublished source1.14.3 fixes existing rawResult:true initial-template delivery for untyped templates, reusing item()* sequence collection. A pending capture is claimed once; nested/recursive typed calls deliver to the outer result. Atomics, emptiness, node kind/order/identity and arrays/maps/functions are preserved. Explicit return conversion and body errors remain; normal serialized delivery still rejects arrays under XML. No public signature, serializer, conformance adapter or JNode model change.
+
+Release build passes with zero errors and two incremental warnings. Solution8,949/0/0 (XSLT6,015), language server84/0/0, focused raw-entry controls16/0/0. Frozen QT3 31,142/0/679 and qt4 gated8,278/0/1,894, both exit0. Native array aggregate153/7/20 and type-alias23/8/1 improve by six and one passes respectively; record29/35/1 unchanged. No lost prior passes. All family exits remain1 because failures remain. All local jobs complete.
+
+Exactly native array-010 through015 plus type-alias-050 newly pass. Array breakdown22/7/8, square-array56/0/0, arrays75/0/12. Initial quoting-error fixture/log, runnable16-case3/13 and strengthened2/14 baselines (atomic kind/count assertions added), final16 controls and every original native receipt preserved. No expected output weakened, expectation edit, upstream contribution, skip/error alias change, gate promotion or publication. Docs synced/rendered using markdown-it/Fytala CSS; AGENTS.md remains applicable.
+
+Next: check exact-head CI/review before integration, then review native array-017/018 JNode sequence-construction diagnostics/placement against the current draft. Profile and other aggregate/JNode issues remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, every worktree and receipt. Earlier entries below are historical.
+
 # Static for-each validation candidate - 2026-10-16
 
 PR325 passed exact-head CI run38891357065 at e98384e1 and merged at 9326d8acc4ef6f13af7160c886c3c6ebde5246c0. Active worktree D:/Development/Bosak/.guard-tmp/for-each-validation-source, branch fix/for-each-static-validation. Read docs/XSLT40-FOR-EACH-VALIDATION.md/json. Delivery is the latest branch commit containing this entry; source hashes identify the tested implementation.

@@ -4,6 +4,8 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**Untyped raw initial-template results - 2026-10-16:** Unpublished source candidate 1.14.3 makes the existing `rawResult: true` entry point retain untyped initial-template results, including arrays, maps, atomics and nodes. Nested typed calls contribute to their caller. Native array-010 through015 and type-alias-050 newly pass: array153/7/20; type-alias23/8/1. [Contract and evidence](XSLT40-RAW-INITIAL-RESULTS.md). Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.
+
 **Static for-each validation - 2026-10-16:** Unpublished source candidate 1.14.2 validates `xsl:for-each` attributes and required `select` during stylesheet compilation, including unreachable bodies. Existing separators, shadow attributes and local forward-compatibility policy are preserved. Native arrays-021 newly passes: arrays75/0/12, array aggregate147/13/20. [Review and evidence](XSLT40-FOR-EACH-VALIDATION.md). Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.
 
 **Complete sum atomization - 2026-10-16:** Unpublished source candidate 1.14.1 fixes both `fn:sum` arities to atomize complete input before empty handling. A JNode wrapping `(5,6)` now contributes both values; empty wrapped input selects the correct zero value. Native array-020/arrays-020 newly pass: array aggregate146/14/20, previously144/16/20. [Contract and evidence](XSLT40-JNODE-SUM.md). Other aggregates remain separate. Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.
