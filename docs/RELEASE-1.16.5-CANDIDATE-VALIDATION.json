@@ -1,0 +1,1309 @@
+{
+  "dateUtc": "2026-10-16T19:34:33.271426+00:00",
+  "status": "Two engine PRs integrated; candidate archives and fresh public consumers verified; no publication",
+  "candidateRevision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+  "candidateSourceVersion": "1.16.5",
+  "integratedAt": "fc759cc25626eefe402a95bbd9296d70e876d465",
+  "candidateAndMergeWholeTreeMatch": true,
+  "candidateTree": "42a3f37c8bffb3389a4cbc3e3ec5c6c2874e3bd3",
+  "enginePrs": [
+    {
+      "number": 350,
+      "head": "d366590ee2d699ce8e493ddad34f86c54cbf1619",
+      "merge": "ebd98f623f25603a2d6627d0e3c2f13361864eb2",
+      "ci": 38953868476
+    },
+    {
+      "number": 351,
+      "head": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "merge": "fc759cc25626eefe402a95bbd9296d70e876d465",
+      "ci": 38954990515
+    }
+  ],
+  "sourceVerification": {
+    "solution": [
+      9577,
+      0,
+      0
+    ],
+    "xslt": [
+      6643,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "cliControls": 10,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gate": [
+      8278,
+      0,
+      1894
+    ]
+  },
+  "packageVerification": {
+    "broad": {
+      "packages": [
+        {
+          "package": "Bosak.XPath.Api/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "8947b2007384125c64d42e7a6d9c5b41243c0209339aca2d64f6011a06da3dab",
+          "archiveSha512": "Fw650Slz7kYEKUB2koir+858yih/V+PnxFGzfcbFSGYkqLaefxKKOLCrSi8iSacmqLI6mpEYyR3pvkjyeDZsoA==",
+          "restoreContentHash": "Fw650Slz7kYEKUB2koir+858yih/V+PnxFGzfcbFSGYkqLaefxKKOLCrSi8iSacmqLI6mpEYyR3pvkjyeDZsoA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Compiler/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "30e0d32792175892511b549650620101554bfe2a9db8e772a8f286db9f5110d2",
+          "archiveSha512": "uWFKlGoGLrjGleGmYSlFmMDaFppP/6Em7+nAob/8pIlHWcOhWai+FA7ViGtPz3BJ5Lh68/WMLru38GWnerzgqA==",
+          "restoreContentHash": "uWFKlGoGLrjGleGmYSlFmMDaFppP/6Em7+nAob/8pIlHWcOhWai+FA7ViGtPz3BJ5Lh68/WMLru38GWnerzgqA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Core/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "a99133d2f44a9352eee0e791a53d348c69b3e23f3ff5d318281220f102bd8d5d",
+          "archiveSha512": "dLJ/BXCKZJcZRJzCc4LlsJQATXhNdRR/GW/B3gCcTND0gMms6S4V3qJJliLowglztyWfmk9xkx9+UM4hJ/4sGA==",
+          "restoreContentHash": "dLJ/BXCKZJcZRJzCc4LlsJQATXhNdRR/GW/B3gCcTND0gMms6S4V3qJJliLowglztyWfmk9xkx9+UM4hJ/4sGA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Parser/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "cae5464982fb8c1c7eec9eba9af66cb29b7e59ddbe2b70f19a1b018e188d40b6",
+          "archiveSha512": "FpInqcVniMJJPw8YG7lUGltSbj8yRJYlheFTUcv7ZXFPYbQhjDZ3WTMDd/P8soxj0UkP1SxmIECjoHbGEMcrVQ==",
+          "restoreContentHash": "FpInqcVniMJJPw8YG7lUGltSbj8yRJYlheFTUcv7ZXFPYbQhjDZ3WTMDd/P8soxj0UkP1SxmIECjoHbGEMcrVQ==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Providers/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "321102e4094967b31250ac1e1eb71a65a7f51fb912b24cb08234d84b3196a06a",
+          "archiveSha512": "t2sj3owU0G+BGtM1NU5U2f9EwtUtaZdsBpMF9HPJmOgs14i/iNiFRUHlWL8Le0cbNEoHxJtegI61IGB6kaoMJQ==",
+          "restoreContentHash": "t2sj3owU0G+BGtM1NU5U2f9EwtUtaZdsBpMF9HPJmOgs14i/iNiFRUHlWL8Le0cbNEoHxJtegI61IGB6kaoMJQ==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Providers.Database/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "3bb5306afcd7c71cbcf16cd8e7a20fa9603cf201498ffd9ff03d19b1c5f7f097",
+          "archiveSha512": "5j7hUA62efZOQCGtIdoVemkRbLiSI6HEkvAhVoQZZM1agu0zn5IwvEGPrKqGFWm1fjqODraitocaD/c3az8ikA==",
+          "restoreContentHash": "5j7hUA62efZOQCGtIdoVemkRbLiSI6HEkvAhVoQZZM1agu0zn5IwvEGPrKqGFWm1fjqODraitocaD/c3az8ikA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Runtime/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "90b167a0decfe2e19f2fbe0b240eba85649b0970c14d8aa07e4c6a1b3cd12d59",
+          "archiveSha512": "GZsTcQaPNdI7x/3DG1aZMKjFoJiomAoMghb8qXubMPDwaodo2LTt3ejYPlX3eUBLWWFUAnMMY9xTLBBZmkuX9w==",
+          "restoreContentHash": "GZsTcQaPNdI7x/3DG1aZMKjFoJiomAoMghb8qXubMPDwaodo2LTt3ejYPlX3eUBLWWFUAnMMY9xTLBBZmkuX9w==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Standard/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "73d613aa628618614478c905cc6ffc50c1363c4c8db907a72bdc788f54be9fd7",
+          "archiveSha512": "pp0H008wzpFOFfph2myps4Fi6v8USMrv3DMD12zALg7JNPjOwGHpnpiVv/yT3lzndji89tbBA/owioKDv6fqrA==",
+          "restoreContentHash": "pp0H008wzpFOFfph2myps4Fi6v8USMrv3DMD12zALg7JNPjOwGHpnpiVv/yT3lzndji89tbBA/owioKDv6fqrA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XQuery/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "13e3f1ee1f71053fab5afdfe6db8736a1233475381ca2fc7ad1ee16ddc3ed6da",
+          "archiveSha512": "fehKtUfg7cwWZZPl7b68sVD4EtGVjWdSLywtkl0l9yNjoFTZwOSn0iWP94FdBu79dJFmH9CH2EMp5TpcpdEIdA==",
+          "restoreContentHash": "fehKtUfg7cwWZZPl7b68sVD4EtGVjWdSLywtkl0l9yNjoFTZwOSn0iWP94FdBu79dJFmH9CH2EMp5TpcpdEIdA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.Xslt/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "9f332499498e3efa4294e5ad054d5c1094a9e12509a8223fc13cc8153824b611",
+          "archiveSha512": "sxl8NFUgkbM9J1HP+ujJFkd6R02pvaEjOjK/6EU7zkG+I2S3AaAtiETgQW/Ig2O67OxQamV0udknYOmiUezskA==",
+          "restoreContentHash": "sxl8NFUgkbM9J1HP+ujJFkd6R02pvaEjOjK/6EU7zkG+I2S3AaAtiETgQW/Ig2O67OxQamV0udknYOmiUezskA==",
+          "cacheOutputDllsMatch": true
+        }
+      ],
+      "assemblyMetadata": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "d2bf3b72ceec71f777dde8a456ea7fd9e852deb0562f5d2b1d5fcacf3d641899"
+        },
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "2a749d1f38e41aa519ef6fc6941a19caed85963d4d32273e921d5dd1c054509d"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "e41be2d99be62989d4082dfc779060e758c160a4d0cd02e9860df93f4e5f1464"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "c2c67dd6ab42ff384b7d2996e9d8ca8e5ab063de8865025db9bb74756400d456"
+        },
+        {
+          "id": "Bosak.XPath.Providers.Database",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "3dc896317e1c565d93cff4e07b8e3fb0e19443b966afec3f4d3a90929c9e38bb"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "af9a13f5f63c6c7ff0e905a19696a620b8f7105deeef2a141d8e03c1fbf84e42"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "7064badf49b45d3c79d0329304b1576a83578accd45d210d640471626709884d"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "551559447bdafa6e5cb9292fc23ec3e5fdedf51981c0ff8eae6ad2ef0fa62982"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "90ea52b3b2ade340668d6d6454fbc62a9acc17db37d03bc95977c0d695ab913f"
+        },
+        {
+          "id": "Bosak.Xslt",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "32043a4003f32330f02fe74331ca36af75fcbdd07a8db3f4486d08d8267588b4"
+        }
+      ],
+      "dependencyAudit": "No vulnerable top-level or transitive packages reported; NuGet advisory source queried."
+    },
+    "focused": {
+      "packages": [
+        {
+          "package": "Bosak.XPath.Api/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "8947b2007384125c64d42e7a6d9c5b41243c0209339aca2d64f6011a06da3dab",
+          "archiveSha512": "Fw650Slz7kYEKUB2koir+858yih/V+PnxFGzfcbFSGYkqLaefxKKOLCrSi8iSacmqLI6mpEYyR3pvkjyeDZsoA==",
+          "restoreContentHash": "Fw650Slz7kYEKUB2koir+858yih/V+PnxFGzfcbFSGYkqLaefxKKOLCrSi8iSacmqLI6mpEYyR3pvkjyeDZsoA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Compiler/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "30e0d32792175892511b549650620101554bfe2a9db8e772a8f286db9f5110d2",
+          "archiveSha512": "uWFKlGoGLrjGleGmYSlFmMDaFppP/6Em7+nAob/8pIlHWcOhWai+FA7ViGtPz3BJ5Lh68/WMLru38GWnerzgqA==",
+          "restoreContentHash": "uWFKlGoGLrjGleGmYSlFmMDaFppP/6Em7+nAob/8pIlHWcOhWai+FA7ViGtPz3BJ5Lh68/WMLru38GWnerzgqA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Core/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "a99133d2f44a9352eee0e791a53d348c69b3e23f3ff5d318281220f102bd8d5d",
+          "archiveSha512": "dLJ/BXCKZJcZRJzCc4LlsJQATXhNdRR/GW/B3gCcTND0gMms6S4V3qJJliLowglztyWfmk9xkx9+UM4hJ/4sGA==",
+          "restoreContentHash": "dLJ/BXCKZJcZRJzCc4LlsJQATXhNdRR/GW/B3gCcTND0gMms6S4V3qJJliLowglztyWfmk9xkx9+UM4hJ/4sGA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Parser/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "cae5464982fb8c1c7eec9eba9af66cb29b7e59ddbe2b70f19a1b018e188d40b6",
+          "archiveSha512": "FpInqcVniMJJPw8YG7lUGltSbj8yRJYlheFTUcv7ZXFPYbQhjDZ3WTMDd/P8soxj0UkP1SxmIECjoHbGEMcrVQ==",
+          "restoreContentHash": "FpInqcVniMJJPw8YG7lUGltSbj8yRJYlheFTUcv7ZXFPYbQhjDZ3WTMDd/P8soxj0UkP1SxmIECjoHbGEMcrVQ==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Providers/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "321102e4094967b31250ac1e1eb71a65a7f51fb912b24cb08234d84b3196a06a",
+          "archiveSha512": "t2sj3owU0G+BGtM1NU5U2f9EwtUtaZdsBpMF9HPJmOgs14i/iNiFRUHlWL8Le0cbNEoHxJtegI61IGB6kaoMJQ==",
+          "restoreContentHash": "t2sj3owU0G+BGtM1NU5U2f9EwtUtaZdsBpMF9HPJmOgs14i/iNiFRUHlWL8Le0cbNEoHxJtegI61IGB6kaoMJQ==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Runtime/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "90b167a0decfe2e19f2fbe0b240eba85649b0970c14d8aa07e4c6a1b3cd12d59",
+          "archiveSha512": "GZsTcQaPNdI7x/3DG1aZMKjFoJiomAoMghb8qXubMPDwaodo2LTt3ejYPlX3eUBLWWFUAnMMY9xTLBBZmkuX9w==",
+          "restoreContentHash": "GZsTcQaPNdI7x/3DG1aZMKjFoJiomAoMghb8qXubMPDwaodo2LTt3ejYPlX3eUBLWWFUAnMMY9xTLBBZmkuX9w==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XPath.Standard/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "73d613aa628618614478c905cc6ffc50c1363c4c8db907a72bdc788f54be9fd7",
+          "archiveSha512": "pp0H008wzpFOFfph2myps4Fi6v8USMrv3DMD12zALg7JNPjOwGHpnpiVv/yT3lzndji89tbBA/owioKDv6fqrA==",
+          "restoreContentHash": "pp0H008wzpFOFfph2myps4Fi6v8USMrv3DMD12zALg7JNPjOwGHpnpiVv/yT3lzndji89tbBA/owioKDv6fqrA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.XQuery/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "13e3f1ee1f71053fab5afdfe6db8736a1233475381ca2fc7ad1ee16ddc3ed6da",
+          "archiveSha512": "fehKtUfg7cwWZZPl7b68sVD4EtGVjWdSLywtkl0l9yNjoFTZwOSn0iWP94FdBu79dJFmH9CH2EMp5TpcpdEIdA==",
+          "restoreContentHash": "fehKtUfg7cwWZZPl7b68sVD4EtGVjWdSLywtkl0l9yNjoFTZwOSn0iWP94FdBu79dJFmH9CH2EMp5TpcpdEIdA==",
+          "cacheOutputDllsMatch": true
+        },
+        {
+          "package": "Bosak.Xslt/1.16.5",
+          "source": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages",
+          "archiveSha256": "9f332499498e3efa4294e5ad054d5c1094a9e12509a8223fc13cc8153824b611",
+          "archiveSha512": "sxl8NFUgkbM9J1HP+ujJFkd6R02pvaEjOjK/6EU7zkG+I2S3AaAtiETgQW/Ig2O67OxQamV0udknYOmiUezskA==",
+          "restoreContentHash": "sxl8NFUgkbM9J1HP+ujJFkd6R02pvaEjOjK/6EU7zkG+I2S3AaAtiETgQW/Ig2O67OxQamV0udknYOmiUezskA==",
+          "cacheOutputDllsMatch": true
+        }
+      ],
+      "assemblyMetadata": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "d2bf3b72ceec71f777dde8a456ea7fd9e852deb0562f5d2b1d5fcacf3d641899"
+        },
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "2a749d1f38e41aa519ef6fc6941a19caed85963d4d32273e921d5dd1c054509d"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "e41be2d99be62989d4082dfc779060e758c160a4d0cd02e9860df93f4e5f1464"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "c2c67dd6ab42ff384b7d2996e9d8ca8e5ab063de8865025db9bb74756400d456"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "af9a13f5f63c6c7ff0e905a19696a620b8f7105deeef2a141d8e03c1fbf84e42"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "7064badf49b45d3c79d0329304b1576a83578accd45d210d640471626709884d"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "551559447bdafa6e5cb9292fc23ec3e5fdedf51981c0ff8eae6ad2ef0fa62982"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "90ea52b3b2ade340668d6d6454fbc62a9acc17db37d03bc95977c0d695ab913f"
+        },
+        {
+          "id": "Bosak.Xslt",
+          "version": "1.16.5.0",
+          "informationalVersion": "1.16.5+c95b56c0b18e4493c31f2285bbe98621c1027655",
+          "sha256": "32043a4003f32330f02fe74331ca36af75fcbdd07a8db3f4486d08d8267588b4"
+        }
+      ],
+      "dependencyAudit": "No vulnerable top-level or transitive packages reported; NuGet advisory source queried."
+    },
+    "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+    "sourceVersion": "1.16.5",
+    "broadChecks": 153,
+    "focusedTests": 338,
+    "publicVersionsUnchanged": true,
+    "publicationPerformed": false,
+    "fixtureScope": {
+      "initialAttempt": "focused-tests.log preserves compile failure from internal unit fixtures; no friend identity used",
+      "publicFixture": "focused-public:141 previously published public insertion controls plus197 current public profile/audit/namespace/fallback/subtyping controls",
+      "internalNamespaceProvenanceCasesExcluded": [
+        "OwnedPrefixMetadata(3.0)",
+        "OwnedPrefixMetadata(4.0)",
+        "OwnedXml11Metadata"
+      ],
+      "engineUnitTestsRetainAllCases": true
+    }
+  },
+  "archives": [
+    {
+      "id": "Bosak.XPath.Api",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Api.1.16.5.nupkg",
+      "sha256": "8947b2007384125c64d42e7a6d9c5b41243c0209339aca2d64f6011a06da3dab",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Compiler.1.16.5.nupkg",
+      "sha256": "30e0d32792175892511b549650620101554bfe2a9db8e772a8f286db9f5110d2",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Core.1.16.5.nupkg",
+      "sha256": "a99133d2f44a9352eee0e791a53d348c69b3e23f3ff5d318281220f102bd8d5d",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": []
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Parser.1.16.5.nupkg",
+      "sha256": "cae5464982fb8c1c7eec9eba9af66cb29b7e59ddbe2b70f19a1b018e188d40b6",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Providers.1.16.5.nupkg",
+      "sha256": "321102e4094967b31250ac1e1eb71a65a7f51fb912b24cb08234d84b3196a06a",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Providers.Database.1.16.5.nupkg",
+      "sha256": "3bb5306afcd7c71cbcf16cd8e7a20fa9603cf201498ffd9ff03d19b1c5f7f097",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Runtime.1.16.5.nupkg",
+      "sha256": "90b167a0decfe2e19f2fbe0b240eba85649b0970c14d8aa07e4c6a1b3cd12d59",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XPath.Standard.1.16.5.nupkg",
+      "sha256": "73d613aa628618614478c905cc6ffc50c1363c4c8db907a72bdc788f54be9fd7",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.XQuery",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.XQuery.1.16.5.nupkg",
+      "sha256": "13e3f1ee1f71053fab5afdfe6db8736a1233475381ca2fc7ad1ee16ddc3ed6da",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Bosak.Xslt",
+      "archive": "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\packages\\Bosak.Xslt.1.16.5.nupkg",
+      "sha256": "9f332499498e3efa4294e5ad054d5c1094a9e12509a8223fc13cc8153824b611",
+      "revision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version": "1.16.5",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    }
+  ],
+  "publicPreflight": [
+    {
+      "id": "Bosak.XPath.Api",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.XQuery",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    },
+    {
+      "id": "Bosak.Xslt",
+      "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+      "candidateVersionPresent": false,
+      "latestListed": "1.8.0",
+      "checked": true
+    }
+  ],
+  "remainingSelectedNativeCounts": [
+    219,
+    36,
+    22
+  ],
+  "recoveredInBothProfiles": [
+    "record-100",
+    "record-101",
+    "record-104",
+    "record-105",
+    "record-110",
+    "record-111",
+    "record-112",
+    "record-113",
+    "record-120"
+  ],
+  "remainingCases": [
+    {
+      "case": "array-017",
+      "family": "array",
+      "classification": "catalog/draft drift",
+      "group": "array-error-code",
+      "assessment": "Expected XTDE4060; current normative code is XTTE4060.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#ERRXTTE4060",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\array\\array-017.xsl",
+          "sha256": "77718ba5eb1b60e8c7a750028dc8aca31c9961671ddc1330d269de170fb6d5a3"
+        }
+      ]
+    },
+    {
+      "case": "array-025",
+      "family": "array",
+      "classification": "unresolved contract",
+      "group": "jposition-contract",
+      "assessment": "Fixture invokes jposition#1; no declaration found in the pinned FO function catalog. Audit JNode semantics before proposing a replacement.",
+      "confidence": "unresolved",
+      "diagnostic": "XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.",
+      "specReference": "https://github.com/qt4cg/qtspecs/blob/72f222929768b411d8e88d96a1a8740483290078/specifications/xpath-functions-40/src/function-catalog.xml",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\array\\array-025.xsl",
+          "sha256": "279f999f5e1df9f2645b0c0f7ac17ecfcca4a956a361019196d4da2897bc0a5b"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-001",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-001.xsl",
+          "sha256": "e42fa96f87999840d572c012d1a73068faee4a29caba541f595b92beb8b5bb98"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-002",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-002.xsl",
+          "sha256": "5380f76f3b483e28d29c9a1916922de9ac9380a2676591720a9123f40e6aa87c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-003",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTDE0450, got: XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-003.xsl",
+          "sha256": "e6de73c17a1e63fccdbfc33140bc9b8efd2e91bb3491c881a329a6d8ca669a80"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-004",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error XTTE3375, got: XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-004.xsl",
+          "sha256": "98ba03a0249657b8fb4d883cdeee3c44b993b89d3468a4ef9637ec0f3084c2e5"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-005",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-005.xsl",
+          "sha256": "7bac2026b57576ae45160a3cdb5a079348ff27d2315b0e7e9b6cb4842cff765f"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-006",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE1430: Prefix ''f' in xsl:record/@extension-element-prefixes is not bound to a namespace.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-006.xsl",
+          "sha256": "0c4e9242d9b69d8563158bb9dc9c87ac9f5bcdd4b4910a4867149fd482affea8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-008",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-008.xsl",
+          "sha256": "8082ec48639e72820bd7e382b6c597210e18812b3a2518581f42083d3bc5d245"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-009",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0010: Unknown XSLT element xsl:record.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-009.xsl",
+          "sha256": "dbf3b0e156d2718daa254f1e331b946f2542771da83061de33650f61632d7a9b"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-401",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-401.xsl",
+          "sha256": "71e066bb4dfe90793cea660134b3065601bfdbabb4c5f710324a019c8f8e0f4a"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-402",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-402.xsl",
+          "sha256": "1a0f43fa90a64753bc6a0d5a4824fe9cf175c7a0dfd3f90ef94263631529767a"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-403",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-403.xsl",
+          "sha256": "6a32618f475dbda3119533b4735edf1d1e02041badb9467f9be0b89b1c1928f8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-404",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-404.xsl",
+          "sha256": "a0b64a27ba0d0c14b4796daaf376fb03fcbe3bad463935d80c3478da41ec6e4c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-405",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error Q{http://example.com/}dupe, got: XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-405.xsl",
+          "sha256": "f3377e9ab2af17ff1b01b61061f8b2955dfcc5758fa57b14922f90598d8679a8"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-407",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-407.xsl",
+          "sha256": "0af6528de7eaa0fb6c9c3882e99042f51ccc74aaec893529de9ad61a486db039"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-408",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-408.xsl",
+          "sha256": "9b61af2017183641b1dd0b2895e6f08b8e14cd97aef7fcec66a075bf11795edc"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-409",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-409.xsl",
+          "sha256": "0c361e273d7412e44a7db02f0f40b70a48e6dea90f2ac206f79918a2f81f2c6c"
+        }
+      ]
+    },
+    {
+      "case": "xsl-record-410",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-instruction",
+      "assessment": "Uses xsl:record, which has no current instruction definition; qualified duplicates variants fail earlier. Reconcile fixture with current xsl:map rather than adding an obsolete instruction.",
+      "confidence": "high",
+      "diagnostic": "Expected error Q{http://example.com/}dupe, got: XTSE0090",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#element-map",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\insn\\xsl-record\\xsl-record-410.xsl",
+          "sha256": "36f166e672d939ebcdec1a44c48f98b5239c73d6abf0506ee810140a6edd93fc"
+        }
+      ]
+    },
+    {
+      "case": "record-003",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "surplus-record-entries",
+      "assessment": "Success expectation supplies surplus x to a narrower record parameter; current coercion rejects surplus entries.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-003.xsl",
+          "sha256": "87d234463511632c639b3ed025ffbcc8de3c0072a8215ddd9f89b186e12af49b"
+        }
+      ]
+    },
+    {
+      "case": "record-004",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "Fixture still uses record(..., *), preventing its expected dynamic error.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPTY0004, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-004.xsl",
+          "sha256": "346965db87918e98cde273fe0e2d458cdb0c5511a335134b346bd44c5be9fc85"
+        }
+      ]
+    },
+    {
+      "case": "record-005",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "surplus-record-entries",
+      "assessment": "Same surplus-entry success expectation as record-003.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-coercion-rules",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-005.xsl",
+          "sha256": "87d234463511632c639b3ed025ffbcc8de3c0072a8215ddd9f89b186e12af49b"
+        }
+      ]
+    },
+    {
+      "case": "record-009",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "An unused parameter still has record(..., *), preventing its expected dynamic error.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPDY0050, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-009.xsl",
+          "sha256": "98a79362c055956e87a1f11313e1980fde7a031edc98693ddafcb5e182c3992e"
+        }
+      ]
+    },
+    {
+      "case": "record-016",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "undeclared-record-key",
+      "assessment": "Fixture expects an empty result when an annotated record is called with an undeclared key.",
+      "confidence": "high",
+      "diagnostic": "XPTY0004: The key 'xyz' is not a declared field of the record type record(r as xs:double,i as xs:double).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-016.xsl",
+          "sha256": "1fce0939db891192b268df9a936dd541b2f4c37c05b06f1ddfed72d876241986"
+        }
+      ]
+    },
+    {
+      "case": "record-020",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "duplicate-field-error",
+      "assessment": "Expected XPST0003; current duplicate-field code is XPST0021.",
+      "confidence": "high",
+      "diagnostic": "Expected error XPST0003, got: Parse error at position 0: XPST0021: The record type declares the field 'middle' more than once.",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#ERRXPST0021",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-020.xsl",
+          "sha256": "844a9111bf109d15448325321014d346d06e64a2f2b127cf3c107d198a3a308d"
+        }
+      ]
+    },
+    {
+      "case": "record-023",
+      "family": "record",
+      "classification": "catalog/draft drift",
+      "group": "retired-field-required",
+      "assessment": "Uses retired xsl:field/@required; correct XTSE0090 retained by PR347.",
+      "confidence": "high",
+      "diagnostic": "XTSE0090: Attribute 'required' is not permitted on xsl:field.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-record-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-023.xsl",
+          "sha256": "d9159f3f43e0436504fa7171fe2563576ae6d567fb41d3e3f5374a474280518f"
+        }
+      ]
+    },
+    {
+      "case": "record-121",
+      "family": "record",
+      "classification": "unresolved contract",
+      "group": "record-subtyping",
+      "assessment": "Typed callable-record key enumeration and map-transitive subtyping rules need reconciliation; historical success not forced.",
+      "confidence": "unresolved",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "record-123",
+      "family": "record",
+      "classification": "unresolved contract",
+      "group": "record-subtyping",
+      "assessment": "Typed callable-record key enumeration and map-transitive subtyping rules need reconciliation; historical success not forced.",
+      "confidence": "unresolved",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-subtype-structural-records",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\record\\record-100.xsl",
+          "sha256": "264b0e0647d59a6fe50f1faeca1742e32a8c7a2e7d1eeaf8675e965d45f48dff"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-003",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "nonstandard-alias-errors",
+      "assessment": "Expected SXTA0001; unresolved type references are diagnosed with XPST0051.",
+      "confidence": "high",
+      "diagnostic": "Expected error SXTA0001, got: XPST0051: Unknown item type 'cx:treble' in an item-type definition.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-003.xsl",
+          "sha256": "d6af9dd10cd8e425d1f3ce3318c9de527797303ec87841421a08c03819e923ca"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-004",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "nonstandard-alias-errors",
+      "assessment": "Expected SXTA0001; current circular-alias code is XTSE4035.",
+      "confidence": "high",
+      "diagnostic": "Expected error SXTA0001, got: XTSE4035: Circular item-type alias definition.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-004.xsl",
+          "sha256": "0ad7ac94f9d7bdd830df54c1e224d335d8a31a34715f58ead53e9f6017eecb25"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-006",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "plain-map-instance-test",
+      "assessment": "Unannotated map literals yield false; annotation requirement makes success expectations stale.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-006.xsl",
+          "sha256": "e8b3bc54b5232ea44ff9e3a82bb7e60b6ac1346b47c8811525134a7ffdf561df"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-007",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-type-wrapper",
+      "assessment": "Function signatures still use type(c:complex). Observed XTTE0780 is an earlier failure, not proof that intended substring type checking is correct.",
+      "confidence": "mixed",
+      "diagnostic": "Expected error XPTY0004, got: XTTE0780: Cannot convert value to type type(c:complex)",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#named-item-types",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-007.xsl",
+          "sha256": "da7011ffccb3e074ae1232ec0c08eed1e7adeb38669af92f17eb21bad6d8f631"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-010",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-pattern-syntax",
+      "assessment": "Uses ~faculty/~course/~student aliases over plain JSON maps. Needs migration to the current map-pattern contract before judging output.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-010.xsl",
+          "sha256": "438c9fc316d7faf153c22e7b8eeb32e176752c5f792b9953acb6036ac52d6026"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-012",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "removed-record-grammar",
+      "assessment": "One instance-of expression still contains d? as xs:date despite its modification note.",
+      "confidence": "high",
+      "diagnostic": "Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).",
+      "specReference": "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-record-test",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-012.xsl",
+          "sha256": "62343e76edc820f2ac9f78551d16f6406d112595016f4b602d809ff70a355214"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-013",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "obsolete-pattern-syntax",
+      "assessment": "Uses ~person on an unannotated parsed map; historical output is not a current-pattern acceptance criterion.",
+      "confidence": "high",
+      "diagnostic": "Result mismatch",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-013.xsl",
+          "sha256": "2a98c122188185a38c5cc5fb9252ce41dab8599f0801623dbc133f7b1b0d1597"
+        }
+      ]
+    },
+    {
+      "case": "type-alias-014",
+      "family": "type-alias",
+      "classification": "catalog/draft drift",
+      "group": "multiple-static-errors",
+      "assessment": "Duplicate fields and obsolete type(person) pattern coexist. No exact diagnostic correction proposed without isolating each error.",
+      "confidence": "mixed",
+      "diagnostic": "Expected error XPST0003, got: XTSE0340: Function call not allowed at the start of a pattern.",
+      "specReference": "https://qt4cg.org/specifications/xslt-40/Overview.html#patterns",
+      "exploratoryDependency": false,
+      "sourceFiles": [
+        {
+          "path": "tests\\type\\type-alias\\type-alias-014.xsl",
+          "sha256": "2658908262a9f6ce128bb79ab294596bfee73daa8dfd87313f503941dafc546c"
+        }
+      ]
+    }
+  ],
+  "releaseNotes": "RELEASE-NOTES-1.16.5-CANDIDATE.md",
+  "publicVersions": {
+    "libraries": "1.8.0",
+    "extension": "0.2.4",
+    "extensionEngine": "1.8.0"
+  },
+  "publicationPerformed": false,
+  "next": "Engine milestone complete. Review the validated candidate/release notes; publication requires a separate explicit instruction. Future catalog corrections and three unresolved contracts are separate work.",
+  "evidenceSha256": {
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\archive-verification.json": "a874186998a1be13f396f576d0cb99f21f5432a4c3bee4be61e798845bb1c6c5",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\broad-audit.json": "8b0121a3188fcfbfa03c6c018571b7809012301ba214197ce3a16dbfc3715ea0",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\broad-audit.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\broad-restore.log": "e8c60d299ff0f90082a9bf806eff2232b00871ca85887380977531cabd1a364c",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\broad-run.log": "d268bc0f4222934f0fab7bd054e386ea626a2e005b839d29d124e1fb46a59411",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\broad-versions.json": "cdd4eaab17aca84982c485f7a0ed021a993a108c62c2686d8fc4b842da45aae5",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\consumer-provenance.json": "88cee9f1c8f5a71a72315ea33b7eae435805800870da864fe654a6501da5feda",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\consumer-source-hashes.json": "2d666aadd6936e77889113bef75997ca14fbf93856ff31969d5e76ea7b3cedfd",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\final-ci.json": "8df9e47933aa605c0a9e3fdadc1365693ff23a7197d754122ba1c31466fc5b3a",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-audit.json": "259a4a99941ea8c8ca01eb699379b56e27073bc1467d4a809fa7005a2546f158",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-audit.stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-public-restore.log": "fc3e983c2b03225c4895e6e5e08875b5aae8ae9d3da30c04a6af1097a5ab9770",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-public-tests.log": "aaa6b2c52e0959ac21a16dcf46f8302959e5fb7254a86d84a27a23a97f100abf",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-restore.log": "cd89f070e6985fcca16b1fcea49281fed99df0a627eb90cb769d4f962a185f25",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-tests.log": "2a87086afdb30fa4c720ab43f13a83ef13392f0d11ef54b17ce1359efebaf451",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-versions.json": "4c4bbc50af87bedce4caadd9debf26bbbac44e833cd5e21f07130e822c4211d1",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\metadata-build.log": "8ab1189829f1e3542a7daad065253c64b609c75e9e4f7e2bd265e9cfa573ee10",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\pack.log": "5a06b3de231ae021fdb75a743c3ef43108b5746b1e354dc82cd79fa4508991ca",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\public-fixture-scope.json": "83e351d292aeab1c2c2d68e23940b6c30248c5938f2165be28edf06625fb4a33",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\public-version-preflight.json": "9eec0d7345e357472dc5535282741a1690e4f9b242e986f6909f10b0b809f7a1",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\tag-preflight.json": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+    "D:\\Development\\Bosak\\.guard-tmp\\record-release-1165\\focused-public\\TestResults\\public-package-consumer.trx": "00196cf3ff5f5f7722c43377e97f691c2abd23bbbc4a604483ed7423aa053329"
+  }
+}

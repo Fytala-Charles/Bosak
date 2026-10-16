@@ -5,6 +5,12 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+## 2026-10-16 - Record-subtyping milestone and validated release candidate
+
+Both engine PRs350/351 are integrated after exact-head CI. Source1.16.5 candidatec95b56c0b18e4493c31f2285bbe98621c1027655 verifies ten local archives,153 fresh broad checks and338 public focused tests with package-only provenance and no reported dependency vulnerabilities. Source9577 tests and both frozen gates pass. Remaining selected draft results219/36/22 classify as33 catalog/draft drift plus3 unresolved contracts. Engine work stops; no publication. [Validation](RELEASE-1.16.5-CANDIDATE-VALIDATION.md) and [candidate release notes](RELEASE-NOTES-1.16.5-CANDIDATE.md). Public versions, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Record-to-map and generic function subtyping
 
 Record-subtyping milestone 2/2: unpublished patch1.16.5 compares structural record field types with map values and accepts generic function supertypes, including parenthesized host aliases. Five further native cases recover in both profiles. Stop engine work after integration; reassess and validate exact-revision packages with fresh consumers. [Contract and evidence](XSLT40-RECORD-MAP-SUBTYPING.md). Record-subtyping milestone 2/2; stop engine work after at most two slices, then validate release packages. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.

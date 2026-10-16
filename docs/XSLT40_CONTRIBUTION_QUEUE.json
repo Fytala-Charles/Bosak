@@ -907,5 +907,17 @@
     "report": "XSLT40-RECORD-MAP-SUBTYPING.md",
     "status": "implemented/tested in source; review exact-head CI",
     "next": "STOP engine work. Reassess remaining36 selected failures as33 catalog/draft drift plus3 unresolved contracts (array025,record121,record123); validate exact-revision ten-library packages and fresh broad/focused consumers. No publication."
+  },
+  "record-subtyping-milestone-checkpoint": {
+    "date": "2026-10-16",
+    "status": "Both engine PRs integrated; candidate packages/consumers verified; stop engine work",
+    "candidateRevision": "c95b56c0b18e4493c31f2285bbe98621c1027655",
+    "sourceVersion": "1.16.5",
+    "report": "RELEASE-1.16.5-CANDIDATE-VALIDATION.md",
+    "remainingSelectedFailures": {
+      "catalogDrift": 33,
+      "unresolvedContracts": 3
+    },
+    "next": "Review exact candidate/release notes; separate publication instruction required."
   }
 }
