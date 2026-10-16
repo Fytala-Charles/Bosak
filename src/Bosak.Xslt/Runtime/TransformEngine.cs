@@ -568,6 +568,7 @@
 //                      | Charles Korthout | 7.52  | 16-10-2026     | Construct copied documents through the shared document-content pipeline.                   |
 //                      | Charles Korthout | 7.53  | 16-10-2026     | Reuse copy constructors in function bodies and preserve caller atomic adjacency.             |
 //                      | Charles Korthout | 7.54  | 16-10-2026     | Restore copy-select focus and template-rule state in both instruction dispatchers.           |
+//                      | Charles Korthout | 7.55  | 16-10-2026     | Preserve non-node copy values in raw sequences and use complex-content delivery otherwise.  |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -8405,11 +8406,7 @@ internal sealed class TransformEngine
                                         ExecuteSingleCopy(item.NodeValue, instruction);
                                     else if (!item.IsUndefined)
                                     {
-                                        // Copying an atomic value behaves like supplying the
-                                        // atomic to the complex content rules: adjacent atomic
-                                        // copies are separated by a single space (XSLT 3.0
-                                        // §11.9.1, si-copy-001).
-                                        AppendAtomicText(item.ToString());
+                                        CopyNonNodeValueToResult(item);
                                     }
                                 }
                             }
@@ -8421,7 +8418,7 @@ internal sealed class TransformEngine
                             }
                             else if (!result.IsUndefined)
                             {
-                                AppendAtomicText(result.ToString());
+                                CopyNonNodeValueToResult(result);
                             }
 
                         }
@@ -8442,7 +8439,7 @@ internal sealed class TransformEngine
                             // (XTTE0945, copy-4308/error-0945a).
                             if (contextItem.IsUndefined)
                                 throw new InvalidOperationException("XTTE0945");
-                            AppendAtomicText(contextItem.ToString());
+                            CopyNonNodeValueToResult(contextItem);
                             break;
                         }
                         ExecuteSingleCopy(nodeToCopy, instruction);
@@ -10818,6 +10815,21 @@ internal sealed class TransformEngine
 
         _lastAddedWasAtomic = false;
         return true;
+    }
+
+    /// <summary>Delivers a copied non-node item without changing its raw kind or payload.</summary>
+    private void CopyNonNodeValueToResult(XdmValue value)
+    {
+        // JNode copying has a separate construction contract; retain its existing path.
+        if (value.IsJNode)
+        {
+            AppendAtomicText(value.ToString());
+            return;
+        }
+        if (_sequenceAccumulator != null)
+            _sequenceAccumulator.Add(value);
+        else
+            CopyToResult(value);
     }
 
     private void CopyToResult(XdmValue value, bool separateAtomicsWithSpace = true)

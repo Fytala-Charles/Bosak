@@ -1,5 +1,17 @@
 # Current isolated delivery - 2026-10-16
 
+PR339 passed exact-head CI run38929364960 atd9d58861a5ea0637aa67fb09f96970ba9908a43a and merged at798b9eae1f15e50b77695e8047c28a573d30fb0d, the base. Current branch fix/copy-non-node-values; delivery commit is `git rev-parse HEAD`. Worktree D:/Development/Bosak/.guard-tmp/copy-values-source; root historical worktree preserved.
+
+Unpublished source candidate **1.14.15** preserves non-node `xsl:copy` values in raw sequence collectors and uses existing complex-content delivery otherwise. Atomics retain their kinds, maps/arrays retain payloads and member boundaries, functions remain callable, and illegal XML function content raises the existing errors. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases.
+
+Initial fixture API compile errors and correction attempt retained (use Kind and TryGetValue). Compilable unprefixed27-case6/21 baseline mixes16 default-namespace static failures with5 runtime failures; first implementation212/16 combined run retained. Default xmlns on xsl:copy triggers unrelated existing XTSE0090; explicit xsl prefix isolates value behavior, without changing expectations. Prefixed27-case12/15 and expanded33-case14/19 baselines retained. Final234 controls pass (33 new +201 previous), expanded fixture byte-identical. Original receipts/logs and implementation snapshot retained. Read [contract/evidence](XSLT40-COPY-NON-NODE-VALUES.md) and companion JSON.
+
+All local jobs completed: Release build zero errors/2 warnings; solution **9,281/0/0** (XSLT6,347), focused combined **234/0/0**, language server **84/0/0**, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**, both exit0. All test processes completed; fixture junctions were verified and removed.
+
+Next: exact-head CI/review before integration, then fix default-namespace declarations incorrectly rejected by xsl:copy validation, with independent controls. JNode copying retains its old path and remains a separate construction review; other constructors' namespace handling, nonraw text-only delivery kind, processor capability and obsolete patterns/functions remain separate. No public API/upstream edits, aliases, skips/gate promotions or publication. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, all worktrees and original receipts. Earlier entries below are historical.
+
+# Current isolated delivery - 2026-10-16
+
 PR338 passed exact-head CI run38923795787 at12d6aceb4fb59534d25fddb2de0b73cb050a474b and merged at4ebbce9ce36fa1e8ac5e8a4ad72b8018b066d84c, the base. Current branch fix/copy-select-state; delivery commit is `git rev-parse HEAD`. Worktree D:/Development/Bosak/.guard-tmp/copy-select-source; root historical worktree preserved.
 
 Unpublished source candidate **1.14.14** restores copy-select caller focus (item/position/size), current template rule and next-match exclusions in `finally` in both instruction dispatchers. Selected copy content retains singleton focus; caught errors no longer lose the caller rule. No-select, empty-selection and ignored-content controls stay green. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases.
