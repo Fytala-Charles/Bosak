@@ -1,9 +1,9 @@
 # REQ-128: Source-Preserving Value-of Insertion for Bosak.Braid
 
 **Parent:** REQ-122. **Date:** 2026-10-15.
-**Status:** Specification and capability audit; runtime insertion is unavailable. Registered as Bosak REQ-128: Pending, target TBD, owner Unassigned. No maintainer acceptance or implementation is implied. Target version and implementation owner remain TBD.
+**Current status - 2026-10-16:** REQ-128 engine delivery is Implemented in public 1.8.0, owned by Charles Korthout. Immutable tag `v1.8.0` points to `20a5d9be757599848d7ceaa8885e59bea8dbb2ec`. The bounded value-of insertion API, consumer F1 correction and fresh public-package verification are delivered. Independent Braid adoption/acceptance remains pending; its production pin and runtime/UI are unchanged. See the [implementation](REQ-128-IMPLEMENTATION.md), [release notes](RELEASE-NOTES-1.8.0.md) and [publication evidence](RELEASE-1.8.0-PUBLICATION.json).
 
-**Design follow-up ? 2026-10-15:** The [proposed engine contract](REQ-128-INSERTION-CONTRACT.md) now resolves the first-slice eligibility, snapshot ownership, byte/encoding/namespace fidelity, explicit candidate identity, cancellation/resource boundary and planned fixtures. Public 1.7.1 still has no insertion API. This is design for review, not implementation acceptance; status/owner/target remain Pending/Unassigned/TBD.
+The audit and proposal below record the original 15 October submission against Braid's older pin. Statements about missing APIs describe that historical baseline, not public 1.8.0.
 
 ## Capability Audit
 

@@ -4,6 +4,10 @@
   <p>Engine correction — 15 October 2026</p>
 </div>
 
+**1.8.0 published - 2026-10-16:** Ten .NET 10 libraries are published from approved immutable tag `v1.8.0` (`20a5d9be`), adding bounded source-preserving value-of insertion. Release CI passes 8,624 solution tests. Fresh nuget.org-only consumers pass 141 insertion cases, 153 broad regression checks and all 19 unchanged Braid probe outcomes; public archive/cache/output payloads and exact assembly revisions verify. [Publication evidence](RELEASE-1.8.0-PUBLICATION.json). REQ-128 engine delivery is implemented; independent Braid adoption/acceptance remains separate. VS Code 0.2.3 still bundles engine 1.7.1, and Braid retains its existing production pin. Earlier entries below are historical.
+
+**Consumer re-review - 2026-10-15:** Braid closes F1 for exact head b0cd2ef8 with no additional blocker in its focused value-of-only review. Fresh reviewed-head packages pass 141 cases and reproduce all 19 reviewed probe outcomes. [Current readiness and remaining integration gates](REQ-128-RELEASE-READINESS.md). Integration, publication and Braid adoption remain separate; previous entries below retain their original revision context.
+
 The Braid review of [PR #312](https://github.com/Fytala-Charles/Bosak/pull/312), head `404d3096ad200052c28148087c4e004bcad877a3`, correctly identifies a P1 static-coverage defect. The review is retained at `D:/Development/Bosak.Braid/docs/BOSAK_REQ128_CONSUMER_REVIEW.md`; this engine response does not edit it or claim consumer acceptance.
 
 ## Finding and correction
