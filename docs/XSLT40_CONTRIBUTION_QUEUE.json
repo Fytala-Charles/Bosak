@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: JNode atomization in XSLT simple-content construction; minimal navigation/data probe works but AVT/expanded text emits (jnode). Processor-capability design separate.",
+    "selectedEngineReview": "Next: reproduce deferred explicit-document multi-atomic spacing against current draft; processor-capability architecture remains separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -700,6 +700,20 @@
         "array-025": "jposition#1 missing; absent from current pinned function catalog"
       },
       "evidence": "XSLT40-ARRAY-PROFILE-AUDIT.json"
+    },
+    "jnodeTextAtomization": {
+      "sourceVersion": "1.14.7 unpublished",
+      "scope": "AVT/value-of/simple-content strings recursively atomize complete JNode payloads; typed XNode payload values and FOTY0012/0013",
+      "newNativePasses": [],
+      "lostNativePasses": [],
+      "arrayAggregate": "155/5/20",
+      "recordAggregate": "29/35/1",
+      "typeAlias": "23/8/1",
+      "diagnosticImprovement": "Root4-only array-022 now RU TJ; minimal AVT/expanded text now Moskva; not native passes",
+      "profileSelectionChanged": false,
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false,
+      "evidence": "XSLT40-JNODE-TEXT-ATOMIZATION.json"
     }
   }
 }
