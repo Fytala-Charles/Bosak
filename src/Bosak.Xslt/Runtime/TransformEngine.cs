@@ -561,6 +561,7 @@
 //                      | Charles Korthout | 7.45  | 16-10-2026     | Apply array member templates after next-match and ordinary text/skip fallback.             |
 //                      | Charles Korthout | 7.46  | 16-10-2026     | Route apply-imports arrays to member templates and isolate member import restrictions.    |
 //                      | Charles Korthout | 7.47  | 16-10-2026     | Atomize complete JNode payloads for AVTs, value-of and simple-content strings.             |
+//                      | Charles Korthout | 7.48  | 16-10-2026     | Isolate document construction from raw template capture and restore caller state.         |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -17555,6 +17556,18 @@ internal sealed class TransformEngine
         }
 
         var savedAccumulator = _sequenceAccumulator;
+        var savedPreserveAtomics = _preserveAtomicSequenceItems;
+        var savedPreserveDocuments = _preserveDocumentNodes;
+        var savedTypedRawItems = _typedResultRawItems;
+        if (wrapInDocumentNode)
+        {
+            // A constructed document applies complex-content rules even when its
+            // caller is collecting a raw/typed template result. Raw collection must
+            // not split its atomics, preserve nested documents, or divert functions.
+            _preserveAtomicSequenceItems = false;
+            _preserveDocumentNodes = false;
+            _typedResultRawItems = null;
+        }
         if (!wrapInDocumentNode)
             _sequenceAccumulator = new PlaceholderSequenceAccumulator(this);
         else
@@ -17681,6 +17694,9 @@ internal sealed class TransformEngine
         finally
         {
             _sequenceAccumulator = savedAccumulator;
+            _preserveAtomicSequenceItems = savedPreserveAtomics;
+            _preserveDocumentNodes = savedPreserveDocuments;
+            _typedResultRawItems = savedTypedRawItems;
             _context.WithFocus(savedContextItem, savedContextPosition, savedContextSize);
         }
     }
