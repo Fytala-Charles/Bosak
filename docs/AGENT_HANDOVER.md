@@ -1,3 +1,19 @@
+# Record-subtyping milestone 1/2 - 2026-10-16
+
+Record-subtyping milestone 1/2: unpublished patch1.16.4 compares structural field sets and covariant field types, preserving case-sensitive names through nested signatures. Typed zero-argument function tests now check arity and return types. Native record100/101/104/105 recover in both profiles; all other outcomes/details are unchanged.
+
+Base48d636c2c2cc66b76bc3e6a5da038bafccdb18e4; branchfix/structural-record-subtyping; authoritative report XSLT40-STRUCTURAL-RECORD-SUBTYPING.md/json. Includes the preceding local readiness review24a775027f19d34b699ed5bb319beee1462403f5 without altering its historical evidence. Original34 baseline2pass/32fail included invalid item-type occurrence fixtures. Corrected36 baseline5pass/31fail; no expected outcome weakened. All36 final controls and150 focused pass. Complete only the conditional record/map/function slice next, then stop engine work and validate release packages with fresh consumers.
+
+All processes completed: Release build0errors/2 existing warnings; solution **9545/0/0** (XSLT6611), language-server **84/0/0**, ten CLI controls pass. Fresh QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both exit0. Verified fixture links removed; canonical documents synchronized and rendered.
+
+# Release readiness review - 2026-10-16
+
+Reviewed base48d636c2c2cc66b76bc3e6a5da038bafccdb18e4; branchdocs/draft-release-readiness. ## 2026-10-16 - Release readiness and draft failure review
+
+Review of integrated source1.16.3:33 catalog/draft mismatches,11 record-subtyping engine candidates and1 unresolved function contract account for all45 selected failures. Seven reduced probes confirm a record-signature subtype gap. Engineering checks support candidate preparation; package/consumer/provenance and release checks remain pending. Recommend at most two focused engine PRs, then reassess; recommendation only, no new implementation or publication. [Review and case inventory](XSLT40-RELEASE-READINESS-REVIEW.md). Public versions, REQ statuses and Braid acceptance unchanged.
+
+No engine/test changes. Prior exact-source CI and gates retained; fresh seven-probe diagnostic evidence in .artifacts/reduced-probes.log. Recommendation only: select package preparation or at most two record-subtyping PRs in a new authorized milestone. Preserve root edits and historical worktrees/receipts.
+
 # Milestone 3/3 - 2026-10-16
 
 Milestone 3/3: unpublished patch 1.16.3 requires fallback statically for unknown future instructions in the draft processor, and evaluates valid function-body fallbacks with raw item preservation and isolated variable scope. Legacy behavior is preserved. The approved three-PR milestone ends here.
