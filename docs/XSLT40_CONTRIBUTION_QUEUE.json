@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit remaining array-021/022/024/025 version/profile declarations against current draft and runner behavior",
+    "selectedEngineReview": "Next: JNode atomization in XSLT simple-content construction; minimal navigation/data probe works but AVT/expanded text emits (jnode). Processor-capability design separate.",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -685,6 +685,21 @@
       "evidence": "XSLT40-ARRAY-IMPORT-FALLBACK.json",
       "upstreamTestsChanged": false,
       "gateMembershipChanged": false
+    },
+    "arrayProfileAudit": {
+      "sourceVersion": "1.14.6 unchanged unpublished",
+      "engineChanged": false,
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false,
+      "arrayAggregate": "155/5/20",
+      "processorProfileFinding": "A4.0 processor has equivalent effective-version3/4 behavior in current draft; Bosak currently selects profile by effective version",
+      "root4Diagnostics": {
+        "array-021": "XPTY0004",
+        "array-022": "Empty out; separate JNode AVT/expanded-text conversion defect reproduced",
+        "array-024": "Expected people output; legacy type patterns also present",
+        "array-025": "jposition#1 missing; absent from current pinned function catalog"
+      },
+      "evidence": "XSLT40-ARRAY-PROFILE-AUDIT.json"
     }
   }
 }
