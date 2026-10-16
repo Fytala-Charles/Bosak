@@ -39,3 +39,5 @@ Fresh unchanged solution: **9,335 passed / 0 failed / 0 skipped**, including XSL
 No engine change means no new manual conformance-gate run: PR342's retained receipts remain QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**; native array155/5/20, record29/35/1, type-alias23/8/1 (all three family exits1). These are prior receipts, not fresh audit passes. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance are unchanged.
 
 PR342 exact-head CI run38936211003 passed and merged at `08b02fba4fe5fa73ed34dec2982740eb22bb4486`. Precursor and merge whole trees match `3d390ec99b0c7cbaa4f7055f00011ed813062fa1`; the audit branch is fast-forward aligned.
+
+Committed text exports normalize line endings and trailing whitespace for repository review; original source/log bytes remain under .artifacts. JSON distinguishes committed evidence hashes from local original-log hashes.

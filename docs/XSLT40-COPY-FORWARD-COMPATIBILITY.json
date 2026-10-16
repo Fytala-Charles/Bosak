@@ -15,12 +15,12 @@
   },
   "next": "Explicit processor capability, validator inventory, copy/sequence fixes under both supported profiles",
   "evidenceSha256": {
-    "docs/evidence/copy-forward-compatibility/expanded-probe.cs.txt": "b7d93bdee29cec16ec2b2aecba764fc95fc34cd7e5d19fc45eaa966f85fb14e4",
-    "docs/evidence/copy-forward-compatibility/expanded-version-matrix.log.txt": "98c8d03c198ea026572d51ee0c5053f0dc86ef3bbfc62eaed51d15dac64ddd48",
-    "docs/evidence/copy-forward-compatibility/language-server.log.txt": "edbcd912f69724fcd86907eeafc8e683212eb1be226898151162959efe3334a0",
-    "docs/evidence/copy-forward-compatibility/original-probe.cs.txt": "d94fed5688e7d72da0d2726b107555cb57e698e358e41d57a6118a506fb5b734",
-    "docs/evidence/copy-forward-compatibility/original-version-matrix.log.txt": "f36ea9d7f21843ed7af383ae7832fe34d825b19c13a590c9ece2e2c4301871db",
-    "docs/evidence/copy-forward-compatibility/solution-tests-final.log.txt": "2c2230cbfb32f826e71bbc5e83e60fb93d044ec359bfe4d052449ace321610b9"
+    "docs/evidence/copy-forward-compatibility/expanded-probe.cs.txt": "3b5f4564896b43505d4926859dd8830d41b3796030400a4e3fd25158819387d0",
+    "docs/evidence/copy-forward-compatibility/expanded-version-matrix.log.txt": "bc3a787527276a1e12a07882b67b69113427c0c3a34e37edc09232eb78829b84",
+    "docs/evidence/copy-forward-compatibility/language-server.log.txt": "d5d0245efdb44a464fd3401e71b762442646482937f9cfbd74e858b02b841605",
+    "docs/evidence/copy-forward-compatibility/original-probe.cs.txt": "deabef2eac3bf05837f483de859fe712979fba81e880edc091d9fe5f53623c0b",
+    "docs/evidence/copy-forward-compatibility/original-version-matrix.log.txt": "51d15056b35e28b30657dc9d0ce09b8882e848ad9b12d80a7b250060d7fea5a0",
+    "docs/evidence/copy-forward-compatibility/solution-tests-final.log.txt": "ac9f72a06a276db33c8bed798f2f17576689d8f7179c63690dc38e7223d8a662"
   },
   "finalBase": "08b02fba4fe5fa73ed34dec2982740eb22bb4486",
   "prerequisiteCi": 38936211003,
@@ -52,5 +52,6 @@
     ".artifacts/solution-tests-final.log": "36f0cfa26790d62d5f8696be485fe18e0708e774879dbc214083a6a0f85f61af",
     ".artifacts/solution-tests.log": "0d97377472017200d0d6a6365cdfadc9ce4b6c35b43f1fbb756adfce42435310",
     ".artifacts/version-matrix.log": "77dee412c0179a74119de4277400e004a8329be18e06df262c89e4f36b682743"
-  }
+  },
+  "evidenceTextNormalization": "Committed text exports normalize line endings and trailing whitespace; original source/log bytes remain in .artifacts, with local log hashes retained."
 }
