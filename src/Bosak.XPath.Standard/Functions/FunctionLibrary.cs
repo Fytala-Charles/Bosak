@@ -114,6 +114,7 @@
 //                      |                  |       |                | ordering (PR2256)                                                                      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.142   | 11-10-2026     | Return map:entries as a sequence; concatenate map:items values (REQ-118).                |
+//                      | Charles Korthout | 5.143 | 16-10-2026     | Atomize complete sum input before empty handling, preserving all JNode wrapped values.    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.143  | 15-10-2026     | Hide lexical pseudo-functions from both availability overloads.                          |
 // ===========================================================================================================================================================
@@ -13365,14 +13366,14 @@ public static class FunctionLibrary
 
     private static XdmValue Sum_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var items = Materialize(args[0]);
+        var items = Materialize(Data(args[0]));
         if (items.Count == 0) return XdmValue.FromInteger(0);
         return Sum(items);
     }
 
     private static XdmValue Sum_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var items = Materialize(args[0]);
+        var items = Materialize(Data(args[0]));
         if (items.Count == 0) return args[1];
         return Sum(items);
     }
