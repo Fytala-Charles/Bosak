@@ -1,3 +1,13 @@
+# String-key map patterns candidate ? 2026-10-16
+
+PR318 passed exact-head CI and merged at dfe0ed08afc7eaeb000f1d410bff73b3d90168ae. Active isolated worktree D:/Development/Bosak/.guard-tmp/map-pattern-source on feat/string-key-map-patterns, based on that merge. Root edits, earlier worktrees, upstream expectations and original receipts remain preserved.
+
+Pinned qtspecs 72f222929768b411d8e88d96a1a8740483290078 shows the former ~type pattern section is commented out; active map patterns use braces and record patterns use record(TypeName). Implemented a bounded standalone string-key map pattern slice: {}, {*}, exact/repeated quoted keys, optional map keyword and final wildcard. Matches maps/records with direct key lookups and correct priorities; no coercion or mutation. Earlier effective profiles refuse it. Entry constraints, outer predicates/path suffixes, non-string constants and trailing commas remain refused. Bare item operands in node-set patterns are rejected; parentheses keep node-only semantics. Legacy ~type behavior is unchanged.
+
+Verification: Release build zero errors/22 warnings; solution 8,664/0/0 (XSLT 5,778), LS 84/0/0, 39 focused cases and repeat pass. Frozen gates QT3 31,142/0/679 and qt4 gated 8,278/0/1,894 exit 0. Native-family counts repeat identically. Canonical docs rendered with Fytala CSS; AGENTS.md unchanged. All local verification jobs complete.
+
+Unpublished source is 1.9.0. Initial 34-case regression fixture on unchanged engine: 10 pass/24 fail; final 39-case fixture (five extra controls) passes. Unchanged native record-010 now passes: record substring 27/37/1, record set 27/20/0, xsl-record 0/17/1; type-alias 22/9/1 unchanged. Both family exits correctly remain 1. See docs/XSLT40-STRING-KEY-MAP-PATTERNS.md/json. Next bounded feature is entry-value/sequence map-pattern constraints and their priorities after draft review. No upstream submission, gate promotion, release/publication or Braid adoption. Public libraries 1.8.0 and VS Code 0.2.4/engine1.8.0 stay immutable; REQ126 remains In Progress. Earlier entries below are historical.
+
 # Record draft review and cancellation reliability ? 2026-10-16
 
 PR317 passed both exact-head checks and merged at dfda6ab2; active isolated worktree D:/Development/Bosak/.guard-tmp/record-draft-cancellation-source on fix/record-draft-cancellation, based on that merge. Root edits, baseline source worktree, unchanged upstream suite and all receipts remain preserved.

@@ -98,6 +98,7 @@
 //                      | Charles Korthout | 3.26  | 13-10-2026     | Match 4.0 set-pattern axis operands against the candidate node.
 //                      | Charles Korthout | 3.27  | 13-10-2026     | Validate 4.0 template pattern prefixes eagerly using lexer tokens.                     |
 //                      | Charles Korthout | 3.28  | 14-10-2026     | Retain namespace-free function identity and host scope.                                  |
+//                      | Charles Korthout | 3.29  | 16-10-2026     | Compile bounded string-key map patterns in the XSLT 4.0 profile.                         |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -202,6 +203,22 @@ internal sealed class PatternCompiler
     /// <param name="compatibility">The declaring expression profile.</param>
     public static void ValidatePatternSyntax(string trimmed, XPathCompatibility compatibility = XPathCompatibility.XPath31)
     {
+        if (compatibility >= XPathCompatibility.XPath40)
+        {
+            foreach (var op in new[] { "|", "union", "intersect", "except" })
+            {
+                var operands = SplitPatternTopLevel(trimmed, op);
+                if (operands.Length > 1 && operands.Any(StringKeyMapPattern.StartsMapPattern))
+                    throw new InvalidOperationException("XTSE0340: Set-pattern operands require node patterns; enclose map patterns in parentheses.");
+            }
+        }
+        if (StringKeyMapPattern.StartsMapPattern(trimmed))
+        {
+            if (compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Map patterns require XSLT 4.0.");
+            _ = StringKeyMapPattern.Parse(trimmed);
+            return;
+        }
         // 1.  Disallowed functions at pattern start (XTSE0340).
         //     Node tests (document-node, element, attribute, text, comment,
         //     processing-instruction, node, schema-element, schema-attribute,
@@ -1031,6 +1048,14 @@ internal sealed class PatternCompiler
     public PatternPredicate? CompileAtomicMatch(string pattern)
     {
         var trimmed = StripXPathComments(pattern).Trim();
+
+        if (StringKeyMapPattern.StartsMapPattern(trimmed))
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Map patterns require XSLT 4.0.");
+            var map = StringKeyMapPattern.Parse(trimmed);
+            return (item, _) => map.Matches(item);
+        }
 
         // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.
         if (_compatibility >= XPathCompatibility.XPath40 && trimmed.StartsWith('('))

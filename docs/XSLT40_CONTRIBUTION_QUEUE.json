@@ -566,7 +566,7 @@
   "upstreamAcceptanceEvidence": "../contributions/xslt40/UPSTREAM_ACCEPTANCE.json",
   "nextPlannedSlice": {
     "recordedDate": "2026-10-16",
-    "status": "Baseline complete; extra-field cluster reviewed against current draft; cancellation test stabilized",
+    "status": "Bounded string-key map patterns implemented and verified against native record-010; broader N04/N05 remains In Progress",
     "families": [
       "type-alias",
       "record"
@@ -596,11 +596,11 @@
       "qt4Gated": "8,278/0/1,894"
     },
     "upstreamPolicy": "Fetch before contribution branch and immediately before submission; refreshed-default base, exact base receipt and final diff check",
-    "implementationPerformed": false,
+    "implementationPerformed": true,
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Extra-field cluster closed as upstream/current-draft alignment discrepancy; review record/named-type patterns before selecting another engine change",
+    "selectedEngineReview": "Next: entry-value/sequence map-pattern constraints and priorities after reviewing current draft",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -612,6 +612,20 @@
       "evidence": "XSLT40-RECORD-DRAFT-RELIABILITY.json",
       "engineChanged": false,
       "cancellationReliability": "Deterministic test-local descriptor traversal; no production hook; cancelled and normal-completion cases"
+    },
+    "stringKeyMapPatterns": {
+      "sourceVersion": "1.9.0 unpublished",
+      "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "newNativePasses": [
+        "record-010"
+      ],
+      "recordFilter": "27/37/1",
+      "recordSet": "27/20/0",
+      "typeAlias": "22/9/1",
+      "scope": "Standalone string-key presence/exact sets/trailing wildcard; no entry constraints, suffixes or non-string constants",
+      "evidence": "XSLT40-STRING-KEY-MAP-PATTERNS.json",
+      "gateMembershipChanged": false,
+      "upstreamTestsChanged": false
     }
   }
 }
