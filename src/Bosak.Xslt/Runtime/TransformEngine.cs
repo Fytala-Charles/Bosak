@@ -558,6 +558,7 @@
 //                      | Charles Korthout | 7.42  | 16-10-2026     | Check bound named context types without coercion while preserving caller focus.            |
 //                      | Charles Korthout | 7.43  | 16-10-2026     | Capture untyped raw initial results once; nested typed calls deliver to their caller.      |
 //                      | Charles Korthout | 7.44  | 16-10-2026     | Suppress implicit binding documents for direct XSLT 4.0 disqualifying children.          |
+//                      | Charles Korthout | 7.45  | 16-10-2026     | Apply array member templates after next-match and ordinary text/skip fallback.             |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -9397,7 +9398,8 @@ internal sealed class TransformEngine
                         }
                         else if (!contextItem.IsUndefined)
                         {
-                            ApplyBuiltInRulesForAtomic(contextItem, nextMatchMode);
+                            if (!TryApplyBuiltInArrayMembers(contextItem, nextMatchMode, nextMatchParams, mergedTunnelParams))
+                                ApplyBuiltInRulesForAtomic(contextItem, nextMatchMode);
                         }
                     }
                     finally
@@ -12616,9 +12618,11 @@ internal sealed class TransformEngine
             ExecuteTemplate(rule, item, callParams: callParams, incomingTunnelParams, position: position, last: last);
             return;
         }
+        if (TryApplyBuiltInArrayMembers(item, mode, callParams, incomingTunnelParams))
+            return;
         if (item.IsArray && item.ArrayValue != null)
         {
-            // Built-in rule for arrays: apply templates to the members (arrays-301/302).
+            // Other mode behaviors retain their existing handling.
             int memberLast = item.ArrayValue.Count;
             int memberPos = 1;
             foreach (var member in item.ArrayValue.Values)
@@ -12635,6 +12639,36 @@ internal sealed class TransformEngine
             return;
         }
         ApplyBuiltInRulesForAtomic(item, mode);
+    }
+
+    /// <summary>Applies the implicit ?* selection for text-only-copy and shallow-skip arrays.</summary>
+    private bool TryApplyBuiltInArrayMembers(XdmValue item, string mode,
+        Dictionary<string, XdmValue>? callParams, Dictionary<string, XdmValue>? incomingTunnelParams)
+    {
+        if (!item.IsArray) return false;
+        var modeDef = CurrentStylesheet.GetModeDefinition(mode);
+        if (modeDef is null && !string.IsNullOrEmpty(mode))
+            modeDef = CurrentStylesheet.GetModeDefinition("");
+        var behavior = modeDef?.OnNoMatch ?? GetDefaultOnNoMatch();
+        if (behavior is not (Stylesheet.OnNoMatch.TextOnlyCopy or Stylesheet.OnNoMatch.ShallowSkip))
+            return false;
+
+        var savedItem = _context.ContextItem;
+        var savedCurrent = _context.CurrentItem;
+        var savedPosition = _context.ContextPosition;
+        var savedSize = _context.ContextSize;
+        try
+        {
+            // Reuse normal application: flatten member sequences, dispatch nodes, pass
+            // parameters and give each member application a fresh next-match chain.
+            ApplyTemplates(item, mode, "?*", incomingTunnelParams: incomingTunnelParams, callParams: callParams);
+        }
+        finally
+        {
+            _context.WithFocus(savedItem, savedPosition, savedSize);
+            _context.WithCurrentItem(savedCurrent);
+        }
+        return true;
     }
 
     private void ApplyBuiltInRulesForAtomic(XdmValue item, string mode)
