@@ -4,6 +4,8 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**Complete sum atomization - 2026-10-16:** Unpublished source candidate 1.14.1 fixes both `fn:sum` arities to atomize complete input before empty handling. A JNode wrapping `(5,6)` now contributes both values; empty wrapped input selects the correct zero value. Native array-020/arrays-020 newly pass: array aggregate146/14/20, previously144/16/20. [Contract and evidence](XSLT40-JNODE-SUM.md). Other aggregates remain separate. Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.
+
 **Array member functions - 2026-10-16:** Unpublished source candidate 1.14.0 adds 4.0-only `array:members` and `array:of-members` using the current JNode signatures. Member boundaries, empty values, parent/key metadata and reconstruction order are retained without flattening or coercion. Unchanged native arrays-006 newly passes: array aggregate144/16/20, previously143/17/20. [Contract and evidence](XSLT40-ARRAY-MEMBER-FUNCTIONS.md). Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.
 
 **Array patterns - 2026-10-16:** Unpublished source candidate 1.13.0 adds `array(SequencePattern)`, recursive member matching and priorities, plus outer predicates. Shared sequence checks reject repeated occurrence indicators without changing valid wildcard patterns. Unchanged native arrays-024 newly passes: array aggregate 143/17/20, previously 142/18/20. [Contract and evidence](XSLT40-ARRAY-PATTERNS.md). Public versions, REQ statuses, frozen gates and independent Braid acceptance are unchanged. Earlier dated entries below are historical.

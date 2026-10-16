@@ -1,3 +1,15 @@
+# Complete sum atomization candidate - 2026-10-16
+
+PR324 passed exact-head CI run38890469504 at24ec2b88 and merged at af0d2e1cea4c4b156d1c547566aaa3be6bbf387a. Active isolated worktree D:/Development/Bosak/.guard-tmp/jnode-sum-source on fix/jnode-sum-atomization. Read docs/XSLT40-JNODE-SUM.md/json. The delivery commit is the latest branch commit containing this entry; source hashes identify the tested implementation. Tests/native runs began on source-equivalent prerequisite head24ec2b88 before merge alignment.
+
+Unpublished source1.14.1 fixes both fn:sum arities to use complete sequence-aware Data atomization before materialization and empty handling. JNodes wrapping multiple or empty values now behave correctly, and later invalid items are no longer discarded. Sum arithmetic/type promotion, shared scalar atomizer, other aggregates, JNode model and public APIs are unchanged.
+
+Release build passes with zero errors and two incremental warnings. Solution 8,916/0/0 (Standard1,351; XSLT5,982), language server84/0/0, focused Standard89/0/0 plus XSLT2/0/0. Frozen QT3 31,142/0/679 and qt4 gated8,278/0/1,894, both exit0. Native array aggregate improves to146/14/20, with only array-020/arrays-020 newly passing and no lost passes; record29/35/1 and type-alias22/9/1 remain unchanged. All family exits remain1 because failures remain. All local jobs have completed.
+
+Initial Standard20-case baseline2/18 and both XSLT failures, exact fixtures, all original logs/native receipts and pinned primary sources remain preserved. Native array breakdown16/13/8, square-array56/0/0, arrays74/1/12. Current draft and unchanged upstream assertions agree on middle value11, not5. No expectation edit, upstream contribution, new skip/error alias, gate promotion or publication. Canonical docs rendered with markdown-it/Fytala CSS; AGENTS.md remains applicable.
+
+Next: check exact-head CI/review before integration, then review arrays-021 static diagnostic against current xsl:for-each rules before changing error precedence. Other aggregate atomization callers and serialization/profile discrepancies remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, every worktree and original receipt. Earlier entries below are historical.
+
 # Array member function candidate - 2026-10-16
 
 PR323 passed exact-head CI run38889429791 at49717bdc and merged at a026a27350e5376a3d6e14de89ed02e1ea9bdb7b. Active isolated worktree D:/Development/Bosak/.guard-tmp/array-member-source on feat/array-member-functions. Read docs/XSLT40-ARRAY-MEMBER-FUNCTIONS.md/json. The delivery commit is the latest feat/array-member-functions commit containing this entry; source hashes identify the tested implementation. Tests and first native runs began on source-equivalent prerequisite head49717bdc before merge alignment.
