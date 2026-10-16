@@ -1,3 +1,15 @@
+# Array member function candidate - 2026-10-16
+
+PR323 passed exact-head CI run38889429791 at49717bdc and merged at a026a27350e5376a3d6e14de89ed02e1ea9bdb7b. Active isolated worktree D:/Development/Bosak/.guard-tmp/array-member-source on feat/array-member-functions. Read docs/XSLT40-ARRAY-MEMBER-FUNCTIONS.md/json. The delivery commit is the latest feat/array-member-functions commit containing this entry; source hashes identify the tested implementation. Tests and first native runs began on source-equivalent prerequisite head49717bdc before merge alignment.
+
+Unpublished source1.14.0 adds 4.0-only array:members and array:of-members using current JNode signatures. Shared root parents, one-based keys, member sequences and reconstruction order/duplicates are retained without flattening or coercion. Direct calls, named references, named arguments and dynamic lookup follow existing profile/type gates. No public C# API/JNode model change.
+
+Release build passes with zero errors and 25 warnings. Solution 8,894/0/0 (Standard 1,331; XSLT 5,980), language server 84/0/0, focused member/JNode cases 69/0/0 (28 new cases). Frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894, both exit 0. Native array aggregate improves to 144/16/20, with only arrays-006 newly passing; record29/35/1 and type-alias22/9/1 remain unchanged. All family exits remain1 because failures remain. All local jobs have completed.
+
+Original compile-error fixture/log, corrected26-case baseline4/22, final28-case fixture, native before/after receipts and primary catalog bytes/hash remain preserved. New native arrays-006 passes; arrays-020 and array-020 now reach result mismatches, array-013/015 serialization errors, array-021/022 profile gating. Failures remain failures. No prior pass lost, expectation edit, upstream submission, skip change or gate promotion. Docs rendered with markdown-it/Fytala CSS; AGENTS.md remains applicable.
+
+Next: check exact-head CI/review before integration, then review native arrays-020/array-020 mismatches against the pinned current draft and original expected results before engine changes. Serialization/profile discrepancies remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance remain unchanged. Preserve root edits/dossiers/.sweep-baselines/, every worktree and original receipt. Earlier entries below are historical.
+
 # Array pattern candidate - 2026-10-16
 
 PR322 passed both exact-head CI checks at 2244c1d7 and merged at 0ac93dd2a2a784603cdb344f6342a6ef107d772a. Active isolated worktree D:/Development/Bosak/.guard-tmp/array-pattern-source on feat/array-patterns, based on that merge. Read docs/XSLT40-ARRAY-PATTERNS.md/json for the contract and preserved receipts. The delivery commit is the latest feat/array-patterns commit containing this entry; source hashes identify the tested implementation.

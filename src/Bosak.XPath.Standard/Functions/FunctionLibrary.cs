@@ -457,6 +457,7 @@
 //                      | Charles Korthout |         |                | collection/uri-collection: authority-approved bytes, no disk/HTTP fallback, no directory |
 //                      | Charles Korthout |         |                | enumeration; collection members re-authorized per member; availability probes IO-free     |
 //                      | Charles Korthout | 5.141   | 10-10-2026     | B-F2: static-phase acquisitions request StaticEvaluation purpose (concrete route kept)    |
+//                      | Charles Korthout | 5.142 | 16-10-2026     | Add 4.0 JNode-based array:members and array:of-members with member boundaries intact.      |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2016,6 +2017,21 @@ public static class FunctionLibrary
                 ReturnType = XdmValueKind.Sequence,
                 IsXPath40Only = true,
                 Implementation = MapItems
+            },
+
+            [(Namespaces.Array, "members", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "members", Arity = 1,
+                ParameterTypes = [XdmValueKind.Array], ParameterTypeNames = ["array(*)"],
+                ReturnType = XdmValueKind.Sequence, ReturnTypeName = "jnode()*",
+                IsXPath40Only = true, Implementation = ArrayMembers
+            },
+            [(Namespaces.Array, "of-members", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Array, LocalName = "of-members", Arity = 1,
+                ParameterTypes = [XdmValueKind.Sequence], ParameterTypeNames = ["jnode()*"],
+                ReturnType = XdmValueKind.Array, ReturnTypeName = "array(*)",
+                IsXPath40Only = true, Implementation = ArrayOfMembers
             },
 
             // ----- array:size -------------------------------------------------
@@ -4721,6 +4737,8 @@ public static class FunctionLibrary
             [(Namespaces.Fn, "hash")] = new(["value", "algorithm", "options"], [null, "'MD5'", "map{}"]),
             [(Namespaces.Map, "merge")] = new(["maps", "options"], [null, "map{}"]),
             [(Namespaces.Map, "build")] = new(["input", "key", "value", "options"], [null, "fn:identity#1", "fn:identity#1", "map{}"]),
+            [(Namespaces.Array, "members")] = new(["array"], [null]),
+            [(Namespaces.Array, "of-members")] = new(["input"], [null]),
             [(Namespaces.Array, "sort")] = new(["array", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Array, "sort-with")] = new(["array", "comparators"], [null, null]),
             [(Namespaces.Array, "slice")] = new(["array", "start", "end", "step"], [null, "0", "0", "0"]),
@@ -13660,6 +13678,30 @@ public static class FunctionLibrary
     // ------------------------------------------------------------------
     // Array functions
     // ------------------------------------------------------------------
+
+    /// <summary>Returns ordered member JNodes sharing a root parent wrapping the input array.</summary>
+    private static XdmValue ArrayMembers(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        if (!args[0].IsArray) throw new InvalidOperationException("XPTY0004: array:members requires one array.");
+        var parent = new XdmJNode(args[0]);
+        var members = new List<XdmValue>(args[0].ArrayValue.Count);
+        long index = 0;
+        foreach (var value in args[0].ArrayValue.Values)
+            members.Add(XdmValue.FromJNode(new XdmJNode(value, XdmValue.FromInteger(++index), parent)));
+        return XdmValue.FromSequence(MaterializedSequence.FromList(members));
+    }
+
+    /// <summary>Constructs one array member per input JNode without flattening its wrapped value.</summary>
+    private static XdmValue ArrayOfMembers(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        var result = new XdmArray();
+        foreach (var item in AsSequence(args[0]))
+        {
+            if (!item.IsJNode) throw new InvalidOperationException("XPTY0004: array:of-members requires JNodes.");
+            result.Add(item.JNodeValue.Value);
+        }
+        return XdmValue.FromArray(result);
+    }
 
     private static XdmValue ArraySize(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => XdmValue.FromInteger(args[0].ArrayValue.Count);
