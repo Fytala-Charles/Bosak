@@ -1,3 +1,15 @@
+# Array pattern candidate - 2026-10-16
+
+PR322 passed both exact-head CI checks at 2244c1d7 and merged at 0ac93dd2a2a784603cdb344f6342a6ef107d772a. Active isolated worktree D:/Development/Bosak/.guard-tmp/array-pattern-source on feat/array-patterns, based on that merge. Read docs/XSLT40-ARRAY-PATTERNS.md/json for the contract and preserved receipts. The delivery commit is the latest feat/array-patterns commit containing this entry; source hashes identify the tested implementation.
+
+Unpublished source1.13.0 adds array(SequencePattern), recursive member matching and default priorities, plus outer predicates. Maps/arrays share sequence cardinality and delimiter checks. Empty arrays match vacuously; member sequences are not flattened or coerced. Predicate detection ignores quoted keys and EQName URIs. Repeated indicators .?? and *** now fail statically; valid wildcard and quantified path forms remain supported.
+
+Release build passes with zero errors and 82 warnings. Solution 8,866/0/0 (XSLT 5,980), language server 84/0/0, focused patterns/context checks 272/0/0 (62 new array cases). Frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894, both exit 0. Native array aggregate improves to 143/17/20, with only arrays-024 newly passing; record 29/35/1 and type-alias 22/9/1 remain unchanged. All three family exits remain 1 because failures remain. All local jobs have completed.
+
+The initial 56-case fixture (10 pass/46 fail), failed two-case edge controls and every original native receipt remain preserved. Baseline array aggregate142/18/20 was run against unchanged record-pattern source; byte-identical log/receipt copies retain original paths/revisions. Final native breakdown: array15/14/8, sx-SquareArrayConstructor56/0/0, arrays72/3/12. No prior native pass lost, expectation edit, upstream submission, new skip or gate promotion. Docs rendered using markdown-it and Fytala CSS; AGENTS.md conventions still apply.
+
+Next: check exact-head CI/review before integration, then review array:members/array:of-members against the current draft and related native failures. JNode patterns remain separate. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance remain unchanged. Preserve root edits, REQ128/129 dossiers, .sweep-baselines/, every worktree and all original receipts. Earlier entries below are historical.
+
 # Named record pattern candidate - 2026-10-16
 
 PR321 passed both exact-head CI checks at 1e305f90 and merged at 94c6d6519cd5b8b8d07c6690c014457166b3d888. Active isolated worktree D:/Development/Bosak/.guard-tmp/record-pattern-source on feat/record-patterns, based on that merge. Read docs/XSLT40-RECORD-PATTERNS.md/json for the contract and execution receipts. The delivery commit is the latest feat/record-patterns commit containing this entry; source hashes identify the tested implementation.

@@ -102,6 +102,7 @@
 //                      | Charles Korthout | 3.30  | 16-10-2026     | Compose map entry sequence cardinality, nested patterns and map-focus predicates.         |
 //                      | Charles Korthout | 3.31  | 16-10-2026     | Match current atomic type patterns and validate atomic alternatives.                      |
 //                      | Charles Korthout | 3.32  | 16-10-2026     | Match named record patterns using existing record identity and instance checks.           |
+//                      | Charles Korthout | 3.33  | 16-10-2026     | Match every array member using shared nested sequence-pattern checks.                     |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -211,7 +212,7 @@ internal sealed class PatternCompiler
             foreach (var op in new[] { "|", "union", "intersect", "except" })
             {
                 var operands = SplitPatternTopLevel(trimmed, op);
-                if (operands.Length > 1 && operands.Any(p => StringKeyMapPattern.StartsMapPattern(p) || AtomicPattern.StartsAtomicPattern(p) || RecordPattern.StartsRecordPattern(p)))
+                if (operands.Length > 1 && operands.Any(p => StringKeyMapPattern.StartsMapPattern(p) || AtomicPattern.StartsAtomicPattern(p) || RecordPattern.StartsRecordPattern(p) || ArrayPattern.StartsArrayPattern(p)))
                     throw new InvalidOperationException("XTSE0340: Set-pattern operands require node patterns; enclose non-node patterns in parentheses.");
             }
         }
@@ -234,6 +235,13 @@ internal sealed class PatternCompiler
             if (compatibility < XPathCompatibility.XPath40)
                 throw new InvalidOperationException("XTSE0340: Record patterns require XSLT 4.0.");
             _ = RecordPattern.Parse(trimmed);
+            return;
+        }
+        if (ArrayPattern.StartsArrayPattern(trimmed))
+        {
+            if (compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Array patterns require XSLT 4.0.");
+            _ = ArrayPattern.Parse(trimmed);
             return;
         }
         // 1.  Disallowed functions at pattern start (XTSE0340).
@@ -1072,7 +1080,7 @@ internal sealed class PatternCompiler
                 throw new InvalidOperationException("XTSE0340: Map patterns require XSLT 4.0.");
             var map = StringKeyMapPattern.Parse(trimmed);
             var outer = map.Predicates.Length > 0 ? CompileAtomicMatch("." + map.Predicates) : null;
-            return map.Compile(CompileMapEntrySequence, outer);
+            return map.Compile(CompileSequencePattern, outer);
         }
 
         if (AtomicPattern.StartsAtomicPattern(trimmed))
@@ -1105,6 +1113,22 @@ internal sealed class PatternCompiler
             var outer = record.Predicates.Length > 0 ? CompileAtomicMatch("." + record.Predicates) : null;
             return (item, context) => item.IsMap &&
                 test.Evaluate(context.WithFocus(item, 1, 1)).BooleanValue && (outer is null || outer(item, context));
+        }
+
+        if (ArrayPattern.StartsArrayPattern(trimmed))
+        {
+            if (_compatibility < XPathCompatibility.XPath40)
+                throw new InvalidOperationException("XTSE0340: Array patterns require XSLT 4.0.");
+            var array = ArrayPattern.Parse(trimmed);
+            var members = CompileSequencePattern(array.Members);
+            var outer = array.Predicates.Length > 0 ? CompileAtomicMatch("." + array.Predicates) : null;
+            return (item, context) =>
+            {
+                if (!item.IsArray) return false;
+                foreach (var member in item.ArrayValue.Values)
+                    if (!members(member, context)) return false;
+                return outer is null || outer(item, context);
+            };
         }
 
         // In 4.0 parentheses introduce an XNode pattern, even when the contained pattern accepts any item.
@@ -1260,14 +1284,12 @@ internal sealed class PatternCompiler
     }
 
     /// <summary>Compiles a nested sequence pattern, checking cardinality without coercing its items.</summary>
-    private PatternPredicate CompileMapEntrySequence(string text)
+    private PatternPredicate CompileSequencePattern(string text)
     {
         text = text.Trim();
-        static bool IsEmptySequence(string pattern) => Regex.IsMatch(pattern,
-            @"\Aempty-sequence[ \t\r\n]*\([ \t\r\n]*\)\z", RegexOptions.CultureInvariant);
         int minimum = 1, maximum = 1;
         PatternPredicate? matcher;
-        if (IsEmptySequence(text))
+        if (ArrayPattern.IsEmptySequence(text))
         {
             minimum = maximum = 0;
             matcher = null;
@@ -1282,9 +1304,10 @@ internal sealed class PatternCompiler
                 minimum = occurrence == '+' ? 1 : 0;
                 maximum = occurrence == '?' ? 1 : int.MaxValue;
             }
-            if (text.Length == 0 || IsEmptySequence(text))
-                throw new InvalidOperationException("XTSE0340: Invalid map entry sequence pattern.");
-            ValidateMapEntryDelimiters(text);
+            if (text.Length == 0 || text.EndsWith('?') || text.EndsWith('+') ||
+                text.EndsWith("**", StringComparison.Ordinal) || ArrayPattern.IsEmptySequence(text))
+                throw new InvalidOperationException("XTSE0340: Invalid nested sequence pattern.");
+            ValidateSequencePatternDelimiters(text);
             matcher = Compile(text, _defaultElementNamespace, _typedMode, _namespaces, _compatibility,
                 _itemTypeAliases, _namedRecordTypeNames);
         }
@@ -1304,7 +1327,7 @@ internal sealed class PatternCompiler
     }
 
     /// <summary>Rejects incomplete nested patterns before the permissive legacy node-pattern compiler.</summary>
-    private static void ValidateMapEntryDelimiters(string text)
+    private static void ValidateSequencePatternDelimiters(string text)
     {
         var delimiters = new Stack<char>();
         char quote = '\0';
@@ -1329,11 +1352,11 @@ internal sealed class PatternCompiler
             {
                 char expected = c == ')' ? '(' : c == ']' ? '[' : '{';
                 if (delimiters.Count == 0 || delimiters.Pop() != expected)
-                    throw new InvalidOperationException("XTSE0340: Unbalanced map entry pattern delimiters.");
+                    throw new InvalidOperationException("XTSE0340: Unbalanced nested sequence pattern delimiters.");
             }
         }
         if (delimiters.Count != 0 || quote != '\0' || uri)
-            throw new InvalidOperationException("XTSE0340: Unclosed map entry pattern delimiter.");
+            throw new InvalidOperationException("XTSE0340: Unclosed nested sequence pattern delimiter.");
     }
 
     /// <summary>
