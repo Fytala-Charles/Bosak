@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: current atomic(TypeName) patterns and priorities, including map entry use, after draft review",
+    "selectedEngineReview": "Next: array-023 result mismatch against current draft; profile and pattern issues separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -641,6 +641,21 @@
       "evidence": "XSLT40-MAP-ENTRY-PATTERNS.json",
       "gateMembershipChanged": false,
       "upstreamTestsChanged": false
+    },
+    "implicitBindingDocuments": {
+      "sourceVersion": "1.14.4 unpublished",
+      "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "newNativePasses": [
+        "array-018"
+      ],
+      "arrayAggregate": "154/6/20",
+      "recordAggregate": "29/35/1",
+      "typeAlias": "23/8/1",
+      "scope": "Direct disqualifying children of effective XSLT 4.0 variable/param/with-param bindings without as/select; existing raw sequence path",
+      "array017Review": "Draft specifies XTTE4060; upstream XTDE4060 expectation unchanged, remains failure",
+      "evidence": "XSLT40-IMPLICIT-BINDING-DOCUMENTS.json",
+      "upstreamTestsChanged": false,
+      "gateMembershipChanged": false
     }
   }
 }

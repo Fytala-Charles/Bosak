@@ -557,6 +557,7 @@
 //                      | Charles Korthout | 7.41  | 15-10-2026     | Distinguish a containing package override from contributed bindings during lookup.         |
 //                      | Charles Korthout | 7.42  | 16-10-2026     | Check bound named context types without coercion while preserving caller focus.            |
 //                      | Charles Korthout | 7.43  | 16-10-2026     | Capture untyped raw initial results once; nested typed calls deliver to their caller.      |
+//                      | Charles Korthout | 7.44  | 16-10-2026     | Suppress implicit binding documents for direct XSLT 4.0 disqualifying children.          |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -17464,6 +17465,20 @@ internal sealed class TransformEngine
     /// </summary>
     private XdmValue EvaluateSequenceConstructor(XElement parent, XdmValue contextItem, bool wrapInDocumentNode = true, bool preserveEmptySequencePositions = false)
     {
+        // XSLT 4.0 variable values / implicit document nodes: only direct children
+        // disqualify a binding from temporary-tree construction. Explicit document
+        // constructors and older effective versions retain complex-content rules.
+        if (wrapInDocumentNode
+            && parent.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+            && parent.Name.LocalName is "variable" or "param" or "with-param"
+            && parent.Attribute("as") is null && parent.Attribute("select") is null
+            && AllowsItemTypeDeclarations(parent)
+            && parent.Elements().Any(child => child.Name.NamespaceName == Stylesheet.Stylesheet.XslNamespace
+                && child.Name.LocalName is "map" or "map-entry" or "array" or "array-member" or "select"))
+        {
+            wrapInDocumentNode = false;
+        }
+
         // Ensure XPath evaluations inside the sequence constructor use the correct context item
         var savedContextItem = _context.ContextItem;
         var savedContextPosition = _context.ContextPosition;
