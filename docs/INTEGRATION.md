@@ -5,6 +5,26 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## 2026-10-16 - Explicit XSLT processor profile
+
+Unpublished source **1.15.0** adds `XsltCompiler.ProcessorProfile`: `Legacy` preserves existing behavior; opt-in `Xslt40Draft` selects a4.0 forward-compatibility ceiling and frozen XPath4.0 independently of stylesheet version. Copy/sequence unknown attributes follow the draft ceiling in the opt-in lane; fallback versions and imported/included/used-package modules share the captured profile. [Contract and evidence](XSLT40-PROCESSOR-PROFILE.md). Published versions, default runners, REQ statuses and independent Braid acceptance are unchanged. Earlier audit results remain historical baseline evidence.
+
+### Opting into the draft processor
+
+```csharp
+var compiler = new Bosak.Xslt.Api.XsltCompiler
+{
+    ProcessorProfile = Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft
+};
+var executable = compiler.Compile(stylesheet);
+```
+
+The selected profile is captured at compilation and inherited by includes, imports and used packages. Reusing the compiler with another profile does not change earlier executables. `Legacy` is the default, preserving the frozen catalog lane and existing effective-version XPath selection. In `Xslt40Draft`, stylesheet versions3.0/4.0 both use frozen XPath4.0; future versions do not enable XPath40Experimental. Unknown copy/sequence attributes at3/4 produce XTSE0090; above4 they are ignored, while invalid known copy options still raise their own errors. Unversioned fallback code resets to4.0. This profile is experimental, with incomplete instruction-specific4.0 validation; it does not assert complete XSLT4 conformance.
+
+Authoring/validation APIs, `fn:transform()`'s separate compiler, and conformance runners retain their existing defaults; no CLI profile switch is introduced. A stylesheet version declaration alone does not opt into the new processor profile.
+
+
+
 ## 2026-10-16 - Copy forward-compatibility audit
 
 The [forward-compatibility audit](XSLT40-COPY-FORWARD-COMPATIBILITY.md) reproduces five draft mismatches in a twelve-case compilation matrix. Copy rejects unknown attributes at effective versions 5/17; apply-templates accepts them at 4; sequence accepts them at 3/4. The shared supported-version ceiling deliberately remains 3.0 for frozen-catalog compatibility. A coordinated processor-capability design and separate sequence attribute validation are the next implementation work. This evidence-only step changes no engine behavior, version, REQ status or gate membership; source remains unpublished1.14.17.

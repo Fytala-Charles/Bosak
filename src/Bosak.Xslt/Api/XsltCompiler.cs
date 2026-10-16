@@ -23,6 +23,7 @@
 //                      |                  |       |                | context only, never part of construction/result-validation scope                       |
 //                      | Charles Korthout | 0.9   | 10-10-2026     | REQ-125 Slice B: ResourcePolicy - controlled compile-time acquisition (include/import,   |
 //                      |                  |       |                | packages, import-schema, parameter documents, static evaluation); default null unchanged  |
+//                      | Charles Korthout | 0.10  | 16-10-2026     | Add opt-in processor profile captured independently of stylesheet versions.              |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -38,6 +39,15 @@ namespace Bosak.Xslt.Api;
 /// </summary>
 public sealed class XsltCompiler
 {
+    /// <summary>
+    /// Selects processor compatibility independently of stylesheet version declarations.
+    /// Defaults to <see cref="XsltProcessorProfile.Legacy"/>; the experimental
+    /// <see cref="XsltProcessorProfile.Xslt40Draft"/> profile uses a 4.0 forward-compatibility
+    /// ceiling and frozen XPath 4.0. The setting is captured by each compilation, including
+    /// its imported, included and used-package modules. It does not enable experimental XPath features.
+    /// </summary>
+    public XsltProcessorProfile ProcessorProfile { get; set; }
+
     /// <summary>
     /// Optional URI resolver for xsl:import and xsl:include. Defaults to <see cref="FileSystemUriResolver"/>.
     /// </summary>
@@ -129,6 +139,7 @@ public sealed class XsltCompiler
     /// <param name="xsl">The XSLT stylesheet as an XML string.</param>
     /// <param name="baseUri">Optional base URI for resolving xsl:import and xsl:include.</param>
     /// <returns>An executable stylesheet.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The processor profile is not a defined value.</exception>
     public XsltExecutable Compile(string xsl, string? baseUri = null)
     {
         var doc = Xml11Loader.Parse(xsl,
@@ -143,8 +154,11 @@ public sealed class XsltCompiler
     /// <param name="document">The parsed XSLT stylesheet.</param>
     /// <param name="baseUri">Optional base URI for resolving xsl:import and xsl:include.</param>
     /// <returns>An executable stylesheet.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">The processor profile is not a defined value.</exception>
     public XsltExecutable Compile(XDocument document, string? baseUri = null)
     {
+        if (!Enum.IsDefined(ProcessorProfile))
+            throw new ArgumentOutOfRangeException(nameof(ProcessorProfile), ProcessorProfile, "Unknown XSLT processor profile.");
         var resolver = UriResolver ?? new FileSystemUriResolver();
         var schemaState = new Stylesheet.SchemaImportState
         {
@@ -154,7 +168,7 @@ public sealed class XsltCompiler
             EnvironmentSchemaSet = EnvironmentSchemaSet,
             ResourcePolicy = ResourcePolicy,
         };
-        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy, schemaState: schemaState);
+        var stylesheet = new Stylesheet.Stylesheet(document, baseUri, resolver, externalStaticParameters: StaticParameters, packageVersionResolutionStrategy: PackageVersionResolutionStrategy, schemaState: schemaState, processorProfile: ProcessorProfile);
         return new XsltExecutable(stylesheet, MessageListener, TreatRecoverableAmbiguousMatchAsError);
     }
 

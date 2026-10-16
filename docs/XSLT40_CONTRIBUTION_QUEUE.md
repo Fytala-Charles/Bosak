@@ -4,6 +4,12 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+## 2026-10-16 - Explicit XSLT processor profile
+
+Unpublished source **1.15.0** adds `XsltCompiler.ProcessorProfile`: `Legacy` preserves existing behavior; opt-in `Xslt40Draft` selects a4.0 forward-compatibility ceiling and frozen XPath4.0 independently of stylesheet version. Copy/sequence unknown attributes follow the draft ceiling in the opt-in lane; fallback versions and imported/included/used-package modules share the captured profile. [Contract and evidence](XSLT40-PROCESSOR-PROFILE.md). Published versions, default runners, REQ statuses and independent Braid acceptance are unchanged. Earlier audit results remain historical baseline evidence.
+
+
+
 ## 2026-10-16 - Copy forward-compatibility audit
 
 The [forward-compatibility audit](XSLT40-COPY-FORWARD-COMPATIBILITY.md) reproduces five draft mismatches in a twelve-case compilation matrix. Copy rejects unknown attributes at effective versions 5/17; apply-templates accepts them at 4; sequence accepts them at 3/4. The shared supported-version ceiling deliberately remains 3.0 for frozen-catalog compatibility. A coordinated processor-capability design and separate sequence attribute validation are the next implementation work. This evidence-only step changes no engine behavior, version, REQ status or gate membership; source remains unpublished1.14.17.

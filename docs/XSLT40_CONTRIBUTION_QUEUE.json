@@ -808,5 +808,15 @@
       0
     ],
     "next": "Processor capability design before copy/sequence validation changes"
+  },
+  "processorProfileSlice": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.15.0",
+    "base": "28474eefd2445b3cc151c46c161d953f1c025b80",
+    "report": "XSLT40-PROCESSOR-PROFILE.md",
+    "defaultChanged": false,
+    "profile": "Xslt40Draft",
+    "newControls": 49,
+    "next": "Explicit native-runner profile option; compare original upstream fixtures by identity"
   }
 }
