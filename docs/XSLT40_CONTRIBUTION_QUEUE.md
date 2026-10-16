@@ -4,6 +4,8 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**N04/N05 baseline - 2026-10-16:** Fresh unchanged upstream `91328fbf` yields type-alias 22/9/1 after correcting whitespace-separated specification dependency selection (initial 22/10/0). The record filter remains 26/38/1: record itself 26/21/0, xsl-record 0/17/1. Eight adapter controls pass; no engine change or conformance pass gain. Next engine review: extra-field matching/conversion in record-003/005/016, after current-draft review. [Baseline, triage and evidence](XSLT40-N04-N05-BASELINE.md). Published versions, REQ statuses, gates and independent Braid acceptance are unchanged.
+
 ## Next planned slice: N04/N05 conformance and reliability - 16 October 2026
 
 The next agreed direction is broader XSLT 4.0 coverage against the upstream-native `qt4cg/xslt40-test` suite, starting with a fresh bounded `type-alias` and `record` baseline. This is planned work: no new baseline, engine implementation, upstream test addition or conformance gain is claimed in this checkpoint. Historical counts and source pins below remain dated evidence, not current results. REQ-126 and the broader N04/N05 work remain In Progress; no REQ status or gate membership changes.
