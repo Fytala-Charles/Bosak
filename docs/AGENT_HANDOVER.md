@@ -1,3 +1,15 @@
+# Current isolated validation correction - 2026-10-16
+
+Branch fix/fixed-namespace-validation, worktree D:/Development/Bosak/.guard-tmp/fixed-namespace-validation-source, base3c02eca7a9ee1ac8308e37b4f91f57d4dc4c0d1b (PR345 exact-head CI38941231250 green at2f6e711d8255d60efda1deda4a464dc2ceef27ec, including Ubuntu/pwsh controls). Read docs/XSLT40-FIXED-NAMESPACE-VALIDATION.md/json.
+
+Unpublished patch1.16.1 changes only local stylesheet/transform/package allowed sets to admit fixed-namespaces when effective module version>=4, matching existing handler range. Stylesheet header2.171. No binding parser/runtime/public API/shared standard whitelist change. Earlier module-version activation, even Draft profile at module3, remains a separate known profile gap; no claim the draft forbids it. Legacy3 rejection preserved. Invalid bindings/unknown attrs and instruction-only boundaries remain tested.
+
+Initial sandbox XML-doc output denial and original quoting issue retained; corrected34-case baseline28/6. First combined98/1 (99 total) retained; remaining library/caller template-name fixture collision fixed without expected-result change. Final42-case expanded baseline35/7 on original Stylesheet; restored implementation107/0/0 combined; fixture byte-identical to expanded pre-fix source. Added all3root forms, actual fixed type-name bindings, invalid bindings, unknown/unqualified/XSLT-qualified/foreign metadata, imports/includes/used packages and local earlier expression versions.
+
+Only native change: Xslt40Draft type-alias16/15/1 ->23/8/1, recovering016..022. No other status or diagnostic changes, no lost passing identities. Legacy array155/5/20, record29/35/1, type-alias23/8/1; Draft array158/2/20 and record29/35/1 unchanged. All six families exit1. PR345 original failed receipts/logs retained byte-identically under native-before; fresh receipts and case-level hashes retained. All local processes completed: Release build **0errors/13 existing warnings**; solution **9,426/0/0** (XSLT6,492), focused **107/0/0**, language-server **84/0/0**, ten CLI controls pass, frozen QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, both gates exit0. Verified fixture links removed. Canonical docs synchronized and ten pages rendered with markdown-it and canonical Fytala CSS; no visual preview approval claimed.
+
+Next: audit record field/@required against pinned draft (record023 draft XTSE0090), then remaining direct validators. Earlier-module fixed-binding activation, fallback errors and other profile APIs remain separate. No aliases/skips/promotions/upstream edits/publication. Public1.8.0, extension0.2.4/engine1.8.0, REQ statuses/Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines and historical worktrees/receipts. Earlier entries below are historical.
+
 # Current isolated runner implementation - 2026-10-16
 
 Branch feat/xslt-runner-profile, worktree D:/Development/Bosak/.guard-tmp/runner-profile-source, basebcbffa69f3040c9d72657f7221554e34ff9d5cf3 (PR344 green exact-head CI38939354663 atcc07d50f8a55bdca907d398d4916d95cbed36734). Read docs/XSLT40-RUNNER-PROFILE.md/json.

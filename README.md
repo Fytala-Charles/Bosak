@@ -5,6 +5,12 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+## 2026-10-16 - Fixed namespace module validation
+
+Unpublished source **1.16.1** admits fixed-namespaces on version4.0-or-later stylesheet/transform/package roots, matching the existing binding handler. All seven lost draft type-alias passes (016..022) are restored: draft23/8/1, with no other native status or diagnostic changes in either profile. The handler activation threshold and shared instruction whitelist are unchanged. [Contract and evidence](docs/XSLT40-FIXED-NAMESPACE-VALIDATION.md). Earlier module-version activation remains a separate profile gap. Published versions, REQ statuses, gates and Braid acceptance are unchanged.
+
+
+
 ## 2026-10-16 - Conformance runner processor profiles
 
 Unpublished source **1.16.0** adds explicit `--processor-profile legacy|xslt40-draft` and wrapper `-ProcessorProfile Legacy|Xslt40Draft`, with separate receipt fields for catalog and processor profiles. Defaults remain legacy. Ten permanent CLI controls run in CI. Unchanged upstream fixtures reveal draft array158/2/20, record29/35/1 and type-alias16/15/1; legacy counts and passing identities are retained. [Comparison and evidence](docs/XSLT40-RUNNER-PROFILE.md). Next: fix module fixed-namespaces validation causing seven lost draft type-alias passes. No engine implementation or upstream fixture edits; published versions, REQ statuses and Braid acceptance are unchanged.

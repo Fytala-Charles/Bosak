@@ -842,5 +842,23 @@
       ]
     },
     "next": "Fix module fixed-namespaces validation causing seven lost draft type-alias passes"
+  },
+  "fixedNamespaceModuleValidation": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.16.1",
+    "report": "XSLT40-FIXED-NAMESPACE-VALIDATION.md",
+    "newControls": 42,
+    "draftTypeAliasBefore": [
+      16,
+      15,
+      1
+    ],
+    "draftTypeAliasAfter": [
+      23,
+      8,
+      1
+    ],
+    "lostPasses": [],
+    "next": "Audit record field/@required against the pinned draft"
   }
 }
