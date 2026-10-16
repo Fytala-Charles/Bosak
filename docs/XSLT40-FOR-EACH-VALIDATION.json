@@ -1,0 +1,316 @@
+{
+  "date": "2026-10-16",
+  "baseRevision": "9326d8acc4ef6f13af7160c886c3c6ebde5246c0",
+  "sourceVersion": "1.14.2 unpublished",
+  "prerequisite": {
+    "pr": 325,
+    "head": "e98384e10fcb948d7a8a5bca74e807fbf3e45008",
+    "ciRun": 38891357065,
+    "conclusion": "success",
+    "merge": "9326d8acc4ef6f13af7160c886c3c6ebde5246c0"
+  },
+  "specification": {
+    "revision": "72f222929768b411d8e88d96a1a8740483290078",
+    "xsltBlob": "59b9bdc79dca23b0c18fdd3e94130bc59037db3e",
+    "elementCatalogBlob": "1191b929fbc3dcc20bf29bc6bb7aee1552e39e61",
+    "savedCatalogSha256": "79f0a0ce9669903ec78b69bf67c59d7739b6ad34bcc7c819a7889b2a530e8548",
+    "blobHashVerified": true,
+    "sections": [
+      "xslt.xml16076 for-each",
+      "xslt.xml2323 multiple-error selection",
+      "element-catalog.xml581 for-each attributes"
+    ]
+  },
+  "upstreamRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "publicLibraries": "1.8.0 unchanged",
+  "publicExtension": "0.2.4/engine1.8.0 unchanged",
+  "verification": {
+    "solution": [
+      8933,
+      0,
+      0
+    ],
+    "xslt": [
+      5999,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "focused": [
+      56,
+      0,
+      0
+    ],
+    "newCases": 17,
+    "qt3": [
+      31142,
+      0,
+      679
+    ],
+    "qt4Gated": [
+      8278,
+      0,
+      1894
+    ],
+    "buildErrors": 0,
+    "buildWarnings": 22,
+    "allLocalJobsComplete": true
+  },
+  "native": {
+    "arrayAggregateBefore": [
+      146,
+      14,
+      20
+    ],
+    "arrayAggregateAfter": [
+      147,
+      13,
+      20
+    ],
+    "arrayInstructionSet": [
+      16,
+      13,
+      8
+    ],
+    "squareArrayConstructor": [
+      56,
+      0,
+      0
+    ],
+    "arraysTypeSetBefore": [
+      74,
+      1,
+      12
+    ],
+    "arraysTypeSetAfter": [
+      75,
+      0,
+      12
+    ],
+    "newPasses": [
+      "arrays-021"
+    ],
+    "lostPasses": [],
+    "record": [
+      29,
+      35,
+      1
+    ],
+    "typeAlias": [
+      22,
+      9,
+      1
+    ],
+    "familyExitCodes": [
+      1,
+      1,
+      1
+    ]
+  },
+  "sourceSha256": {
+    "src/Directory.Build.props": "f138c02c760fdb61c8bcab551da6eaff9f9c38e4f1bb665880ac93db9970984c",
+    "src/Bosak.Xslt/Stylesheet/Stylesheet.cs": "e30bf197fc173f5896d0e070dfdf4e354ecb13670f8ceaa335ee0cf35a2ea731",
+    "tests/Bosak.Xslt.Tests/ForEachStaticValidationTests.cs": "6e234d0e8ac0e50aa826a7510a19dbe315c2337eddc119cdb97c6b7dcabddb3b"
+  },
+  "trackedSourcePatchSha256": "09c9f857119cc2224f41c03f167f65b67baff4365b727f148e337982f7a1d203",
+  "diagnosticBaseline": {
+    "cases": 17,
+    "pass": 5,
+    "fail": 12,
+    "limitation": "Includes one shadow fixture mistake, so counts are not an engine-only baseline; remaining11 negative controls expose missing static validation",
+    "originalCompileErrorFixtureSha256": "54a4036ba874feb27ae0d3433c5f6e5da46e68aeef31b19feab5b0de2cb911c1",
+    "baselineFixtureSha256": "dde4cac7998e2ecf3933692ea5afc15b64c6149739bd83d659868238207efc22"
+  },
+  "executionLogs": [
+    {
+      "path": ".artifacts/build.log",
+      "sha256": "49bf4153cdd1324a89758270dc790c41486373f50eab4150d4943041124eb90d"
+    },
+    {
+      "path": ".artifacts/focused-final.log",
+      "sha256": "afbc196144649ca87eb545b2b5b0752c0881230ffd9c62631372cf7029c6cea7"
+    },
+    {
+      "path": ".artifacts/focused-first.log",
+      "sha256": "f7d726d85ae7bc5ae3bb13a93d4a791f1734bdc38e21ec06c5c4af4972880962"
+    },
+    {
+      "path": ".artifacts/for-each-baseline.log",
+      "sha256": "d798bc76700f09ddeff7a2ff2162d7f1845954f2e8b6b9070b0a3f675dd78f75"
+    },
+    {
+      "path": ".artifacts/for-each-before.log",
+      "sha256": "35f0818b5702c49ad56e3fffb693849b4f0306a01932801e6000207136681189"
+    },
+    {
+      "path": ".artifacts/language-server.log",
+      "sha256": "d182b237635d0fcac39f747db291a8a21a2187d782893caf4ca356267d431ee5"
+    },
+    {
+      "path": ".artifacts/native-array-before.log",
+      "sha256": "cb44f042e0e8ce44f6a7252bbb94216cd226210c8e7012190d80cae8a06da143"
+    },
+    {
+      "path": ".artifacts/native-array.log",
+      "sha256": "8a276393cc3317b7823b7f2072619e7edfb0cf4d74dc7277d9f836882a0bb6d3"
+    },
+    {
+      "path": ".artifacts/native-record.log",
+      "sha256": "797369880fceed144b8f895acf9826b471a0654e42e9e9bcf26413934659116c"
+    },
+    {
+      "path": ".artifacts/native-type-alias.log",
+      "sha256": "7b319969f8030c1d822047914cdbb16d2e09c9392e205f931a308feb27184a01"
+    },
+    {
+      "path": ".artifacts/qt3.log",
+      "sha256": "17b3d83d81fd4a94fba693953399919eb102bfeb05703defb84dbcc2a02b4d24"
+    },
+    {
+      "path": ".artifacts/qt4.log",
+      "sha256": "dae9c98fd8c4d3dcd8923b8bfee9d984258dd0539953270304c59d70820b4dd5"
+    },
+    {
+      "path": ".artifacts/solution-tests.log",
+      "sha256": "d1b579dd2c2acdc8b395a922952e503090af114b442555473b08b7eb1a3c5dd0"
+    }
+  ],
+  "rawNativeReceipts": [
+    {
+      "path": ".artifacts/xslt40/20261016T112025471Z.json",
+      "sha256": "b80ba35857d5b9ba436b0b52b67c644309b9e1e257c77df537f493624b4216ea",
+      "receipt": {
+        "timestampUtc": "2026-10-16T11:20:29.3298559Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "9326d8acc4ef6f13af7160c886c3c6ebde5246c0",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? tests/Bosak.Xslt.Tests/ForEachStaticValidationTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "array",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 13,
+          "Skipped": 20,
+          "Total": 180,
+          "Passed": 147
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\for-each-validation-source\\.artifacts\\xslt40\\20261016T112025471Z.log"
+      }
+    },
+    {
+      "path": ".artifacts/xslt40/20261016T112030246Z.json",
+      "sha256": "93c56331295944387e0929713e00b25103c36254d5a8bc2e666de5a2100efb4f",
+      "receipt": {
+        "timestampUtc": "2026-10-16T11:20:31.8332469Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "9326d8acc4ef6f13af7160c886c3c6ebde5246c0",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? tests/Bosak.Xslt.Tests/ForEachStaticValidationTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "record",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 35,
+          "Skipped": 1,
+          "Total": 65,
+          "Passed": 29
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\for-each-validation-source\\.artifacts\\xslt40\\20261016T112030246Z.log"
+      }
+    },
+    {
+      "path": ".artifacts/xslt40/20261016T112032735Z.json",
+      "sha256": "58e8c631c51755e6951c3b27f1585a89b1681eb6a4a58011434dd3c166fff405",
+      "receipt": {
+        "timestampUtc": "2026-10-16T11:20:34.2174293Z",
+        "upstream": "https://github.com/qt4cg/xslt40-test",
+        "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+        "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+        "suiteStatus": [],
+        "bosakRevision": "9326d8acc4ef6f13af7160c886c3c6ebde5246c0",
+        "bosakStatus": [
+          " M src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+          " M src/Directory.Build.props",
+          "?? .artifacts/",
+          "?? tests/Bosak.Xslt.Tests/ForEachStaticValidationTests.cs"
+        ],
+        "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+        "schemaAware": false,
+        "testSet": "type-alias",
+        "testCase": "",
+        "runnerExitCode": 1,
+        "counts": {
+          "Failed": 9,
+          "Skipped": 1,
+          "Total": 32,
+          "Passed": 22
+        },
+        "success": false,
+        "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+        "log": "D:\\Development\\Bosak\\.guard-tmp\\for-each-validation-source\\.artifacts\\xslt40\\20261016T112032735Z.log"
+      }
+    }
+  ],
+  "rawNativeBeforeReceipt": {
+    "timestampUtc": "2026-10-16T11:00:16.9885119Z",
+    "upstream": "https://github.com/qt4cg/xslt40-test",
+    "suiteRoot": "D:\\Development\\Bosak\\.guard-tmp\\n04-n05-upstream",
+    "suiteRevision": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "suiteStatus": [],
+    "bosakRevision": "24ec2b8850532dee0c19f6de508154ef6c68c797",
+    "bosakStatus": [
+      " M src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+      " M src/Directory.Build.props",
+      "?? .artifacts/",
+      "?? tests/Bosak.XPath.Standard.Tests/JNodeSumTests.cs",
+      "?? tests/Bosak.Xslt.Tests/Xslt40ArrayMemberSumTests.cs"
+    ],
+    "profile": "XSLT40 catalog dependencies; stylesheet versions retained; exact error codes",
+    "schemaAware": false,
+    "testSet": "array",
+    "testCase": "",
+    "runnerExitCode": 1,
+    "counts": {
+      "Failed": 14,
+      "Skipped": 20,
+      "Total": 180,
+      "Passed": 146
+    },
+    "success": false,
+    "scope": "Selected tests only. Skips and partial adapter/engine coverage are not conformance passes.",
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\jnode-sum-source\\.artifacts\\xslt40\\20261016T110013262Z.log"
+  },
+  "nativeBeforeReceiptSha256": "c1c9a6509334b26f2be21e7c0e2130ca34b82c1754133d648eb02c1cc75a6c8a",
+  "limitations": [
+    "Multiple-error selection remains implementation-dependent",
+    "Existing local forward-compatibility policy preserved",
+    "Arrays12 skips remain skipped; no full conformance claim",
+    "No upstream submission, gate promotion, publication or Braid acceptance"
+  ]
+}
