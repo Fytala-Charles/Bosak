@@ -1,0 +1,56 @@
+{
+  "date": "2026-10-16",
+  "base": "974b2a31e2688b749e5bc154a869becfc234dc0b",
+  "sourceVersion": "1.14.17",
+  "engineChanged": false,
+  "originalProbe": {
+    "passed": 4,
+    "failed": 4,
+    "exitCode": 1
+  },
+  "expandedProbe": {
+    "passed": 7,
+    "failed": 5,
+    "exitCode": 1
+  },
+  "next": "Explicit processor capability, validator inventory, copy/sequence fixes under both supported profiles",
+  "evidenceSha256": {
+    "docs/evidence/copy-forward-compatibility/expanded-probe.cs.txt": "b7d93bdee29cec16ec2b2aecba764fc95fc34cd7e5d19fc45eaa966f85fb14e4",
+    "docs/evidence/copy-forward-compatibility/expanded-version-matrix.log.txt": "98c8d03c198ea026572d51ee0c5053f0dc86ef3bbfc62eaed51d15dac64ddd48",
+    "docs/evidence/copy-forward-compatibility/language-server.log.txt": "edbcd912f69724fcd86907eeafc8e683212eb1be226898151162959efe3334a0",
+    "docs/evidence/copy-forward-compatibility/original-probe.cs.txt": "d94fed5688e7d72da0d2726b107555cb57e698e358e41d57a6118a506fb5b734",
+    "docs/evidence/copy-forward-compatibility/original-version-matrix.log.txt": "f36ea9d7f21843ed7af383ae7832fe34d825b19c13a590c9ece2e2c4301871db",
+    "docs/evidence/copy-forward-compatibility/solution-tests-final.log.txt": "2c2230cbfb32f826e71bbc5e83e60fb93d044ec359bfe4d052449ace321610b9"
+  },
+  "finalBase": "08b02fba4fe5fa73ed34dec2982740eb22bb4486",
+  "prerequisiteCi": 38936211003,
+  "precursorMergeTree": "3d390ec99b0c7cbaa4f7055f00011ed813062fa1",
+  "verification": {
+    "solution": [
+      9335,
+      0,
+      0
+    ],
+    "xslt": [
+      6401,
+      0,
+      0
+    ],
+    "languageServer": [
+      84,
+      0,
+      0
+    ],
+    "fixtureJunctionsRemoved": true,
+    "allProcessesComplete": true,
+    "manualGates": "Prior PR342 receipts; not rerun in this docs-only audit"
+  },
+  "localAttemptSha256": {
+    ".artifacts/expanded-version-matrix.log": "293754f9b26ec60e905712585870c9357f12e286c0c4546890bafcf9cbcc270b",
+    ".artifacts/language-server.log": "0d4ab82947ce1d84ef5526916541eaff36bb62eb89c7f14940db6314a877a374",
+    ".artifacts/runtime-unrestricted.log": "d5650b3727bdc6bf48d188adfce1164d980816cefe26919303a3eb5a3ee88a04",
+    ".artifacts/solution-tests-final.log": "36f0cfa26790d62d5f8696be485fe18e0708e774879dbc214083a6a0f85f61af",
+    ".artifacts/solution-tests.log": "0d97377472017200d0d6a6365cdfadc9ce4b6c35b43f1fbb756adfce42435310",
+    ".artifacts/version-matrix.log": "77dee412c0179a74119de4277400e004a8329be18e06df262c89e4f36b682743"
+  }
+}

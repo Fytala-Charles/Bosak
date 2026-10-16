@@ -797,5 +797,16 @@
     "base": "331602e53a0934cd1596967577161645eb9a0cf4",
     "evidence": "XSLT40-COPY-STANDARD-ATTRIBUTES.json",
     "nativePassesChanged": false
+  },
+  "copyForwardCompatibilityAudit": {
+    "date": "2026-10-16",
+    "report": "docs/XSLT40-COPY-FORWARD-COMPATIBILITY.md",
+    "engineChanged": false,
+    "probe": [
+      7,
+      5,
+      0
+    ],
+    "next": "Processor capability design before copy/sequence validation changes"
   }
 }

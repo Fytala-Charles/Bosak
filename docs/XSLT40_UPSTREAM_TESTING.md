@@ -4,6 +4,12 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+## 2026-10-16 - Copy forward-compatibility audit
+
+The [forward-compatibility audit](XSLT40-COPY-FORWARD-COMPATIBILITY.md) reproduces five draft mismatches in a twelve-case compilation matrix. Copy rejects unknown attributes at effective versions 5/17; apply-templates accepts them at 4; sequence accepts them at 3/4. The shared supported-version ceiling deliberately remains 3.0 for frozen-catalog compatibility. A coordinated processor-capability design and separate sequence attribute validation are the next implementation work. This evidence-only step changes no engine behavior, version, REQ status or gate membership; source remains unpublished1.14.17.
+
+
+
 **Copy standard attributes - 2026-10-16:** Unpublished source candidate **1.14.17** validates `xsl:copy` against the shared supported-standard attribute set plus copy-specific options. Local expansion, XPath namespace, collation, mode and version attributes are accepted; module-only input-type-annotations and unknown attributes remain rejected. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases. [Contract and evidence](XSLT40-COPY-STANDARD-ATTRIBUTES.md). Published versions, profile selection, REQ statuses and independent Braid acceptance remain unchanged. Earlier dated entries below are historical.
 
 **Copy namespace validation - 2026-10-16:** Unpublished source candidate **1.14.16** classifies namespace declarations and qualified metadata before `xsl:copy` option validation. Legal default namespaces, undeclarations, option-like namespace prefixes and foreign attributes no longer trigger XTSE0090/0020; real unqualified invalid attributes/options still fail. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases. [Contract and evidence](XSLT40-COPY-NAMESPACE-VALIDATION.md). Published versions, profile selection, REQ statuses and independent Braid acceptance remain unchanged. Earlier dated entries below are historical.
