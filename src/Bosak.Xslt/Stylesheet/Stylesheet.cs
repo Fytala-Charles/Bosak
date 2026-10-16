@@ -332,6 +332,7 @@
 //                      | Charles Korthout | 2.170 | 16-10-2026     | Apply host profiles to forward compatibility, XPath and copy/sequence validation.               |
 //                      | Charles Korthout | 2.171 | 16-10-2026     | Admit fixed-namespaces on module roots in the existing supported version range.             |
 //                      | Charles Korthout | 2.172 | 16-10-2026     | Isolate draft modules and activate fixed bindings independently of declared version.        |
+//                      | Charles Korthout | 2.173 | 16-10-2026     | Require fallback statically for unknown future instructions in the draft processor.         |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -4275,7 +4276,10 @@ internal sealed class Stylesheet
                 {
                     if (IsForwardsCompatibleElement(elem))
                     {
-                        // Ignored in forwards-compatible mode.
+                        if (ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft && !isTopLevel &&
+                            !elem.Elements(XName.Get("fallback", XslNamespace)).Any())
+                            throw new InvalidOperationException($"XTSE0010: Unknown future instruction xsl:{localName} requires xsl:fallback.");
+                        // Top-level declarations are ignored; instructions use their fallback.
                     }
                     else if (isTopLevel && GetEffectiveVersion(elem) >= 3.0)
                     {

@@ -570,6 +570,7 @@
 //                      | Charles Korthout | 7.54  | 16-10-2026     | Restore copy-select focus and template-rule state in both instruction dispatchers.           |
 //                      | Charles Korthout | 7.55  | 16-10-2026     | Preserve non-node copy values in raw sequences and use complex-content delivery otherwise.  |
 //                      | Charles Korthout | 7.56  | 16-10-2026     | Use the captured processor profile for runtime forward compatibility and fallback versions. |
+//                      | Charles Korthout | 7.57  | 16-10-2026     | Evaluate draft future-instruction fallbacks in function bodies with isolated variable scope. |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -6550,7 +6551,18 @@ internal sealed class TransformEngine
                     // xsl:function bodies are always a temporary output state (XSLT 3.0 §11.4).
                     throw new InvalidOperationException("XTDE1480: xsl:result-document cannot be used in temporary output state");
                 default:
-                    // Unknown XSLT instruction in function body: ignore
+                    if (_stylesheet.ProcessorProfile == Api.XsltProcessorProfile.Xslt40Draft &&
+                        !Stylesheet.Stylesheet.KnownXsltElementNames.Contains(instruction.Name.LocalName) &&
+                        IsForwardsCompatible(instruction))
+                    {
+                        foreach (var fallback in instruction.Elements(XName.Get("fallback", Stylesheet.Stylesheet.XslNamespace)))
+                        {
+                            var savedVariables = _context.SnapshotVariables();
+                            try { results.AddRange(EvaluateSequenceConstructorToItems(fallback, contextItem)); }
+                            finally { _context.RestoreVariables(savedVariables); }
+                        }
+                    }
+                    // Preserve the legacy function-body handling for all other cases.
                     break;
             }
         }

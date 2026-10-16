@@ -3,7 +3,7 @@
   <PropertyGroup>
     <IsPackable>true</IsPackable>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <Version>1.16.2</Version>
+    <Version>1.16.3</Version>
     <Authors>Fytala</Authors>
     <Company>Fytala</Company>
     <Copyright>Copyright (c) 2026 FYTALA</Copyright>

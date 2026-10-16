@@ -4,6 +4,12 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+## 2026-10-16 - Future instruction fallback validation and execution
+
+Milestone 3/3: unpublished patch 1.16.3 requires fallback statically for unknown future instructions in the draft processor, and evaluates valid function-body fallbacks with raw item preservation and isolated variable scope. Legacy behavior is preserved. The approved three-PR milestone ends here. [Contract and evidence](XSLT40-FUTURE-FALLBACK.md). Milestone 3/3; stop and reassess after slice3. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.
+
+
+
 ## 2026-10-16 - Earlier-version fixed namespace contexts
 
 Milestone2/3: unpublished patch1.16.2 activates fixed bindings from the captured draft processor capability for module versions1.0-4.0. Draft modules own their mutable compilation trees and caches; reader base URI/line information and provider provenance are retained. Legacy behavior remains unchanged. [Contract and evidence](XSLT40-EARLIER-FIXED-NAMESPACES.md). Milestone 2/3; stop and reassess after slice3. Public libraries1.8.0, extension0.2.4/engine1.8.0, REQ statuses and Braid acceptance unchanged.

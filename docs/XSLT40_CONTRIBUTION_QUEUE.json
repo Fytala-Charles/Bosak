@@ -874,5 +874,12 @@
     "report": "XSLT40-EARLIER-FIXED-NAMESPACES.md",
     "status": "implemented/tested in source; review exact-head CI",
     "next": "Milestone3: unknown future instructions without fallback, then stop/reassess"
+  },
+  "XSLT40-FUTURE-FALLBACK": {
+    "date": "2026-10-16",
+    "milestoneSlice": 3,
+    "report": "XSLT40-FUTURE-FALLBACK.md",
+    "status": "implemented/tested in source; review exact-head CI",
+    "next": "STOP and reassess. Review release readiness and classify remaining native failures against the pinned draft before authorizing another milestone."
   }
 }
