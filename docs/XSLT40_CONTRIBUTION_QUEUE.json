@@ -566,7 +566,7 @@
   "upstreamAcceptanceEvidence": "../contributions/xslt40/UPSTREAM_ACCEPTANCE.json",
   "nextPlannedSlice": {
     "recordedDate": "2026-10-16",
-    "status": "Baseline complete; specification-list adapter correction implemented; engine slice selected for review",
+    "status": "Baseline complete; extra-field cluster reviewed against current draft; cancellation test stabilized",
     "families": [
       "type-alias",
       "record"
@@ -600,6 +600,18 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "record-003/005/016 extra-field matching/conversion; current pinned draft review required before implementation"
+    "selectedEngineReview": "Extra-field cluster closed as upstream/current-draft alignment discrepancy; review record/named-type patterns before selecting another engine change",
+    "recordDraftReview": {
+      "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
+      "cases": [
+        "record-003",
+        "record-005",
+        "record-016"
+      ],
+      "conclusion": "Observed Bosak errors agree with current draft; original upstream expectations unchanged",
+      "evidence": "XSLT40-RECORD-DRAFT-RELIABILITY.json",
+      "engineChanged": false,
+      "cancellationReliability": "Deterministic test-local descriptor traversal; no production hook; cancelled and normal-completion cases"
+    }
   }
 }
