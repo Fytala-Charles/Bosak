@@ -1,5 +1,17 @@
 # Current isolated delivery - 2026-10-16
 
+PR341 passed exact-head CI run38934679051 at02ca511c154dd9dcac33c65f8585f67f79437008 and merged at331602e53a0934cd1596967577161645eb9a0cf4, the final base. Baseline began on exact precursor while CI ran; entire precursor/merge trees are identical (80a04f63659a2b63fe8d90a8bf4829cd7271be19), verified before fast-forward alignment. Current branch fix/copy-standard-attributes; delivery commit is `git rev-parse HEAD`. Worktree D:/Development/Bosak/.guard-tmp/copy-standard-source; root historical worktree preserved.
+
+Unpublished source candidate **1.14.17** validates `xsl:copy` against the shared supported-standard attribute set plus copy-specific options. Local expansion, XPath namespace, collation, mode and version attributes are accepted; module-only input-type-annotations and unknown attributes remain rejected. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases.
+
+Original27-case3/24 and expanded31-case4/27 baselines retained; first284/0 and final288/0 focused controls (31 new +257 previous) pass. No fixture/API/expectation corrections; expanded fixture byte-identical. Tests verify actual local expand-text, XPath namespace, default collation/default mode behavior, both dispatch paths, unused functions and rejection of real invalid options/module-only attributes. Runtime handlers are unchanged. Read [contract/evidence](XSLT40-COPY-STANDARD-ATTRIBUTES.md) and companion JSON.
+
+All local jobs completed: Release build zero errors/2 warnings; solution **9,335/0/0** (XSLT6,401), focused combined **288/0/0**, language server **84/0/0**, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**, both exit0. All test processes completed; fixture junctions were verified and removed.
+
+Next: exact-head CI/review before integration, then audit xsl:copy forward-compatible attribute handling. New4.0 schema-role support is not introduced here; JNode copying, broader constructor namespace semantics, nonraw text-only delivery kind, processor capability and obsolete patterns/functions remain separate. No public API/runtime/upstream edits, aliases, skips/gate promotions or publication. Public libraries1.8.0, VSCode0.2.4/engine1.8.0, REQ statuses and independent Braid acceptance unchanged. Preserve root edits/dossiers/.sweep-baselines/, all worktrees and original receipts. Earlier entries below are historical.
+
+# Current isolated delivery - 2026-10-16
+
 PR340 passed exact-head CI run38933454715 ataea095eb853b8f6c1772a594e5c21c0bacf2b46a and merged ata73345fa6258d4255e171f2792230695ad570e51, the final base. Tests began on the exact precursor while CI ran; entire precursor/merge trees are identical (4c85a2b2e36899e3efb3557d150b7b751daa11ec), verified before alignment. Current branch fix/copy-namespace-validation; delivery commit is `git rev-parse HEAD`. Worktree D:/Development/Bosak/.guard-tmp/copy-xmlns-source; root historical worktree preserved.
 
 Unpublished source candidate **1.14.16** classifies namespace declarations and qualified metadata before `xsl:copy` option validation. Legal default namespaces, undeclarations, option-like namespace prefixes and foreign attributes no longer trigger XTSE0090/0020; real unqualified invalid attributes/options still fail. Native array155/5/20, record29/35/1 and type-alias23/8/1 retain identical passing cases.

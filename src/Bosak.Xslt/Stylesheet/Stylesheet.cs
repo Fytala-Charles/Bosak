@@ -328,6 +328,7 @@
 //                      | Charles Korthout | 2.166 | 15-10-2026     | Resolve adopted abstract functions and propagate concrete bindings through adoption.     |
 //                      | Charles Korthout | 2.167 | 16-10-2026     | Validate for-each attributes and required select statically, including unused bodies.      |
 //                      | Charles Korthout | 2.168 | 16-10-2026     | Classify namespace declarations and foreign attributes before xsl:copy option validation.  |
+//                      | Charles Korthout | 2.169 | 16-10-2026     | Accept supported standard attributes on copy while rejecting module-only attributes.       |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -3782,6 +3783,12 @@ internal sealed class Stylesheet
             // xsl:copy attribute validation
             if (isXsltElement && localName == "copy")
             {
+                var allowedCopyAttributes = AllowedXsltAttributes(
+                    "select", "copy-namespaces", "inherit-namespaces", "use-attribute-sets", "type", "validation");
+                // This shared set also serves module declarations; their input-type
+                // policy is not a standard attribute applicable to instructions.
+                allowedCopyAttributes.Remove("input-type-annotations");
+
                 // XTSE0090: xsl:copy does not allow invalid attributes
                 foreach (var attr in elem.Attributes())
                 {
@@ -3792,14 +3799,7 @@ internal sealed class Stylesheet
 
                     var attrName = attr.Name.LocalName;
                     var baseName = attrName.StartsWith("_") ? attrName.Substring(1) : attrName;
-                    if (attr.Name.NamespaceName == "" &&
-                        baseName != "select" &&
-                        baseName != "copy-namespaces" &&
-                        baseName != "inherit-namespaces" &&
-                        baseName != "use-attribute-sets" &&
-                        baseName != "type" &&
-                        baseName != "validation" &&
-                        baseName != "use-when")
+                    if (!allowedCopyAttributes.Contains(baseName))
                     {
                         throw new InvalidOperationException("XTSE0090");
                     }

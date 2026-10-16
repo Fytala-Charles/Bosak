@@ -600,7 +600,7 @@
     "upstreamSubmissionAuthorized": false,
     "braidAdoptionSeparate": true,
     "baselineEvidence": "XSLT40-N04-N05-BASELINE.json",
-    "selectedEngineReview": "Next: audit xsl:copy standard XSLT attributes against the shared whitelist; namespace classification fixed in unpublished1.14.16; JNode construction and processor capability remain separate",
+    "selectedEngineReview": "Next: audit xsl:copy forward-compatible attribute handling; supported standard attributes fixed in unpublished1.14.17; schema-role, JNode construction and processor capability remain separate",
     "recordDraftReview": {
       "specificationRevision": "72f222929768b411d8e88d96a1a8740483290078",
       "cases": [
@@ -789,6 +789,13 @@
     "sourceVersion": "1.14.16 unpublished",
     "base": "a73345fa6258d4255e171f2792230695ad570e51",
     "evidence": "XSLT40-COPY-NAMESPACE-VALIDATION.json",
+    "nativePassesChanged": false
+  },
+  "copyStandardAttributes": {
+    "date": "2026-10-16",
+    "sourceVersion": "1.14.17 unpublished",
+    "base": "331602e53a0934cd1596967577161645eb9a0cf4",
+    "evidence": "XSLT40-COPY-STANDARD-ATTRIBUTES.json",
     "nativePassesChanged": false
   }
 }
