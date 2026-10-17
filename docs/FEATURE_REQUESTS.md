@@ -502,7 +502,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented; Braid adoption recorded within accepted REQ-129 profile | 1.8.0 | Charles Korthout | 2026-10-17 |
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
-| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented in source; consumer review/acceptance pending | 1.19.0 (unpublished) | Charles Korthout | 2026-10-17 |
+| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented in source; no-blocking consumer review; publication/acceptance pending | 1.19.0 (unpublished) | Charles Korthout | 2026-10-17 |
 
 
 > **Legend:
@@ -1746,9 +1746,11 @@ Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blo
 
 **Requesting Application:** Product owner, following the Bosak.Braid authoring roadmap
 **Submitted:** 2026-10-17
-**Status:** Implemented in source; independent consumer review and acceptance pending
+**Status:** Implemented in source; no-blocking consumer implementation review; publication and functional/native acceptance pending
 **Target Version:** 1.19.0 (unpublished)
 **Owner:** Charles Korthout
+
+**1.19.0 release prepared ? 17 October 2026:** [Braid?s unchanged implementation review](REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking finding at exact head189405f2/merge27691fdb, with overlapping291/282/298 checks (16 new probes within298). [Release readiness](RELEASE-1.19.0-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.0.md) target immutable27691fdb. Source1.19.0 is unpublished; publication approval and separate Braid integration/native acceptance remain open. Accepted REQ-130 stays on public1.18.0; no Braid pin or extension change is included.
 
 Append one engine-owned xsl:text carrying decoded literal Unicode text, with compatible PreserveSource/explicit Readable layout and complete source edit/node evidence. The [contract](REQ-131-TEXT-INSERTION-CONTRACT.md) resolves escaping, literal expand-text override, payload newline preservation, empty payloads, typed targets, mixed text/value-of coverage, limits and refusal boundaries. The [acceptance matrix](REQ-131-TEXT-INSERTION-ACCEPTANCE.md) defines 25 planned fixture groups; no new tests are claimed as executed.
 
