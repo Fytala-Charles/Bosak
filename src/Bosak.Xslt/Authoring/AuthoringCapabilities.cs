@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | REQ-124 acceptance F2: collections wrapped in Array.AsReadOnly over private storage      |
+//                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-129: advertise separately bounded readable insertion support.
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
@@ -43,6 +44,9 @@ public static class AuthoringCapabilities
 {
     /// <summary>Gets whether bounded source-preserving value-of insertion is implemented.</summary>
     public static bool SupportsValueOfInsertion => true;
+
+    /// <summary>Gets whether explicit readable insertion layout and complete edit evidence are available.</summary>
+    public static bool SupportsReadableValueOfInsertion => true;
 
     /// <summary>Gets the separate insertion limit for both original and candidate bytes, including BOM.</summary>
     public static int MaxValueOfInsertionSourceBytes => 8_388_608;

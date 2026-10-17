@@ -204,3 +204,8 @@ Publication report and canonical status pages use the unchanged Fytala styleshee
 ## REQ-129 design checkpoint
 
 Render the readable insertion contract and canonical status notices with the unchanged Fytala stylesheet. Verify tables, XML example, branded banner and explicit proposed/not-implemented language.
+
+
+## REQ-129 implementation checkpoint
+
+Render the implementation API example, source-only status and canonical notes with unchanged Fytala styles. Verify links and explicit public-release/consumer boundaries.

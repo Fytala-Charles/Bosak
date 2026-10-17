@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Resolve eligibility from retained source rather than a previously compiled backing tree. |
 //                      | Charles Korthout | 0.3   | 15-10-2026     | Apply coverage guards only to XSLT annotations, preserving ordinary result attributes.   |
+//                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-129: apply explicit layout edits and prove all surviving descriptor identities.
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -92,19 +93,22 @@ internal static class ValueOfInsertionPipeline
                 token.ThrowIfCancellationRequested();
                 var escaped = EscapeScalar(rune);
                 encodedLength += source.Encoding.GetByteCount(escaped);
-                if (encodedLength + source.OriginalBytes.Length > AuthoringCapabilities.MaxValueOfInsertionSourceBytes)
+                if (encodedLength > AuthoringCapabilities.MaxValueOfInsertionSourceBytes ||
+                    proposal.FormattingMode == AuthoringInsertionFormattingMode.PreserveSource &&
+                    encodedLength + source.OriginalBytes.Length > AuthoringCapabilities.MaxValueOfInsertionSourceBytes)
                     return new(null, Failure(AuthoringInsertionFailureKind.SizeLimit, "The candidate exceeds the insertion source byte limit."));
             }
             token.ThrowIfCancellationRequested();
             var escapedText = new StringBuilder();
             foreach (var rune in text.EnumerateRunes()) escapedText.Append(EscapeScalar(rune));
             var instruction = $"<{prefix}:value-of{declaration} select=\"{escapedText}\"/>";
-            var insertedBytes = source.Encoding.GetBytes(instruction);
-            var position = checked((int)source.CoordinateMap.ByteOffsetFromCharOffset(target.CharacterOffset));
-            var emitted = new byte[checked(source.OriginalBytes.Length + insertedBytes.Length)];
-            source.OriginalBytes.Span[..position].CopyTo(emitted);
-            insertedBytes.CopyTo(emitted, position);
-            source.OriginalBytes.Span[position..].CopyTo(emitted.AsSpan(position + insertedBytes.Length));
+            var layout = ValueOfInsertionLayout.Create(source, target, instruction, proposal.FormattingMode, token, out var layoutSizeLimit);
+            if (layout is null)
+                return new(null, Failure(layoutSizeLimit ? AuthoringInsertionFailureKind.SizeLimit : AuthoringInsertionFailureKind.UnsupportedFormatting,
+                    layoutSizeLimit ? "The formatted candidate exceeds the insertion byte limit." : "Readable layout requires unambiguous literal whitespace, indentation and newlines."));
+            var emitted = layout.Emit(source, token);
+            if (emitted is null)
+                return new(null, Failure(AuthoringInsertionFailureKind.SizeLimit, "The formatted candidate exceeds the insertion byte limit."));
             token.ThrowIfCancellationRequested();
             if (!AuthoringSource.TryCreate(emitted, target.ModuleUri, out var candidateSource, out var sourceFailure))
                 return new(null, Failure(AuthoringInsertionFailureKind.InvalidCandidate, sourceFailure!.Message));
@@ -115,8 +119,8 @@ internal static class ValueOfInsertionPipeline
             if (!inspection.IsSuccess)
                 return new(null, Failure(AuthoringInsertionFailureKind.InvalidCandidate, inspection.Failure!.Message));
             var candidate = inspection.Snapshot!;
-            var insertedRange = candidateSource!.CoordinateMap.RangeFromCharOffsets(target.CharacterOffset,
-                target.CharacterOffset + instruction.Length);
+            var insertedRange = candidateSource!.CoordinateMap.RangeFromCharOffsets(layout.InstructionOffset,
+                layout.InstructionOffset + instruction.Length);
             var insertedMatches = Nodes(candidate.PrincipalModule.Root).Where(n =>
                 n.Kind == AuthoringNodeKind.Element && n.Range == insertedRange).ToArray();
             var inserted = insertedMatches.Length == 1 ? insertedMatches[0] : null;
@@ -125,12 +129,12 @@ internal static class ValueOfInsertionPipeline
                 return new(null, Failure(AuthoringInsertionFailureKind.SourceAlignmentFailure, "The inserted expression did not round-trip exactly."));
             var validation = Validate(candidate, true, token, select);
             if (validation is not null) return new(null, validation);
-            var correspondence = Correspondence(snapshot, candidate, position, insertedBytes.Length, inserted!);
+            var correspondence = Correspondence(snapshot, candidate, layout, inserted!, token);
             if (correspondence is null)
                 return new(null, Failure(AuthoringInsertionFailureKind.SourceAlignmentFailure, "Node provenance was incomplete or ambiguous."));
             var result = new AuthoringValueOfInsertionCandidate(snapshot, candidate.WithSuccessfulCompilation(),
                 source.CoordinateMap.RangeFromCharOffsets(target.CharacterOffset, target.CharacterOffset),
-                insertedRange, inserted!, select, correspondence);
+                insertedRange, inserted!, select, correspondence, proposal.FormattingMode, layout.Evidence(source, candidateSource!));
             token.ThrowIfCancellationRequested();
             return new(result, null);
         }
@@ -312,23 +316,34 @@ internal static class ValueOfInsertionPipeline
     { '&' => "&amp;", '<' => "&lt;", '"' => "&quot;", '\t' => "&#x9;", '\n' => "&#xA;", '\r' => "&#xD;", _ => rune.ToString() };
 
     private static IReadOnlyDictionary<int, int>? Correspondence(AuthoringSnapshot input, AuthoringSnapshot candidate,
-        long position, long delta, AuthoringNodeDescriptor inserted)
+        ValueOfInsertionLayout layout, AuthoringNodeDescriptor inserted, CancellationToken token)
     {
         var available = Nodes(candidate.PrincipalModule.Root).Where(n => !ReferenceEquals(n, inserted))
             .GroupBy(Key).ToDictionary(g => g.Key, g => g.ToArray());
         var map = new Dictionary<int, int>();
         var used = new HashSet<int>();
+        var oldSource = input.SourceFor(input.PrincipalModule.ModuleUri);
+        var newSource = candidate.SourceFor(candidate.PrincipalModule.ModuleUri);
+        var evidence = layout.Evidence(oldSource, newSource);
         foreach (var old in Nodes(input.PrincipalModule.Root))
         {
-            var start = old.Range.StartByteOffset;
-            var length = old.Range.ByteLength;
-            if (start >= position) start += delta;
-            else if (start + length > position) length += delta;
-            var key = (old.Kind, start, length, old.ElementName?.NamespaceUri, old.ElementName?.LocalName);
+            token.ThrowIfCancellationRequested();
+            var start = oldSource.CoordinateMap.CharOffsetFromLineColumn(old.Range.StartLine, old.Range.StartColumn);
+            var end = oldSource.CoordinateMap.CharOffsetFromLineColumn(old.Range.EndLine, old.Range.EndColumn);
+            var translated = layout.Translate(start, end, old.Kind == AuthoringNodeKind.Text);
+            var range = newSource.CoordinateMap.RangeFromCharOffsets(translated.Start, translated.End);
+            var key = (old.Kind, range.StartByteOffset, range.ByteLength, old.ElementName?.NamespaceUri, old.ElementName?.LocalName);
             if (!available.TryGetValue(key, out var matches) || matches.Length != 1 || !used.Add(matches[0].Id)) return null;
             map.Add(old.Id, matches[0].Id);
         }
-        return used.Count == available.Values.Sum(a => a.Length) ? new ReadOnlyDictionary<int, int>(map) : null;
+        foreach (var added in available.Values.SelectMany(a => a).Where(n => !used.Contains(n.Id)))
+        {
+            token.ThrowIfCancellationRequested();
+            if (added.Kind != AuthoringNodeKind.Text || added.Text!.Any(c => c is not (' ' or '\t' or '\r' or '\n')) ||
+                !evidence.Any(e => added.Range.StartByteOffset >= e.ReplacementRange.StartByteOffset &&
+                    added.Range.StartByteOffset + added.Range.ByteLength <= e.ReplacementRange.StartByteOffset + e.ReplacementRange.ByteLength)) return null;
+        }
+        return new ReadOnlyDictionary<int, int>(map);
     }
 
     private static (AuthoringNodeKind, long, long, string?, string?) Key(AuthoringNodeDescriptor node) =>
