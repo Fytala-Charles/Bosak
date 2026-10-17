@@ -4,9 +4,11 @@
 <p>Source implementation — 17 October 2026</p>
 </div>
 
+**Published 1.18.0:** [Public package/release verification](RELEASE-1.18.0-PUBLICATION.md) is complete at immutable 3264fcfa. Braid adoption/functional/native acceptance remains open; original source-review checkpoints below are historical.
+
 ## Delivery state
 
-Source version **1.18.0, unpublished**. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Engine verification at code head `10a3b5e3ef59074ba803b63e13d29a7d4eaae989` passes; no publication, Braid pin/UI/source changes or native acceptance is claimed. Public libraries remain 1.17.0; extension 0.2.5 still bundles 1.16.5.
+Published version **1.18.0** at immutable tag `v1.18.0`, source 3264fcfa. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Engine verification at code head `10a3b5e3ef59074ba803b63e13d29a7d4eaae989` passes; no Braid pin/UI/source changes or native acceptance is claimed. Public libraries are 1.18.0; Braid production remains 1.17.0; extension 0.2.5 still bundles 1.16.5.
 
 ## Implemented boundary
 
@@ -53,7 +55,7 @@ Code revision `10a3b5e3ef59074ba803b63e13d29a7d4eaae989`, [implementation PR #36
 
 Four new proof controls and two older insertion traversal controls stay in source tests because they use internals. They are not relabeled as public package cases. Receipts are in `.guard-tmp/req130-*`, including `req130-head-package-provenance.json`, `req130-corrected-focused-results`, `req130-corrected-qt3.log`, `req130-corrected-qt4.log` and `req130-head-ci.log`. Preserve every original failure and corrected receipt separately.
 
-These engine gates do not implement Braid's review/Apply/history/worker/export/reopen workflows or native acceptance. Source version 1.18.0 is not published; Braid remains on accepted public 1.17.0. Release and consumer adoption follow their own review and authorization.
+These engine gates do not implement Braid's review/Apply/history/worker/export/reopen workflows or native acceptance. Source version 1.18.0 is published; Braid remains on accepted public 1.17.0. Release and consumer adoption follow their own review and authorization.
 
 ## Independent implementation review and release preparation
 

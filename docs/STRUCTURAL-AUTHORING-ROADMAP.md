@@ -4,6 +4,10 @@
   <p>Planning catalogue — 15 October 2026</p>
 </div>
 
+**1.18.0 published — 17 October 2026:** [Verified public delivery](RELEASE-1.18.0-PUBLICATION.md) at immutable source 3264fcfa supplies bounded REQ-130 value-of deletion. Ten signed public packages verify; fresh nuget.org-only 153 broad/221 focused checks pass with exact provenance and no reported vulnerable dependencies. Braid adoption/functional/native acceptance remains pending; its production pin 1.17.0 and extension 0.2.5/engine 1.16.5 are unchanged. Earlier preparation/unpublished statements below describe historical checkpoints.
+
+
+
 **1.18.0 release preparation — 17 October 2026:** [Braid's implementation review](REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking findings within the delivered REQ-130 profile, with overlapping reported 226/221/241 test runs. [Release readiness](RELEASE-1.18.0-READINESS.md) and [prepared notes](RELEASE-NOTES-1.18.0.md) pin proposed publication to 3264fcfa. Publication is not authorized or performed; public 1.17.0, Braid's production pin and extension remain unchanged. REQ-130 consumer/native acceptance remains open.
 
 **REQ-130 implementation — 17 October 2026:** Source 1.18.0 implements bounded instruction-only value-of deletion, with engine-issued targets, isolated candidates, complete descriptor correspondence and explicit adjacent-whitespace merge fragments. Source verification passes; public packages remain 1.17.0 and Braid adoption/native acceptance are pending. See the [implementation record](REQ-130-IMPLEMENTATION.md). No whitespace cleanup, dependency deletion, arbitrary subtree edit or automatic publication is included.
