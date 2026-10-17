@@ -5,6 +5,12 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+## VS Code 0.2.5 preparation - 17 October 2026
+
+Extension 0.2.5 prepares the released engine 1.16.5 for editor users. TypeScript, highlighting, launcher, 84 language-server tests, packaged protocol diagnostics and isolated editor live correction pass; ten bundled assembly versions and source/test trees verify. Production dependency audit reports zero vulnerabilities. See [preparation evidence](VSCODE-0.2.5-PREPARATION.md). Exact merged-revision verification precedes separate Marketplace approval. Public extension remains 0.2.4 with engine 1.8.0. Experimental 4.0 support remains bounded; package-dependent editor signatures and external module acquisition retain their existing limits. REQ statuses and Braid adoption are unchanged.
+
+
+
 ## 2026-10-16 - 1.16.5 published and verified
 
 All ten .NET10 libraries are published as1.16.5 from approved immutable `v1.16.5` at`09940e90f702566107bb2eed521b7f8d789a6410`. The single release workflow passes9,577 solution tests and all ten uploads. Fresh nuget.org-only consumers pass153 broad checks and338 public focused tests; public signatures, archive/cache/output hashes, restore hashes and exact assembly revisions verify. Dependency audits report no vulnerable packages. [Publication verification](RELEASE-1.16.5-PUBLICATION.md); [release notes](RELEASE-NOTES-1.16.5.md). VS Code0.2.4 still bundles1.8.0; Braid adoption, REQ acceptance and upstream work are unchanged. No further engine PR is planned.

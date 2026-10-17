@@ -1,3 +1,7 @@
+# Extension 0.2.5 preparation - 2026-10-17
+
+Base main `f6fc79da8f13ab9b9198d5a1369ee9dce4bb106d`; branch `feat/vscode025-alignment`. User authorized one extension preparation PR and exact merged VSIX verification. Engine source/tests match published v1.16.5; no engine edits. Complete CI, integrate this PR, repack exact merge and verify before requesting Marketplace publication approval. Preserve historical root edits, all receipts, installed extension and Braid state. Read VSCODE-0.2.5-PREPARATION.md/json. Entries below are historical.
+
 # 1.16.5 published and verified — 2026-10-16
 
 Approved release revision`09940e90f702566107bb2eed521b7f8d789a6410`; tag`v1.16.5`; single workflow38958389011 succeeds. ## 2026-10-16 - 1.16.5 published and verified
