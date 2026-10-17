@@ -1,3 +1,9 @@
+# VS Code 0.2.5 published and verified - 2026-10-17
+
+Approved immutable `vscode-v0.2.5` at `f8bbc38c4f4c9f2fc37bd8b52e83b984141ce208`; single tag-triggered workflow 39003997352 succeeds. Official public package matches 286 workflow payload files; all ten engine 1.16.5 assembly revisions verify. Public protocol and isolated editor valid/error/live-correction checks pass. Initial index lag and gzip transport receipt retained. Read VSCODE-0.2.5-PUBLICATION.md/json. Public libraries remain 1.16.5; installed extension, user settings, Braid state and all REQ statuses unchanged.
+
+Publication record branch `docs/vscode025-publication`, worktree `.guard-tmp/vscode025-publication-source`, base `f8bbc38c4f4c9f2fc37bd8b52e83b984141ce208`. Integrate this documentation record after green exact-head CI. Do not repeat publication or move tags. Preserve historical root edits and all original receipts. Entries below are historical.
+
 # Extension 0.2.5 preparation - 2026-10-17
 
 Base main `f6fc79da8f13ab9b9198d5a1369ee9dce4bb106d`; branch `feat/vscode025-alignment`. User authorized one extension preparation PR and exact merged VSIX verification. Engine source/tests match published v1.16.5; no engine edits. Complete CI, integrate this PR, repack exact merge and verify before requesting Marketplace publication approval. Preserve historical root edits, all receipts, installed extension and Braid state. Read VSCODE-0.2.5-PREPARATION.md/json. Entries below are historical.

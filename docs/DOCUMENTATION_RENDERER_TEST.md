@@ -194,3 +194,8 @@ Twelve canonical/publication/release-note/checklist pages rendered with markdown
 ## Extension 0.2.5 preparation
 
 Render the new preparation report and canonical status pages with the canonical Fytala stylesheet. Verify branded banners, links and the pending publication wording. No kit assets change.
+
+
+## Extension 0.2.5 publication
+
+Publication report and canonical status pages use the unchanged Fytala stylesheet. Verify branded banners, publication links and preserved historical candidate notices.
