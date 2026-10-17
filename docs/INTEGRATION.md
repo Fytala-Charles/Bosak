@@ -5,6 +5,12 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## Bosak 1.17.0 published - 17 October 2026
+
+Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.
+
+
+
 ## REQ-129 readable insertion in source - 17 October 2026
 
 Unpublished source **1.17.0** adds explicit opt-in readable value-of insertion, a separate capability flag and complete original/candidate edit ranges. The legacy constructor retains its existing byte splice. Formatting changes only proven direct-child whitespace gaps; ambiguity refuses. Frozen QT3 remains **31,142/0/679** and qt4 gated **8,278/0/1,894**. Full tests, exact-head package verification and integration are tracked in the [implementation record](REQ-129-IMPLEMENTATION.md). Public libraries remain 1.16.5 and extension 0.2.5; Braid integration/native acceptance are independent.
