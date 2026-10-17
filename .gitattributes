@@ -3,3 +3,4 @@
 /docs/REQ-130-source-preserving-value-of-deletion.md -text whitespace=cr-at-eol
 /docs/REQ-130-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
 /docs/REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+/docs/REQ-130-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
