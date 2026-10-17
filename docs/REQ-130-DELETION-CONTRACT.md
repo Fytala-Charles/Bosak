@@ -4,7 +4,7 @@
 <p>Proposed bounded authoring operation — 17 October 2026</p>
 </div>
 
-**Source implementation checkpoint — 17 October 2026:** [Source 1.18.0 implementation](REQ-130-IMPLEMENTATION.md) is under verification. The following contract records the reviewed design; public 1.17.0 still lacks deletion. Proposed names now implemented are detailed in the implementation record. No Braid runtime/native acceptance or publication is inferred.
+**Source implementation checkpoint — 17 October 2026:** [Source 1.18.0 implementation](REQ-130-IMPLEMENTATION.md) passes its engine verification gates. The following contract records the reviewed design; public 1.17.0 still lacks deletion. Proposed names now implemented are detailed in the implementation record. No Braid runtime/native acceptance or publication is inferred.
 
 ## Status and review decision
 

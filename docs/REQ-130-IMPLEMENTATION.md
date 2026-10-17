@@ -6,7 +6,7 @@
 
 ## Delivery state
 
-Source version **1.18.0, unpublished**. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Engine integration verification is in progress; no publication, Braid pin/UI/source changes or native acceptance is claimed. Public libraries remain 1.17.0; extension 0.2.5 still bundles 1.16.5.
+Source version **1.18.0, unpublished**. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Engine verification at code head `10a3b5e3ef59074ba803b63e13d29a7d4eaae989` passes; no publication, Braid pin/UI/source changes or native acceptance is claimed. Public libraries remain 1.17.0; extension 0.2.5 still bundles 1.16.5.
 
 ## Implemented boundary
 
@@ -34,4 +34,23 @@ The final actual API cases cover imported first/middle/last instructions, compac
 
 Final build, focused/full tests, language-server suite, frozen QT3/qt4 results, exact-head CI and independent package-only proof are recorded below once complete. No D01–D27 consumer/native gate is inferred from engine tests. Braid still needs compatible port/review/Apply/history/selection integration, malformed consumer-evidence controls, worker/export/independent reopen goldens and native owner acceptance after delivery. Preserve [Braid's design-only review](REQ-130-CONSUMER-DESIGN-REVIEW.md) and the [original request](REQ-130-source-preserving-value-of-deletion.md) unchanged.
 
-An added internal malformed-candidate control exposed a range-bound exception when the supplied candidate was shorter than the translated root extent. The proof now explicitly rejects translated endpoints outside candidate text before constructing coordinates. This is a robustness correction in the engine proof (distinct from the earlier fixture corrections); original failed full-run receipt is retained in `.guard-tmp/req130-final-solution-results`. A fresh corrected-source full run is required.
+An added internal malformed-candidate control exposed a range-bound exception when the supplied candidate was shorter than the translated root extent. The proof now explicitly rejects translated endpoints outside candidate text before constructing coordinates. This is a robustness correction in the engine proof (distinct from the earlier fixture corrections); original failed full-run receipt is retained in `.guard-tmp/req130-final-solution-results`. Corrected-source focused 226 and exact-head CI full 9,661 solution plus 84 language-server tests pass. The earlier failed run remains preserved.
+
+## Verified code-head delivery gates
+
+Code revision `10a3b5e3ef59074ba803b63e13d29a7d4eaae989`, [implementation PR #361](https://github.com/Fytala-Charles/Bosak/pull/361). Subsequent documentation-only updates retain the same source/test trees; final-head CI/package proof and integrated revision are retained in the delivery receipt.
+
+| Gate | Observed evidence |
+|---|---|
+| Release build | Successful, zero errors; existing unrelated documentation/test warnings retained. |
+| Focused source | **226 passed**, zero failed/skipped: 49 deletion cases (including four internal proof controls) plus 177 insertion/readable cases. |
+| Exact code-head CI | Run **39028847729** succeeds: **9,661 solution +84 language-server tests**, zero failed/skipped; highlighting green. |
+| QT3 frozen | **31,142 /0 /679**, matching baseline. |
+| qt4 gated | **8,278 /0 /1,894**, matching baseline, zero gated/exploratory failures. |
+| Independent local-package consumer | **221 passed**, zero failed/skipped: 45 public deletion +175 public insertion +one assembly-identity case. No project references or friend-assembly identity. |
+| Package provenance | Ten local 1.18.0 archives, nine consumed assemblies; exact repository/informational revision and archive/cache/output bytes, SHA-512 restore hashes and local source receipts agree. Dependency audit reports zero vulnerable dependencies. |
+| Documentation and retained evidence | Nine changed pages render using unchanged canonical CSS; original consumer dossiers/review remain byte-identical Git blobs. |
+
+Four new proof controls and two older insertion traversal controls stay in source tests because they use internals. They are not relabeled as public package cases. Receipts are in `.guard-tmp/req130-*`, including `req130-head-package-provenance.json`, `req130-corrected-focused-results`, `req130-corrected-qt3.log`, `req130-corrected-qt4.log` and `req130-head-ci.log`. Preserve every original failure and corrected receipt separately.
+
+These engine gates do not implement Braid's review/Apply/history/worker/export/reopen workflows or native acceptance. Source version 1.18.0 is not published; Braid remains on accepted public 1.17.0. Release and consumer adoption follow their own review and authorization.
