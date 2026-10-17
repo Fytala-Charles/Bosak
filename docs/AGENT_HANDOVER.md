@@ -1,3 +1,7 @@
+# REQ-129 contract proposed - 2026-10-17
+
+Base6069a7a6; isolated branch docs/req129-formatting-contract. User requested defining the formatting contract, not implementation. Read REQ-129-READABLE-INSERTION-CONTRACT.md and consumer dossier. Pending/TBD/Unassigned retained; no engine/API/test/package/consumer changes. Legacy default, direct-child whitespace-only plan, explicit full-edit evidence and complete correspondence are mandatory. Compact fallback two spaces; ambiguity refuses. Root old checkout registrations and user edits preserved. Review contract before authorizing implementation. Earlier entries below historical.
+
 # VS Code 0.2.5 published and verified - 2026-10-17
 
 Approved immutable `vscode-v0.2.5` at `f8bbc38c4f4c9f2fc37bd8b52e83b984141ce208`; single tag-triggered workflow 39003997352 succeeds. Official public package matches 286 workflow payload files; all ten engine 1.16.5 assembly revisions verify. Public protocol and isolated editor valid/error/live-correction checks pass. Initial index lag and gzip transport receipt retained. Read VSCODE-0.2.5-PUBLICATION.md/json. Public libraries remain 1.16.5; installed extension, user settings, Braid state and all REQ statuses unchanged.

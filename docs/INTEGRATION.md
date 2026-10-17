@@ -5,6 +5,12 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## REQ-129 formatting contract proposed - 17 October 2026
+
+The [readable insertion contract](REQ-129-READABLE-INSERTION-CONTRACT.md) defines opt-in layout, direct-child whitespace changes, exact candidate edit/provenance evidence, conservative refusals and planned tests. Existing insertion behavior remains the default. This is design only: REQ-129 remains Pending/TBD/Unassigned; released libraries 1.16.5, extension 0.2.5, REQ-128 delivery and Braid acceptance are unchanged.
+
+
+
 ## VS Code 0.2.5 published - 17 October 2026
 
 The [Marketplace extension](https://marketplace.visualstudio.com/items?itemName=fytala.vscode-bosak) now bundles released engine 1.16.5, published from approved immutable tag `vscode-v0.2.5` at `f8bbc38c4f4c9f2fc37bd8b52e83b984141ce208`. The single [publication workflow](https://github.com/Fytala-Charles/Bosak/actions/runs/39003997352) passes 84 language-server tests, highlighting and launcher checks. The official public VSIX matches the workflow payload; ten assembly versions/revisions, packaged protocol diagnostics and isolated editor live correction verify. [Publication record](VSCODE-0.2.5-PUBLICATION.md). Public libraries remain 1.16.5; Braid adoption and REQ acceptance are independent. The installed extension and user settings were unchanged. Earlier preparation entries below are historical.

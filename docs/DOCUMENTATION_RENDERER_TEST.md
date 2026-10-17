@@ -199,3 +199,8 @@ Render the new preparation report and canonical status pages with the canonical 
 ## Extension 0.2.5 publication
 
 Publication report and canonical status pages use the unchanged Fytala stylesheet. Verify branded banners, publication links and preserved historical candidate notices.
+
+
+## REQ-129 design checkpoint
+
+Render the readable insertion contract and canonical status notices with the unchanged Fytala stylesheet. Verify tables, XML example, branded banner and explicit proposed/not-implemented language.
