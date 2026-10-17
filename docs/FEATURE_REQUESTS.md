@@ -501,7 +501,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-127 | Bosak.Braid | Source-preserving inspection of compact nested sibling elements | Valid compact XSLT was refused with source-alignment failure; exact retained ranges are required | Implemented — published 1.1.3, public artifacts verified; Braid verification reported | 1.1.3 | Charles Korthout | 2026-10-12 |
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented; Braid adoption recorded within accepted REQ-129 profile | 1.8.0 | Charles Korthout | 2026-10-17 |
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
-| REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented and published; consumer acceptance pending | 1.18.0 | Charles Korthout | 2026-10-17 |
+| REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented and accepted by Bosak.Braid (published) | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented in source; verification/consumer acceptance pending | 1.19.0 (unpublished) | Charles Korthout | 2026-10-17 |
 
 
@@ -1722,9 +1722,9 @@ REQ-128 preserves original insertion layout; repeated compact insertions need an
 
 **Requesting Application:** Bosak.Braid
 **Submitted:** 2026-10-17
-**Status:** Pending; deletion contract and acceptance plan proposed, scope/API not yet accepted
-**Target Version:** TBD
-**Owner:** Unassigned
+**Status:** Implemented, published and accepted by Bosak.Braid
+**Target Version:** 1.18.0
+**Owner:** Charles Korthout
 
 The [unchanged consumer dossier](REQ-130-source-preserving-value-of-deletion.md) requests engine-owned deletion of exactly one eligible principal-module value-of with instruction-only byte removal, complete removed/surviving identity evidence and no surrounding whitespace/namespace cleanup. Braid's concurrent handoff reserves this identifier; the separate literal-text proposal is REQ-131. No deletion engine API, implementation, consumer command or release is supplied by this documentation step. Review the requested deletion contract separately before implementation.
 
@@ -1737,6 +1737,8 @@ Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blo
 **Release preparation — 17 October 2026:** Braid's [implementation review](REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking finding at exact head 07e66dbb/merge 3264fcfa, independently reporting overlapping226/221/241 passes (20 new probes within 241). [Prepared 1.18.0 release](RELEASE-1.18.0-READINESS.md) targets3264fcfa; no publication or consumer functional/native acceptance is authorized or claimed. Registry remains implemented in source, consumer acceptance pending. Public 1.17.0 pin remains unchanged.
 
 **Published — 17 October 2026:** Approved 1.18.0 at immutable 3264fcfa is public and verified. [Publication proof](RELEASE-1.18.0-PUBLICATION.md) records single successful Release workflow 9661 tests/ten uploads, ten signed public packages and fresh public-only 153 broad/221 focused passes with exact provenance. Braid production pin stays 1.17.0 and functional/native acceptance remains open. Earlier source-only/preparation checkpoints are historical.
+
+**Formal consumer acceptance - 17 October 2026:** Bosak.Braid accepts the published 1.18.0 delivery at 3264fcfaf739e492770c882d2cbfc1f93f0172d2. Accepted Braid implementation/records are pushed at 6d89fcd5e53d65560c4004b18b98264aa20e1fee; full normal Release 1,015/0/0 and public-package 241/0/0 pass. The user completed the native procedure and confirms all hashes match. This accepts explicit review/Apply/history/parent navigation and changed-output worker/export/reopen within the delivered bounded profile, including separate ordinary-survivor and two-text-merge provenance. Native variants/literal hash values/detailed accessibility observations are unspecified. See [formal notification](REQ-130-BRAID-ACCEPTANCE.md). Earlier pending-consumer/source-only notes above are historical; REQ-131 is separate.
 
 ### REQ-131: Literal-Text Insertion for Structural Authoring
 
