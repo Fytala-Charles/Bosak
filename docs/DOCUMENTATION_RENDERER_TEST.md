@@ -209,3 +209,8 @@ Render the readable insertion contract and canonical status notices with the unc
 ## REQ-129 implementation checkpoint
 
 Render the implementation API example, source-only status and canonical notes with unchanged Fytala styles. Verify links and explicit public-release/consumer boundaries.
+
+
+## Bosak1.17.0 publication
+
+Render the publication report, release notes and canonical notices using unchanged Fytala CSS. Verify publication links, bounded API wording and Braid feedback attribution.

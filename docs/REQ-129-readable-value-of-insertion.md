@@ -1,6 +1,9 @@
 # REQ-129: Readable Value-of Insertion - Consumer Request
 
-Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Current status: Implemented in source. Target: 1.17.0 (unpublished). Owner: Charles Korthout. The user authorized implementation after contract preparation; final validation/integration and consumer acceptance are separate.
+Published 17 October 2026. [Release verification](RELEASE-1.17.0-PUBLICATION.md). Original source/design checkpoint text below is historical.
+
+
+Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Current status: Implemented and published. Target: 1.17.0. Owner: Charles Korthout. The user authorized implementation after contract preparation; public signatures and fresh consumers verify; user reports Braid found no blockers. Additional native UI results and production adoption are independent.
 
 ## Source implementation - 17 October 2026
 

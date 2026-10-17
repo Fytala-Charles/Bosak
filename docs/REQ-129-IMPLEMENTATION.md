@@ -4,6 +4,12 @@
 <p>Opt-in bounded source formatting — 17 October 2026</p>
 </div>
 
+## Bosak 1.17.0 published - 17 October 2026
+
+Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.
+
+
+
 ## Behavior and compatibility
 
 Unpublished source 1.17.0 implements the [reviewed contract](REQ-129-READABLE-INSERTION-CONTRACT.md). Source edits affect only the selected parent's direct-child whitespace gaps and one appended value-of instruction. Existing tags, child markup, comments, PI payloads, XPath expressions and bytes outside declared spans stay intact. The complete final encoded length is counted before replacement/output allocation, including BOM. A compact parent gets two-space child indentation; a consistently indented parent retains its unit. Uniform LF/CRLF/lone CR are retained; sources with no newlines use LF.
