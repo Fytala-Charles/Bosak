@@ -1,8 +1,10 @@
-# REQ-129 accepted; REQ-130 contract proposed - 2026-10-17
+# REQ-129 accepted; REQ-131 contract proposed - 2026-10-17
 
 Branch docs/text-insertion-contract; base24841b7c. User confirmed Braid implementation/acceptance and requested the next design steps. Import existing root REQ-129-BRAID-ACCEPTANCE.md byte-for-byte; SHA-256 `ca360f49ea8c3675c19ec7ae0e7083cd0d9cd18484aa048cd9eea6c2a13815d2`. Consumer reports952 Release/184 public cases and explicit owner functional acceptance; supplemental native manual hash/manifest observations remain unrecorded, not blockers. Do not rerun/claim new Braid tests or modify Braid files/pin. REQ129 accepted; REQ128 adoption language updated only within that accepted shared profile.
 
-REQ130 is Pending/TBD/Unassigned, design only: typed text insertion, literal expand-text=no, escaped control/newline payloads, exact source/node evidence, deliberate literal-xsl:text coverage for mixed operation reuse, original profile/refusal/resource/cancellation limits,25 planned acceptance groups. No engine/API/flag/test/version/release/extension change. Review contract before authorizing one engine implementation PR. Read REQ-130-TEXT-INSERTION-CONTRACT.md and acceptance matrix. Preserve root old branch/edits and original acceptance receipt. Earlier entries below historical.
+Concurrent root/Braid registration reserves REQ130 for value-of deletion; imported its dossier unchanged, SHA-256 `a0c9b7b2e9f78b7de0c7695b1206bcdfa709aeba62c662b5df1a72cd539a2698`. Preserve its pending status; no deletion implementation authorized by this import. Text proposal renumbered REQ131 to avoid collision; earlier drafting head/CI retained as superseded.
+
+REQ131 is Pending/TBD/Unassigned, design only: typed text insertion, literal expand-text=no, escaped control/newline payloads, exact source/node evidence, deliberate literal-xsl:text coverage for mixed operation reuse, original profile/refusal/resource/cancellation limits,25 planned acceptance groups. No engine/API/flag/test/version/release/extension change. Review contract before authorizing one engine implementation PR. Read REQ-131-TEXT-INSERTION-CONTRACT.md and acceptance matrix. Preserve root old branch/edits and original acceptance receipt. Earlier entries below historical.
 
 # Bosak1.17.0 published and verified -2026-10-17
 

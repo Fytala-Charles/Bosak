@@ -4,7 +4,7 @@
   <p>Planning catalogue — 15 October 2026</p>
 </div>
 
-**17 October 2026:** REQ-129 is implemented, published and accepted by Braid within its delivered bounded profile. The next operation is now the proposed [REQ-130 literal-text contract](REQ-130-TEXT-INSERTION-CONTRACT.md), with [25 planned acceptance groups](REQ-130-TEXT-INSERTION-ACCEPTANCE.md). This authorizes design only; sequence insertion and the other rows remain unscheduled. The earlier planning comparison and adoption-pending wording below describe the original roadmap checkpoint.
+**17 October 2026:** REQ-129 is implemented, published and accepted by Braid within its delivered bounded profile. The user-requested text design is now [REQ-131](REQ-131-TEXT-INSERTION-CONTRACT.md), with [25 planned acceptance groups](REQ-131-TEXT-INSERTION-ACCEPTANCE.md). During this design step, Braid registered [REQ-130 value-of deletion](REQ-130-source-preserving-value-of-deletion.md); that existing consumer identifier is preserved. Neither operation is implemented here. Next implementation priority should be reviewed against the actual deletion request before scheduling the internal text proposal. Earlier planning/adoption wording below describes the original checkpoint.
 
 
 

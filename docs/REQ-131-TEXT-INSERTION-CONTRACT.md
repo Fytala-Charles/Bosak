@@ -1,6 +1,6 @@
 <div align="center">
 <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala literal-text insertion contract">
-<h1>REQ-130: literal-text insertion contract</h1>
+<h1>REQ-131: literal-text insertion contract</h1>
 <p>Proposed structural authoring operation — 17 October 2026</p>
 </div>
 
@@ -11,6 +11,8 @@
 Append one engine-created `xsl:text` carrying literal text at the end of an eligible principal-module sequence constructor. This complements value-of insertion; sequence insertion, result-element creation, arbitrary XML fragments, text value templates, disable-output-escaping and general document formatting remain separate operations. Existing text execution in the compiler is not an advertised authoring creation capability.
 
 Design baseline: public 1.17.0 at `15eacde48b47cc8e48af29ddc95949801a2e3e5d`, with documentation main `24841b7ca33b6b9ad31313ef19cda12e7dea4e82`. Existing insertion APIs, `ValueOfInsertionPipeline`, `ValueOfInsertionLayout`, capabilities and source descriptors were reviewed. No source, public API, dependency pin, version, gate membership or release changes in this design step.
+
+**Identifier correction:** An independent Braid handoff registered REQ-130 for value-of deletion while this text design was being drafted. Its dossier is preserved unchanged. This proposal uses REQ-131; it does not displace that consumer request or authorize text implementation ahead of deletion. The earlier drafting commit and superseded CI receipt remain in history.
 
 ## Proposed additive API
 
@@ -100,6 +102,6 @@ Braid separately discovers text/readable-text capability, edits a literal-text f
 
 ## Acceptance and implementation gates
 
-The [planned acceptance matrix](REQ-130-TEXT-INSERTION-ACCEPTANCE.md) specifies happy-path, edge, compatibility, payload, provenance, budget and consumer cases. They are plans, not executed tests. Implementation requires full solution and language-server tests, exact-head and exact-merge package-only consumers, unchanged frozen QT3 **31,142/0/679**, and qt4 gated **8,278/0/1,894** unless a separately approved gate change occurs. Preserve original failure receipts and use separate corrections; no skips, aliases or gate promotions merely to make this slice green.
+The [planned acceptance matrix](REQ-131-TEXT-INSERTION-ACCEPTANCE.md) specifies happy-path, edge, compatibility, payload, provenance, budget and consumer cases. They are plans, not executed tests. Implementation requires full solution and language-server tests, exact-head and exact-merge package-only consumers, unchanged frozen QT3 **31,142/0/679**, and qt4 gated **8,278/0/1,894** unless a separately approved gate change occurs. Preserve original failure receipts and use separate corrections; no skips, aliases or gate promotions merely to make this slice green.
 
 Review this contract before starting one bounded engine implementation PR. Ship no capability flag, version bump, package or Braid command as part of this design document.
