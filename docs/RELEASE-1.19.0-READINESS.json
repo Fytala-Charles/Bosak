@@ -1,102 +1,110 @@
 {
-  "status": "READY_FOR_PUBLICATION_APPROVAL",
-  "publicationAuthorized": false,
-  "publicationPerformed": false,
-  "candidateVersion": "1.19.0",
-  "candidateRevision": "27691fdb3708bb4ffd7c984abbf3196b7cde5667",
-  "proposedTag": "v1.19.0",
-  "preparationBase": "211be50e7be455b0538625fdd4d5ebd08bfb70df",
-  "engineChanges": false,
-  "review": {
-    "source": "D:\\Development\\Bosak.Braid\\docs\\BOSAK_REQ131_CONSUMER_REVIEW.md",
-    "importedAs": "REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md",
-    "sha256": "83d8a912f8748462f86e735d8a5153d62aef4c35c3ad2a53ab6046c3ebc45732",
-    "verdict": "No blocking implementation finding within declared bounded profile",
-    "reportedSourceFocused": 291,
-    "reportedPublicContracts": 282,
-    "reportedCombinedProbes": 298,
-    "additionalProbes": 16,
-    "reportedBraid1180Baseline": 1015,
-    "countsOverlap": true,
-    "publicPackageVerification": false,
-    "consumerAcceptance": false
-  },
-  "upstream": {
-    "solution": 9726,
-    "languageServer": 84,
-    "focused": 291,
-    "independentPackageConsumer": 282,
-    "qt3": [
-      31142,
-      0,
-      679
-    ],
-    "qt4": [
-      8278,
-      0,
-      1894
-    ],
-    "finalHeadCI": 39035190436,
-    "integratedCI": 39035670638
-  },
-  "preflight": {
-    "checkedAtUTC": "2026-10-17T19:33:30.269222+00:00",
+  "status": "PUBLISHED_VERIFIED",
+  "publicationAuthorized": true,
+  "publicationPerformed": true,
+  "revision": "27691fdb3708bb4ffd7c984abbf3196b7cde5667",
+  "releaseUrl": "https://github.com/Fytala-Charles/Bosak/releases/tag/v1.19.0",
+  "publicationProof": "RELEASE-1.19.0-PUBLICATION.json",
+  "historicalPreparationEvidence": {
+    "status": "READY_FOR_PUBLICATION_APPROVAL",
+    "publicationAuthorized": false,
+    "publicationPerformed": false,
     "candidateVersion": "1.19.0",
     "candidateRevision": "27691fdb3708bb4ffd7c984abbf3196b7cde5667",
-    "remoteTagPresent": false,
-    "githubReleasePresent": false,
-    "githubReleaseQueryError": "gh: Not Found (HTTP 404)",
-    "publicPackageVersionChecks": [
-      {
-        "id": "Bosak.XPath.Api",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Compiler",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Core",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Parser",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Providers",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Providers.Database",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Runtime",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json"
-      },
-      {
-        "id": "Bosak.XPath.Standard",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json"
-      },
-      {
-        "id": "Bosak.XQuery",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json"
-      },
-      {
-        "id": "Bosak.Xslt",
-        "version1190Present": false,
-        "source": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json"
-      }
-    ]
+    "proposedTag": "v1.19.0",
+    "preparationBase": "211be50e7be455b0538625fdd4d5ebd08bfb70df",
+    "engineChanges": false,
+    "review": {
+      "source": "D:\\Development\\Bosak.Braid\\docs\\BOSAK_REQ131_CONSUMER_REVIEW.md",
+      "importedAs": "REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md",
+      "sha256": "83d8a912f8748462f86e735d8a5153d62aef4c35c3ad2a53ab6046c3ebc45732",
+      "verdict": "No blocking implementation finding within declared bounded profile",
+      "reportedSourceFocused": 291,
+      "reportedPublicContracts": 282,
+      "reportedCombinedProbes": 298,
+      "additionalProbes": 16,
+      "reportedBraid1180Baseline": 1015,
+      "countsOverlap": true,
+      "publicPackageVerification": false,
+      "consumerAcceptance": false
+    },
+    "upstream": {
+      "solution": 9726,
+      "languageServer": 84,
+      "focused": 291,
+      "independentPackageConsumer": 282,
+      "qt3": [
+        31142,
+        0,
+        679
+      ],
+      "qt4": [
+        8278,
+        0,
+        1894
+      ],
+      "finalHeadCI": 39035190436,
+      "integratedCI": 39035670638
+    },
+    "preflight": {
+      "checkedAtUTC": "2026-10-17T19:33:30.269222+00:00",
+      "candidateVersion": "1.19.0",
+      "candidateRevision": "27691fdb3708bb4ffd7c984abbf3196b7cde5667",
+      "remoteTagPresent": false,
+      "githubReleasePresent": false,
+      "githubReleaseQueryError": "gh: Not Found (HTTP 404)",
+      "publicPackageVersionChecks": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Providers.Database",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json"
+        },
+        {
+          "id": "Bosak.Xslt",
+          "version1190Present": false,
+          "source": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json"
+        }
+      ]
+    }
   }
 }

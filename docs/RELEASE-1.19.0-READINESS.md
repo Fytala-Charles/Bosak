@@ -4,6 +4,8 @@
 <p>Prepared; publication approval outstanding ? 17 October 2026</p>
 </div>
 
+**Publication completed after user approval - 18 October 2026:** [Verified public delivery](RELEASE-1.19.0-PUBLICATION.md) supersedes the original preparation-only status below. v1.19.0 remains immutable at27691fdb; do not republish or move it. Original preflight and execution boundary retained as history.
+
 ## Decision and immutable target
 
 **Ready for publication approval; not published.** Proposed version **1.19.0**, annotated tag `v1.19.0`, exact source target **`27691fdb3708bb4ffd7c984abbf3196b7cde5667`**, merged [PR #364](https://github.com/Fytala-Charles/Bosak/pull/364). Do not tag the later documentation-preparation merge. Ten coordinated libraries already use 1.19.0; no source/version bump is needed. [Structured readiness](RELEASE-1.19.0-READINESS.json), [prepared release notes](RELEASE-NOTES-1.19.0.md).

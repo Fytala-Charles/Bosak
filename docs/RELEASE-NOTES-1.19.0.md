@@ -1,10 +1,10 @@
 <div align="center">
-<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.19.0 prepared release notes">
+<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.19.0 public release">
 <h1>Bosak 1.19.0 release notes</h1>
-<p>Prepared literal-text insertion release; unpublished ? 17 October 2026</p>
+<p>Published literal-text insertion release - 18 October 2026</p>
 </div>
 
-Proposed immutable tag `v1.19.0` at **`27691fdb3708bb4ffd7c984abbf3196b7cde5667`**. All ten coordinated libraries target .NET 10. [Readiness and approval boundary](RELEASE-1.19.0-READINESS.md). Public delivery remains 1.18.0 until separately approved publication and verification.
+Published immutable tag `v1.19.0` at **`27691fdb3708bb4ffd7c984abbf3196b7cde5667`**. All ten coordinated libraries target .NET 10. [Readiness and approval boundary](RELEASE-1.19.0-READINESS.md). [Public artifact verification](RELEASE-1.19.0-PUBLICATION.md) is complete: ten signed packages, 153 broad/282 focused fresh public-only checks, exact provenance and clear audits. Braid adoption/native acceptance remains separate.
 
 ## Bounded literal-text insertion
 
