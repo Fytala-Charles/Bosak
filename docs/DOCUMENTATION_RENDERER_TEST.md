@@ -189,3 +189,8 @@ Eleven pages rendered with markdown-it and canonical Fytala CSS in a fresh outpu
 ## 2026-10-16 Published1.16.5 record
 
 Twelve canonical/publication/release-note/checklist pages rendered with markdown-it and canonical Fytala CSS in a fresh output directory. Valid heading tags and release-note h1 are checked. Public package signatures,153 broad controls,338 public focused tests and exact release provenance verify. Automated rendering only; no visual approval claimed. Engine/tests and immutable release tag unchanged.
+
+
+## Extension 0.2.5 preparation
+
+Render the new preparation report and canonical status pages with the canonical Fytala stylesheet. Verify branded banners, links and the pending publication wording. No kit assets change.
