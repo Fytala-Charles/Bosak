@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 17-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 17-10-2026     | REQ-131: share exact layout with an independent byte bound; legacy default unchanged.  |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -25,7 +26,7 @@ internal sealed class ValueOfInsertionLayout
     internal int InstructionOffset { get; private set; }
 
     internal static ValueOfInsertionLayout? Create(AuthoringSource source, AuthoringValueOfInsertionTarget target,
-        string instruction, AuthoringInsertionFormattingMode mode, CancellationToken token, out bool sizeLimit)
+        string instruction, AuthoringInsertionFormattingMode mode, CancellationToken token, out bool sizeLimit, int? maxSourceBytes = null)
     {
         sizeLimit = false;
         var plan = new ValueOfInsertionLayout();
@@ -118,7 +119,7 @@ internal sealed class ValueOfInsertionLayout
             finalLength += prefixBytes;
         }
         finalLength += source.Encoding.GetByteCount(instruction) + source.Encoding.GetByteCount(newline) + source.Encoding.GetByteCount(baseline);
-        if (finalLength > AuthoringCapabilities.MaxValueOfInsertionSourceBytes)
+        if (finalLength > (maxSourceBytes ?? AuthoringCapabilities.MaxValueOfInsertionSourceBytes))
         {
             sizeLimit = true;
             return null;
@@ -174,7 +175,7 @@ internal sealed class ValueOfInsertionLayout
         return "  ";
     }
 
-    internal byte[]? Emit(AuthoringSource source, CancellationToken token)
+    internal byte[]? Emit(AuthoringSource source, CancellationToken token, int? maxSourceBytes = null)
     {
         long length = source.OriginalBytes.Length;
         foreach (var e in Edits)
@@ -183,7 +184,7 @@ internal sealed class ValueOfInsertionLayout
             length += source.Encoding.GetByteCount(e.Replacement) -
                 (source.CoordinateMap.ByteOffsetFromCharOffset(e.End) - source.CoordinateMap.ByteOffsetFromCharOffset(e.Start));
         }
-        if (length > AuthoringCapabilities.MaxValueOfInsertionSourceBytes) return null;
+        if (length > (maxSourceBytes ?? AuthoringCapabilities.MaxValueOfInsertionSourceBytes)) return null;
         var output = new byte[checked((int)length)];
         var original = source.OriginalBytes.Span; var oldOffset = 0; var newOffset = 0;
         foreach (var e in Edits)

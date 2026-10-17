@@ -502,7 +502,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented; Braid adoption recorded within accepted REQ-129 profile | 1.8.0 | Charles Korthout | 2026-10-17 |
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented and published; consumer acceptance pending | 1.18.0 | Charles Korthout | 2026-10-17 |
-| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Pending (contract and acceptance plan proposed; no implementation) | TBD | Unassigned | 2026-10-17 |
+| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented in source; verification/consumer acceptance pending | 1.19.0 (unpublished) | Charles Korthout | 2026-10-17 |
 
 
 > **Legend:
@@ -1742,9 +1742,9 @@ Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blo
 
 **Requesting Application:** Product owner, following the Bosak.Braid authoring roadmap
 **Submitted:** 2026-10-17
-**Status:** Pending; contract and acceptance plan proposed, not implemented
-**Target Version:** TBD
-**Owner:** Unassigned
+**Status:** Implemented in source; verification/integration and independent consumer acceptance pending
+**Target Version:** 1.19.0 (unpublished)
+**Owner:** Charles Korthout
 
 Append one engine-owned xsl:text carrying decoded literal Unicode text, with compatible PreserveSource/explicit Readable layout and complete source edit/node evidence. The [contract](REQ-131-TEXT-INSERTION-CONTRACT.md) resolves escaping, literal expand-text override, payload newline preservation, empty payloads, typed targets, mixed text/value-of coverage, limits and refusal boundaries. The [acceptance matrix](REQ-131-TEXT-INSERTION-ACCEPTANCE.md) defines 25 planned fixture groups; no new tests are claimed as executed.
 
@@ -5683,3 +5683,5 @@ The contribution was prepared on refreshed upstream master 91328fbf, fetched bef
 
 Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static contexts, authoring validation and source-preserving expression edits, function keyword binding, literal result namespace copying and key match/use indexing. Ten coordinated .NET 10 packages use 1.2.1; published version remains 1.2.0. Final candidate ed5080b5 passes all 8,170 unit tests, frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894. All ten candidate packages are verified; 60 fresh-cache package-only consumer checks pass and all ten assembly versions are 1.2.1.0. See [preparation evidence](RELEASE-1.2.1-PREPARATION.json). No public API or gate membership changes, and no publication is authorized. Upstream correction #29 and new-case #30 review remain separate from release preparation; broader package/default-function/editing work is deferred.
 [Release scope and verification](RELEASE-NOTES-1.2.1.md).
+
+**Implementation checkpoint — 17 October 2026:** User authorized continuation after REQ-130 publication. [Source implementation](REQ-131-IMPLEMENTATION.md) adds typed targets/proposals/candidates, literal scalar validation/escaping, explicit expand-text=no, compatible layout and complete instruction/payload/new-whitespace provenance. Source 1.19.0 verification is in progress. Baseline probes corrected the earlier claim that xsl:text was absent from the allow-list; legacy value-of DOE/whitespace-expansion successes remain unchanged, while the new text operation has its own narrower existing-text checks. No publication, Braid command/pin change or native acceptance is supplied.

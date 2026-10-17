@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-129: apply explicit layout edits and prove all surviving descriptor identities.
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: share restricted validation without changing insertion behavior.                |
+//                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: share namespace/provenance helpers; preserve legacy one-node behavior.        |
 // ===========================================================================================================================================================
 
 using System.Collections.ObjectModel;
@@ -304,7 +305,7 @@ internal static class ValueOfInsertionPipeline
     private static bool IsXsltAttribute(XElement owner, XAttribute attribute) =>
         attribute.Name.Namespace == Xsl || owner.Name.Namespace == Xsl && attribute.Name.NamespaceName.Length == 0;
 
-    private static Dictionary<string, string> NamespaceBindings(XElement element)
+    internal static Dictionary<string, string> NamespaceBindings(XElement element)
     {
         var bindings = new Dictionary<string, string>(StringComparer.Ordinal);
         foreach (var ancestor in element.AncestorsAndSelf().Reverse())
@@ -316,10 +317,11 @@ internal static class ValueOfInsertionPipeline
     private static string EscapeScalar(Rune rune) => rune.Value switch
     { '&' => "&amp;", '<' => "&lt;", '"' => "&quot;", '\t' => "&#x9;", '\n' => "&#xA;", '\r' => "&#xD;", _ => rune.ToString() };
 
-    private static IReadOnlyDictionary<int, int>? Correspondence(AuthoringSnapshot input, AuthoringSnapshot candidate,
-        ValueOfInsertionLayout layout, AuthoringNodeDescriptor inserted, CancellationToken token)
+    internal static IReadOnlyDictionary<int, int>? Correspondence(AuthoringSnapshot input, AuthoringSnapshot candidate,
+        ValueOfInsertionLayout layout, AuthoringNodeDescriptor inserted, CancellationToken token, bool insertedSubtree = false)
     {
-        var available = Nodes(candidate.PrincipalModule.Root).Where(n => !ReferenceEquals(n, inserted))
+        var excluded = insertedSubtree ? Nodes(inserted).ToHashSet() : new HashSet<AuthoringNodeDescriptor> { inserted };
+        var available = Nodes(candidate.PrincipalModule.Root).Where(n => !excluded.Contains(n))
             .GroupBy(Key).ToDictionary(g => g.Key, g => g.ToArray());
         var map = new Dictionary<int, int>();
         var used = new HashSet<int>();
@@ -350,7 +352,7 @@ internal static class ValueOfInsertionPipeline
     private static (AuthoringNodeKind, long, long, string?, string?) Key(AuthoringNodeDescriptor node) =>
         (node.Kind, node.Range.StartByteOffset, node.Range.ByteLength, node.ElementName?.NamespaceUri, node.ElementName?.LocalName);
 
-    private static IEnumerable<AuthoringNodeDescriptor> Nodes(AuthoringNodeDescriptor root)
+    internal static IEnumerable<AuthoringNodeDescriptor> Nodes(AuthoringNodeDescriptor root)
     {
         yield return root;
         foreach (var child in root.Children)

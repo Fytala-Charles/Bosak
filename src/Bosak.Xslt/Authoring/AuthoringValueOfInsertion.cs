@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Retain private source-derived context independently of earlier inspection compilation.    |
 //                      | Charles Korthout | 0.3   | 17-10-2026     | REQ-129: immutable opt-in formatting mode and complete edit evidence.
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-131: append literal InvalidPayload without renumbering existing failures.          |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -58,6 +59,8 @@ public enum AuthoringInsertionFailureKind
     Cancelled,
     /// <summary>Readable layout cannot be inferred or proven safe.</summary>
     UnsupportedFormatting,
+    /// <summary>A literal payload contains invalid XML characters or unpaired surrogates.</summary>
+    InvalidPayload,
 }
 
 /// <summary>An immutable classified refusal; expression errors do not fabricate original-source ranges.</summary>

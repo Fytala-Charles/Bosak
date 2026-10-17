@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.3   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: independently advertise bounded value-of deletion.                              |
+//                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: independently advertise bounded literal-text insertion.                       |
 // ===========================================================================================================================================================
 
 using System.Reflection;
@@ -44,6 +45,15 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded literal xsl:text insertion is supported.</summary>
+    public static bool SupportsTextInsertion => true;
+
+    /// <summary>Gets whether explicit readable literal-text insertion is supported.</summary>
+    public static bool SupportsReadableTextInsertion => true;
+
+    /// <summary>Gets the maximum original and candidate text-insertion source bytes, including BOM.</summary>
+    public static int MaxTextInsertionSourceBytes => 8_388_608;
+
     /// <summary>Gets whether bounded instruction-only value-of deletion is available.</summary>
     public static bool SupportsValueOfDeletion => true;
 

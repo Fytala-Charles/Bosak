@@ -5,6 +5,8 @@
   <p>A high-performance, XDM-first XPath 3.1, XSLT 3.0 and XQuery 3.1 engine for .NET — with opt-in XPath/XSLT 4.0</p>
 </div>
 
+**REQ-131 source implementation — 17 October 2026:** Unpublished source 1.19.0 adds typed literal xsl:text insertion with compatible PreserveSource/explicit Readable, exact literal payload/source ranges, independent limits/capabilities and complete subtree provenance. [Implementation and reviewed compatibility decision](docs/REQ-131-IMPLEMENTATION.md). Verification/integration is in progress; public 1.18.0, Braid's pin/REQ-130 integration and extension remain unchanged. No publication or Braid native acceptance is inferred.
+
 **1.18.0 published — 17 October 2026:** [Verified public delivery](docs/RELEASE-1.18.0-PUBLICATION.md) at immutable source 3264fcfa supplies bounded REQ-130 value-of deletion. Ten signed public packages verify; fresh nuget.org-only 153 broad/221 focused checks pass with exact provenance and no reported vulnerable dependencies. Braid adoption/functional/native acceptance remains pending; its production pin 1.17.0 and extension 0.2.5/engine 1.16.5 are unchanged. Earlier preparation/unpublished statements below describe historical checkpoints.
 
 
