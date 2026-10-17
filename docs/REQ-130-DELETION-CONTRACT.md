@@ -4,6 +4,8 @@
 <p>Proposed bounded authoring operation — 17 October 2026</p>
 </div>
 
+**Source implementation checkpoint — 17 October 2026:** [Source 1.18.0 implementation](REQ-130-IMPLEMENTATION.md) is under verification. The following contract records the reviewed design; public 1.17.0 still lacks deletion. Proposed names now implemented are detailed in the implementation record. No Braid runtime/native acceptance or publication is inferred.
+
 ## Status and review decision
 
 **Pending: contract and acceptance plan proposed; owner Unassigned, target TBD.** The user requested continuation with REQ-130 after acceptance of REQ-129. This step designs deletion; it does not implement an API, advertise a capability, reserve a release, or change Braid. The [original consumer submission](REQ-130-source-preserving-value-of-deletion.md) is retained byte-for-byte. Baseline main is `731c94431a954a86cf771a6dbffee37eca92fa5a`; released libraries remain 1.17.0 at `15eacde48b47cc8e48af29ddc95949801a2e3e5d`.

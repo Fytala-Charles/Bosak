@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 15-10-2026     | Apply coverage guards only to XSLT annotations, preserving ordinary result attributes.   |
 //                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-129: apply explicit layout edits and prove all surviving descriptor identities.
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: share restricted validation without changing insertion behavior.                |
 // ===========================================================================================================================================================
 
 using System.Collections.ObjectModel;
@@ -141,7 +142,7 @@ internal static class ValueOfInsertionPipeline
         catch (OperationCanceledException) { return new(null, Cancelled()); }
     }
 
-    private static AuthoringInsertionFailure? CheckScope(AuthoringSnapshot snapshot, AuthoringNodeDescriptor parent,
+    internal static AuthoringInsertionFailure? CheckScope(AuthoringSnapshot snapshot, AuthoringNodeDescriptor parent,
         CancellationToken token, out int offset, out XElement? retainedParent)
     {
         offset = 0;
@@ -221,7 +222,7 @@ internal static class ValueOfInsertionPipeline
         return null;
     }
 
-    private static AuthoringInsertionFailure? Validate(AuthoringSnapshot snapshot, bool candidate,
+    internal static AuthoringInsertionFailure? Validate(AuthoringSnapshot snapshot, bool candidate,
         CancellationToken token, AuthoringAttributeDescriptor? select = null)
     {
         token.ThrowIfCancellationRequested();
