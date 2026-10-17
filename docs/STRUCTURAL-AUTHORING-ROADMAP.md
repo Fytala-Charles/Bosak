@@ -4,6 +4,10 @@
   <p>Planning catalogue — 15 October 2026</p>
 </div>
 
+**17 October 2026:** REQ-129 is implemented, published and accepted by Braid within its delivered bounded profile. The user-requested text design is now [REQ-131](REQ-131-TEXT-INSERTION-CONTRACT.md), with [25 planned acceptance groups](REQ-131-TEXT-INSERTION-ACCEPTANCE.md). During this design step, Braid registered [REQ-130 value-of deletion](REQ-130-source-preserving-value-of-deletion.md); that existing consumer identifier is preserved. Neither operation is implemented here. Next implementation priority should be reviewed against the actual deletion request before scheduling the internal text proposal. Earlier planning/adoption wording below describes the original checkpoint.
+
+
+
 REQ-128 delivers one bounded creation operation: append one `xsl:value-of` with a contextual select expression. Public 1.8.0 delivers the consumer-cleared implementation from PR #312, merged and tagged at `20a5d9be`; independent Braid adoption remains separate. The wider instruction list accepted in existing source describes validation coverage, not instructions that callers may create.
 
 Each later operation needs an engine-owned eligibility and payload contract before implementation. Shared review, source-revision checks, Apply/history and selection orchestration can remain reusable in the consumer. That reuse must not become arbitrary XML-fragment insertion or UI assumptions that every instruction has the same legal positions and static context.
