@@ -6,6 +6,8 @@
 
 ## Delivery state
 
+**1.19.0 published and verified - 18 October 2026:** Immutable `v1.19.0` at27691fdb supplies bounded REQ-131 literal-text insertion. [Public delivery proof](RELEASE-1.19.0-PUBLICATION.md) records one successful Release run (9,726 tests/ten uploads), ten verified signed archives and fresh nuget.org-only153 broad/282 focused checks with exact provenance and clear audits. REQ-131 Braid adoption/functional/native acceptance remains pending; accepted1.18.0 pin and extension are unchanged. Earlier preparation-only statements below are historical.
+
 **1.19.0 release prepared ? 17 October 2026:** [Braid?s unchanged implementation review](REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking finding at exact head189405f2/merge27691fdb, with overlapping291/282/298 checks (16 new probes within298). [Release readiness](RELEASE-1.19.0-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.0.md) target immutable27691fdb. Source1.19.0 is unpublished; publication approval and separate Braid integration/native acceptance remain open. Accepted REQ-130 stays on public1.18.0; no Braid pin or extension change is included.
 
 **REQ-131 source delivery complete ? 17 October 2026:** [PR #364](https://github.com/Fytala-Charles/Bosak/pull/364) merged as `27691fdb3708bb4ffd7c984abbf3196b7cde5667`; final-head and integrated CI each pass 9,810 checks. Local focused 291 and frozen QT3 31,142/0/679 / qt4 gated 8,278/0/1,894 pass. Independent exact-merge local packages pass 282 public-API checks with exact ten-archive/nine-assembly provenance and no vulnerable dependencies. Source **1.19.0 remains unpublished**. [Independent consumer review handoff](REQ-131-CONSUMER-REVIEW-HANDOFF.md) is next; no Braid/native acceptance is inferred.

@@ -1,3 +1,9 @@
+# Bosak1.19.0 published and verified - 18 October 2026
+
+User approved publication. Immutable annotated v1.19.0 at27691fdb3708bb4ffd7c984abbf3196b7cde5667, object682f361ca25cd1c2f3cad09b275d3087b9137ca0. Single Release39074829260 succeeds with9,726 solution tests/ten uploads. Ten signed public packages verify; fresh nuget.org-only153 broad/282 focused consumers, ten/nine assemblies and archive/cache/output/restore provenance/audits pass. Public release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.19.0. What was built: publication proof MD/JSON, released notes/readiness/status reconciliation only. No engine/test/version/workflow/extension/Braid source changes.
+
+REQ131 implemented/published; independent Braid adoption/functional/native acceptance remains open. Accepted REQ130/production1.18 pin and extension0.2.5/engine1.16.5 unchanged. Original review/acceptance blobs and historical root/all earlier edits preserved. Receipts `.guard-tmp/release1190-publication/`. STOP: approved publication complete; do not republish or move tags. Earlier preparation boundaries superseded by explicit approval/completed publication.
+
 # Bosak1.19.0 release prepared; publication approval outstanding ? 17 October 2026
 
 Base `211be50e7be455b0538625fdd4d5ebd08bfb70df`, branch docs/release1190-preparation. What was built: unchanged docs/REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md SHA25683d8a912f8748462f86e735d8a5153d62aef4c35c3ad2a53ab6046c3ebc45732, narrow -text attribute, release readiness MD/JSON and prepared release notes, canonical status sync. Braid reports no blockers at exact head189405f2/merge27691fdb, overlapping291/282/298 checks including16 new probes, accepted1.18 baseline1,015. Retain initial surrogate InlineData correction and warning overrides; imported reports are not reruns/public-package proof/functional acceptance.
