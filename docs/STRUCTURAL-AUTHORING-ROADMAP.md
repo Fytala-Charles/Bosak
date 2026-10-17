@@ -4,6 +4,10 @@
   <p>Planning catalogue — 15 October 2026</p>
 </div>
 
+**17 October 2026:** REQ-129 is implemented, published and accepted by Braid within its delivered bounded profile. The next operation is now the proposed [REQ-130 literal-text contract](REQ-130-TEXT-INSERTION-CONTRACT.md), with [25 planned acceptance groups](REQ-130-TEXT-INSERTION-ACCEPTANCE.md). This authorizes design only; sequence insertion and the other rows remain unscheduled. The earlier planning comparison and adoption-pending wording below describe the original roadmap checkpoint.
+
+
+
 REQ-128 delivers one bounded creation operation: append one `xsl:value-of` with a contextual select expression. Public 1.8.0 delivers the consumer-cleared implementation from PR #312, merged and tagged at `20a5d9be`; independent Braid adoption remains separate. The wider instruction list accepted in existing source describes validation coverage, not instructions that callers may create.
 
 Each later operation needs an engine-owned eligibility and payload contract before implementation. Shared review, source-revision checks, Apply/history and selection orchestration can remain reusable in the consumer. That reuse must not become arbitrary XML-fragment insertion or UI assumptions that every instruction has the same legal positions and static context.

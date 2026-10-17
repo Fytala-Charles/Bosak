@@ -1,9 +1,11 @@
 # REQ-129: Readable Value-of Insertion - Consumer Request
 
+**Consumer acceptance - 17 October 2026:** Implemented and accepted by Bosak.Braid within the delivered bounded readable insertion profile. See the [unchanged original receipt](REQ-129-BRAID-ACCEPTANCE.md) for automated results, product-owner confirmation and explicit supplemental audit limits. Earlier pending/adoption language below is historical.
+
 Published 17 October 2026. [Release verification](RELEASE-1.17.0-PUBLICATION.md). Original source/design checkpoint text below is historical.
 
 
-Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Current status: Implemented and published. Target: 1.17.0. Owner: Charles Korthout. The user authorized implementation after contract preparation; public signatures and fresh consumers verify; user reports Braid found no blockers. Additional native UI results and production adoption are independent.
+Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Current status: Implemented, published and accepted by Bosak.Braid. Target: 1.17.0. Owner: Charles Korthout. The user authorized implementation after contract preparation; public signatures and fresh consumers verify; Braid's recorded adoption and product-owner confirmation are bounded by the acceptance receipt; no unobserved audit or native certification is inferred.
 
 ## Source implementation - 17 October 2026
 

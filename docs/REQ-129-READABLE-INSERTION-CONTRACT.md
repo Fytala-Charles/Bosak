@@ -4,6 +4,10 @@
 <p>Proposed design for review — 17 October 2026</p>
 </div>
 
+**Consumer acceptance - 17 October 2026:** Implemented and accepted by Bosak.Braid within the delivered bounded readable insertion profile. See the [unchanged original receipt](REQ-129-BRAID-ACCEPTANCE.md) for automated results, product-owner confirmation and explicit supplemental audit limits. Earlier pending/adoption language below is historical.
+
+
+
 ## Bosak 1.17.0 published - 17 October 2026
 
 Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.

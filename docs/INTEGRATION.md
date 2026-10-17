@@ -5,6 +5,12 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+## REQ-129 accepted; literal-text design proposed - 17 October 2026
+
+Braid confirms **REQ-129 implemented and accepted** within the delivered bounded profile. The [original consumer acceptance receipt](REQ-129-BRAID-ACCEPTANCE.md) records 952 consumer tests, 184 fresh public-package cases and product-owner functional confirmation, with supplemental manual-hash observations still explicitly unrecorded. This session imports that receipt unchanged; it does not claim to rerun Braid tests. The next [REQ-130 literal-text contract](REQ-130-TEXT-INSERTION-CONTRACT.md) and [planned acceptance matrix](REQ-130-TEXT-INSERTION-ACCEPTANCE.md) are design only. Public libraries 1.17.0 and extension 0.2.5 remain unchanged; no new authoring capability is advertised.
+
+
+
 ## Bosak 1.17.0 published - 17 October 2026
 
 Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.

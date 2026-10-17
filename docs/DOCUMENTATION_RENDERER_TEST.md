@@ -214,3 +214,8 @@ Render the implementation API example, source-only status and canonical notes wi
 ## Bosak1.17.0 publication
 
 Render the publication report, release notes and canonical notices using unchanged Fytala CSS. Verify publication links, bounded API wording and Braid feedback attribution.
+
+
+## Literal-text design and consumer acceptance
+
+Render the new contract/matrix and accepted-status notices using unchanged Fytala CSS. Preserve the imported acceptance receipt byte-for-byte; its compact heading is an evidence-record exception. Verify XML examples, table escaping and explicit proposed/no-implementation wording.

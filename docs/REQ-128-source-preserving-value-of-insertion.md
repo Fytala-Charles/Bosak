@@ -1,5 +1,7 @@
 # REQ-128: Source-Preserving Value-of Insertion for Bosak.Braid
 
+**Consumer adoption update - 17 October 2026:** Braid's [accepted REQ-129 delivery](REQ-129-BRAID-ACCEPTANCE.md) records adoption of public 1.17.0 and both value-of formatting modes within its bounded profile. This supersedes earlier adoption-pending statements; it grants no additional insertion operations or broader profile acceptance.
+
 **Parent:** REQ-122. **Date:** 2026-10-15.
 **Current status - 2026-10-16:** REQ-128 engine delivery is Implemented in public 1.8.0, owned by Charles Korthout. Immutable tag `v1.8.0` points to `20a5d9be757599848d7ceaa8885e59bea8dbb2ec`. The bounded value-of insertion API, consumer F1 correction and fresh public-package verification are delivered. Independent Braid adoption/acceptance remains pending; its production pin and runtime/UI are unchanged. See the [implementation](REQ-128-IMPLEMENTATION.md), [release notes](RELEASE-NOTES-1.8.0.md) and [publication evidence](RELEASE-1.8.0-PUBLICATION.json).
 
