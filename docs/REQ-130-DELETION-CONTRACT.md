@@ -12,6 +12,12 @@
 
 Keep one-to-one correspondence for all other survivors; represent merged text through a separate immutable relation with exact retained-source fragments. Never remove surrounding whitespace, misclassify it as deleted, invent split candidate descriptors or infer identities from equal text. UnsupportedCorrespondence remains a refusal for evidence that cannot be proven, rather than for an otherwise supported whitespace merge.
 
+## Consumer design review
+
+Braid reports **no blocking design finding** at exact head `c6db469c0dcc2eae0d290d1aaf0c33d22e02a88b`; the selected bounded merge relation is suitable. The [original review receipt](REQ-130-CONSUMER-DESIGN-REVIEW.md) is preserved verbatim, SHA-256 `922718b643a4c5bde5fd0161bdcdc6d98a68891a5bda91be20e397105330b77f`. Its relative links and `.acceptance` paths retain their original sibling Braid checkout context (`D:/Development/Bosak.Braid/docs/BOSAK_REQ130_CONSUMER_REVIEW.md`); they are not Bosak repository artifacts.
+
+Braid independently reports six passing public-1.17.0 inspection-shape probes (including 16 encoding/seam combinations), not deletion API tests; it did not rerun the full runtime suite. The initial probe build error and its public-API correction remain disclosed. Reviewed-head CI succeeded. This is design feedback only, not GitHub approval, merge/implementation authorization, functional acceptance or adoption. Live consumer design/adapter changes and all D01–D27 delivery gates remain required. This session imports the report without claiming to rerun those probes.
+
 ## Proposed additive public surface
 
 All names below are proposed and absent from 1.17.0. Keep insertion and expression replacement types and defaults intact.
@@ -87,6 +93,8 @@ Only this explicitly classified text merge relaxes injectivity. All elements (in
 Deleting output-producing value-of intentionally changes results. Validate original and candidate statically, then use separately specified changed-output goldens for controlled execution tests. No output-equivalence requirement and no execution as part of the proposal. Compilation/preprocessing must not evaluate user code or resolve external resources; refuse unsupported static evaluation before invoking it. Retain current resolver denial, DTD/entity restrictions, limits and no filesystem/network/process side effects. Byte bound checks precede whole-source allocation; decoded buffers/maps remain bounded and cancellation cooperative. A smaller candidate does not excuse an oversized original.
 
 Braid discovers compatible capability and an engine-issued target; captures exact current revision, node and permissions; asks for a proposal; freezes complete bytes/edits/removals/one-to-one survivors/text-merge fragments/parent evidence in a bounded review; independently checks replay, complete disjoint graph partitions, fragment coverage and authority; and applies only an explicit session-issued reviewed deletion. Stale, cancelled, denied, overlapping or incomplete evidence cannot Apply. Oversized review refuses, never truncates. One Apply adds one history step; undo/redo restores exact bytes under new revisions and invalidates old inspection/validation/preview/export authority. Export goes to a new file with provenance/hash; independent ordinary-file reopen/run proves the changed-output golden. No Braid command/pin change is included in this design.
+
+The engine owns XML parsing, character-reference and line-end semantics, and correctness of the fresh inspected Text value. Braid verifies opaque engine descriptors, snapshot ownership, graph partitions, source fragments and exact byte replay. It must not implement an XML parser or normalization algorithm to reproduce the engine's parsed-text proof. Consumer tests may assert known fixture expectations while preserving this production responsibility boundary.
 
 ## Delivery and review gates
 

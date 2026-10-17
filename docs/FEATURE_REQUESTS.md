@@ -1730,6 +1730,8 @@ The [unchanged consumer dossier](REQ-130-source-preserving-value-of-deletion.md)
 
 The [proposed deletion contract](REQ-130-DELETION-CONTRACT.md) and [27 planned acceptance groups](REQ-130-DELETION-ACCEPTANCE.md) now define the next review. Product owner selected explicit merged-text provenance before implementation. The revised proposal keeps one-to-one identity outside a bounded two-text-node merge, with complete ordered byte-fragment evidence, graph partitions, XML newline-join checks and mandatory compatible consumer verification. Review the concrete schema before engine implementation. No executed deletion tests are claimed.
 
+Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blocking finding at c6db469c and six passing public inspection-shape probes, not deletion tests. Preserve engine-owned XML semantics and consumer-owned opaque evidence/replay checks; no parallel consumer parser. Design feedback does not authorize implementation/merge or close functional acceptance. REQ-130 remains Pending/TBD/Unassigned.
+
 ### REQ-131: Literal-Text Insertion for Structural Authoring
 
 **Requesting Application:** Product owner, following the Bosak.Braid authoring roadmap

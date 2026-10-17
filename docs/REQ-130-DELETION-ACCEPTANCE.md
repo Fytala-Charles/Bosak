@@ -35,12 +35,12 @@
 | D24 | **Merge fragment proof:** Two full original text ranges map to ordered contiguous candidate fragments covering the complete actual candidate text range; exact bytes, encoding and own-snapshot coordinates verified. Missing/foreign/duplicate/overlapping/gapped/reordered/partial fragments refuse. |
 | D25 | **Normalization at join:** CR + LF becomes CRLF across deletion, lone CR/LF, tabs, XML whitespace references and UTF-16 boundaries; prove parsed candidate whitespace from joined lexical bytes, not concatenation of original parsed values; source bytes remain exact. |
 | D26 | **Merge boundaries:** Zero/one bounded merge group; reject unsupported significant text/CDATA, arbitrary many-to-one elements, wrong parent and nonadjacent or larger groups. Comments/PIs/elements keep unaffected nodes separate. |
-| D27 | **Consumer merge authority:** Old/plain-dictionary adapter cannot Apply; compatible consumer verifies complete partitions/fragment replay and immutable evidence, parent selection, revision checks and history without resurrecting source identities. |
+| D27 | **Consumer merge authority:** Old/plain-dictionary adapter cannot Apply; compatible consumer verifies complete partitions/fragment replay without implementing parallel XML parsing/normalization and immutable evidence, parent selection, revision checks and history without resurrecting source identities. |
 
 ## Acceptance decisions
 
 - [x] Product owner selected explicit merged-text provenance before implementation (17 October 2026).
-- [ ] Review the concrete map-plus-merge schema and normalization/consumer verification rules before engine implementation.
+- [ ] Review the concrete map-plus-merge schema and normalization/consumer verification rules before engine implementation. Braid reports no blocking design finding at c6db469c; this does not authorize implementation or constitute functional acceptance.
 - [ ] Maintainers review API names, supported empty-body forms, validation boundaries and exact partition/parent evidence.
 - [ ] Implement automated fixture groups with observed results, exact revision/toolchain and retained original receipts.
 - [ ] Full solution and language-server suites, frozen QT3/qt4 gates and independent package-only consumer verification pass on the exact implementation head and integrated revision.
@@ -48,3 +48,5 @@
 - [ ] Native owner accepts actual supported workflows and records remaining limits without inferring unobserved cases.
 
 D07 is planned success coverage for bounded whitespace merging; D24–D27 prove its byte, graph, normalization and consumer boundaries. The original injective-only request is explicitly revised for text merges; no implementation or Braid acceptance is inferred from the direction decision. Do not mark REQ-130 implemented or consumer-accepted merely because a narrow automated subset passes. No release/pin/UI changes are made by this plan.
+
+Consumer review evidence: [verbatim design review](REQ-130-CONSUMER-DESIGN-REVIEW.md), with six reported inspection-shape probes only. D01–D27 remain planned actual-deletion evidence.

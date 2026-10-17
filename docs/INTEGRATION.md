@@ -5,7 +5,7 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**REQ-130 design update — 17 October 2026:** The [bounded deletion contract](REQ-130-DELETION-CONTRACT.md) and [27 planned acceptance groups](REQ-130-DELETION-ACCEPTANCE.md) are proposed. The product owner selected explicit merged-text provenance: preserve one-to-one mapping outside a bounded whitespace merge and prove every surviving fragment in the actual candidate text node. This supports ordinary indented/readable cases without deleting surrounding whitespace. Concrete schema/consumer review precedes engine implementation. REQ-130 remains Pending/TBD/Unassigned; public 1.17.0 and all engine capabilities are unchanged.
+**REQ-130 design update — 17 October 2026:** The [bounded deletion contract](REQ-130-DELETION-CONTRACT.md) and [27 planned acceptance groups](REQ-130-DELETION-ACCEPTANCE.md) are proposed. The product owner selected explicit merged-text provenance: preserve one-to-one mapping outside a bounded whitespace merge and prove every surviving fragment in the actual candidate text node. This supports ordinary indented/readable cases without deleting surrounding whitespace. Concrete schema/consumer review precedes engine implementation. [Braid design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blockers at c6db469c; six reported inspection probes are not deletion tests or functional acceptance. REQ-130 remains Pending/TBD/Unassigned; public 1.17.0 and all engine capabilities are unchanged.
 
 ## REQ-129 accepted; literal-text design proposed - 17 October 2026
 
