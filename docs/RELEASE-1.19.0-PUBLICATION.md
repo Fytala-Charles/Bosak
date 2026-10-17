@@ -23,3 +23,8 @@ User approved publication following [release preparation](RELEASE-1.19.0-READINE
 REQ-131 is implemented and published; **Braid integration and independent functional/native acceptance remain open**. Braid's no-blocking review used local candidate archives and overlapping 291/282/298 suites, including 16 independent probes; it is not public adoption or native acceptance. Its accepted production pin remains public 1.18.0 at 3264fcfa until independent verified adoption. REQ-130 remains accepted in its delivered profile. VS Code 0.2.5 bundles 1.16.5 and is unchanged.
 
 Next: Braid independently verifies this immutable tag and public packages, adopts the pin and implements text-specific adapter/capabilities, frozen review/Apply, selection/history, worker/restricted export/reopen and separate native acceptance. No Braid source/pin/UI changes are made by this publication.
+
+
+## Signed-package hash cross-check
+
+Raw signed archive SHA-512 matches the cached archive and its .sha512 file. NuGet signed-package content identity is checked separately using the SDK PackageArchiveReader.GetContentHash API; all ten computed content hashes match the restored assets/.nupkg.metadata values in both consumers. This distinction follows [NuGet?s implementation](https://github.com/NuGet/NuGet.Client/blob/dev/src/NuGet.Core/NuGet.Packaging/PackageArchiveReader.cs). An additional verifier initially equated these two hashes and failed; the incorrect assumption was corrected without changing packages or rerunning publication. The original correction receipt remains in extra-raw-hash-assumption-correction.txt beside the computed hashes.

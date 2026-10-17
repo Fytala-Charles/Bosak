@@ -310,7 +310,8 @@
           "archiveSha256": "435e33360aded1b6b2795e1355a4f3869c030a9a04577729dac2366cf6daea12",
           "archiveSha512": "aOYs9RKfARIYWKsW4DPxhA1HWBU301ReddlC/1AuOb1Kc0K5ykrRyNc4XLATJFbfhbVwG6ubldhYbBOnvQkU5g==",
           "restoreContentHash": "kDAylLYgD+y7HveOMD+TXIP/O803O0Ja6SiN4sCjiyExunpbu7XsobVUyG2X8iYJ1mirTWyoYdv2MmA4T1/1eQ==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Compiler/1.19.0",
@@ -318,7 +319,8 @@
           "archiveSha256": "5b8d5302e30674ab252fcb2dd8f3f3d1eb1547871ae6378235d5a3d3f377d862",
           "archiveSha512": "YTUb15PQ2xxXXk0cjlh/fkqwVVwSbEJpg/cNjcsV6HwwQHSiiQgam9FUoIvhZ0djju0fqth9a/L+PsUDYV04Qw==",
           "restoreContentHash": "Ba16GqR0rjUsih1Sygiqfa/5bOY1Q5rX46DIQXODe0px9B/rqkG6gP3c6/MOWAvztgu6AZ1YtC/xTO5fM1QYEg==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Core/1.19.0",
@@ -326,7 +328,8 @@
           "archiveSha256": "ac0cca22732102118ddaccbbb96acec5696f6dbe4e45a16c1b3898271e7e5e05",
           "archiveSha512": "fu8LCvpuBKuTUuigjVdUdmk6JlWxlmwA2gj9XvX/iy69zdTMoaip7jjwUhYFSJMZUPpHhdLnJlTdatBW1EARYA==",
           "restoreContentHash": "DqvLQSdebdGZap9Jq7ivHHiUZtdLkip6BCSPj6hoJYXM6wMnpzdaqkgcD4nUsEVxYERxAM0TQ8gdoTsRaL8eZg==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Parser/1.19.0",
@@ -334,7 +337,8 @@
           "archiveSha256": "163bfea2ceed8d1a9b3b7a433382286006e6b242b8f96c908c1dd004465b919d",
           "archiveSha512": "mCz47XbtzblmKzqooZMZdX52v6oA0aiYZmPTO8RUxuNSmcTliF9+YO97cNWVpCvjIdPuZh4QoQbnAF3eVASxwQ==",
           "restoreContentHash": "PF06HLtdYvhFIig3F29mPTNo4d8nHg/OoY5x9/U0qxrwosjzrGHrA3RG2H+MsbkENGsa44wg2aZlVTFfYsSzHw==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Providers/1.19.0",
@@ -342,7 +346,8 @@
           "archiveSha256": "d553109eb940b4148c48463233696b673cc392fd99bc18fe51ee15d7a59f2c0b",
           "archiveSha512": "IMYGlHCr/l1oKsapcTfm3gwBSmGPmr0mkuhdo5Nxi9g+cCP2fNhjromRGAuEfUcGFOhDJH/z8SPUUt8TzEalgw==",
           "restoreContentHash": "+g9qG3LLtuCG+8czO4PPv7AkCiyQa3KSf1gXOU/yp16ik/OazuKv+Ph1UcUptBiYl1JadSqMh2MwaksyQcwbuA==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Providers.Database/1.19.0",
@@ -350,7 +355,8 @@
           "archiveSha256": "62e0482c67e418815a85ac2f0681918d086dab40a3313c29a7cdf6dd5a409c9e",
           "archiveSha512": "xEEGOejgNGv+BaLWwPzHHziosvte26pOSsuxGbmg6tEeitN/cyjXPaJoqNh1wDN6KFtkx2IyRtqmozXrgaso9Q==",
           "restoreContentHash": "rClpt0UrFetZInJAe8x+mHuHmd1OkJaK1jPGJt6wuH2alPE8qU7G39As7v7eb5t/rBqJqXGGBm37JxJIr+pMDA==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Runtime/1.19.0",
@@ -358,7 +364,8 @@
           "archiveSha256": "a02b3c4f6df3dac49ec0ede40ec65ff32f68da77167b68dad264a48771126e73",
           "archiveSha512": "kUwkG/xDlwbY9SLbSDyAszowt3KCqX2gp5afd5XvwQH/JSdPkB2CK39z4UkJHhYTHZoCVdwoTJK/KbEDY5UuoA==",
           "restoreContentHash": "rSvCYZlLd0Rms9tniQKw8XYJBgA7AXBBC6nBcVpiMXVB8hRU85sHctOmdD4bGObvyKaoaXhJQ1GP1qh7CvsvKw==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Standard/1.19.0",
@@ -366,7 +373,8 @@
           "archiveSha256": "8adcd3f801411c77d91b6b9109d6cb41f79d8661078597ced5731a7f71213b40",
           "archiveSha512": "nCGJ/MttcPf74FXW1/Jo88NT8TPQb1CQ/0TMiO4yhfvx3VZzCi+jYYsej0gMtaYcvJlQzKcmmHVfgay3gvfI0w==",
           "restoreContentHash": "h3abvHfIaZsIeh7Gz5Qgra4cf9KYd698fN3/PMsM9RfvTcJa2XWW8ddmN4sZXPuqYC3IfSPIx2ezhHJwGahkpA==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XQuery/1.19.0",
@@ -374,7 +382,8 @@
           "archiveSha256": "afe8c14e1b8464865b8d9f75957314d60f6708252cf5623cf6721d42ac22349f",
           "archiveSha512": "FOYQjUMEbIrT4NIh0QrCatSD8KXZP4Ud44P7QXbvOmZbu1GCBlu2bupBv4ujlRhkdIjZqEhs8CXZVr/5bq2fOw==",
           "restoreContentHash": "0N+MNASMR/bQXTCiprHlaeJxMj7bDn+1ZMzV8BjE/n2zfz+p3awyxMeh/4YZWOqBluDRAh4lyimYMU4mX9Px2w==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.Xslt/1.19.0",
@@ -382,7 +391,8 @@
           "archiveSha256": "97e11944975ddb04be1cb76be7c87a63bb5047b9dab25c4264469db3b5b0478f",
           "archiveSha512": "ehVVFuv0wTodHZTAdk9eA1S6aoKFryTdUjSUu4ocUGkhMy7M0ZQK8KHEJeXJqlfvFQvDapln+85W8tQThPkYRA==",
           "restoreContentHash": "6GTkoDkuxh2RP0aHshkBZeMyUc5rDsh0nB5vmfyx+QwSGQqsnI8IYo/fG+9+qEZV37BcnkJw0j27NC72lhbHiQ==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         }
       ],
       "assemblyMetadata": [
@@ -457,7 +467,8 @@
           "archiveSha256": "435e33360aded1b6b2795e1355a4f3869c030a9a04577729dac2366cf6daea12",
           "archiveSha512": "aOYs9RKfARIYWKsW4DPxhA1HWBU301ReddlC/1AuOb1Kc0K5ykrRyNc4XLATJFbfhbVwG6ubldhYbBOnvQkU5g==",
           "restoreContentHash": "kDAylLYgD+y7HveOMD+TXIP/O803O0Ja6SiN4sCjiyExunpbu7XsobVUyG2X8iYJ1mirTWyoYdv2MmA4T1/1eQ==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Compiler/1.19.0",
@@ -465,7 +476,8 @@
           "archiveSha256": "5b8d5302e30674ab252fcb2dd8f3f3d1eb1547871ae6378235d5a3d3f377d862",
           "archiveSha512": "YTUb15PQ2xxXXk0cjlh/fkqwVVwSbEJpg/cNjcsV6HwwQHSiiQgam9FUoIvhZ0djju0fqth9a/L+PsUDYV04Qw==",
           "restoreContentHash": "Ba16GqR0rjUsih1Sygiqfa/5bOY1Q5rX46DIQXODe0px9B/rqkG6gP3c6/MOWAvztgu6AZ1YtC/xTO5fM1QYEg==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Core/1.19.0",
@@ -473,7 +485,8 @@
           "archiveSha256": "ac0cca22732102118ddaccbbb96acec5696f6dbe4e45a16c1b3898271e7e5e05",
           "archiveSha512": "fu8LCvpuBKuTUuigjVdUdmk6JlWxlmwA2gj9XvX/iy69zdTMoaip7jjwUhYFSJMZUPpHhdLnJlTdatBW1EARYA==",
           "restoreContentHash": "DqvLQSdebdGZap9Jq7ivHHiUZtdLkip6BCSPj6hoJYXM6wMnpzdaqkgcD4nUsEVxYERxAM0TQ8gdoTsRaL8eZg==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Parser/1.19.0",
@@ -481,7 +494,8 @@
           "archiveSha256": "163bfea2ceed8d1a9b3b7a433382286006e6b242b8f96c908c1dd004465b919d",
           "archiveSha512": "mCz47XbtzblmKzqooZMZdX52v6oA0aiYZmPTO8RUxuNSmcTliF9+YO97cNWVpCvjIdPuZh4QoQbnAF3eVASxwQ==",
           "restoreContentHash": "PF06HLtdYvhFIig3F29mPTNo4d8nHg/OoY5x9/U0qxrwosjzrGHrA3RG2H+MsbkENGsa44wg2aZlVTFfYsSzHw==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Providers/1.19.0",
@@ -489,7 +503,8 @@
           "archiveSha256": "d553109eb940b4148c48463233696b673cc392fd99bc18fe51ee15d7a59f2c0b",
           "archiveSha512": "IMYGlHCr/l1oKsapcTfm3gwBSmGPmr0mkuhdo5Nxi9g+cCP2fNhjromRGAuEfUcGFOhDJH/z8SPUUt8TzEalgw==",
           "restoreContentHash": "+g9qG3LLtuCG+8czO4PPv7AkCiyQa3KSf1gXOU/yp16ik/OazuKv+Ph1UcUptBiYl1JadSqMh2MwaksyQcwbuA==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Runtime/1.19.0",
@@ -497,7 +512,8 @@
           "archiveSha256": "a02b3c4f6df3dac49ec0ede40ec65ff32f68da77167b68dad264a48771126e73",
           "archiveSha512": "kUwkG/xDlwbY9SLbSDyAszowt3KCqX2gp5afd5XvwQH/JSdPkB2CK39z4UkJHhYTHZoCVdwoTJK/KbEDY5UuoA==",
           "restoreContentHash": "rSvCYZlLd0Rms9tniQKw8XYJBgA7AXBBC6nBcVpiMXVB8hRU85sHctOmdD4bGObvyKaoaXhJQ1GP1qh7CvsvKw==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XPath.Standard/1.19.0",
@@ -505,7 +521,8 @@
           "archiveSha256": "8adcd3f801411c77d91b6b9109d6cb41f79d8661078597ced5731a7f71213b40",
           "archiveSha512": "nCGJ/MttcPf74FXW1/Jo88NT8TPQb1CQ/0TMiO4yhfvx3VZzCi+jYYsej0gMtaYcvJlQzKcmmHVfgay3gvfI0w==",
           "restoreContentHash": "h3abvHfIaZsIeh7Gz5Qgra4cf9KYd698fN3/PMsM9RfvTcJa2XWW8ddmN4sZXPuqYC3IfSPIx2ezhHJwGahkpA==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.XQuery/1.19.0",
@@ -513,7 +530,8 @@
           "archiveSha256": "afe8c14e1b8464865b8d9f75957314d60f6708252cf5623cf6721d42ac22349f",
           "archiveSha512": "FOYQjUMEbIrT4NIh0QrCatSD8KXZP4Ud44P7QXbvOmZbu1GCBlu2bupBv4ujlRhkdIjZqEhs8CXZVr/5bq2fOw==",
           "restoreContentHash": "0N+MNASMR/bQXTCiprHlaeJxMj7bDn+1ZMzV8BjE/n2zfz+p3awyxMeh/4YZWOqBluDRAh4lyimYMU4mX9Px2w==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         },
         {
           "package": "Bosak.Xslt/1.19.0",
@@ -521,7 +539,8 @@
           "archiveSha256": "97e11944975ddb04be1cb76be7c87a63bb5047b9dab25c4264469db3b5b0478f",
           "archiveSha512": "ehVVFuv0wTodHZTAdk9eA1S6aoKFryTdUjSUu4ocUGkhMy7M0ZQK8KHEJeXJqlfvFQvDapln+85W8tQThPkYRA==",
           "restoreContentHash": "6GTkoDkuxh2RP0aHshkBZeMyUc5rDsh0nB5vmfyx+QwSGQqsnI8IYo/fG+9+qEZV37BcnkJw0j27NC72lhbHiQ==",
-          "publicArchiveCacheOutputDllMatch": true
+          "publicArchiveCacheOutputDllMatch": true,
+          "signedContentHashViaNuGetReaderMatchesRestore": true
         }
       ],
       "assemblyMetadata": [
@@ -594,5 +613,48 @@
   "extensionVersion": "0.2.5",
   "extensionEngineVersion": "1.16.5",
   "publicationAuthorized": true,
-  "workflowLogSha256": "c42ff5aaa29028f7adcb1aca84fcebdd44bf32955749946a5062619fabdac761"
+  "workflowLogSha256": "c42ff5aaa29028f7adcb1aca84fcebdd44bf32955749946a5062619fabdac761",
+  "nugetSignedContentHashes": [
+    {
+      "archive": "Bosak.XPath.Api.1.19.0.nupkg",
+      "contentHash": "kDAylLYgD+y7HveOMD+TXIP/O803O0Ja6SiN4sCjiyExunpbu7XsobVUyG2X8iYJ1mirTWyoYdv2MmA4T1/1eQ=="
+    },
+    {
+      "archive": "Bosak.XPath.Compiler.1.19.0.nupkg",
+      "contentHash": "Ba16GqR0rjUsih1Sygiqfa/5bOY1Q5rX46DIQXODe0px9B/rqkG6gP3c6/MOWAvztgu6AZ1YtC/xTO5fM1QYEg=="
+    },
+    {
+      "archive": "Bosak.XPath.Core.1.19.0.nupkg",
+      "contentHash": "DqvLQSdebdGZap9Jq7ivHHiUZtdLkip6BCSPj6hoJYXM6wMnpzdaqkgcD4nUsEVxYERxAM0TQ8gdoTsRaL8eZg=="
+    },
+    {
+      "archive": "Bosak.XPath.Parser.1.19.0.nupkg",
+      "contentHash": "PF06HLtdYvhFIig3F29mPTNo4d8nHg/OoY5x9/U0qxrwosjzrGHrA3RG2H+MsbkENGsa44wg2aZlVTFfYsSzHw=="
+    },
+    {
+      "archive": "Bosak.XPath.Providers.1.19.0.nupkg",
+      "contentHash": "+g9qG3LLtuCG+8czO4PPv7AkCiyQa3KSf1gXOU/yp16ik/OazuKv+Ph1UcUptBiYl1JadSqMh2MwaksyQcwbuA=="
+    },
+    {
+      "archive": "Bosak.XPath.Providers.Database.1.19.0.nupkg",
+      "contentHash": "rClpt0UrFetZInJAe8x+mHuHmd1OkJaK1jPGJt6wuH2alPE8qU7G39As7v7eb5t/rBqJqXGGBm37JxJIr+pMDA=="
+    },
+    {
+      "archive": "Bosak.XPath.Runtime.1.19.0.nupkg",
+      "contentHash": "rSvCYZlLd0Rms9tniQKw8XYJBgA7AXBBC6nBcVpiMXVB8hRU85sHctOmdD4bGObvyKaoaXhJQ1GP1qh7CvsvKw=="
+    },
+    {
+      "archive": "Bosak.XPath.Standard.1.19.0.nupkg",
+      "contentHash": "h3abvHfIaZsIeh7Gz5Qgra4cf9KYd698fN3/PMsM9RfvTcJa2XWW8ddmN4sZXPuqYC3IfSPIx2ezhHJwGahkpA=="
+    },
+    {
+      "archive": "Bosak.XQuery.1.19.0.nupkg",
+      "contentHash": "0N+MNASMR/bQXTCiprHlaeJxMj7bDn+1ZMzV8BjE/n2zfz+p3awyxMeh/4YZWOqBluDRAh4lyimYMU4mX9Px2w=="
+    },
+    {
+      "archive": "Bosak.Xslt.1.19.0.nupkg",
+      "contentHash": "6GTkoDkuxh2RP0aHshkBZeMyUc5rDsh0nB5vmfyx+QwSGQqsnI8IYo/fG+9+qEZV37BcnkJw0j27NC72lhbHiQ=="
+    }
+  ],
+  "additionalVerifierCorrection": "An extra raw-archive SHA-512 equals signed contentHash assumption failed; corrected to NuGet PackageArchiveReader.GetContentHash, independently matching assets and restore metadata. Raw archive hashes verified separately. Original correction receipt retained."
 }
