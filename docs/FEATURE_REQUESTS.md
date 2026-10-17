@@ -494,7 +494,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-126 | *(internal)* | XPATH40-FEATURE-CATALOG — GoF-style catalog of every XPath/XSLT 4.0 syntax decision (template adapted from Design Patterns pp. 6–7): Name+Classification (frozen/experimental/deferred/rejected), Intent, Also Known As (spec PRs, renames), History/Supersedes (1.x–3.x idioms replaced + migration pair), Motivation, Language Alignment (prior art + semantic-drift warnings), Applicability, Structure, Participants, Collaborations, Consequences, Implementation, Sample Code, Performance Notes (cost class; measured deltas only from Bosak.Benchmarks with revision+date), Known Uses (qt4tests gate evidence), Related Features | 4.x syntax decisions are scattered across REQ-118 stability tiers, slice handovers and spec PRs; users choosing idioms and Bosak.Braid generating syntax need one searchable reference with drift warnings (`->` first-arg vs F# last, `??` empty-seq vs nullish, `=>>`→`=!>` rename) and a rejected-shapes graveyard so dropped syntax is never re-introduced; REQ-124 completion frees the authoring track that motivated it | **In Progress** (2026-10-12: four worked chapters; 67 entries; 2,578 feature and 24 chapter checks; representative all-name constructor audit supplied; signature/grammar coverage and acceptance evidence remain partial) | Post-1.0 (docs) | Charles Korthout | 2026-10-11 |
 | REQ-127 | Bosak.Braid | Source-preserving inspection of compact nested sibling elements | Valid compact XSLT was refused with source-alignment failure; exact retained ranges are required | Implemented — published 1.1.3, public artifacts verified; Braid verification reported | 1.1.3 | Charles Korthout | 2026-10-12 |
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented (Braid acceptance pending) | 1.8.0 | Charles Korthout | 2026-10-16 |
-| REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Pending (contract proposed) | TBD | Unassigned | 2026-10-17 |
+| REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented in source (release/Braid acceptance pending) | 1.17.0 (unpublished) | Charles Korthout | 2026-10-17 |
 
 
 > **Legend:
@@ -1696,14 +1696,14 @@ When updating this file via automated tools, preserve the table alignment and se
 
 **Requesting Application:** Bosak.Braid
 **Submitted:** 2026-10-16
-**Status:** Pending; formatting contract proposed 2026-10-17, not implemented
-**Target Version:** TBD
-**Owner:** Unassigned
+**Status:** Implemented in source; release and independent Braid acceptance pending
+**Target Version:** 1.17.0 (unpublished)
+**Owner:** Charles Korthout
 
-REQ-128 preserves original insertion layout; repeated compact insertions need an optional readable layout. The [consumer request](REQ-129-readable-value-of-insertion.md) and [proposed formatting contract](REQ-129-READABLE-INSERTION-CONTRACT.md) specify compatible PreserveSource behavior, explicit Readable capability/mode, bounded direct-child whitespace edits, two-space compact fallback, safe refusals, exact candidate/edit/provenance evidence and planned acceptance tests. No API implementation, release or consumer acceptance is claimed.
+REQ-128 preserves original insertion layout; repeated compact insertions need an optional readable layout. The [consumer request](REQ-129-readable-value-of-insertion.md) and [proposed formatting contract](REQ-129-READABLE-INSERTION-CONTRACT.md) specify compatible PreserveSource behavior, explicit Readable capability/mode, bounded direct-child whitespace edits, two-space compact fallback, safe refusals, exact candidate/edit/provenance evidence and planned acceptance tests. Source now implements the additive API and bounded formatting plan; see [implementation evidence](REQ-129-IMPLEMENTATION.md). Final validation/integration, release and consumer acceptance remain distinct.
 
-- [ ] Implement opt-in formatting with byte-identical legacy default and separately advertised capability.
-- [ ] Prove whitespace semantics, exact changed footprint, encoding/range fidelity and complete surviving-node correspondence.
+- [x] Implement opt-in formatting with byte-identical legacy default and separately advertised capability.
+- [x] Prove whitespace semantics, exact changed footprint, encoding/range fidelity and complete surviving-node correspondence.
 - [ ] Pass planned compatibility, golden-output, resource/cancellation and package-consumer tests plus existing frozen engine gates.
 - [ ] Deliver reviewed engine support before independent Braid Apply/history/native acceptance.
 

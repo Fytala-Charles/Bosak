@@ -4,6 +4,10 @@
 <p>Proposed design for review — 17 October 2026</p>
 </div>
 
+**Implementation checkpoint - 17 October 2026:** The user authorized this bounded engine slice after design preparation. Source 1.17.0 now implements the proposed public surface and edit/provenance contract; final validation/integration is tracked in [implementation evidence](REQ-129-IMPLEMENTATION.md). Released 1.16.5 does not contain this capability. Original proposed-state wording below is preserved as design history.
+
+
+
 ## Decision and delivery boundary
 
 Add an explicit opt-in readable formatting mode to the existing bounded REQ-128 value-of insertion operation. The existing two-argument proposal constructor and omitted formatting option retain byte-identical legacy behavior. This document is a proposed contract, not an implemented capability or consumer acceptance. REQ-129 remains **Pending**, target **TBD**, owner **Unassigned** until implementation is authorized and assigned. A released feature would require a minor version bump from the then-current library version; no version is reserved here.
@@ -57,6 +61,8 @@ Formatting is allowed only where the affected source whitespace is proven to be 
 Ambiguous newline or indent evidence, a non-whitespace affected gap, an unprovable whitespace-stripping context or inability to preserve total node correspondence refuses with no candidate. PreserveSource is an explicit separate retry decision for the caller; the engine never silently changes the requested mode. PreserveSource must continue accepting every case it accepted before, even when Readable refuses it.
 
 Compilation alone does not prove semantic equivalence. Acceptance compares execution of Readable and PreserveSource candidates for the **same insertion and select expression** on identical fixtures, using exact output bytes where declared deterministic. The original stylesheet is not expected to have the same output as a stylesheet with an inserted value-of. No global proof of arbitrary XPath/XSLT equivalence is claimed.
+
+**Verified coverage refinement - 17 October 2026:** Readable refuses beneath any ancestor `xml:space="preserve"`, including a nearer `xml:space="default"` reset. Same-insertion execution comparisons exposed observable result whitespace in this engine context; effective XML settings alone do not prove safe engine behavior. PreserveSource remains supported under its existing rules. The first failing equivalence receipt is preserved; no execution-engine whitespace correction is included in this slice.
 
 ## Snapshot, range and provenance rules
 

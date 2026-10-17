@@ -1,6 +1,10 @@
 # REQ-129: Readable Value-of Insertion - Consumer Request
 
-Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Status: Pending. Target: TBD. Owner: Unassigned. Registered with explicit user authorization; no implementation or acceptance claimed.
+Date: 2026-10-16. Requester: Braid. Upstream ID: REQ-129. Current status: Implemented in source. Target: 1.17.0 (unpublished). Owner: Charles Korthout. The user authorized implementation after contract preparation; final validation/integration and consumer acceptance are separate.
+
+## Source implementation - 17 October 2026
+
+The additive Readable mode, capability and complete source-edit evidence are implemented in source. See [implementation record](REQ-129-IMPLEMENTATION.md). PreserveSource remains the default; no release or Braid adoption is implied. The original design/request below is historical.
 
 ## Design checkpoint - 17 October 2026
 

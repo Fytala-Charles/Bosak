@@ -5,6 +5,12 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+## REQ-129 readable insertion in source - 17 October 2026
+
+Unpublished source **1.17.0** adds explicit opt-in readable value-of insertion, a separate capability flag and complete original/candidate edit ranges. The legacy constructor retains its existing byte splice. Formatting changes only proven direct-child whitespace gaps; ambiguity refuses. Frozen QT3 remains **31,142/0/679** and qt4 gated **8,278/0/1,894**. Full tests, exact-head package verification and integration are tracked in the [implementation record](REQ-129-IMPLEMENTATION.md). Public libraries remain 1.16.5 and extension 0.2.5; Braid integration/native acceptance are independent.
+
+
+
 ## REQ-129 formatting contract proposed - 17 October 2026
 
 The [readable insertion contract](REQ-129-READABLE-INSERTION-CONTRACT.md) defines opt-in layout, direct-child whitespace changes, exact candidate edit/provenance evidence, conservative refusals and planned tests. Existing insertion behavior remains the default. This is design only: REQ-129 remains Pending/TBD/Unassigned; released libraries 1.16.5, extension 0.2.5, REQ-128 delivery and Braid acceptance are unchanged.

@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 15-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 15-10-2026     | Retain private source-derived context independently of earlier inspection compilation.    |
+//                      | Charles Korthout | 0.3   | 17-10-2026     | REQ-129: immutable opt-in formatting mode and complete edit evidence.
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -55,6 +56,8 @@ public enum AuthoringInsertionFailureKind
     SourceAlignmentFailure,
     /// <summary>Cooperative cancellation was observed before returning a candidate.</summary>
     Cancelled,
+    /// <summary>Readable layout cannot be inferred or proven safe.</summary>
+    UnsupportedFormatting,
 }
 
 /// <summary>An immutable classified refusal; expression errors do not fabricate original-source ranges.</summary>
@@ -99,6 +102,26 @@ public sealed class AuthoringValueOfInsertionTargetResult
     public AuthoringInsertionFailure? Failure { get; }
 }
 
+/// <summary>Controls optional layout for a bounded insertion proposal.</summary>
+public enum AuthoringInsertionFormattingMode
+{
+    /// <summary>Keep the existing insertion layout and untouched original bytes.</summary>
+    PreserveSource = 0,
+    /// <summary>Format only proven ignorable direct-child whitespace gaps.</summary>
+    Readable = 1,
+}
+
+/// <summary>An immutable byte edit linking input source to exact candidate replacement bytes.</summary>
+public sealed class AuthoringInsertionSourceEdit
+{
+    internal AuthoringInsertionSourceEdit(SourceRange originalRange, SourceRange replacementRange)
+    { OriginalRange = originalRange; ReplacementRange = replacementRange; }
+    /// <summary>Gets the replaced range in the input snapshot; may be empty for insertion.</summary>
+    public SourceRange OriginalRange { get; }
+    /// <summary>Gets the replacement range in the exported candidate snapshot.</summary>
+    public SourceRange ReplacementRange { get; }
+}
+
 /// <summary>A request to append one value-of instruction using expanded XPath expression text.</summary>
 public sealed class AuthoringValueOfInsertionProposal
 {
@@ -107,7 +130,23 @@ public sealed class AuthoringValueOfInsertionProposal
     /// <param name="selectExpressionText">Expanded expression text, before XML escaping.</param>
     /// <exception cref="ArgumentNullException">Either argument is null.</exception>
     public AuthoringValueOfInsertionProposal(AuthoringValueOfInsertionTarget target, string selectExpressionText)
-    { Target = target ?? throw new ArgumentNullException(nameof(target)); SelectExpressionText = selectExpressionText ?? throw new ArgumentNullException(nameof(selectExpressionText)); }
+        : this(target, selectExpressionText, AuthoringInsertionFormattingMode.PreserveSource) { }
+    /// <summary>Creates a proposal with an explicit immutable formatting mode.</summary>
+    /// <param name="target">The engine-issued target.</param>
+    /// <param name="selectExpressionText">Expanded expression text, before XML escaping.</param>
+    /// <param name="formattingMode">The requested source layout.</param>
+    /// <exception cref="ArgumentNullException">Either reference argument is null.</exception>
+    /// <exception cref="ArgumentOutOfRangeException">The formatting mode is undefined.</exception>
+    public AuthoringValueOfInsertionProposal(AuthoringValueOfInsertionTarget target, string selectExpressionText,
+        AuthoringInsertionFormattingMode formattingMode)
+    {
+        Target = target ?? throw new ArgumentNullException(nameof(target));
+        SelectExpressionText = selectExpressionText ?? throw new ArgumentNullException(nameof(selectExpressionText));
+        if (!Enum.IsDefined(formattingMode)) throw new ArgumentOutOfRangeException(nameof(formattingMode));
+        FormattingMode = formattingMode;
+    }
+    /// <summary>Gets the explicitly requested layout; omitted options preserve source.</summary>
+    public AuthoringInsertionFormattingMode FormattingMode { get; }
     /// <summary>Gets the opaque insertion target.</summary>
     public AuthoringValueOfInsertionTarget Target { get; }
     /// <summary>Gets the exact expanded expression text.</summary>
@@ -132,16 +171,24 @@ public sealed class AuthoringValueOfInsertionCandidate
 {
     internal AuthoringValueOfInsertionCandidate(AuthoringSnapshot input, AuthoringSnapshot snapshot,
         SourceRange originalRange, SourceRange insertedRange, AuthoringNodeDescriptor insertedNode,
-        AuthoringAttributeDescriptor selectSlot, IReadOnlyDictionary<int, int> correspondence)
-    { InputSnapshot = input; Snapshot = snapshot; OriginalRange = originalRange; InsertedRange = insertedRange;
-      InsertedNode = insertedNode; SelectSlot = selectSlot; NodeCorrespondence = correspondence; }
+        AuthoringAttributeDescriptor selectSlot, IReadOnlyDictionary<int, int> correspondence,
+        AuthoringInsertionFormattingMode formattingMode, IReadOnlyList<AuthoringInsertionSourceEdit> sourceEdits)
+    {
+        InputSnapshot = input; Snapshot = snapshot; OriginalRange = originalRange; InsertedRange = insertedRange;
+        InsertedNode = insertedNode; SelectSlot = selectSlot; NodeCorrespondence = correspondence;
+        FormattingMode = formattingMode; SourceEdits = Array.AsReadOnly(sourceEdits.ToArray());
+    }
+    /// <summary>Gets the applied formatting mode; no implicit downgrade occurs.</summary>
+    public AuthoringInsertionFormattingMode FormattingMode { get; }
+    /// <summary>Gets all edits in input-source order; replacement ranges refer to the exported candidate bytes.</summary>
+    public IReadOnlyList<AuthoringInsertionSourceEdit> SourceEdits { get; }
     /// <summary>Gets the exact input snapshot against which this candidate is valid.</summary>
     public AuthoringSnapshot InputSnapshot { get; }
     /// <summary>Gets the isolated candidate snapshot.</summary>
     public AuthoringSnapshot Snapshot { get; }
     /// <summary>Gets the principal module URI.</summary>
     public Uri ModuleUri => Snapshot.PrincipalModule.ModuleUri;
-    /// <summary>Gets the zero-length insertion range in the original source.</summary>
+    /// <summary>Gets the zero-length instruction anchor in the input; use SourceEdits for the complete formatted footprint.</summary>
     public SourceRange OriginalRange { get; }
     /// <summary>Gets the exact inserted instruction range in candidate source.</summary>
     public SourceRange InsertedRange { get; }
