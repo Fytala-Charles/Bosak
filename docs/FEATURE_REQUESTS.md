@@ -501,7 +501,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-127 | Bosak.Braid | Source-preserving inspection of compact nested sibling elements | Valid compact XSLT was refused with source-alignment failure; exact retained ranges are required | Implemented — published 1.1.3, public artifacts verified; Braid verification reported | 1.1.3 | Charles Korthout | 2026-10-12 |
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented; Braid adoption recorded within accepted REQ-129 profile | 1.8.0 | Charles Korthout | 2026-10-17 |
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
-| REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Pending | TBD | Unassigned | 2026-10-17 |
+| REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Pending (deletion contract and acceptance plan proposed) | TBD | Unassigned | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Pending (contract and acceptance plan proposed; no implementation) | TBD | Unassigned | 2026-10-17 |
 
 
@@ -1722,11 +1722,13 @@ REQ-128 preserves original insertion layout; repeated compact insertions need an
 
 **Requesting Application:** Bosak.Braid
 **Submitted:** 2026-10-17
-**Status:** Pending; consumer request registered, API/scope and implementation not accepted
+**Status:** Pending; deletion contract and acceptance plan proposed, scope/API not yet accepted
 **Target Version:** TBD
 **Owner:** Unassigned
 
 The [unchanged consumer dossier](REQ-130-source-preserving-value-of-deletion.md) requests engine-owned deletion of exactly one eligible principal-module value-of with instruction-only byte removal, complete removed/surviving identity evidence and no surrounding whitespace/namespace cleanup. Braid's concurrent handoff reserves this identifier; the separate literal-text proposal is REQ-131. No deletion engine API, implementation, consumer command or release is supplied by this documentation step. Review the requested deletion contract separately before implementation.
+
+The [proposed deletion contract](REQ-130-DELETION-CONTRACT.md) and [23 planned acceptance groups](REQ-130-DELETION-ACCEPTANCE.md) now define the next review. Initial recommendation refuses text coalescence as UnsupportedCorrespondence to retain ordinary inspection and injective survivor identity. Many two-sided indented/readable cases therefore remain outside proposed success scope; consumer agreement or a revised identity model is required before implementation. No executed deletion tests are claimed.
 
 ### REQ-131: Literal-Text Insertion for Structural Authoring
 
