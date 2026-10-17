@@ -54,3 +54,7 @@ Code revision `10a3b5e3ef59074ba803b63e13d29a7d4eaae989`, [implementation PR #36
 Four new proof controls and two older insertion traversal controls stay in source tests because they use internals. They are not relabeled as public package cases. Receipts are in `.guard-tmp/req130-*`, including `req130-head-package-provenance.json`, `req130-corrected-focused-results`, `req130-corrected-qt3.log`, `req130-corrected-qt4.log` and `req130-head-ci.log`. Preserve every original failure and corrected receipt separately.
 
 These engine gates do not implement Braid's review/Apply/history/worker/export/reopen workflows or native acceptance. Source version 1.18.0 is not published; Braid remains on accepted public 1.17.0. Release and consumer adoption follow their own review and authorization.
+
+## Independent implementation review and release preparation
+
+Braid [reports no blocking implementation findings](REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md) at the exact reviewed head and integrated revision. Its 226 source,221 unchanged package and 241 combined package/probe counts overlap;241 includes 20 independent cases. These use local unpublished artifacts, not public NuGet. Its normal runtime baseline remains 952, and restricted worker/export/Apply/history/native gates remain open. The receipt is preserved verbatim, including warning overrides and initial fixture/helper corrections. [Release readiness](RELEASE-1.18.0-READINESS.md) and prepared notes target 3264fcfa; publication requires separate authorization. No engine change is needed from this review.
