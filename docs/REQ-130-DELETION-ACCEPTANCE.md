@@ -4,6 +4,8 @@
 <p>Planned evidence — 17 October 2026</p>
 </div>
 
+**Implementation checkpoint — 17 October 2026:** Actual source/API fixture evidence is recorded separately in [REQ-130-IMPLEMENTATION.md](REQ-130-IMPLEMENTATION.md). The historical matrix below specifies planned gates; consumer/native rows are not marked passed by source tests, and functional acceptance remains open.
+
 **Pending design: none of these groups is claimed as an implemented or passed test.** Read the [proposed contract](REQ-130-DELETION-CONTRACT.md) and [unchanged consumer request](REQ-130-source-preserving-value-of-deletion.md). Each group requires positive and refusal/edge evidence where applicable. Preserve initial failures and corrections separately.
 
 | Group | Required evidence |

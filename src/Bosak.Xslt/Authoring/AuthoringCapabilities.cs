@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 // ===========================================================================================================================================================
+//                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: independently advertise bounded value-of deletion.                              |
+// ===========================================================================================================================================================
 
 using System.Reflection;
 
@@ -42,6 +44,12 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded instruction-only value-of deletion is available.</summary>
+    public static bool SupportsValueOfDeletion => true;
+
+    /// <summary>Gets the maximum original and candidate deletion source bytes, including BOM.</summary>
+    public static int MaxValueOfDeletionSourceBytes => 8_388_608;
+
     /// <summary>Gets whether bounded source-preserving value-of insertion is implemented.</summary>
     public static bool SupportsValueOfInsertion => true;
 

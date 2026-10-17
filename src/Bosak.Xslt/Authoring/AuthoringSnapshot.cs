@@ -16,6 +16,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain immutable captured function keyword signatures.                                   |
 //                      | Charles Korthout | 0.4   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
+//                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: snapshot-owned deletion and merged-text provenance.                            |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -165,6 +166,32 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return ValueOfInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers an owned empty-body value-of deletion target in the bounded profile.</summary>
+    /// <param name="node">The actual instruction descriptor issued by this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An opaque target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    /// <exception cref="OperationCanceledException">Cancellation is observed.</exception>
+    public AuthoringValueOfDeletionTargetResult GetValueOfDeletionTarget(AuthoringNodeDescriptor node,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        return ValueOfDeletionPipeline.Target(this, node, cancellationToken);
+    }
+
+    /// <summary>Removes one instruction privately and proves complete source and graph provenance.</summary>
+    /// <param name="proposal">The engine-issued target to remove.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no partial candidate is returned.</param>
+    /// <returns>A complete isolated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    /// <exception cref="OperationCanceledException">Cancellation is observed.</exception>
+    public AuthoringValueOfDeletionResult ProposeValueOfDeletion(AuthoringValueOfDeletionProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return ValueOfDeletionPipeline.Run(this, proposal, cancellationToken);
     }
 
     internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,
