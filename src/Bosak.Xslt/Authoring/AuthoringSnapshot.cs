@@ -17,6 +17,7 @@
 //                      | Charles Korthout | 0.3   | 13-10-2026     | Retain immutable captured function keyword signatures.                                   |
 //                      | Charles Korthout | 0.4   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: snapshot-owned deletion and merged-text provenance.                            |
+//                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: typed snapshot-owned literal-text insertion entry points.                     |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -192,6 +193,30 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return ValueOfDeletionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers a typed snapshot-owned target for appending one literal text instruction.</summary>
+    /// <param name="parent">The exact parent descriptor issued by this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>A target or classified insertion refusal, including Cancelled.</returns>
+    /// <exception cref="ArgumentNullException">The parent is null.</exception>
+    public AuthoringTextInsertionTargetResult GetTextInsertionTarget(AuthoringNodeDescriptor parent,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        return TextInsertionPipeline.Target(this, parent, cancellationToken);
+    }
+
+    /// <summary>Appends one literal text instruction privately with complete source and node evidence.</summary>
+    /// <param name="proposal">A typed engine-issued target and literal Unicode payload.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; cancellation returns no candidate.</param>
+    /// <returns>An isolated validated candidate or classified insertion refusal, including Cancelled.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringTextInsertionResult ProposeTextInsertion(AuthoringTextInsertionProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return TextInsertionPipeline.Run(this, proposal, cancellationToken);
     }
 
     internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,

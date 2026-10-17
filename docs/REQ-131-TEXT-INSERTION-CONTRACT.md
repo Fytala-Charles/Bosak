@@ -4,6 +4,8 @@
 <p>Proposed structural authoring operation — 17 October 2026</p>
 </div>
 
+**Implementation review — 17 October 2026:** User authorized continuation after published 1.18.0/REQ-130. This contract has been reviewed against current main 38221050 and the delivered text/value-of/deletion behavior; [source 1.19.0 implementation](REQ-131-IMPLEMENTATION.md) is under verification. Original design-only status/baseline below records the earlier checkpoint. Publication and Braid commands/adoption/native acceptance remain separate.
+
 ## Status and scope
 
 **Pending: proposed contract only. Target version TBD; implementation owner unassigned.** The product owner requested the next design step after Braid accepted REQ-129. This registers an internal authoring-roadmap proposal for Braid; it does not claim a separately submitted consumer request or authorize engine implementation. A future implementation would need a minor version increment from the then-current source version; no version is reserved here.
@@ -70,9 +72,11 @@ Retain REQ-128's single-principal-module, explicit-close, template/literal-resul
 
 Keep significant direct parent text, direct CDATA and effective xml:space=preserve outside the initial target profile, as for value-of insertion. A literal xsl:text child is a markup unit whose protected payload is not parent formatting whitespace. Preserve its entire original source bytes during later insertions.
 
-**Required coverage change, not automatic reuse:** released 1.17.0's insertion allow-list excludes `xsl:text`. The implementation must deliberately recognize validated non-expanding literal xsl:text, including newly generated instructions, so repeated text insertion and mixed text/value-of authoring work. Do not merely add its name to an allow-list. Prove literal expansion policy, supported attributes/content, static validity and unchanged provenance; existing expanding/disable-output-escaping or otherwise unsupported forms retain coverage refusal.
+**Baseline correction and compatibility decision:** inspection of current 1.18.0 source and published-API probes show that the existing allow-list already includes xsl:text. Legacy value-of insertion accepts plain literal text, disable-output-escaping=yes text and whitespace-only expand-text=yes text; significant expanded text already refuses. The earlier exclusion assumption was incorrect. Preserve all these measured legacy behaviors; do not tighten its profile or shared deletion validation to implement this slice.
 
-Document and test this bounded newly supported literal-text input form for both insertion operations. Every previously successful value-of proposal must retain its original behavior and bytes in PreserveSource; unrelated refusal boundaries remain. Text and value-of target objects remain distinct even when the private parent eligibility/layout code is shared. A fresh text or value-of target must be discovered from each newly accepted snapshot.
+The new text operation independently accepts existing xsl:text only when effective expand-text is absent/no/false/0, disable-output-escaping is absent/no, and body nodes are ordinary XText (no CDATA/comments/PIs/elements). Shared structural/static validation still applies. Generated paired text with explicit local no is inside this profile and coexists with legacy value-of insertion/deletion. New text targets refuse other text forms as UnsupportedCoverage; this new-operation boundary does not reclassify old value-of successes. Protected existing literal payload and surrounding bytes are retained. The baseline probe receipt is preserved in `.guard-tmp/req131-baseline-probes.log`.
+
+Document and test the new text-operation profile and compatible mixed-operation use, preserving the old value-of profile. Every previously successful value-of proposal must retain its original behavior and bytes in PreserveSource; unrelated refusal boundaries remain. Text and value-of target objects remain distinct even when the private parent eligibility/layout code is shared. A fresh text or value-of target must be discovered from each newly accepted snapshot.
 
 ## Formatting and exact edit footprint
 
@@ -104,4 +108,4 @@ Braid separately discovers text/readable-text capability, edits a literal-text f
 
 The [planned acceptance matrix](REQ-131-TEXT-INSERTION-ACCEPTANCE.md) specifies happy-path, edge, compatibility, payload, provenance, budget and consumer cases. They are plans, not executed tests. Implementation requires full solution and language-server tests, exact-head and exact-merge package-only consumers, unchanged frozen QT3 **31,142/0/679**, and qt4 gated **8,278/0/1,894** unless a separately approved gate change occurs. Preserve original failure receipts and use separate corrections; no skips, aliases or gate promotions merely to make this slice green.
 
-Review this contract before starting one bounded engine implementation PR. Ship no capability flag, version bump, package or Braid command as part of this design document.
+The user authorized the bounded engine implementation after this review. Its source-only delivery and observed gates are recorded separately; no publication or Braid command/adoption is implied.
