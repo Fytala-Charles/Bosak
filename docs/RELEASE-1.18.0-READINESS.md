@@ -4,6 +4,8 @@
 <p>Prepared; publication authorization outstanding — 17 October 2026</p>
 </div>
 
+**Publication completed after user approval — 17 October 2026:** Immutable v1.18.0 remains at `3264fcfaf739e492770c882d2cbfc1f93f0172d2`. [Public delivery and verification](RELEASE-1.18.0-PUBLICATION.md) supersedes the original preparation-only status below. Original execution boundary/preflight findings are retained as history; do not republish or move the tag.
+
 ## Decision and immutable target
 
 **Ready for publication authorization, not published.** Proposed version 1.18.0, tag `v1.18.0`, exact source target `3264fcfaf739e492770c882d2cbfc1f93f0172d2` (merged PR #361). The documentation preparation branch may advance separately; do not tag its later documentation merge or rebuild the release from an unspecified main HEAD. The current ten library versions are already 1.18.0; no further source/version bump is needed. [Structured readiness](RELEASE-1.18.0-READINESS.json) and [prepared release notes](RELEASE-NOTES-1.18.0.md) record this decision.

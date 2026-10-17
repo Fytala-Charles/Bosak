@@ -1,10 +1,10 @@
 <div align="center">
-<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.18.0 release preparation">
+<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.18.0 public release">
 <h1>Bosak 1.18.0 release notes</h1>
-<p>Prepared value-of deletion release — 17 October 2026</p>
+<p>Published value-of deletion release — 17 October 2026</p>
 </div>
 
-**Prepared, not published.** Proposed tag `v1.18.0` must target exact verified source revision `3264fcfaf739e492770c882d2cbfc1f93f0172d2`. No release tag, GitHub release or public 1.18.0 package is created by this preparation. All ten libraries target .NET 10.
+Published from immutable tag `v1.18.0` at `3264fcfaf739e492770c882d2cbfc1f93f0172d2`. All ten libraries target .NET 10. [Verified public delivery](RELEASE-1.18.0-PUBLICATION.md) and [GitHub release](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.18.0).
 
 ## Bounded source-preserving deletion
 
@@ -27,3 +27,9 @@ Upstream full build and **9,661 solution +84 language-server tests** pass. Focus
 Braid's production pin remains accepted public 1.17.0. Its deletion-specific adapter, frozen review/Apply/history/selection, licensed worker/restricted export/reopen workflow and native acceptance remain open. Its implementation review is not release authorization or functional acceptance. VS Code 0.2.5 still bundles 1.16.5. No Braid or extension update is part of this release preparation.
 
 [Implementation and API details](REQ-130-IMPLEMENTATION.md), [implementation PR #361](https://github.com/Fytala-Charles/Bosak/pull/361), [release readiness and execution boundary](RELEASE-1.18.0-READINESS.md).
+
+## Public artifact verification
+
+All ten signed NuGet packages verify; fresh nuget.org-only consumers pass 153 broad and 221 focused public checks with exact archive/cache/output/assembly provenance and no reported vulnerable dependencies. This verifies publication, not Braid production/native acceptance.
+
+[Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.18.0), [Bosak.XPath.Compiler](https://www.nuget.org/packages/Bosak.XPath.Compiler/1.18.0), [Bosak.XPath.Core](https://www.nuget.org/packages/Bosak.XPath.Core/1.18.0), [Bosak.XPath.Parser](https://www.nuget.org/packages/Bosak.XPath.Parser/1.18.0), [Bosak.XPath.Providers](https://www.nuget.org/packages/Bosak.XPath.Providers/1.18.0), [Bosak.XPath.Providers.Database](https://www.nuget.org/packages/Bosak.XPath.Providers.Database/1.18.0), [Bosak.XPath.Runtime](https://www.nuget.org/packages/Bosak.XPath.Runtime/1.18.0), [Bosak.XPath.Standard](https://www.nuget.org/packages/Bosak.XPath.Standard/1.18.0), [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.18.0), [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.18.0)
