@@ -1734,6 +1734,8 @@ Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blo
 
 **Implementation checkpoint — 17 October 2026:** Source 1.18.0 now contains the additive bounded API/pipeline and actual deletion fixtures. See [implementation record](REQ-130-IMPLEMENTATION.md) for exact schema and verification. Exact code-head CI passes 9,661 solution plus 84 language-server tests; focused 226 and independent package-only 221 pass, with frozen gates unchanged. Public 1.17.0 lacks deletion. Braid runtime adoption/native acceptance and publication remain pending, independent of its no-blocking design review. Earlier pending-design descriptions above are historical.
 
+**Release preparation — 17 October 2026:** Braid's [implementation review](REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking finding at exact head 07e66dbb/merge 3264fcfa, independently reporting overlapping226/221/241 passes (20 new probes within 241). [Prepared 1.18.0 release](RELEASE-1.18.0-READINESS.md) targets3264fcfa; no publication or consumer functional/native acceptance is authorized or claimed. Registry remains implemented in source, consumer acceptance pending. Public 1.17.0 pin remains unchanged.
+
 ### REQ-131: Literal-Text Insertion for Structural Authoring
 
 **Requesting Application:** Product owner, following the Bosak.Braid authoring roadmap

@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-17",
+  "candidateVersion": "1.18.0",
+  "candidateRevision": "3264fcfaf739e492770c882d2cbfc1f93f0172d2",
+  "localMergedPackageProofVerified": true,
+  "packageCount": 10,
+  "publicPackageVersionChecks": [
+    {
+      "id": "Bosak.XPath.Api",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json"
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json"
+    },
+    {
+      "id": "Bosak.XQuery",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json"
+    },
+    {
+      "id": "Bosak.Xslt",
+      "version1180Present": false,
+      "source": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json"
+    }
+  ],
+  "tagPresent": false,
+  "githubReleasePresent": false,
+  "mainCiRun": 39029719562,
+  "mainCiConclusion": "success",
+  "publicationAuthorized": false,
+  "publicationPerformed": false,
+  "status": "PREPARED_AWAITING_PUBLICATION_AUTHORIZATION",
+  "consumerReview": {
+    "file": "docs/REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md",
+    "sha256": "f92f5648800e82f9b9507ffed142b824ca330f3114aa7e94331863437fd7e972",
+    "verdict": "No blocking implementation finding within delivered bounded profile",
+    "functionalAcceptance": false,
+    "reportedCountsOverlap": [
+      226,
+      221,
+      241
+    ]
+  },
+  "sourceCi": {
+    "headRun": 39029229185,
+    "mainRun": 39029719562,
+    "solutionPassed": 9661,
+    "languageServerPassed": 84
+  },
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "qt4Gated": [
+    8278,
+    0,
+    1894
+  ],
+  "localPackageConsumers": {
+    "finalHeadPassed": 221,
+    "mergedPassed": 221,
+    "publicNugetVerified": false
+  },
+  "releaseWorkflow": ".github/workflows/release.yml",
+  "publicationTrigger": "One annotated v1.18.0 tag pushed at candidateRevision; do not also workflow_dispatch",
+  "extension": {
+    "version": "0.2.5",
+    "bundledEngine": "1.16.5",
+    "changed": false
+  },
+  "braidProductionVersion": "1.17.0"
+}
