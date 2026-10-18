@@ -1,0 +1,42 @@
+<div align="center">
+<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala REQ-133: text body replacement acceptance matrix">
+<h1>REQ-133: text body replacement acceptance matrix</h1>
+<p>Proposed design - 18 October 2026</p>
+</div>
+
+**Reviewed plan for a future operation; zero replacement tests have been executed.** Read with the [contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) and [original consumer TE groups](REQ-133-literal-text-body-replacement.md). Public 1.20.0 does not expose text-body replacement.
+
+Each engine group needs relevant positive and refusal/control cases. UI/license/session/history, restricted export/worker and native groups belong to Braid. Malformed evidence rejection must be tested at the actual engine/consumer authority boundary; do not fabricate a publicly constructible engine snapshot simply to mirror internal implementation.
+
+| Group | Consumer group | Fixture | Required evidence |
+|---|---|---|---|
+| R01 | TE-01 | Imported and previously inserted text | Discover exact paired xsl:text targets by expanded name; aliases, default XSLT namespace and 3.0/4.0 profiles have actual original instruction/parent/body/payload evidence. |
+| R02 | TE-01 | Wrong kind and ownership | Literal output named text, arbitrary text node and unrelated instruction refuse; foreign descriptors/targets from equal bytes or same URI refuse by reference ownership. |
+| R03 | TE-01/04 | Excluded syntax before NoChange | Self-close, CDATA, comments/PIs, elements or ambiguous bodies refuse even when proposed logical text would be equal/empty; no implicit tag expansion or repair. |
+| R04 | TE-01/02 | Effective controls | Non-expansion absent/no/false/0 where supported; local false under expanding ancestor succeeds. Effective expansion, output escaping and invalid/unsupported control values refuse without attribute edits. |
+| R05 | TE-01/03 | Preserved and mixed surrounding text | Ordinary xsl:text under inherited/local xml:space preserve/default and significant parent text remains eligible when validation permits. Mixed external physical newlines stay unchanged; no append-layout whitespace policy is applied. |
+| R06 | TE-02 | Exact logical strings | Unicode, decomposed/precomposed differences, supplementary scalars, markup-looking/entity-looking strings, braces, spaces, quotes, tabs, CR/LF/CRLF retain exact intent with no parsing/normalization. |
+| R07 | TE-02/06 | Invalid scalars | Runtime-built unpaired high/low surrogates, NUL and other invalid XML scalars refuse InvalidPayload; no runner argument normalization or lossy encoding replacement hides the case. |
+| R08 | TE-03 | Single body footprint | Exactly one edit equals old/full new body ranges; replay prefix/new-body/suffix equals exported bytes; tags/prefixes/attributes/namespaces and all outside text/comments/PIs are identical. |
+| R09 | TE-03/06 | Physical encodings and coordinates | UTF-8 with/without BOM and BOM-marked UTF-16 LE/BE; declarations, BOM bias, non-ASCII/supplementary characters before/inside the body and byte/line/column ranges remain exact. |
+| R10 | TE-02/03 | Escaping and lexical safety | Ampersand/less/greater escapes, numeric CR/LF/TAB, raw ]]> intent, literal entity-looking strings and braces produce exact decoded output without markup/template authority. |
+| R11 | TE-04 | Equal reference spelling | Logical A over existing &#x41; or decimal/built-in references yields explicit NoChange; source spelling/owner/revision/history unchanged, no candidate/edit/inspection created. |
+| R12 | TE-04 | Empty and newline equality | Paired empty to empty is NoChange. Physical source CR/CRLF normalized by XML are compared as actual logical values; explicit different CR/LF/CRLF intents and normalization forms are Changed. |
+| R13 | TE-04/06 | NoChange authority and budgets | Foreign, oversized-original, unsupported encoding/control, invalid original and cancelled cases cannot return NoChange. Equal eligible text does not fail on hypothetical canonical escaped-output growth. |
+| R14 | TE-05/09 | All payload-presence transitions | Empty-to-nonempty: no replaced node/one new payload; nonempty-to-empty: one replaced/no new payload; nonempty-to-nonempty: one each. Owner survives; payload is never mislabeled as ordinary survivor. |
+| R15 | TE-05 | Complete disjoint partitions | O = map keys disjoint-union ReplacedNodes; C = map image disjoint-union NewNodes. Actual payload refs agree, cardinality zero/one, every outside descriptor maps injectively with exact parent/order and attributes. |
+| R16 | TE-05/07 | Malformed evidence and alignment | Missing/duplicate/foreign map items, omitted/extra/split/merged payloads, wrong names/parent/ranges/value/attribute changes refuse engine alignment or fail consumer review at the appropriate boundary. |
+| R17 | TE-05/08 | Encoded range and empty caret | Actual payload range covers encoded source, not logical string length; empty candidate has exact zero-byte body caret and no synthetic text descriptor or Expression slot. |
+| R18 | TE-06 | Physical size and shrinkage | At/over 8,388,608-byte original/final boundaries; replacement subtracts old encoded body, counts escaping/UTF-16/BOM and overflow safely; shrink-to-fit allowed, oversized original still refuses. |
+| R19 | TE-06 | Encoding/profile refusal | Unsupported structural encoding, invalid bytes, XML-version/declaration mismatch and excluded language version refuse at documented inspection/operation boundaries without conversion. |
+| R20 | TE-01/06 | Static and resource authority | Dependencies/packages/schema/type-component contexts and static/use-when/shadow/extension preprocessing refuse before evaluation; resolver/extension instrumentation proves no acquisition/execution, including equal intent. |
+| R21 | TE-07 | Deep freeze and isolation | Input holders/export arrays/map and partition collections cannot alter retained evidence; concurrent Changed/NoChange/refused requests against one owner remain isolated. |
+| R22 | TE-06/07 | Cancellation checkpoints | Pre-cancelled discovery/proposal, traversal/scalar/count/validation/mapping/pre-outcome cancellation produces Refused/Cancelled with no partial candidate, including equal-intent calls. |
+| R23 | TE-07/08 | Current session and review | Compatible adapter/capability/license/current owner/revision/inspection/overlap required; full logical and lexical review, exact whole instruction and provenance; input/source change invalidates prior evidence, oversized complete review refuses without truncation. |
+| R24 | TE-04/08 | NoChange consumer behavior | No source owner Apply, new revision, undo/redo step, reserialization or synthetic selection; existing valid evidence stays subject to unchanged current-session authority and independent policy changes. |
+| R25 | TE-08 | Changed Apply and exact history | Separate atomic Apply, actual owner plus payload/caret selection, graph reopen, one-step exact-byte undo/redo and fresh inspection; cancellation before commit preserves state and after commit reports success. |
+| R26 | TE-09 | Lifecycle and legacy compatibility | Insert then edit; imported/repeated edits and empty transitions use fresh targets each time. Existing expression/value-of/text insertion/deletion/literal-element capabilities, bytes and refusals remain unchanged. |
+| R27 | TE-10/11 | Worker and native gates | Deliberately changed output, real validation/preview ExactBytes, restricted new-file export/receipt/hash and independent destination reopen/run across four encodings; protected native kit and actual observed walkthrough/hashes, without inferred variants/accessibility approval. |
+| R28 | TE-01 through TE-11 | Delivery separation | Full solution/LS and exact-head CI, independent exact-merge package-public cases, frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894; later signed public release, Braid adoption and native acceptance remain separate. |
+
+These are **28 planned groups**, not 28 tests or passed runs. The [seven baseline probes](REQ-133-DESIGN-BASELINE.json) exercise existing inspection/runtime only and do not satisfy replacement cases. Source/package counts in future evidence overlap; retain original failures and record fixture corrections separately. Frozen gate values are future requirements, not reruns for this design-only slice.
