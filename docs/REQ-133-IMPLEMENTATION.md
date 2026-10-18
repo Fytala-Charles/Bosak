@@ -4,6 +4,9 @@
 <p>Source 1.21.0 - 18 October 2026</p>
 </div>
 
+**Publication update:** [1.21.0 is published and verified](RELEASE-1.21.0-PUBLICATION.md) after [Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier source-only, local-feed and review-pending statements below preserve their historical delivery checkpoint. Consumer adoption/native acceptance remains separate and pending.
+
+
 Source implementation and local verification are complete after [no-blocking Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and explicit user authorization. Baseline main is `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`. Public packages remain 1.20.0; no release, Braid adoption or native acceptance is claimed.
 
 The [reviewed contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) is implemented additively in `Bosak.Xslt.Authoring`. `SupportsTextBodyReplacement`, its 8,388,608-byte bound and immutable encoding list describe a separate operation. Snapshot discovery issues an opaque owner-specific paired ordinary text-body target; proposals contain exact logical Unicode and no formatting option.

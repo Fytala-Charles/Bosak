@@ -5,7 +5,7 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
-**REQ-133 source verification complete - 18 October 2026:** Source 1.21.0 adds reviewed literal text body replacement after [Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and user authorization. [Implementation record](REQ-133-IMPLEMENTATION.md) covers exclusive Changed/NoChange/Refused outcomes, exact body bytes and disjoint payload provenance. Local checks pass 9,900 solution, 84 language-server, 76 new source cases, 437 package-public and 153 broad checks; frozen gates remain unchanged. Exact-head CI and final package receipts accompany delivery. Public packages remain 1.20.0 and REQ-132 remains consumer-accepted. Consumer implementation review, publication and native acceptance are pending.
+**1.21.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.21.0-PUBLICATION.md) records immutable `v1.21.0` at `8929a130`, one successful Release run (9,900 solution tests and ten uploads), ten verified signed archives, and fresh nuget.org-only **153 broad / 437 focused** checks with exact provenance and clear audits. REQ-133 text-body replacement is published after [no-blocking Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md). Braid adoption/native acceptance remain pending; REQ-132 remains consumer-accepted. Earlier source-only/review-pending checkpoints are historical.
 
 
 
