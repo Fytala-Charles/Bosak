@@ -5,6 +5,10 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**1.19.1 release preparation - 18 October 2026:** [Readiness](RELEASE-1.19.1-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.1.md) pin proposed publication to merged `a9e954d7`. Exact-merge local packages pass 153 broad API checks and eight regression/identity checks with fresh caches and exact provenance. Source CI passes 9,817; frozen gates remain unchanged. Publication approval is pending; public 1.19.0 and recorded consumer acceptance remain unchanged.
+
+
+
 For the product introduction, Schema and Braid overview, start with the [README](../README.md) and [ecosystem guide](ECOSYSTEM.md). Earlier README implementation checkpoints are preserved in [development history](DEVELOPMENT_HISTORY.md); dated checkpoints below retain their original context.
 
 
