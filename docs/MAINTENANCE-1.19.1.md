@@ -4,6 +4,9 @@
 <p>Source patch 1.19.1; unpublished - 18 October 2026</p>
 </div>
 
+**Delivery update:** [1.19.1 is published and verified](RELEASE-1.19.1-PUBLICATION.md). Source/preparation-only statements below retain their historical context.
+
+
 ## Problem and resulting behavior
 
 A clean Release rebuild of main `f82495dd6ff7d9ef95f72b3e0c179d1205b376cb` reports **81 warnings**, predominantly malformed XML comments, unresolved or ambiguous cref links, displaced comments and missing parameter documentation. The nullable warning in element-to-map also exposes a runtime error: a named layout can fail while a wildcard entry exists without supplying any layout, leading to an unchecked nullable-value access.

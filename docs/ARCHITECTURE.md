@@ -5,6 +5,10 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**1.19.1 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.19.1-PUBLICATION.md) records immutable `v1.19.1` at `a9e954d7`, one successful Release run (9,733 tests / ten uploads), ten verified signed archives and fresh nuget.org-only 153 broad / 289 focused checks with exact provenance and clear audits. This maintenance patch adds no public API; consumer acceptance and the separate extension remain scoped to their recorded releases. Earlier preparation-only checkpoints are historical.
+
+
+
 **1.19.1 release preparation - 18 October 2026:** [Readiness](RELEASE-1.19.1-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.1.md) pin proposed publication to merged `a9e954d7`. Exact-merge local packages pass 153 broad API checks and eight regression/identity checks with fresh caches and exact provenance. Source CI passes 9,817; frozen gates remain unchanged. Publication approval is pending; public 1.19.0 and recorded consumer acceptance remain unchanged.
 
 
