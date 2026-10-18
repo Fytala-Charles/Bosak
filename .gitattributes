@@ -16,3 +16,5 @@
 /docs/REQ-132-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
 
 /docs/REQ-133-literal-text-body-replacement.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol

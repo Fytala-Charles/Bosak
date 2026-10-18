@@ -1,6 +1,6 @@
 # REQ-133 consumer design review handoff
 
-18 October 2026. **Proposed design; Braid review pending.** No replacement implementation, capability or release. Baseline is published 1.20.0 at91f1af0d488bb2ed72b219118eeb1ab3570726bd; documentation base af76b1e6c3b2f22e6a2783ab95cc93d237301454 closes REQ-132 acceptance.
+18 October 2026. **Historical design handoff: Braid review completed with no blocking findings.** [Review receipt](REQ-133-CONSUMER-DESIGN-REVIEW.md). The user subsequently authorized implementation; see the [implementation record](REQ-133-IMPLEMENTATION.md). The following text records the original design handoff. No replacement implementation, capability or release. Baseline is published 1.20.0 at91f1af0d488bb2ed72b219118eeb1ab3570726bd; documentation base af76b1e6c3b2f22e6a2783ab95cc93d237301454 closes REQ-132 acceptance.
 
 Review the [contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md), [28 planned groups](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md) and [unchanged request](REQ-133-literal-text-body-replacement.md), SHA-256 `ba50ab5c3761f0c193e72ffc3467a950b08744d5a7b30c41bf9ba57db987a22e`. [Baseline evidence](REQ-133-DESIGN-BASELINE.json) contains seven existing public inspection/runtime probes, zero replacement tests.
 
