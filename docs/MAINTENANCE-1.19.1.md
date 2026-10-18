@@ -52,3 +52,7 @@ Receipts in `.guard-tmp/`: maintenance-baseline-build.log, maintenance-warning-i
 ## Delivery boundary
 
 Public packages/tag 1.19.0 remain immutable and accepted by Braid. This source-only maintenance patch neither publishes 1.19.1 nor changes consumer acceptance. Release preparation/publication, new structural authoring operations and any independent consumer adoption remain separate steps. The product README retains its concise introduction; implementation evidence belongs here and in the handover.
+
+## Merged delivery and release preparation
+
+PR #370 merged as `a9e954d75b3518340ce6da84c9ae06c50ab1f5a4`; final reviewed-head CI 39107867726 passes 9,817 tests, with zero solution or separate language-server warning lines. [Release preparation](RELEASE-1.19.1-READINESS.md) verifies fresh exact-merge packages. Publication is pending explicit approval.

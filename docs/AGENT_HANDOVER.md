@@ -1,3 +1,9 @@
+# 1.19.1 release preparation - 18 October 2026
+
+**1.19.1 release preparation - 18 October 2026:** [Readiness](RELEASE-1.19.1-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.1.md) pin proposed publication to merged `a9e954d7`. Exact-merge local packages pass 153 broad API checks and eight regression/identity checks with fresh caches and exact provenance. Source CI passes 9,817; frozen gates remain unchanged. Publication approval is pending; public 1.19.0 and recorded consumer acceptance remain unchanged.
+
+Source/tag target a9e954d75b3518340ce6da84c9ae06c50ab1f5a4. See RELEASE-1.19.1-READINESS.json. Prepared only; publication requires explicit approval. Root checkout contains separate local REQ-132 planning edits: preserve them; do not overwrite or commit them with this release preparation. README remains product-focused.
+
 # Warning-free build maintenance and fallback regression - 18 October 2026
 
 Base f82495dd6ff7d9ef95f72b3e0c179d1205b376cb; branch fix/build-warning-maintenance in `.guard-tmp/build-warning-maintenance`. User authorized the maintenance/test slice. What was built: typed wildcard fallback guard returning FOJS0008 when no fallback layout exists, seven regressions/controls, documentation corrections and test/harness warning cleanup; source1.19.1 unpublished. Read MAINTENANCE-1.19.1.md. No warning suppression or extra dependency references.
