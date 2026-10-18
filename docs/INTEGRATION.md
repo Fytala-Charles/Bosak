@@ -5,6 +5,10 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**1.20.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.20.0-PUBLICATION.md) records immutable `v1.20.0` at `91f1af0d`, one successful Release run (9,824 tests and ten uploads), ten verified signed archives, and 153 broad checks and 374 focused tests from fresh nuget.org restores. REQ-132 literal element insertion is published after [implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings. Braid adoption and native acceptance remain pending. Earlier source-only/review-pending checkpoints are historical.
+
+
+
 **REQ-132 source verification complete - 18 October 2026:** Authorized source 1.20.0 implements bounded paired empty no-namespace literal element insertion after [Braid design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Read the [implementation record](REQ-132-IMPLEMENTATION.md) for APIs, namespace reset, complete source/node evidence and composition. Source verification passes: 9,824 solution, 84 language-server, 91 new-operation, 374 independent public-API and 153 broad checks; frozen QT3/qt4 gates unchanged. [Implementation review handoff](REQ-132-CONSUMER-IMPLEMENTATION-HANDOFF.md). Public packages remain 1.19.1. Independent implementation review/publication/consumer acceptance remain separate.
 
 

@@ -506,7 +506,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
-| REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented in source; implementation review pending | 1.20.0 (unpublished) | Charles Korthout | 2026-10-18 |
+| REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented and published; consumer acceptance pending | 1.20.0 | Charles Korthout | 2026-10-18 |
 
 
 > **Legend:
@@ -1773,8 +1773,8 @@ Append one engine-owned xsl:text carrying decoded literal Unicode text, with com
 
 **Requesting Application:** Bosak.Braid
 **Submitted:** 2026-10-18
-**Status:** Implemented in source; implementation review pending
-**Target Version:** 1.20.0 (unpublished)
+**Status:** Implemented and published; consumer acceptance pending
+**Target Version:** 1.20.0
 **Owner:** Charles Korthout
 
 Append one engine-approved principal paired empty no-namespace literal result element by local-name intent, with optional separately advertised Readable formatting, complete source edits/old-node correspondence and exact new-element/body-caret identity. Existing text/value-of operations should be able to populate the accepted new child through fresh engine targets. No attributes, namespace-qualified names, raw XML, arbitrary placement or move/wrap/cleanup profile is requested. Bosak owns name/namespace legality, source generation, conservative eligibility, public API acceptance, implementation, tests and release decisions. Existing APIs remain compatible. See the [consumer dossier and twelve acceptance groups](REQ-132-literal-result-element-insertion.md), including default-namespace reset-or-refusal, encoding/source fidelity, malformed evidence, cancellation/license/session controls and changed worker/export/reopen goldens. Braid references: D:/Development/Bosak.Braid/docs/LITERAL_ELEMENT_INSERTION.md and proposed ADR-018.
@@ -1783,6 +1783,8 @@ Append one engine-approved principal paired empty no-namespace literal result el
 Design-only continuation defines local default-namespace reset, conservative alias refusal, operation-specific targets, exact body caret, total old correspondence/NewNodes partition and fresh text/value-of composition. Read the [proposed contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md), [28 planned acceptance groups](REQ-132-LITERAL-ELEMENT-ACCEPTANCE.md) and [consumer design handoff](REQ-132-CONSUMER-DESIGN-HANDOFF.md). No implementation, version reservation, publication or new consumer acceptance is claimed.
 
 [Braid design review](REQ-132-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings at e6f21839, with zero runtime probes. User authorized the [bounded implementation](REQ-132-IMPLEMENTATION.md): independent capability/typed targets, exact NCName, local namespace reset, complete descriptor partition and fresh text/value-of composition. Source verification passes: 9,824 solution, 84 language-server, 91 new-operation tests, 374 independent public-API checks and 153 broad API checks; frozen QT3/qt4 gates unchanged. See [source verification](REQ-132-SOURCE-VERIFICATION.json) and [implementation review handoff](REQ-132-CONSUMER-IMPLEMENTATION-HANDOFF.md). Public release and implementation/consumer/native acceptance remain pending. Earlier proposal-only statements describe their original design checkpoint.
+
+Published **1.20.0** from immutable source `91f1af0d` after the user explicitly approved publication and [Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings (91 source tests and 399 local-package checks; counts overlap). [Public release proof](RELEASE-1.20.0-PUBLICATION.md) verifies ten signed archives and 153 broad checks and 374 focused tests from fresh public restores with exact provenance. Earlier source-only/review-pending statements above are historical; Braid pin/UI/worker/native acceptance remains separate and pending.
 
 ### REQ-022: Migrate Bosak to .NET 10
 
