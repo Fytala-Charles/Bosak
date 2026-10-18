@@ -1,5 +1,8 @@
 # REQ-132 implementation review handoff
 
+**Publication update:** [1.20.0 is published and verified](RELEASE-1.20.0-PUBLICATION.md) after [Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier unpublished/review-pending statements below preserve their source-delivery checkpoint; consumer adoption/native acceptance remains separate.
+
+
 18 October 2026. Source **1.20.0 unpublished**; source verification complete; independent implementation review pending. User authorized this slice following [Braid no-blocking design review](REQ-132-CONSUMER-DESIGN-REVIEW.md) of e6f21839. That review is unchanged; SHA-256 `49cdb0aae35036835942bd788a8033c6d4578acbee2457cc388070de1c31c30c`. It reported no new-operation probes and is not implementation acceptance.
 
 Read [implementation details](REQ-132-IMPLEMENTATION.md), the [reviewed contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md) and [planned acceptance matrix](REQ-132-LITERAL-ELEMENT-ACCEPTANCE.md). New APIs are operation-specific: GetLiteralElementInsertionTarget, AuthoringLiteralElementInsertionProposal and ProposeLiteralElementInsertion; candidates expose complete source edits, actual parent/element, empty-body caret and total old mapping/NewNodes partition.

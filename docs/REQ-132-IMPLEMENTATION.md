@@ -4,6 +4,9 @@
 <p>Source 1.20.0; unpublished - 18 October 2026</p>
 </div>
 
+**Publication update:** [1.20.0 is published and verified](RELEASE-1.20.0-PUBLICATION.md) after [Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier unpublished/review-pending statements below preserve their source-delivery checkpoint; consumer adoption/native acceptance remains separate.
+
+
 ## Delivered source profile
 
 User authorized implementation after [Braid design review](REQ-132-CONSUMER-DESIGN-REVIEW.md) found no blockers at e6f21839. The report is imported byte-for-byte; its four-document/28-group assessment includes zero new-operation probes. The reported Braid 1,079-test baseline is not an implementation rerun, public-package verification or native acceptance. Source baseline is `e6f2183905739e2a303acc9ee1827004e1307041`; public packages remain 1.19.1.

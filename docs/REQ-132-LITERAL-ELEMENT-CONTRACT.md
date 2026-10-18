@@ -4,6 +4,9 @@
 <p>Proposed design - 18 October 2026</p>
 </div>
 
+**Publication update:** [1.20.0 is published and verified](RELEASE-1.20.0-PUBLICATION.md) after [Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier unpublished/review-pending statements below preserve their source-delivery checkpoint; consumer adoption/native acceptance remains separate.
+
+
 **Implementation update:** [Source 1.20.0](REQ-132-IMPLEMENTATION.md) passes source verification after the unchanged [no-blocking design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Proposal-only status below preserves the reviewed contract history; publication and consumer acceptance are separate.
 
 
