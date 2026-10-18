@@ -17,6 +17,9 @@
 //                      | Charles Korthout | 0.4   | 19-07-2026     | XPath 'i' flag: use RegexOptions.IgnoreCase, wrap class atoms in (?-i:)                 |
 //                      | Charles Korthout | 0.5   | 03-08-2026     | \i/\c use explicit XML 1.0 5e NameStartChar/NameChar ranges (XSD 1.1; regex-syntax-0986/7) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.6   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -31,7 +34,7 @@ namespace Bosak.XPath.Standard.Functions;
 /// fragment. All emitted classes exclude the surrogate range; astral members are emitted as
 /// surrogate-pair alternatives so that matching is based on whole Unicode code points.
 /// When the XPath <c>i</c> flag is active, class atoms are wrapped in <c>(?-i:...)</c> so that
-/// .NET's <see cref="RegexOptions.IgnoreCase"/> expands literals but leaves category and
+/// .NET's <see cref="System.Text.RegularExpressions.RegexOptions.IgnoreCase"/> expands literals but leaves category and
 /// bracketed classes unchanged, matching XPath case-folding semantics.
 /// </summary>
 internal static class XsdCharClasses
@@ -56,7 +59,7 @@ internal static class XsdCharClasses
     /// Translates all XSD character-class constructs in <paramref name="pattern"/> to .NET
     /// syntax. When <paramref name="caseInsensitive"/> is <c>true</c>, emitted class atoms
     /// (category escapes, single-letter escapes, and bracketed class expressions) are wrapped
-    /// in <c>(?-i:...)</c> so that .NET's <see cref="RegexOptions.IgnoreCase"/> only affects
+    /// in <c>(?-i:...)</c> so that .NET's <see cref="System.Text.RegularExpressions.RegexOptions.IgnoreCase"/> only affects
     /// literal characters, matching XPath case-folding semantics.
     /// </summary>
     public static string Translate(string pattern, bool caseInsensitive)

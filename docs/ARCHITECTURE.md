@@ -1565,3 +1565,8 @@ The contribution was prepared on refreshed upstream master 91328fbf, fetched bef
 
 Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static contexts, authoring validation and source-preserving expression edits, function keyword binding, literal result namespace copying and key match/use indexing. Ten coordinated .NET 10 packages use 1.2.1; published version remains 1.2.0. Final candidate ed5080b5 passes all 8,170 unit tests, frozen QT3 31,142/0/679 and qt4 gate-only 8,278/0/1,894. All ten candidate packages are verified; 60 fresh-cache package-only consumer checks pass and all ten assembly versions are 1.2.1.0. See [preparation evidence](RELEASE-1.2.1-PREPARATION.json). No public API or gate membership changes, and no publication is authorized. Upstream correction #29 and new-case #30 review remain separate from release preparation; broader package/default-function/editing work is deferred.
 [Release scope and verification](RELEASE-NOTES-1.2.1.md).
+
+
+## Maintenance verification
+
+The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-free XML/API documentation, layer-safe reference formatting, and a concrete-layout guard in standard element-to-map fallback selection. Layer dependencies and public API surfaces are unchanged.

@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 20-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1.1 | 14-10-2026     | Verify expression scopes, functions, strings and XML exclusions.                             |
+//                      | Charles Korthout | 0.1.2 | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Linq;
 using System.Threading.Tasks;
@@ -116,7 +119,7 @@ public class SemanticTokensHandlerTests
             + "<result select=\"fake(456)\" title=\"if $x fn:concat()\">fn:concat(789)</result>";
         var tokens = SemanticTokensHandler.Tokenize(text, true, false, true);
         Assert.DoesNotContain(tokens, t => t.Type is "function" or "number" or "variable");
-        Assert.Single(tokens.Where(t => t.Type == SemanticTokenType.Keyword));
+        Assert.Single(tokens, t => t.Type == SemanticTokenType.Keyword);
     }
 
     /// <summary>Verifies string contents and nested comments do not emit code tokens.</summary>
@@ -125,7 +128,7 @@ public class SemanticTokensHandlerTests
     {
         const string text = "concat('fn:fake(123) $x and', (: outer (: inner :) fn:fake(456) :) 'it''s')";
         var tokens = SemanticTokensHandler.Tokenize(text, false, false, true);
-        Assert.Single(tokens.Where(t => t.Type == SemanticTokenType.Function));
+        Assert.Single(tokens, t => t.Type == SemanticTokenType.Function);
         Assert.Equal(2, tokens.Count(t => t.Type == SemanticTokenType.String));
         Assert.DoesNotContain(tokens, t => t.Type is "number" or "variable" or "operator");
     }

@@ -19,6 +19,9 @@
 //                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-123 JNode cluster: JValue renamed to element-to-map internal converter (fn:jvalue
 //                      | Charles Korthout |       |                | is now the F+O 4.0 section 17.7 JNode accessor in FunctionLibrary)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 18-10-2026     | Guard absent fallback layout and preserve FOJS0008 classification.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -45,7 +48,7 @@ internal static class ElementMap
     internal const string XsiNamespace = "http://www.w3.org/2001/XMLSchema-instance";
     internal const string XmlNamespace = "http://www.w3.org/XML/1998/namespace";
 
-    /// <summary>The layout names of F&O 4.0 §17.6 (option/plan values are lower-case).</summary>
+    /// <summary>The layout names of F&amp;O 4.0 §17.6 (option/plan values are lower-case).</summary>
     internal enum Layout
     {
         Empty, EmptyPlus, Simple, SimplePlus, List, ListPlus, Record, Sequence, Mixed,
@@ -82,7 +85,7 @@ internal static class ElementMap
     {
     }
 
-    /// <summary>A validated <c>plan</c> option entry (only the keys of F&O PR2903 are allowed).</summary>
+    /// <summary>A validated <c>plan</c> option entry (only the keys of F&amp;O PR2903 are allowed).</summary>
     internal sealed class PlanEntry
     {
         public Layout? Layout;
@@ -231,7 +234,7 @@ internal static class ElementMap
     }
 
     /// <summary>
-    /// Plan-key format of F&O 14.6.5: <c>local</c>, <c>Q{uri}local</c>, <c>*</c>,
+    /// Plan-key format of F&amp;O 14.6.5: <c>local</c>, <c>Q{uri}local</c>, <c>*</c>,
     /// <c>@local</c> or <c>@Q{uri}local</c>.
     /// </summary>
     private static bool IsValidPlanKey(string key)
@@ -711,13 +714,13 @@ internal static class ElementMap
                 // (element-to-map-401/511). Without a usable fallback the error is
                 // unrecoverable (element-to-map-420/421).
                 var wild = LookupPlan(_o, "*");
-                if (wild == null || ReferenceEquals(wild, exact) || wild.Layout == Layout.Error)
+                if (wild is not { Layout: { } fallbackLayout } || ReferenceEquals(wild, exact) || fallbackLayout == Layout.Error)
                     throw new InvalidOperationException("FOJS0008: input inconsistent with plan layout");
-                if (wild.Layout == Layout.Xml)
+                if (fallbackLayout == Layout.Xml)
                     return Untyped(el.ToXmlString());
-                if (wild.Layout == Layout.DeepSkip)
+                if (fallbackLayout == Layout.DeepSkip)
                     return null;
-                return ByLayout(el, key, f, wild.Layout.Value, wild);
+                return ByLayout(el, key, f, fallbackLayout, wild);
             }
             catch (InconsistentLayoutException)
             {
@@ -808,7 +811,7 @@ internal static class ElementMap
 
         /// <summary>
         /// A forced list layout requires every child to match the plan's child name
-        /// (F&O 14.6.1.5/14.6.1.6 errors; element-to-map-420). Child attributes are
+        /// (F&amp;O 14.6.1.5/14.6.1.6 errors; element-to-map-420). Child attributes are
         /// discarded in both list layouts.
         /// </summary>
         private void ValidateListChildren(in ContentFacts f, PlanEntry? entry)
@@ -993,7 +996,7 @@ internal static class ElementMap
 
     /// <summary>
     /// Union of the content facts of all elements sharing one name across the corpus
-    /// (F&O 14.6.2 decides the layout from $EE, the union of same-named elements).
+    /// (F&amp;O 14.6.2 decides the layout from $EE, the union of same-named elements).
     /// </summary>
     private sealed class UnionFacts
     {

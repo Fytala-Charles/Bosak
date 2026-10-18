@@ -132,6 +132,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.20  | 14-10-2026     | Lower omitted host argument markers as boxed undefined values.                           |
 //                      | Charles Korthout | 1.55  | 14-10-2026     | Support private namespace-free XSLT 4.0 functions.                                      |
+//                      | Charles Korthout | 1.56  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -1528,6 +1531,8 @@ internal sealed class IrLowerer
     /// <summary>
     /// Emits axis + name test for a step (no predicates).
     /// </summary>
+    /// <param name="node">The step to lower.</param>
+    /// <param name="contextReg">The register containing the step input.</param>
     /// <param name="hasLhs">
     /// Whether the step input is the result of a preceding path step (<c>/</c> LHS);
     /// carried in the axis instruction's RegisterC so the runtime can raise XPTY0019

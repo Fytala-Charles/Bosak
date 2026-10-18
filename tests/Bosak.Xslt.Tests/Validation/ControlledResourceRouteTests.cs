@@ -15,6 +15,9 @@
 //                      | Charles Korthout | 0.2   | 10-10-2026     | [Collection("XSLT package registry")] — the package-route test mutates the global        |
 //                      |                  |       |                | package registry; serialized against the other registry test classes (XTSE3000 CI flake) |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -99,7 +102,7 @@ public class ControlledResourceRouteTests
     // AC-04: table-driven route coverage (approval path + refusal path)
     // ------------------------------------------------------------------
 
-    public static IEnumerable<object[]> ApprovalRoutes
+    public static IEnumerable<object?[]> ApprovalRoutes
     {
         get
         {
@@ -112,7 +115,7 @@ public class ControlledResourceRouteTests
             var member2 = Utf8.GetBytes("<m>two</m>");
 
             // route name, stylesheet body, approvals (uri -> bytes), collection approvals (uri -> members), expected output fragment
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:doc",
                 """<xsl:value-of select="doc('urn:test:doc')/root/child"/>""",
@@ -120,7 +123,7 @@ public class ControlledResourceRouteTests
                 null,
                 "DOC-OK",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:document (XSLT)",
                 """<xsl:value-of select="document('urn:test:doc')/root/child"/>""",
@@ -128,7 +131,7 @@ public class ControlledResourceRouteTests
                 null,
                 "DOC-OK",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:doc-available (approved)",
                 """<xsl:value-of select="doc-available('urn:test:doc')"/>""",
@@ -136,7 +139,7 @@ public class ControlledResourceRouteTests
                 null,
                 ">true<",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:unparsed-text",
                 """<xsl:value-of select="unparsed-text('urn:test:text')"/>""",
@@ -144,7 +147,7 @@ public class ControlledResourceRouteTests
                 null,
                 "TEXT-OK",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:unparsed-text-lines",
                 """<xsl:value-of select="unparsed-text-lines('urn:test:lines')"/>""",
@@ -152,7 +155,7 @@ public class ControlledResourceRouteTests
                 null,
                 "line-1 line-2",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:unparsed-text-available (approved)",
                 """<xsl:value-of select="unparsed-text-available('urn:test:text')"/>""",
@@ -160,7 +163,7 @@ public class ControlledResourceRouteTests
                 null,
                 ">true<",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:json-doc",
                 """<xsl:value-of select="json-doc('urn:test:json')?a"/>""",
@@ -168,7 +171,7 @@ public class ControlledResourceRouteTests
                 null,
                 "JSON-OK",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:collection",
                 """<xsl:value-of select="count(collection('urn:test:coll'))"/>""",
@@ -180,7 +183,7 @@ public class ControlledResourceRouteTests
                 new Dictionary<string, IReadOnlyList<string>> { ["urn:test:coll"] = new[] { "urn:test:coll/one.xml", "urn:test:coll/two.xml" } },
                 ">2<",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "fn:uri-collection",
                 """<xsl:value-of select="count(uri-collection('urn:test:coll'))"/>""",
@@ -192,7 +195,7 @@ public class ControlledResourceRouteTests
                 new Dictionary<string, IReadOnlyList<string>> { ["urn:test:coll"] = new[] { "urn:test:coll/one.xml", "urn:test:coll/two.xml" } },
                 ">2<",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "xsl:source-document",
                 """<xsl:source-document href="urn:test:src"><xsl:value-of select="root/child"/></xsl:source-document>""",
@@ -200,7 +203,7 @@ public class ControlledResourceRouteTests
                 null,
                 "SRC-OK",
             };
-            yield return new object[]
+            yield return new object?[]
             {
                 "xsl:source-document (streamable)",
                 """<xsl:source-document href="urn:test:src" streamable="yes"><xsl:value-of select="root/child"/></xsl:source-document>""",

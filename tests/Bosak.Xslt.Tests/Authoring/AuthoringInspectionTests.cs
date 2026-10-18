@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 10-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 10-10-2026     | Pin AC-02/AC-03 fixtures to explicit LF (byte-exact expectations vs checkout line endings)|
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -211,7 +214,7 @@ public class AuthoringInspectionTests
         var html = module.Root.Children.Single(c => c.Kind == AuthoringNodeKind.Element);
         Assert.Equal("html", html.ElementName!.LocalName);
         Assert.Equal(string.Empty, html.ElementName!.Prefix);
-        Assert.Single(html.Attributes.Where(a => a.Name == "xsl:version"));
+        Assert.Single(html.Attributes, a => a.Name == "xsl:version");
     }
 
     // ---------------------------------------------------------------------------------------------

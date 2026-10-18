@@ -28,6 +28,9 @@
 //                      | Charles Korthout | 0.10 | 13-10-2026     | Carry known nominative record names for host static type validation
 //                      | Charles Korthout | 0.11  | 13-10-2026     | Carry internal host keyword parameter identities for exact-arity functions.
 //                      | Charles Korthout | 0.3   | 14-10-2026     | Capture host required-prefix lengths without public API changes.                         |
+//                      | Charles Korthout | 0.12  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Xml.Schema;
@@ -118,7 +121,7 @@ public sealed class CompileOptions
     /// <summary>
     /// The static base URI for resolving relative URIs in expressions
     /// (e.g. <c>resolve-uri('file.xml')</c>). When null, the runtime
-    /// context's <see cref="EvaluationContext.BaseUri"/> is used.
+    /// context's <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.BaseUri"/> is used.
     /// </summary>
     public string? BaseUri { get; init; }
 
@@ -140,7 +143,7 @@ public sealed class CompileOptions
     /// <c>schema-element()</c>/<c>schema-attribute()</c> kind tests are permitted and their
     /// name arguments are validated against the set's global declarations (XPST0008 when no
     /// matching declaration exists). When null (the default), schema-aware kind tests raise
-    /// XPST0008 (no schema awareness). Mirrors <see cref="EvaluationContext.SchemaSet"/>,
+    /// XPST0008 (no schema awareness). Mirrors <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.SchemaSet"/>,
     /// which carries the set at evaluation time.
     /// </summary>
     public XmlSchemaSet? SchemaSet { get; init; }

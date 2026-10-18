@@ -27,6 +27,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.54  | 14-10-2026     | Keep host optional-argument metadata internal and retain precise types.                  |
 //                      | Charles Korthout | 0.55   | 15-10-2026     | Retain internal declaration-bound host function item targets.                            |
+//                      | Charles Korthout | 0.56  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Vm;
@@ -144,10 +147,10 @@ public sealed class FunctionSignature
     /// <summary>
     /// When true, the function is a not-yet-stabilized XPath/XQuery 4.0 draft addition
     /// (post-June-2026 spec sections carrying churn risk). It is invisible at
-    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath31"/> and
-    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath40"/> (XPST0017 at compile time;
+    /// <c>Bosak.XPath.Api.XPathCompatibility.XPath31</c> and
+    /// <c>Bosak.XPath.Api.XPathCompatibility.XPath40</c> (XPST0017 at compile time;
     /// omitted from the standard function table) and only becomes available at
-    /// <see cref="Bosak.XPath.Api.XPathCompatibility.XPath40Experimental"/>. Defaults to
+    /// <c>Bosak.XPath.Api.XPathCompatibility.XPath40Experimental</c>. Defaults to
     /// <c>false</c> (REQ-123, 4.0-Exp S1).
     /// </summary>
     public bool IsXPath40ExperimentalOnly { get; init; }

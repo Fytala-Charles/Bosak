@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -82,17 +85,19 @@ public class XQueryHandlerTests
     }
 
     [Fact]
-    public void DocumentSymbolsFindsXQueryDeclarations()
+    public async System.Threading.Tasks.Task DocumentSymbolsFindsXQueryDeclarationsAsync()
     {
         var documents = new DocumentManager();
         var uri = DocumentUri.FromFileSystemPath("C:/test/query.xq").ToString();
         documents.Update(uri, SampleXQuery);
 
         var handler = new DocumentSymbolHandler(documents);
-        var result = handler.Handle(new DocumentSymbolParams
+        var result = await handler.Handle(new DocumentSymbolParams
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/query.xq"))
-        }, default).GetAwaiter().GetResult();
+        }, default);
+
+        Assert.NotNull(result);
 
         var names = result.Select(s => s.DocumentSymbol?.Name ?? s.SymbolInformation?.Name).ToList();
         Assert.Contains("variable $greeting", names);

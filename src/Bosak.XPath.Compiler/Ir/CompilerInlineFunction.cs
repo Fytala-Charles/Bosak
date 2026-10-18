@@ -15,12 +15,15 @@
 //                      | Charles Korthout | 0.2   | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.3   | 21-09-2026     | API freeze stage A: internalized (IVT for in-repo consumers)                           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Compiler.Ir;
 
 /// <summary>
 /// Compile-time representation of an inline function, stored in the IR literal pool.
-/// The VM converts this to <see cref="Bosak.XPath.Runtime.Functions.InlineFunctionItem"/>.
+/// The VM converts this to <c>Bosak.XPath.Runtime.Functions.InlineFunctionItem</c>.
 /// </summary>
 /// <param name="Parameters">The parameter names of the inline function.</param>
 /// <param name="Body">The compiled body of the inline function.</param>

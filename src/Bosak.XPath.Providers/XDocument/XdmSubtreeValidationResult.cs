@@ -19,6 +19,9 @@
 //                      |                  |       |                | constraint errors (XSLT 3.0 §25.4.2 → XTTE1555 at document level, suppressed at        |
 //                      |                  |       |                | element level per §25.4.1.3)                                                            |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Xml.Schema;
@@ -27,8 +30,7 @@ namespace Bosak.XPath.Providers.Xml;
 
 /// <summary>
 /// Represents the outcome of validating an in-memory subtree against an XML Schema set
-/// (see <see cref="XdmSchemaAnnotator.ValidateSubtree"/> and
-/// <see cref="XdmSchemaAnnotator.Validate(XElement, XmlSchemaSet, XdmValidationOptions, ValidationEventHandler?, bool)"/>).
+/// (see <see cref="XdmSchemaAnnotator.ValidateSubtree"/>).
 /// Regardless of the outcome, PSVI (<see cref="IXmlSchemaInfo"/>) annotations are attached to
 /// the live <see cref="System.Xml.Linq.XObject"/>s, so every typed-value surface of the
 /// engine reflects the schema immediately after the call returns.

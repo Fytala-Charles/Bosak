@@ -123,6 +123,9 @@
 //                      | Charles Korthout | 2.45 | 13-10-2026     | Carry a package-local host callback for nominative record coercion
 //                      | Charles Korthout | 2.46 | 13-10-2026     | Distinguish nominative record casting from coercion in the host callback
 //                      | Charles Korthout | 2.47  | 15-10-2026     | Snapshot and restore hidden bound aliases without capturing ordinary function registries. |
+//                      | Charles Korthout | 2.48  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -187,8 +190,8 @@ public sealed class EvaluationContext
     internal bool SuppressLazySequenceConstructorGlobals { get; set; }
 
     /// <summary>
-    /// When true, <see cref="Bosak.XPath.Standard.Functions.FunctionLibrary.Populate"/> will not
-    /// be called automatically by <see cref="XPath31Expression.Evaluate"/>. Used by XSLT's
+    /// When true, <c>Bosak.XPath.Standard.Functions.FunctionLibrary.Populate</c> will not
+    /// be called automatically by <c>XPath31Expression.Evaluate</c>. Used by XSLT's
     /// <c>xsl:evaluate</c> to supply a restricted function library.
     /// </summary>
     internal bool SkipStandardFunctionPopulation { get; set; }
@@ -528,7 +531,7 @@ public sealed class EvaluationContext
     /// </para>
     /// <para>
     /// Return the member document URIs (or absolute file paths) in the collection's
-    /// document order; each member is then loaded through <see cref="LoadDocument"/>, so
+    /// document order; each member is then loaded through <see cref="LoadDocument(string)"/>, so
     /// document identity caching, the per-load-policy cache, and whitespace/strip-space
     /// post-processing behave exactly as for documents loaded by fn:doc. Cross-tree document
     /// order follows load order (the creation-sequence model): the order in which the member

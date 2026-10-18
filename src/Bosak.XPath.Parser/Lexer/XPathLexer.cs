@@ -45,6 +45,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.10  | 08-10-2026     | REQ-118 4.0-S4: '->' pipeline and '=!>' mapping arrow token scanning                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.11  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -52,7 +55,7 @@ using Bosak.XPath.Parser;
 namespace Bosak.XPath.Parser.Lexer;
 
 /// <summary>
-/// A zero-allocation XPath 3.1 lexer operating over <see cref="ReadOnlySpan{char}"/>.
+/// A zero-allocation XPath 3.1 lexer operating over <see cref="ReadOnlySpan{T}"/>.
 /// </summary>
 internal ref struct XPathLexer
 {
@@ -785,8 +788,8 @@ internal ref struct XPathLexer
     // ------------------------------------------------------------------
 
     /// <summary>
-    /// Attempts to scan a whole direct element constructor starting at '<'. Returns an
-    /// Invalid token when the structure does not hold (the caller then re-lexes '<' as
+    /// Attempts to scan a whole direct element constructor starting at '&lt;'. Returns an
+    /// Invalid token when the structure does not hold (the caller then re-lexes '&lt;' as
     /// the comparison operator). Structure validation is shallow: name matching and
     /// expression parsing are left to the parser.
     /// </summary>
