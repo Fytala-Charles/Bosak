@@ -4,6 +4,9 @@
 <p>18 October 2026</p>
 </div>
 
+**Published and verified:** See [public delivery proof](RELEASE-1.19.1-PUBLICATION.md). The preparation-only evidence below is historical.
+
+
 **Ready for publication approval; no publication performed or authorized.** Public 1.19.0 remains the delivered release.
 
 Proposed immutable tag: `v1.19.1` at `a9e954d75b3518340ce6da84c9ae06c50ab1f5a4`. Later documentation commits must not move this target. [Prepared release notes](RELEASE-NOTES-1.19.1.md) describe the patch; [machine-readable evidence](RELEASE-1.19.1-READINESS.json) records exact archives and provenance.
