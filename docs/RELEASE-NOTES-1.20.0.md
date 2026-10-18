@@ -1,5 +1,5 @@
 <div align="center">
-<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak Bosak 1.20.0 release notes">
+<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.20.0 release notes">
 <h1>Bosak 1.20.0 release notes</h1>
 <p>18 October 2026</p>
 </div>

@@ -1,5 +1,5 @@
 <div align="center">
-<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak Bosak 1.20.0 publication">
+<img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.20.0 publication">
 <h1>Bosak 1.20.0 publication</h1>
 <p>18 October 2026</p>
 </div>
@@ -10,16 +10,16 @@ Adds the bounded REQ-132 paired empty no-namespace literal result element operat
 
 | Check | Observed result |
 |---|---|
-| Single tag-triggered [Release run](https://github.com/Fytala-Charles/Bosak/actions/runs/39122930266) | Success at approved91f1af0d; **9,824** solution tests pass, zero failed/skipped, ten upload acknowledgments. |
-| Public archives | All ten signed NuGet1.20.0 packages downloaded; exact repository revisions, aligned dependencies, README/license/icon/assets and XML documentation verified against the approved Git blobs. |
+| Single tag-triggered [Release run](https://github.com/Fytala-Charles/Bosak/actions/runs/39122930266) | Success at approved `91f1af0d`; **9,824** solution tests pass, zero failed/skipped, ten upload acknowledgments. |
+| Public archives | All ten signed NuGet 1.20.0 packages downloaded; exact repository revisions, aligned dependencies, README/license/icon/assets and XML documentation verified against the approved Git blobs. |
 | Signatures | All ten `dotnet nuget verify --all` checks pass. |
 | Fresh public broad consumer | **153** checks pass; all ten assembly identities and archive/cache/output bytes verify. |
-| Fresh public focused consumer | **374/0/0**: 85 public literal-element cases plus existing289 authoring/regression/identity checks; nine assemblies verify. Six source-only controls excluded. |
+| Fresh public focused consumer | **374/0/0**: 85 public literal-element cases plus 289 existing authoring/regression/identity checks; nine assemblies verify. Six source-only controls excluded. |
 | Signed content and audit | Raw signed archive/cache hashes match; NuGet PackageArchiveReader content hashes match restored assets/metadata. Both dependency audits clear. |
 
-Consumers use separate fresh caches, nuget.org as the only feed, distinct non-friend assembly identity and no project references. Counts overlap source coverage and are not additive. These public signed archives are separate evidence from local unsigned candidates. Source91/9,824/84, frozen QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894** and CI9,908 remain recorded upstream evidence; Release reruns the solution, not those separate gates or language-server tests.
+Consumers use separate fresh caches, nuget.org as the only feed, distinct non-friend assembly identity and no project references. Counts overlap source coverage and are not additive. These public signed archives are separate evidence from local unsigned candidates. The upstream source record includes 91 focused tests, 9,824 solution tests, 84 language-server tests, frozen QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894** and 9,908 tests in CI. The Release workflow reruns the solution; the separate gates and language-server results retain their source-verification receipts.
 
-[Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking findings at91f1af0d, with independently observed91 source and399 local-package checks (374 imported plus25 Braid probes). Its original build/fixture corrections and scope limits remain unchanged in that report. It did not independently rerun the full upstream suite/gates or certify public packages, Braid UI adoption, restricted export/worker workflow, destination relocation or native acceptance. The review hash is `58c80bac435dc1a3cdd375f4a0513aecf1d21cd50bd9cae9f7985d641649ac5c`.
+[Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blocking findings at `91f1af0d`, with independently observed 91 source tests and 399 local-package checks (374 imported plus 25 Braid probes). Its original build/fixture corrections and scope limits remain unchanged in that report. It did not independently rerun the full upstream suite/gates or certify public packages, Braid UI adoption, restricted export/worker workflow, destination relocation or native acceptance. The review hash is `58c80bac435dc1a3cdd375f4a0513aecf1d21cd50bd9cae9f7985d641649ac5c`.
 
 NuGet propagation was checked after successful upload; original availability snapshots are retained. No duplicate publication workflow, reupload or retag was used. Raw receipts live under `.guard-tmp/release1200-publication/`; [machine-readable publication proof](RELEASE-1.20.0-PUBLICATION.json) records literal hashes and identities.
 

@@ -5,7 +5,7 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**1.20.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.20.0-PUBLICATION.md) records immutable `v1.20.0` at `91f1af0d`, one successful Release run (9,824 tests / ten uploads), ten verified signed archives and fresh nuget.org-only153 broad /374 focused checks. REQ-132 literal element insertion is published after [no-blocking implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md); Braid adoption and native acceptance remain pending. Earlier source-only/review-pending checkpoints are historical.
+**1.20.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.20.0-PUBLICATION.md) records immutable `v1.20.0` at `91f1af0d`, one successful Release run (9,824 tests and ten uploads), ten verified signed archives, and 153 broad checks and 374 focused tests from fresh nuget.org restores. REQ-132 literal element insertion is published after [implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings. Braid adoption and native acceptance remain pending. Earlier source-only/review-pending checkpoints are historical.
 
 
 
