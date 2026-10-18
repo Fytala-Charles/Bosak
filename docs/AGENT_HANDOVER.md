@@ -1,3 +1,11 @@
+# Product-focused README and preserved development history - 18 October 2026
+
+Base84548ddedb79f7ce1c7ac4e600737a1abbfd0b5e; branch docs/readme-product-overview, isolated `.guard-tmp/readme-product-overview`. What was built: short product README, full former README body archived in docs/DEVELOPMENT_HISTORY.md with rebased relative links, public docs/ECOSYSTEM.md, canonical navigation sync and README content policy. Keep future checkpoint logs out of README. Required FYTALA text preserved verbatim in a collapsible block immediately after banner.
+
+Schema/Braid repositories verified private; public customer guide/trial both HTTP200. Describe Schema implemented complex-type profile and separate compatibility/access lifecycle, not an unverified GA/core1.19 pair. Braid reviewed operations/navigation delivered; full live bidirectional editing remains in development. Public links go to this ecosystem guide and contact, not private repositories.
+
+Original docs/REQ-131-BRAID-ACCEPTANCE.md imported byte-identically, SHA256 31fa375573d8282c0a9aae5273cfde798abdfa3824c7a232b93b231697ce6e71. Registry closes boundedREQ131 acceptance; reported1,079/298 consumer results and native hash confirmation are imported observations, not reruns or a committed/public Braid release. Exact literal hashes/native variants not invented. Root historical HEAD/all earlier edits remain preserved. Engine/version/workflow/extension/kit assets unchanged. Quick-start/render/link/source-history preservation checks and exact-head CI required before merge. Earlier release/session checkpoints below historical.
+
 # Bosak1.19.0 published and verified - 18 October 2026
 
 User approved publication. Immutable annotated v1.19.0 at27691fdb3708bb4ffd7c984abbf3196b7cde5667, object682f361ca25cd1c2f3cad09b275d3087b9137ca0. Single Release39074829260 succeeds with9,726 solution tests/ten uploads. Ten signed public packages verify; fresh nuget.org-only153 broad/282 focused consumers, ten/nine assemblies and archive/cache/output/restore provenance/audits pass. Public release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.19.0. What was built: publication proof MD/JSON, released notes/readiness/status reconciliation only. No engine/test/version/workflow/extension/Braid source changes.

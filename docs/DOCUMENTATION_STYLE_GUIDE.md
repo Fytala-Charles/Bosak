@@ -167,3 +167,10 @@ Broken assets and inaccessible content may become blocking rules after the conve
 ---
 
 *Last updated: 2026-08-26*
+
+
+## README content policy
+
+Keep the README as the product entry point: value, practical uses, a verified quick start, ecosystem availability and links to deeper guidance. The required FYTALA statement may sit in a collapsible block immediately after the banner so it remains intact without crowding the introduction.
+
+Put chronological implementation checkpoints, run/commit receipts and approval history in operation-specific documents, release records, DEVELOPMENT_HISTORY.md or AGENT_HANDOVER.md. Update the README when user-facing capabilities, setup or product availability change; link to evidence rather than appending session logs. Historical snapshots must identify their base revision/date and retain functional relative links. Distinguish implemented profiles from planned builder features, and link public readers to accessible product information rather than private repositories.
