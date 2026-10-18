@@ -4,7 +4,7 @@
 <p>Proposed design - 18 October 2026</p>
 </div>
 
-**Implementation update:** [Source 1.20.0](REQ-132-IMPLEMENTATION.md) is under verification after the unchanged [no-blocking design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Proposal-only status below preserves the reviewed contract history; publication and consumer acceptance are separate.
+**Implementation update:** [Source 1.20.0](REQ-132-IMPLEMENTATION.md) passes source verification after the unchanged [no-blocking design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Proposal-only status below preserves the reviewed contract history; publication and consumer acceptance are separate.
 
 
 ## Status and intended outcome

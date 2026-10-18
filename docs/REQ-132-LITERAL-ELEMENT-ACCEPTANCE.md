@@ -7,7 +7,7 @@
 **Implementation update:** Observed source/package checks belong in the [implementation record](REQ-132-IMPLEMENTATION.md) and its delivery handoff. The matrix below remains the reviewed plan, including unexecuted Braid/native responsibilities.
 
 
-**Planned cases only; none of these new-operation cases has been executed.** Review with the [contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md) and [original consumer LE groups](REQ-132-literal-result-element-insertion.md). Public 1.19.1 has no literal-element insertion capability.
+**Reviewed acceptance plan.** Current observed engine/package results are recorded separately; consumer/native groups remain independent work. Review with the [contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md) and [original consumer LE groups](REQ-132-literal-result-element-insertion.md). Public 1.19.1 has no literal-element insertion capability.
 
 Each engine case needs positive and refusal/control fixtures where applicable. UI/session/license/native cases belong to Braid; engine tests cannot certify them. Verify expanded XML names/result semantics separately from exact stylesheet source bytes. Preserve failing receipts; record fixture corrections separately rather than replacing the original evidence.
 

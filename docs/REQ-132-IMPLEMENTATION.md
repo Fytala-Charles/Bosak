@@ -43,3 +43,18 @@ New source/public contract tests cover expanded runtime names and changed output
 Intermediate build receipts also remain: initial sandbox output-directory denial, incorrect capability insertion inside an enum (fixed before successful build), online vulnerability metadata refreshed after a restricted restore, and a test analyzer predicate correction. No suppressions or analyzer reductions were introduced. Only final observed results are authoritative. Detailed final verification and package identity receipts are recorded in the delivery handoff and `.guard-tmp/req132-*`.
 
 All 28 design acceptance groups remain mapped to engine or consumer responsibility. Braid UI/history/license/native cases are still consumer work; upstream tests do not certify them. No release tag, public NuGet upload, Braid pin/adapter/UI change or extension publication is part of this implementation step.
+
+## Observed final source verification
+
+| Check | Result |
+|---|---|
+| Solution build | Zero warnings and zero errors, no suppressions. |
+| Final full solution | **9,824/0/0**, ten projects, including all 91 new cases. |
+| Separate language server | **84/0/0**. |
+| New operation tests | **91/0/0**: 85 public cases plus six instrumented cancellation/alignment controls. |
+| Frozen QT3 / qt4 gated | **31,142/0/679** / **8,278/0/1,894**, zero gated failures. |
+| Independent public-only package consumer | **374/0/0**: existing 289 plus 85 new cases; distinct non-friend assembly, no project references, fresh mapped local-package cache. |
+| Broad package consumer | **153** checks pass across all ten packages in a separate fresh cache. |
+| Exact committed candidate | All ten archives and nine focused/ten broad consumed assemblies identify source0677f060 and version1.20.0; archive/cache/output bytes, SHA-512, restore source and aligned dependencies verified. Both audits clear. |
+
+[Machine-readable source proof](REQ-132-SOURCE-VERIFICATION.json) preserves exact hashes, identities and the unchanged design-review hash. Counts overlap; this is local unsigned candidate evidence, not published/signed-package verification. Exact-head CI must pass before merge. The completed delivery receipt `.guard-tmp/req132-implementation-delivery.json` records the observed final CI, merge and exact-merge package verification.
