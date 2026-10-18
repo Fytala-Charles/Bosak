@@ -5,6 +5,10 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**REQ-132 contract proposed - 18 October 2026:** Bounded literal result element insertion is in design review. The [contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md), [planned acceptance matrix](REQ-132-LITERAL-ELEMENT-ACCEPTANCE.md) and [consumer handoff](REQ-132-CONSUMER-DESIGN-HANDOFF.md) specify one paired empty no-namespace element, local namespace reset, complete source/descriptor evidence and later text/value-of composition. No implementation or capability is delivered; public 1.19.1 remains current.
+
+
+
 **1.19.1 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.19.1-PUBLICATION.md) records immutable `v1.19.1` at `a9e954d7`, one successful Release run (9,733 tests / ten uploads), ten verified signed archives and fresh nuget.org-only 153 broad / 289 focused checks with exact provenance and clear audits. This maintenance patch adds no public API; consumer acceptance and the separate extension remain scoped to their recorded releases. Earlier preparation-only checkpoints are historical.
 
 

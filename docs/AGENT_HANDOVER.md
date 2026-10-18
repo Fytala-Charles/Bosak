@@ -1,3 +1,9 @@
+# REQ-132 literal element design proposed - 18 October 2026
+
+**REQ-132 contract proposed - 18 October 2026:** Bounded literal result element insertion is in design review. The [contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md), [planned acceptance matrix](REQ-132-LITERAL-ELEMENT-ACCEPTANCE.md) and [consumer handoff](REQ-132-CONSUMER-DESIGN-HANDOFF.md) specify one paired empty no-namespace element, local namespace reset, complete source/descriptor evidence and later text/value-of composition. No implementation or capability is delivered; public 1.19.1 remains current.
+
+Design base cd5507afa2e2bfc98f20669b2941acb5b938a121; public engine a9e954d7. User authorized committing the pending request and preparing the contract/matrix. Original request imported byte-for-byte (hash in handoff); existing local REQ-132 registry/handover additions incorporated. Proposed API names and 28 groups are unimplemented/planned. Primary XSLT literal-result/namespace semantics checked; full downloaded W3C spec retained in .guard-tmp/req132-xslt30-spec.html after web reader size limit. No engine/source/version/gate/README changes. Next: independent Braid design review, resolve findings, then obtain implementation authorization. Preserve source/test receipts; do not infer consumer review/acceptance from this design.
+
 # 1.19.1 published and verified - 18 October 2026
 
 **1.19.1 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.19.1-PUBLICATION.md) records immutable `v1.19.1` at `a9e954d7`, one successful Release run (9,733 tests / ten uploads), ten verified signed archives and fresh nuget.org-only 153 broad / 289 focused checks with exact provenance and clear audits. This maintenance patch adds no public API; consumer acceptance and the separate extension remain scoped to their recorded releases. Earlier preparation-only checkpoints are historical.
@@ -11,6 +17,11 @@ Documentation base c2f19264; approved immutable release source a9e954d75b3518340
 Source/tag target a9e954d75b3518340ce6da84c9ae06c50ab1f5a4. See RELEASE-1.19.1-READINESS.json. Prepared only; publication requires explicit approval. Root checkout contains separate local REQ-132 planning edits: preserve them; do not overwrite or commit them with this release preparation. README remains product-focused.
 
 # Warning-free build maintenance and fallback regression - 18 October 2026
+
+## Braid REQ-132 Consumer Request Registered - 2026-10-18
+
+Product owner explicitly authorized documentation-only registration of bounded literal result element insertion. Registry/detail and docs/REQ-132-literal-result-element-insertion.md record Pending / TBD / Unassigned. First profile: one paired empty no-namespace LRE appended to an engine-approved principal constructor, exact complete edits/correspondence/body-caret evidence and compatibility with subsequent text/value-of commands. Namespace/name/generation semantics stay engine-owned; no Braid splice. Twelve acceptance groups and proposed Braid ADR-018 are linked. No engine changes, new capability/release, test-run claim, commit or push. Existing unrelated files preserved; before-images retained in Braid .acceptance/literal-element-request-20261018.
+
 
 Base f82495dd6ff7d9ef95f72b3e0c179d1205b376cb; branch fix/build-warning-maintenance in `.guard-tmp/build-warning-maintenance`. User authorized the maintenance/test slice. What was built: typed wildcard fallback guard returning FOJS0008 when no fallback layout exists, seven regressions/controls, documentation corrections and test/harness warning cleanup; source1.19.1 unpublished. Read MAINTENANCE-1.19.1.md. No warning suppression or extra dependency references.
 
