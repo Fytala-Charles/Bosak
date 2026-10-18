@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 17-10-2026     | REQ-129: immutable opt-in formatting mode and complete edit evidence.
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 17-10-2026     | REQ-131: append literal InvalidPayload without renumbering existing failures.          |
+//                      | Charles Korthout | 0.5   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
 
 namespace Bosak.Xslt.Authoring;
@@ -61,6 +62,8 @@ public enum AuthoringInsertionFailureKind
     UnsupportedFormatting,
     /// <summary>A literal payload contains invalid XML characters or unpaired surrogates.</summary>
     InvalidPayload,
+    /// <summary>The requested literal element name is not a supported exact NCName.</summary>
+    InvalidElementName,
 }
 
 /// <summary>An immutable classified refusal; expression errors do not fabricate original-source ranges.</summary>

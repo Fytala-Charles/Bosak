@@ -4,6 +4,9 @@
 <p>Proposed design - 18 October 2026</p>
 </div>
 
+**Implementation update:** [Source 1.20.0](REQ-132-IMPLEMENTATION.md) is under verification after the unchanged [no-blocking design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Proposal-only status below preserves the reviewed contract history; publication and consumer acceptance are separate.
+
+
 ## Status and intended outcome
 
 **Pending; contract proposed for Braid review. Target version TBD; implementation owner unassigned.** The user authorized this design slice, including committing the existing consumer request. Engine implementation, public capability, version reservation and publication are separate decisions. Baseline: published 1.19.1 at `a9e954d75b3518340ce6da84c9ae06c50ab1f5a4`; documentation main `cd5507afa2e2bfc98f20669b2941acb5b938a121`. Existing expression replacement, value-of insertion/deletion and literal-text insertion remain the delivered capabilities.

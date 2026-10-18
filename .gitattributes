@@ -8,3 +8,5 @@
 /docs/REQ-131-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
 
 /docs/REQ-132-literal-result-element-insertion.md -text whitespace=cr-at-eol
+
+/docs/REQ-132-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
