@@ -507,6 +507,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
+| REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Pending; contract proposed for consumer review | TBD | Unassigned | 2026-10-18 |
 
 
 > **Legend:
@@ -1790,6 +1791,23 @@ Published **1.20.0** from immutable source `91f1af0d` after the user explicitly 
 #### Formal Bosak.Braid Consumer Acceptance - 2026-10-18
 
 [Formal acceptance notification](REQ-132-BRAID-ACCEPTANCE.md) closes the delivered bounded literal-element profile in published1.20.0 at91f1af0d. Braid checkpoint849dc0e is committed/pushed; full normal Release1,157/0/0 and fresh public-package399/0/0 pass. The product owner completed the native walkthrough and reports all hashes true. Exact native hashes/variants/platform/accessibility details are unreported; optional child-population is accepted only as exercised. Automated four-encoding/both-mode empty/populated worker/export/reopen evidence is separate. No engine changes or new upstream test execution are claimed; earlier consumer-pending statements above are historical.
+
+### REQ-133: Literal Text Body Replacement for Bosak.Braid
+
+**Requesting Application:** Bosak.Braid
+
+**Submitted:** 2026-10-18
+
+**Status:** Pending; contract proposed for consumer review
+
+**Target Version:** TBD
+
+**Owner:** Unassigned
+
+Replace only the body of one engine-approved principal paired ordinary literal xsl:text, preserving all outside bytes/tags/attributes/namespaces and exact unnormalized logical Unicode input. Request a separate capability and snapshot-owned opaque target/proposal, old/new logical text and body extents, actual payload presence, complete single-body edit evidence and disjoint survivor/replaced-payload/new-payload partitions. Equal logical text should return NoChange without rewriting entity spelling or creating source/history changes. Empty transitions retain paired tags and exact caret; no synthetic payload node or Expression slot. Self-closing expansion, dynamic text-value templates, mixed/CDATA/comment/PI bodies, output-escaping/control edits, arbitrary text/subtree replacement and readable payload formatting are outside the first profile. Engine owns precise legality, source generation, conservative scope and delivery. See [consumer dossier and eleven acceptance groups](REQ-133-literal-text-body-replacement.md), including compatibility, physical size/shrinkage, cancellation, four-encoding worker/export/reopen and native acceptance. Braid design: D:/Development/Bosak.Braid/docs/LITERAL_TEXT_EDITING.md; proposed ADR-019.
+
+
+The [proposed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) defines three exclusive outcomes, body-only source edits, survivor/replaced/new-payload partitions, preserved-context scope and independent physical replacement budgets. See [28 planned groups](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md), [seven baseline-only probes](REQ-133-DESIGN-BASELINE.json) and the [consumer design handoff](REQ-133-CONSUMER-DESIGN-HANDOFF.md). No engine implementation or replacement test execution is claimed.
 
 ### REQ-022: Migrate Bosak to .NET 10
 

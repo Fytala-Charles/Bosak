@@ -1,4 +1,15 @@
+# REQ-133 body replacement design proposed - 18 October 2026
+
+**REQ-133 design proposed - 18 October 2026:** [Text-body replacement contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md), [planned acceptance matrix](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md) and [Braid review handoff](REQ-133-CONSUMER-DESIGN-HANDOFF.md) specify one paired literal xsl:text body edit, explicit NoChange and separate payload partitions. Seven existing public inspection/runtime probes inform the design; zero replacement tests or new capabilities are delivered. REQ-132 remains consumer-accepted in public 1.20.0.
+
+Design base af76b1e6c3b2f22e6a2783ab95cc93d237301454. PR #376 merged after canonical acceptance notices and receipt preservation were fixed; submitted acceptance blob retained. User authorized closing acceptance and preparing the next design, not implementation. Local REQ-133 registration insertions incorporated onto refreshed accepted main; original files/patch preserved under .guard-tmp/req133-local-registration-backup. Raw request hash in the handoff; source/runtime baseline uses public1.20.0 exact91f1af0d and has seven probes/zero replacement tests. Proposed API/result/NoChange and payload partition rules are unimplemented; owner unassigned, version TBD. Next: independent Braid design review, then resolve findings and obtain implementation authorization. Source/tests/version/README and published tags remain unchanged.
+
 # 1.20.0 published and verified - 18 October 2026
+
+## Braid REQ-133 Consumer Request Registered - 2026-10-18
+
+Product owner explicitly authorized documentation-only registration of one existing paired literal xsl:text body replacement. Actual ID REQ-133, Pending / TBD / Unassigned. Registry/detail and docs/REQ-133-literal-text-body-replacement.md record exact logical Unicode, unchanged outside bytes, equal-value NoChange, actual old/new payload partitions and explicit review/Apply/history/caret selection. Eleven acceptance groups and proposed Braid ADR-019 linked. Bosak owns API/profile acceptance, implementation, tests and release. No engine changes, capability/version release, new test execution, commit or push. Existing .sweep-baselines preserved; before-images/hashes retained in Braid .acceptance/literal-text-edit-request-20261018.
+
 
 ## REQ-132 Braid Consumer Acceptance - 2026-10-18
 

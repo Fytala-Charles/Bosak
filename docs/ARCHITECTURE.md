@@ -5,6 +5,10 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**REQ-133 design proposed - 18 October 2026:** [Text-body replacement contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md), [planned acceptance matrix](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md) and [Braid review handoff](REQ-133-CONSUMER-DESIGN-HANDOFF.md) specify one paired literal xsl:text body edit, explicit NoChange and separate payload partitions. Seven existing public inspection/runtime probes inform the design; zero replacement tests or new capabilities are delivered. REQ-132 remains consumer-accepted in public 1.20.0.
+
+
+
 **1.20.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.20.0-PUBLICATION.md) records immutable `v1.20.0` at `91f1af0d`, one successful Release run (9,824 tests and ten uploads), ten verified signed archives, and 153 broad checks and 374 focused tests from fresh nuget.org restores. REQ-132 literal element insertion is published after [implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings. Bosak.Braid has accepted the delivered REQ-132 profile in 1.20.0; see the [formal acceptance receipt](REQ-132-BRAID-ACCEPTANCE.md) for observed coverage and native-observation limits. Earlier source-only, review-pending and acceptance-pending checkpoints are historical.
 
 
