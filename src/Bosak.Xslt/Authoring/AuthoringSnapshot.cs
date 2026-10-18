@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.4   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: snapshot-owned deletion and merged-text provenance.                            |
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: typed snapshot-owned literal-text insertion entry points.                     |
+//                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -217,6 +218,30 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return TextInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers an opaque append target for one empty no-namespace literal element.</summary>
+    /// <param name="parent">The exact constructor descriptor from this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>A typed target or classified refusal, including cancellation.</returns>
+    /// <exception cref="ArgumentNullException">The parent is null.</exception>
+    public AuthoringLiteralElementInsertionTargetResult GetLiteralElementInsertionTarget(
+        AuthoringNodeDescriptor parent, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        return LiteralElementInsertionPipeline.Target(this, parent, cancellationToken);
+    }
+
+    /// <summary>Privately proposes one paired empty literal element with complete source evidence.</summary>
+    /// <param name="proposal">The immutable target, local name and formatting mode.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no partial candidate is returned.</param>
+    /// <returns>A fresh validated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralElementInsertionResult ProposeLiteralElementInsertion(
+        AuthoringLiteralElementInsertionProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralElementInsertionPipeline.Run(this, proposal, cancellationToken);
     }
 
     internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,

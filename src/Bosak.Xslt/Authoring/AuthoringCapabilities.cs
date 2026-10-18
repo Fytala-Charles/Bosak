@@ -19,6 +19,7 @@
 // ===========================================================================================================================================================
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: independently advertise bounded value-of deletion.                              |
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: independently advertise bounded literal-text insertion.                       |
+//                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
 
 using System.Reflection;
@@ -45,6 +46,17 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded no-namespace literal element insertion is available.</summary>
+    public static bool SupportsLiteralElementInsertion => true;
+    /// <summary>Gets whether explicit readable literal element layout is available.</summary>
+    public static bool SupportsReadableLiteralElementInsertion => true;
+    /// <summary>Gets the original and complete candidate physical byte limit, including BOM.</summary>
+    public static int MaxLiteralElementInsertionSourceBytes => 8_388_608;
+    /// <summary>Gets immutable literal element encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> LiteralElementInsertionSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
+
     /// <summary>Gets whether bounded literal xsl:text insertion is supported.</summary>
     public static bool SupportsTextInsertion => true;
 
