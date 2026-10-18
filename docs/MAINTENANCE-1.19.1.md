@@ -26,7 +26,9 @@ The implementation captures a concrete wildcard layout with a property pattern b
 - Correct nullable annotations in test data, rename a private test helper that resembled an entry point, use xUnit's predicate Single overload, and make the conformance runner's already-established non-null error-code condition explicit.
 - Append dated change-history rows while retaining author, copyright and SPDX notices. The solution source version advances to **1.19.1**, unpublished.
 
-No warning suppressions, lowered analyzer settings, public API additions, conformance gate membership changes, extension changes, publishing workflows or Braid source/pin changes are included.
+The first exact-head CI exposed eight additional diagnostics in the separate language-server build, outside Bosak.sln. Those are also corrected: match the nullable LSP symbol-return contract while returning the same containers, construct an explicit JSON-null initial-template argument, await the XQuery symbol test, use an Async suffix on the diagnostics helper, and use predicate Single assertions. Existing code-lens tests already verify the null payload shape. No new editor feature is introduced.
+
+No warning suppressions, lowered analyzer settings, public engine API additions, conformance gate membership changes, extension changes, publishing workflows or Braid source/pin changes are included.
 
 ## Observed verification
 
@@ -34,9 +36,10 @@ No warning suppressions, lowered analyzer settings, public API additions, confor
 |---|---|
 | Baseline clean Release rebuild |81 warnings, zero errors. |
 | Regression before fix |Three missing-layout cases fail on the .NET nullable message; four controls pass. Original TRX/log retained. |
-| Corrected clean Release rebuild |**Zero warnings and zero errors**, without suppression. |
+| Corrected clean solution rebuild |**Zero warnings and zero errors**, without suppression. |
+| Separate language-server build |Eight warnings in first CI; corrected clean rebuild has **zero warnings and zero errors**. |
 | Focused element-to-map tests |**29/0/0**, including all seven new regression/control cases. |
-| Roslyn syntax audit |20 changed C# files are syntax-equivalent after trivia removal; the five syntax changes are the fallback guard and four test/harness warning corrections. New regression file is checked separately. |
+| Roslyn syntax audit |20 changed C# files are syntax-equivalent after trivia removal; the eleven syntax changes are the fallback guard, four solution test/harness corrections and six separate language-server source/test corrections. New regression file is checked separately. |
 | Language-server tests |**84/0/0**. |
 | Runner controls |**10** pass. |
 | Frozen QT3 |**31,142/0/679**. |
@@ -44,7 +47,7 @@ No warning suppressions, lowered analyzer settings, public API additions, confor
 | Full solution |**9,733/0/0**, ten test projects. |
 | Exact-head CI |Required before merge; final receipt records the observed result. |
 
-Receipts in `.guard-tmp/`: maintenance-baseline-build.log, maintenance-warning-inventory.json, maintenance-red-tests.log / maintenance-red-results, maintenance-final-build.log, maintenance-focused-tests.log / maintenance-focused-results, maintenance-syntax-proof.json, maintenance-solution.log / maintenance-solution-results, maintenance-ls.log / maintenance-ls-results, maintenance-runner-controls.log, maintenance-qt3.log and maintenance-qt4.log. Intermediate edit/build logs remain retained; only the corrected final build is described as warning-free.
+Receipts in `.guard-tmp/`: maintenance-baseline-build.log, maintenance-warning-inventory.json, maintenance-red-tests.log / maintenance-red-results, maintenance-final-build.log, maintenance-focused-tests.log / maintenance-focused-results, maintenance-syntax-proof.json / maintenance-syntax-proof-final.json, maintenance-ci-first.log, maintenance-ls-final-build.log, maintenance-ls-final.log, maintenance-solution.log / maintenance-solution-results, maintenance-ls.log / maintenance-ls-results, maintenance-runner-controls.log, maintenance-qt3.log and maintenance-qt4.log. Intermediate edit/build logs remain retained; only the corrected final build is described as warning-free.
 
 ## Delivery boundary
 

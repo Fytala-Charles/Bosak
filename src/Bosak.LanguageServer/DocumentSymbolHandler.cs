@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 31-08-2026     | Added comprehensive tests for richer XSLT document symbols (REQ-073)                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -55,21 +58,21 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
     /// <param name="request">The document symbol parameters.</param>
     /// <param name="cancellationToken">A token to cancel the operation.</param>
     /// <returns>A container of symbols or document symbols.</returns>
-    public override Task<SymbolInformationOrDocumentSymbolContainer> Handle(
+    public override Task<SymbolInformationOrDocumentSymbolContainer?> Handle(
         DocumentSymbolParams request, CancellationToken cancellationToken)
     {
         var symbols = new List<SymbolInformationOrDocumentSymbol>();
         if (!_documents.TryGet(request.TextDocument.Uri.ToString(), out var text))
-            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+            return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(symbols));
 
         var path = request.TextDocument.Uri.Path?.ToLowerInvariant() ?? string.Empty;
         bool isXslt = path.EndsWith(".xsl") || path.EndsWith(".xslt");
         bool isXQuery = path.EndsWith(".xq") || path.EndsWith(".xqy") || path.EndsWith(".xquery");
         if (!isXslt && !isXQuery)
-            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+            return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(symbols));
 
         if (isXQuery)
-            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(GetXQuerySymbols(text)));
+            return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(GetXQuerySymbols(text)));
 
         XDocument doc;
         try
@@ -78,11 +81,11 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
         }
         catch (XmlException)
         {
-            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+            return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(symbols));
         }
 
         if (doc.Root is null)
-            return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+            return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(symbols));
 
         foreach (var element in doc.Root.Elements().Where(e => e.Name.NamespaceName == XslNamespace))
         {
@@ -91,7 +94,7 @@ public class DocumentSymbolHandler : DocumentSymbolHandlerBase
                 symbols.Add(symbol);
         }
 
-        return Task.FromResult(new SymbolInformationOrDocumentSymbolContainer(symbols));
+        return Task.FromResult<SymbolInformationOrDocumentSymbolContainer?>(new SymbolInformationOrDocumentSymbolContainer(symbols));
     }
 
     /// <summary>
