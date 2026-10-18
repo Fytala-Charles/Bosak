@@ -58,6 +58,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.24  | 10-10-2026     | REQ-125 Slice B: LoadControlled parses host-approved bytes with DTD/entities prohibited  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.25  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -105,7 +108,7 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Builds an XDocument-backed element node from provider-neutral construction data
-    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.ElementConstructorHook"/>).
+    /// (the <c>Bosak.XPath.Runtime.Vm.EvaluationContext.ElementConstructorHook</c>).
     /// Prefixes used by the tag and attributes are declared on the element so that
     /// serialization honors them; existing nodes are deep-copied into the new tree.
     /// </summary>
@@ -421,7 +424,7 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Builds an XDocument-backed comment or processing-instruction node
-    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.ContentNodeConstructorHook"/>).
+    /// (the <c>Bosak.XPath.Runtime.Vm.EvaluationContext.ContentNodeConstructorHook</c>).
     /// </summary>
     /// <param name="item">The content item to construct.</param>
     /// <returns>The constructed node.</returns>
@@ -476,7 +479,7 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Builds an XDocument-backed free-standing attribute node for a computed attribute
-    /// constructor (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.AttributeConstructorHook"/>).
+    /// constructor (the <c>Bosak.XPath.Runtime.Vm.EvaluationContext.AttributeConstructorHook</c>).
     /// </summary>
     /// <param name="attribute">The computed attribute (name and value).</param>
     /// <returns>The constructed attribute node.</returns>
@@ -501,7 +504,7 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Builds an XDocument-backed document node for a computed document constructor
-    /// (the <see cref="Bosak.XPath.Runtime.Vm.EvaluationContext.DocumentConstructorHook"/>).
+    /// (the <c>Bosak.XPath.Runtime.Vm.EvaluationContext.DocumentConstructorHook</c>).
     /// </summary>
     /// <param name="content">The document content items.</param>
     /// <returns>The constructed document node.</returns>
@@ -850,7 +853,7 @@ public static class XDocumentProvider
 
     /// <summary>
     /// Validates an in-memory <see cref="XDocument"/> against the supplied XML Schema set
-    /// and attaches PSVI annotations (<see cref="XElement.GetSchemaInfo()"/>) to every
+    /// and attaches PSVI annotations (<see cref="System.Xml.Schema.Extensions.GetSchemaInfo(XElement)"/>) to every
     /// node. On success, whitespace-only text nodes inside element-only schema content are
     /// stripped to match XDM validating construction rules. On failure, a
     /// <see cref="XmlSchemaValidationException"/> is thrown.

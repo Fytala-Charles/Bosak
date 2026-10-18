@@ -26,6 +26,9 @@
 //                      | Charles Korthout | 0.3   | 10-10-2026     | REQ-123 JNode cluster: serialization replaces JNode by its jvalue (central item
 //                      | Charles Korthout |       |                | unwrap and adaptive recursion arm)
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.8   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Text;
@@ -1408,7 +1411,7 @@ internal static class XdmSerializer
         /// <summary>
         /// Writes an element nested inside an HTML raw-text element (script/style): start
         /// and end tags are written literally, but neither text nor attribute values are
-        /// escaped (Serialization-html-9/10 — "&amp;" stays "&" inside raw-text content).
+        /// escaped (Serialization-html-9/10 — "&amp;" stays "&amp;" inside raw-text content).
         /// </summary>
         private void WriteRawElement(IXdmNode element)
         {

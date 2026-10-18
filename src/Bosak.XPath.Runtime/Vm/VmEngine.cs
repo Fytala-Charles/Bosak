@@ -418,6 +418,9 @@
 //                      | Charles Korthout | 2.191 | 15-10-2026     | Retain lexical original aliases in escaping inline functions and restore callers on errors. |
 //                      | Charles Korthout | 2.192 | 16-10-2026     | Compare structural record signatures with case-sensitive fields and typed zero-arity results. |
 //                      | Charles Korthout | 2.193 | 16-10-2026     | Compare record fields against map value types and generic function supertypes.               |
+//                      | Charles Korthout | 2.194 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -4462,10 +4465,6 @@ internal static class VmEngine
         _ => throw new ArgumentOutOfRangeException(nameof(opcode), opcode, null)
     };
 
-    /// <param name="hasLhs">
-    /// Whether the input is the result of a preceding path step (LHS of <c>/</c>).
-    /// Atomic input from an LHS raises XPTY0019; atomic ambient context input raises XPTY0020.
-    /// </param>
     /// <summary>
     /// The node-matching predicate of a <see cref="IrOpCode.NameTest"/> for a plain
     /// (non-wildcard) name: match on the full name or, for prefixed forms, on the local
@@ -6447,7 +6446,7 @@ internal static class VmEngine
     }
 
     /// <summary>
-    /// Applies one of the 31 binary operators exposed by XPath 4.0 fn:op (F&O 4.0 §18.4) to
+    /// Applies one of the 31 binary operators exposed by XPath 4.0 fn:op (F&amp;O 4.0 §18.4) to
     /// two operand sequences. This is the single semantics source for the operator: the
     /// opcode dispatch above and the fn:op function item both route through here.
     /// </summary>
@@ -9051,7 +9050,7 @@ internal static class VmEngine
     public static bool TryCast(XdmValue value, string typeName, EvaluationContext? context, out XdmValue result)
         => TryCast(value, typeName, context, out result, out _);
 
-    /// <summary>Distinguishes why a cast failed so <see cref="Cast"/> can raise the spec-mandated code.</summary>
+    /// <summary>Distinguishes why a cast failed so <see cref="Cast(XdmValue, string, EvaluationContext)"/> can raise the spec-mandated code.</summary>
     private enum CastFailureKind
     {
         /// <summary>A permitted cast whose lexical form or value is invalid (FORG0001).</summary>
@@ -12678,7 +12677,7 @@ internal static class VmEngine
 
     /// <summary>
     /// Computes the lowercased, occurrence- and xs:/xsd:-prefix-stripped type name used by
-    /// the atomic/kind-test matching path of <see cref="ValueMatchesType"/>, cached per
+    /// the atomic/kind-test matching path of <see cref="ValueMatchesType(XdmValue, string, EvaluationContext)"/>, cached per
     /// distinct input string (the same signature type names repeat on every call). The
     /// parenthesized-type case is deliberately left in place: the matcher re-enters itself
     /// for it, so fully parenthesized inputs flow through unchanged.
@@ -13380,7 +13379,7 @@ internal static class VmEngine
     /// <summary>
     /// Parses an enumeration type text (XPath 4.0 §3.2.6, <c>enum("a", "b", ...)</c>) into
     /// its member values. Returns null when the text is not a well-formed enumeration type.
-    /// The parser-side validator (<see cref="Parser.XPathParser.TryParseEnumTypeMembers"/>)
+    /// The parser-side validator (<c>Parser.XPathParser.TryParseEnumTypeMembers</c>)
     /// guarantees well-formedness for expressions that compiled successfully.
     /// </summary>
     private static string[]? TryGetEnumMembers(string typeText)

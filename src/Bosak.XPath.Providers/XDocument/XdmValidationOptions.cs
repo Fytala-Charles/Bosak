@@ -20,6 +20,9 @@
 //                      |                  |       |                | instruction but not on the detached result-tree element, so QName-valued content        |
 //                      |                  |       |                | resolves identically during validity assessment (error-0950a/b)                        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -27,7 +30,7 @@ using System.Xml;
 namespace Bosak.XPath.Providers.Xml;
 
 /// <summary>
-/// Options controlling <see cref="XdmSchemaAnnotator.Validate(XElement, System.Xml.Schema.XmlSchemaSet, XdmValidationOptions, System.Xml.Schema.ValidationEventHandler?, bool)"/>
+/// Options controlling <see cref="XdmSchemaAnnotator.ValidateSubtree"/>
 /// and the corresponding attribute-level entry point.
 /// </summary>
 /// <param name="Mode">The validation action to perform.</param>
@@ -41,7 +44,7 @@ namespace Bosak.XPath.Providers.Xml;
 /// be a built-in XML Schema type.
 /// </param>
 /// <param name="DocumentLevel">
-/// When <c>true</c>, the supplied <see cref="XElement"/> acts as the content container of a
+/// When <c>true</c>, the supplied <see cref="System.Xml.Linq.XElement"/> acts as the content container of a
 /// document node: it must contain exactly one element child and no text node children, and
 /// the validation applies to that single child element (XSLT 3.0 §25.4.2).
 /// </param>

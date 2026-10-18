@@ -244,6 +244,9 @@
 //                      | Charles Korthout | 3.76  | 16-10-2026     | Add explicit processor-profile selection independently of catalog dependencies.             |
 //                      |==================|=======|================|=========================================================================================
 
+
+//                      | Charles Korthout | 3.77  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
 using System.Xml.Linq;
 using System.Xml;
 using System.Xml.Schema;
@@ -1860,7 +1863,7 @@ class Program
         // local part is compared. A namespaced expectation (Q{uri}local with a non-empty
         // uri) must match BOTH parts; Q{}local / plain local match the local name only
         // (si-assert-901 expects Q{}XX99 from xsl:assert/@error-code="XX99").
-        if (ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
+        if (expectedCode is not null && ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
         {
             string? expectedNs = null;
             var expectedLocal = expectedCode;
@@ -4152,7 +4155,7 @@ class Program
     }
 
     /// <summary>
-    /// Replaces numeric character references (<c>&#xNNNN;</c> and <c>&#NNNN;</c>)
+    /// Replaces numeric character references (<c>&amp;#xNNNN;</c> and <c>&amp;#NNNN;</c>)
     /// with the actual characters they represent, so that XML 1.1 output can be
     /// compared with expected strings regardless of whether references or literals
     /// were used.

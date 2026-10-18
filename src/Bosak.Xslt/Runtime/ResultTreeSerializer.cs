@@ -75,6 +75,9 @@
 //                      |                  |       |                | preamble                                                                              |
 //                      | Charles Korthout | 1.38  | 11-10-2026     | C-F1: shared writer-based HTML/XHTML serialization for bounded capture.                  |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.39  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -269,8 +272,6 @@ internal static partial class ResultTreeSerializer
         }
     }
 
-    /// <summary>
-    /// Returns <c>true</c> if any output property was explicitly supplied by an
     /// <summary>
     /// Validates serialization properties that have cross-attribute constraints
     /// or require a supported encoding. Raises XSLT serialization errors.

@@ -571,6 +571,9 @@
 //                      | Charles Korthout | 7.55  | 16-10-2026     | Preserve non-node copy values in raw sequences and use complex-content delivery otherwise.  |
 //                      | Charles Korthout | 7.56  | 16-10-2026     | Use the captured processor profile for runtime forward compatibility and fallback versions. |
 //                      | Charles Korthout | 7.57  | 16-10-2026     | Evaluate draft future-instruction fallbacks in function bodies with isolated variable scope. |
+//                      | Charles Korthout | 7.58  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -10770,11 +10773,6 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
-    /// Copies an XDM value (node or sequence) into the result tree.
-    /// </summary>
-    /// <param name="value">The value to copy.</param>
-    /// <param name="separateAtomicsWithSpace">If true, consecutive atomic values are separated by a space (complex content construction). If false, they are concatenated directly (xsl:copy-of behavior).</param>
-    /// <summary>
     /// Returns whether the current result position is the top level of a raw-item
     /// output (JSON output method or build-tree="no"), where items should be collected
     /// as raw XDM values instead of being added to the result document tree.
@@ -13964,6 +13962,7 @@ internal sealed class TransformEngine
     /// <param name="mode">The mode to match in.</param>
     /// <param name="excludedRules">Rules to exclude (used by xsl:next-match).</param>
     /// <param name="minImportPrecedence">If set, only rules with import precedence greater than this value are considered (used by xsl:apply-imports).</param>
+    /// <param name="allowedStylesheets">Restricts eligible rules to the supplied modules when non-null.</param>
     private Stylesheet.TemplateRule? FindBestTemplate(XdmValue item, string mode, HashSet<Stylesheet.TemplateRule>? excludedRules = null, int? minImportPrecedence = null, IReadOnlySet<Stylesheet.Stylesheet>? allowedStylesheets = null)
     {
         Stylesheet.TemplateRule? best = null;
@@ -16499,7 +16498,7 @@ internal sealed class TransformEngine
     /// Resolves a lexical named-template name from a call-template instruction to the
     /// lexical key stored in <see cref="_allNamedTemplates"/>, matching by expanded QName.
     /// If no template matches by expanded name, the original lexical name is returned so
-    /// that <see cref="CallTemplate"/> raises the appropriate not-found error.
+    /// that <c>CallTemplate</c> raises the appropriate not-found error.
     /// </summary>
     private string ResolveNamedTemplateName(string calledName, XElement callElement)
     {
@@ -16872,15 +16871,6 @@ internal sealed class TransformEngine
             (name, attribute) => Stylesheet.Stylesheet.ExpandSchemaDeclarationName(name, attribute, declaration)) ?? sequenceType;
     }
 
-    /// <summary>
-    /// Applies type conversion and validation for the <c>as</c> attribute on
-    /// <c>xsl:variable</c> / <c>xsl:param</c> / <c>xsl:with-param</c>.
-    /// Atomizes the value and casts to common atomic types (xs:integer, xs:string, etc.).
-    /// Node types (element(), attribute(), document-node()) are validated but not atomized.
-    /// </summary>
-    /// <param name="value">The value to convert/validate.</param>
-    /// <param name="asType">The declared sequence type, or null/empty for no constraint.</param>
-    /// <param name="isParam">If true, type/cardinality mismatches raise <c>XTTE0590</c>; otherwise <c>XTTE0570</c>.</param>
     /// <summary>
     /// Converts a function call argument to the required type of an <c>xsl:param</c>,
     /// using the XPath function conversion rules and reporting failures as XPTY0004.
@@ -19733,7 +19723,7 @@ internal sealed class TransformEngine
     }
 
     /// <summary>
-    /// Resolves a document href for streamable loading exactly as <see cref="EvaluationContext.LoadDocument"/>
+    /// Resolves a document href for streamable loading exactly as <see cref="EvaluationContext.LoadDocument(string)"/>
     /// does: relative URIs against the current base URI, then the resource URI mapper.
     /// </summary>
     private string ResolveStreamingHref(string href)

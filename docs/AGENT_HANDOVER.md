@@ -1,3 +1,11 @@
+# Warning-free build maintenance and fallback regression - 18 October 2026
+
+Base f82495dd6ff7d9ef95f72b3e0c179d1205b376cb; branch fix/build-warning-maintenance in `.guard-tmp/build-warning-maintenance`. User authorized the maintenance/test slice. What was built: typed wildcard fallback guard returning FOJS0008 when no fallback layout exists, seven regressions/controls, documentation corrections and test/harness warning cleanup; source1.19.1 unpublished. Read MAINTENANCE-1.19.1.md. No warning suppression or extra dependency references.
+
+Baseline clean rebuild81 warnings; red tests3 failed/4 passed expose nullable message. Final clean rebuild0 warnings/0 errors; focused29/0/0; LS84/0/0; runner10; QT3 31142/0/679 and qt4 gated8278/0/1894. Roslyn audit20 comment-only files, five syntax-changed files as intended. Full solution9,733/0/0 passes; exact-head CI required before merge. Original red and intermediate helper/build failures retained in `.guard-tmp/maintenance-*`; header-placement and exact-comment-target helper mistakes corrected before the final warning-free build. Public1.19/Braid acceptance, extension, workflows and gate membership unchanged.
+
+Main workspace now follows main, with only local sweep baselines untracked. After source merge, fast-forward D:/Development/Bosak main and verify local files/submodules again; do not return it to a historical feature branch. Local notes/backups/stash from the earlier sync remain preserved. Keep README free of session logs. Earlier checkpoints below historical.
+
 # Product-focused README and preserved development history - 18 October 2026
 
 Base84548ddedb79f7ce1c7ac4e600737a1abbfd0b5e; branch docs/readme-product-overview, isolated `.guard-tmp/readme-product-overview`. What was built: short product README, full former README body archived in docs/DEVELOPMENT_HISTORY.md with rebased relative links, public docs/ECOSYSTEM.md, canonical navigation sync and README content policy. Keep future checkpoint logs out of README. Required FYTALA text preserved verbatim in a collapsible block immediately after banner.
