@@ -1,12 +1,12 @@
 <div align="center">
 <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala REQ-133: literal text body replacement contract">
 <h1>REQ-133: literal text body replacement contract</h1>
-<p>Proposed design - 18 October 2026</p>
+<p>Reviewed contract; implementation authorized - 18 October 2026</p>
 </div>
 
 ## Status and intended outcome
 
-**Pending; contract proposed for consumer review. Target version TBD; implementation owner unassigned.** The user authorized committing the consumer request and preparing this design. No implementation, new public capability, version reservation or publication is authorized by this document. Public Bosak 1.20.0 at `91f1af0d488bb2ed72b219118eeb1ab3570726bd` supplies the baseline. Documentation base: `af76b1e6c3b2f22e6a2783ab95cc93d237301454`, which closes REQ-132 consumer acceptance through PR #376.
+**Design reviewed with no blocking findings; implementation authorized by the user on 18 October 2026.** [Braid review](REQ-133-CONSUMER-DESIGN-REVIEW.md), SHA-256 `8c333d6d349670c9e99683b0e8c4448bd3ab484399a63b2965556e3426ea9616`, covers immutable design `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`; it reports seven existing-operation baseline probes and zero replacement tests. Source development targets 1.21.0. Public packages remain 1.20.0. This approval authorizes implementation and verification; publication and consumer/native acceptance remain later gates. See the [implementation record](REQ-133-IMPLEMENTATION.md).
 
 Replace the body of one engine-approved existing paired ordinary literal `xsl:text`. A user changes a label or separator without appending another instruction. Keep opening/closing tags, attributes, prefix spelling and every byte outside that body intact. New logical text may be empty; paired tags remain. No formatting mode, self-closing expansion, generic text-node/subtree replacement, deletion, attribute/control edits or namespace changes are included.
 
@@ -14,7 +14,7 @@ The [original consumer request](REQ-133-literal-text-body-replacement.md) is pre
 
 ## Proposed additive public API
 
-Names below are proposals and do not exist in released 1.20.0. Reuse immutable descriptor, source-range and source-edit types where their meanings agree; do not reuse an insertion/deletion target as replacement authority.
+Names below are implemented in source 1.21.0 and do not exist in released 1.20.0. Reuse immutable descriptor, source-range and source-edit types where their meanings agree; do not reuse an insertion/deletion target as replacement authority.
 
 | Proposed surface | Contract |
 |---|---|
@@ -104,7 +104,7 @@ Braid offers separate check/edit-text actions only after compatible public deliv
 
 Changed Apply is separate, explicit and atomic under current capability/license/source/inspection/revision/cancellation/overlap checks. Select actual EditedNode plus PayloadNode.Range or the empty ReplacementBodyRange caret. Reopen graph selection against the fresh snapshot. Undo/redo restores exact bytes under fresh revisions and inspection; old validation/preview/export receipts stay historical. Cancellation after committed Apply reports the committed result. No Braid XML parser, source splice, friend access or reflection bypass grants edit authority.
 
-Implementation follows independent Braid design review and separate user authorization. A future additive feature requires a minor version increment from the then-current source version; none is reserved here. Gates include full solution and separate language-server tests, unchanged legacy authoring behavior, exact-head CI, exact-merge independent public-API package verification, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**. Public signed-package verification and Braid UI/worker/export/reopen/native acceptance remain separate later gates.
+Independent Braid design review and separate user implementation authorization are complete. The additive feature increments source version from 1.20.0 to 1.21.0. Gates include full solution and separate language-server tests, unchanged legacy authoring behavior, exact-head CI, exact-merge independent public-API package verification, frozen QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**. Public signed-package verification and Braid UI/worker/export/reopen/native acceptance remain separate later gates.
 
 ## Evidence used for this design
 

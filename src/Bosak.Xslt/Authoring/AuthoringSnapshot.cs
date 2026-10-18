@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: typed snapshot-owned literal-text insertion entry points.                     |
 //                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
+//                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: snapshot-owned literal text body replacement.                                  |
 
 using System.Xml.Linq;
 
@@ -242,6 +243,30 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return LiteralElementInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers authority for one paired ordinary literal text body.</summary>
+    /// <param name="instruction">The actual instruction descriptor from this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>A checked target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The instruction is null.</exception>
+    public AuthoringTextBodyReplacementTargetResult GetTextBodyReplacementTarget(AuthoringNodeDescriptor instruction,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(instruction);
+        return TextBodyReplacementPipeline.Target(this, instruction, cancellationToken);
+    }
+
+    /// <summary>Privately replaces one literal body or reports validated equal intent.</summary>
+    /// <param name="proposal">An opaque target and exact logical Unicode intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no partial candidate is published.</param>
+    /// <returns>Exclusive Changed, NoChange or Refused evidence.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringTextBodyReplacementResult ProposeTextBodyReplacement(AuthoringTextBodyReplacementProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return TextBodyReplacementPipeline.Run(this, proposal, cancellationToken);
     }
 
     internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,

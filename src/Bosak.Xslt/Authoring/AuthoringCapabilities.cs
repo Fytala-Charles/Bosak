@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: independently advertise bounded literal-text insertion.                       |
 //                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
+//                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: independently advertise literal text body replacement.                         |
 
 using System.Reflection;
 
@@ -46,6 +47,14 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded literal text body replacement is implemented.</summary>
+    public static bool SupportsTextBodyReplacement => true;
+    /// <summary>Gets the original and final physical byte bound, including BOM.</summary>
+    public static int MaxTextBodyReplacementSourceBytes => 8_388_608;
+    /// <summary>Gets immutable replacement encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> TextBodyReplacementSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
     /// <summary>Gets whether bounded no-namespace literal element insertion is available.</summary>
     public static bool SupportsLiteralElementInsertion => true;
     /// <summary>Gets whether explicit readable literal element layout is available.</summary>

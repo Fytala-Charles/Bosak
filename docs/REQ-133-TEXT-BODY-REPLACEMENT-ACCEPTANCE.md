@@ -4,7 +4,7 @@
 <p>Proposed design - 18 October 2026</p>
 </div>
 
-**Reviewed plan for a future operation; zero replacement tests have been executed.** Read with the [contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) and [original consumer TE groups](REQ-133-literal-text-body-replacement.md). Public 1.20.0 does not expose text-body replacement.
+**Reviewed acceptance plan; source verification in progress.** The original design had zero replacement tests. Current source/package execution counts and the distinction between public tests, internal controls and consumer-only gates are recorded in the [implementation record](REQ-133-IMPLEMENTATION.md). Read with the [contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) and [original consumer TE groups](REQ-133-literal-text-body-replacement.md). Public 1.20.0 does not expose text-body replacement.
 
 Each engine group needs relevant positive and refusal/control cases. UI/license/session/history, restricted export/worker and native groups belong to Braid. Malformed evidence rejection must be tested at the actual engine/consumer authority boundary; do not fabricate a publicly constructible engine snapshot simply to mirror internal implementation.
 
@@ -39,4 +39,4 @@ Each engine group needs relevant positive and refusal/control cases. UI/license/
 | R27 | TE-10/11 | Worker and native gates | Deliberately changed output, real validation/preview ExactBytes, restricted new-file export/receipt/hash and independent destination reopen/run across four encodings; protected native kit and actual observed walkthrough/hashes, without inferred variants/accessibility approval. |
 | R28 | TE-01 through TE-11 | Delivery separation | Full solution/LS and exact-head CI, independent exact-merge package-public cases, frozen QT3 31,142/0/679 and qt4 gated 8,278/0/1,894; later signed public release, Braid adoption and native acceptance remain separate. |
 
-These are **28 planned groups**, not 28 tests or passed runs. The [seven baseline probes](REQ-133-DESIGN-BASELINE.json) exercise existing inspection/runtime only and do not satisfy replacement cases. Source/package counts in future evidence overlap; retain original failures and record fixture corrections separately. Frozen gate values are future requirements, not reruns for this design-only slice.
+These are **28 acceptance groups**, not 28 tests or passed runs. The [seven baseline probes](REQ-133-DESIGN-BASELINE.json) exercise existing inspection/runtime only and do not satisfy replacement cases. Source/package counts in future evidence overlap; retain original failures and record fixture corrections separately. Frozen gate values and actual implementation runs are distinguished in the implementation record.

@@ -5,7 +5,7 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**REQ-133 design proposed - 18 October 2026:** [Text-body replacement contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md), [planned acceptance matrix](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md) and [Braid review handoff](REQ-133-CONSUMER-DESIGN-HANDOFF.md) specify one paired literal xsl:text body edit, explicit NoChange and separate payload partitions. Seven existing public inspection/runtime probes inform the design; zero replacement tests or new capabilities are delivered. REQ-132 remains consumer-accepted in public 1.20.0.
+**REQ-133 implementation in progress - 18 October 2026:** Source 1.21.0 adds reviewed literal text body replacement after [Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and user authorization. [Implementation record](REQ-133-IMPLEMENTATION.md) covers exclusive Changed/NoChange/Refused outcomes, exact body bytes and disjoint payload provenance. Verification is in progress; public packages remain 1.20.0 and REQ-132 remains consumer-accepted. Consumer implementation review, publication and native acceptance are pending.
 
 
 
