@@ -5,6 +5,9 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+For the product introduction, Schema and Braid overview, start with the [README](../README.md) and [ecosystem guide](ECOSYSTEM.md). Earlier README implementation checkpoints are preserved in [development history](DEVELOPMENT_HISTORY.md); dated checkpoints below retain their original context.
+
+
 ## Bosak 1.17.0 published - 17 October 2026
 
 Released **1.17.0** supplies opt-in readable value-of insertion (REQ-129) with a byte-identical legacy default, complete edit/provenance evidence and conservative whitespace refusals. Braid reports no blocking issues. The single release workflow passes 9,612 solution tests; all ten signed public packages verify and fresh nuget.org-only consumers pass 153 broad and 372 focused checks. [Publication evidence](RELEASE-1.17.0-PUBLICATION.md); [release notes](RELEASE-NOTES-1.17.0.md). VS Code 0.2.5 still bundles 1.16.5; this task changes no Braid source/pin or native acceptance record. Earlier source/candidate entries below are historical.
@@ -502,7 +505,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-128 | Bosak.Braid | Source-preserving insertion of one xsl:value-of into an engine-approved principal sequence constructor | First structural visual edit requires supported isolated candidates, legal insertion targets and exact source fidelity | Implemented; Braid adoption recorded within accepted REQ-129 profile | 1.8.0 | Charles Korthout | 2026-10-17 |
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
-| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented and published; consumer acceptance pending | 1.19.0 | Charles Korthout | 2026-10-17 |
+| REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 
 
 > **Legend:
@@ -1746,9 +1749,12 @@ Braid [consumer design review](REQ-130-CONSUMER-DESIGN-REVIEW.md) reports no blo
 
 **Requesting Application:** Product owner, following the Bosak.Braid authoring roadmap
 **Submitted:** 2026-10-17
-**Status:** Implemented and published; independent consumer functional/native acceptance pending
+**Status:** Implemented, published and consumer-accepted within the delivered bounded profile
 **Target Version:** 1.19.0 (unpublished)
 **Owner:** Charles Korthout
+
+**Formal consumer acceptance - 18 October 2026:** The [unchanged Braid receipt](REQ-131-BRAID-ACCEPTANCE.md) accepts published1.19.0 within the bounded literal-text profile, reporting1,079 full tests,298 public-package checks and completed native procedure/matching hashes. These are imported consumer reports, not reruns; exact hashes/native variants remain unreported. Acceptance does not imply a public Braid release or full live two-way editing. Earlier pending checkpoints are historical.
+
 
 **1.19.0 published and verified - 18 October 2026:** Immutable `v1.19.0` at27691fdb supplies bounded REQ-131 literal-text insertion. [Public delivery proof](RELEASE-1.19.0-PUBLICATION.md) records one successful Release run (9,726 tests/ten uploads), ten verified signed archives and fresh nuget.org-only153 broad/282 focused checks with exact provenance and clear audits. REQ-131 Braid adoption/functional/native acceptance remains pending; accepted1.18.0 pin and extension are unchanged. Earlier preparation-only statements below are historical.
 
