@@ -4,6 +4,9 @@
 <p>Reviewed acceptance matrix - 18 October 2026</p>
 </div>
 
+**Publication update:** [1.21.0 is published and verified](RELEASE-1.21.0-PUBLICATION.md) after [Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier source-only, local-feed and review-pending statements below preserve their historical delivery checkpoint. Consumer adoption/native acceptance remains separate and pending.
+
+
 **Reviewed acceptance plan; implementation evidence is recorded separately.** The original design had zero replacement tests. Current source/package execution counts and the distinction between public tests, internal controls and consumer-only gates are recorded in the [implementation record](REQ-133-IMPLEMENTATION.md). Read with the [contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) and [original consumer TE groups](REQ-133-literal-text-body-replacement.md). Public 1.20.0 does not expose text-body replacement.
 
 Each engine group needs relevant positive and refusal/control cases. UI/license/session/history, restricted export/worker and native groups belong to Braid. Malformed evidence rejection must be tested at the actual engine/consumer authority boundary; do not fabricate a publicly constructible engine snapshot simply to mirror internal implementation.

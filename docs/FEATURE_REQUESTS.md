@@ -507,7 +507,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
-| REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented in source; consumer implementation review pending | 1.21.0 (source) | Charles Korthout | 2026-10-18 |
+| REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented and published; consumer acceptance pending | 1.21.0 | Charles Korthout | 2026-10-18 |
 
 
 > **Legend:
@@ -1794,15 +1794,15 @@ Published **1.20.0** from immutable source `91f1af0d` after the user explicitly 
 
 ### REQ-133: Literal Text Body Replacement for Bosak.Braid
 
-**REQ-133 source verification complete - 18 October 2026:** Source 1.21.0 adds reviewed literal text body replacement after [Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and user authorization. [Implementation record](REQ-133-IMPLEMENTATION.md) covers exclusive Changed/NoChange/Refused outcomes, exact body bytes and disjoint payload provenance. Local checks pass 9,900 solution, 84 language-server, 76 new source cases, 437 package-public and 153 broad checks; frozen gates remain unchanged. Exact-head CI and final package receipts accompany delivery. Public packages remain 1.20.0 and REQ-132 remains consumer-accepted. Consumer implementation review, publication and native acceptance are pending.
+**1.21.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.21.0-PUBLICATION.md) records immutable `v1.21.0` at `8929a130`, one successful Release run (9,900 solution tests and ten uploads), ten verified signed archives, and fresh nuget.org-only **153 broad / 437 focused** checks with exact provenance and clear audits. REQ-133 text-body replacement is published after [no-blocking Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md). Braid adoption/native acceptance remain pending; REQ-132 remains consumer-accepted. Earlier source-only/review-pending checkpoints are historical.
 
 **Requesting Application:** Bosak.Braid
 
 **Submitted:** 2026-10-18
 
-**Status:** Implemented in source; consumer implementation review pending
+**Status:** Implemented and published; consumer acceptance pending
 
-**Target Version:** 1.21.0 (source; not published)
+**Target Version:** 1.21.0
 
 **Owner:** Charles Korthout
 

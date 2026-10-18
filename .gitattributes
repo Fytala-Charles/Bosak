@@ -18,3 +18,5 @@
 /docs/REQ-133-literal-text-body-replacement.md -text whitespace=cr-at-eol
 
 /docs/REQ-133-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol

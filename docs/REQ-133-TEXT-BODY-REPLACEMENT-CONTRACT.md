@@ -4,6 +4,9 @@
 <p>Reviewed contract; implementation authorized - 18 October 2026</p>
 </div>
 
+**Publication update:** [1.21.0 is published and verified](RELEASE-1.21.0-PUBLICATION.md) after [Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Earlier source-only, local-feed and review-pending statements below preserve their historical delivery checkpoint. Consumer adoption/native acceptance remains separate and pending.
+
+
 ## Status and intended outcome
 
 **Design reviewed with no blocking findings; implementation authorized by the user on 18 October 2026.** [Braid review](REQ-133-CONSUMER-DESIGN-REVIEW.md), SHA-256 `8c333d6d349670c9e99683b0e8c4448bd3ab484399a63b2965556e3426ea9616`, covers immutable design `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`; it reports seven existing-operation baseline probes and zero replacement tests. Source development targets 1.21.0. Public packages remain 1.20.0. This approval authorizes implementation and verification; publication and consumer/native acceptance remain later gates. See the [implementation record](REQ-133-IMPLEMENTATION.md).
