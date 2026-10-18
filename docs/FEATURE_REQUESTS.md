@@ -506,7 +506,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-129 | Bosak.Braid | Opt-in readable formatting for value-of insertion candidates | Readable indentation with exact engine candidate provenance and compatible default behavior | Implemented, published and accepted by Bosak.Braid (bounded profile) | 1.17.0 | Charles Korthout | 2026-10-17 |
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
-| REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented and published; consumer acceptance pending | 1.20.0 | Charles Korthout | 2026-10-18 |
+| REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 
 
 > **Legend:
@@ -1773,7 +1773,7 @@ Append one engine-owned xsl:text carrying decoded literal Unicode text, with com
 
 **Requesting Application:** Bosak.Braid
 **Submitted:** 2026-10-18
-**Status:** Implemented and published; consumer acceptance pending
+**Status:** Implemented, published and consumer-accepted
 **Target Version:** 1.20.0
 **Owner:** Charles Korthout
 
@@ -1785,6 +1785,11 @@ Design-only continuation defines local default-namespace reset, conservative ali
 [Braid design review](REQ-132-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings at e6f21839, with zero runtime probes. User authorized the [bounded implementation](REQ-132-IMPLEMENTATION.md): independent capability/typed targets, exact NCName, local namespace reset, complete descriptor partition and fresh text/value-of composition. Source verification passes: 9,824 solution, 84 language-server, 91 new-operation tests, 374 independent public-API checks and 153 broad API checks; frozen QT3/qt4 gates unchanged. See [source verification](REQ-132-SOURCE-VERIFICATION.json) and [implementation review handoff](REQ-132-CONSUMER-IMPLEMENTATION-HANDOFF.md). Public release and implementation/consumer/native acceptance remain pending. Earlier proposal-only statements describe their original design checkpoint.
 
 Published **1.20.0** from immutable source `91f1af0d` after the user explicitly approved publication and [Braid implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings (91 source tests and 399 local-package checks; counts overlap). [Public release proof](RELEASE-1.20.0-PUBLICATION.md) verifies ten signed archives and 153 broad checks and 374 focused tests from fresh public restores with exact provenance. Earlier source-only/review-pending statements above are historical; Braid pin/UI/worker/native acceptance remains separate and pending.
+
+
+#### Formal Bosak.Braid Consumer Acceptance - 2026-10-18
+
+[Formal acceptance notification](REQ-132-BRAID-ACCEPTANCE.md) closes the delivered bounded literal-element profile in published1.20.0 at91f1af0d. Braid checkpoint849dc0e is committed/pushed; full normal Release1,157/0/0 and fresh public-package399/0/0 pass. The product owner completed the native walkthrough and reports all hashes true. Exact native hashes/variants/platform/accessibility details are unreported; optional child-population is accepted only as exercised. Automated four-encoding/both-mode empty/populated worker/export/reopen evidence is separate. No engine changes or new upstream test execution are claimed; earlier consumer-pending statements above are historical.
 
 ### REQ-022: Migrate Bosak to .NET 10
 
