@@ -4,7 +4,7 @@
 <p>Source 1.21.0 - 18 October 2026</p>
 </div>
 
-Source implementation and verification are in progress after [no-blocking Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and explicit user authorization. Baseline main is `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`. Public packages remain 1.20.0; no release, Braid adoption or native acceptance is claimed.
+Source implementation and local verification are complete after [no-blocking Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and explicit user authorization. Baseline main is `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`. Public packages remain 1.20.0; no release, Braid adoption or native acceptance is claimed.
 
 The [reviewed contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) is implemented additively in `Bosak.Xslt.Authoring`. `SupportsTextBodyReplacement`, its 8,388,608-byte bound and immutable encoding list describe a separate operation. Snapshot discovery issues an opaque owner-specific paired ordinary text-body target; proposals contain exact logical Unicode and no formatting option.
 
@@ -16,7 +16,16 @@ One retained-byte splice replaces only the complete body. Emission escapes amper
 
 ## Verification
 
-Pending final full-solution, language-server, conformance, CI and independent package receipts. Targeted source checks currently pass 76 cases: 63 public API cases and 13 instrumented internal metadata/cancellation controls. These overlap future package-public cases and are not additive independent product acceptance. All 28 acceptance groups remain a matrix; consumer-only R23-R25/R27 and consumer malformed-evidence review remain Braid responsibilities.
+Final local Release build passed with zero warnings/errors. Full solution: **9,900 passed, zero failed/skipped**; separate language server: **84 passed**. New source cases: **76 passed**, comprising **63 public API cases** and **13 instrumented internal authority/cancellation controls**. These cover payload transitions/partitions, names/versions/context, four encodings/coordinates/outside bytes, Unicode/escaping/equality, null/immutability/concurrency, physical limits/shrinkage/NoChange budgets, static/resource/profile refusals, deterministic cancellation and malformed metadata/identity/order/payload evidence.
+
+Frozen gates on the final implementation: QT3 **31,142/0/679** and qt4 gated **8,278/0/1,894**, zero gated failures. No engine/parser/conformance fixture changes were needed.
+
+Independent local package consumer at immutable source `d09737f1a37507e51d257d6268892eb8910cc2c2`: **437 passed**, comprising 63 new public cases and 374 prior public authoring/identity cases. A distinct non-friend assembly uses PackageReferences only; 13 internal controls are excluded. Fresh-cache source mapping pins Bosak packages to the local feed. Ten archive source revisions, nine consumed archives/cache/output assemblies, SHA-256/SHA-512 and restore-source receipts agree. Transitive vulnerability audit reports none. A separate all-ten-package consumer passed **153 broad checks**, verifying exact informational versions and archive/cache/output assembly equality including the database provider.
+
+Counts overlap and must not be added as independent product acceptance. The 28 acceptance groups remain a matrix; consumer-only R23-R25/R27 and consumer malformed-evidence review remain Braid responsibilities. Seven Braid design probes cover existing operations only. Exact-head CI and final immutable package revision accompany delivery through the implementation PR/receipt; independent implementation review remains pending. Logs, original failures, TRXs, hashes and source/audit receipts are retained under `.guard-tmp/req133-*`. README and legacy operation implementations remain unchanged. Documentation HTML was rendered with unchanged canonical CSS; no native preview/PDF walkthrough is claimed. The unchanged consumer review retains its original Braid-relative references.
+
+Two initial sandboxed solution runs each encountered 45 database-provider fixture failures because HttpListener could not start; the final full rerun with required local permissions passed all 9,900. Logs/TRXs are preserved, and the log-tail-only interim success assessment was corrected. Test exit codes and all ten final TRX counters are checked, rather than inferring success from the last project.
+
 
 The first compile failed because the new failure adapter referenced Code instead of the existing ErrorCode member; corrected before test execution. The original failing build log is retained. No engine/fixture failures occurred in the first 47, expanded 63 or source-control 71 and hardened 76 targeted test runs. Final evidence supersedes these earlier checkpoints.
 

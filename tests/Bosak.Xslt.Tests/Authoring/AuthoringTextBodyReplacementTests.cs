@@ -269,6 +269,7 @@ public class AuthoringTextBodyReplacementTests
     }
 
     /// <summary>Concurrent changed, equal and refused proposals do not mutate their shared owner.</summary>
+    /// <returns>A task completing after all isolated requests have been verified.</returns>
     [Fact]
     public async Task ConcurrentIsolation()
     {
