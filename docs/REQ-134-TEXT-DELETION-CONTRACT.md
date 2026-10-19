@@ -26,7 +26,7 @@ These proposed members do not exist in 1.21.0. Existing value-of deletion, text 
 | Correspondence / reusable data | `IReadOnlyDictionary<AuthoringNodeDescriptor, AuthoringNodeDescriptor>` for ordinary survivors; existing immutable SourceRange, AuthoringInsertionSourceEdit, AuthoringTextMergeGroup and AuthoringTextMergeFragment may be reused with their existing meanings. A target/result/candidate from another operation is never deletion authority. |
 | `AuthoringTextDeletionFailure` / `AuthoringTextDeletionFailureKind` | Separate typed classification, Message, optional diagnostic ErrorCode/Range and ModuleUri. No old enum renumbering or message parsing. |
 
-Null reference arguments throw ArgumentNullException. This new API proposes classified Cancelled refusals for both discovery and proposal; legacy value-of cancellation continues to throw under its existing contract. Every result is exclusive; cancellation returns no target/candidate/partial evidence. All retained collections, handles and exported bytes are immutable or defensive copies.
+Null reference arguments throw ArgumentNullException. This new API proposes classified Cancelled refusals for both discovery and proposal; legacy value-of cancellation continues to throw under its existing contract. Every result is exclusive; cancellation returns no target/candidate/partial evidence. All retained collections, handles and exported bytes are immutable or defensive copies. Failure.ModuleUri identifies the input principal module; a non-null Failure.Range always belongs to InputSnapshot source coordinates. Candidate-only diagnostic ranges are omitted rather than mislabeled or returned as unowned partial-candidate evidence.
 
 ### Deletion always changes source
 
@@ -71,7 +71,7 @@ References establish owned identity; integer IDs are snapshot-scoped and may be 
 
 ### Zero or one bounded adjacent whitespace merge
 
-Reuse the already reviewed REQ-130 source-fragment meaning, without widening its existing public behavior. TextMergeGroups is empty unless removing this instruction joins its two immediately bordering ordinary whitespace text siblings under the same direct parent. At most one group has exactly those two distinct actual original nodes and one actual candidate ordinary text node. Both siblings must be nonempty, XML-whitespace-only, non-CDATA and outside R. Significant text/CDATA or any larger/nonadjacent merge is outside this profile.
+Reuse the already reviewed REQ-130 source-fragment meaning, without widening its existing public behavior. TextMergeGroups is empty unless removing this instruction joins its two immediately bordering ordinary whitespace text siblings under the same direct parent. At most one group has exactly those two distinct actual original nodes and one actual candidate ordinary text node. Both siblings must be nonempty, XML-whitespace-only (U+0020, U+0009, U+000D, U+000A), non-CDATA and outside R. Significant text/CDATA or any larger/nonadjacent merge is outside this profile.
 
 Each fragment's OriginalRange covers its complete actual original node. The translated CandidateRanges are ordered, nonoverlapping, contiguous and cover the whole actual destination range once, with exact original/candidate byte equality and encoding alignment. A fragment range is lexical provenance inside one node, not another candidate descriptor. Groups are disjoint from M and R; their parent is the mapped SurvivingParent. No surrounding whitespace is reclassified as deleted to make the map appear injective.
 
