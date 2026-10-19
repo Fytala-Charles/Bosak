@@ -4,6 +4,9 @@
 <p>Proposed design - 19 October 2026</p>
 </div>
 
+**Publication update:** [1.22.0 is published and verified](RELEASE-1.22.0-PUBLICATION.md) after [Braid final exact-merge implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Public nuget.org-only consumers pass153 broad/531 focused checks and all ten signatures/identities verify. Earlier local-feed/source/review-pending statements below preserve historical checkpoints. Braid public adoption/integration/native acceptance remain separate and pending.
+
+
 **REQ-134 source verified - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Local verification passes 10,010 solution, 84 language-server, 110 new source and 531 initial package-public checks; frozen gates are unchanged. [Implementation record](REQ-134-IMPLEMENTATION.md), [verification receipt](REQ-134-VERIFICATION.json) and [consumer implementation handoff](REQ-134-CONSUMER-IMPLEMENTATION-HANDOFF.md) track exact delivery gates through [PR #383](https://github.com/Fytala-Charles/Bosak/pull/383). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
 
 ## Historical reviewed design material
