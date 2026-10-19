@@ -20,6 +20,8 @@
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: share namespace/provenance helpers; preserve legacy one-node behavior.        |
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.7   | 19-10-2026     | REQ-134: optional strict refusal filter; legacy validation defaults unchanged.          |
+
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Xml;
@@ -224,7 +226,7 @@ internal static class ValueOfInsertionPipeline
     }
 
     internal static AuthoringInsertionFailure? Validate(AuthoringSnapshot snapshot, bool candidate,
-        CancellationToken token, AuthoringAttributeDescriptor? select = null)
+        CancellationToken token, AuthoringAttributeDescriptor? select = null, Func<Exception, bool>? refusalFilter = null)
     {
         token.ThrowIfCancellationRequested();
         var validation = XsltValidation.Validate(snapshot, new XsltValidationOptions { CancellationToken = token });
@@ -244,11 +246,11 @@ internal static class ValueOfInsertionPipeline
                 return Failure(AuthoringInsertionFailureKind.UnsupportedCoverage, $"Instruction {node.ElementName.LocalName} is outside proven insertion coverage.");
             foreach (var slot in node.Attributes.Where(a => a.SlotContext is not null))
             {
-                try { InsertionExpressionCoverage.Check(snapshot, slot, token); }
+                try { InsertionExpressionCoverage.Check(snapshot, slot, token, refusalFilter); }
                 catch (OperationCanceledException) { throw; }
                 catch (InsertionExpressionCoverage.CoverageException ex)
                 { return Failure(AuthoringInsertionFailureKind.UnsupportedCoverage, ex.Message); }
-                catch (Exception ex)
+                catch (Exception ex) when (refusalFilter is null || refusalFilter(ex))
                 {
                     return Failure(!candidate ? AuthoringInsertionFailureKind.InvalidOriginal
                         : ReferenceEquals(slot, select) ? AuthoringInsertionFailureKind.InvalidExpression
@@ -271,7 +273,7 @@ internal static class ValueOfInsertionPipeline
             return null;
         }
         catch (OperationCanceledException) { throw; }
-        catch (Exception ex)
+        catch (Exception ex) when (policy.Receipts.Count != 0 || refusalFilter is null || refusalFilter(ex))
         {
             token.ThrowIfCancellationRequested();
             return Failure(policy.Receipts.Count != 0 ? AuthoringInsertionFailureKind.ResourceDenied

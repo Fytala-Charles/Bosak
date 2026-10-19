@@ -23,6 +23,8 @@
 // ===========================================================================================================================================================
 //                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: independently advertise literal text body replacement.                         |
 
+//                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
+
 using System.Reflection;
 
 namespace Bosak.Xslt.Authoring;
@@ -47,6 +49,14 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded literal text instruction deletion is implemented.</summary>
+    public static bool SupportsTextDeletion => true;
+    /// <summary>Gets the original and final physical byte bound, including BOM.</summary>
+    public static int MaxTextDeletionSourceBytes => 8_388_608;
+    /// <summary>Gets immutable deletion encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> TextDeletionSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
     /// <summary>Gets whether bounded literal text body replacement is implemented.</summary>
     public static bool SupportsTextBodyReplacement => true;
     /// <summary>Gets the original and final physical byte bound, including BOM.</summary>

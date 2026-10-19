@@ -22,6 +22,8 @@
 // ===========================================================================================================================================================
 //                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: snapshot-owned literal text body replacement.                                  |
 
+//                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
+
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Authoring;
@@ -243,6 +245,30 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return LiteralElementInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers opaque authority to remove one literal text instruction and its payload.</summary>
+    /// <param name="instruction">The exact owned instruction descriptor.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, returned as a typed refusal.</param>
+    /// <returns>A complete target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The instruction is null.</exception>
+    public AuthoringTextDeletionTargetResult GetTextDeletionTarget(AuthoringNodeDescriptor instruction,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(instruction);
+        return TextDeletionPipeline.Target(this, instruction, cancellationToken);
+    }
+
+    /// <summary>Proposes exact removal without mutating this snapshot.</summary>
+    /// <param name="proposal">The engine-issued target authority.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, returned as a typed refusal.</param>
+    /// <returns>A fresh validated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringTextDeletionResult ProposeTextDeletion(AuthoringTextDeletionProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return TextDeletionPipeline.Run(this, proposal, cancellationToken);
     }
 
     /// <summary>Discovers authority for one paired ordinary literal text body.</summary>
