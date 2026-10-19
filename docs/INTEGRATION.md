@@ -5,6 +5,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
+
+
 **1.21.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.21.0-PUBLICATION.md) records immutable `v1.21.0` at `8929a130`, one successful Release run (9,900 solution tests and ten uploads), ten verified signed archives, and fresh nuget.org-only **153 broad / 437 focused** checks with exact provenance and clear audits. REQ-133 text-body replacement is published after [no-blocking Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md). Bosak.Braid has accepted the delivered REQ-133 profile in 1.21.0; see the [formal acceptance receipt](REQ-133-BRAID-ACCEPTANCE.md) for observed coverage and native-observation limits. REQ-132 remains consumer-accepted. Earlier source-only, review-pending and acceptance-pending checkpoints are historical.
 
 

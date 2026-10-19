@@ -4,6 +4,11 @@
   <p>Planning catalogue — 15 October 2026</p>
 </div>
 
+**REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
+
+
+## Historical planning checkpoints
+
 **Current consumer checkpoint - 18 October 2026:** Braid accepts bounded text insertion in public1.19.0; see the [unchanged receipt](REQ-131-BRAID-ACCEPTANCE.md). Expression/value-of/text operations and navigation are delivered foundations for the larger bidirectional builder. Free-form editing and full live graph/source synchronization remain in development. [Public ecosystem overview](ECOSYSTEM.md). Historical planning checkpoints below retain their original context.
 
 

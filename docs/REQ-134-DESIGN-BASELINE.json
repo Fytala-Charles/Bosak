@@ -1,0 +1,186 @@
+{
+  "publicVersion": "1.21.0",
+  "revision": "8929a1301d1846bb24b49bcc505877f05fd3395a",
+  "informationalVersion": "1.21.0+8929a1301d1846bb24b49bcc505877f05fd3395a",
+  "existingOperationProbesPassed": 10,
+  "textDeletionTestsExecuted": 0,
+  "rows": [
+    {
+      "name": "paired-empty",
+      "payloadCount": 0,
+      "parentTextValues": [],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "paired-unicode-references",
+      "payloadCount": 1,
+      "parentTextValues": [],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "<&\r\n\ud83d\ude00",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "self-closing",
+      "payloadCount": 0,
+      "parentTextValues": [],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "neighbor-whitespace",
+      "payloadCount": 1,
+      "parentTextValues": [
+        "\n  ",
+        "\n"
+      ],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "A",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "split-physical-seam",
+      "payloadCount": 1,
+      "parentTextValues": [
+        "\n",
+        "\n"
+      ],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "A",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "joined-physical-run-baseline",
+      "payloadCount": null,
+      "parentTextValues": [
+        "\n"
+      ],
+      "existingValueOfDeletionRefusal": null,
+      "output": "",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "cdata-payload",
+      "payloadCount": 1,
+      "parentTextValues": [],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "A",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "preserved-parent",
+      "payloadCount": 1,
+      "parentTextValues": [
+        "L",
+        "R"
+      ],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "LAR",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "significant-parent-text",
+      "payloadCount": 1,
+      "parentTextValues": [
+        "L",
+        "R"
+      ],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "LAR",
+      "sourceUnchanged": true
+    },
+    {
+      "name": "local-nonexpansion",
+      "payloadCount": 1,
+      "parentTextValues": [],
+      "existingValueOfDeletionRefusal": "IneligibleNode",
+      "output": "{A}",
+      "sourceUnchanged": true
+    }
+  ],
+  "publicPackageRestore": {
+    "packageReferencesOnly": true,
+    "friendAccess": false,
+    "freshNugetOrgOnlyCache": true,
+    "baselineEncoding": "UTF-8 without BOM",
+    "signedArchivesMatchPreviouslyVerifiedPublicRelease": true,
+    "signaturesReverifiedInThisDesignStep": false,
+    "newTextDeletionTests": 0,
+    "assemblies": [
+      {
+        "id": "Bosak.XPath.Api",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "2c517868736bee8e307e7fcd8e143d8dc6bf851c04a1f4d01ae570fac1c41ce9",
+        "assemblySha256": "a3ebdbcfbac37839d647dbd66fad7baad5635ee31a4ff18b747abd18b9b603cc",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Compiler",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "85a8ee17bc4fd8c2a3f1a90058fd3e0b286406bec4c7c08ee3dcec0718ec2c93",
+        "assemblySha256": "90364dec954a880b30b837434a04fd853aca4dba4fba509dab2b2735ace15417",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "c2b5eab861153a4c8bc36236ffb16d8b57d9746a1cccd2887d431fbdf7a2d426",
+        "assemblySha256": "b523987f7304fda58d249b6bcd79ea01b0c516b15947db565e98778105e53a30",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "5a447b8e9449cad929bb3f280383dcf41d95d803957a4473d1c11cfad63a9890",
+        "assemblySha256": "484f8c9c2d04f77d9df9fdc9c0308fdd057305e7a29dfa1312243cba435fb943",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "0f94a6301d3f15336c672b819b1131509152908a427b2124c125866b5f2e69f5",
+        "assemblySha256": "11158dc24915147162a9a5a5628052a09f8b2f81c57986244773f6353fd8e4d7",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "3f1aeaa4ff73adc57269736cb5eb13225c4bbad67bdf52f6eb5c499d7dc6582e",
+        "assemblySha256": "fe3ccbe8f8ca9e6a163e12e2f94a6c6360f95d79bd5890068732add316ead7e1",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "d3eef08468301ee87aa2f381c40422ff7dbd4789124a4e67d92efa10f23b5140",
+        "assemblySha256": "9b284b13ac40eb59a1f70529272dd0df75afad5ec87369041b0d366ffac4bd55",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.XQuery",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "e28957e6c6674dfec11e601625dd7d04934a5487e9f3dfa25c547405300f17b9",
+        "assemblySha256": "61b848a3269ea99a954c205a6adc09d76249c78fa574e1a71e9e70f0fde6833b",
+        "archiveCacheOutputMatch": true
+      },
+      {
+        "id": "Bosak.Xslt",
+        "version": "1.21.0",
+        "source": "https://api.nuget.org/v3/index.json",
+        "archiveSha256": "71c817afaf0d73315aa93bdedb14abfb73d934e50f45ba9bd1f3b985ed1713c2",
+        "assemblySha256": "16ae149b434751f1dc8499821aba65d698b56d78f4e799836b502dd939b95ca3",
+        "archiveCacheOutputMatch": true
+      }
+    ]
+  }
+}
