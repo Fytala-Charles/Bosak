@@ -508,6 +508,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
+| REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Pending; contract proposed for consumer review | TBD | Unassigned | 2026-10-19 |
 
 
 > **Legend:
@@ -1815,6 +1816,22 @@ The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) define
 #### Formal Bosak.Braid Consumer Acceptance - 2026-10-19
 
 [Formal acceptance notification](REQ-133-BRAID-ACCEPTANCE.md) accepts the delivered bounded body-replacement profile in published1.21.0 at8929a130. Braid implementation5ec2075 and native acceptance recordsd2c051a are committed/pushed. Observed1,242 normal Release and460 fresh public-package checks pass; product owner completed native review/all hashes matching. Exact hashes/variants/accessibility details are unreported; optional transitions accepted only as exercised. No engine change or new upstream test run. Earlier consumer-pending statements above are historical.
+
+### REQ-134: Literal Text Instruction Deletion for Bosak.Braid
+
+**Requesting Application:** Bosak.Braid
+
+**Submitted:** 2026-10-19
+
+**Status:** Pending; contract proposed for consumer review
+
+**Target Version:** TBD
+
+**Owner:** Unassigned
+
+[Consumer inquiry #381](https://github.com/Fytala-Charles/Bosak/issues/381) requests one engine-approved principal literal xsl:text instruction deletion, distinct from empty body replacement. The [unchanged body](REQ-134-literal-text-instruction-deletion.md) and [issue provenance](REQ-134-ISSUE-381.json) preserve the original inquiry, which assigned no identifier; Bosak registers REQ-134 under user-authorized design-only scope.
+
+The [proposed contract](REQ-134-TEXT-DELETION-CONTRACT.md) covers paired empty/nonempty and self-closing ordinary literal text, separate opaque authority, full instruction-only byte removal, actual one/two-node removed sets, surviving-parent selection and complete disjoint ordinary-map/whitespace-merge evidence. Effective controls, encoding/byte/static/resource limits, conservative parent mixed/preserved exclusions and new classified cancellation are explicit. Existing value-of/text replacement contracts remain unchanged. [28 planned groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) require independent review before implementation authorization. Ten existing-public inspection/runtime probes inform the design; zero text-deletion tests or capabilities are delivered. No version reservation, implementation, release or Braid production change is authorized.
 
 ### REQ-022: Migrate Bosak to .NET 10
 

@@ -1,3 +1,9 @@
+# REQ-134 text instruction deletion design - 19 October 2026
+
+**REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
+
+Design base `ecac021c5e34e620127251f750d7001ec49fe97a` closes REQ-133 acceptance through PR #380; acceptance head 7c75af7e, CI39270679710 passes9,984. Register next ID134 from issue381, preserving its returned body and provenance/SHA-256. Proposed self-closing inclusion, payload removal partitions, two-fragment merge/newline proof and conservative mixed/preserved boundaries need independent consumer review. Existing-public baseline10/0/0 at exact8929a130; zero new-deletion tests. No implementation/version/release/README/kit or Braid changes. Next: Braid reviews immutable design through REQ-134-CONSUMER-DESIGN-HANDOFF.md; resolve findings then seek separate implementation authorization. Preserve sweep baselines and all prior receipts/backups/stashes.
+
 # 1.21.0 published and verified - 18 October 2026
 
 ## REQ-133 Braid Consumer Acceptance - 2026-10-19
