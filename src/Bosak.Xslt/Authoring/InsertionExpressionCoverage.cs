@@ -16,6 +16,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.3   | 19-10-2026     | REQ-134: optional strict pattern failure filtering; legacy defaults unchanged.          |
+
 using Bosak.XPath.Parser;
 using Bosak.XPath.Parser.Ast;
 using Bosak.XPath.Standard.Functions;
@@ -24,7 +26,8 @@ namespace Bosak.Xslt.Authoring;
 
 internal static class InsertionExpressionCoverage
 {
-    internal static void Check(AuthoringSnapshot snapshot, AuthoringAttributeDescriptor slot, CancellationToken token)
+    internal static void Check(AuthoringSnapshot snapshot, AuthoringAttributeDescriptor slot, CancellationToken token,
+        Func<Exception, bool>? refusalFilter = null)
     {
         var context = slot.SlotContext;
         if (context is null) return;
@@ -49,7 +52,8 @@ internal static class InsertionExpressionCoverage
         foreach (var binding in context.InScopeNamespaces) namespaces[binding.Prefix] = binding.Uri;
         XPathAstNode ast;
         try { ast = XPathParser.Parse(text, xpath40: context.EffectiveVersion == "4.0"); }
-        catch (Exception) when (slot.SlotKind == AuthoringAttributeSlotKind.Pattern)
+        catch (Exception ex) when (slot.SlotKind == AuthoringAttributeSlotKind.Pattern
+            && (refusalFilter is null || refusalFilter(ex)))
         { throw new CoverageException("This pattern needs static coverage beyond the insertion grammar."); }
         Visit(ast);
         Patterns.PatternCompiler.ValidateNamespacePrefixes(text, namespaces);

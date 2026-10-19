@@ -4,6 +4,10 @@
 <p>Planned evidence - 19 October 2026</p>
 </div>
 
+**REQ-134 implementation authorized - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Verification and delivery are tracked in the [implementation record](REQ-134-IMPLEMENTATION.md). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+
+## Historical reviewed design material
+
 **Pending design: 28 planned groups, zero new text-deletion tests executed.** Read the [proposed contract](REQ-134-TEXT-DELETION-CONTRACT.md), [unchanged consumer inquiry](REQ-134-literal-text-instruction-deletion.md) and [design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md). Each engine group needs positive and edge/refusal cases. These are coverage groups, not 28 passed tests. Ten existing public inspection/runtime probes are baseline evidence only.
 
 | Group | Area | Required evidence |

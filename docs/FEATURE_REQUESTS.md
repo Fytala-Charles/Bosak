@@ -508,7 +508,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
-| REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Pending; contract proposed for consumer review | TBD | Unassigned | 2026-10-19 |
+| REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented in source; verification and consumer implementation review pending | 1.22.0 | Bosak | 2026-10-19 |
 
 
 > **Legend:
@@ -1819,19 +1819,11 @@ The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) define
 
 ### REQ-134: Literal Text Instruction Deletion for Bosak.Braid
 
-**Requesting Application:** Bosak.Braid
+**Implemented in source 1.22.0; verification and consumer implementation review pending.** User implementation authorization follows the [no-blocking consumer design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) of merged design `bdefbfbfcc2f3654708e8cfd200416377bd623e3`. The [implementation record](REQ-134-IMPLEMENTATION.md) tracks exact source/package evidence and remaining delivery gates.
 
-**Submitted:** 2026-10-19
+Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Candidate/Failure remove one eligible paired empty/nonempty or self-closing literal text instruction, including its actual payload. Exact outside bytes, nullable original body, complete removed/survivor/merge partitions and actual surviving parent are retained. Conservative parent/control/static/resource and encoding/byte limits follow the [reviewed contract](REQ-134-TEXT-DELETION-CONTRACT.md). New typed cancellation preserves existing value-of throwing behavior and replacement scope. No NoChange result exists.
 
-**Status:** Pending; contract proposed for consumer review
-
-**Target Version:** TBD
-
-**Owner:** Unassigned
-
-[Consumer inquiry #381](https://github.com/Fytala-Charles/Bosak/issues/381) requests one engine-approved principal literal xsl:text instruction deletion, distinct from empty body replacement. The [unchanged body](REQ-134-literal-text-instruction-deletion.md) and [issue provenance](REQ-134-ISSUE-381.json) preserve the original inquiry, which assigned no identifier; Bosak registers REQ-134 under user-authorized design-only scope.
-
-The [proposed contract](REQ-134-TEXT-DELETION-CONTRACT.md) covers paired empty/nonempty and self-closing ordinary literal text, separate opaque authority, full instruction-only byte removal, actual one/two-node removed sets, surviving-parent selection and complete disjoint ordinary-map/whitespace-merge evidence. Effective controls, encoding/byte/static/resource limits, conservative parent mixed/preserved exclusions and new classified cancellation are explicit. Existing value-of/text replacement contracts remain unchanged. [28 planned groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) require independent review before implementation authorization. Ten existing-public inspection/runtime probes inform the design; zero text-deletion tests or capabilities are delivered. No version reservation, implementation, release or Braid production change is authorized.
+The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Source implementation does not certify consumer-only acceptance groups, public packages, Braid adoption or native observations. Public 1.21.0 and REQ-133 consumer acceptance remain unchanged.
 
 ### REQ-022: Migrate Bosak to .NET 10
 

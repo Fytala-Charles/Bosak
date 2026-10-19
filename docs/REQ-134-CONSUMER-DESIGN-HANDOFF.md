@@ -1,5 +1,9 @@
 # REQ-134 consumer design review handoff
 
+**REQ-134 implementation authorized - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Verification and delivery are tracked in the [implementation record](REQ-134-IMPLEMENTATION.md). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+
+## Historical reviewed design material
+
 19 October 2026. **Proposed design; Braid review pending.** The user authorized registration/design for [issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) after REQ-133 acceptance. No engine implementation, new capability, version reservation or publication is authorized. Design base `ecac021c5e34e620127251f750d7001ec49fe97a`; public 1.21.0 remains exact `8929a1301d1846bb24b49bcc505877f05fd3395a`.
 
 Review the [contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md), [unchanged inquiry](REQ-134-literal-text-instruction-deletion.md) and [issue provenance](REQ-134-ISSUE-381.json). Original GitHub-returned body SHA-256: `ac3d728ffc9a586490fcc1ea8a3ca4b42c564cc6a8314eae41ab3d429c47e198`. [Baseline evidence](REQ-134-DESIGN-BASELINE.json) contains ten existing public inspection/runtime cases, zero new text-deletion tests; it does not grant deletion authority. The original inquiry intentionally assigned no ID; Bosak now registers REQ-134 without changing its body.

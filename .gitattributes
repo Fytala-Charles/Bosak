@@ -24,3 +24,5 @@
 /docs/REQ-133-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
 
 /docs/REQ-134-literal-text-instruction-deletion.md -text whitespace=cr-at-eol
+
+/docs/REQ-134-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol

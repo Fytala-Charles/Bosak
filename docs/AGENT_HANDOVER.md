@@ -1,3 +1,11 @@
+# REQ-134 literal text deletion implementation - 19 October 2026
+
+**REQ-134 implementation authorized - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Verification and delivery are tracked in the [implementation record](REQ-134-IMPLEMENTATION.md). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+
+Implementation base `bdefbfbfcc2f3654708e8cfd200416377bd623e3`, branch `feat/req134-text-deletion`. New operation accepts paired empty/nonempty and self-closing ordinary text; nullable body span, actual removed payload, separate classified cancellation and complete map/merge partitions. Preserve legacy authoring behavior and frozen gates. Check the implementation record for exact verification/delivery revisions; do not publish without the separate implementation review/publication authorization. Preserve `.sweep-baselines/`, all original failed receipts, prior worktrees, backups and stashes. README remains product-focused.
+
+## Historical design checkpoint
+
 # REQ-134 text instruction deletion design - 19 October 2026
 
 **REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
