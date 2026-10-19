@@ -1,5 +1,8 @@
 # REQ-134: literal text instruction deletion implementation
 
+**Publication update:** [1.22.0 is published and verified](RELEASE-1.22.0-PUBLICATION.md) after [Braid final exact-merge implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blockers. Public nuget.org-only consumers pass153 broad/531 focused checks and all ten signatures/identities verify. Earlier local-feed/source/review-pending statements below preserve historical checkpoints. Braid public adoption/integration/native acceptance remain separate and pending.
+
+
 19 October 2026. **Source implementation locally verified; consumer implementation review pending.** Version 1.22.0; implementation base `bdefbfbfcc2f3654708e8cfd200416377bd623e3`. User explicitly authorized implementation after the [no-blocking Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md). Review SHA-256 `4833aa45c539cd58fafad4ca35a3b3d3a57daf3a0b2f1603136df5045e0b5d1e`; imported bytes preserved unchanged.
 
 ## Delivered behavior
