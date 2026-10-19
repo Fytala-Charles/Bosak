@@ -507,7 +507,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-130 | Bosak.Braid | Source-preserving deletion of one engine-approved principal xsl:value-of | Complete basic authoring loop with explicit removal review, survivor identity and exact one-step history | Implemented, published and consumer-accepted | 1.18.0 | Charles Korthout | 2026-10-17 |
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
-| REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented and published; consumer acceptance pending | 1.21.0 | Charles Korthout | 2026-10-18 |
+| REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 
 
 > **Legend:
@@ -1800,7 +1800,7 @@ Published **1.20.0** from immutable source `91f1af0d` after the user explicitly 
 
 **Submitted:** 2026-10-18
 
-**Status:** Implemented and published; consumer acceptance pending
+**Status:** Implemented, published and consumer-accepted
 
 **Target Version:** 1.21.0
 
@@ -1810,6 +1810,11 @@ Replace only the body of one engine-approved principal paired ordinary literal x
 
 
 The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) defines three exclusive outcomes, body-only source edits, survivor/replaced/new-payload partitions, preserved-context scope and independent physical replacement budgets. See [28 planned groups](REQ-133-TEXT-BODY-REPLACEMENT-ACCEPTANCE.md), [seven baseline-only probes](REQ-133-DESIGN-BASELINE.json) and the [consumer design handoff](REQ-133-CONSUMER-DESIGN-HANDOFF.md). The original design evidence is historical; current implementation/test evidence is in the implementation record.
+
+
+#### Formal Bosak.Braid Consumer Acceptance - 2026-10-19
+
+[Formal acceptance notification](REQ-133-BRAID-ACCEPTANCE.md) accepts the delivered bounded body-replacement profile in published1.21.0 at8929a130. Braid implementation5ec2075 and native acceptance recordsd2c051a are committed/pushed. Observed1,242 normal Release and460 fresh public-package checks pass; product owner completed native review/all hashes matching. Exact hashes/variants/accessibility details are unreported; optional transitions accepted only as exercised. No engine change or new upstream test run. Earlier consumer-pending statements above are historical.
 
 ### REQ-022: Migrate Bosak to .NET 10
 
