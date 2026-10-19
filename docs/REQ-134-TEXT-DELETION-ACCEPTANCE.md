@@ -4,7 +4,24 @@
 <p>Planned evidence - 19 October 2026</p>
 </div>
 
-**REQ-134 implementation authorized - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Verification and delivery are tracked in the [implementation record](REQ-134-IMPLEMENTATION.md). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+**REQ-134 source verified - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Local verification passes 10,010 solution, 84 language-server, 110 new source and 531 initial package-public checks; frozen gates are unchanged. [Implementation record](REQ-134-IMPLEMENTATION.md), [verification receipt](REQ-134-VERIFICATION.json) and [consumer implementation handoff](REQ-134-CONSUMER-IMPLEMENTATION-HANDOFF.md) track exact delivery gates through [PR #383](https://github.com/Fytala-Charles/Bosak/pull/383). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+
+## Executed engine coverage and remaining consumer gates
+
+Local source verification executes 110 new cases (94 public / 16 source-only), with 531 overlapping initial package-public checks including legacy compatibility. This is evidence for bounded engine behavior, not a statement that all 28 groups or every planned phase injection passed. Full exact counts and immutable receipts are in the [implementation record](REQ-134-IMPLEMENTATION.md).
+
+| Groups | Executed evidence / boundary |
+|---|---|
+| TD01-TD03 | Foreign/old owners, imported/inserted/replaced targets, positions, aliases/default namespaces, 3.0/4.0, paired empty/nonempty/self-closing and nullable body |
+| TD04-TD05 | Full ordinary payload, whitespace/Unicode/entities; CDATA/comment/PI/element/split bodies refuse; effective controls/local override, empty/self-closing exclusions |
+| TD06-TD13 | Full edit replay, exact outside bytes, paired parent, actual removed sets, complete disjoint partitions, metadata/ranges/order, two-fragment merges, physical/reference seams, separators, conservative parent/preserve exclusions and unchanged replacement scope |
+| TD14 | Source-only changed/missing/extra/reordered/duplicate-ID/metadata/kind/range proof controls; consumer-forged frozen map/fragment collections remain a Braid gate |
+| TD15-TD16 | Four encoding variants, Unicode and exact CR/LF seam, at/over physical byte bound in each variant, broader inspection encodings refused; legacy inspection regressions retain malformed-byte handling |
+| TD17-TD18 | Module/static/shadow coverage and retained resolver count controls, unsupported profiles and invalid original expression; malformed candidate proof controls. No candidate-only failure offsets exposed |
+| TD19-TD20 | Pre-cancelled, deterministic discovery/proposal and each observed original traversal phase, typed exclusivity/nulls, legacy throwing, immutable exports/collections and concurrent proposals. No preemptive parser deadline or claim of every copy/compile scheduling interleaving |
+| TD21-TD22 | Independent changed output golden, empty/self-closing source changes, fresh insertion/replacement composition and legacy authoring package/source suite |
+| TD23-TD27 | Not executed by Bosak: Braid adapter, defensive forged review evidence, session/license/overlap, atomic Apply/history/navigation, real worker/export/reopen and native observations remain separate |
+| TD28 | Local full build/solution/LS and frozen gates pass; initial local-package identity proof passes. Final-head CI and final-head/merge package delivery receipts must be confirmed separately before review |
 
 ## Historical reviewed design material
 
