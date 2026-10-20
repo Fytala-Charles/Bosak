@@ -1,0 +1,76 @@
+Bosak XSLT Conformance Harness
+Catalog: D:\Development\Bosak\.guard-tmp\xslt40-array-select-pr\tests\Bosak.Xslt.Conformance\Fixtures\ArraySelectBoundaries\catalog.xml
+Processor profile: Xslt40Draft
+Test sets: 2
+Profile: XSLT 4.0 suite; exact declared error codes; partial Bosak feature coverage
+
+  Starting: array-boundaries ...
+  RUN  array-033
+  PASS array-033
+  RUN  array-034
+  PASS array-034
+  RUN  array-035
+  PASS array-035
+  RUN  array-036
+  PASS array-036
+  RUN  array-037
+  PASS array-037
+  RUN  array-038
+  PASS array-038
+  RUN  array-039
+  PASS array-039
+  RUN  array-040
+  PASS array-040
+  RUN  array-041
+  PASS array-041
+  RUN  array-042
+  PASS array-042
+  Done: array-boundaries (10 tests, 10 passed, 0 failed, 0 skipped)
+  Starting: seqtor-boundaries ...
+  RUN  seqtor-147
+  PASS seqtor-147
+  RUN  seqtor-148
+  PASS seqtor-148
+  RUN  seqtor-149
+  PASS seqtor-149
+  RUN  seqtor-150
+  PASS seqtor-150
+  RUN  seqtor-151
+  PASS seqtor-151
+  RUN  seqtor-152
+  PASS seqtor-152
+  RUN  seqtor-153
+  PASS seqtor-153
+  RUN  seqtor-154
+  PASS seqtor-154
+  RUN  seqtor-155
+  PASS seqtor-155
+  RUN  seqtor-156
+  PASS seqtor-156
+  RUN  seqtor-157
+  PASS seqtor-157
+  RUN  seqtor-158
+  FAIL seqtor-158: Expected error FOER0000, got: fn:error() called
+  RUN  seqtor-159
+  FAIL seqtor-159: Result mismatch
+    Expected: error XPST0008
+    Got:      <out/>
+  RUN  seqtor-160
+  FAIL seqtor-160: Result mismatch
+    Expected: error XPST0003
+    Got:      <out/>
+  Done: seqtor-boundaries (14 tests, 11 passed, 3 failed, 0 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   24
+Passed:  21
+Failed:  3
+Skipped: 0
+Unselected: 0
+Selected: 24
+Selected skipped: 0
+Missing test sets: 0
+
+Pass rate: 87.5%

@@ -1,0 +1,580 @@
+diff --git a/tests/insn/array/_array-test-set.xml b/tests/insn/array/_array-test-set.xml
+index 65b25f71..d81f85d9 100644
+--- a/tests/insn/array/_array-test-set.xml
++++ b/tests/insn/array/_array-test-set.xml
+@@ -560,4 +560,84 @@
+       <result><error code="XTTE4060"/></result>
+    </test-case>
+ 
++
++   <test-case name="array-033">
++      <description>Empty for-each input does not evaluate a failing member constructor.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-033.xsl"/></test>
++      <result><assert-xml><![CDATA[<out size="0"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-034">
++      <description>Array iteration restores the outer item, position and size.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-034.xsl"/></test>
++      <result><assert-xml><![CDATA[<out restored="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-035">
++      <description>Array sequence-constructor form sees the complete iteration focus.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-035.xsl"/></test>
++      <result><assert-xml><![CDATA[<out correct="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-036">
++      <description>An ordinary function item remains callable as an array member.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-036.xsl"/></test>
++      <result><assert-xml><![CDATA[<out size="1" value="42"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-037">
++      <description>Nested array-member wrappers recursively unwrap grouped payload without copying nodes.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-037.xsl"/></test>
++      <result><assert-xml><![CDATA[<out size="1" count="3" same="true" tail="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-038">
++      <description>Array select cannot be combined with nonempty sequence-constructor content.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-038.xsl"/></test>
++      <result><error code="XTSE3185"/></result>
++   </test-case>
++
++   <test-case name="array-039">
++      <description>Array-member select cannot be combined with nonempty constructor content.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-039.xsl"/></test>
++      <result><error code="XTSE3185"/></result>
++   </test-case>
++
++   <test-case name="array-040">
++      <description>Array select permits whitespace, comments and ignored fallback children.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-040.xsl"/></test>
++      <result><assert-xml><![CDATA[<out correct="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-041">
++      <description>Array-member select permits whitespace, comments and ignored fallback children.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-041.xsl"/></test>
++      <result><assert-xml><![CDATA[<out size="1" grouped="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="array-042">
++      <description>An empty array instruction creates no members, unlike an empty array-member.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="array-042.xsl"/></test>
++      <result><assert-xml><![CDATA[<out size="0"/>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+\ No newline at end of file
+diff --git a/tests/insn/array/array-033.xsl b/tests/insn/array/array-033.xsl
+new file mode 100644
+index 00000000..e92eb9aa
+--- /dev/null
++++ b/tests/insn/array/array-033.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array for-each="()"><xsl:sequence select="error()"/></xsl:array></xsl:variable><out size="{array:size($a)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-034.xsl b/tests/insn/array/array-034.xsl
+new file mode 100644
+index 00000000..6c816a47
+--- /dev/null
++++ b/tests/insn/array/array-034.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="checks" as="xs:boolean*"><xsl:for-each select="('A','B')"><xsl:variable name="before" select="(.,position(),last())"/><xsl:variable name="a" as="array(*)"><xsl:array for-each="10 to 11" select="(.,position(),last())"/></xsl:variable><xsl:sequence select="deep-equal($before,(.,position(),last())) and deep-equal($a,[(10,1,2),(11,2,2)])"/></xsl:for-each></xsl:variable><out restored="{every $b in $checks satisfies $b}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-035.xsl b/tests/insn/array/array-035.xsl
+new file mode 100644
+index 00000000..6fa10565
+--- /dev/null
++++ b/tests/insn/array/array-035.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array for-each="('A','B')"><xsl:sequence select="(.,position(),last())"/></xsl:array></xsl:variable><out correct="{deep-equal($a,[('A',1,2),('B',2,2)])}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-036.xsl b/tests/insn/array/array-036.xsl
+new file mode 100644
+index 00000000..78d7c6a6
+--- /dev/null
++++ b/tests/insn/array/array-036.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array><xsl:array-member select="function($x){$x + 1}"/></xsl:array></xsl:variable><out size="{array:size($a)}" value="{$a(1)(41)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-037.xsl b/tests/insn/array/array-037.xsl
+new file mode 100644
+index 00000000..e41da639
+--- /dev/null
++++ b/tests/insn/array/array-037.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="n" as="element(n)"><n/></xsl:variable><xsl:variable name="a" as="array(*)"><xsl:array><xsl:array-member><xsl:array-member select="$n"/><xsl:array-member select="()"/><xsl:array-member select="1,2"/></xsl:array-member></xsl:array></xsl:variable><out size="{array:size($a)}" count="{count($a(1))}" same="{$a(1)[1] is $n}" tail="{deep-equal(subsequence($a(1),2),(1,2))}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-038.xsl b/tests/insn/array/array-038.xsl
+new file mode 100644
+index 00000000..8d14232b
+--- /dev/null
++++ b/tests/insn/array/array-038.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:array select="1"><xsl:sequence select="2"/></xsl:array>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-039.xsl b/tests/insn/array/array-039.xsl
+new file mode 100644
+index 00000000..dc503e4f
+--- /dev/null
++++ b/tests/insn/array/array-039.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:array><xsl:array-member select="1"><xsl:sequence select="2"/></xsl:array-member></xsl:array>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-040.xsl b/tests/insn/array/array-040.xsl
+new file mode 100644
+index 00000000..2ffe1136
+--- /dev/null
++++ b/tests/insn/array/array-040.xsl
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array select="1,2">
++<!-- allowed -->
++<xsl:fallback><xsl:sequence select="error()"/></xsl:fallback>
++</xsl:array></xsl:variable><out correct="{deep-equal($a,[1,2])}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-041.xsl b/tests/insn/array/array-041.xsl
+new file mode 100644
+index 00000000..e7eb2b68
+--- /dev/null
++++ b/tests/insn/array/array-041.xsl
+@@ -0,0 +1,12 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array><xsl:array-member select="1,2">
++<!-- allowed -->
++<xsl:fallback><xsl:sequence select="error()"/></xsl:fallback>
++</xsl:array-member></xsl:array></xsl:variable><out size="{array:size($a)}" grouped="{deep-equal($a(1),(1,2))}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/array/array-042.xsl b/tests/insn/array/array-042.xsl
+new file mode 100644
+index 00000000..9344c501
+--- /dev/null
++++ b/tests/insn/array/array-042.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="a" as="array(*)"><xsl:array/></xsl:variable><out size="{array:size($a)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/_seqtor-test-set.xml b/tests/misc/seqtor/_seqtor-test-set.xml
+index 6eb21883..d27c62d9 100644
+--- a/tests/misc/seqtor/_seqtor-test-set.xml
++++ b/tests/misc/seqtor/_seqtor-test-set.xml
+@@ -1255,4 +1255,116 @@
+       <test><stylesheet file="seqtor-146.xsl"/></test>
+       <result><assert-xml><![CDATA[<out><row value="A|1|3"/><row value="B|2|3"/><row value="C|3|3"/></out>]]></assert-xml></result>
+    </test-case>
++
++   <test-case name="seqtor-147">
++      <description>Whitespace-only select body satisfies an explicit empty-sequence result type.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-147.xsl"/></test>
++      <result><assert-xml><![CDATA[<out count="0"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-148">
++      <description>Whitespace-only select body fails a required singleton result type.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-148.xsl"/></test>
++      <result><error code="XPTY0004"/></result>
++   </test-case>
++
++   <test-case name="seqtor-149">
++      <description>Multiple select results fail a required singleton result type.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-149.xsl"/></test>
++      <result><error code="XPTY0004"/></result>
++   </test-case>
++
++   <test-case name="seqtor-150">
++      <description>Select body can return a callable ordinary function item.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-150.xsl"/></test>
++      <result><assert-xml><![CDATA[<out value="42"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-151">
++      <description>Select body preserves XML-node identity and explicit reverse order.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-151.xsl"/></test>
++      <result><assert-xml><![CDATA[<out count="2" first="B" same="true" last="A"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-152">
++      <description>Host xpath-default-namespace applies to select body name tests.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-152.xsl"/></test>
++      <result><assert-xml><![CDATA[<out count="1" namespace="urn:books"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-153">
++      <description>Instruction-local default collation applies inside select without leaking to siblings.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-153.xsl"/></test>
++      <result><assert-xml><![CDATA[<out inside="true" restored="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-154">
++      <description>Adjacent CDATA sections preserve an XPath string containing a CDATA terminator.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-154.xsl"/></test>
++      <result><assert-xml><![CDATA[<out value="A]]&gt;B"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-155">
++      <description>Comments, processing instructions and xsl:note are removed before body evaluation.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-155.xsl"/></test>
++      <result><assert-xml><![CDATA[<out value="ABCD"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-156">
++      <description>Fallback-only select body returns empty and does not execute fallback.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-156.xsl"/></test>
++      <result><assert-xml><![CDATA[<out empty="true"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-157">
++      <description>A select expression succeeds without executing a failing fallback.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-157.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="seqtor-158">
++      <description>A selected expression error propagates rather than invoking fallback.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-158.xsl"/></test>
++      <result><error code="FOER0000"/></result>
++   </test-case>
++
++   <test-case name="seqtor-159">
++      <description>An undeclared variable in the select body raises a static binding error.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-159.xsl"/></test>
++      <result><error code="XPST0008"/></result>
++   </test-case>
++
++   <test-case name="seqtor-160">
++      <description>Malformed select body XPath is rejected when its named template is invoked.</description>
++      <created by="Charles Korthout" on="2026-10-20"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="seqtor-160.xsl"/></test>
++      <result><error code="XPST0003"/></result>
++   </test-case>
+ </test-set>
+\ No newline at end of file
+diff --git a/tests/misc/seqtor/seqtor-147.xsl b/tests/misc/seqtor/seqtor-147.xsl
+new file mode 100644
+index 00000000..10160f82
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-147.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="v" as="item()*"><xsl:select as="empty-sequence()" xml:space="preserve"> &#x9;&#xA; </xsl:select></xsl:variable><out count="{count($v)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-148.xsl b/tests/misc/seqtor/seqtor-148.xsl
+new file mode 100644
+index 00000000..d22269ba
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-148.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:select as="xs:integer" xml:space="preserve"> &#x9;&#xA; </xsl:select></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-149.xsl b/tests/misc/seqtor/seqtor-149.xsl
+new file mode 100644
+index 00000000..0bad2e92
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-149.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:select as="xs:integer">(1,2)</xsl:select></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-150.xsl b/tests/misc/seqtor/seqtor-150.xsl
+new file mode 100644
+index 00000000..ff462b8d
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-150.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="f" as="function(xs:integer) as xs:integer"><xsl:select>function($n as xs:integer) as xs:integer {$n + 1}</xsl:select></xsl:variable><out value="{$f(41)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-151.xsl b/tests/misc/seqtor/seqtor-151.xsl
+new file mode 100644
+index 00000000..03afb575
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-151.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="doc" as="element(root)"><root><n id="A"/><n id="B"/></root></xsl:variable><xsl:variable name="nodes" as="element()*"><xsl:select>reverse($doc/n)</xsl:select></xsl:variable><out count="{count($nodes)}" first="{$nodes[1]/@id}" same="{$nodes[1] is $doc/n[2]}" last="{$nodes[2]/@id}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-152.xsl b/tests/misc/seqtor/seqtor-152.xsl
+new file mode 100644
+index 00000000..6d65e132
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-152.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="doc" as="element()"><d:root xmlns:d="urn:books"><d:n/></d:root></xsl:variable><xsl:variable name="nodes" as="element()*"><xsl:select xpath-default-namespace="urn:books">$doc/n</xsl:select></xsl:variable><out count="{count($nodes)}" namespace="{namespace-uri($nodes[1])}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-153.xsl b/tests/misc/seqtor/seqtor-153.xsl
+new file mode 100644
+index 00000000..d199b4a8
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-153.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="inside" as="xs:boolean"><xsl:select default-collation="http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive">compare('A','a') eq 0</xsl:select></xsl:variable><out inside="{$inside}" restored="{compare('A','a') ne 0}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-154.xsl b/tests/misc/seqtor/seqtor-154.xsl
+new file mode 100644
+index 00000000..54228ebd
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-154.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="value" as="xs:string"><xsl:select><![CDATA['A]]]]><![CDATA[>B']]></xsl:select></xsl:variable><out value="{$value}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-155.xsl b/tests/misc/seqtor/seqtor-155.xsl
+new file mode 100644
+index 00000000..515901cf
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-155.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="value" as="xs:string"><xsl:select>'A' || <!-- join --> 'B' || <?audit ignored?> 'C' || <xsl:note>ignored</xsl:note> 'D'</xsl:select></xsl:variable><out value="{$value}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-156.xsl b/tests/misc/seqtor/seqtor-156.xsl
+new file mode 100644
+index 00000000..f1312c71
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-156.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="v" as="item()*"><xsl:select><xsl:fallback><xsl:sequence select="error()"/></xsl:fallback></xsl:select></xsl:variable><out empty="{empty($v)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-157.xsl b/tests/misc/seqtor/seqtor-157.xsl
+new file mode 100644
+index 00000000..1c4bf5ef
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-157.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:select><xsl:fallback><xsl:sequence select="error()"/></xsl:fallback>42</xsl:select></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-158.xsl b/tests/misc/seqtor/seqtor-158.xsl
+new file mode 100644
+index 00000000..f4026b27
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-158.xsl
+@@ -0,0 +1,9 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:select><xsl:fallback>recovered</xsl:fallback>error()</xsl:select></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-159.xsl b/tests/misc/seqtor/seqtor-159.xsl
+new file mode 100644
+index 00000000..a34ee21e
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-159.xsl
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="unused"><out><xsl:select>$missing</xsl:select></out></xsl:template>
++<xsl:template name="xsl:initial-template">
++<xsl:call-template name="unused"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/misc/seqtor/seqtor-160.xsl b/tests/misc/seqtor/seqtor-160.xsl
+new file mode 100644
+index 00000000..a41e0393
+--- /dev/null
++++ b/tests/misc/seqtor/seqtor-160.xsl
+@@ -0,0 +1,10 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
++ xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:array="http://www.w3.org/2005/xpath-functions/array"
++ xmlns:f="urn:array-select-boundaries" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="unused"><xsl:select>1 +</xsl:select></xsl:template>
++<xsl:template name="xsl:initial-template">
++<xsl:call-template name="unused"/>
++</xsl:template>
++</xsl:stylesheet>
