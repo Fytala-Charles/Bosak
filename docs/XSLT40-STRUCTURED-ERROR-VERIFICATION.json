@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-20",
+  "base": "22cc7d308e33a38005c192c0d74ff46f0df08b57",
+  "structuredControls": [
+    {
+      "lane": "original",
+      "profile": "legacy",
+      "counts": {
+        "Passed": 0,
+        "Failed": 6,
+        "Skipped": 0
+      },
+      "exit": 1
+    },
+    {
+      "lane": "original",
+      "profile": "xslt40-draft",
+      "counts": {
+        "Passed": 0,
+        "Failed": 6,
+        "Skipped": 0
+      },
+      "exit": 1
+    },
+    {
+      "lane": "corrected",
+      "profile": "legacy",
+      "counts": {
+        "Passed": 3,
+        "Failed": 3,
+        "Skipped": 0
+      },
+      "exit": 1
+    },
+    {
+      "lane": "corrected",
+      "profile": "xslt40-draft",
+      "counts": {
+        "Passed": 3,
+        "Failed": 3,
+        "Skipped": 0
+      },
+      "exit": 1
+    }
+  ],
+  "processControlsPassed": 16,
+  "newBatchOriginalRunner": {
+    "legacy": {
+      "Total": 24,
+      "Passed": 23,
+      "Failed": 1,
+      "Skipped": 0,
+      "Unselected": 0,
+      "Selected": 24,
+      "Selected skipped": 0,
+      "Missing test sets": 0
+    },
+    "xslt40-draft": {
+      "Total": 24,
+      "Passed": 23,
+      "Failed": 1,
+      "Skipped": 0,
+      "Unselected": 0,
+      "Selected": 24,
+      "Selected skipped": 0,
+      "Missing test sets": 0
+    }
+  },
+  "newBatchCorrectedRunner": {
+    "legacy": {
+      "Total": 24,
+      "Passed": 24,
+      "Failed": 0,
+      "Skipped": 0,
+      "Unselected": 0,
+      "Selected": 24,
+      "Selected skipped": 0,
+      "Missing test sets": 0
+    },
+    "xslt40-draft": {
+      "Total": 24,
+      "Passed": 24,
+      "Failed": 0,
+      "Skipped": 0,
+      "Unselected": 0,
+      "Selected": 24,
+      "Selected skipped": 0,
+      "Missing test sets": 0
+    }
+  },
+  "engineChanges": false,
+  "CI": "Pending exact-head review verification.",
+  "sourceSha256": "672bcd0ce0f1d00cbcce52cd12e7ef7f8f822863b39e0948c21192c278f9e0a2"
+}

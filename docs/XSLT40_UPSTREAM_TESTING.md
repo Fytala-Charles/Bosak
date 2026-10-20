@@ -4,6 +4,8 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Six identity controls reject wrong code/namespace pairs; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
 ## 2026-10-20 - Harness hardening and selected baseline
 
 [Harness guide](XSLT40-HARNESS-HARDENING.md) adds bounded native execution, durable receipts and explicit selection accounting. [Baseline](XSLT40-BASELINE-2026-10-20.md) and [original manifest](XSLT40-BASELINE-2026-10-20.json) retain freshly fetched suite/spec pins and exact failures, with an explicit correction for later overwritten raw logs. Fourteen CLI and four Windows wrapper controls pass locally. No engine, assertion, fixture or package version changes; switch validation is a separate PR.
