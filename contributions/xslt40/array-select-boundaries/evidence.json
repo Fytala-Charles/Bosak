@@ -1,0 +1,799 @@
+{
+  "date": "2026-10-20",
+  "bosakEngineBase": "22cc7d308e33a38005c192c0d74ff46f0df08b57",
+  "sourceVersion": "1.22.1",
+  "publishedVersion": "1.22.0",
+  "upstream": {
+    "upstreamBase": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+    "localPreparedHead": "d1aec33e14ce623e2b65c4c592d51804353cf47d",
+    "submission": "Not submitted or pushed upstream; refresh again immediately before any submission."
+  },
+  "specRevision": "72f222929768b411d8e88d96a1a8740483290078",
+  "nativeCases": 24,
+  "publicApiChecks": 48,
+  "publicApiResult": "48/0/0; full isolated solution10078/0/0; Release build zero warnings/errors.",
+  "originalExecution": [
+    {
+      "profile": "legacy",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 1,
+      "seconds": 1.645,
+      "counts": {
+        "Total": 24,
+        "Passed": 21,
+        "Failed": 3,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r",
+        "seqtor-159: Result mismatch\r",
+        "seqtor-160: Result mismatch\r"
+      ],
+      "logSha256": "21d2f88c7ec393eb90bdae314b01864616b1bbe645aa8e26dfd32e75c477530e"
+    },
+    {
+      "profile": "legacy",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 3.439,
+      "counts": {
+        "Total": 190,
+        "Passed": 165,
+        "Failed": 5,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-021: Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-022: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-024: XTSE0340: The match attribute of xsl:template must not contain an attribute value template\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r"
+      ],
+      "logSha256": "ef246fef0102722548f4c319c004bb0d8d891a7ccfbe695f7ab9c1083c715848"
+    },
+    {
+      "profile": "legacy",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 1,
+      "seconds": 1.217,
+      "counts": {
+        "Total": 106,
+        "Passed": 94,
+        "Failed": 3,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r",
+        "seqtor-159: Result mismatch\r",
+        "seqtor-160: Result mismatch\r"
+      ],
+      "logSha256": "ef4754b2e9260a01869a1e52e07b461cc8b2366ea0e0ceb6aeaf0cd82d8b216e"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 1,
+      "seconds": 0.478,
+      "counts": {
+        "Total": 24,
+        "Passed": 21,
+        "Failed": 3,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r",
+        "seqtor-159: Result mismatch\r",
+        "seqtor-160: Result mismatch\r"
+      ],
+      "logSha256": "ef98291853a27026c0b913f71064d86582177a17ef2439e417442629cb4c4a6b"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 17.639,
+      "counts": {
+        "Total": 190,
+        "Passed": 168,
+        "Failed": 2,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.\r"
+      ],
+      "logSha256": "8bf0266fb174a6b8f8aeb5a03d6031c0867313565a6e042e5e0497a1ce9866f2"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 1,
+      "seconds": 0.679,
+      "counts": {
+        "Total": 106,
+        "Passed": 94,
+        "Failed": 3,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r",
+        "seqtor-159: Result mismatch\r",
+        "seqtor-160: Result mismatch\r"
+      ],
+      "logSha256": "73394667f1e2feb7d39fb4ccd2d9a6e7672774d2642a26807e98779dd9b5ee12"
+    }
+  ],
+  "correctedFixturesOriginalHarness": [
+    {
+      "profile": "legacy",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 1,
+      "seconds": 0.549,
+      "counts": {
+        "Total": 24,
+        "Passed": 23,
+        "Failed": 1,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r"
+      ],
+      "logSha256": "b1f65af63eb3d94d43d8d60ac25872ce4e719689dfd57f271e719f9aec4ccaf1"
+    },
+    {
+      "profile": "legacy",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 2.158,
+      "counts": {
+        "Total": 190,
+        "Passed": 165,
+        "Failed": 5,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-021: Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-022: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-024: XTSE0340: The match attribute of xsl:template must not contain an attribute value template\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r"
+      ],
+      "logSha256": "ef246fef0102722548f4c319c004bb0d8d891a7ccfbe695f7ab9c1083c715848"
+    },
+    {
+      "profile": "legacy",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 1,
+      "seconds": 0.797,
+      "counts": {
+        "Total": 106,
+        "Passed": 96,
+        "Failed": 1,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r"
+      ],
+      "logSha256": "f37a9d43fa440569ec0c4a2cf473176ba0ec286c99b86bf43fc5124aa48381fa"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 1,
+      "seconds": 0.48,
+      "counts": {
+        "Total": 24,
+        "Passed": 23,
+        "Failed": 1,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r"
+      ],
+      "logSha256": "f50badcb3ebd561b3ac443eb819d223601d92a45dbcb898c4707de345008187b"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 16.736,
+      "counts": {
+        "Total": 190,
+        "Passed": 168,
+        "Failed": 2,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.\r"
+      ],
+      "logSha256": "8bf0266fb174a6b8f8aeb5a03d6031c0867313565a6e042e5e0497a1ce9866f2"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 1,
+      "seconds": 0.679,
+      "counts": {
+        "Total": 106,
+        "Passed": 96,
+        "Failed": 1,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "seqtor-158: Expected error FOER0000, got: fn:error() called\r"
+      ],
+      "logSha256": "5efb39404f43a8b5b4bc8b753f0dee14b4bc6c41b4c8681253b74e7f725905b9"
+    }
+  ],
+  "correctedFixturesStructuredHarness": [
+    {
+      "profile": "legacy",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 0,
+      "seconds": 0.493,
+      "counts": {
+        "Total": 24,
+        "Passed": 24,
+        "Failed": 0,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "bd70f2773ef9d7d3e479367cc0a48db16566e20fcbd2a7d1e1bdd8f22ae17c11"
+    },
+    {
+      "profile": "legacy",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 2.04,
+      "counts": {
+        "Total": 190,
+        "Passed": 165,
+        "Failed": 5,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-021: Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-022: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-024: XTSE0340: The match attribute of xsl:template must not contain an attribute value template\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r"
+      ],
+      "logSha256": "ef246fef0102722548f4c319c004bb0d8d891a7ccfbe695f7ab9c1083c715848"
+    },
+    {
+      "profile": "legacy",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 0,
+      "seconds": 0.681,
+      "counts": {
+        "Total": 106,
+        "Passed": 97,
+        "Failed": 0,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "55f463af043d5e7e6c65eb380ef9d75480118f663f55ce0facd8f3ee9cda871b"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "new",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-pr\\tests\\Bosak.Xslt.Conformance\\Fixtures\\ArraySelectBoundaries\\catalog.xml"
+      ],
+      "exitCode": 0,
+      "seconds": 0.498,
+      "counts": {
+        "Total": 24,
+        "Passed": 24,
+        "Failed": 0,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "312fd67bb024e1c95cc13599d6007f27c8fb283086a32127df31e480162e9912"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "array",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "seconds": 16.71,
+      "counts": {
+        "Total": 190,
+        "Passed": 168,
+        "Failed": 2,
+        "Skipped": 20,
+        "Unselected": 0,
+        "Selected": 190,
+        "Selected skipped": 20,
+        "Missing test sets": 0
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.\r"
+      ],
+      "logSha256": "8bf0266fb174a6b8f8aeb5a03d6031c0867313565a6e042e5e0497a1ce9866f2"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "seqtor",
+      "arguments": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-structured-errors-pr\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-array-select-upstream\\catalog.xml",
+        "seqtor"
+      ],
+      "exitCode": 0,
+      "seconds": 0.726,
+      "counts": {
+        "Total": 106,
+        "Passed": 97,
+        "Failed": 0,
+        "Skipped": 9,
+        "Unselected": 0,
+        "Selected": 106,
+        "Selected skipped": 9,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "59bfd383a4c3d16863be638df73b0fb010a71876115a784310cfa94b8f87b7a6"
+    }
+  ],
+  "correction": {
+    "preservedFixtureSha256": {
+      "catalog.xml": "40732c492138dcc049d50ba4f66df29537635ad2718a2c58c40a736b55a299e0",
+      "array/array-033.xsl": "5a4518933ee6a63b04eb442797a960535d7d140d47649915a458cdf773d454db",
+      "array/array-034.xsl": "1490d79ccbe94230f373a0d64ecf32a82414b7fae02073686670f25c3c9d409c",
+      "array/array-035.xsl": "22e3af0cd2fd75c0f550dca9ec4822c94dc87839cac31dffd6ad8f7d7235d6f8",
+      "array/array-036.xsl": "3821b1770e0dfeb97a7cb06e5135c1f15f008c693e3882123cbc705d87eb6c70",
+      "array/array-037.xsl": "bded064d5551b141213cab0426c33073d7e842167516079fa9fbec785564dc98",
+      "array/array-038.xsl": "d2e2fd0b5e589e1fa9aead7377c93fd8c8e7497f0274fc3dda82cc93f0c6debc",
+      "array/array-039.xsl": "7d2ddc76c2eca3baa6dcb30e11b5c4f711002c768a363cb952bc95a3769ef32f",
+      "array/array-040.xsl": "940968596e24a0815e7325687c56a29bdba621333bbb796f2b10548e3f6fa205",
+      "array/array-041.xsl": "ca1b92bc2278a30a4847d1675241a061e71bf0804ef701586d66ed385f215eb9",
+      "array/array-042.xsl": "b0aff1f1b628d5492fdceb2cdfbad77376bcfdb1e0fe25a89abf12f9f04b9967",
+      "array/_array-test-set.xml": "5e91fb3e54bec857eea800f7de3f852cc44c7491d28cd638b1edd22028faf073",
+      "seqtor/seqtor-147.xsl": "b1994f58f36616181e2fbbdb083034d8d2d07307c652e89dd561dc99ff8b1ebb",
+      "seqtor/seqtor-148.xsl": "cd8b4465ebcbc0e6f24209bf7103e0b69a8f5f390c6808b30a59e113e8d6b6cd",
+      "seqtor/seqtor-149.xsl": "853f644031d5fdbc19f42f4845a636d82afac1274820175a1b1dd4399c25a3d7",
+      "seqtor/seqtor-150.xsl": "56cc6778b1573a6b93303d0c5f9cd633be35a201eed205fa4ef8c89c04199600",
+      "seqtor/seqtor-151.xsl": "9ab7d20440a78c52c80005f28ccf4655216252357df1a187a1d071a2a407d737",
+      "seqtor/seqtor-152.xsl": "38d9c334f2a9635e7c0d7499b42a9d2780c81b7164cf4e3ac4af996e91152299",
+      "seqtor/seqtor-153.xsl": "f11194b1b66a9141f330f23442a26bb8744a2a70e2297d647404ad75262df4f9",
+      "seqtor/seqtor-154.xsl": "d9fbab7fa78f5d9ae31172f276cc356db1ca2bafc8be953bd35be41c4879aae6",
+      "seqtor/seqtor-155.xsl": "b557bb8bf332c286e1b0e1bbb2eb192dd266577aa8c6bfd7158a551bf784fd00",
+      "seqtor/seqtor-156.xsl": "8bdf014e6c767bf030de509f9508db87254240571c412e70a3480d13a37ad5b4",
+      "seqtor/seqtor-157.xsl": "351dab6452b9f26263e9909f60fa60a46bd067af74795d07001c3ee7767bbfc0",
+      "seqtor/seqtor-158.xsl": "e68de5e05e9e7dcb2f781bded47a7ae26a453022e8be49104c154fd088f4de77",
+      "seqtor/seqtor-159.xsl": "0e3907fc3fff324ea5b2ef9d5d448fdfa2c1574097ce01e6d2d6d53ad9545d46",
+      "seqtor/seqtor-160.xsl": "915a7f13bbc9c0bc3215735dcd211e230a3a9cb18eef4d4f95da8405b35f8bac",
+      "seqtor/_seqtor-test-set.xml": "cfeda61b38cde809e463bbd99f148591cdaadcd28bc0ad09c1ef6623acf52544"
+    },
+    "reason": "Pinned xslt.xml errors section permits a mode where static errors in unexecuted stylesheet parts go unreported. Candidate159/160 now invoke the affected template; error codes XPST0008/XPST0003 remain unchanged.",
+    "engineFix": false
+  },
+  "schemaValidation": "Standalone catalog, two standalone test sets and two expanded upstream sets validate against the pinned upstream catalog-schema.xsd.",
+  "scope": "No engine, existing upstream expectation, skip-list, package version or gate change. Upstream not submitted. Independent processor confirmation pending.",
+  "fixtureSha256": {
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/catalog.xml": "40732c492138dcc049d50ba4f66df29537635ad2718a2c58c40a736b55a299e0",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-033.xsl": "5a4518933ee6a63b04eb442797a960535d7d140d47649915a458cdf773d454db",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-034.xsl": "1490d79ccbe94230f373a0d64ecf32a82414b7fae02073686670f25c3c9d409c",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-035.xsl": "22e3af0cd2fd75c0f550dca9ec4822c94dc87839cac31dffd6ad8f7d7235d6f8",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-036.xsl": "3821b1770e0dfeb97a7cb06e5135c1f15f008c693e3882123cbc705d87eb6c70",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-037.xsl": "bded064d5551b141213cab0426c33073d7e842167516079fa9fbec785564dc98",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-038.xsl": "d2e2fd0b5e589e1fa9aead7377c93fd8c8e7497f0274fc3dda82cc93f0c6debc",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-039.xsl": "7d2ddc76c2eca3baa6dcb30e11b5c4f711002c768a363cb952bc95a3769ef32f",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-040.xsl": "940968596e24a0815e7325687c56a29bdba621333bbb796f2b10548e3f6fa205",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-041.xsl": "ca1b92bc2278a30a4847d1675241a061e71bf0804ef701586d66ed385f215eb9",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/array-042.xsl": "b0aff1f1b628d5492fdceb2cdfbad77376bcfdb1e0fe25a89abf12f9f04b9967",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/array/_array-test-set.xml": "5e91fb3e54bec857eea800f7de3f852cc44c7491d28cd638b1edd22028faf073",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-147.xsl": "b1994f58f36616181e2fbbdb083034d8d2d07307c652e89dd561dc99ff8b1ebb",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-148.xsl": "cd8b4465ebcbc0e6f24209bf7103e0b69a8f5f390c6808b30a59e113e8d6b6cd",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-149.xsl": "853f644031d5fdbc19f42f4845a636d82afac1274820175a1b1dd4399c25a3d7",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-150.xsl": "56cc6778b1573a6b93303d0c5f9cd633be35a201eed205fa4ef8c89c04199600",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-151.xsl": "9ab7d20440a78c52c80005f28ccf4655216252357df1a187a1d071a2a407d737",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-152.xsl": "38d9c334f2a9635e7c0d7499b42a9d2780c81b7164cf4e3ac4af996e91152299",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-153.xsl": "f11194b1b66a9141f330f23442a26bb8744a2a70e2297d647404ad75262df4f9",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-154.xsl": "d9fbab7fa78f5d9ae31172f276cc356db1ca2bafc8be953bd35be41c4879aae6",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-155.xsl": "b557bb8bf332c286e1b0e1bbb2eb192dd266577aa8c6bfd7158a551bf784fd00",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-156.xsl": "8bdf014e6c767bf030de509f9508db87254240571c412e70a3480d13a37ad5b4",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-157.xsl": "351dab6452b9f26263e9909f60fa60a46bd067af74795d07001c3ee7767bbfc0",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-158.xsl": "e68de5e05e9e7dcb2f781bded47a7ae26a453022e8be49104c154fd088f4de77",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-159.xsl": "665e36f56ac105637bce1b6fc56e345997a3053651796c32be88b9c01c40e462",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/seqtor-160.xsl": "25e36bb832b96c6e4490f1bd87d3f0ff5737137a834f73fdaf26e26eef37bf01",
+    "tests/Bosak.Xslt.Conformance/Fixtures/ArraySelectBoundaries/seqtor/_seqtor-test-set.xml": "6e0ab1e112afbfba6c10f1a9a4d4c9abde02b2be76f5bbc86c57348e25f5dd81"
+  },
+  "patchSha256": "79e517962c7dde6139a531c1c2d027154631f0911661b6fb4d6671547eccd49b",
+  "fullSolutionTrx": {
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0.trx": {
+      "total": "66",
+      "executed": "66",
+      "passed": "66",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[1].trx": {
+      "total": "202",
+      "executed": "202",
+      "passed": "202",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[2].trx": {
+      "total": "269",
+      "executed": "269",
+      "passed": "269",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[3].trx": {
+      "total": "132",
+      "executed": "132",
+      "passed": "132",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[4].trx": {
+      "total": "411",
+      "executed": "411",
+      "passed": "411",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[5].trx": {
+      "total": "1358",
+      "executed": "1358",
+      "passed": "1358",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[6].trx": {
+      "total": "47",
+      "executed": "47",
+      "passed": "47",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_48_net10.0[7].trx": {
+      "total": "153",
+      "executed": "153",
+      "passed": "153",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_49_net10.0.trx": {
+      "total": "303",
+      "executed": "303",
+      "passed": "303",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    },
+    ".guard-tmp/xslt40-array-select-isolated-results/charl_CHARLES_2026-10-20_14_40_49_net10.0[1].trx": {
+      "total": "7137",
+      "executed": "7137",
+      "passed": "7137",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  }
+}

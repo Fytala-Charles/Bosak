@@ -5,6 +5,12 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Array/select test batch prepared -20 October2026:** [Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
+
+**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
+**XSLT 4.0 harness hardening - 20 October 2026:** [Bounded native runs and selection accounting](XSLT40-HARNESS-HARDENING.md) add timeout receipts, missing-file detection and explicit selected/unselected counts. Fourteen runner and four Windows wrapper controls pass locally. Engine behavior, package versions, REQ statuses and consumer acceptance are unchanged.
+
 **1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.
 
 **REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
@@ -3701,3 +3707,8 @@ Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static c
 ## Element-to-map fallback errors - source patch 1.19.1
 
 When an explicit element layout fails and the wildcard conversion-plan entry supplies no layout, element-to-map now reports FOJS0008 rather than a .NET nullable-value exception. Explicit fallback layouts and ordinary inference without a failed explicit layout retain their behavior. This unpublished maintenance patch adds no API and leaves public 1.19.0 unchanged. [Regression and warning-cleanup evidence](MAINTENANCE-1.19.1.md).
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.

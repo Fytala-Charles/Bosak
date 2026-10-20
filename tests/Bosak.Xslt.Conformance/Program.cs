@@ -246,6 +246,8 @@
 
 
 //                      | Charles Korthout | 3.77  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 3.78  | 20-10-2026     | Distinguish unselected cases and fail incomplete selected catalogs.                      |
+//                      | Charles Korthout | 3.79  | 20-10-2026     | Match structured error identities before excluding legacy aliases in exact mode.         |
 //                      |==================|=======|================|=========================================================================================
 using System.Xml.Linq;
 using System.Xml;
@@ -649,7 +651,8 @@ class Program
             var testSetPath = Path.Combine(catalogDir, testSetFile);
             if (!File.Exists(testSetPath))
             {
-                Console.WriteLine($"  Skip: test-set file not found: {testSetPath}");
+                Console.WriteLine($"  ERROR: test-set file not found: {testSetPath}");
+                MissingTestSets++;
                 continue;
             }
 
@@ -666,11 +669,18 @@ class Program
         Console.WriteLine($"Passed:  {Passed}");
         Console.WriteLine($"Failed:  {Failed}");
         Console.WriteLine($"Skipped: {Skipped}");
+        Console.WriteLine($"Unselected: {Unselected}");
+        Console.WriteLine($"Selected: {Passed + Failed + Skipped - Unselected}");
+        Console.WriteLine($"Selected skipped: {Skipped - Unselected}");
+        Console.WriteLine($"Missing test sets: {MissingTestSets}");
         Console.WriteLine();
         Console.WriteLine($"Pass rate: {(Passed * 100.0 / Math.Max(1, Passed + Failed)):F1}%");
         if (_xslt40 || _processorProfile == Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft)
-            Environment.ExitCode = Failed > 0 || Passed + Failed == 0 ? 1 : 0;
+            Environment.ExitCode = Failed > 0 || MissingTestSets > 0 || Passed + Failed == 0 ? 1 : 0;
     }
+
+    static int Unselected;
+    static int MissingTestSets;
 
     static void RunTestSet(string testSetPath, string testSetName, string catalogDir)
     {
@@ -678,7 +688,14 @@ class Program
         XNamespace ns = "http://www.w3.org/2012/10/xslt-test-catalog";
         var testSetDir = Path.GetDirectoryName(testSetPath)!;
 
-        int testCount = doc.Root?.Elements(ns + "test-case").Count() ?? 0;
+        var catalogCases = doc.Root!.Elements(ns + "test-case").ToList();
+        var selectedCases = catalogCases.Where(c => _testNameFilter == null ||
+            (c.Attribute("name")?.Value ?? "unknown").Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        int excluded = catalogCases.Count - selectedCases.Count;
+        Unselected += excluded;
+        // Preserve historical aggregate Skipped while exposing unselected cases separately.
+        Skipped += excluded;
+        int testCount = selectedCases.Count;
 
         // Allow a targeted filter to run test sets that are normally skipped during full sweeps.
         if (SkipTestSets.Contains(testSetName) && _testSetFilter == null)
@@ -724,7 +741,7 @@ class Program
             if (name != null) environments[name] = env;
         }
 
-        var testCases = doc.Root.Elements(ns + "test-case").ToList();
+        var testCases = selectedCases;
         if (testCases.Count == 0) return;
 
         Console.WriteLine($"  Starting: {testSetName} ...");
@@ -1804,7 +1821,7 @@ class Program
     }
 
     /// <summary>
-    /// Returns true when the exception message contains the expected error code.
+    /// Returns true when the exception message or structured identity matches the expected error code.
     /// A missing or wildcard code accepts any error.
     /// </summary>
     private static bool ErrorCodeMatches(string? expectedCode, Exception ex)
@@ -1815,6 +1832,39 @@ class Program
         // (import-schema-203 — the test only requires the import-schema declaration to fail).
         if (expectedCode == "XXXX9999")
             return true;
+        // XPathErrorException carries the error code as structured parts (namespace/local)
+        // rather than embedded in the message (xsl:assert / xsl:message error paths).
+        // Catalog codes may be Clark notation (Q{uri}local, Q{}local) or a plain local
+        // name. Exact mode maps plain codes to the standard error namespace and
+        // requires Clark notation for custom namespaces; legacy mode retains its
+        // historical local-name treatment of unresolved prefixed names.
+        // (si-assert-901 expects Q{}XX99 from xsl:assert/@error-code="XX99").
+        if (expectedCode is not null && ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
+        {
+            string? expectedNs = _xslt40 ? "http://www.w3.org/2005/xqt-errors" : null;
+            var expectedLocal = expectedCode;
+            if (expectedCode.StartsWith("Q{", StringComparison.Ordinal))
+            {
+                var close = expectedCode.IndexOf('}');
+                if (close >= 2)
+                {
+                    expectedNs = expectedCode[2..close];
+                    expectedLocal = expectedCode[(close + 1)..];
+                }
+            }
+            else if (expectedCode.Contains(':'))
+            {
+                // Exact mode cannot resolve a catalog prefix from a bare string.
+                // Clark notation carries the namespace without relying on aliases.
+                if (_xslt40) return false;
+                expectedLocal = expectedCode[(expectedCode.IndexOf(':') + 1)..];
+            }
+            bool matches = xpe.CodeLocalName == expectedLocal && (expectedNs == null || xpe.CodeNamespaceUri == expectedNs);
+            if (matches || _xslt40)
+                return matches;
+        }
+        // Structured identity is authoritative in exact mode; human descriptions
+        // can mention other codes and must not override the actual error identity.
         if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
             return true;
         // Upstream contribution evidence must not use Bosak's legacy label/code aliases.
@@ -1855,33 +1905,6 @@ class Program
                 if (ErrorCodeAliasMatches(expectedCode, m.Value))
                     return true;
             }
-        }
-        // XPathErrorException carries the error code as structured parts (namespace/local)
-        // rather than embedded in the message (xsl:assert / xsl:message error paths).
-        // Catalog codes may be Clark notation (Q{uri}local, Q{}local) or a plain local
-        // name; a prefixed QName binds in the test stylesheet, not here, so only the
-        // local part is compared. A namespaced expectation (Q{uri}local with a non-empty
-        // uri) must match BOTH parts; Q{}local / plain local match the local name only
-        // (si-assert-901 expects Q{}XX99 from xsl:assert/@error-code="XX99").
-        if (expectedCode is not null && ex is Bosak.XPath.Runtime.Vm.XPathErrorException xpe)
-        {
-            string? expectedNs = null;
-            var expectedLocal = expectedCode;
-            if (expectedCode.StartsWith("Q{", StringComparison.Ordinal))
-            {
-                var close = expectedCode.IndexOf('}');
-                if (close >= 2)
-                {
-                    expectedNs = expectedCode[2..close];
-                    expectedLocal = expectedCode[(close + 1)..];
-                }
-            }
-            else if (expectedCode.Contains(':'))
-            {
-                expectedLocal = expectedCode[(expectedCode.IndexOf(':') + 1)..];
-            }
-            if (xpe.CodeLocalName == expectedLocal && (expectedNs == null || xpe.CodeNamespaceUri == expectedNs))
-                return true;
         }
         return false;
     }

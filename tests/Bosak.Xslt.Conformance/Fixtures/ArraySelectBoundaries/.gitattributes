@@ -1,0 +1,3 @@
+# Keep the executed fixture bytes reproducible across Windows/Linux checkouts.
+*.xsl -text whitespace=cr-at-eol
+*.xml -text whitespace=cr-at-eol

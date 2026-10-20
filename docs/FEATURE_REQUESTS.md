@@ -5,6 +5,12 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Array/select test batch prepared -20 October2026:** [Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
+
+**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
+**XSLT 4.0 harness hardening - 20 October 2026:** [Bounded native runs and selection accounting](XSLT40-HARNESS-HARDENING.md) add timeout receipts, missing-file detection and explicit selected/unselected counts. Fourteen runner and four Windows wrapper controls pass locally. Engine behavior, package versions, REQ statuses and consumer acceptance are unchanged.
+
 For the product introduction, Schema and Braid overview, start with the [README](../README.md) and [ecosystem guide](ECOSYSTEM.md). Earlier README implementation checkpoints are preserved in [development history](DEVELOPMENT_HISTORY.md); dated checkpoints below retain their original context.
 
 
@@ -508,7 +514,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-131 | Product owner (Braid authoring roadmap) | Append one literal xsl:text with exact source/candidate provenance | Literal labels and separators complement value-of creation | Implemented, published and consumer-accepted | 1.19.0 | Charles Korthout | 2026-10-17 |
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
-| REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented and published; consumer acceptance pending | 1.22.0 | Bosak | 2026-10-19 |
+| REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Pending scope/API review | TBD | Unassigned | 2026-10-20 |
 
 
@@ -1819,6 +1825,8 @@ The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) define
 [Formal acceptance notification](REQ-133-BRAID-ACCEPTANCE.md) accepts the delivered bounded body-replacement profile in published1.21.0 at8929a130. Braid implementation5ec2075 and native acceptance recordsd2c051a are committed/pushed. Observed1,242 normal Release and460 fresh public-package checks pass; product owner completed native review/all hashes matching. Exact hashes/variants/accessibility details are unreported; optional transitions accepted only as exercised. No engine change or new upstream test run. Earlier consumer-pending statements above are historical.
 
 ### REQ-134: Literal Text Instruction Deletion for Bosak.Braid
+
+**Formal Bosak.Braid consumer acceptance - 20 October 2026:** [Acceptance receipt](REQ-134-BRAID-ACCEPTANCE.md) records verified/adopted published1.22.0 at3b009388, complete consumer adapter/review/Apply/history/UI integration,1,316 Release and551 public-package passes, and the product owner's completed native procedure with all hashes reported matching. Braid checkpointb10630f is committed/pushed. Disposition: implemented, published and consumer-accepted within the declared bounded profile; exact native hash values/variants/accessibility observations remain unspecified. Earlier pending-adoption/native notes below are historical. No engine or release changes.
 
 **1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.
 
@@ -5770,3 +5778,8 @@ Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static c
 **REQ-130 accepted ? 17 October 2026:** Braid formally accepts bounded value-of deletion in published **1.18.0**, source `3264fcfaf739e492770c882d2cbfc1f93f0172d2`. The [unchanged consumer acceptance receipt](REQ-130-BRAID-ACCEPTANCE.md) reports 1,015 normal Release tests and 241 fresh public-package checks (overlapping evidence), exact nine-assembly provenance, and product-owner native completion with matching hashes. These are reported consumer results, not engine reruns. Exact literal hashes/native encoding variants were not supplied. Acceptance is limited to the delivered profile; REQ-131 is separate. Earlier pending/adoption checkpoints below are historical.
 
 **REQ-131 source delivery complete ? 17 October 2026:** [PR #364](https://github.com/Fytala-Charles/Bosak/pull/364) merged as `27691fdb3708bb4ffd7c984abbf3196b7cde5667`; final-head and integrated CI each pass 9,810 checks. Local focused 291 and frozen QT3 31,142/0/679 / qt4 gated 8,278/0/1,894 pass. Independent exact-merge local packages pass 282 public-API checks with exact ten-archive/nine-assembly provenance and no vulnerable dependencies. Source **1.19.0 remains unpublished**. [Independent consumer review handoff](REQ-131-CONSUMER-REVIEW-HANDOFF.md) is next; no Braid/native acceptance is inferred.
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.

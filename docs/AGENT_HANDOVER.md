@@ -1,8 +1,24 @@
+# Array/select test batch prepared -20 October2026
+
+[Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
+
+# Exact structured error harness correction -20 October2026
+
+[Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
+# XSLT 4.0 harness hardening - 20 October 2026
+
+Base `53c098d1529343b41f763168df1daa3b6ce8bdfe`; branch `test/xslt40-harness-hardening`. [Harness guide](XSLT40-HARNESS-HARDENING.md) and [baseline](XSLT40-BASELINE-2026-10-20.md) separate execution/accounting changes from the switch engine patch in another PR. Fourteen runner and four Windows wrapper controls pass locally. CI must verify this isolated head; the prior combined 10,030-test run includes the separate20 switch cases. Engine/package version remains1.22.0. Preserve the original baseline manifest/diagnostics and all failed receipts. Original baseline raw logs were overwritten by a later local rerun; the correction is explicit in the baseline report. No merging, release, upstream submission, REQ status or Braid acceptance changes are authorized by this review branch.
+
 # 1.22.0 published and verified - 19 October 2026
 
 ## REQ-135 Literal Attribute Lifecycle Request - 2026-10-20
 
 Braid product owner requests create/update/delete of one unqualified literal result attribute as one feature in a single implementation PR. [REQ-135 dossier](REQ-135-literal-attribute-lifecycle.md) is registered Pending scope/API review, owner Unassigned, version TBD;23 planned acceptance groups, zero new runtime tests. Exact logical literal values, equal-Update NoChange, source-preserving per-operation edits and actual attribute/descriptor correspondence need engine-owned authority. Registry max134 was checked before assigning135; source API audited at53c098d. This documentation PR does not authorize implementation or publication and changes no engine/version/tag. Original working checkout and unrelated sweep data are preserved. REQ-134 acceptance PR385 is a separate change.
+
+## REQ-134 Braid Consumer Acceptance - 2026-10-20
+
+Braid formally accepts published1.22.0/REQ-134 within the delivered bounded deletion profile after its product owner completed native review and reported all hashes match. Consumer checkpointb10630f is committed/pushed. [Formal receipt](REQ-134-BRAID-ACCEPTANCE.md) records independent1,316 Release/551 public-package passes, payload-aware review/Apply/history/UI and worker/export/reopen scope, provenance and native observation limits. Counts are previously executed consumer evidence, not new upstream test runs. Registry/detail updated; no engine/version/tag/release changes or automatic merge.
 
 **1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.
 
@@ -17417,3 +17433,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 **1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
 
 Verification: Release solution build succeeds (0 errors; 88 existing warnings); all 7,908 unit tests pass, including 5,022 XSLT tests, with zero failures/skips. No engine source changed; conformance gate results are retained from merged PR #260. Contribution and canonical Markdown render checks pass.
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.
