@@ -1832,8 +1832,6 @@ class Program
         // (import-schema-203 — the test only requires the import-schema declaration to fail).
         if (expectedCode == "XXXX9999")
             return true;
-        if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
-            return true;
         // XPathErrorException carries the error code as structured parts (namespace/local)
         // rather than embedded in the message (xsl:assert / xsl:message error paths).
         // Catalog codes may be Clark notation (Q{uri}local, Q{}local) or a plain local
@@ -1861,9 +1859,14 @@ class Program
                 if (_xslt40) return false;
                 expectedLocal = expectedCode[(expectedCode.IndexOf(':') + 1)..];
             }
-            if (xpe.CodeLocalName == expectedLocal && (expectedNs == null || xpe.CodeNamespaceUri == expectedNs))
-                return true;
+            bool matches = xpe.CodeLocalName == expectedLocal && (expectedNs == null || xpe.CodeNamespaceUri == expectedNs);
+            if (matches || _xslt40)
+                return matches;
         }
+        // Structured identity is authoritative in exact mode; human descriptions
+        // can mention other codes and must not override the actual error identity.
+        if (ex.Message.Contains(expectedCode, StringComparison.Ordinal))
+            return true;
         // Upstream contribution evidence must not use Bosak's legacy label/code aliases.
         if (_xslt40)
             return false;

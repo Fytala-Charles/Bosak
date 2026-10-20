@@ -1,6 +1,6 @@
 # Exact structured error harness correction -20 October2026
 
-[Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Six identity controls reject wrong code/namespace pairs; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+[Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
 
 # XSLT 4.0 harness hardening - 20 October 2026
 

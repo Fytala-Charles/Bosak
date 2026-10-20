@@ -1,1 +1,1 @@
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"><xsl:template name="xsl:initial-template"><xsl:sequence select="error(QName('urn:custom-errors','FOER0000'),'custom namespace detail')"/></xsl:template></xsl:stylesheet>
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"><xsl:template name="xsl:initial-template"><xsl:sequence select="error(QName('urn:custom-errors','FOER0000'),'FOER0000 in user detail')"/></xsl:template></xsl:stylesheet>

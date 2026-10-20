@@ -5,4 +5,5 @@
 <test-case name="wrong-namespace"><test><stylesheet file="custom.xsl"/></test><result><error code="Q{urn:wrong-errors}BOOM"/></result></test-case>
 <test-case name="empty-match"><test><stylesheet file="empty.xsl"/></test><result><error code="Q{}BARE"/></result></test-case>
 <test-case name="standard-lookalike"><test><stylesheet file="lookalike.xsl"/></test><result><error code="FOER0000"/></result></test-case>
+<test-case name="message-spoof"><test><stylesheet file="spoof.xsl"/></test><result><error code="FODC0001"/></result></test-case>
 </test-set>

@@ -5,7 +5,7 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Six identity controls reject wrong code/namespace pairs; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
 
 **XSLT 4.0 harness hardening - 20 October 2026:** [Bounded native runs and selection accounting](XSLT40-HARNESS-HARDENING.md) add timeout receipts, missing-file detection and explicit selected/unselected counts. Fourteen runner and four Windows wrapper controls pass locally. Engine behavior, package versions, REQ statuses and consumer acceptance are unchanged.
 
