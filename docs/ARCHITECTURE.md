@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
 **XSLT 4.0 harness hardening - 20 October 2026:** [Bounded native runs and selection accounting](XSLT40-HARNESS-HARDENING.md) add timeout receipts, missing-file detection and explicit selected/unselected counts. Fourteen runner and four Windows wrapper controls pass locally. Engine behavior, package versions, REQ statuses and consumer acceptance are unchanged.
 
 **1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.

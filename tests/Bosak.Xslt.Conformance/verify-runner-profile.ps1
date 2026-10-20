@@ -68,7 +68,19 @@ $dependencyLog = Get-Content -LiteralPath (Join-Path $OutputDirectory 'filtered-
 foreach ($line in @('Unselected: 4','Selected: 1','Selected skipped: 1')) {
     if ($dependencyLog -notmatch ('(?m)^' + [regex]::Escape($line) + '\s*$')) { throw "Incorrect dependency accounting: $line" }
 }
-Write-Output "Verified $script:verified runner profile controls."
+$structuredCatalog = Join-Path $PSScriptRoot 'Fixtures/StructuredErrors/catalog.xml'
+Assert-Runner 'structured-errors-legacy' @('--xslt40','--processor-profile','legacy',$structuredCatalog) 1 @(3,4,0)
+Assert-Runner 'structured-errors-draft' @('--xslt40','--processor-profile','xslt40-draft',$structuredCatalog) 1 @(3,4,0)
+foreach ($lane in @('legacy','draft')) {
+    $structuredLog = Get-Content -LiteralPath (Join-Path $OutputDirectory "structured-errors-$lane.log") -Raw
+    foreach ($case in @('default-match','custom-match','empty-match')) {
+        if ($structuredLog -notmatch ('(?m)^\s+PASS ' + [regex]::Escape($case) + '\s*$')) { throw "Missing structured match: $lane/$case" }
+    }
+    foreach ($case in @('wrong-local','wrong-namespace','standard-lookalike','message-spoof')) {
+        if ($structuredLog -notmatch ('(?m)^\s+FAIL ' + [regex]::Escape($case) + ':')) { throw "Missing structured rejection: $lane/$case" }
+    }
+}
+Write-Output "Verified $script:verified runner profile controls including exact structured error controls."
 # The last negative control intentionally exits 1. CI dot-sources this script
 # and otherwise propagates that stale native status despite every assertion passing.
 exit 0
