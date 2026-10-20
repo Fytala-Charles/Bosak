@@ -515,6 +515,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
+| REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Pending scope/API review | TBD | Unassigned | 2026-10-20 |
 
 
 > **Legend:
@@ -1832,6 +1833,14 @@ The [reviewed engine contract](REQ-133-TEXT-BODY-REPLACEMENT-CONTRACT.md) define
 Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Candidate/Failure remove one eligible paired empty/nonempty or self-closing literal text instruction, including its actual payload. Exact outside bytes, nullable original body, complete removed/survivor/merge partitions and actual surviving parent are retained. Conservative parent/control/static/resource and encoding/byte limits follow the [reviewed contract](REQ-134-TEXT-DELETION-CONTRACT.md). New typed cancellation preserves existing value-of throwing behavior and replacement scope. No NoChange result exists.
 
 The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Published 1.22.0 is independently verified; Braid final implementation review is complete. Consumer-only acceptance groups, Braid adoption and native observations remain pending. REQ-133 consumer acceptance remains unchanged.
+
+### REQ-135: Literal Result Attribute Lifecycle for Bosak.Braid
+
+**Requester:** Bosak.Braid (consumer REQ-122). **Submitted:** 2026-10-20. **Status:** Pending scope/API review. **Target version:** TBD. **Implementation owner:** Unassigned.
+
+The product owner requests Create / Update / Delete of one literal result attribute as **one cohesive feature and one implementation PR**, rather than separate operation deliveries. The [self-contained consumer request and23 planned acceptance groups](REQ-135-literal-attribute-lifecycle.md) define unqualified no-namespace names, exact literal Unicode/AVT-brace escaping, duplicate-create and missing/dynamic-target refusals, explicit ordinal NoChange for equal Update, operation-specific single-edit footprints, complete actual attribute/descriptor provenance and shared review/Apply/history/navigation.
+
+Published1.22.0/current-main API audit finds no literal-attribute authoring capability; Expression/AVT slots and existing element/text operations do not authorize it. Bosak owns eligibility, syntax/semantics, public API design, source proof, implementation/tests and release. Braid local design and proposed ADR-021 are referenced in the dossier. This registration is documentation only: no engine capability, tests, version reservation or implementation/publication authorization. Consumer UI/worker/export/reopen/native gates remain planned.
 
 ### REQ-022: Migrate Bosak to .NET 10
 

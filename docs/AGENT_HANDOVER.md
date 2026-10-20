@@ -12,6 +12,10 @@ Base `53c098d1529343b41f763168df1daa3b6ce8bdfe`; branch `test/xslt40-harness-har
 
 # 1.22.0 published and verified - 19 October 2026
 
+## REQ-135 Literal Attribute Lifecycle Request - 2026-10-20
+
+Braid product owner requests create/update/delete of one unqualified literal result attribute as one feature in a single implementation PR. [REQ-135 dossier](REQ-135-literal-attribute-lifecycle.md) is registered Pending scope/API review, owner Unassigned, version TBD;23 planned acceptance groups, zero new runtime tests. Exact logical literal values, equal-Update NoChange, source-preserving per-operation edits and actual attribute/descriptor correspondence need engine-owned authority. Registry max134 was checked before assigning135; source API audited at53c098d. This documentation PR does not authorize implementation or publication and changes no engine/version/tag. Original working checkout and unrelated sweep data are preserved. REQ-134 acceptance PR385 is a separate change.
+
 ## REQ-134 Braid Consumer Acceptance - 2026-10-20
 
 Braid formally accepts published1.22.0/REQ-134 within the delivered bounded deletion profile after its product owner completed native review and reported all hashes match. Consumer checkpointb10630f is committed/pushed. [Formal receipt](REQ-134-BRAID-ACCEPTANCE.md) records independent1,316 Release/551 public-package passes, payload-aware review/Apply/history/UI and worker/export/reopen scope, provenance and native observation limits. Counts are previously executed consumer evidence, not new upstream test runs. Registry/detail updated; no engine/version/tag/release changes or automatic merge.
