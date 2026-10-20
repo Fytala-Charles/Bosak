@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-20",
+  "engineAuditBase": "fbfb7ea4764a6cb9c6d3a368053a4234daac6d1d",
+  "requestOriginalCommit": "794ac98dab8921b16da0a2351a9f86afd5a868ba",
+  "requestSha256": "176b583319659acd60b1e7c7188b9424ea3c5fcd2d2b19ac5ed71a5aee7a103e",
+  "sourceFiles": {
+    "src/Bosak.Xslt/Authoring/AuthoringAttributeDescriptor.cs": "dd363695fd0cab74c5e8289bb03596a4871d6bb609775f2b9757f6360d4871ef",
+    "src/Bosak.Xslt/Authoring/AttributeSlotClassifier.cs": "35727078d36ae8794729b12e6f2919b8b418d731ad29edf951cc09b8f0c5a99f",
+    "src/Bosak.Xslt/Authoring/AuthoringInspector.cs": "821f54d19023066056b294f31d564616c3360a6444a09be69a1344d9ea4f68e4",
+    "src/Bosak.Xslt/Authoring/SourceTagScanner.cs": "953b6e9b89673cb18901b842c2d41a4f0f7a00b6df476f404ea65c49a3625ad8",
+    "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs": "fd74ef56f684c15f73cee46bd8a022734a23125168187a74bdcaadc7e84f1df1",
+    "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs": "32bde122e6a13841b237382b159c2c7713ff8a0c9f212dc69747f077821abc45",
+    "src/Bosak.Xslt/Authoring/TextBodyReplacementPipeline.cs": "91d5c7d0dabdae39444dea363e736490e215e8448bee58c345da998ad4da5869",
+    "src/Bosak.Xslt/Authoring/ValueOfInsertionPipeline.cs": "dda129e5d8804c0ae6375835fa37d743097b7694e159dd327e55c43feeea3c89"
+  },
+  "findings": [
+    "Attributes are actual element metadata, not child graph descriptors.",
+    "FullRange is constructed from scanned NameStart through FullEnd and excludes adjacent trivia.",
+    "ExpandedValue reflects XML expansion, not final AVT literal-brace interpretation.",
+    "Slot classifier uses raw brace heuristics and cannot establish constant result-attribute authority.",
+    "Existing lifecycle capability and proposal APIs are absent.",
+    "Existing static/resource validation primitives require coverage review before reuse; no new profile is implemented."
+  ],
+  "verificationScope": "Read-only source/API audit; zero new attribute-authoring runtime tests. Existing merged-main CI 39438760635 passed 10078 solution plus 84 LS tests, prior evidence only.",
+  "delivery": "All three operations in one future implementation PR after independent design review and user authorization; no version reserved.",
+  "originalPreservation": "Original request and acceptance Git blob content unchanged; checkout may apply CRLF filters."
+}
