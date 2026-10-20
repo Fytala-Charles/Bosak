@@ -18,4 +18,6 @@ Run after the Release build:
 
 This change preserves exact error assertions, native suite fixtures and all engine behavior. The switch validation fix and version increment belong to a separate PR. [Baseline](XSLT40-BASELINE-2026-10-20.md) records the pre-change results.
 
+The first remote CI run passed every control assertion but failed both control steps because the GitHub PowerShell launcher propagated the final negative child process's exit1. Both control scripts now explicitly return0 after successful verification; any assertion still throws. The original failure run39416346881 remains retained and is not reported as a green run.
+
 [Harness verification receipt](XSLT40-HARNESS-PR-VERIFICATION.json) records the 14 CLI and four Windows wrapper controls. The prior combined local run passed 10,030 solution tests and unchanged frozen gates, including 20 tests belonging to the separate switch PR; that count is not the isolated harness branch count. CI validates the isolated harness head, whose solution inventory remains 10,010 tests. Source and public package versions remain 1.22.0.

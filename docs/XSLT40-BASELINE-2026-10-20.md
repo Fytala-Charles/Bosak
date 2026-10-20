@@ -31,6 +31,8 @@ The additional failure is **switch-901**, in both profiles: expected `XTSE0010`,
 
 ## Harness findings
 
+The `select` family above is `tests/attr/select` (select-attribute tests), not the primary home of the new `xsl:select` instruction. A subsequent correctly targeted `seqtor` run passed83/0/9 in both profiles at the same suite/spec pins. Future xsl:select test additions must audit `tests/misc/seqtor` and other instruction-bearing stylesheets rather than infer coverage from the158 attribute cases.
+
 - Family selection is a case-insensitive substring filter. `array` selects `array` (37), `sx-SquareArrayConstructor` (56) and `arrays` (87); `record` selects `xsl-record` (18) and `record` (47). Select/switch/type-alias select 158/12/32 cases. The receipt lists exact files and counts.
 - Case-filter mismatches contribute to `Skipped`; dependency skips can have no individual reason. Skip totals therefore cannot be reported as a pure unsupported-feature inventory. The displayed catalog test-set count also does not mean selected count.
 - XSLT40 mode disables legacy error-code aliases, and an empty/all-skipped execution fails. Existing controls verify profile defaults, both explicit profiles, invalid/missing/duplicate arguments, empty selection and adapter behavior.

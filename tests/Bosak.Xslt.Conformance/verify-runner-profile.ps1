@@ -69,3 +69,6 @@ foreach ($line in @('Unselected: 4','Selected: 1','Selected skipped: 1')) {
     if ($dependencyLog -notmatch ('(?m)^' + [regex]::Escape($line) + '\s*$')) { throw "Incorrect dependency accounting: $line" }
 }
 Write-Output "Verified $script:verified runner profile controls."
+# The last negative control intentionally exits 1. CI dot-sources this script
+# and otherwise propagates that stale native status despite every assertion passing.
+exit 0

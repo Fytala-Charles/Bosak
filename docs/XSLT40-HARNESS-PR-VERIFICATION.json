@@ -240,7 +240,13 @@
     "README.md": "a037daf46c9a99afc5d68450899ef0e089552c14350cd255f813babb15d96ef0",
     "run-xslt40-tests.ps1": "c5d2c5617f5e653036ed0ede29189b18ab5d9708346add47b6daa4929004fc20",
     "tests/Bosak.Xslt.Conformance/Program.cs": "c2f056582c45cc5798d091b3ba1e79999ddb88d96fb3ee25651e5538efb3e335",
-    "tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1": "3abdc448d4509240517c2cb9e50c6d644087673104d8d711c114533a22f7a198",
-    "tests/Bosak.Xslt.Conformance/verify-wrapper.ps1": "5ddeb1229c04eb585d0182c5c878e52a0e4c6373a2e116779f68ad1ccf1d840e"
-  }
+    "tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1": "3cc18dcc3e1169331c98d25c9beac11033dd997303343df2e356161adab640e7",
+    "tests/Bosak.Xslt.Conformance/verify-wrapper.ps1": "cb51b3301bdc8a21e1e59ad5750fe2382024e02a7a4a359a12094e4a90588c1e"
+  },
+  "firstRemoteRun": {
+    "run": 39416346881,
+    "conclusion": "failure",
+    "reason": "All controls passed; dot-sourced launchers propagated final expected negative child exit1."
+  },
+  "correction": "Explicit exit0 after all assertions in both control scripts; CI-style launch controls pass locally."
 }

@@ -45,3 +45,6 @@ Assert-Wrapper pass 30 0 Completed $true
 Assert-Wrapper fail 30 1 Completed $false
 Assert-Wrapper no-such-case 30 1 Completed $false
 Assert-Wrapper slow 1 1 TimedOut $false
+# The final timeout control deliberately returns 1; successful verification must
+# have its own success status when dot-sourced by the CI PowerShell launcher.
+exit 0
