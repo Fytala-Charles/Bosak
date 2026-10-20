@@ -246,6 +246,7 @@
 
 
 //                      | Charles Korthout | 3.77  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 3.78  | 20-10-2026     | Distinguish unselected cases and fail incomplete selected catalogs.                      |
 //                      |==================|=======|================|=========================================================================================
 using System.Xml.Linq;
 using System.Xml;
@@ -649,7 +650,8 @@ class Program
             var testSetPath = Path.Combine(catalogDir, testSetFile);
             if (!File.Exists(testSetPath))
             {
-                Console.WriteLine($"  Skip: test-set file not found: {testSetPath}");
+                Console.WriteLine($"  ERROR: test-set file not found: {testSetPath}");
+                MissingTestSets++;
                 continue;
             }
 
@@ -666,11 +668,18 @@ class Program
         Console.WriteLine($"Passed:  {Passed}");
         Console.WriteLine($"Failed:  {Failed}");
         Console.WriteLine($"Skipped: {Skipped}");
+        Console.WriteLine($"Unselected: {Unselected}");
+        Console.WriteLine($"Selected: {Passed + Failed + Skipped - Unselected}");
+        Console.WriteLine($"Selected skipped: {Skipped - Unselected}");
+        Console.WriteLine($"Missing test sets: {MissingTestSets}");
         Console.WriteLine();
         Console.WriteLine($"Pass rate: {(Passed * 100.0 / Math.Max(1, Passed + Failed)):F1}%");
         if (_xslt40 || _processorProfile == Bosak.Xslt.Api.XsltProcessorProfile.Xslt40Draft)
-            Environment.ExitCode = Failed > 0 || Passed + Failed == 0 ? 1 : 0;
+            Environment.ExitCode = Failed > 0 || MissingTestSets > 0 || Passed + Failed == 0 ? 1 : 0;
     }
+
+    static int Unselected;
+    static int MissingTestSets;
 
     static void RunTestSet(string testSetPath, string testSetName, string catalogDir)
     {
@@ -678,7 +687,14 @@ class Program
         XNamespace ns = "http://www.w3.org/2012/10/xslt-test-catalog";
         var testSetDir = Path.GetDirectoryName(testSetPath)!;
 
-        int testCount = doc.Root?.Elements(ns + "test-case").Count() ?? 0;
+        var catalogCases = doc.Root!.Elements(ns + "test-case").ToList();
+        var selectedCases = catalogCases.Where(c => _testNameFilter == null ||
+            (c.Attribute("name")?.Value ?? "unknown").Contains(_testNameFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        int excluded = catalogCases.Count - selectedCases.Count;
+        Unselected += excluded;
+        // Preserve historical aggregate Skipped while exposing unselected cases separately.
+        Skipped += excluded;
+        int testCount = selectedCases.Count;
 
         // Allow a targeted filter to run test sets that are normally skipped during full sweeps.
         if (SkipTestSets.Contains(testSetName) && _testSetFilter == null)
@@ -724,7 +740,7 @@ class Program
             if (name != null) environments[name] = env;
         }
 
-        var testCases = doc.Root.Elements(ns + "test-case").ToList();
+        var testCases = selectedCases;
         if (testCases.Count == 0) return;
 
         Console.WriteLine($"  Starting: {testSetName} ...");
