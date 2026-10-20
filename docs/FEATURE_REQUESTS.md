@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**REQ-135 proposed design — 20 October 2026:** [Literal attribute lifecycle contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) proposes Create, Update and Delete together in one implementation PR, separate operation authority, exact literal escaping/NoChange and complete graph plus actual attribute correspondence. [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) and [Braid design handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md) await consumer review. No engine API/capability, implementation, version or release is authorized. REQ-134 is [consumer-accepted in 1.22.0](REQ-134-BRAID-ACCEPTANCE.md); earlier pending acceptance notes are historical.
+
 **Array/select test batch prepared -20 October2026:** [Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
 
 **Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
@@ -515,7 +517,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
-| REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Pending scope/API review | TBD | Unassigned | 2026-10-20 |
+| REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Pending consumer design review | TBD | Unassigned | 2026-10-20 |
 
 
 > **Legend:
@@ -1835,6 +1837,8 @@ Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Cand
 The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Published 1.22.0 is independently verified; Braid final implementation review is complete. Consumer-only acceptance groups, Braid adoption and native observations remain pending. REQ-133 consumer acceptance remains unchanged.
 
 ### REQ-135: Literal Result Attribute Lifecycle for Bosak.Braid
+
+**REQ-135 proposed design — 20 October 2026:** [Literal attribute lifecycle contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) proposes Create, Update and Delete together in one implementation PR, separate operation authority, exact literal escaping/NoChange and complete graph plus actual attribute correspondence. [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) and [Braid design handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md) await consumer review. No engine API/capability, implementation, version or release is authorized. REQ-134 is [consumer-accepted in 1.22.0](REQ-134-BRAID-ACCEPTANCE.md); earlier pending acceptance notes are historical.
 
 **Requester:** Bosak.Braid (consumer REQ-122). **Submitted:** 2026-10-20. **Status:** Pending scope/API review. **Target version:** TBD. **Implementation owner:** Unassigned.
 
