@@ -4,6 +4,8 @@
 <p>Proposed design for Braid review — 20 October 2026</p>
 </div>
 
+**REQ-135 source implementation — 20 October 2026:** User-authorized source 1.23.0 implements literal attribute Create, Update and Delete together under the [reviewed contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md). Separate opaque operation authority, constant AVT interpretation, exact per-operation edits, Update NoChange, complete graph/per-owner attribute correspondence and conservative static/resource bounds are implemented. [Implementation verification](REQ-135-IMPLEMENTATION.md) and [consumer handoff](REQ-135-CONSUMER-IMPLEMENTATION-HANDOFF.md) record136 focused passes, unchanged frozen gates and distinct exact-head delivery evidence. Public packages remain 1.22.0; publication and Braid integration/native acceptance are separate. Earlier waiting-for-authorization notes preserve the design checkpoint.
+
 **Consumer design clearance — 20 October 2026:** [Braid review](REQ-135-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings or required contract correction at `c01537066cb991b1eea2b1e51a046215a70ed46f`. Braid explicitly approves preparing one implementation PR containing all three operations within this profile. Its 24 passing published-1.22.0 inspection/runtime checks are baseline evidence, not new attribute-authoring tests; initial harness version failures and provenance limits are retained. All three exact-head CI checks passed. Product-owner implementation authorization remains the next agreed gate; no implementation, version or publication is performed by this import.
 
 Earlier proposed/review-pending statements below describe the reviewed design checkpoint.

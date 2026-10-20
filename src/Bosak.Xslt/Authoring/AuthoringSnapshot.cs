@@ -24,6 +24,8 @@
 
 //                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
 
+//                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: operation-bound literal attribute lifecycle.                                    |
+
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Authoring;
@@ -39,6 +41,76 @@ namespace Bosak.Xslt.Authoring;
 /// </summary>
 public sealed class AuthoringSnapshot
 {
+    /// <summary>Discovers owned literal attribute Creation authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeCreationTargetResult GetLiteralAttributeCreationTarget(AuthoringNodeDescriptor owner, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, null, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Creation.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeCreationResult ProposeLiteralAttributeCreation(AuthoringLiteralAttributeCreationProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Creation(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers owned literal attribute Update authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="attribute">The actual attribute within that owner.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeUpdateTargetResult GetLiteralAttributeUpdateTarget(AuthoringNodeDescriptor owner, AuthoringAttributeDescriptor attribute, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        ArgumentNullException.ThrowIfNull(attribute);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, attribute, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Update.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeUpdateResult ProposeLiteralAttributeUpdate(AuthoringLiteralAttributeUpdateProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Update(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers owned literal attribute Deletion authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="attribute">The actual attribute within that owner.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeDeletionTargetResult GetLiteralAttributeDeletionTarget(AuthoringNodeDescriptor owner, AuthoringAttributeDescriptor attribute, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        ArgumentNullException.ThrowIfNull(attribute);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, attribute, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Deletion.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeDeletionResult ProposeLiteralAttributeDeletion(AuthoringLiteralAttributeDeletionProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Deletion(this, proposal, cancellationToken);
+    }
+
     private readonly IReadOnlyList<AuthoringModuleDescriptor> _modules;
     private readonly Dictionary<Uri, AuthoringModuleDescriptor> _modulesByUri;
     private readonly Dictionary<Uri, AuthoringSource> _sourcesByUri;

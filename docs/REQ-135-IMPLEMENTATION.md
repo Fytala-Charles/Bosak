@@ -1,0 +1,29 @@
+# REQ-135 literal attribute lifecycle implementation
+
+20 October 2026. User approved implementation following [Braid design clearance](REQ-135-CONSUMER-DESIGN-REVIEW.md). Source version **1.23.0, unpublished**. Design merge base `613eeb47`; public packages remain 1.22.0. All three operations are delivered in one source slice. The [contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) and [LA01–LA23 matrix](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) define the bounded profile; the original request/review are unchanged.
+
+## Implementation
+
+`AuthoringCapabilities.SupportsLiteralAttributeLifecycle`, independent 8,388,608-byte bounds and immutable encoding discovery accompany the three explicit Snapshot discovery/proposal pairs. Creation/Update/Deletion targets cannot cross operations. Create/Delete results contain only a complete Candidate or Failure; Update has exclusive Changed, NoChange or Refused. A shared candidate carries explicit operation intent, both actual owners/opening tags, addressed actual attribute pair/absence, names/logical values/ranges, complete reference-keyed graph bijection, complete per-owner ordinary attribute maps and exactly one source edit. Attributes remain metadata, with no invented nodes/IDs.
+
+Literal-only AVT recognition operates on XML-expanded values, independently of SlotKind/raw brace heuristics. Logical emission doubles braces, escapes XML and the retained delimiter, and references tab/CR/LF. NoChange preserves source/entity/quote spelling after all original checks, without hypothetical canonical expansion. Create inserts a double-quoted token immediately after the owner lexical name, Update replaces only its retained value span, Delete removes only name-through-closing-quote and retains surrounding trivia. Physical encoding/BOM and every outside byte survive.
+
+Original and independently inspected candidate receive restricted static/resource validation, exact graph/attribute/source proof and final cooperative cancellation. Whole-module dynamic result AVTs, qualified owners/attributes, dependencies/preprocessing/extensions, unsupported components/types/encodings and CDATA are conservatively refused. Ordinary mixed/preserved children remain supported where proven unchanged. Legacy operations and their cancellation/capability behavior are not widened or narrowed. No transformation or ambient resource acquisition occurs in proposals.
+
+## Verification checkpoints
+
+Local source verification is complete. Final focused tests pass **136/0/0** (117 public /19 source-only), including four additional physical-coordinate/legacy-composition cases. Full local solution at the prior132-case checkpoint passes **10,210/0/0**; the final four focused additions bring the exact-head full-suite target to10,214. Separate language server **84/0/0**, frozen QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894** and all16 runner controls pass on the final engine source. The final incremental solution build succeeds with0 warnings/errors; an earlier full build reports the pre-existing nullable warning at conformance Program.cs:1868. Full final immutable-head CI and local-package delivery evidence are supplied in the implementation PR body and external delivery receipt, including exact revisions and hashes.
+
+- Initial focused run: 94 passed /2 failed. Empty Create name raised ArgumentException instead of a typed refusal; explicitly reject empty names before XmlConvert. Lone-surrogate InlineData was normalized during test serialization and two cases shared an ID; use integer code units constructed inside each test. Original TRX/log retained.
+- Corrected first focused suite: 97/0/0.
+- Expanded first suite: 125/1/0. Source-only addressed-attribute reordering escaped the ordinary survivor map. Added explicit addressed position proof; corrected suite126/0/0. Added emitted lexical/XML-expanded/slot consistency and duplicate graph-ID controls subsequently.
+- Final focused rebuild initially collided with an earlier running full suite's testhost DLL lock. Retain that build failure; serialize final rebuild/test after the earlier run completes. No engine expectation changed.
+- Earlier source checkpoint: QT3 31,142/0/679; qt4 gated8,278/0/1,894; separate language server84/0/0. These are not substituted for final source verification.
+
+[Verification JSON](REQ-135-VERIFICATION.json) records source hashes, exact local checkpoints, preserved failures and the distinct final-head delivery gates. Final-head CI/package results are attached to the implementation PR; do not substitute earlier dirty-tree or public1.22.0 package results. Source-only malformed metadata and traversal controls are not imported into public package consumers. Tests use independent runtime attribute values and byte replay across four physical encodings. Original source/harness failures and corrections remain separate evidence, never overwritten.
+
+## Limits and next gate
+
+Engine tests do not certify Braid LA17–LA22 UI/session/license/Apply/history, real worker/export/destination reopen or native variants. Deterministic cancellation checks cover observed descriptor traversal and pre-cancelled entry points, not every possible parsing/copy scheduling interleaving or a preemptive parser deadline. Existing 1.22.0 consumer results remain historical.
+
+Prepare isolated public-only local candidate packages tied to the final immutable PR head for independent Braid implementation review. Merge verification and merge-specific packages remain separate until implementation merge is authorized. No signed public release, public-feed proof, Braid adoption or native acceptance is claimed.

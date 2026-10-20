@@ -25,6 +25,8 @@
 
 //                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
 
+//                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: advertise complete literal attribute lifecycle.                                 |
+
 using System.Reflection;
 
 namespace Bosak.Xslt.Authoring;
@@ -49,6 +51,13 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether the complete literal attribute lifecycle is available.</summary>
+    public static bool SupportsLiteralAttributeLifecycle => true;
+    /// <summary>Gets the independent original and final physical source byte limit.</summary>
+    public static int MaxLiteralAttributeSourceBytes => 8_388_608;
+    /// <summary>Gets immutable supported encodings; UTF-16 requires a matching BOM.</summary>
+    public static IReadOnlyList<string> LiteralAttributeSupportedEncodings { get; } = Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
     /// <summary>Gets whether bounded literal text instruction deletion is implemented.</summary>
     public static bool SupportsTextDeletion => true;
     /// <summary>Gets the original and final physical byte bound, including BOM.</summary>
