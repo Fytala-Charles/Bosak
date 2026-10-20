@@ -4,6 +4,8 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+**Array/select test batch prepared -20 October2026:** [Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
+
 ## 2026-10-20 - Harness hardening and selected baseline
 
 [Harness guide](XSLT40-HARNESS-HARDENING.md) adds bounded native execution, durable receipts and explicit selection accounting. [Baseline](XSLT40-BASELINE-2026-10-20.md) and [original manifest](XSLT40-BASELINE-2026-10-20.json) retain freshly fetched suite/spec pins and exact failures, with an explicit correction for later overwritten raw logs. Fourteen CLI and four Windows wrapper controls pass locally. No engine, assertion, fixture or package version changes; switch validation is a separate PR.

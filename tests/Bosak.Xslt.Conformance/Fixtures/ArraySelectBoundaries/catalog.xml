@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<catalog xmlns="http://www.w3.org/2012/10/xslt-test-catalog"><test-set name="array-boundaries" file="array/_array-test-set.xml" /><test-set name="seqtor-boundaries" file="seqtor/_seqtor-test-set.xml" /></catalog>

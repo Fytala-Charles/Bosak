@@ -1,3 +1,7 @@
+# New array/select boundary batch -20 October2026
+
+[Prepared24-case batch](array-select-boundaries/README.md) includes a fresh-base portable patch and48 public-API checks. Not submitted upstream; independent confirmation remains pending. Original21/3/0 execution and corrected preconditions remain preserved. No engine, package version or old upstream expectation changes.
+
 # Native XSLT 4.0 contributions
 
 **Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](optional-default-corrections/revision-2/README.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.

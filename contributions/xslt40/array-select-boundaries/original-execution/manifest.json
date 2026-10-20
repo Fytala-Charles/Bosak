@@ -1,0 +1,194 @@
+[
+  {
+    "id": "array-033",
+    "family": "array",
+    "description": "Empty for-each input does not evaluate a failing member constructor.",
+    "stylesheet": "tests/insn/array/array-033.xsl",
+    "expectedXml": "<out size=\"0\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-034",
+    "family": "array",
+    "description": "Array iteration restores the outer item, position and size.",
+    "stylesheet": "tests/insn/array/array-034.xsl",
+    "expectedXml": "<out restored=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-035",
+    "family": "array",
+    "description": "Array sequence-constructor form sees the complete iteration focus.",
+    "stylesheet": "tests/insn/array/array-035.xsl",
+    "expectedXml": "<out correct=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-036",
+    "family": "array",
+    "description": "An ordinary function item remains callable as an array member.",
+    "stylesheet": "tests/insn/array/array-036.xsl",
+    "expectedXml": "<out size=\"1\" value=\"42\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-037",
+    "family": "array",
+    "description": "Nested array-member wrappers recursively unwrap grouped payload without copying nodes.",
+    "stylesheet": "tests/insn/array/array-037.xsl",
+    "expectedXml": "<out size=\"1\" count=\"3\" same=\"true\" tail=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-038",
+    "family": "array",
+    "description": "Array select cannot be combined with nonempty sequence-constructor content.",
+    "stylesheet": "tests/insn/array/array-038.xsl",
+    "expectedXml": null,
+    "expectedError": "XTSE3185"
+  },
+  {
+    "id": "array-039",
+    "family": "array",
+    "description": "Array-member select cannot be combined with nonempty constructor content.",
+    "stylesheet": "tests/insn/array/array-039.xsl",
+    "expectedXml": null,
+    "expectedError": "XTSE3185"
+  },
+  {
+    "id": "array-040",
+    "family": "array",
+    "description": "Array select permits whitespace, comments and ignored fallback children.",
+    "stylesheet": "tests/insn/array/array-040.xsl",
+    "expectedXml": "<out correct=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-041",
+    "family": "array",
+    "description": "Array-member select permits whitespace, comments and ignored fallback children.",
+    "stylesheet": "tests/insn/array/array-041.xsl",
+    "expectedXml": "<out size=\"1\" grouped=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "array-042",
+    "family": "array",
+    "description": "An empty array instruction creates no members, unlike an empty array-member.",
+    "stylesheet": "tests/insn/array/array-042.xsl",
+    "expectedXml": "<out size=\"0\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-147",
+    "family": "seqtor",
+    "description": "Whitespace-only select body satisfies an explicit empty-sequence result type.",
+    "stylesheet": "tests/misc/seqtor/seqtor-147.xsl",
+    "expectedXml": "<out count=\"0\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-148",
+    "family": "seqtor",
+    "description": "Whitespace-only select body fails a required singleton result type.",
+    "stylesheet": "tests/misc/seqtor/seqtor-148.xsl",
+    "expectedXml": null,
+    "expectedError": "XPTY0004"
+  },
+  {
+    "id": "seqtor-149",
+    "family": "seqtor",
+    "description": "Multiple select results fail a required singleton result type.",
+    "stylesheet": "tests/misc/seqtor/seqtor-149.xsl",
+    "expectedXml": null,
+    "expectedError": "XPTY0004"
+  },
+  {
+    "id": "seqtor-150",
+    "family": "seqtor",
+    "description": "Select body can return a callable ordinary function item.",
+    "stylesheet": "tests/misc/seqtor/seqtor-150.xsl",
+    "expectedXml": "<out value=\"42\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-151",
+    "family": "seqtor",
+    "description": "Select body preserves XML-node identity and explicit reverse order.",
+    "stylesheet": "tests/misc/seqtor/seqtor-151.xsl",
+    "expectedXml": "<out count=\"2\" first=\"B\" same=\"true\" last=\"A\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-152",
+    "family": "seqtor",
+    "description": "Host xpath-default-namespace applies to select body name tests.",
+    "stylesheet": "tests/misc/seqtor/seqtor-152.xsl",
+    "expectedXml": "<out count=\"1\" namespace=\"urn:books\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-153",
+    "family": "seqtor",
+    "description": "Instruction-local default collation applies inside select without leaking to siblings.",
+    "stylesheet": "tests/misc/seqtor/seqtor-153.xsl",
+    "expectedXml": "<out inside=\"true\" restored=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-154",
+    "family": "seqtor",
+    "description": "Adjacent CDATA sections preserve an XPath string containing a CDATA terminator.",
+    "stylesheet": "tests/misc/seqtor/seqtor-154.xsl",
+    "expectedXml": "<out value=\"A]]&gt;B\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-155",
+    "family": "seqtor",
+    "description": "Comments, processing instructions and xsl:note are removed before body evaluation.",
+    "stylesheet": "tests/misc/seqtor/seqtor-155.xsl",
+    "expectedXml": "<out value=\"ABCD\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-156",
+    "family": "seqtor",
+    "description": "Fallback-only select body returns empty and does not execute fallback.",
+    "stylesheet": "tests/misc/seqtor/seqtor-156.xsl",
+    "expectedXml": "<out empty=\"true\"/>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-157",
+    "family": "seqtor",
+    "description": "A select expression succeeds without executing a failing fallback.",
+    "stylesheet": "tests/misc/seqtor/seqtor-157.xsl",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null
+  },
+  {
+    "id": "seqtor-158",
+    "family": "seqtor",
+    "description": "A selected expression error propagates rather than invoking fallback.",
+    "stylesheet": "tests/misc/seqtor/seqtor-158.xsl",
+    "expectedXml": null,
+    "expectedError": "FOER0000"
+  },
+  {
+    "id": "seqtor-159",
+    "family": "seqtor",
+    "description": "An undeclared variable in the select body raises a static binding error.",
+    "stylesheet": "tests/misc/seqtor/seqtor-159.xsl",
+    "expectedXml": null,
+    "expectedError": "XPST0008"
+  },
+  {
+    "id": "seqtor-160",
+    "family": "seqtor",
+    "description": "Malformed select body XPath is rejected even in an unused named template.",
+    "stylesheet": "tests/misc/seqtor/seqtor-160.xsl",
+    "expectedXml": null,
+    "expectedError": "XPST0003"
+  }
+]
