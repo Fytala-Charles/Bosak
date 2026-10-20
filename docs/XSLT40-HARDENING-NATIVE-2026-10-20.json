@@ -1,0 +1,397 @@
+{
+  "date": "2026-10-20",
+  "bosak": "53c098d1529343b41f763168df1daa3b6ce8bdfe",
+  "bosakStatus": "M .github/workflows/ci.yml\n M docs/AGENT_HANDOVER.md\n M docs/XSLT40_UPSTREAM_TESTING.md\n M run-xslt40-tests.ps1\n M src/Bosak.Xslt/Stylesheet/Stylesheet.cs\n M src/Directory.Build.props\n M tests/Bosak.Xslt.Conformance/Program.cs\n M tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1\n?? .sweep-baselines/\n?? docs/XSLT40-BASELINE-2026-10-20.json\n?? docs/XSLT40-BASELINE-2026-10-20.md\n?? tests/Bosak.Xslt.Conformance/verify-wrapper.ps1\n?? tests/Bosak.Xslt.Tests/SwitchFallbackOrderingTests.cs",
+  "suite": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "suiteStatus": "",
+  "spec": "72f222929768b411d8e88d96a1a8740483290078",
+  "specStatus": "",
+  "specDefault": "refs/remotes/origin/master",
+  "selection": {
+    "array": [
+      {
+        "name": "array",
+        "file": "tests/insn/array/_array-test-set.xml",
+        "cases": 37
+      },
+      {
+        "name": "sx-SquareArrayConstructor",
+        "file": "tests/strm/sx-SquareArrayConstructor/_sx-SquareArrayConstructor-test-set.xml",
+        "cases": 56
+      },
+      {
+        "name": "arrays",
+        "file": "tests/type/arrays/_arrays-test-set.xml",
+        "cases": 87
+      }
+    ],
+    "select": [
+      {
+        "name": "select",
+        "file": "tests/attr/select/_select-test-set.xml",
+        "cases": 158
+      }
+    ],
+    "switch": [
+      {
+        "name": "switch",
+        "file": "tests/insn/switch/_switch-test-set.xml",
+        "cases": 12
+      }
+    ],
+    "record": [
+      {
+        "name": "xsl-record",
+        "file": "tests/insn/xsl-record/_xsl-record-test-set.xml",
+        "cases": 18
+      },
+      {
+        "name": "record",
+        "file": "tests/type/record/_record-test-set.xml",
+        "cases": 47
+      }
+    ],
+    "type-alias": [
+      {
+        "name": "type-alias",
+        "file": "tests/type/type-alias/_type-alias-test-set.xml",
+        "cases": 32
+      }
+    ]
+  },
+  "timeoutSeconds": 300,
+  "runs": [
+    {
+      "profile": "legacy",
+      "family": "array",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 2.316,
+      "counts": {
+        "Total": 180,
+        "Passed": 155,
+        "Failed": 5,
+        "Skipped": 20
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-021: Expected error XPTY0004, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-022: XPST0017: Function {http://www.w3.org/2005/xpath-functions/array}members is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r",
+        "array-024: XTSE0340: The match attribute of xsl:template must not contain an attribute value template\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jkey is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/legacy-array/run.log",
+      "logSha256": "f82ba2de16b70908fdfe8166c175467473f7a0daf3cf01f0c89187bc5234653c"
+    },
+    {
+      "profile": "legacy",
+      "family": "select",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "select"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 1.051,
+      "counts": {
+        "Total": 158,
+        "Passed": 157,
+        "Failed": 0,
+        "Skipped": 1
+      },
+      "failures": [],
+      "log": ".guard-tmp/xslt40-hardening-native-final/legacy-select/run.log",
+      "logSha256": "f4992ea359d638101588990ef583eb95daa241c4bc190492b0ab60ac58f6037f"
+    },
+    {
+      "profile": "legacy",
+      "family": "switch",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "switch"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.49,
+      "counts": {
+        "Total": 12,
+        "Passed": 10,
+        "Failed": 0,
+        "Skipped": 2
+      },
+      "failures": [],
+      "log": ".guard-tmp/xslt40-hardening-native-final/legacy-switch/run.log",
+      "logSha256": "ea794ff8ec0af821150915e3ed4ec35b67cde07dd18a882cd2a397efaa6dc198"
+    },
+    {
+      "profile": "legacy",
+      "family": "record",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "record"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.816,
+      "counts": {
+        "Total": 65,
+        "Passed": 38,
+        "Failed": 26,
+        "Skipped": 1
+      },
+      "failures": [
+        "xsl-record-001: Result mismatch\r",
+        "xsl-record-002: Result mismatch\r",
+        "xsl-record-003: Result mismatch\r",
+        "xsl-record-004: Expected error XTTE3375, got: XTTE0570: Empty sequence not allowed for type item()\r",
+        "xsl-record-005: XTTE0570: Empty sequence not allowed for type item()\r",
+        "xsl-record-006: XTTE0570: Empty sequence not allowed for type item()\r",
+        "xsl-record-008: XTTE0570: Empty sequence not allowed for type item()\r",
+        "xsl-record-009: XTTE0570: Sequence of more than one item not allowed for type item()\r",
+        "xsl-record-401: XTSE0090\r",
+        "xsl-record-402: XTSE0090\r",
+        "xsl-record-403: XTSE0090\r",
+        "xsl-record-404: XTSE0090\r",
+        "xsl-record-405: Expected error Q{http://example.com/}dupe, got: XTSE0090\r",
+        "xsl-record-407: XTSE0090\r",
+        "xsl-record-408: XTSE0090\r",
+        "xsl-record-409: XTSE0090\r",
+        "xsl-record-410: Expected error Q{http://example.com/}dupe, got: XTSE0090\r",
+        "record-003: XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-004: Expected error XPTY0004, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "record-005: XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-009: Expected error XPDY0050, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "record-016: XPTY0004: The key 'xyz' is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-020: Expected error XPST0003, got: Parse error at position 0: XPST0021: The record type declares the field 'middle' more than once.\r",
+        "record-023: Result mismatch\r",
+        "record-121: Result mismatch\r",
+        "record-123: Result mismatch\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/legacy-record/run.log",
+      "logSha256": "4be57339557cfc061f613bca47e035e379af7542ee6f15177022cbd8aba86a74"
+    },
+    {
+      "profile": "legacy",
+      "family": "type-alias",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "type-alias"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.725,
+      "counts": {
+        "Total": 32,
+        "Passed": 23,
+        "Failed": 8,
+        "Skipped": 1
+      },
+      "failures": [
+        "type-alias-003: Expected error SXTA0001, got: XPST0051: Unknown item type 'cx:treble' in an item-type definition.\r",
+        "type-alias-004: Expected error SXTA0001, got: XTSE4035: Circular item-type alias definition.\r",
+        "type-alias-006: Result mismatch\r",
+        "type-alias-007: Expected error XPTY0004, got: XTTE0780: Cannot convert value to type type(c:complex)\r",
+        "type-alias-010: Result mismatch\r",
+        "type-alias-012: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "type-alias-013: Result mismatch\r",
+        "type-alias-014: Expected error XPST0003, got: XTSE0340: Function call not allowed at the start of a pattern.\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/legacy-type-alias/run.log",
+      "logSha256": "10c49b79f68831fe1212139fc07ca879d22bc20ef3cff42c5b6ae2d1147a1011"
+    },
+    {
+      "profile": "xslt40-draft",
+      "family": "array",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "array"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 19.868,
+      "counts": {
+        "Total": 180,
+        "Passed": 158,
+        "Failed": 2,
+        "Skipped": 20
+      },
+      "failures": [
+        "array-017: Expected error XTDE4060, got: XTTE4060: A for-each array member cannot mix a JNode with other items.\r",
+        "array-025: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jposition#1 not found.\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/xslt40-draft-array/run.log",
+      "logSha256": "f9d60951823d0958287a6207b14764965332998189b663cf7af79185f114d147"
+    },
+    {
+      "profile": "xslt40-draft",
+      "family": "select",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "select"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.872,
+      "counts": {
+        "Total": 158,
+        "Passed": 157,
+        "Failed": 0,
+        "Skipped": 1
+      },
+      "failures": [],
+      "log": ".guard-tmp/xslt40-hardening-native-final/xslt40-draft-select/run.log",
+      "logSha256": "9b5706a840167c450a8a6dc5143dcf9ab1c148e2e00bea9e82c4ff5e002dc6a9"
+    },
+    {
+      "profile": "xslt40-draft",
+      "family": "switch",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "switch"
+      ],
+      "exitCode": 0,
+      "timeout": false,
+      "seconds": 0.461,
+      "counts": {
+        "Total": 12,
+        "Passed": 10,
+        "Failed": 0,
+        "Skipped": 2
+      },
+      "failures": [],
+      "log": ".guard-tmp/xslt40-hardening-native-final/xslt40-draft-switch/run.log",
+      "logSha256": "e1ce31d18ccb52a40e1a83dde1c083aac5fd69798a15eb90d5c93186d389a14b"
+    },
+    {
+      "profile": "xslt40-draft",
+      "family": "record",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "record"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.68,
+      "counts": {
+        "Total": 65,
+        "Passed": 38,
+        "Failed": 26,
+        "Skipped": 1
+      },
+      "failures": [
+        "xsl-record-001: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-002: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-003: Expected error XTDE0450, got: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-004: Expected error XTTE3375, got: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-005: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-006: XTSE1430: Prefix ''f' in xsl:record/@extension-element-prefixes is not bound to a namespace.\r",
+        "xsl-record-008: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-009: XTSE0010: Unknown XSLT element xsl:record.\r",
+        "xsl-record-401: XTSE0090\r",
+        "xsl-record-402: XTSE0090\r",
+        "xsl-record-403: XTSE0090\r",
+        "xsl-record-404: XTSE0090\r",
+        "xsl-record-405: Expected error Q{http://example.com/}dupe, got: XTSE0090\r",
+        "xsl-record-407: XTSE0090\r",
+        "xsl-record-408: XTSE0090\r",
+        "xsl-record-409: XTSE0090\r",
+        "xsl-record-410: Expected error Q{http://example.com/}dupe, got: XTSE0090\r",
+        "record-003: XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-004: Expected error XPTY0004, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "record-005: XPTY0004: The map contains an entry 'x' that is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-009: Expected error XPDY0050, got: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "record-016: XPTY0004: The key 'xyz' is not a declared field of the record type record(r as xs:double,i as xs:double).\r",
+        "record-020: Expected error XPST0003, got: Parse error at position 0: XPST0021: The record type declares the field 'middle' more than once.\r",
+        "record-023: XTSE0090: Attribute 'required' is not permitted on xsl:field.\r",
+        "record-121: Result mismatch\r",
+        "record-123: Result mismatch\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/xslt40-draft-record/run.log",
+      "logSha256": "b332a338cfffea111c09feaf934f2f4dbd62e4e2e5d8b74e62e3022162fce967"
+    },
+    {
+      "profile": "xslt40-draft",
+      "family": "type-alias",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\xslt40-baseline-20261020-suite\\catalog.xml",
+        "type-alias"
+      ],
+      "exitCode": 1,
+      "timeout": false,
+      "seconds": 0.694,
+      "counts": {
+        "Total": 32,
+        "Passed": 23,
+        "Failed": 8,
+        "Skipped": 1
+      },
+      "failures": [
+        "type-alias-003: Expected error SXTA0001, got: XPST0051: Unknown item type 'cx:treble' in an item-type definition.\r",
+        "type-alias-004: Expected error SXTA0001, got: XTSE4035: Circular item-type alias definition.\r",
+        "type-alias-006: Result mismatch\r",
+        "type-alias-007: Expected error XPTY0004, got: XTTE0780: Cannot convert value to type type(c:complex)\r",
+        "type-alias-010: Result mismatch\r",
+        "type-alias-012: Parse error at position 0: XPST0003: A record type must have the form record(*), record(), or record(field ('as' SequenceType)?, ...).\r",
+        "type-alias-013: Result mismatch\r",
+        "type-alias-014: Expected error XPST0003, got: XTSE0340: Function call not allowed at the start of a pattern.\r"
+      ],
+      "log": ".guard-tmp/xslt40-hardening-native-final/xslt40-draft-type-alias/run.log",
+      "logSha256": "06e768886cde9d564b4c4dcdbfe59dab90f8b4d9c1983fc6b570a7f7909870e5"
+    }
+  ],
+  "evidenceNote": "Post-fix rerun; source worktree is dirty and identifies local pending changes. Original baseline manifest remains in docs/XSLT40-BASELINE-2026-10-20.json; its original raw matrix logs were overwritten by this rerun."
+}
