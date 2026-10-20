@@ -161,6 +161,8 @@ dotnet build Bosak.sln
 dotnet test Bosak.sln
 ```
 
+Selected XSLT 4.0 native runs support a configurable Windows timeout and retained receipts; see the [harness guide](docs/XSLT40-HARNESS-HARDENING.md).
+
 Language-server tests and manual conformance gates have separate commands in [AGENTS.md](AGENTS.md). Use the [release verification record](docs/RELEASE-1.19.0-PUBLICATION.md) for exact test counts and artifact provenance.
 
 ## Support and contribute
