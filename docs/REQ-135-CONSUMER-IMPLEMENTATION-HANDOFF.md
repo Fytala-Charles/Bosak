@@ -1,5 +1,9 @@
 # REQ-135 consumer implementation review handoff
 
+**Braid implementation head review — 20 October 2026:** [Original consumer review](REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blockers or required correction at `f9e618dc1bcec38ff552d6edfa80e36bfb42a335`. An independent isolated public-only suite passes700/0/0 (117 imported lifecycle,551 prior authoring/identity and32 new Braid probes); counts overlap earlier evidence. Ten candidate archive revisions and nine consumed assembly/archive/cache/output identities match that head. These are unsigned local candidates, not public packages. Product-owner merge authorization and subsequent exact-merge verification remain next gates; publication, Braid adoption and native acceptance remain separate. Source1.23.0 is unpublished, public1.22.0 unchanged.
+
+Earlier review-pending statements below describe the delivered head checkpoint.
+
 20 October 2026. Source 1.23.0 is unpublished; public packages remain 1.22.0. User authorized Create/Update/Delete together after [consumer design clearance](REQ-135-CONSUMER-DESIGN-REVIEW.md). Review the final immutable implementation PR head and its package receipt supplied in the PR body/delivery record, not moving working files. Exact-head CI and local-package verification must be complete before treating the delivery as review-ready.
 
 Read the [implementation record](REQ-135-IMPLEMENTATION.md), [verification JSON](REQ-135-VERIFICATION.json), [contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) and [LA01–LA23 groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md). Preserve failed/corrected receipts and report overlapping source/package counts separately. Public package consumers must use isolated PackageReference/local-feed resolution with exact nuspec/assembly source provenance and archive/cache/output hashes; no ProjectReference, friend or reflection bypass.
