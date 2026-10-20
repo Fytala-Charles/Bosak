@@ -2,23 +2,23 @@
   "date": "2026-10-20",
   "sourceVersion": "1.23.0",
   "publicVersion": "1.22.0",
-  "status": "Local source verification complete; exact-head CI and package-only delivery receipts supplied with implementation PR",
+  "status": "Source and initial immutable-head package/CI verified; independent consumer implementation review pending. Final documentation-head receipts are attached to the PR.",
   "designMerge": "613eeb47",
   "localSolutionCheckpoint": {
-    "passed": 10210,
+    "passed": 10214,
     "failed": 0,
     "skipped": 0,
     "receipts": {
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0.trx": "f7e8baf1e9ca77dd0b0b704a0405a439af1cbe6eace828f37ad2649733ea4abb",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[1].trx": "35b80b6f45f3a094554e9ba40aa39e41b6c6c970af5edcdd03759eccf4b9bd23",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[2].trx": "9bb7f77209088a7d2643b90cf4d05cfb5ef65c1b6072a6c0e4e60077578cbc71",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[3].trx": "89b0aa471a2b7151b3e1879d373a9b1aca4ceda3f84523d8684f3eae73f268f0",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[4].trx": "f2bfb240310cd4e56babba74668e070b448e3b5b4c69355a0e34c94212b51016",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[5].trx": "814d817a7e2ea057d88dcb076e7ffe9258d2f5d0adc52db827e8d149409a7b35",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[6].trx": "e805e93898a029cf00b4eafe6c6ba7c0db84d06487f0bf799b8316e8cef25417",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[7].trx": "dace11291a196f60d2c5a5ae7367bfa034a350a9f046d1f3b5b373d879c6adc1",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_51_net10.0[8].trx": "eca5703d38445c69a40b32d5ecd16f09b6bfaf767ecac16236483f2e37009c3e",
-      ".guard-tmp\\req135-final-solution-results\\charl_CHARLES_2026-10-20_17_49_53_net10.0.trx": "a20151c0a075f6a67453d3b43a6195f9fad932392ea63926c98209df03908e69"
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0.trx": "11de699b531236ddc8f1a1fc9714c06c0132e80bb1aa3426ffe9060f5bd9bdb5",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[1].trx": "bc34405b30c3b2bfbf8be067cfb91a2085907922d2495e9848b55f19f16616f0",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[2].trx": "810cc090998fa342b22f74516601b3a776f50b22d9949cea65e6add44ba93026",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[3].trx": "e354d25b53ec06f837faa0768094ce4fdd038e1876d9c6e08a8869f0467c5859",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[4].trx": "8b0cb9ec7eb86e7fb7201dc1cf4dfe8e439061a530ff364b8a5ab837fd627e5c",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[5].trx": "451da886380189eddb7b7a523bf9994bc5a1d57e302804d52fab583be6f7daa2",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[6].trx": "3ac8172a4b26f17ca8ea53edf0a9f98fcf50027e786b10ab07aad7becfc03979",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[7].trx": "0ec7c6f1dc031ce98f6e672f72203f98c5c63eca5e10e013751b7b08ffb4e58f",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_15_net10.0[8].trx": "4275b4ad987b3285f3e730ab7a7d4ca10751faab11b40c02a099ee8789975cae",
+      ".guard-tmp\\req135-complete-solution-results\\charl_CHARLES_2026-10-20_17_57_16_net10.0.trx": "015543864875723b8a2c45e5546e31707333d7522013eec5fa39ab6a29dde5a1"
     }
   },
   "finalFocused": {
@@ -31,7 +31,7 @@
   },
   "publicNewCases": 117,
   "sourceOnlyNewCases": 19,
-  "scopeNote": "The solution checkpoint contains 132 new cases (10210 total). Four additional focused coordinate/composition cases bring the final suite to136 new cases; exact-head full CI must verify10214 solution cases. Counts overlap, not additive unique coverage.",
+  "scopeNote": "All136 new cases are included in10214 final full solution passes.117 public and19 source-only new cases are overlapping subsets, not additive run counts.",
   "languageServer": {
     "passed": 84,
     "failed": 0,
@@ -57,7 +57,7 @@
     "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs": "dfe5756d2247c17747629a6359dd924580d949630bea6e5c532d246a929febdf",
     "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs": "42212fd87c633e4f2d25e57f84f72eb4bbebca6dff1f35a1946f65ac88ccc0f2",
     "src/Directory.Build.props": "a8e198deaa508a093763fe6d3ebef9bfa1476f7a0aa282f56992a7761e4c5612",
-    "tests/Bosak.Xslt.Tests/Authoring/AuthoringLiteralAttributeLifecycleTests.cs": "55f4883f6ee56f7ea4eaccb9197513dc188a0440e7b4e04fdc31f05957ca62c1",
+    "tests/Bosak.Xslt.Tests/Authoring/AuthoringLiteralAttributeLifecycleTests.cs": "8962e1780eb8d900d7423afaf8c247644ad242d1849d520ab232982d7cfab13d",
     "tests/Bosak.Xslt.Tests/Authoring/AuthoringLiteralAttributeLifecycleBoundaryTests.cs": "63555f980d7e330adf910f5bbf069a6107d4c8d922a87ca8c54277f45c2cb10c"
   },
   "initialFailuresPreserved": [
@@ -65,7 +65,26 @@
     "req135-expanded-focused-results",
     "req135-final-focused.log"
   ],
-  "packageProof": "Requires isolated local-feed PackageReference-only117-case suite at final immutable PR head; separate from source-only controls. Delivery receipt in PR body identifies head/archive/nuspec/assembly provenance.",
+  "packageProof": {
+    "initialHead": "7f4c66c0642f9eb9d0ffdfcbecefcdd9301c8335",
+    "passed": 117,
+    "failed": 0,
+    "sourceOnlyControlsExcluded": 19,
+    "archives": 10,
+    "consumedAssemblies": 9,
+    "provenanceReceipt": "D:/Development/Bosak/.guard-tmp/req135-head-public-provenance.json",
+    "note": "Unsigned unpublished local packages; exact nuspec/assembly revision, archive/cache/output and SHA-512/contentHash/assets proof. Final documentation-head repeat is supplied with PR body/delivery receipt."
+  },
   "consumerOnlyGroups": "LA17-LA22 not certified by engine tests",
-  "publicationAuthorized": false
+  "publicationAuthorized": false,
+  "initialImmutableHead": "7f4c66c0642f9eb9d0ffdfcbecefcdd9301c8335",
+  "initialExactHeadCI": {
+    "run": 39453100125,
+    "head": "7f4c66c0642f9eb9d0ffdfcbecefcdd9301c8335",
+    "conclusion": "success",
+    "solutionPassed": 10214,
+    "languageServerPassed": 84,
+    "windowsWrapperControls": "success",
+    "highlighting": "success"
+  }
 }

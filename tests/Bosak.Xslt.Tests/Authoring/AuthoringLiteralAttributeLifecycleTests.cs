@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 20-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 20-10-2026     | Complete asynchronous test return documentation.                                         |
 // ===========================================================================================================================================================
 
 using System.Text;
@@ -217,6 +218,7 @@ public partial class AuthoringLiteralAttributeLifecycleTests
         Assert.Equal(8_388_608, AuthoringCapabilities.MaxLiteralAttributeSourceBytes);
     }
     /// <summary>Independent concurrent proposals do not mutate shared owners.</summary>
+    /// <returns>A task completing after all independent proposals are verified.</returns>
     [Fact]
     public async Task ConcurrentProposals()
     {
