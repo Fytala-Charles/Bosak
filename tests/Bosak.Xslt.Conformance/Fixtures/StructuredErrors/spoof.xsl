@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"><xsl:template name="xsl:initial-template"><xsl:sequence select="error(QName('http://www.w3.org/2005/xqt-errors','FOER0000'),'FODC0001 in user detail')"/></xsl:template></xsl:stylesheet>
