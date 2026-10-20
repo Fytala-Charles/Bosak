@@ -1,5 +1,9 @@
 # REQ-135 consumer design review handoff
 
+**Consumer design clearance — 20 October 2026:** [Braid review](REQ-135-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings or required contract correction at `c01537066cb991b1eea2b1e51a046215a70ed46f`. Braid explicitly approves preparing one implementation PR containing all three operations within this profile. Its 24 passing published-1.22.0 inspection/runtime checks are baseline evidence, not new attribute-authoring tests; initial harness version failures and provenance limits are retained. All three exact-head CI checks passed. Product-owner implementation authorization remains the next agreed gate; no implementation, version or publication is performed by this import.
+
+## Historical handoff
+
 20 October 2026. **Proposed design; Braid review pending.** The user authorized request review/registration and this design. Implementation and publication remain subsequent decisions. Public Bosak is 1.22.0; source audit base is `fbfb7ea4764a6cb9c6d3a368053a4234daac6d1d` (unpublished 1.22.1). No version reserved. Create/Update/Delete remain one feature and **one implementation PR**.
 
 Review the [contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md), [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md), [unchanged request](REQ-135-literal-attribute-lifecycle.md) and [audit receipt](REQ-135-DESIGN-AUDIT.json). Zero new attribute-authoring tests executed; source audit is not runtime validation. Existing source/package/consumer results retain their original scope. No Braid source, ADR, package pin, session authority or native acceptance is modified here.

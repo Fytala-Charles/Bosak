@@ -1,3 +1,9 @@
+# REQ-135 consumer design clearance — 20 October 2026
+
+**Consumer design clearance — 20 October 2026:** [Braid review](REQ-135-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings or required contract correction at `c01537066cb991b1eea2b1e51a046215a70ed46f`. Braid explicitly approves preparing one implementation PR containing all three operations within this profile. Its 24 passing published-1.22.0 inspection/runtime checks are baseline evidence, not new attribute-authoring tests; initial harness version failures and provenance limits are retained. All three exact-head CI checks passed. Product-owner implementation authorization remains the next agreed gate; no implementation, version or publication is performed by this import.
+
+Original review imported byte-for-byte; hash and source path in REQ-135-CONSUMER-DESIGN-REVIEW.json. No contract correction required. Next: obtain the product owner’s implementation authorization, merge the cleared design, and deliver Create/Update/Delete together under the reviewed gates. No new engine tests or Braid changes.
+
 # REQ-135 literal attribute lifecycle design — 20 October 2026
 
 **REQ-135 proposed design — 20 October 2026:** [Literal attribute lifecycle contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) proposes Create, Update and Delete together in one implementation PR, separate operation authority, exact literal escaping/NoChange and complete graph plus actual attribute correspondence. [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) and [Braid design handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md) await consumer review. No engine API/capability, implementation, version or release is authorized. REQ-134 is [consumer-accepted in 1.22.0](REQ-134-BRAID-ACCEPTANCE.md); earlier pending acceptance notes are historical.

@@ -4,6 +4,10 @@
 <p>Planned coverage — 20 October 2026</p>
 </div>
 
+**Consumer design clearance — 20 October 2026:** [Braid review](REQ-135-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings or required contract correction at `c01537066cb991b1eea2b1e51a046215a70ed46f`. Braid explicitly approves preparing one implementation PR containing all three operations within this profile. Its 24 passing published-1.22.0 inspection/runtime checks are baseline evidence, not new attribute-authoring tests; initial harness version failures and provenance limits are retained. All three exact-head CI checks passed. Product-owner implementation authorization remains the next agreed gate; no implementation, version or publication is performed by this import.
+
+Earlier proposed/review-pending statements below describe the reviewed design checkpoint.
+
 **23 planned groups, zero new attribute-authoring tests executed.** These expand the consumer's LA01–LA23 without claiming implementation. Read the [contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md), [original request](REQ-135-literal-attribute-lifecycle.md) and [handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md). Each engine group needs happy-path and edge/refusal cases; counts below are group identifiers, not passed tests.
 
 | Group | Required evidence | Responsibility |
