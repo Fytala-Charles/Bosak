@@ -4,6 +4,10 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+## 2026-10-20 - Harness hardening and selected baseline
+
+[Harness guide](XSLT40-HARNESS-HARDENING.md) adds bounded native execution, durable receipts and explicit selection accounting. [Baseline](XSLT40-BASELINE-2026-10-20.md) and [original manifest](XSLT40-BASELINE-2026-10-20.json) retain freshly fetched suite/spec pins and exact failures, with an explicit correction for later overwritten raw logs. Fourteen CLI and four Windows wrapper controls pass locally. No engine, assertion, fixture or package version changes; switch validation is a separate PR.
+
 ## 2026-10-16 - 1.16.5 published and verified
 
 All ten .NET10 libraries are published as1.16.5 from approved immutable `v1.16.5` at`09940e90f702566107bb2eed521b7f8d789a6410`. The single release workflow passes9,577 solution tests and all ten uploads. Fresh nuget.org-only consumers pass153 broad checks and338 public focused tests; public signatures, archive/cache/output hashes, restore hashes and exact assembly revisions verify. Dependency audits report no vulnerable packages. [Publication verification](RELEASE-1.16.5-PUBLICATION.md); [release notes](RELEASE-NOTES-1.16.5.md). VS Code0.2.4 still bundles1.8.0; Braid adoption, REQ acceptance and upstream work are unchanged. No further engine PR is planned.

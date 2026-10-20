@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**XSLT 4.0 harness hardening - 20 October 2026:** [Bounded native runs and selection accounting](XSLT40-HARNESS-HARDENING.md) add timeout receipts, missing-file detection and explicit selected/unselected counts. Fourteen runner and four Windows wrapper controls pass locally. Engine behavior, package versions, REQ statuses and consumer acceptance are unchanged.
+
 For the product introduction, Schema and Braid overview, start with the [README](../README.md) and [ecosystem guide](ECOSYSTEM.md). Earlier README implementation checkpoints are preserved in [development history](DEVELOPMENT_HISTORY.md); dated checkpoints below retain their original context.
 
 

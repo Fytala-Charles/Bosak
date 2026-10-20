@@ -1,3 +1,7 @@
+# XSLT 4.0 harness hardening - 20 October 2026
+
+Base `53c098d1529343b41f763168df1daa3b6ce8bdfe`; branch `test/xslt40-harness-hardening`. [Harness guide](XSLT40-HARNESS-HARDENING.md) and [baseline](XSLT40-BASELINE-2026-10-20.md) separate execution/accounting changes from the switch engine patch in another PR. Fourteen runner and four Windows wrapper controls pass locally. CI must verify this isolated head; the prior combined 10,030-test run includes the separate20 switch cases. Engine/package version remains1.22.0. Preserve the original baseline manifest/diagnostics and all failed receipts. Original baseline raw logs were overwritten by a later local rerun; the correction is explicit in the baseline report. No merging, release, upstream submission, REQ status or Braid acceptance changes are authorized by this review branch.
+
 # 1.22.0 published and verified - 19 October 2026
 
 **1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.
