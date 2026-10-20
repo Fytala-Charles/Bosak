@@ -334,6 +334,7 @@
 //                      | Charles Korthout | 2.172 | 16-10-2026     | Isolate draft modules and activate fixed bindings independently of declared version.        |
 //                      | Charles Korthout | 2.173 | 16-10-2026     | Require fallback statically for unknown future instructions in the draft processor.         |
 //                      | Charles Korthout | 2.174 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 2.175 | 20-10-2026     | Enforce trailing-only fallback children in switch content.                             |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -4371,6 +4372,7 @@ internal sealed class Stylesheet
                         throw new InvalidOperationException("XTSE0010: xsl:switch requires a select attribute.");
                     bool seenOtherwise = false;
                     bool seenWhen = false;
+                    bool seenFallback = false;
                     foreach (var child in elem.Elements())
                     {
                         if (child.Name.NamespaceName != XslNamespace)
@@ -4378,16 +4380,21 @@ internal sealed class Stylesheet
                         switch (child.Name.LocalName)
                         {
                             case "when":
+                                if (seenFallback)
+                                    throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:fallback in xsl:switch.");
                                 if (seenOtherwise)
                                     throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:otherwise in xsl:switch.");
                                 seenWhen = true;
                                 break;
                             case "otherwise":
+                                if (seenFallback)
+                                    throw new InvalidOperationException("XTSE0010: xsl:otherwise must precede xsl:fallback in xsl:switch.");
                                 if (seenOtherwise)
                                     throw new InvalidOperationException("XTSE0010: xsl:switch allows at most one xsl:otherwise.");
                                 seenOtherwise = true;
                                 break;
                             case "fallback":
+                                seenFallback = true;
                                 break;
                             default:
                                 throw new InvalidOperationException($"XTSE0010: xsl:{child.Name.LocalName} is not permitted as a child of xsl:switch.");

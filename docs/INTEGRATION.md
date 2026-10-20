@@ -3703,3 +3703,8 @@ Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static c
 ## Element-to-map fallback errors - source patch 1.19.1
 
 When an explicit element layout fails and the wildcard conversion-plan entry supplies no layout, element-to-map now reports FOJS0008 rather than a .NET nullable-value exception. Explicit fallback layouts and ordinary inference without a failed explicit layout retain their behavior. This unpublished maintenance patch adds no API and leaves public 1.19.0 unchanged. [Regression and warning-cleanup evidence](MAINTENANCE-1.19.1.md).
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.

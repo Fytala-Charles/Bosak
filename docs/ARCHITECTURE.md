@@ -1601,3 +1601,8 @@ Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static c
 ## Maintenance verification
 
 The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-free XML/API documentation, layer-safe reference formatting, and a concrete-layout guard in standard element-to-map fallback selection. Layer dependencies and public API surfaces are unchanged.
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.
