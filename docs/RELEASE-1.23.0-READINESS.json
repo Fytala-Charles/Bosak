@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-21",
+  "status": "PREPARED_PUBLICATION_AUTHORIZATION_PENDING",
+  "version": "1.23.0",
+  "proposedTag": "v1.23.0",
+  "immutableSource": "9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+  "implementationPR": 392,
+  "documentationPR": 393,
+  "consumerMergeReviewSha256": "1a9434b348407596dcbb9cbac77997ec771033084957e9dca436ab17621c5896",
+  "sourceTests": 10214,
+  "languageServerTests": 84,
+  "mergedMainCI": 39543201162,
+  "localPackageOnlyPassed": 117,
+  "independentBraidMergePassed": 700,
+  "countsOverlap": true,
+  "frozenGates": {
+    "qt3": "31142/0/679",
+    "qt4Gated": "8278/0/1894",
+    "scope": "Previously verified unchanged runtime source; no new manual run by release preparation"
+  },
+  "packages": [
+    "Bosak.XPath.Api",
+    "Bosak.XPath.Compiler",
+    "Bosak.XPath.Core",
+    "Bosak.XPath.Parser",
+    "Bosak.XPath.Providers",
+    "Bosak.XPath.Providers.Database",
+    "Bosak.XPath.Runtime",
+    "Bosak.XPath.Standard",
+    "Bosak.XQuery",
+    "Bosak.Xslt"
+  ],
+  "workflow": ".github/workflows/release.yml",
+  "publicationTrigger": "One push of immutable annotated version tag, after explicit user approval and repeated live preflight; do not also dispatch manually",
+  "githubReleaseTitle": "Bosak 1.23.0",
+  "publicVersionCurrently": "1.22.0",
+  "publicationPerformed": false,
+  "tagCreated": false,
+  "githubReleaseCreated": false,
+  "preflight": {
+    "date": "2026-10-21",
+    "version": "1.23.0",
+    "proposedTag": "v1.23.0",
+    "immutableSource": "9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+    "remoteTagPresent": false,
+    "githubReleasePresent": false,
+    "nugetIndexes": [
+      {
+        "package": "Bosak.XPath.Api",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Compiler",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Core",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Parser",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Providers",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Providers.Database",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Runtime",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XPath.Standard",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.XQuery",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json",
+        "version1230Present": false
+      },
+      {
+        "package": "Bosak.Xslt",
+        "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+        "version1230Present": false
+      }
+    ],
+    "publicationAuthorized": false,
+    "scope": "Read-only preflight. Repeat immediately before separately authorized publication; no tag, release, workflow or upload started."
+  },
+  "postPublicationVerification": [
+    "Single successful tag-triggered Release run at immutable source;10214 solution tests and ten package upload acknowledgments",
+    "Ten signed public archives and exact source/nuspec/aligned dependencies/docs/license/README/icon identity",
+    "dotnet nuget verify --all for all ten public archives",
+    "Fresh nuget.org-only broad153-case and lifecycle117-case PackageReference consumers, not engine ProjectReferences",
+    "Exact archive/cache/output DLL and informational revision identity, signed archive SHA-512 versus NuGet contentHash/assets metadata",
+    "Restore-source receipts and transitive vulnerability audits",
+    "Only after verified signed public delivery: Braid adoption and independent LA17-LA22 integration/worker/export/reopen/native acceptance"
+  ]
+}

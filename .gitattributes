@@ -34,3 +34,6 @@
 
 # Retain the original REQ-135 implementation review bytes.
 /docs/REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+
+# Preserve updated exact-merge review separately from the original head review.
+/docs/REQ-135-CONSUMER-MERGE-REVIEW.md -text whitespace=cr-at-eol
