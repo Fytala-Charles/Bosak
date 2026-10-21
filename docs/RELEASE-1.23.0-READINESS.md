@@ -4,6 +4,11 @@
 <p>21 October 2026</p>
 </div>
 
+**1.23.0 published and verified - 21 October 2026:** [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md) records immutable `v1.23.0` at `9218a2b6`, one successful Release run (10,214 solution tests; ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /117 lifecycle** checks with exact provenance and clear audits. REQ-135 Create/Update/Delete is published after [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) cleared700 checks without blockers. Braid adoption and LA17–LA22 integration/native acceptance remain pending. Earlier source/preparation/review-pending checkpoints below are historical.
+
+**Historical checkpoint:** The original readiness/source statements below predate approved publication.
+
+
 **Prepared; publication approval pending.** Pin proposed annotated tag `v1.23.0` to **`9218a2b6f2339f923fd6d018ba988c8325b2c44d`**, the independently reviewed implementation merge. Do not tag a later documentation merge or moving main. Read the [notes](RELEASE-NOTES-1.23.0.md), [machine-readable plan](RELEASE-1.23.0-READINESS.json), [merge evidence](REQ-135-MERGED-READINESS.md) and [unchanged updated consumer review](REQ-135-CONSUMER-MERGE-REVIEW.md).
 
 | Gate | Observed result |

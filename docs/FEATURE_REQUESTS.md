@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-**1.23.0 publication prepared — 21 October 2026:** [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) clears9218a2b6/REQ-135 with700 public-only passes and matching merge provenance. [Release readiness](RELEASE-1.23.0-READINESS.md), [notes](RELEASE-NOTES-1.23.0.md) and the publication plan pin proposed v1.23.0 to that immutable implementation merge, not this later documentation head. Live preflight finds no tag/release or public1.23.0 package. Publication is not authorized or performed; public1.22.0 and pending Braid adoption/native gates remain unchanged. Earlier pending exact-merge review statements are historical.
+**1.23.0 published and verified - 21 October 2026:** [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md) records immutable `v1.23.0` at `9218a2b6`, one successful Release run (10,214 solution tests; ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /117 lifecycle** checks with exact provenance and clear audits. REQ-135 Create/Update/Delete is published after [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) cleared700 checks without blockers. Braid adoption and LA17–LA22 integration/native acceptance remain pending. Earlier source/preparation/review-pending checkpoints below are historical.
 
 **REQ-135 merge verified — 21 October 2026:** User-approved [PR #392](https://github.com/Fytala-Charles/Bosak/pull/392) is merged as `9218a2b6f2339f923fd6d018ba988c8325b2c44d`. Merged-main CI39543201162 passes10,214 solution +84 language-server tests,16 runner controls, four Windows wrapper controls and highlighting. Exact-merge isolated public-only packages pass117/0/0 with matching ten archive/nine consumed assembly provenance. Runtime source/tests remain unchanged from Braid-reviewed f9e618dc. [Merge verification](REQ-135-MERGED-READINESS.md) and [exact-merge consumer handoff](REQ-135-CONSUMER-MERGE-HANDOFF.md) record the next gate: independent Braid confirmation at the immutable merge. Source1.23.0 remains unpublished; public1.22.0, Braid adoption and native acceptance are unchanged. No release authorized.
 
@@ -527,7 +527,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-132 | Bosak.Braid | Append one paired empty no-namespace literal result element through engine-owned targets and complete source evidence | Build output structure and populate it using accepted text/value-of operations | Implemented, published and consumer-accepted | 1.20.0 | Charles Korthout | 2026-10-18 |
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
-| REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Merged; exact-merge consumer review cleared; publication pending | 1.23.0 (unpublished) | Bosak | 2026-10-21 |
+| REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented and published; consumer acceptance pending | 1.23.0 | Bosak | 2026-10-21 |
 
 
 > **Legend:
@@ -1848,9 +1848,13 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 ### REQ-135: Literal Result Attribute Lifecycle for Bosak.Braid
 
+**Published 21 October 2026:** Literal attribute Create, Update and Delete are delivered together in verified signed1.23.0 packages. [Publication proof](RELEASE-1.23.0-PUBLICATION.md) records153 broad/117 lifecycle public checks, ten signatures and exact provenance. Braid independently cleared the immutable implementation merge with700 checks. Braid adoption and LA17–LA22 consumer integration/native acceptance remain pending.
+
+**Historical registration/design checkpoint:**
+
 **REQ-135 proposed design — 20 October 2026:** [Literal attribute lifecycle contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) proposes Create, Update and Delete together in one implementation PR, separate operation authority, exact literal escaping/NoChange and complete graph plus actual attribute correspondence. [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) and [Braid design handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md) await consumer review. No engine API/capability, implementation, version or release is authorized. REQ-134 is [consumer-accepted in 1.22.0](REQ-134-BRAID-ACCEPTANCE.md); earlier pending acceptance notes are historical.
 
-**Requester:** Bosak.Braid (consumer REQ-122). **Submitted:** 2026-10-20. **Status:** Pending scope/API review. **Target version:** TBD. **Implementation owner:** Unassigned.
+**Requester:** Bosak.Braid (consumer REQ-122). **Submitted:** 2026-10-20. **Status:** Implemented and published; Braid adoption and consumer acceptance pending. **Target version:** 1.23.0. **Implementation owner:** Bosak.
 
 The product owner requests Create / Update / Delete of one literal result attribute as **one cohesive feature and one implementation PR**, rather than separate operation deliveries. The [self-contained consumer request and23 planned acceptance groups](REQ-135-literal-attribute-lifecycle.md) define unqualified no-namespace names, exact literal Unicode/AVT-brace escaping, duplicate-create and missing/dynamic-target refusals, explicit ordinal NoChange for equal Update, operation-specific single-edit footprints, complete actual attribute/descriptor provenance and shared review/Apply/history/navigation.
 
