@@ -19017,9 +19017,11 @@
     "kind": "xpath",
     "mode": "40",
     "file": "equality-contracts/index-empty-collation.xpath",
-    "error": "XPTY0004",
-    "reviewStatus": "observed-implementation-gap",
-    "normative40Expected": "1"
+    "reviewStatus": "corrected-in-source-1.23.2",
+    "normative40Expected": "1",
+    "expected": "1",
+    "baselineError": "XPTY0004",
+    "priorObservedError": "XPTY0004"
   },
   {
     "id": "equality-contract-deep-same-order",

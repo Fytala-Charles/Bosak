@@ -4,6 +4,9 @@
 <p>21 October 2026 — separate from the documentation delivery</p>
 </div>
 
+**Index-of correction - 21 October 2026:** Source1.23.2 [defaults an empty collation only in4.0](INDEX-OF-EMPTY-COLLATION.md), retaining XPath3.1 behavior. The manifest reproducer now verifies result1 plus the3.1 XPTY0004 baseline. Original source5de2cfc5 findings/hashes below remain historical; deep-equal options and unrelated keyword findings remain open. No new release.
+
+
 These bounded findings are recorded against source 5de2cfc5 (unpublished1.23.1). No engine fix or release is included in the REQ-126 documentation slice. The [contract review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [raw audit](audit-equality-collation-contracts.json) pin the draft declarations and original receipts. A future engine correction must retain the real customer report, add specification-derived regressions, assess3.1 compatibility and rerun both mandatory engine gates.
 
 | Reproduction in explicit XPath40 | Pinned draft outcome in this context | Current observation | Scope of next investigation |

@@ -1,0 +1,84 @@
+{
+  "date": "2026-10-21",
+  "status": "VERIFIED_UNPUBLISHED_SOURCE_CANDIDATE",
+  "sourceBase": "7c33728c7aa34fca5ccdc21d8310f36894d77f09",
+  "sourceVersion": "1.23.2",
+  "publishedVersion": "1.23.0",
+  "documentationPRMerged": 398,
+  "documentationMerge": "7c33728c7aa34fca5ccdc21d8310f36894d77f09",
+  "documentationHeadCI": 39610977211,
+  "specRevision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+  "normativeSignature": "fn:index-of($input as xs:anyAtomicType*, $target as xs:anyAtomicType, $collation as xs:string? := fn:default-collation()) as xs:integer*; collation default-on-empty",
+  "compatibility": "Only ctx.IsXPath40 (frozen and experimental); XPath31 empty-third-argument XPTY0004 and keyword XPST0003 unchanged",
+  "focusedBefore": {
+    "passed": 15,
+    "failed": 12,
+    "skipped": 0,
+    "trxSha256": {
+      "charl_CHARLES_2026-10-21_15_58_54_net10.0.trx": "23d034b740028083f33652d57774b36d9ae04a941e6b75a83d676f9bc707e777"
+    }
+  },
+  "focusedAfter": {
+    "passed": 27,
+    "failed": 0,
+    "skipped": 0,
+    "trxSha256": {
+      "charl_CHARLES_2026-10-21_16_00_09_net10.0.trx": "510286a21db12c79b76c249d32c69cd7a7b903fdaa543b73e2b72b13857892f0"
+    }
+  },
+  "fullSolution": {
+    "passed": 10331,
+    "failed": 0,
+    "skipped": 0,
+    "trxSha256": {
+      "charl_CHARLES_2026-10-21_16_02_02_net10.0.trx": "f58f09c2694dba44f4fadad6481141db902dae0b06933c1ddea2c2c341f756a8",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0.trx": "466494d955bbbfbbb40fe61d7a1135d320819aee45d71038d0b3a3b42a60d82f",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[1].trx": "959345df017388ff1e3617bfecfe7032e77b42c63e1f10c2f3351ffb85207b1b",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[2].trx": "9fd20eb350314261861fa822ac55d24222899ac95b5009d495ed7b9923dd127a",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[3].trx": "cf51c24e2e92436c8c77c3b15e3a463d706b040db59ec548d12719386a54f37e",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[4].trx": "a472311b38fe9ed0295a01a2e74cf91281c51c2a7a14df45386b06ba0e54f000",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[5].trx": "44231beddba21fb6673e8762644fa60a6ab6080baa1e840684377e8fca7473d7",
+      "charl_CHARLES_2026-10-21_16_02_04_net10.0[6].trx": "005eb44e5e39bb7ae305b87ab10c3f58d72a7737bef6e6f9517e95252b90d15e",
+      "charl_CHARLES_2026-10-21_16_02_05_net10.0.trx": "f9176ed20418666f1d68408df2bae1f35007db692b4b2e6999f8f8a8436e1b80",
+      "charl_CHARLES_2026-10-21_16_02_06_net10.0.trx": "b13ef627e74b6183703eaff89bee4026329add91af763f3101b0444288e724eb"
+    }
+  },
+  "qt3": "31142/0/679",
+  "qt4Gated": "8278/0/1894",
+  "gateMembershipChanged": false,
+  "catalogRowsAdded": 0,
+  "catalogRowsChanged": 1,
+  "catalogCorrection": {
+    "prior": {
+      "id": "equality-contract-index-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-empty-collation.xpath",
+      "error": "XPTY0004",
+      "reviewStatus": "observed-implementation-gap",
+      "normative40Expected": "1"
+    },
+    "current": {
+      "id": "equality-contract-index-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-empty-collation.xpath",
+      "reviewStatus": "corrected-in-source-1.23.2",
+      "normative40Expected": "1",
+      "expected": "1",
+      "baselineError": "XPTY0004",
+      "priorObservedError": "XPTY0004"
+    }
+  },
+  "catalogCounts": {
+    "entries": 68,
+    "featureCases": 2636,
+    "chapterCases": 24,
+    "total": 2660
+  },
+  "countsOverlap": true,
+  "build": "Final incremental Release build0 warnings/errors after forced network restore; initial clean compilation retains pre-existing conformance CS8604. Initial cached NU1900 audit warnings resolved by force/no-http-cache restore. No warning fix claimed.",
+  "releasePerformed": false,
+  "req126Status": "In Progress",
+  "oldPR132Untouched": true
+}

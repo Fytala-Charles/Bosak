@@ -88,7 +88,7 @@ All 58 manifest cases run through the unchanged public catalog runner. Successfu
 
 `index-of(input,target,collation)` and `contains-token(value,token,collation)` have keyword metadata. `compare` currently accepts `comparand1`/`comparand2`, while the pinned draft declares `value1`/`value2`; the draft spellings refuse XPST0017. `distinct-values` and `deep-equal` have no keyword metadata and refuse tested keyword forms at both 4.0 levels. These observations are not recommended alternatives to the normative spellings.
 
-The pinned draft defaults an explicitly empty collation for `index-of`; Bosak positional#3 instead raises XPTY0004. The pinned `deep-equal` third argument accepts an options map, but Bosak atomizes it as a legacy collation argument and raises FOTY0013. The two fixtures explicitly carry `reviewStatus=observed-implementation-gap` and separate `normative40Expected` metadata. They preserve current behavior for diagnosis; their passing tests do not certify draft conformance. Use omitted or valid string collation arguments in supported consumer examples. No engine correction is included.
+Source **1.23.2** corrects the explicitly empty `index-of` collation in4.0: it uses the current evaluation context default. XPath3.1 still raises XPTY0004. Positional/reference/lookup/partial/keyword paths and non-codepoint host defaults have dedicated regressions; [correction evidence](../../INDEX-OF-EMPTY-COLLATION.md). The pinned `deep-equal` third argument accepts an options map, but Bosak atomizes it as a legacy collation argument and raises FOTY0013. The deep-equal fixture retains `reviewStatus=observed-implementation-gap` and separate `normative40Expected` metadata. The index-of fixture now checks the normative result and its unchanged3.1 refusal; original observed-error evidence remains in the audit. They preserve current behavior for diagnosis; their passing tests do not certify draft conformance. Use omitted or valid string collation arguments in supported consumer examples. The index-of correction is separate from the original documentation delivery; no deep-equal implementation change is included.
 
 NaN illustrates distinct equality contracts: two NaNs yield one distinct value and are deep-equal, but `index-of` uses value equality and finds neither NaN equal to itself. Case-insensitive deep comparison of map values does not make differently spelled map keys equivalent. ASCII collation does not equate Ä/ä or normalize CAFÉ/CAFÉ. NFC normalization is an explicit, separate policy in its own fixture.
 
@@ -110,7 +110,7 @@ Tests use fresh default contexts; host-custom default collation, all UCA configu
 | [index-empty-target](index-empty-target.xpath) | 40 | `XPTY0004` |
 | [index-nan](index-nan.xpath) | 40 | `0` |
 | [index-unknown-collation](index-unknown-collation.xpath) | 40 | `FOCH0002` |
-| [index-empty-collation](index-empty-collation.xpath) | 40 | `XPTY0004` (observed gap; draft expects `1`) |
+| [index-empty-collation](index-empty-collation.xpath) | 40 | `1`; XPath3.1 baseline `XPTY0004` |
 | [deep-same-order](deep-same-order.xpath) | 40 | `true` |
 | [deep-reordered](deep-reordered.xpath) | 40 | `false` |
 | [deep-nan](deep-nan.xpath) | 40 | `true` |

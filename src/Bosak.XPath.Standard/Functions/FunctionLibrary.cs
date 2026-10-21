@@ -462,6 +462,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 5.144 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 5.145 | 21-10-2026     | Default empty index-of collation only in explicit XPath 4.0 compatibility modes.           |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -13356,7 +13357,9 @@ public static class FunctionLibrary
 
     private static XdmValue IndexOf_3(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        string collation = RequireStringRequired(args[2]);
+        string collation = ctx.IsXPath40 && IsEmptySequence(args[2])
+            ? ctx.DefaultCollation
+            : RequireStringRequired(args[2]);
         ValidateCollation(collation);
         return IndexOfImpl(args[0], args[1], collation, ctx.ImplicitTimezoneOffsetMinutes);
     }
