@@ -31,3 +31,6 @@
 
 # Preserve the original REQ-135 consumer review bytes.
 /docs/REQ-135-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+# Retain the original REQ-135 implementation review bytes.
+/docs/REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
