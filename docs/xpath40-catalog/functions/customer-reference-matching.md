@@ -8,6 +8,8 @@
 
 **Customer-reference equality and collation — existing 3.1 functions with reviewed 4.0 contracts.** Covers fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token. Functions are not4.0-only names; this adds no name to the 117-name inventory. [REQ-126](../../FEATURE_REQUESTS.md) equality/collation documentation slice; [review and source pins](../EQUALITY-COLLATION-CONTRACT-REVIEW.md), source base `5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f`. Keyword syntax requires4.0. Unsupported draft forms are explicitly separated from supported calls.
 
+Documentation delivery: [Bosak PR #398](https://github.com/Fytala-Charles/Bosak/pull/398). The review and verification receipts preserve source/specification pins, named cases, original findings and test hashes.
+
 ## 2. Intent
 
 Match synthetic customer references under an explicit business collation, retain every matching position, test whole tag tokens and verify report order. Start with the [complete customer example](../examples/equality-contracts/README.md).
@@ -70,7 +72,7 @@ The report scans the supplied customer sequence several times. No benchmark, asy
 
 ## 15. Known Uses
 
-The [manifest](../examples/cases.json) and CatalogExampleTests verify the named equality-contract cases. QT3 sets: [distinct-values](../../../tests/qt3tests/fn/distinct-values.xml), [index-of](../../../tests/qt3tests/fn/index-of.xml), [deep-equal](../../../tests/qt3tests/fn/deep-equal.xml), [compare](../../../tests/qt3tests/fn/compare.xml), [contains-token](../../../tests/qt3tests/fn/contains-token.xml). Corresponding qt4 files exist at the same fn paths under [qt4tests](../../../tests/qt4tests/catalog.xml). Current [GatedSets](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs) includes fn-compare/fn-contains-token; fn-distinct-values/fn-index-of/fn-deep-equal are not gated. Membership is source evidence, not a new conformance run. No gate is invented or promoted; AC-03's catalog-wide acceptance remains unresolved.
+The [manifest](../examples/cases.json) and CatalogExampleTests verify the named equality-contract cases. QT3 sets: [distinct-values](https://github.com/w3c/qt3tests/blob/201a6e466940cdfc727f4babfedcde5332b9f578/fn/distinct-values.xml), [index-of](https://github.com/w3c/qt3tests/blob/201a6e466940cdfc727f4babfedcde5332b9f578/fn/index-of.xml), [deep-equal](https://github.com/w3c/qt3tests/blob/201a6e466940cdfc727f4babfedcde5332b9f578/fn/deep-equal.xml), [compare](https://github.com/w3c/qt3tests/blob/201a6e466940cdfc727f4babfedcde5332b9f578/fn/compare.xml), [contains-token](https://github.com/w3c/qt3tests/blob/201a6e466940cdfc727f4babfedcde5332b9f578/fn/contains-token.xml). Corresponding qt4 files exist at the same fn paths under [qt4tests](https://github.com/qt4cg/qt4tests/blob/68910080d2d4d4092a1c6a908998ceec64ffc6d4/catalog.xml). Current [GatedSets](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs) includes fn-compare/fn-contains-token; fn-distinct-values/fn-index-of/fn-deep-equal are not gated. Membership is source evidence, not a new conformance run. No gate is invented or promoted; AC-03's catalog-wide acceptance remains unresolved.
 
 ## 16. Related Features
 
