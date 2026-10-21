@@ -19,7 +19,13 @@
 // ===========================================================================================================================================================
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: independently advertise bounded value-of deletion.                              |
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: independently advertise bounded literal-text insertion.                       |
+//                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
+//                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: independently advertise literal text body replacement.                         |
+
+//                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
+
+//                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: advertise complete literal attribute lifecycle.                                 |
 
 using System.Reflection;
 
@@ -45,6 +51,40 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether the complete literal attribute lifecycle is available.</summary>
+    public static bool SupportsLiteralAttributeLifecycle => true;
+    /// <summary>Gets the independent original and final physical source byte limit.</summary>
+    public static int MaxLiteralAttributeSourceBytes => 8_388_608;
+    /// <summary>Gets immutable supported encodings; UTF-16 requires a matching BOM.</summary>
+    public static IReadOnlyList<string> LiteralAttributeSupportedEncodings { get; } = Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
+    /// <summary>Gets whether bounded literal text instruction deletion is implemented.</summary>
+    public static bool SupportsTextDeletion => true;
+    /// <summary>Gets the original and final physical byte bound, including BOM.</summary>
+    public static int MaxTextDeletionSourceBytes => 8_388_608;
+    /// <summary>Gets immutable deletion encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> TextDeletionSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
+    /// <summary>Gets whether bounded literal text body replacement is implemented.</summary>
+    public static bool SupportsTextBodyReplacement => true;
+    /// <summary>Gets the original and final physical byte bound, including BOM.</summary>
+    public static int MaxTextBodyReplacementSourceBytes => 8_388_608;
+    /// <summary>Gets immutable replacement encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> TextBodyReplacementSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
+    /// <summary>Gets whether bounded no-namespace literal element insertion is available.</summary>
+    public static bool SupportsLiteralElementInsertion => true;
+    /// <summary>Gets whether explicit readable literal element layout is available.</summary>
+    public static bool SupportsReadableLiteralElementInsertion => true;
+    /// <summary>Gets the original and complete candidate physical byte limit, including BOM.</summary>
+    public static int MaxLiteralElementInsertionSourceBytes => 8_388_608;
+    /// <summary>Gets immutable literal element encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> LiteralElementInsertionSupportedEncodings { get; } =
+        Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
+
     /// <summary>Gets whether bounded literal xsl:text insertion is supported.</summary>
     public static bool SupportsTextInsertion => true;
 

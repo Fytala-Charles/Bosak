@@ -1,6 +1,211 @@
-# REQ-130 Braid consumer acceptance - 2026-10-17
+# REQ-130 acceptance evidence reconciliation - 21 October 2026
 
-Formal acceptance is recorded in docs/REQ-130-BRAID-ACCEPTANCE.md and the registry. Published Bosak1.18.0/3264fcfa is adopted; Braid's accepted deletion implementation and tracking are committed/pushed at 6d89fcd5e53d65560c4004b18b98264aa20e1fee. Fresh full normal Release1,015/0/0; public-package241/0/0. User completed the native procedure and confirms all hashes match. Record Implemented/published/consumer-accepted within the declared profile, including separate text-merge provenance. No invented native variants/literal hashes/accessibility certification. This documentation-only change does not modify source, frozen receipts, publication or REQ131 acceptance. Earlier REQ130 consumer-pending entries are historical; preserve current REQ131 delivery/release context below.
+**REQ-130 acceptance evidence reconciled - 21 October 2026:** [Formal consumer acceptance](REQ-130-BRAID-ACCEPTANCE.md) remains accepted in published1.18.0. Original notification PR366 adds immutable Braid evidence links at `6d89fcd5e53d65560c4004b18b98264aa20e1fee`, confirming the acceptance records are pushed. Current later REQ statuses and all historical execution receipts are retained. Documentation only; no engine, version or release change.
+
+# Switch slice merged; upstream draft submitted - 21 October 2026
+
+**Switch slice merged and upstream draft submitted - 21 October 2026:** [Bosak PR395](https://github.com/Fytala-Charles/Bosak/pull/395) merged as `d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4` after exact-head CI passed10,246 solution +84 language-server tests. [Upstream draft PR34](https://github.com/qt4cg/xslt40-test/pull/34) contains the12 native switch cases, based on refreshed default `91328fbf`; [submission proof](../contributions/xslt40/switch-comparison-boundaries/submission.json) records exact revisions and the unchanged prepared patch hash. Upstream review/acceptance and independent processor confirmation remain pending. Source1.23.1 is unpublished; public1.23.0 and Braid REQ-135 validation remain unchanged. Merged-main CI39572257850 is running at this checkpoint. Earlier prepared/not-submitted statements below are historical.
+
+What was completed: reviewed exact-head CI, merged PR395 with source/tests unchanged, refreshed upstream default before submission and opened draft PR34, and preserved original evidence separately from submission.json. Current source base `d53d64bd`; publication remains1.23.0 at9218a2b6. Next: observe merged-main CI, upstream design/independent processor review, and Braid independent REQ-135 acceptance. No release decision or new engine slice is implied. Root pending PR33 notes/sweep data and all backup stashes remain preserved.
+
+## Earlier checkpoints
+
+# XSLT4 switch boundary slice - 21 October 2026
+
+**XSLT4 switch boundaries - 21 October 2026:** [Twelve new native cases](XSLT40-SWITCH-BOUNDARIES.md) expose and verify a narrow selected-node identity correction in unpublished source1.23.1.32 public checks and10,246 full solution tests pass; QT3 stays31,142/0/679 and qt4 gated8,278/0/1,894. Native new cases12/0/0 and expanded switch22/0/2 pass in both profiles; original assertions/receipts and dependency skips are retained. Upstream patch prepared, not submitted. Public1.23.0 and separate Braid REQ-135 validation remain unchanged.
+
+Base `00788b46d001daa6db5baf2b12821d77f239e1a0`; new slice commit follows. What was built:12 portable native fixtures,32 public API controls, a narrow switch-select node identity fix, complete original/final receipts and test-only upstream patch at freshly fetched default 91328fbf0fed4a5d2813eb3661808ee53cb961ba. The original without-switch reduction passes; rooted switch reduction fails. Source1.23.1 remains unpublished. Next: exact-head CI/review before merge; refresh upstream default immediately before any later submission. PR394 release documentation is merged; published1.23.0 immutable tag stays9218a2b6. Braid continues independent REQ-135 acceptance. Preserve all original failure receipts, fixture refinement, pending root PR33 notes, sweep data, stashes and worktrees. README public package links and commands remain current; no product/CLI structure changed.
+
+## Earlier checkpoints
+
+# Bosak 1.23.0 published and verified - 21 October 2026
+
+**1.23.0 published and verified - 21 October 2026:** [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md) records immutable `v1.23.0` at `9218a2b6`, one successful Release run (10,214 solution tests; ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /117 lifecycle** checks with exact provenance and clear audits. REQ-135 Create/Update/Delete is published after [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) cleared700 checks without blockers. Braid adoption and LA17–LA22 integration/native acceptance remain pending. Earlier source/preparation/review-pending checkpoints below are historical.
+
+Release source `9218a2b6f2339f923fd6d018ba988c8325b2c44d`; annotated tag `8d202a8cb123a67ab0fac048ff94297fde3c037e`; publication run 39564362629. Documentation base `deaea957d9db4d5fa449107aff0403cadf61ac22`; the publication documentation commit follows. Preserve original receipts, sweep baselines, all stashes/backups/worktrees and immutable tags. Root pending upstream PR33 submission notes remain separate. Next: Braid signed-public adoption and independent lifecycle integration/native acceptance; no new engine slice is required for this handoff.
+
+## Historical delivery checkpoints
+
+# Bosak1.23.0 publication preparation — 21 October 2026
+
+**1.23.0 publication prepared — 21 October 2026:** [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) clears9218a2b6/REQ-135 with700 public-only passes and matching merge provenance. [Release readiness](RELEASE-1.23.0-READINESS.md), [notes](RELEASE-NOTES-1.23.0.md) and the publication plan pin proposed v1.23.0 to that immutable implementation merge, not this later documentation head. Live preflight finds no tag/release or public1.23.0 package. Publication is not authorized or performed; public1.22.0 and pending Braid adoption/native gates remain unchanged. Earlier pending exact-merge review statements are historical.
+
+What was built: preserved updated exact-merge consumer review, immutable source/version/tag plan, release notes, read-only ten-index/tag/release preflight and post-publication verification preparation. Source/tag MUST remain9218a2b6; ten library packages, one tag-triggered workflow, no duplicate manual dispatch. User requested preparation only. No engine/test/version/tag/release/Braid change. Next: explicit user publication approval, repeat live preflight and use the prepared readiness sequence; then signed public verification before Braid adoption. Pending root PR33 notes/sweep data remain untouched.
+
+# REQ-135 immutable merge verification — 21 October 2026
+
+**REQ-135 merge verified — 21 October 2026:** User-approved [PR #392](https://github.com/Fytala-Charles/Bosak/pull/392) is merged as `9218a2b6f2339f923fd6d018ba988c8325b2c44d`. Merged-main CI39543201162 passes10,214 solution +84 language-server tests,16 runner controls, four Windows wrapper controls and highlighting. Exact-merge isolated public-only packages pass117/0/0 with matching ten archive/nine consumed assembly provenance. Runtime source/tests remain unchanged from Braid-reviewed f9e618dc. [Merge verification](REQ-135-MERGED-READINESS.md) and [exact-merge consumer handoff](REQ-135-CONSUMER-MERGE-HANDOFF.md) record the next gate: independent Braid confirmation at the immutable merge. Source1.23.0 remains unpublished; public1.22.0, Braid adoption and native acceptance are unchanged. No release authorized.
+
+What was built: exact-merge local candidates/fresh package consumer/provenance, verified merged-main CI, canonical status reconciliation and independent consumer merge handoff. All reviewed-head packages/review originals and initial failures are retained. Root main is synced to9218a2b6 with pending PR33 submission notes restored, backup9eb1bbe26bbcf5c208992277f2dd40e172698a3b retained and sweep untouched. Next: Braid exact-merge consumer confirmation, then a separately authorized release decision. No engine/test/version change in this checkpoint.
+
+# REQ-135 consumer implementation head clearance — 20 October 2026
+
+**Braid implementation head review — 20 October 2026:** [Original consumer review](REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blockers or required correction at `f9e618dc1bcec38ff552d6edfa80e36bfb42a335`. An independent isolated public-only suite passes700/0/0 (117 imported lifecycle,551 prior authoring/identity and32 new Braid probes); counts overlap earlier evidence. Ten candidate archive revisions and nine consumed assembly/archive/cache/output identities match that head. These are unsigned local candidates, not public packages. Product-owner merge authorization and subsequent exact-merge verification remain next gates; publication, Braid adoption and native acceptance remain separate. Source1.23.0 is unpublished, public1.22.0 unchanged.
+
+Original review imported byte-for-byte; SHA-256 and reported evidence are in REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.json. No runtime source or tests changed. Preserve reviewed head packages and original harness failures. Next: product-owner approval to merge PR392, verify immutable merge CI and matching local packages, then independent exact-merge consumer confirmation. No public release, Braid integration or native acceptance authorized. Root pending PR33 submission notes and sweep data remain untouched.
+
+# REQ-135 complete literal attribute lifecycle implementation — 20 October 2026
+
+**REQ-135 source implementation — 20 October 2026:** User-authorized source 1.23.0 implements literal attribute Create, Update and Delete together under the [reviewed contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md). Separate opaque operation authority, constant AVT interpretation, exact per-operation edits, Update NoChange, complete graph/per-owner attribute correspondence and conservative static/resource bounds are implemented. [Implementation verification](REQ-135-IMPLEMENTATION.md) and [consumer handoff](REQ-135-CONSUMER-IMPLEMENTATION-HANDOFF.md) record136 focused passes, unchanged frozen gates and distinct exact-head delivery evidence. Public packages remain 1.22.0; publication and Braid integration/native acceptance are separate. Earlier waiting-for-authorization notes preserve the design checkpoint.
+
+Design merge base `613eeb47`; original Braid review SHA-256 `adae00d3b61b9777b674a43db74dca5f4cefb0db299cef1d50ff8fdcfba1e621` remains byte-identical. All three operations remain one implementation PR. What was built: public operation-specific targets/proposals/results, shared candidate and actual-reference per-owner attribute maps; bounded literal escaping, independent original/candidate validation, graph and source proofs, strict encodings/bounds, typed cancellation and immutable evidence. Existing APIs/defaults/enums/AVT authoring remain unchanged. No release or Braid pin/UI changes. Main checkout pending PR33 submission notes and sweep data are preserved. Verification:136 focused (117 public/19 source-only),10,214 full solution and84 LS pass; frozen gates unchanged and16 runner controls pass. Initial immutable7f4c66c0 passes CI39453100125 and117 isolated package-only checks with ten archives/nine consumed assemblies proved. Final documentation-head receipts are in PR392. Initial failures/corrections remain in the implementation record. Next: independent Braid implementation review before merge/release decisions.
+
+# REQ-135 consumer design clearance — 20 October 2026
+
+**Consumer design clearance — 20 October 2026:** [Braid review](REQ-135-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings or required contract correction at `c01537066cb991b1eea2b1e51a046215a70ed46f`. Braid explicitly approves preparing one implementation PR containing all three operations within this profile. Its 24 passing published-1.22.0 inspection/runtime checks are baseline evidence, not new attribute-authoring tests; initial harness version failures and provenance limits are retained. All three exact-head CI checks passed. Product-owner implementation authorization remains the next agreed gate; no implementation, version or publication is performed by this import.
+
+Original review imported byte-for-byte; hash and source path in REQ-135-CONSUMER-DESIGN-REVIEW.json. No contract correction required. Next: obtain the product owner’s implementation authorization, merge the cleared design, and deliver Create/Update/Delete together under the reviewed gates. No new engine tests or Braid changes.
+
+# REQ-135 literal attribute lifecycle design — 20 October 2026
+
+**REQ-135 proposed design — 20 October 2026:** [Literal attribute lifecycle contract](REQ-135-ATTRIBUTE-LIFECYCLE-CONTRACT.md) proposes Create, Update and Delete together in one implementation PR, separate operation authority, exact literal escaping/NoChange and complete graph plus actual attribute correspondence. [23 planned groups](REQ-135-ATTRIBUTE-LIFECYCLE-ACCEPTANCE.md) and [Braid design handoff](REQ-135-CONSUMER-DESIGN-HANDOFF.md) await consumer review. No engine API/capability, implementation, version or release is authorized. REQ-134 is [consumer-accepted in 1.22.0](REQ-134-BRAID-ACCEPTANCE.md); earlier pending acceptance notes are historical.
+
+Engine audit base `fbfb7ea4764a6cb9c6d3a368053a4234daac6d1d`; REQ-134 acceptance merge `21fe2f03997e55d0f14a03a2f57ebfef89a26f96`. What was built: proposed public surface, bounded profile, exact per-operation edits, AVT-aware constant/equality rules, complete per-owner attribute partitions, 23 planned acceptance groups and independent consumer handoff. Source/API audit only; zero new attribute-authoring runtime checks. Original request and acceptance receipt preserved byte-for-byte. Existing source version 1.22.1 remains unpublished, public 1.22.0 unchanged. Next: Braid design review against immutable design head, then separate user implementation authorization. Existing root upstream-submission notes and sweep data were left untouched in their checkout.
+
+# Array/select test batch prepared -20 October2026
+
+[Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
+
+# Exact structured error harness correction -20 October2026
+
+[Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.
+
+# XSLT 4.0 harness hardening - 20 October 2026
+
+Base `53c098d1529343b41f763168df1daa3b6ce8bdfe`; branch `test/xslt40-harness-hardening`. [Harness guide](XSLT40-HARNESS-HARDENING.md) and [baseline](XSLT40-BASELINE-2026-10-20.md) separate execution/accounting changes from the switch engine patch in another PR. Fourteen runner and four Windows wrapper controls pass locally. CI must verify this isolated head; the prior combined 10,030-test run includes the separate20 switch cases. Engine/package version remains1.22.0. Preserve the original baseline manifest/diagnostics and all failed receipts. Original baseline raw logs were overwritten by a later local rerun; the correction is explicit in the baseline report. No merging, release, upstream submission, REQ status or Braid acceptance changes are authorized by this review branch.
+
+# 1.22.0 published and verified - 19 October 2026
+
+## REQ-135 Literal Attribute Lifecycle Request - 2026-10-20
+
+Braid product owner requests create/update/delete of one unqualified literal result attribute as one feature in a single implementation PR. [REQ-135 dossier](REQ-135-literal-attribute-lifecycle.md) is registered Pending scope/API review, owner Unassigned, version TBD;23 planned acceptance groups, zero new runtime tests. Exact logical literal values, equal-Update NoChange, source-preserving per-operation edits and actual attribute/descriptor correspondence need engine-owned authority. Registry max134 was checked before assigning135; source API audited at53c098d. This documentation PR does not authorize implementation or publication and changes no engine/version/tag. Original working checkout and unrelated sweep data are preserved. REQ-134 acceptance PR385 is a separate change.
+
+## REQ-134 Braid Consumer Acceptance - 2026-10-20
+
+Braid formally accepts published1.22.0/REQ-134 within the delivered bounded deletion profile after its product owner completed native review and reported all hashes match. Consumer checkpointb10630f is committed/pushed. [Formal receipt](REQ-134-BRAID-ACCEPTANCE.md) records independent1,316 Release/551 public-package passes, payload-aware review/Apply/history/UI and worker/export/reopen scope, provenance and native observation limits. Counts are previously executed consumer evidence, not new upstream test runs. Registry/detail updated; no engine/version/tag/release changes or automatic merge.
+
+**1.22.0 published and verified - 19 October 2026:** [Public delivery proof](RELEASE-1.22.0-PUBLICATION.md) records immutable `v1.22.0` at `3b009388`, one successful Release run (10,010 solution tests and ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /531 focused** checks with exact provenance and clear audits. REQ-134 literal text instruction deletion is published after [Braid final implementation review](REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md) found no blockers. Braid adoption/native acceptance remain pending; REQ-133 remains consumer-accepted. Earlier source/review-pending checkpoints below are historical.
+
+Approved immutable release source `3b00938875490d1997b09f53b80f2ee2986a666b`; annotated tag `8a96e8ed966c379e8596977d76a8f2f069a7f485`; publication workflow 39290775983. Read RELEASE-1.22.0-PUBLICATION.md/json, release notes and unchanged final consumer implementation review. Public signatures10, fresh153/531, exact signed archive/cache/output/assembly/restore provenance and both audits pass. Receipts under .guard-tmp/release1220-publication. Braid still uses1.21.0; next: independent public verification/adoption, separate deletion adapter/session/review/atomic Apply/history/parent navigation and real worker/export/reopen/native acceptance. No Braid runtime/UI/native or extension release changes. Preserve sweep baselines, original failures, stashes/backups/worktrees and immutable tags. README remains product-focused.
+
+## Historical source delivery checkpoints
+
+# REQ-134 literal text deletion implementation - 19 October 2026
+
+**REQ-134 source verified - 19 October 2026:** [Braid design review](REQ-134-CONSUMER-DESIGN-REVIEW.md) found no blocking findings; the user subsequently authorized implementation. Source 1.22.0 adds separate literal text deletion authority, complete instruction/payload removal, exact byte replay and bounded whitespace-merge provenance. Local verification passes 10,010 solution, 84 language-server, 110 new source and 531 initial package-public checks; frozen gates are unchanged. [Implementation record](REQ-134-IMPLEMENTATION.md), [verification receipt](REQ-134-VERIFICATION.json) and [consumer implementation handoff](REQ-134-CONSUMER-IMPLEMENTATION-HANDOFF.md) track exact delivery gates through [PR #383](https://github.com/Fytala-Charles/Bosak/pull/383). Public packages remain 1.21.0; consumer implementation review, publication and Braid integration/native acceptance remain separate gates. Earlier design-only restrictions below describe the historical design checkpoint.
+
+Implementation base `bdefbfbfcc2f3654708e8cfd200416377bd623e3`, branch `feat/req134-text-deletion`. New operation accepts paired empty/nonempty and self-closing ordinary text; nullable body span, actual removed payload, separate classified cancellation and complete map/merge partitions. Preserve legacy authoring behavior and frozen gates. Check the implementation record for exact verification/delivery revisions; do not publish without the separate implementation review/publication authorization. Preserve `.sweep-baselines/`, all original failed receipts, prior worktrees, backups and stashes. README remains product-focused.
+
+## Historical design checkpoint
+
+# REQ-134 text instruction deletion design - 19 October 2026
+
+**REQ-134 design proposed - 19 October 2026:** [Literal text instruction deletion contract](REQ-134-TEXT-DELETION-CONTRACT.md), [28 planned acceptance groups](REQ-134-TEXT-DELETION-ACCEPTANCE.md) and [Braid design handoff](REQ-134-CONSUMER-DESIGN-HANDOFF.md) propose separate whole-instruction authority, complete removed payload evidence and bounded whitespace-merge provenance. [Issue #381](https://github.com/Fytala-Charles/Bosak/issues/381) is registered for design only; ten existing public inspection/runtime probes inform the plan, zero text-deletion tests or new capabilities are delivered. Version TBD, owner unassigned; implementation/publication require later authorization. REQ-133 remains consumer-accepted in public 1.21.0.
+
+Design base `ecac021c5e34e620127251f750d7001ec49fe97a` closes REQ-133 acceptance through PR #380; acceptance head 7c75af7e, CI39270679710 passes9,984. Register next ID134 from issue381, preserving its returned body and provenance/SHA-256. Proposed self-closing inclusion, payload removal partitions, two-fragment merge/newline proof and conservative mixed/preserved boundaries need independent consumer review. Existing-public baseline10/0/0 at exact8929a130; zero new-deletion tests. No implementation/version/release/README/kit or Braid changes. Next: Braid reviews immutable design through REQ-134-CONSUMER-DESIGN-HANDOFF.md; resolve findings then seek separate implementation authorization. Preserve sweep baselines and all prior receipts/backups/stashes.
+
+# 1.21.0 published and verified - 18 October 2026
+
+## REQ-133 Braid Consumer Acceptance - 2026-10-19
+
+Product owner authorized formal notification after completing native text-edit review/all hashes matching. docs/REQ-133-BRAID-ACCEPTANCE.md and registry/detail record implemented, published and consumer-accepted in1.21.0 at8929a130. Braid implementation5ec2075 and acceptanced2c051a committed/pushed; last observed1,242 normal Release and460 public-package checks pass. Literal hashes/native variants/accessibility details unspecified, optional transitions only as exercised. Imported evidence, no new upstream tests or engine edits. Earlier acceptance-pending entries below are historical.
+
+
+**1.21.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.21.0-PUBLICATION.md) records immutable `v1.21.0` at `8929a130`, one successful Release run (9,900 solution tests and ten uploads), ten verified signed archives, and fresh nuget.org-only **153 broad / 437 focused** checks with exact provenance and clear audits. REQ-133 text-body replacement is published after [no-blocking Braid implementation review](REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md). Bosak.Braid has accepted the delivered REQ-133 profile in 1.21.0; see the [formal acceptance receipt](REQ-133-BRAID-ACCEPTANCE.md) for observed coverage and native-observation limits. REQ-132 remains consumer-accepted. Earlier source-only, review-pending and acceptance-pending checkpoints are historical.
+
+Approved immutable release source `8929a1301d1846bb24b49bcc505877f05fd3395a`; publication workflow 39139755889. Read RELEASE-1.21.0-PUBLICATION.md/json, release notes and unchanged consumer implementation review. Public signatures10, fresh153/437, exact signed archive/cache/output/assembly/restore provenance and both audits pass. Receipts under .guard-tmp/release1210-publication. The publication itself changed no Braid pin/UI/history/native state or extension. Subsequent Braid integration and exercised native acceptance are recorded in the formal acceptance receipt; the earlier next-step list is historical. Preserve sweep baselines, registration backups/stashes, original failures and propagation snapshots. README stays product-focused.
+
+## Historical source delivery checkpoint
+
+# REQ-133 body replacement implementation - 18 October 2026
+
+**REQ-133 source verification complete - 18 October 2026:** Source 1.21.0 adds reviewed literal text body replacement after [Braid design review](REQ-133-CONSUMER-DESIGN-REVIEW.md) and user authorization. [Implementation record](REQ-133-IMPLEMENTATION.md) covers exclusive Changed/NoChange/Refused outcomes, exact body bytes and disjoint payload provenance. Local checks pass 9,900 solution, 84 language-server, 76 new source cases, 437 package-public and 153 broad checks; frozen gates remain unchanged. Exact-head CI and final package receipts accompany delivery. Public packages remain 1.20.0 and REQ-132 remains consumer-accepted. Consumer implementation review, publication and native acceptance are pending.
+
+Implementation base `00b5e01e9749e6c11e3dfa8279dda76ff8a429df`; user authorization and preserved consumer design review supersede the historical design-only restriction below. Source version 1.21.0. Current source/package/gate evidence belongs to the implementation record. README, kit assets and published tags remain unchanged; .sweep-baselines and registration backups/stashes are preserved.
+
+# 1.20.0 published and verified - 18 October 2026
+
+## Braid REQ-133 Consumer Request Registered - 2026-10-18
+
+Product owner explicitly authorized documentation-only registration of one existing paired literal xsl:text body replacement. Actual ID REQ-133, Pending / TBD / Unassigned. Registry/detail and docs/REQ-133-literal-text-body-replacement.md record exact logical Unicode, unchanged outside bytes, equal-value NoChange, actual old/new payload partitions and explicit review/Apply/history/caret selection. Eleven acceptance groups and proposed Braid ADR-019 linked. Bosak owns API/profile acceptance, implementation, tests and release. No engine changes, capability/version release, new test execution, commit or push. Existing .sweep-baselines preserved; before-images/hashes retained in Braid .acceptance/literal-text-edit-request-20261018.
+
+
+## REQ-132 Braid Consumer Acceptance - 2026-10-18
+
+Product owner authorized formal consumer acceptance after completing the native walkthrough/all hashes true. Notification docs/REQ-132-BRAID-ACCEPTANCE.md and registry/detail mark implemented, published and consumer-accepted in1.20.0 at91f1af0d. Braid849dc0e is committed/pushed; independently observed1,157 normal Release and399 public-package checks pass. Native literal hashes/variants/platform/accessibility details are unspecified; optional population only as exercised. Imported consumer evidence, no engine changes or upstream test rerun. Earlier pending acceptance checkpoints below are historical.
+
+
+**1.20.0 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.20.0-PUBLICATION.md) records immutable `v1.20.0` at `91f1af0d`, one successful Release run (9,824 tests and ten uploads), ten verified signed archives, and 153 broad checks and 374 focused tests from fresh nuget.org restores. REQ-132 literal element insertion is published after [implementation review](REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md) reported no blocking findings. Bosak.Braid has accepted the delivered REQ-132 profile in 1.20.0; see the [formal acceptance receipt](REQ-132-BRAID-ACCEPTANCE.md) for observed coverage and native-observation limits. Earlier source-only, review-pending and acceptance-pending checkpoints are historical.
+
+Approved immutable source `91f1af0d488bb2ed72b219118eeb1ab3570726bd`; documentation branch docs/release-1.20.0-publication. Read RELEASE-1.20.0-PUBLICATION.md/json and unchanged consumer review. Run 39122930266 passes 9,824 tests and uploads ten packages; ten signatures, 153 broad checks and 374 focused tests, exact signed hash/cache/output/restore provenance and both audits pass. Receipts under .guard-tmp/release1200-publication; preserve availability snapshots and original Braid fixture corrections. No Braid production pin/UI, native acceptance or extension change. Next: independent Braid public package adoption and adapter/review/Apply/history/worker/native integration. Sync root main after documentation merge; preserve untracked sweep baselines. README remains product-focused.
+
+# REQ-132 source verification complete - 18 October 2026
+
+**REQ-132 implementation verification - 18 October 2026:** Authorized source 1.20.0 implements bounded paired empty no-namespace literal element insertion after [Braid design review](REQ-132-CONSUMER-DESIGN-REVIEW.md). Read the [implementation record](REQ-132-IMPLEMENTATION.md) for APIs, namespace reset, complete source/node evidence and composition. Source verification passes: 9,824 solution, 84 language-server, 91 new-operation, 374 independent public-API and 153 broad checks; frozen QT3/qt4 gates unchanged. [Implementation review handoff](REQ-132-CONSUMER-IMPLEMENTATION-HANDOFF.md). Public packages remain 1.19.1. Independent implementation review/publication/consumer acceptance remain separate.
+
+Base e6f2183905739e2a303acc9ee1827004e1307041; branch feat/req132-literal-element-insertion in .guard-tmp/req132-implementation-source. User authorized engine implementation after the no-blocking review; review import hash retained in .guard-tmp/req132-review-import.json. Additive own pipeline/targets/results/capabilities; old pipelines/layout unchanged. Source version1.20.0 unpublished. Read REQ-132-IMPLEMENTATION.md; verify gates and exact package provenance before delivery. Original fixture/build failures retained separately. No automatic publication or Braid acceptance.
+
+# REQ-132 literal element design proposed - 18 October 2026
+
+**REQ-132 contract proposed - 18 October 2026:** Bounded literal result element insertion is in design review. The [contract](REQ-132-LITERAL-ELEMENT-CONTRACT.md), [planned acceptance matrix](REQ-132-LITERAL-ELEMENT-ACCEPTANCE.md) and [consumer handoff](REQ-132-CONSUMER-DESIGN-HANDOFF.md) specify one paired empty no-namespace element, local namespace reset, complete source/descriptor evidence and later text/value-of composition. No implementation or capability is delivered; public 1.19.1 remains current.
+
+Design base cd5507afa2e2bfc98f20669b2941acb5b938a121; public engine a9e954d7. User authorized committing the pending request and preparing the contract/matrix. Original request imported byte-for-byte (hash in handoff); existing local REQ-132 registry/handover additions incorporated. Proposed API names and 28 groups are unimplemented/planned. Primary XSLT literal-result/namespace semantics checked; full downloaded W3C spec retained in .guard-tmp/req132-xslt30-spec.html after web reader size limit. No engine/source/version/gate/README changes. Next: independent Braid design review, resolve findings, then obtain implementation authorization. Preserve source/test receipts; do not infer consumer review/acceptance from this design.
+
+# 1.19.1 published and verified - 18 October 2026
+
+**1.19.1 published and verified - 18 October 2026:** [Public delivery proof](RELEASE-1.19.1-PUBLICATION.md) records immutable `v1.19.1` at `a9e954d7`, one successful Release run (9,733 tests / ten uploads), ten verified signed archives and fresh nuget.org-only 153 broad / 289 focused checks with exact provenance and clear audits. This maintenance patch adds no public API; consumer acceptance and the separate extension remain scoped to their recorded releases. Earlier preparation-only checkpoints are historical.
+
+Documentation base c2f19264; approved immutable release source a9e954d75b3518340ce6da84c9ae06c50ab1f5a4. Read RELEASE-1.19.1-PUBLICATION.md/json. Release run39113986765 passes9,733 and acknowledges ten uploads; public153/289, signatures, exact source/hash/restore provenance and both audits pass. Receipts in .guard-tmp/release1191-publication. Local REQ-132 planning files remain separate and must be preserved when syncing main. README stays product-focused.
+
+# 1.19.1 release preparation - 18 October 2026
+
+**1.19.1 release preparation - 18 October 2026:** [Readiness](RELEASE-1.19.1-READINESS.md) and [prepared notes](RELEASE-NOTES-1.19.1.md) pin proposed publication to merged `a9e954d7`. Exact-merge local packages pass 153 broad API checks and eight regression/identity checks with fresh caches and exact provenance. Source CI passes 9,817; frozen gates remain unchanged. Publication approval is pending; public 1.19.0 and recorded consumer acceptance remain unchanged.
+
+Source/tag target a9e954d75b3518340ce6da84c9ae06c50ab1f5a4. See RELEASE-1.19.1-READINESS.json. Prepared only; publication requires explicit approval. Root checkout contains separate local REQ-132 planning edits: preserve them; do not overwrite or commit them with this release preparation. README remains product-focused.
+
+# Warning-free build maintenance and fallback regression - 18 October 2026
+
+## Braid REQ-132 Consumer Request Registered - 2026-10-18
+
+Product owner explicitly authorized documentation-only registration of bounded literal result element insertion. Registry/detail and docs/REQ-132-literal-result-element-insertion.md record Pending / TBD / Unassigned. First profile: one paired empty no-namespace LRE appended to an engine-approved principal constructor, exact complete edits/correspondence/body-caret evidence and compatibility with subsequent text/value-of commands. Namespace/name/generation semantics stay engine-owned; no Braid splice. Twelve acceptance groups and proposed Braid ADR-018 are linked. No engine changes, new capability/release, test-run claim, commit or push. Existing unrelated files preserved; before-images retained in Braid .acceptance/literal-element-request-20261018.
+
+
+Base f82495dd6ff7d9ef95f72b3e0c179d1205b376cb; branch fix/build-warning-maintenance in `.guard-tmp/build-warning-maintenance`. User authorized the maintenance/test slice. What was built: typed wildcard fallback guard returning FOJS0008 when no fallback layout exists, seven regressions/controls, documentation corrections and test/harness warning cleanup; source1.19.1 unpublished. Read MAINTENANCE-1.19.1.md. No warning suppression or extra dependency references.
+
+Baseline clean rebuild81 warnings; red tests3 failed/4 passed expose nullable message. Final clean rebuild0 warnings/0 errors; focused29/0/0; LS84/0/0; runner10; QT3 31142/0/679 and qt4 gated8278/0/1894. Roslyn final audit20 comment-only files, eleven syntax-changed files as intended. Full solution9,733/0/0 passes; exact-head CI required before merge. Original red and intermediate helper/build failures retained in `.guard-tmp/maintenance-*`; header-placement and exact-comment-target helper mistakes corrected before the final warning-free build. Public1.19/Braid acceptance, extension, workflows and gate membership unchanged.
+
+First source CI39107175270 passes9,817 tests and clean solution build but surfaces8 separate LS diagnostics. Corrected in follow-up: nullable LSP return contract, explicit JValue-null argument (existing shape tests retained), async diagnostics helper and XQuery symbol test, predicate assertions and non-null test controls. Separate LS clean rebuild0 warnings/0 errors and84 tests pass. Original CI log retained as maintenance-ci-first.log. Final exact-head CI remains required. Engine/gate changes unchanged from first source head; no suppression or new editor behavior.
+
+
+Main workspace now follows main, with only local sweep baselines untracked. After source merge, fast-forward D:/Development/Bosak main and verify local files/submodules again; do not return it to a historical feature branch. Local notes/backups/stash from the earlier sync remain preserved. Keep README free of session logs. Earlier checkpoints below historical.
+
+# Product-focused README and preserved development history - 18 October 2026
+
+Base84548ddedb79f7ce1c7ac4e600737a1abbfd0b5e; branch docs/readme-product-overview, isolated `.guard-tmp/readme-product-overview`. What was built: short product README, full former README body archived in docs/DEVELOPMENT_HISTORY.md with rebased relative links, public docs/ECOSYSTEM.md, canonical navigation sync and README content policy. Keep future checkpoint logs out of README. Required FYTALA text preserved verbatim in a collapsible block immediately after banner.
+
+Schema/Braid repositories verified private; public customer guide/trial both HTTP200. Describe Schema implemented complex-type profile and separate compatibility/access lifecycle, not an unverified GA/core1.19 pair. Braid reviewed operations/navigation delivered; full live bidirectional editing remains in development. Public links go to this ecosystem guide and contact, not private repositories.
+
+Original docs/REQ-131-BRAID-ACCEPTANCE.md imported byte-identically, SHA256 31fa375573d8282c0a9aae5273cfde798abdfa3824c7a232b93b231697ce6e71. Registry closes boundedREQ131 acceptance; reported1,079/298 consumer results and native hash confirmation are imported observations, not reruns or a committed/public Braid release. Exact literal hashes/native variants not invented. Root historical HEAD/all earlier edits remain preserved. Engine/version/workflow/extension/kit assets unchanged. Quick-start/render/link/source-history preservation checks and exact-head CI required before merge. Earlier release/session checkpoints below historical.
+
+# Bosak1.19.0 published and verified - 18 October 2026
+
+User approved publication. Immutable annotated v1.19.0 at27691fdb3708bb4ffd7c984abbf3196b7cde5667, object682f361ca25cd1c2f3cad09b275d3087b9137ca0. Single Release39074829260 succeeds with9,726 solution tests/ten uploads. Ten signed public packages verify; fresh nuget.org-only153 broad/282 focused consumers, ten/nine assemblies and archive/cache/output/restore provenance/audits pass. Public release https://github.com/Fytala-Charles/Bosak/releases/tag/v1.19.0. What was built: publication proof MD/JSON, released notes/readiness/status reconciliation only. No engine/test/version/workflow/extension/Braid source changes.
+
+REQ131 implemented/published; independent Braid adoption/functional/native acceptance remains open. Accepted REQ130/production1.18 pin and extension0.2.5/engine1.16.5 unchanged. Original review/acceptance blobs and historical root/all earlier edits preserved. Receipts `.guard-tmp/release1190-publication/`. STOP: approved publication complete; do not republish or move tags. Earlier preparation boundaries superseded by explicit approval/completed publication.
+
+# Bosak1.19.0 release prepared; publication approval outstanding ? 17 October 2026
+
+Base `211be50e7be455b0538625fdd4d5ebd08bfb70df`, branch docs/release1190-preparation. What was built: unchanged docs/REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md SHA25683d8a912f8748462f86e735d8a5153d62aef4c35c3ad2a53ab6046c3ebc45732, narrow -text attribute, release readiness MD/JSON and prepared release notes, canonical status sync. Braid reports no blockers at exact head189405f2/merge27691fdb, overlapping291/282/298 checks including16 new probes, accepted1.18 baseline1,015. Retain initial surrogate InlineData correction and warning overrides; imported reports are not reruns/public-package proof/functional acceptance.
+
+Proposed annotated v1.19.0 MUST target `27691fdb3708bb4ffd7c984abbf3196b7cde5667`, not this later documentation merge. Preflight finds no remote tag/release and all ten public indexes lack1.19.0; recheck immediately before publication. Existing Release workflow tag trigger only; do not also dispatch. STOP before tag/push/dispatch/NuGet upload/GitHub release until user approves publication. Public1.18.0 and accepted REQ-130 remain unchanged; REQ-131 Braid adoption/native acceptance remains open. No engine/version/workflow/extension/Braid source/pin/UI changes. Historical root a6867201/all earlier edits preserved.
+
+Concurrent Braid PR366 records REQ-130 acceptance on older base27691fdb; main already imported the supplied original acceptance byte-identically via PR365. Its unmerged status in the imported REQ-131 review is a historical observation; this step does not close or merge that separate consumer PR. Earlier notes below historical.
+
+# REQ-130 accepted; REQ-131 ready for independent review ? 17 October 2026
+
+Base main `27691fdb3708bb4ffd7c984abbf3196b7cde5667`. What was built: documentation-only import of formal REQ-130 acceptance, exact byte preservation attribute, registry/canonical status reconciliation and concrete REQ-131 review handoff. Acceptance SHA-256 `dde7dbaa84d989d2a005d702419079c144a4d9b1f88d576d9ae302198814e31a`; source `D:/Development/Bosak/docs/REQ-130-BRAID-ACCEPTANCE.md`. Braid reports 1,015 full tests, 241 public-package checks and native product-owner procedure/hash confirmation; these are imported evidence, not reruns. Delivered bounded deletion profile accepted in public1.18.0; do not invent literal hashes, native variants or broader certification.
+
+REQ-131 source delivery and main CI39035670638 complete (9,810 checks); exact merge local package282 proof complete. Source1.19.0 unpublished; independent Braid review next via REQ-131-CONSUMER-REVIEW-HANDOFF.md. No publication, Braid source/pin/UI edits, tags, workflows, extension or engine changes. Original receipts/root a6867201 and pre-existing edits preserved. Earlier checkpoints below historical.
 
 # REQ-131 source verification checkpoint ? 17 October 2026
 
@@ -17292,3 +17497,8 @@ dotnet run --project tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj 
 **1.1.3 release decision — 2026-10-12:** The user reports that Braid verified REQ-127 and explicitly authorized publication of 1.1.3. This records consumer verification without inventing its exact adopted pin or test totals. Existing fix CI passed; final documentation CI, merge/tag, Trusted Publishing and public-package verification are the remaining release steps. No additional features are included.
 
 Verification: Release solution build succeeds (0 errors; 88 existing warnings); all 7,908 unit tests pass, including 5,022 XSLT tests, with zero failures/skips. No engine source changed; conformance gate results are retained from merged PR #260. Contribution and canonical Markdown render checks pass.
+
+
+## XSLT 4.0 switch fallback ordering - 20 October 2026
+
+[Source patch 1.22.1](XSLT40-SWITCH-FALLBACK-ORDERING.md) rejects switch branches following fallback with XTSE0010 while preserving legal trailing fallbacks. Twenty regression cases cover both processor profiles and stylesheet versions3.0/4.0. Native switch improves9/1/2 to10/0/2 in both profiles. Public packages remain1.22.0; REQ status and Braid consumer acceptance are unchanged.

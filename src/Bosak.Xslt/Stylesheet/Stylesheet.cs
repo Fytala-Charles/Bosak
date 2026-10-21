@@ -333,6 +333,10 @@
 //                      | Charles Korthout | 2.171 | 16-10-2026     | Admit fixed-namespaces on module roots in the existing supported version range.             |
 //                      | Charles Korthout | 2.172 | 16-10-2026     | Isolate draft modules and activate fixed bindings independently of declared version.        |
 //                      | Charles Korthout | 2.173 | 16-10-2026     | Require fallback statically for unknown future instructions in the draft processor.         |
+//                      | Charles Korthout | 2.174 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 2.175 | 20-10-2026     | Enforce trailing-only fallback children in switch content.                             |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.IO;
@@ -2208,12 +2212,12 @@ internal sealed class Stylesheet
             }
         }
 
-        /// <summary>
-        /// Recursively strips elements whose <c>use-when</c> attribute evaluates to <c>false()</c>.
-        /// This is applied to the entire stylesheet tree, including nested elements inside
-        /// template bodies, so that <c>use-when</c> on instructions and LREs is respected.
-        /// Descendants of an excluded element are not evaluated.
-        /// </summary>
+        // <summary>
+        // Recursively strips elements whose <c>use-when</c> attribute evaluates to <c>false()</c>.
+        // This is applied to the entire stylesheet tree, including nested elements inside
+        // template bodies, so that <c>use-when</c> on instructions and LREs is respected.
+        // Descendants of an excluded element are not evaluated.
+        // </summary>
         void StripUseWhenElements(XElement parent)
         {
             var children = parent.Elements().ToList();
@@ -4368,6 +4372,7 @@ internal sealed class Stylesheet
                         throw new InvalidOperationException("XTSE0010: xsl:switch requires a select attribute.");
                     bool seenOtherwise = false;
                     bool seenWhen = false;
+                    bool seenFallback = false;
                     foreach (var child in elem.Elements())
                     {
                         if (child.Name.NamespaceName != XslNamespace)
@@ -4375,16 +4380,21 @@ internal sealed class Stylesheet
                         switch (child.Name.LocalName)
                         {
                             case "when":
+                                if (seenFallback)
+                                    throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:fallback in xsl:switch.");
                                 if (seenOtherwise)
                                     throw new InvalidOperationException("XTSE0010: xsl:when must precede xsl:otherwise in xsl:switch.");
                                 seenWhen = true;
                                 break;
                             case "otherwise":
+                                if (seenFallback)
+                                    throw new InvalidOperationException("XTSE0010: xsl:otherwise must precede xsl:fallback in xsl:switch.");
                                 if (seenOtherwise)
                                     throw new InvalidOperationException("XTSE0010: xsl:switch allows at most one xsl:otherwise.");
                                 seenOtherwise = true;
                                 break;
                             case "fallback":
+                                seenFallback = true;
                                 break;
                             default:
                                 throw new InvalidOperationException($"XTSE0010: xsl:{child.Name.LocalName} is not permitted as a child of xsl:switch.");

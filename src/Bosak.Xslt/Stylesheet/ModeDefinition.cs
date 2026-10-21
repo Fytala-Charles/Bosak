@@ -35,6 +35,9 @@
 //                      |                  |       |                | by a higher-import-precedence declaration are resolved (mode-1505 vs mode-1506)          |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.6   | 14-10-2026     | Retain module fixed mode identities independently of local earlier grammar.                |
+//                      | Charles Korthout | 1.7   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Collections.Generic;
@@ -177,6 +180,7 @@ internal sealed class ModeDefinition
     /// <param name="useAccumulators">The accumulator names (Clark notation) applicable to this mode.</param>
     /// <param name="useAllAccumulators">Whether this mode uses all accumulators.</param>
     /// <param name="specifiedAttributes">The attribute names explicitly specified on the xsl:mode declaration; defaults to an empty set.</param>
+    /// <param name="specifiedValues">The explicit mode attribute values used during module merging.</param>
     public ModeDefinition(string name, OnNoMatch onNoMatch, OnMultipleMatch onMultipleMatch, ModeVisibility visibility, ModeTyped typed, bool warningOnNoMatch, bool warningOnMultipleMatch, bool streamable, IReadOnlySet<string> useAccumulators, bool useAllAccumulators, IReadOnlySet<string>? specifiedAttributes = null, IReadOnlyDictionary<string, string>? specifiedValues = null)
     {
         Name = name;

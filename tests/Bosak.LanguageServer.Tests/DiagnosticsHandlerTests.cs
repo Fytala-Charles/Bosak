@@ -13,6 +13,9 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 14-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using Bosak.LanguageServer;
@@ -25,7 +28,7 @@ namespace Bosak.LanguageServer.Tests;
 /// <summary>Verifies editor diagnostics use the effective stylesheet context.</summary>
 public class DiagnosticsHandlerTests
 {
-    private static async Task<Diagnostic[]> Diagnose(string text)
+    private static async Task<Diagnostic[]> DiagnoseAsync(string text)
     {
         var uri = DocumentUri.FromFileSystemPath("C:/test/main.xsl");
         var documents = new DocumentManager();
@@ -46,7 +49,7 @@ public class DiagnosticsHandlerTests
     public async Task OptionalKeywordCallsAreValid()
     {
         var text = Sheet("""<xsl:function name='p:f'><xsl:param name='a'/><xsl:param name='b' required='no' select="'B'"/><xsl:sequence select='$a,$b'/></xsl:function><xsl:template match='/'><xsl:value-of select="p:f(a := 'A')"/></xsl:template>""");
-        Assert.Empty(await Diagnose(text));
+        Assert.Empty(await DiagnoseAsync(text));
     }
 
     /// <summary>Private names and partial keywords use the XSLT 4.0 host signatures.</summary>
@@ -54,14 +57,14 @@ public class DiagnosticsHandlerTests
     public async Task PrivateNoNamespaceCallsAreValid()
     {
         var text = Sheet("<xsl:function name='divide'><xsl:param name='a'/><xsl:param name='b'/><xsl:sequence select='$a div $b'/></xsl:function><xsl:template match='/'><xsl:value-of select='divide(?, b := 3)(9)'/></xsl:template>");
-        Assert.Empty(await Diagnose(text));
+        Assert.Empty(await DiagnoseAsync(text));
     }
 
     /// <summary>Earlier declaration profiles retain the namespace error.</summary>
     [Fact]
     public async Task EarlierProfileRejectsPrivateName()
     {
-        var diagnostics = await Diagnose(Sheet("<xsl:function name='divide'><xsl:sequence select='1'/></xsl:function>","3.0"));
+        var diagnostics = await DiagnoseAsync(Sheet("<xsl:function name='divide'><xsl:sequence select='1'/></xsl:function>","3.0"));
         Assert.Contains(diagnostics, d => d.Message.Contains("XTSE0740") && d.Severity == DiagnosticSeverity.Error);
     }
 
@@ -70,7 +73,7 @@ public class DiagnosticsHandlerTests
     public async Task InvalidKeywordHasSourceLocation()
     {
         var text = Sheet("<xsl:function name='p:f'><xsl:param name='a'/><xsl:sequence select='$a'/></xsl:function>\n<xsl:template match='/'><xsl:value-of select='p:f(missing := 1)'/></xsl:template>");
-        var error = Assert.Single((await Diagnose(text)).Where(d => d.Message.Contains("XPST0017")));
+        var error = Assert.Single(await DiagnoseAsync(text), d => d.Message.Contains("XPST0017"));
         Assert.Equal(1,error.Range.Start.Line);
         Assert.True(error.Range.Start.Character > 0);
     }
@@ -79,7 +82,7 @@ public class DiagnosticsHandlerTests
     [Fact]
     public async Task UnresolvedImportProducesCoverageWarning()
     {
-        var diagnostics = await Diagnose(Sheet("<xsl:include href='https://example.invalid/functions.xsl'/><xsl:template match='/'/>"));
+        var diagnostics = await DiagnoseAsync(Sheet("<xsl:include href='https://example.invalid/functions.xsl'/><xsl:template match='/'/>"));
         Assert.Contains(diagnostics, d => d.Severity == DiagnosticSeverity.Warning);
     }
 
@@ -87,11 +90,11 @@ public class DiagnosticsHandlerTests
     [Fact]
     public async Task ConditionalDeclarationsProduceCoverageWarning()
     {
-        var diagnostics = await Diagnose(Sheet("<xsl:function name='p:f' use-when='system-property(\"xsl:version\") = \"4.0\"'><xsl:sequence select='1'/></xsl:function>"));
+        var diagnostics = await DiagnoseAsync(Sheet("<xsl:function name='p:f' use-when='system-property(\"xsl:version\") = \"4.0\"'><xsl:sequence select='1'/></xsl:function>"));
         Assert.Contains(diagnostics, d => d.Message.Contains("coverage incomplete") && d.Severity == DiagnosticSeverity.Warning);
     }
 
     /// <summary>Malformed XML remains an editor error.</summary>
     [Fact]
-    public async Task MalformedXmlProducesError() => Assert.Contains(await Diagnose("<xsl:stylesheet"), d => d.Severity == DiagnosticSeverity.Error);
+    public async Task MalformedXmlProducesError() => Assert.Contains(await DiagnoseAsync("<xsl:stylesheet"), d => d.Severity == DiagnosticSeverity.Error);
 }

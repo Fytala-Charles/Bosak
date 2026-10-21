@@ -1,0 +1,20 @@
+{
+  "issue": 381,
+  "url": "https://github.com/Fytala-Charles/Bosak/issues/381",
+  "title": "Braid consumer inquiry: source-preserving deletion of one literal xsl:text instruction",
+  "author": {
+    "id": "U_kgDODXGFNQ",
+    "is_bot": false,
+    "login": "Fytala-Charles",
+    "name": ""
+  },
+  "createdAt": "2026-10-19T14:28:53Z",
+  "updatedAt": "2026-10-19T14:28:53Z",
+  "retrievedDate": "2026-10-19",
+  "bodyFile": "REQ-134-literal-text-instruction-deletion.md",
+  "bodySha256": "ac3d728ffc9a586490fcc1ea8a3ca4b42c564cc6a8314eae41ab3d429c47e198",
+  "bodyPreservedAsReturnedByGitHub": true,
+  "requestIdentifierAssignedByBosak": "REQ-134",
+  "originalInquiryAssignedNoIdentifier": true,
+  "designBase": "ecac021c5e34e620127251f750d7001ec49fe97a"
+}

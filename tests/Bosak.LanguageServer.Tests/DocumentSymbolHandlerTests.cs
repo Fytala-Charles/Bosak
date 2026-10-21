@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 18-08-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 31-08-2026     | Added comprehensive XSLT document-symbol tests (REQ-073)                                |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Linq;
 using Bosak.LanguageServer;
@@ -54,6 +57,8 @@ public class DocumentSymbolHandlerTests
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/sample.xslt"))
         }, default);
 
+        Assert.NotNull(result);
+
         var names = result.Select(s => s.DocumentSymbol?.Name ?? s.SymbolInformation?.Name).ToList();
         Assert.Contains("output (xml)", names);
         Assert.Contains("global-param", names);
@@ -77,6 +82,8 @@ public class DocumentSymbolHandlerTests
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/expr.xpath"))
         }, default);
 
+        Assert.NotNull(result);
+
         Assert.Empty(result);
     }
 
@@ -92,6 +99,8 @@ public class DocumentSymbolHandlerTests
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/broken.xslt"))
         }, default);
+
+        Assert.NotNull(result);
 
         Assert.Empty(result);
     }
@@ -123,6 +132,8 @@ public class DocumentSymbolHandlerTests
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/req073.xslt"))
         }, default);
+
+        Assert.NotNull(result);
 
         var names = result.Select(s => s.DocumentSymbol?.Name ?? s.SymbolInformation?.Name).ToList();
         Assert.Contains("output (html)", names);
@@ -158,6 +169,8 @@ public class DocumentSymbolHandlerTests
         {
             TextDocument = new TextDocumentIdentifier(DocumentUri.FromFileSystemPath("C:/test/extras.xslt"))
         }, default);
+
+        Assert.NotNull(result);
 
         var names = result.Select(s => s.DocumentSymbol?.Name ?? s.SymbolInformation?.Name).ToList();
         Assert.Contains("import common.xsl", names);

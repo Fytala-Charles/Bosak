@@ -1,0 +1,113 @@
+<?xml version='1.0' encoding='utf-8'?>
+<test-set xmlns="http://www.w3.org/2012/10/xslt-test-catalog" name="seqtor-boundaries"><description>New native seqtor boundaries; no existing expectations changed.</description><test-case name="seqtor-147">
+      <description>Whitespace-only select body satisfies an explicit empty-sequence result type.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-147.xsl" /></test>
+      <result><assert-xml>&lt;out count="0"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-148">
+      <description>Whitespace-only select body fails a required singleton result type.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-148.xsl" /></test>
+      <result><error code="XPTY0004" /></result>
+   </test-case>
+
+   <test-case name="seqtor-149">
+      <description>Multiple select results fail a required singleton result type.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-149.xsl" /></test>
+      <result><error code="XPTY0004" /></result>
+   </test-case>
+
+   <test-case name="seqtor-150">
+      <description>Select body can return a callable ordinary function item.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-150.xsl" /></test>
+      <result><assert-xml>&lt;out value="42"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-151">
+      <description>Select body preserves XML-node identity and explicit reverse order.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-151.xsl" /></test>
+      <result><assert-xml>&lt;out count="2" first="B" same="true" last="A"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-152">
+      <description>Host xpath-default-namespace applies to select body name tests.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-152.xsl" /></test>
+      <result><assert-xml>&lt;out count="1" namespace="urn:books"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-153">
+      <description>Instruction-local default collation applies inside select without leaking to siblings.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-153.xsl" /></test>
+      <result><assert-xml>&lt;out inside="true" restored="true"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-154">
+      <description>Adjacent CDATA sections preserve an XPath string containing a CDATA terminator.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-154.xsl" /></test>
+      <result><assert-xml>&lt;out value="A]]&amp;gt;B"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-155">
+      <description>Comments, processing instructions and xsl:note are removed before body evaluation.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-155.xsl" /></test>
+      <result><assert-xml>&lt;out value="ABCD"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-156">
+      <description>Fallback-only select body returns empty and does not execute fallback.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-156.xsl" /></test>
+      <result><assert-xml>&lt;out empty="true"/&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-157">
+      <description>A select expression succeeds without executing a failing fallback.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-157.xsl" /></test>
+      <result><assert-xml>&lt;out&gt;42&lt;/out&gt;</assert-xml></result>
+   </test-case>
+
+   <test-case name="seqtor-158">
+      <description>A selected expression error propagates rather than invoking fallback.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-158.xsl" /></test>
+      <result><error code="FOER0000" /></result>
+   </test-case>
+
+   <test-case name="seqtor-159">
+      <description>An undeclared variable in the select body raises a static binding error.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-159.xsl" /></test>
+      <result><error code="XPST0008" /></result>
+   </test-case>
+
+   <test-case name="seqtor-160">
+      <description>Malformed select body XPath is rejected when its named template is invoked.</description>
+      <created by="Charles Korthout" on="2026-10-20" />
+      <dependencies><spec value="XSLT40+" /></dependencies>
+      <test><stylesheet file="seqtor-160.xsl" /></test>
+      <result><error code="XPST0003" /></result>
+   </test-case>
+</test-set>

@@ -1,0 +1,33 @@
+{
+  "preservedFixtureSha256": {
+    "catalog.xml": "40732c492138dcc049d50ba4f66df29537635ad2718a2c58c40a736b55a299e0",
+    "array/array-033.xsl": "5a4518933ee6a63b04eb442797a960535d7d140d47649915a458cdf773d454db",
+    "array/array-034.xsl": "1490d79ccbe94230f373a0d64ecf32a82414b7fae02073686670f25c3c9d409c",
+    "array/array-035.xsl": "22e3af0cd2fd75c0f550dca9ec4822c94dc87839cac31dffd6ad8f7d7235d6f8",
+    "array/array-036.xsl": "3821b1770e0dfeb97a7cb06e5135c1f15f008c693e3882123cbc705d87eb6c70",
+    "array/array-037.xsl": "bded064d5551b141213cab0426c33073d7e842167516079fa9fbec785564dc98",
+    "array/array-038.xsl": "d2e2fd0b5e589e1fa9aead7377c93fd8c8e7497f0274fc3dda82cc93f0c6debc",
+    "array/array-039.xsl": "7d2ddc76c2eca3baa6dcb30e11b5c4f711002c768a363cb952bc95a3769ef32f",
+    "array/array-040.xsl": "940968596e24a0815e7325687c56a29bdba621333bbb796f2b10548e3f6fa205",
+    "array/array-041.xsl": "ca1b92bc2278a30a4847d1675241a061e71bf0804ef701586d66ed385f215eb9",
+    "array/array-042.xsl": "b0aff1f1b628d5492fdceb2cdfbad77376bcfdb1e0fe25a89abf12f9f04b9967",
+    "array/_array-test-set.xml": "5e91fb3e54bec857eea800f7de3f852cc44c7491d28cd638b1edd22028faf073",
+    "seqtor/seqtor-147.xsl": "b1994f58f36616181e2fbbdb083034d8d2d07307c652e89dd561dc99ff8b1ebb",
+    "seqtor/seqtor-148.xsl": "cd8b4465ebcbc0e6f24209bf7103e0b69a8f5f390c6808b30a59e113e8d6b6cd",
+    "seqtor/seqtor-149.xsl": "853f644031d5fdbc19f42f4845a636d82afac1274820175a1b1dd4399c25a3d7",
+    "seqtor/seqtor-150.xsl": "56cc6778b1573a6b93303d0c5f9cd633be35a201eed205fa4ef8c89c04199600",
+    "seqtor/seqtor-151.xsl": "9ab7d20440a78c52c80005f28ccf4655216252357df1a187a1d071a2a407d737",
+    "seqtor/seqtor-152.xsl": "38d9c334f2a9635e7c0d7499b42a9d2780c81b7164cf4e3ac4af996e91152299",
+    "seqtor/seqtor-153.xsl": "f11194b1b66a9141f330f23442a26bb8744a2a70e2297d647404ad75262df4f9",
+    "seqtor/seqtor-154.xsl": "d9fbab7fa78f5d9ae31172f276cc356db1ca2bafc8be953bd35be41c4879aae6",
+    "seqtor/seqtor-155.xsl": "b557bb8bf332c286e1b0e1bbb2eb192dd266577aa8c6bfd7158a551bf784fd00",
+    "seqtor/seqtor-156.xsl": "8bdf014e6c767bf030de509f9508db87254240571c412e70a3480d13a37ad5b4",
+    "seqtor/seqtor-157.xsl": "351dab6452b9f26263e9909f60fa60a46bd067af74795d07001c3ee7767bbfc0",
+    "seqtor/seqtor-158.xsl": "e68de5e05e9e7dcb2f781bded47a7ae26a453022e8be49104c154fd088f4de77",
+    "seqtor/seqtor-159.xsl": "0e3907fc3fff324ea5b2ef9d5d448fdfa2c1574097ce01e6d2d6d53ad9545d46",
+    "seqtor/seqtor-160.xsl": "915a7f13bbc9c0bc3215735dcd211e230a3a9cb18eef4d4f95da8405b35f8bac",
+    "seqtor/_seqtor-test-set.xml": "cfeda61b38cde809e463bbd99f148591cdaadcd28bc0ad09c1ef6623acf52544"
+  },
+  "reason": "Pinned xslt.xml errors section permits a mode where static errors in unexecuted stylesheet parts go unreported. Candidate159/160 now invoke the affected template; error codes XPST0008/XPST0003 remain unchanged.",
+  "engineFix": false
+}

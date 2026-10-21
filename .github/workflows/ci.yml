@@ -7,6 +7,27 @@ on:
     branches: [main]
 
 jobs:
+  xslt-wrapper-controls:
+    name: XSLT wrapper controls (Windows)
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Build conformance runner
+        run: dotnet build tests/Bosak.Xslt.Conformance -c Release
+      - name: Verify successful, failing, empty and timed-out receipts
+        shell: powershell
+        run: ./tests/Bosak.Xslt.Conformance/verify-wrapper.ps1
+      - name: Retain wrapper evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xslt-wrapper-controls
+          include-hidden-files: true
+          path: .artifacts/
   build-and-test:
     name: Build & test (net10.0)
     runs-on: ubuntu-latest

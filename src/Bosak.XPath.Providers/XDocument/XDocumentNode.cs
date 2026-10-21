@@ -111,6 +111,9 @@
 //                      | Charles Korthout | 0.33  | 30-09-2026     | REQ-114 (PB-3 C9): GetSchemaTypeAnnotation normalizes .NET's xdt-namespace              |
 //                      |                  |       |                | untypedAtomic to xs:untypedAtomic (validation-0108)                                     |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 2.15  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -875,6 +878,10 @@ public sealed class XDocumentNode : IXdmNode
     /// Converts a .NET value returned by <see cref="XmlSchemaDatatype.ParseValue"/> into an
     /// <see cref="XdmValue"/> with the appropriate schema-type annotation.
     /// </summary>
+    /// <param name="value">The schema parser value.</param>
+    /// <param name="datatype">The schema datatype used to parse the value.</param>
+    /// <param name="schemaType">The type annotation retained on the result.</param>
+    /// <param name="hasTimezone">Whether the lexical value supplies a timezone.</param>
     /// <param name="lexicalValue">The original lexical string, used for date/time values so the
     /// timezone offset is preserved instead of being normalized to the local offset.</param>
     private static XdmValue ConvertSchemaValue(object value, XmlSchemaDatatype datatype, XmlSchemaType schemaType, bool hasTimezone = true, string? lexicalValue = null)
@@ -1101,7 +1108,7 @@ public sealed class XDocumentNode : IXdmNode
 
     /// <summary>
     /// Rebuilds the canonical XSD lexical form of a duration value (XML Schema 1.0
-    /// Part 2 Appendix D, as adopted by XPath F&O): the total month count folds into
+    /// Part 2 Appendix D, as adopted by XPath F&amp;O): the total month count folds into
     /// years and remaining months, zero components are omitted, fractional-second
     /// trailing zeros are trimmed, and an all-zero value is <c>PT0S</c>. For
     /// <c>xs:yearMonthDuration</c> only the year/month part is emitted; for

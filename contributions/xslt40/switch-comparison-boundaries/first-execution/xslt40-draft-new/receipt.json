@@ -1,0 +1,28 @@
+{
+  "profile": "xslt40-draft",
+  "scope": "new",
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+    "--xslt40",
+    "--processor-profile",
+    "xslt40-draft",
+    "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\Fixtures\\SwitchBoundaries\\catalog.xml"
+  ],
+  "exitCode": 1,
+  "seconds": 0.46,
+  "counts": {
+    "Total": 12,
+    "Passed": 11,
+    "Failed": 1,
+    "Skipped": 0,
+    "Unselected": 0,
+    "Selected": 12,
+    "Selected skipped": 0,
+    "Missing test sets": 0
+  },
+  "failures": [
+    "switch-018: Result mismatch\r"
+  ],
+  "logSha256": "0130a6ddfa7ed4c4118395b78aa04efde0d499a5a2560412e4c6eabbc8cce816"
+}

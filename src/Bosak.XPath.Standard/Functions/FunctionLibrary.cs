@@ -460,6 +460,9 @@
 //                      | Charles Korthout | 5.141   | 10-10-2026     | B-F2: static-phase acquisitions request StaticEvaluation purpose (concrete route kept)    |
 //                      | Charles Korthout | 5.142 | 16-10-2026     | Add 4.0 JNode-based array:members and array:of-members with member boundaries intact.      |
 //                      |==================|=======|================|=========================================================================================
+
+//                      | Charles Korthout | 5.144 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -503,9 +506,9 @@ public static class FunctionLibrary
     /// The (namespace URI, local name) pairs of all standard functions that are marked
     /// <see cref="FunctionSignature.IsXPath40ExperimentalOnly"/>: additions to the XPath 4.0
     /// draft that are not yet stabilized and therefore hidden from the frozen
-    /// <see cref="XPathCompatibility.XPath40"/> level as well as from 3.1. The Api layer
+    /// <c>XPathCompatibility.XPath40</c> level as well as from 3.1. The Api layer
     /// consults this set during compilation to raise XPST0017 outside
-    /// <see cref="XPathCompatibility.XPath40Experimental"/> mode (REQ-123, slice 4.0-Exp S1).
+    /// <c>XPathCompatibility.XPath40Experimental</c> mode (REQ-123, slice 4.0-Exp S1).
     /// Built once from the <c>StandardFunctions</c> table, so it always reflects the
     /// registered signatures.
     /// </summary>
@@ -4544,10 +4547,6 @@ public static class FunctionLibrary
         context.RegisterFunction(StandardFunctions[(Namespaces.Fn, "document", 2)]);
     }
 
-    /// <summary>
-    /// Populates the evaluation context with all standard functions.
-    /// </summary>
-    /// <param name="context">The evaluation context to populate.</param>
     // Shared standard function tables: one for dynamic contexts, one for static
     // (use-when / shadow attribute) contexts that exclude the XSLT-defined dynamic
     // functions. Cloned into each EvaluationContext by Populate — a single dictionary
@@ -5277,7 +5276,7 @@ public static class FunctionLibrary
     /// F+O 4.0 §18.4 fn:op — returns the function represented by
     /// <c>fn($x, $y) { $x ⊙ $y }</c>, where ⊙ is the supplied binary operator. The
     /// operator name is validated eagerly (XPTY0004 for anything outside the 31
-    /// supported operators of F&O 4.0 §18.4); the returned arity-2 function routes
+    /// supported operators of F&amp;O 4.0 §18.4); the returned arity-2 function routes
     /// each invocation through <see cref="VmEngine.ApplyBinaryOperator"/> so its
     /// semantics are bit-identical to the infix operator (collation, implicit
     /// timezone, and empty-sequence propagation included).
@@ -6645,6 +6644,8 @@ public static class FunctionLibrary
     /// Replaces the percent-encoded UTF-8 forms of the non-ASCII characters that appear
     /// literally in <paramref name="source"/> with the characters themselves.
     /// </summary>
+    /// <param name="resolved">The resolved URI whose escaped characters are inspected.</param>
+    /// <param name="source">The original reference containing literal characters.</param>
     /// <param name="restoreSpaces">Spaces are only restored from the relative reference: a
     /// <c>%20</c> legitimately present in the base URI must stay encoded.</param>
     private static string RestoreLiteralIriCharacters(string resolved, string source, bool restoreSpaces)
@@ -8495,7 +8496,7 @@ public static class FunctionLibrary
 
     /// <summary>
     /// Compares two strings using the supplied collation URI. Returns a negative value,
-    /// zero, or a positive value using the same conventions as <see cref="string.Compare"/>.
+    /// zero, or a positive value using the same conventions as <see cref="string.Compare(string, string, StringComparison)"/>.
     /// </summary>
     /// <param name="s1">The first string.</param>
     /// <param name="s2">The second string.</param>
@@ -10548,7 +10549,7 @@ public static class FunctionLibrary
     /// Loads a collection's member documents in the order supplied, shared by declared
     /// collections (<see cref="EvaluationContext.Collections"/>) and the host
     /// <see cref="EvaluationContext.CollectionLoader"/> hook. Each member URI passes
-    /// through <see cref="EvaluationContext.LoadDocument"/>, so document identity caching,
+    /// through <see cref="EvaluationContext.LoadDocument(string)"/>, so document identity caching,
     /// the per-load-policy cache, and fragment resolution behave exactly as for fn:doc;
     /// cross-tree document order follows the load (creation-sequence) order of the list.
     /// Under a controlled resource policy every member load is authorized (tagged

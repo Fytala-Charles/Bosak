@@ -251,7 +251,7 @@
         "xsl:item-type"
       ],
       "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
-      "estimatedReach": "Medium–high",
+      "estimatedReach": "Medium\u2013high",
       "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
       "businessScenario": "Reusable payload and callback contracts across modules",
       "specSection": "named-item-types",
@@ -362,7 +362,7 @@
         "xsl:field"
       ],
       "novelty": "New XSLT element declarations in the pinned 4.0 draft; equivalent outcomes may have earlier-version idioms.",
-      "estimatedReach": "Medium–high",
+      "estimatedReach": "Medium\u2013high",
       "usageEvidence": "Editorial estimate from recurring transformation tasks, not measured adoption or telemetry.",
       "businessScenario": "Typed customer/order records and constructor validation",
       "specSection": "named-record-types",
@@ -939,5 +939,17 @@
       "focused": 338
     },
     "next": "Stop. Extension alignment, Braid adoption and catalog/specification work require separate scope."
+  },
+  "latestSwitchBoundarySlice": {
+    "date": "2026-10-21",
+    "evidence": "../contributions/xslt40/switch-comparison-boundaries/evidence.json",
+    "nativeCases": 12,
+    "publicChecks": 32,
+    "sourceVersion": "1.23.1",
+    "upstreamSubmitted": true,
+    "upstreamPR": 34,
+    "upstreamDraft": true,
+    "submissionEvidence": "../contributions/xslt40/switch-comparison-boundaries/submission.json",
+    "bosakMerge": "d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4"
   }
 }

@@ -3,3 +3,40 @@
 /docs/REQ-130-source-preserving-value-of-deletion.md -text whitespace=cr-at-eol
 /docs/REQ-130-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
 /docs/REQ-130-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+/docs/REQ-130-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
+/docs/REQ-131-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+/docs/REQ-131-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
+
+/docs/REQ-132-literal-result-element-insertion.md -text whitespace=cr-at-eol
+
+/docs/REQ-132-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-132-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-132-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-literal-text-body-replacement.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-133-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
+
+/docs/REQ-134-literal-text-instruction-deletion.md -text whitespace=cr-at-eol
+
+/docs/REQ-134-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+/docs/REQ-134-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+
+# Preserve the original REQ-135 consumer review bytes.
+/docs/REQ-135-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+
+# Retain the original REQ-135 implementation review bytes.
+/docs/REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md -text whitespace=cr-at-eol
+
+# Preserve updated exact-merge review separately from the original head review.
+/docs/REQ-135-CONSUMER-MERGE-REVIEW.md -text whitespace=cr-at-eol
+
+# Keep native switch fixtures identical to the executed portable contribution.
+/tests/Bosak.Xslt.Conformance/Fixtures/SwitchBoundaries/** text eol=lf

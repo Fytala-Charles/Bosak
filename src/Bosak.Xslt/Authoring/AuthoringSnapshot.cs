@@ -18,7 +18,13 @@
 //                      | Charles Korthout | 0.4   | 15-10-2026     | REQ-128: bounded insertion and immutable candidate descriptors.                           |
 //                      | Charles Korthout | 0.5   | 17-10-2026     | REQ-130: snapshot-owned deletion and merged-text provenance.                            |
 //                      | Charles Korthout | 0.6   | 17-10-2026     | REQ-131: typed snapshot-owned literal-text insertion entry points.                     |
+//                      | Charles Korthout | 0.7   | 18-10-2026     | REQ-132: additive literal element insertion with exact candidate provenance.             |
 // ===========================================================================================================================================================
+//                      | Charles Korthout | 0.8   | 18-10-2026     | REQ-133: snapshot-owned literal text body replacement.                                  |
+
+//                      | Charles Korthout | 0.9   | 19-10-2026     | REQ-134: separately bounded literal text deletion.                                      |
+
+//                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: operation-bound literal attribute lifecycle.                                    |
 
 using System.Xml.Linq;
 
@@ -35,6 +41,76 @@ namespace Bosak.Xslt.Authoring;
 /// </summary>
 public sealed class AuthoringSnapshot
 {
+    /// <summary>Discovers owned literal attribute Creation authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeCreationTargetResult GetLiteralAttributeCreationTarget(AuthoringNodeDescriptor owner, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, null, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Creation.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeCreationResult ProposeLiteralAttributeCreation(AuthoringLiteralAttributeCreationProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Creation(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers owned literal attribute Update authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="attribute">The actual attribute within that owner.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeUpdateTargetResult GetLiteralAttributeUpdateTarget(AuthoringNodeDescriptor owner, AuthoringAttributeDescriptor attribute, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        ArgumentNullException.ThrowIfNull(attribute);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, attribute, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Update.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeUpdateResult ProposeLiteralAttributeUpdate(AuthoringLiteralAttributeUpdateProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Update(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers owned literal attribute Deletion authority.</summary>
+    /// <param name="owner">The actual owned literal element.</param>
+    /// <param name="attribute">The actual attribute within that owner.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">An owner or attribute argument is null.</exception>
+    public AuthoringLiteralAttributeDeletionTargetResult GetLiteralAttributeDeletionTarget(AuthoringNodeDescriptor owner, AuthoringAttributeDescriptor attribute, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+        ArgumentNullException.ThrowIfNull(attribute);
+        var (data, failure) = LiteralAttributeLifecyclePipeline.Discover(this, owner, attribute, cancellationToken);
+        return new(data is null ? null : new(data), failure);
+    }
+    /// <summary>Proposes an exact literal attribute Deletion.</summary>
+    /// <param name="proposal">Owned operation intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive operation result.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralAttributeDeletionResult ProposeLiteralAttributeDeletion(AuthoringLiteralAttributeDeletionProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralAttributeLifecyclePipeline.Deletion(this, proposal, cancellationToken);
+    }
+
     private readonly IReadOnlyList<AuthoringModuleDescriptor> _modules;
     private readonly Dictionary<Uri, AuthoringModuleDescriptor> _modulesByUri;
     private readonly Dictionary<Uri, AuthoringSource> _sourcesByUri;
@@ -217,6 +293,78 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return TextInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers an opaque append target for one empty no-namespace literal element.</summary>
+    /// <param name="parent">The exact constructor descriptor from this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>A typed target or classified refusal, including cancellation.</returns>
+    /// <exception cref="ArgumentNullException">The parent is null.</exception>
+    public AuthoringLiteralElementInsertionTargetResult GetLiteralElementInsertionTarget(
+        AuthoringNodeDescriptor parent, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        return LiteralElementInsertionPipeline.Target(this, parent, cancellationToken);
+    }
+
+    /// <summary>Privately proposes one paired empty literal element with complete source evidence.</summary>
+    /// <param name="proposal">The immutable target, local name and formatting mode.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no partial candidate is returned.</param>
+    /// <returns>A fresh validated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralElementInsertionResult ProposeLiteralElementInsertion(
+        AuthoringLiteralElementInsertionProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralElementInsertionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers opaque authority to remove one literal text instruction and its payload.</summary>
+    /// <param name="instruction">The exact owned instruction descriptor.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, returned as a typed refusal.</param>
+    /// <returns>A complete target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The instruction is null.</exception>
+    public AuthoringTextDeletionTargetResult GetTextDeletionTarget(AuthoringNodeDescriptor instruction,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(instruction);
+        return TextDeletionPipeline.Target(this, instruction, cancellationToken);
+    }
+
+    /// <summary>Proposes exact removal without mutating this snapshot.</summary>
+    /// <param name="proposal">The engine-issued target authority.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, returned as a typed refusal.</param>
+    /// <returns>A fresh validated candidate or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringTextDeletionResult ProposeTextDeletion(AuthoringTextDeletionProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return TextDeletionPipeline.Run(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers authority for one paired ordinary literal text body.</summary>
+    /// <param name="instruction">The actual instruction descriptor from this snapshot.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>A checked target or classified refusal.</returns>
+    /// <exception cref="ArgumentNullException">The instruction is null.</exception>
+    public AuthoringTextBodyReplacementTargetResult GetTextBodyReplacementTarget(AuthoringNodeDescriptor instruction,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(instruction);
+        return TextBodyReplacementPipeline.Target(this, instruction, cancellationToken);
+    }
+
+    /// <summary>Privately replaces one literal body or reports validated equal intent.</summary>
+    /// <param name="proposal">An opaque target and exact logical Unicode intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation; no partial candidate is published.</param>
+    /// <returns>Exclusive Changed, NoChange or Refused evidence.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringTextBodyReplacementResult ProposeTextBodyReplacement(AuthoringTextBodyReplacementProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return TextBodyReplacementPipeline.Run(this, proposal, cancellationToken);
     }
 
     internal AuthoringSnapshot WithSuccessfulCompilation() => new(_modules, _modulesByUri, _sourcesByUri,

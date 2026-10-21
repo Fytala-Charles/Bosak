@@ -18,6 +18,9 @@
 //                      | Charles Korthout | 0.5   | 31-08-2026     | Added initial-template runner code lens for XSLT                                        |
 //                      | Charles Korthout | 0.6   | 31-08-2026     | Polished default source-document hint: XML comment alternative and trimmed paths        |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.7   | 18-10-2026     | Correct language-server nullability and async/analyzer diagnostics.                       |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System;
 using System.Collections.Generic;
@@ -90,7 +93,7 @@ public class CodeLensHandler : CodeLensHandlerBase
                     {
                         Title = title,
                         Name = "bosak.runInitialTemplate",
-                        Arguments = new JArray(uri.ToString(), (object?)initialTemplate)
+                        Arguments = new JArray(uri.ToString(), initialTemplate is null ? JValue.CreateNull() : new JValue(initialTemplate))
                     }
                 });
             }

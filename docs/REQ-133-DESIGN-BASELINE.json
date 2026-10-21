@@ -1,0 +1,52 @@
+{
+  "sourceVersion": "1.20.0+91f1af0d488bb2ed72b219118eeb1ab3570726bd",
+  "baselineProbes": [
+    {
+      "label": "empty",
+      "payloadNodes": 0,
+      "logicalText": "",
+      "output": ""
+    },
+    {
+      "label": "reference",
+      "payloadNodes": 1,
+      "logicalText": "A",
+      "output": "A"
+    },
+    {
+      "label": "numeric-newlines",
+      "payloadNodes": 1,
+      "logicalText": "\r\n\t",
+      "output": "\r\n\t"
+    },
+    {
+      "label": "physical-newlines",
+      "payloadNodes": 1,
+      "logicalText": " \n ",
+      "output": " \n "
+    },
+    {
+      "label": "preserved",
+      "payloadNodes": 1,
+      "logicalText": "  ",
+      "output": "  "
+    },
+    {
+      "label": "mixed-parent",
+      "payloadNodes": 1,
+      "logicalText": " label ",
+      "output": "before label after"
+    },
+    {
+      "label": "local-expansion-override",
+      "payloadNodes": 1,
+      "logicalText": "{1+1}",
+      "output": "{1+1}"
+    }
+  ],
+  "newOperationTests": 0,
+  "kind": "EXISTING_PUBLIC_INSPECTION_RUNTIME_BASELINE_ONLY",
+  "consumerRequestSha256": "ba50ab5c3761f0c193e72ffc3467a950b08744d5a7b30c41bf9ba57db987a22e",
+  "documentationBase": "af76b1e6c3b2f22e6a2783ab95cc93d237301454",
+  "newCapabilityImplemented": false
+}

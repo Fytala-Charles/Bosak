@@ -17,6 +17,9 @@
 //                      | Charles Korthout | 0.3   | 03-10-2026     | Slice 3: collection listing (LoadCollection / DispatchCollection) — per-scheme listing   |
 //                      |                  |       |                | shapes behind the scheme registry; members returned as scheme:// URIs in listing order   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 using System.Net;
 using System.Net.Http.Headers;
@@ -67,7 +70,7 @@ namespace Bosak.XPath.Providers.Database;
 /// unreachable endpoints, HTTP error statuses, and timeouts surface as
 /// <see cref="IOException"/>; malformed XML payloads surface as <see cref="XmlException"/>;
 /// both map to FODC0002 when the load runs through <c>EvaluationContext.LoadDocument</c>.
-/// Unsupported URI shapes (an unregistered scheme passed to <see cref="Load(string)"/>
+/// Unsupported URI shapes (an unregistered scheme passed to <see cref="Load(string, DatabaseLoaderOptions)"/>
 /// directly, or URI-embedded userinfo) surface as <see cref="ArgumentException"/>/<see cref="UriFormatException"/>
 /// (FODC0005 class).
 /// </para>

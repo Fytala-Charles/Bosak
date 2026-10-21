@@ -14,6 +14,9 @@
 //                      | Charles Korthout | 0.1   | 27-07-2026     | Creation — XPathErrorException, GetErrorDetails, catch pattern matching, err:* binding   |
 //                      | Charles Korthout | 0.2   | 21-09-2026     | API freeze stage A: internalized (exposes Parser catch patterns)                       |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      |==================|=======|================|=========================================================================================
+
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -59,7 +62,7 @@ public sealed class XPathErrorException : InvalidOperationException
 /// Marks an exception raised while lazily evaluating a global (prolog) variable initializer.
 /// Per the XQuery specification, errors occurring during global variable evaluation are NOT
 /// caught by try/catch expressions (try-006/007); the VM rethrows these immediately. The
-/// <see cref="InvalidOperationException.Message"/> mirrors the wrapped exception so error
+/// <see cref="System.Exception.Message"/> mirrors the wrapped exception so error
 /// reporting is unaffected.
 /// </summary>
 public sealed class GlobalVariableEvaluationException : InvalidOperationException

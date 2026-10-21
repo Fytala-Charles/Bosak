@@ -4,11 +4,11 @@
 <p>Source implementation — 17 October 2026</p>
 </div>
 
-**Published 1.18.0:** [Public package/release verification](RELEASE-1.18.0-PUBLICATION.md) is complete at immutable 3264fcfa. Braid adoption/functional/native acceptance remains open; original source-review checkpoints below are historical.
+**REQ-130 accepted ? 17 October 2026:** Braid formally accepts bounded value-of deletion in published **1.18.0**, source `3264fcfaf739e492770c882d2cbfc1f93f0172d2`. The [unchanged consumer acceptance receipt](REQ-130-BRAID-ACCEPTANCE.md) reports 1,015 normal Release tests and 241 fresh public-package checks (overlapping evidence), exact nine-assembly provenance, and product-owner native completion with matching hashes. These are reported consumer results, not engine reruns. Exact literal hashes/native encoding variants were not supplied. Acceptance is limited to the delivered profile; REQ-131 is separate. Earlier pending/adoption checkpoints below are historical.
 
 ## Delivery state
 
-Published version **1.18.0** at immutable tag `v1.18.0`, source 3264fcfa. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Engine verification at code head `10a3b5e3ef59074ba803b63e13d29a7d4eaae989` passes; no Braid pin/UI/source changes or native acceptance is claimed. Public libraries are 1.18.0; Braid production remains 1.17.0; extension 0.2.5 still bundles 1.16.5.
+Published version **1.18.0** at immutable tag `v1.18.0`, source 3264fcfa. Branch `feat/req130-value-of-deletion`, based on reviewed design merge `5c8513d6cbad3ea9f2f6c5d55918d3a730fff070`. User requested continuation after Braid reported no blocking design findings. Historical source delivery checkpoint: engine verification at code head `10a3b5e3ef59074ba803b63e13d29a7d4eaae989` passes; no Braid pin/UI/source changes or native acceptance is claimed. Public libraries are 1.18.0; Braid production remains 1.17.0; extension 0.2.5 still bundles 1.16.5.
 
 ## Implemented boundary
 
