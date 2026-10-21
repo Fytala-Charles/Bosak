@@ -946,6 +946,10 @@
     "nativeCases": 12,
     "publicChecks": 32,
     "sourceVersion": "1.23.1",
-    "upstreamSubmitted": false
+    "upstreamSubmitted": true,
+    "upstreamPR": 34,
+    "upstreamDraft": true,
+    "submissionEvidence": "../contributions/xslt40/switch-comparison-boundaries/submission.json",
+    "bosakMerge": "d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4"
   }
 }
