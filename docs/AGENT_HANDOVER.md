@@ -1,3 +1,11 @@
+# Switch slice merged; upstream draft submitted - 21 October 2026
+
+**Switch slice merged and upstream draft submitted - 21 October 2026:** [Bosak PR395](https://github.com/Fytala-Charles/Bosak/pull/395) merged as `d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4` after exact-head CI passed10,246 solution +84 language-server tests. [Upstream draft PR34](https://github.com/qt4cg/xslt40-test/pull/34) contains the12 native switch cases, based on refreshed default `91328fbf`; [submission proof](../contributions/xslt40/switch-comparison-boundaries/submission.json) records exact revisions and the unchanged prepared patch hash. Upstream review/acceptance and independent processor confirmation remain pending. Source1.23.1 is unpublished; public1.23.0 and Braid REQ-135 validation remain unchanged. Merged-main CI39572257850 is running at this checkpoint. Earlier prepared/not-submitted statements below are historical.
+
+What was completed: reviewed exact-head CI, merged PR395 with source/tests unchanged, refreshed upstream default before submission and opened draft PR34, and preserved original evidence separately from submission.json. Current source base `d53d64bd`; publication remains1.23.0 at9218a2b6. Next: observe merged-main CI, upstream design/independent processor review, and Braid independent REQ-135 acceptance. No release decision or new engine slice is implied. Root pending PR33 notes/sweep data and all backup stashes remain preserved.
+
+## Earlier checkpoints
+
 # XSLT4 switch boundary slice - 21 October 2026
 
 **Formal Braid REQ-135 acceptance - 21 October 2026:** [Consumer acceptance receipt](REQ-135-BRAID-ACCEPTANCE.md) records published1.23.0 at9218a2b6, pushed Braid checkpoint3caa613, complete Create/Update/Delete integration, **1,373 Release /700 signed public-package passes**, and the product owner's completed native procedure with all hashes reported correct. Disposition: implemented, published and consumer-accepted within the delivered bounded profile; exact native hash values, destinations, variants and accessibility observations remain unspecified. LA17-LA22 consumer evidence is recorded separately from engine/source gates. Earlier pending-adoption/native entries are historical. Documentation only; no engine/release change or acceptance of unrelated unpublished1.23.1 work.
