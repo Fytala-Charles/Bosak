@@ -4,6 +4,8 @@
   <p>Real tasks, earlier-version baselines, edge cases, and explicit compatibility</p>
 </div>
 
+**REQ-126 D3 grammar review — 21 October 2026:** [Switch/array/select mapping](../SWITCH-ARRAY-SELECT-GRAMMAR.md) adds a16-field [xsl:select entry](../xslt-instructions/xsl-select.md) and37 executable checks, including six full dispatch reports. Current catalog: **69 entries;2,673 feature +24 chapter checks =2,697**; four chapters and117 assigned function names unchanged. Public/source1.23.2 is verified. Instruction recognition, effective XPath version and host profile are distinct. REQ-126 remains In Progress; D2/D3/D4 and AC-03 remain partial. No engine/API/harness/version/gate change or release; earlier status/count snapshots are historical.
+
 **REQ-126 equality/collation review - 21 October 2026:** [Five-family review](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](../functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
 
 
@@ -15,7 +17,7 @@ From the repository root:
 dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter FullyQualifiedName~CatalogExampleTests
 ```
 
-The [case manifest](cases.json) contains 2,636 named checks. Each points to a complete
+The [case manifest](cases.json) contains 2,673 named checks. Each points to a complete
 published expression or stylesheet and declares its expected text or error. The
 test project copies those exact files; [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
 uses public compiler/evaluation APIs and verifies the declared outcomes.

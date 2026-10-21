@@ -4,6 +4,9 @@
   <p>Practical reference: Bosak XSLT 4.0 surface</p>
 </div>
 
+**Grammar/version review — 21 October 2026:** [Current pinned mapping](../SWITCH-ARRAY-SELECT-GRAMMAR.md) and [complete dispatch comparison](../examples/dispatch-grammar/README.md) distinguish known-instruction recognition, effective XPath version, raw result types and actual text delivery. Public1.23.2 is verified; historical provenance gaps remain.
+
+
 ## 1. Name and Classification
 
 **xsl:switch** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -60,7 +63,7 @@ Benefit: Match a selector against branch test values. Tradeoff: the declared com
 
 ## 12. Implementation
 
-The complete draft-instruction file declares version="4.0". Bosak recognizes these implemented instruction surfaces; its instruction support is separate from XPathCompatibility. Embedded expressions in these files remain XPath 3.1. The companion baseline declares version="3.0". See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
+The complete draft-instruction file declares version="4.0". Bosak recognizes these implemented instruction surfaces; its instruction support is separate from XPathCompatibility. Embedded expressions use effective compatibility: under the default Legacy host, effective version4.0 selects frozen XPath40 and a local3.0 override selects XPath31. An explicit Xslt40Draft host selects frozen XPath40 independently of lower local version. Known-instruction recognition is separate from these expression gates. The companion baseline declares version="3.0". See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code
 
@@ -81,3 +84,5 @@ Executable example IDs: `xsl-switch-main`, `xsl-switch-edge`, `xsl-switch-before
 See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*
+
+Updated21 October2026: dispatch-grammar array/switch cases add exact source-node identity, empty-member and3.0/4.0 host/version evidence without changing engine semantics.

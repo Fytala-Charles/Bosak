@@ -1,0 +1,762 @@
+{
+  "date": "2026-10-21",
+  "sourceBase": "9382daf5f73244b181c13919def0e7c61be053b8",
+  "sourceAndPublishedVersion": "1.23.2",
+  "specification": {
+    "revision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+    "url": "https://raw.githubusercontent.com/qt4cg/qtspecs/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xslt-40/src/xslt.xml",
+    "sha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "sections": [
+      "xsl-switch",
+      "array-construction",
+      "select-instruction"
+    ],
+    "role": "Current review pin; not recovered historical adoption"
+  },
+  "xslSelectDelivery": "69a7cfd3c84e405c037be41786464950d1c06696",
+  "scope": "Bounded D3 XSLT switch/array/select; not complete grammar inventory or historical adoption recovery",
+  "entryCount": 69,
+  "featureChecks": 2673,
+  "chapterChecks": 24,
+  "totalChecks": 2697,
+  "workedChapters": 4,
+  "assignedFunctionNames": 117,
+  "newChecks": 37,
+  "host": "Default Legacy in new manifest; explicit Draft host covered by existing source tests",
+  "stylesheetVersions": [
+    "3.0",
+    "4.0"
+  ],
+  "originalManifestRowsUnchanged": 2636,
+  "newCases": [
+    {
+      "id": "dispatch-grammar-report-3-normal",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/report-3.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+    },
+    {
+      "id": "dispatch-grammar-report-3-empty",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/report-3.xsl",
+      "input": "dispatch-grammar/empty.xml",
+      "expected": "batches=0;flat=0;groups=0"
+    },
+    {
+      "id": "dispatch-grammar-report-3-reordered",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/report-3.xsl",
+      "input": "dispatch-grammar/reordered.xml",
+      "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+    },
+    {
+      "id": "dispatch-grammar-report-4-normal",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/report-4.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+    },
+    {
+      "id": "dispatch-grammar-report-4-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/report-4.xsl",
+      "input": "dispatch-grammar/empty.xml",
+      "expected": "batches=0;flat=0;groups=0"
+    },
+    {
+      "id": "dispatch-grammar-report-4-reordered",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/report-4.xsl",
+      "input": "dispatch-grammar/reordered.xml",
+      "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+    },
+    {
+      "id": "dispatch-grammar-recognized-switch-3",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/recognized-switch-3.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "hit"
+    },
+    {
+      "id": "dispatch-grammar-recognized-array-3",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/recognized-array-3.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2"
+    },
+    {
+      "id": "dispatch-grammar-recognized-select-3",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/recognized-select-3.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2"
+    },
+    {
+      "id": "dispatch-grammar-recognized-switch-4",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/recognized-switch-4.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "hit"
+    },
+    {
+      "id": "dispatch-grammar-recognized-array-4",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/recognized-array-4.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2"
+    },
+    {
+      "id": "dispatch-grammar-recognized-select-4",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/recognized-select-4.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2"
+    },
+    {
+      "id": "dispatch-grammar-expression-root40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/expression-root40.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2,1"
+    },
+    {
+      "id": "dispatch-grammar-expression-root30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/expression-root30.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "dispatch-grammar-expression-local30",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/expression-local30.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "dispatch-grammar-expression-local40",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "dispatch-grammar/expression-local40.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2,1"
+    },
+    {
+      "id": "dispatch-grammar-switch-no-selector",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-no-selector.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-switch-no-when",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-no-when.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-switch-duplicate-otherwise",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-duplicate-otherwise.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-switch-late-when",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-late-when.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-switch-select-content",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-select-content.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE3185"
+    },
+    {
+      "id": "dispatch-grammar-array-select-content",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/array-select-content.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE3185"
+    },
+    {
+      "id": "dispatch-grammar-member-select-content",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/member-select-content.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE3185"
+    },
+    {
+      "id": "dispatch-grammar-select-child",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-child.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-select-late-fallback",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-late-fallback.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "dispatch-grammar-select-required-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-required-empty.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XPTY0004"
+    },
+    {
+      "id": "dispatch-grammar-array-per-item",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/array-per-item.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2:1"
+    },
+    {
+      "id": "dispatch-grammar-array-per-sequence",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/array-per-sequence.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "1:2"
+    },
+    {
+      "id": "dispatch-grammar-array-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/array-empty.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "0"
+    },
+    {
+      "id": "dispatch-grammar-array-empty-member",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/array-empty-member.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "1:0"
+    },
+    {
+      "id": "dispatch-grammar-switch-node-identity",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-node-identity.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "true"
+    },
+    {
+      "id": "dispatch-grammar-select-cdata",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-cdata.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "{SKU}"
+    },
+    {
+      "id": "dispatch-grammar-select-coercion",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-coercion.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "2"
+    },
+    {
+      "id": "dispatch-grammar-select-type-error",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-type-error.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XPTY0004"
+    },
+    {
+      "id": "dispatch-grammar-switch-empty-selector",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/switch-empty-selector.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "error": "XPTY0004"
+    },
+    {
+      "id": "dispatch-grammar-select-focus",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-focus.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "10:1/2; 20:2/2;"
+    },
+    {
+      "id": "dispatch-grammar-select-focus-text",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "dispatch-grammar/select-focus-text.xsl",
+      "input": "dispatch-grammar/normal.xml",
+      "expected": "10:1/2;20:2/2;"
+    }
+  ],
+  "initialExecution": {
+    "passed": 33,
+    "failed": 3,
+    "skipped": 0,
+    "fixtureOnlyCorrection": "Adjacent atomic item serialization is explicit; report creates text, raw focus expected separator corrected, additional text focus case added."
+  },
+  "intermediateExecution": {
+    "passed": 35,
+    "failed": 1,
+    "skipped": 0,
+    "reason": "UTF8 decoding interruption left focus correction unapplied; original receipts retained"
+  },
+  "finalFocused": {
+    "passed": 37,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fullSolution": {
+    "passed": 10368,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      {
+        "file": "req126-grammar_net10.0_20261021181224.trx",
+        "passed": 66,
+        "sha256": "8df87f4cde3011a933c111bf78c6fa99231e0d8dfef40e123fecf59f0cb53b73"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181225.trx",
+        "passed": 202,
+        "sha256": "bc55269025ae51095c728cf5119a189e78f219ee26dd30a38a8cf55253ca5070"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181226.trx",
+        "passed": 269,
+        "sha256": "d287767221ae558c6709729a6f31580c9c6646f70780e706ec81205fb0362623"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181227.trx",
+        "passed": 411,
+        "sha256": "3dba488a65917dd5642025ed7de97121a82319d66644cbbb9ca5fa4fa5aa8e61"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181228.trx",
+        "passed": 132,
+        "sha256": "ccae869dce9907dd68eab4b3ae3961703187736a29fae0e9a94168739cc05427"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181229.trx",
+        "passed": 303,
+        "sha256": "23af0106f28530f1b8af1542dc9afe82d46c7a9d294c9600172bbb77a2b5672a"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181230.trx",
+        "passed": 1385,
+        "sha256": "31c861565b7616d025a36c9a9fbef886369b8d27146bd71d2cc3026a2abe368c"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181231.trx",
+        "passed": 47,
+        "sha256": "c0eeb6b8dd2fcb07eaacb46fe845a548767e7d95124067a68f0fa03094262453"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181233.trx",
+        "passed": 153,
+        "sha256": "c4983e6b6e2efd672fb21741db23c708ef05749788b92fe181e4ee2a1198bbb7"
+      },
+      {
+        "file": "req126-grammar_net10.0_20261021181607.trx",
+        "passed": 7400,
+        "sha256": "8bda41b0bf82474cc2a7f959874396a70b60af876943aa0886e84e63fdba0bbd"
+      }
+    ],
+    "xsltPassed": 7400
+  },
+  "engineChanges": false,
+  "harnessChanges": false,
+  "versionChanges": false,
+  "gateMembershipChanges": false,
+  "manualEngineGatesRerun": false,
+  "manualGateRationale": "Engine/runtime/parser/compiler/test harness source unchanged; this is executable documentation only",
+  "upstreamSubmissionPerformed": false,
+  "req126Status": "In Progress",
+  "remaining": [
+    "Other D3 grammar/types/patterns",
+    "D2 full defaults/options/prose",
+    "D4 historical adoption gaps",
+    "AC-03 applicable-gate acceptance treatment"
+  ],
+  "executionReceipts": [
+    {
+      "path": "focused-final\\focused-final.trx",
+      "sha256": "2332bd948005abc826d90b16363e4a4a525a52070eefd4006d0c4cffa226037a"
+    },
+    {
+      "path": "focused-original\\focused-original.trx",
+      "sha256": "50e0614bce3481086c7ebc5bacd68872583eafcbc209d2fe40a42ff539b25f8d"
+    },
+    {
+      "path": "focused-verified\\focused-verified.trx",
+      "sha256": "a5f1acc35dba1ca0362f19079e2c94a8499967a226db0283dd4581244b0c7661"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181224.trx",
+      "sha256": "8df87f4cde3011a933c111bf78c6fa99231e0d8dfef40e123fecf59f0cb53b73"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181225.trx",
+      "sha256": "bc55269025ae51095c728cf5119a189e78f219ee26dd30a38a8cf55253ca5070"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181226.trx",
+      "sha256": "d287767221ae558c6709729a6f31580c9c6646f70780e706ec81205fb0362623"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181227.trx",
+      "sha256": "3dba488a65917dd5642025ed7de97121a82319d66644cbbb9ca5fa4fa5aa8e61"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181228.trx",
+      "sha256": "ccae869dce9907dd68eab4b3ae3961703187736a29fae0e9a94168739cc05427"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181229.trx",
+      "sha256": "23af0106f28530f1b8af1542dc9afe82d46c7a9d294c9600172bbb77a2b5672a"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181230.trx",
+      "sha256": "31c861565b7616d025a36c9a9fbef886369b8d27146bd71d2cc3026a2abe368c"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181231.trx",
+      "sha256": "c0eeb6b8dd2fcb07eaacb46fe845a548767e7d95124067a68f0fa03094262453"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181233.trx",
+      "sha256": "c4983e6b6e2efd672fb21741db23c708ef05749788b92fe181e4ee2a1198bbb7"
+    },
+    {
+      "path": "full-results\\req126-grammar_net10.0_20261021181607.trx",
+      "sha256": "8bda41b0bf82474cc2a7f959874396a70b60af876943aa0886e84e63fdba0bbd"
+    }
+  ],
+  "fixtureHashes": [
+    {
+      "path": "examples\\dispatch-grammar\\array-empty-member.xsl",
+      "sha256": "583409ac7e20ad1af32a45f07e16e6741e78944c4b7d0cdfaa94ea60b8801cd2"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\array-empty.xsl",
+      "sha256": "a6976353f3c8ea56487c23d39ba13eb755e42cc80959cda9d8fdbcc4b10eed8b"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\array-per-item.xsl",
+      "sha256": "4418bc2714f2e1d90d25f37f303c7a82dd46a25e943da7bbdf53f53e13236e6c"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\array-per-sequence.xsl",
+      "sha256": "4f973e9c2878b0562aa530c8be37b257093442f64572a2ccb868a2fafeb1902e"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\array-select-content.xsl",
+      "sha256": "fe45600c17fe8ab8121867b224345f5e8adf3b98367ed4d4c16d2a6778fb6cf0"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\empty.xml",
+      "sha256": "0356a54003934f469d8276039a96bcec69f02d01c885690774faba1c45ed21ba"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\expression-local30.xsl",
+      "sha256": "f38929c6e60e4e7d86afa61231a00ac69c8e46cc3e438bf420cb6d4e82af5cb9"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\expression-local40.xsl",
+      "sha256": "0d417b2d138cf3104fd96c232fef1cb7b111dc85b03ac1c0c65984081e154cf6"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\expression-root30.xsl",
+      "sha256": "2adc3e1e5a0bb8f2ccf96d9ffc7ebe7fa9449b52ede363df19b5fb44bf291fe0"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\expression-root40.xsl",
+      "sha256": "f8a28bbfa3ef824f440cf5b862c80b93c81f3fd9b6b4028c54bfa272b8c95b42"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\member-select-content.xsl",
+      "sha256": "c43fdb89acbdd47f5047ecc683f09c5bc95ba63662950e126c24aa14a82693c5"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\normal.xml",
+      "sha256": "aee411555d89c72f2561af2b2e670d49412f20a4ce315bafe974f3c65161975a"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-array-3.xsl",
+      "sha256": "5be404ebc1e25aaa3da724399a083b192b6bd915b00f856e9a156ec769e16cb9"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-array-4.xsl",
+      "sha256": "920ea4e29c0f8742cf419facd8c643004d622c485c17ffafc947d1db97e89354"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-select-3.xsl",
+      "sha256": "275e2458723e1b76ef9981b87fcc1420a92c7a60b9da9e06321a52da38f63767"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-select-4.xsl",
+      "sha256": "08ebc1ef448501adda76e7523cfcdb8a704e293aed8682987e59eb248e79e258"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-switch-3.xsl",
+      "sha256": "9f539f99dff25d39c7e21d8cf56021292197fa1e6a86e02227f5a83df56b4398"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\recognized-switch-4.xsl",
+      "sha256": "455d2f0c855c095f94786e2547757af8379124038d98035e786f43a735f85cae"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\reordered.xml",
+      "sha256": "2a317dbc63f1f175c1918ebe459b2db1b36a343d838be39e440a439d0e7682a0"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\report-3.xsl",
+      "sha256": "dcc0c9fae03176f33bf7ab48a1e017e834149385c80bcef37aaf68a13382a4e1"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\report-4.xsl",
+      "sha256": "392e57604d3c015dc1d88ac750a85ba304312dc90c8d137475584c4f15d59276"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-cdata.xsl",
+      "sha256": "2fc696b59dd9636bd9cc440968fe70522241b43efc0cc9590020b41702075676"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-child.xsl",
+      "sha256": "6dbcf49836200ff3098f93c6cc374dcd64a4a87d227e4146811d28393eda1b9b"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-coercion.xsl",
+      "sha256": "4e44a0da0c334da78217ede1a2781b4a334ce53ed8de98011aa4b7cf6a7e69ec"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-focus-text.xsl",
+      "sha256": "8c5d5222b5d59ef8398750b64fb9ff2d515e0bd6c9ff3551bb91744aa1bf7f36"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-focus.xsl",
+      "sha256": "08a1a065b774dada90798e956b4bdabcc581664e29667fffa68555a8286cdc06"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-late-fallback.xsl",
+      "sha256": "7fdaae3b63c288641fc589a5b6b8edd2ea29fedbf4f8c5698922dbb19821b27c"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-required-empty.xsl",
+      "sha256": "9dde5acc0d2dbc014ceecca2615d8078151895300a64326c0731b323ed17f152"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\select-type-error.xsl",
+      "sha256": "31cf3d97c53078da312bdaba75ebef28adfe4c93a8bc20d63e53ad159e32a5bc"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-duplicate-otherwise.xsl",
+      "sha256": "21d4a9c4e7ec87327b48321d6818e3c9c92c270da8241056de51117e553355b6"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-empty-selector.xsl",
+      "sha256": "e06c27a3e74affedb08f04f79da665c69d3c1a85023cdcb36b7f83bf65622feb"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-late-when.xsl",
+      "sha256": "224b47e87b6fb540cdb565e4e19edb467a2546b7dccd2f7687cc72369e5d7b31"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-no-selector.xsl",
+      "sha256": "6196db4608d1110419f489da264ef801cc6a0cd02a1c77f62de87d1d9807ddc2"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-no-when.xsl",
+      "sha256": "2812eb195b1c152e1dd7e77f137b23306a40af398632c4c4d101e4a4e039e838"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-node-identity.xsl",
+      "sha256": "56abe4bb1691ef02946170b01f332017458121b672cec29ffb11d846862b4537"
+    },
+    {
+      "path": "examples\\dispatch-grammar\\switch-select-content.xsl",
+      "sha256": "6ffd4e1b5627204d28f6ecc73cc508506eb438edb25d12ef58b979434d3b99a6"
+    }
+  ],
+  "originalFixtureHashes": [
+    {
+      "path": "first-execution-fixtures\\array-empty-member.xsl",
+      "sha256": "583409ac7e20ad1af32a45f07e16e6741e78944c4b7d0cdfaa94ea60b8801cd2"
+    },
+    {
+      "path": "first-execution-fixtures\\array-empty.xsl",
+      "sha256": "a6976353f3c8ea56487c23d39ba13eb755e42cc80959cda9d8fdbcc4b10eed8b"
+    },
+    {
+      "path": "first-execution-fixtures\\array-per-item.xsl",
+      "sha256": "4418bc2714f2e1d90d25f37f303c7a82dd46a25e943da7bbdf53f53e13236e6c"
+    },
+    {
+      "path": "first-execution-fixtures\\array-per-sequence.xsl",
+      "sha256": "4f973e9c2878b0562aa530c8be37b257093442f64572a2ccb868a2fafeb1902e"
+    },
+    {
+      "path": "first-execution-fixtures\\array-select-content.xsl",
+      "sha256": "fe45600c17fe8ab8121867b224345f5e8adf3b98367ed4d4c16d2a6778fb6cf0"
+    },
+    {
+      "path": "first-execution-fixtures\\empty.xml",
+      "sha256": "0356a54003934f469d8276039a96bcec69f02d01c885690774faba1c45ed21ba"
+    },
+    {
+      "path": "first-execution-fixtures\\expression-local30.xsl",
+      "sha256": "f38929c6e60e4e7d86afa61231a00ac69c8e46cc3e438bf420cb6d4e82af5cb9"
+    },
+    {
+      "path": "first-execution-fixtures\\expression-local40.xsl",
+      "sha256": "0d417b2d138cf3104fd96c232fef1cb7b111dc85b03ac1c0c65984081e154cf6"
+    },
+    {
+      "path": "first-execution-fixtures\\expression-root30.xsl",
+      "sha256": "2adc3e1e5a0bb8f2ccf96d9ffc7ebe7fa9449b52ede363df19b5fb44bf291fe0"
+    },
+    {
+      "path": "first-execution-fixtures\\expression-root40.xsl",
+      "sha256": "f8a28bbfa3ef824f440cf5b862c80b93c81f3fd9b6b4028c54bfa272b8c95b42"
+    },
+    {
+      "path": "first-execution-fixtures\\member-select-content.xsl",
+      "sha256": "c43fdb89acbdd47f5047ecc683f09c5bc95ba63662950e126c24aa14a82693c5"
+    },
+    {
+      "path": "first-execution-fixtures\\normal.xml",
+      "sha256": "aee411555d89c72f2561af2b2e670d49412f20a4ce315bafe974f3c65161975a"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-array-3.xsl",
+      "sha256": "5be404ebc1e25aaa3da724399a083b192b6bd915b00f856e9a156ec769e16cb9"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-array-4.xsl",
+      "sha256": "920ea4e29c0f8742cf419facd8c643004d622c485c17ffafc947d1db97e89354"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-select-3.xsl",
+      "sha256": "275e2458723e1b76ef9981b87fcc1420a92c7a60b9da9e06321a52da38f63767"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-select-4.xsl",
+      "sha256": "08ebc1ef448501adda76e7523cfcdb8a704e293aed8682987e59eb248e79e258"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-switch-3.xsl",
+      "sha256": "9f539f99dff25d39c7e21d8cf56021292197fa1e6a86e02227f5a83df56b4398"
+    },
+    {
+      "path": "first-execution-fixtures\\recognized-switch-4.xsl",
+      "sha256": "455d2f0c855c095f94786e2547757af8379124038d98035e786f43a735f85cae"
+    },
+    {
+      "path": "first-execution-fixtures\\reordered.xml",
+      "sha256": "2a317dbc63f1f175c1918ebe459b2db1b36a343d838be39e440a439d0e7682a0"
+    },
+    {
+      "path": "first-execution-fixtures\\report-3.xsl",
+      "sha256": "dcc0c9fae03176f33bf7ab48a1e017e834149385c80bcef37aaf68a13382a4e1"
+    },
+    {
+      "path": "first-execution-fixtures\\report-4.xsl",
+      "sha256": "fab1440ada0321eb46309e999f4767cba55e6c2d4e2922a3f795c33aac03aa65"
+    },
+    {
+      "path": "first-execution-fixtures\\select-cdata.xsl",
+      "sha256": "2fc696b59dd9636bd9cc440968fe70522241b43efc0cc9590020b41702075676"
+    },
+    {
+      "path": "first-execution-fixtures\\select-child.xsl",
+      "sha256": "6dbcf49836200ff3098f93c6cc374dcd64a4a87d227e4146811d28393eda1b9b"
+    },
+    {
+      "path": "first-execution-fixtures\\select-coercion.xsl",
+      "sha256": "4e44a0da0c334da78217ede1a2781b4a334ce53ed8de98011aa4b7cf6a7e69ec"
+    },
+    {
+      "path": "first-execution-fixtures\\select-focus.xsl",
+      "sha256": "08a1a065b774dada90798e956b4bdabcc581664e29667fffa68555a8286cdc06"
+    },
+    {
+      "path": "first-execution-fixtures\\select-late-fallback.xsl",
+      "sha256": "7fdaae3b63c288641fc589a5b6b8edd2ea29fedbf4f8c5698922dbb19821b27c"
+    },
+    {
+      "path": "first-execution-fixtures\\select-required-empty.xsl",
+      "sha256": "9dde5acc0d2dbc014ceecca2615d8078151895300a64326c0731b323ed17f152"
+    },
+    {
+      "path": "first-execution-fixtures\\select-type-error.xsl",
+      "sha256": "31cf3d97c53078da312bdaba75ebef28adfe4c93a8bc20d63e53ad159e32a5bc"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-duplicate-otherwise.xsl",
+      "sha256": "21d4a9c4e7ec87327b48321d6818e3c9c92c270da8241056de51117e553355b6"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-empty-selector.xsl",
+      "sha256": "e06c27a3e74affedb08f04f79da665c69d3c1a85023cdcb36b7f83bf65622feb"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-late-when.xsl",
+      "sha256": "224b47e87b6fb540cdb565e4e19edb467a2546b7dccd2f7687cc72369e5d7b31"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-no-selector.xsl",
+      "sha256": "6196db4608d1110419f489da264ef801cc6a0cd02a1c77f62de87d1d9807ddc2"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-no-when.xsl",
+      "sha256": "2812eb195b1c152e1dd7e77f137b23306a40af398632c4c4d101e4a4e039e838"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-node-identity.xsl",
+      "sha256": "56abe4bb1691ef02946170b01f332017458121b672cec29ffb11d846862b4537"
+    },
+    {
+      "path": "first-execution-fixtures\\switch-select-content.xsl",
+      "sha256": "6ffd4e1b5627204d28f6ecc73cc508506eb438edb25d12ef58b979434d3b99a6"
+    }
+  ],
+  "originalManifestSha256": "765738d70654b2ce7b75181d6e97d664d87ff0cfb5b4e3a3c6ac7a988d48addc",
+  "originalExecutionManifestSha256": "bebc7608be79a1f53d2f51e7c5c5d2c70b9de680d24a584aadb0358474e0174e"
+}
