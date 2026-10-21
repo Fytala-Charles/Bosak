@@ -1,3 +1,11 @@
+# Index-of empty-collation correction - 21 October 2026
+
+**Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](xpath40-catalog/INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
+
+Base `7c33728c7aa34fca5ccdc21d8310f36894d77f09` is the approved PR398 merge; its workflow39610977211 succeeds at c247af68. What was built: IsXPath40-only default-on-empty branch in IndexOf_3,27 meaningful public-call regressions, one corrected catalog row with3.1 baseline error, separate historical audit correction and source1.23.2. Red15/12/0; green27/0/0; full10,331/0/0; exact manual gates unchanged. No other runtime/harness/API change, package publication or Braid change. All original source/docs findings, test/restore failures and hashes retained. Next: review and exact-head CI before merging this engine correction; defer deep-equal options and broader keyword work. Preserve root pending PR33 notes, sweep data, stashes/worktrees and untouched PR132.
+
+## Earlier checkpoints
+
 # REQ-126 equality/collation documentation slice - 21 October 2026
 
 **REQ-126 equality/collation slice - 21 October 2026:** [Current catalog review](xpath40-catalog/EQUALITY-COLLATION-CONTRACT-REVIEW.md) adds a customer-reference family and58 executable checks:68 entries,2,636 feature +24 chapter checks =2,660. Six complete3.1/4.0 reports cover normal/empty/reordered input; current observations and pinned normative outcomes remain separate. No engine/API/version/gate/release changes. REQ-126 remains In Progress; source1.23.1/public1.23.0 and Braid acceptance are unchanged. Hash-only PR132 is untouched.

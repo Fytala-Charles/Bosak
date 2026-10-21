@@ -5,6 +5,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](xpath40-catalog/INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
+
+
 **REQ-126 equality/collation slice - 21 October 2026:** [Current catalog review](xpath40-catalog/EQUALITY-COLLATION-CONTRACT-REVIEW.md) adds a customer-reference family and58 executable checks:68 entries,2,636 feature +24 chapter checks =2,660. Six complete3.1/4.0 reports cover normal/empty/reordered input; current observations and pinned normative outcomes remain separate. No engine/API/version/gate/release changes. REQ-126 remains In Progress; source1.23.1/public1.23.0 and Braid acceptance are unchanged. Hash-only PR132 is untouched.
 
 

@@ -60,7 +60,9 @@ Explicit policy makes reports reproducible for the supplied supported collations
 
 ## 12. Implementation
 
-Current reviewed implementation: [FunctionLibrary at the immutable source base](https://github.com/Fytala-Charles/Bosak/blob/5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f/src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs), including DistinctValues_2, IndexOf_3, DeepEqual_3, Compare_2/3 and ContainsToken. This documentation slice changes no engine code. Current compare keywords differ from the draft, two families lack metadata, empty positional index collation refuses and deep-equal options maps refuse; see the separate findings. Keyword grammar refuses at XPath31; the five positional functions remain available there, with compare's earlier string contract.
+Original reviewed implementation: [FunctionLibrary at the immutable source base](https://github.com/Fytala-Charles/Bosak/blob/5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f/src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs), including DistinctValues_2, IndexOf_3, DeepEqual_3, Compare_2/3 and ContainsToken. This documentation slice changes no engine code. Current compare keywords differ from the draft, two families lack metadata, empty positional index collation is corrected in source1.23.2 only at4.0 while deep-equal options maps still refuse; see the separate findings. Keyword grammar refuses at XPath31; the five positional functions remain available there, with compare's earlier string contract.
+
+**Index-of source correction:** [Empty-collation default evidence](../INDEX-OF-EMPTY-COLLATION.md) records27 new standard-library checks, unchanged3.1 refusal and the corrected manifest case. The original source/audit pins above remain historical evidence.
 
 ## 13. Sample Code
 

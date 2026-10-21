@@ -846,5 +846,17 @@
   "versionChanged": false,
   "gateMembershipChanged": false,
   "req126Status": "In Progress",
-  "scope": "Current targeted declarations/observations, not exhaustive conformance; historical inventories retained unchanged."
+  "scope": "Current targeted declarations/observations, not exhaustive conformance; historical inventories retained unchanged.",
+  "sourceCorrections": [
+    {
+      "date": "2026-10-21",
+      "case": "equality-contract-index-empty-collation",
+      "version": "1.23.2",
+      "scope": "Runtime default on an empty third argument in XPath40/experimental only; XPath31 XPTY0004 retained.",
+      "currentExpected": "1",
+      "baseline31Error": "XPTY0004",
+      "originalAuditAndFindingsPreserved": true,
+      "evidence": "INDEX-OF-EMPTY-COLLATION.md"
+    }
+  ]
 }

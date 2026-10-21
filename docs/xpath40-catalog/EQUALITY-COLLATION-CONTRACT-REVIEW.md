@@ -4,6 +4,9 @@
 <p>21 October 2026</p>
 </div>
 
+**Index-of correction - 21 October 2026:** Source1.23.2 [defaults an empty collation only in4.0](INDEX-OF-EMPTY-COLLATION.md), retaining XPath3.1 behavior. The manifest reproducer now verifies result1 plus the3.1 XPTY0004 baseline. Original source5de2cfc5 findings/hashes below remain historical; deep-equal options and unrelated keyword findings remain open. No new release.
+
+
 Reviewed 21 October2026 against source `5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f` (unpublished1.23.1; public 1.23.0), with the unchanged catalog runner. [Pinned draft declarations](https://github.com/qt4cg/qtspecs/blob/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xpath-functions-40/src/function-catalog.xml) at `3230573afe246f1b502ed2e22d187ce9928155b1` have SHA-256 `feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010`. [Dated F&O3.1 declarations](https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/function-catalog.xml) have SHA-256 `0a387a2a160d608788e293479412fc4b43152a07193184b315e6323b799426da`. This is a current contract comparison; no historical adopted-specification pin is recovered.
 
 58 new checks comprise 52 focused function/mode boundaries and six full customer reports. Current catalog: **68 entries,2,636 feature checks +24 chapter checks =2,660**; four worked chapters and117 assigned4.0-only names are unchanged. REQ-126 remains In Progress. No source/API/test-harness/version/gate changes or release.
