@@ -1,4 +1,7 @@
 <div align="center">
+
+**Formal Braid REQ-135 acceptance - 21 October 2026:** [Consumer acceptance receipt](REQ-135-BRAID-ACCEPTANCE.md) records published1.23.0 at9218a2b6, pushed Braid checkpoint3caa613, complete Create/Update/Delete integration, **1,373 Release /700 signed public-package passes**, and the product owner's completed native procedure with all hashes reported correct. Disposition: implemented, published and consumer-accepted within the delivered bounded profile; exact native hash values, destinations, variants and accessibility observations remain unspecified. LA17-LA22 consumer evidence is recorded separately from engine/source gates. Earlier pending-adoption/native entries are historical. Documentation only; no engine/release change or acceptance of unrelated unpublished1.23.1 work.
+
 <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala literal attribute lifecycle acceptance plan">
 <h1>REQ-135: literal attribute lifecycle acceptance plan</h1>
 <p>Planned coverage — 20 October 2026</p>
