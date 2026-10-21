@@ -1,5 +1,9 @@
 # REQ-135 consumer implementation review handoff
 
+**REQ-135 merge verified — 21 October 2026:** User-approved [PR #392](https://github.com/Fytala-Charles/Bosak/pull/392) is merged as `9218a2b6f2339f923fd6d018ba988c8325b2c44d`. Merged-main CI39543201162 passes10,214 solution +84 language-server tests,16 runner controls, four Windows wrapper controls and highlighting. Exact-merge isolated public-only packages pass117/0/0 with matching ten archive/nine consumed assembly provenance. Runtime source/tests remain unchanged from Braid-reviewed f9e618dc. [Merge verification](REQ-135-MERGED-READINESS.md) and [exact-merge consumer handoff](REQ-135-CONSUMER-MERGE-HANDOFF.md) record the next gate: independent Braid confirmation at the immutable merge. Source1.23.0 remains unpublished; public1.22.0, Braid adoption and native acceptance are unchanged. No release authorized.
+
+Earlier merge-pending statements below retain their historical checkpoint.
+
 **Braid implementation head review — 20 October 2026:** [Original consumer review](REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md) reports no blockers or required correction at `f9e618dc1bcec38ff552d6edfa80e36bfb42a335`. An independent isolated public-only suite passes700/0/0 (117 imported lifecycle,551 prior authoring/identity and32 new Braid probes); counts overlap earlier evidence. Ten candidate archive revisions and nine consumed assembly/archive/cache/output identities match that head. These are unsigned local candidates, not public packages. Product-owner merge authorization and subsequent exact-merge verification remain next gates; publication, Braid adoption and native acceptance remain separate. Source1.23.0 is unpublished, public1.22.0 unchanged.
 
 Earlier review-pending statements below describe the delivered head checkpoint.

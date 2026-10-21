@@ -1,0 +1,195 @@
+{
+  "date": "2026-10-21",
+  "implementationPR": 392,
+  "merge": "9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+  "reviewedImplementationHead": "f9e618dc1bcec38ff552d6edfa80e36bfb42a335",
+  "runtimeAndTestsIdenticalToReviewedHead": true,
+  "sourceVersion": "1.23.0",
+  "publishedVersion": "1.22.0",
+  "mergedMainCI": {
+    "run": 39543201162,
+    "conclusion": "success",
+    "solutionPassed": 10214,
+    "languageServerPassed": 84,
+    "runnerControlsPassed": 16,
+    "windowsWrapperControlsPassed": 4,
+    "highlighting": "success",
+    "logSha256": "6aa1165fc56874043101f4450f71ed5ac65c23a7fcfaff11ae0a50e29548a66a"
+  },
+  "exactMergePackageProof": {
+    "date": "2026-10-21",
+    "head": "9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+    "version": "1.23.0",
+    "published": false,
+    "packageKind": "Unsigned local candidate packages; not public-feed/signature verification",
+    "consumerProject": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-package-consumer\\Req135.PublicConsumer.csproj",
+    "freshCache": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-package-cache",
+    "passed": 117,
+    "failed": 0,
+    "skipped": 0,
+    "sourceOnlyControlsExcluded": 19,
+    "archives": [
+      {
+        "id": "Bosak.XPath.Api",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Api.1.23.0.nupkg",
+        "sha256": "25d2b53c5b11ad5c84e9965ff191f512e3cd74e5539659a10ee55f6e5c9b6c98",
+        "sha512": "Wd8QArqcUdkxSYRBXL1gGxqTAC/f4qiPTmYfCeGuYNC5rTHjINqffY0WNUuu6Fic/rw+vuiPln85oKyF1IgFmA==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Compiler",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Compiler.1.23.0.nupkg",
+        "sha256": "f07acb0bc74303b378fb6b3e8d92cbf88736b5a62ed0f423c66f2b1641cf67b4",
+        "sha512": "AF/T28MzZcG1oyxuinxaGfLkvMLfcnjx3q1c78K0CKE7GNh9k9B5zbdecP7IIjjikbonwt79NDpIjf2NEcRCOw==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Core.1.23.0.nupkg",
+        "sha256": "81b21afc3b13d7fd58574ffa7392a97a6548c6ef1d8d82a4e94b39c6f6d76e33",
+        "sha512": "4sHTsspliKZn+WuShhAPFvSC+FKVtZ3QSI3Q+izWbyMktsXLFVKtL1lahlY093ct0FGRNCmWV1cIAwRxdp8cBg==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Parser.1.23.0.nupkg",
+        "sha256": "5b5244721e0f5af3657d0dec331c46360e171b0027690dc73eed72a61bea3053",
+        "sha512": "1PEbxIphz7FJkAhsqJZmf5lrrW89X+6sqQumuGUsk2/BBaRhXzlZz/IKtMoAenvAwuajIoFtXm44oNIrC4Lfxg==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Providers.1.23.0.nupkg",
+        "sha256": "67bb79478a334efbcc8b834889a7fa98fcb3d335ce65ddca52f3b9448b815ba5",
+        "sha512": "/UP184kODDyDyNHtpVDF6lZY76/yh+Q+IBcyyi+aWQ6CPZBYz0ept3FqoHllxQDfYcp9oIOV0XGefRKz6bHDew==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Providers.Database",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Providers.Database.1.23.0.nupkg",
+        "sha256": "ae5d8cd21e625761369f42b14f47e0f6e0dd5be06844737eca6aae6491344e47",
+        "sha512": "/oeP8cCADca2/lKi93dlscikwmX4JFd5w/YcT7u9u9bDFadiH6EkuVP8nofnTOWjuIdpHkNp3hhvO52N/HrnEw==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Runtime.1.23.0.nupkg",
+        "sha256": "8092ce390d24e900a84f1786c7df127f0fcfedf8e36d2e518f74b71516d15f7a",
+        "sha512": "6Z2eiiO2mRed16DcQFsqgk1rd+Gl7UcgLbaVwy+C7+IIEW5XcU69/GEFSAyExGEB8/li5Q/EeDfu21xJmavU4g==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XPath.Standard.1.23.0.nupkg",
+        "sha256": "f1f209e6fd9cddca1bf0b04ac343cf70d7292abcd4b2c9329bbcabe4a4cb6e7c",
+        "sha512": "Dc+kdfNJ1uVuXtrfk/aVL/yxtDrAjQOCzz3W03OHzaOcaA3DGz8hrXivNx1pQgIrc/SZhSa5X/EdmM90S56w9A==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.XQuery",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.XQuery.1.23.0.nupkg",
+        "sha256": "2e115863f18ab59968e55ede6f67e7bd7112dd62377e4702b37b5a90ac9f6d69",
+        "sha512": "rIqhn4yNePuCrbnFfYUxS1cjjPeewvSduyzpRhgOYaK/U0AaowNqP0yoUSB17L//jbaV+SuedQ01Zij+3lLu4g==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      },
+      {
+        "id": "Bosak.Xslt",
+        "archive": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages\\Bosak.Xslt.1.23.0.nupkg",
+        "sha256": "98249e4b4c33c583daf8ce9013295a7b56be474bd70471ff4cc7cb79b4e42860",
+        "sha512": "bZlc6ldy4L9cILldHXGj7E092q0GMS8V0tohW67DOvJRTcVObl3zJ+AWlL6PfH2jEuC6h33r+FUOLuUHv6kp+w==",
+        "repositoryCommit": "9218a2b6f2339f923fd6d018ba988c8325b2c44d"
+      }
+    ],
+    "consumedAssemblies": [
+      {
+        "id": "Bosak.XPath.Api",
+        "assembly": "Bosak.XPath.Api.dll",
+        "sha256": "b9ea991778c840d3ad663b8ead41dc6580d2088b89da49f4e188c88bb9aeb3aa",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Compiler",
+        "assembly": "Bosak.XPath.Compiler.dll",
+        "sha256": "a0159e234e17d4f3fece551fd1b721ca81be666e476f1a90dd5fc9791e319bc8",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "assembly": "Bosak.XPath.Core.dll",
+        "sha256": "e40158b99c4db119dddabb7ad468e6670740cbe36cf2ffe1bd99e56e2e9ef6d5",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "assembly": "Bosak.XPath.Parser.dll",
+        "sha256": "3171f6e8cb2269d2376401703b8f2d22fd04317bcff7ef2f7c3751c97c123c8c",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "assembly": "Bosak.XPath.Providers.dll",
+        "sha256": "e77c07bffb7435395c09915eb368ce828ebdf4a50ad810f035340d54617cfae0",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "assembly": "Bosak.XPath.Runtime.dll",
+        "sha256": "cb0fcebdaf44ea21b71d899581d879afd07066d6d5423bbb103d4fee991a3296",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "assembly": "Bosak.XPath.Standard.dll",
+        "sha256": "ab7f56f761f3d3590803e4f9728e7d6a5cabadf0414747244efd261bb397f267",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.XQuery",
+        "assembly": "Bosak.XQuery.dll",
+        "sha256": "93ec252fd1e807f6a135187e80a490341c8e0fe64411865caead11e75f1affdb",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      },
+      {
+        "id": "Bosak.Xslt",
+        "assembly": "Bosak.Xslt.dll",
+        "sha256": "ff2419b63d9b7a4d2e009b0b2966897530ef02698ed7c00b67710681ed20ab14",
+        "informationalVersion": "1.23.0+9218a2b6f2339f923fd6d018ba988c8325b2c44d",
+        "archiveCacheOutputMatch": true,
+        "cacheSource": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-packages"
+      }
+    ],
+    "testReceipt": "D:\\Development\\Bosak\\.guard-tmp\\req135-merged-public-results\\charl_CHARLES_2026-10-21_06_18_55_net10.0.trx",
+    "testReceiptSha256": "c2c7be7b0bfbd2508b1b6a497814c9f6a7b1633a8d782e12068fcbf6cc01be28",
+    "independence": "PackageReference-only, candidate feed mapping for Bosak.*, fresh cache; no ProjectReference/friend/reflection into engine internals."
+  },
+  "independentConsumerHeadReview": {
+    "passed": 700,
+    "scope": "Reviewed f9e618dc; overlapping117 lifecycle/551 prior/32 independent Braid cases. Not exact-merge confirmation."
+  },
+  "frozenGates": {
+    "qt3": "31142/0/679",
+    "qt4Gated": "8278/0/1894",
+    "scope": "Previously verified unchanged runtime source; not rerun by this documentation checkpoint."
+  },
+  "consumerExactMergeConfirmation": "Pending",
+  "releaseAuthorized": false,
+  "publicReleasePerformed": false,
+  "braidAdoption": "Pending",
+  "nativeAcceptance": "Pending"
+}
