@@ -4,6 +4,9 @@
   <p>21 October 2026</p>
 </div>
 
+**Compound-pattern follow-up supplied — 21 October 2026:** [New bounded mapping](COMPOUND-PATTERN-GRAMMAR.md) now covers set/union grouping, priority and rule identity, with a separately labelled current-draft union-priority gap. Original counts/queues below describe their earlier checkpoint.
+
+
 This bounded REQ-126 D3 inventory documents existing public **1.23.2** behavior. It distinguishes stylesheet aliases, structural annotation, named-record identity and map/array/record pattern syntax. No engine, API, C#, harness, version, host default or gate membership changes are included.
 
 PR #402 is reviewed and merged as `9ddf46b0b5232cc69ea845014eb252ef6a7ee925` after exact-head CI39633664285 passed10,368 solution +84 language-server tests. Its switch/array/select slice remains intact. This next slice adds40 manifest checks; all2,673 prior rows remain unchanged. Catalog totals become **70 entries;2,713 feature +24 chapter checks =2,737**, with four worked chapters and117 assigned function names unchanged.

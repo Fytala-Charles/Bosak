@@ -4,6 +4,8 @@
   <p>Remaining acceptance work and observed implementation boundaries</p>
 </div>
 
+**REQ-126 compound-pattern review — 21 October 2026:** [Grammar mapping](COMPOUND-PATTERN-GRAMMAR.md) adds30 manifest checks, including six complete3.0/4.0 manual reports. Two rows are explicit implementation observations: source1.23.2 uses maximum union alternative priority, while the pinned draft requires minimum; [separate finding](UNION-PRIORITY-ENGINE-FINDING.md) records the normative outcome and correction scope. Catalog71 entries /2,767 checks. REQ-126 remains In Progress; D2/D3/D4 and AC-03 partial. No engine/API/harness/version/gate/release change; prior count snapshots are historical.
+
 **REQ-126 type/pattern review — 21 October 2026:** [Current grammar mapping](TYPE-PATTERN-GRAMMAR.md) and [intake reports](examples/intake-types/README.md) add40 executable checks and one16-field structured-value pattern entry. Current catalog: **70 entries;2,713 feature +24 chapter checks =2,737**. Existing alias/record pages now describe bounded published1.23.2 XSLT support; older source/deferral logs are preserved separately. D2/D3/D4 and AC-03 remain partial; REQ-126 stays In Progress. No engine/API/harness/version/profile/gate/release change. Earlier count/status snapshots are historical.
 
 **REQ-126 D3 grammar review — 21 October 2026:** [Switch/array/select mapping](SWITCH-ARRAY-SELECT-GRAMMAR.md) adds a16-field [xsl:select entry](xslt-instructions/xsl-select.md) and37 executable checks, including six full dispatch reports. Current catalog: **69 entries;2,673 feature +24 chapter checks =2,697**; four chapters and117 assigned function names unchanged. Public/source1.23.2 is verified. Instruction recognition, effective XPath version and host profile are distinct. REQ-126 remains In Progress; D2/D3/D4 and AC-03 remain partial. No engine/API/harness/version/gate change or release; earlier status/count snapshots are historical.
@@ -24,14 +26,14 @@ The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLE
 | AC-01: landed slices and traceability | Partial | Full slice/grammar/signature mapping, exact tiers, per-contract source/tests. The 28 baseline provenance rows have delivery evidence but no historical adopted-specification pins. |
 | AC-02: deferred/rejected decisions | Partial | Validate the dossier-to-record matrix and superseded decisions against source/history; supplied records alone do not certify exhaustive lifecycle coverage. |
 | AC-03: examples and qt4tests gate references | Partial | Current fixtures establish their stated outcomes. The criterion literally requests qt4tests sets for every entry. XSLT-only, refusal and out-of-scope records need applicable harness evidence and explicit absent-gate status; acceptance treatment remains unresolved. Do not invent gates or silently waive this requirement. |
-| AC-04: structure and drift | Partial | All 70 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
+| AC-04: structure and drift | Partial | All 71 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
 | AC-05: discoverability | Met for current scope | Keep canonical links/status synchronized through the remaining deliveries. |
 
 A current immutable review pin can describe today's comparison, but cannot reconstruct a historically adopted revision. Retain those 28 gaps unless actual historical evidence is recovered.
 
 ## Documentation delivery queue
 
-The equality/collation review is now supplied. The bounded switch/array/select D3 mapping is now supplied. The bounded named/structural type and map/array pattern inventory is now supplied. Next: compound/set/union grammar and priority boundaries; D2 defaults/options and engine findings remain separate. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
+The equality/collation review is now supplied. The bounded switch/array/select D3 mapping is now supplied. The bounded named/structural type and map/array pattern inventory is now supplied. The bounded compound/set/union review is supplied, including an explicit draft union-priority gap. Next: review that narrow correction and reconcile the remaining D3 matrix/AC-03 treatment; D2 defaults/options and engine findings remain separate. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
 
 
 
