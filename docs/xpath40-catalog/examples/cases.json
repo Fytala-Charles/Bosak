@@ -19369,5 +19369,301 @@
     "file": "equality-contracts/report-reordered-40.xpath",
     "expected": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false",
     "baselineError": "XPST0003"
+  },
+  {
+    "id": "dispatch-grammar-report-3-normal",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/report-3.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+  },
+  {
+    "id": "dispatch-grammar-report-3-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/report-3.xsl",
+    "input": "dispatch-grammar/empty.xml",
+    "expected": "batches=0;flat=0;groups=0"
+  },
+  {
+    "id": "dispatch-grammar-report-3-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/report-3.xsl",
+    "input": "dispatch-grammar/reordered.xml",
+    "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+  },
+  {
+    "id": "dispatch-grammar-report-4-normal",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/report-4.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+  },
+  {
+    "id": "dispatch-grammar-report-4-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/report-4.xsl",
+    "input": "dispatch-grammar/empty.xml",
+    "expected": "batches=0;flat=0;groups=0"
+  },
+  {
+    "id": "dispatch-grammar-report-4-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/report-4.xsl",
+    "input": "dispatch-grammar/reordered.xml",
+    "expected": "batches=3;flat=3;groups=3|B-100:expedite:A+B|B-200:review:-|B-300:standard:C"
+  },
+  {
+    "id": "dispatch-grammar-recognized-switch-3",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/recognized-switch-3.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "hit"
+  },
+  {
+    "id": "dispatch-grammar-recognized-array-3",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/recognized-array-3.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2"
+  },
+  {
+    "id": "dispatch-grammar-recognized-select-3",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/recognized-select-3.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2"
+  },
+  {
+    "id": "dispatch-grammar-recognized-switch-4",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/recognized-switch-4.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "hit"
+  },
+  {
+    "id": "dispatch-grammar-recognized-array-4",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/recognized-array-4.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2"
+  },
+  {
+    "id": "dispatch-grammar-recognized-select-4",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/recognized-select-4.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2"
+  },
+  {
+    "id": "dispatch-grammar-expression-root40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/expression-root40.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2,1"
+  },
+  {
+    "id": "dispatch-grammar-expression-root30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/expression-root30.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "dispatch-grammar-expression-local30",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/expression-local30.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "dispatch-grammar-expression-local40",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "dispatch-grammar/expression-local40.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2,1"
+  },
+  {
+    "id": "dispatch-grammar-switch-no-selector",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-no-selector.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-switch-no-when",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-no-when.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-switch-duplicate-otherwise",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-duplicate-otherwise.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-switch-late-when",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-late-when.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-switch-select-content",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-select-content.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE3185"
+  },
+  {
+    "id": "dispatch-grammar-array-select-content",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/array-select-content.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE3185"
+  },
+  {
+    "id": "dispatch-grammar-member-select-content",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/member-select-content.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE3185"
+  },
+  {
+    "id": "dispatch-grammar-select-child",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-child.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-select-late-fallback",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-late-fallback.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "dispatch-grammar-select-required-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-required-empty.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "dispatch-grammar-array-per-item",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/array-per-item.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2:1"
+  },
+  {
+    "id": "dispatch-grammar-array-per-sequence",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/array-per-sequence.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "1:2"
+  },
+  {
+    "id": "dispatch-grammar-array-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/array-empty.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "0"
+  },
+  {
+    "id": "dispatch-grammar-array-empty-member",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/array-empty-member.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "1:0"
+  },
+  {
+    "id": "dispatch-grammar-switch-node-identity",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-node-identity.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "true"
+  },
+  {
+    "id": "dispatch-grammar-select-cdata",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-cdata.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "{SKU}"
+  },
+  {
+    "id": "dispatch-grammar-select-coercion",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-coercion.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "2"
+  },
+  {
+    "id": "dispatch-grammar-select-type-error",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-type-error.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "dispatch-grammar-switch-empty-selector",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/switch-empty-selector.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "dispatch-grammar-select-focus",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-focus.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "10:1/2; 20:2/2;"
+  },
+  {
+    "id": "dispatch-grammar-select-focus-text",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "dispatch-grammar/select-focus-text.xsl",
+    "input": "dispatch-grammar/normal.xml",
+    "expected": "10:1/2;20:2/2;"
   }
 ]

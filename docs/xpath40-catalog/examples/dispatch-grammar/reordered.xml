@@ -1,0 +1,1 @@
+<dispatch xmlns="urn:fytala:dispatch"><batch id="B-200" priority="hold"/><batch id="B-100" priority="rush"><line sku="A"/><line sku="B"/></batch><batch id="B-300" priority="normal"><line sku="C"/></batch></dispatch>

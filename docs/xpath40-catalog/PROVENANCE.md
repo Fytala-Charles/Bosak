@@ -4,6 +4,8 @@
   <p>Engine deliveries, named evidence and explicit specification history gaps</p>
 </div>
 
+**REQ-126 D3 grammar review — 21 October 2026:** [Switch/array/select mapping](SWITCH-ARRAY-SELECT-GRAMMAR.md) adds a16-field [xsl:select entry](xslt-instructions/xsl-select.md) and37 executable checks, including six full dispatch reports. Current catalog: **69 entries;2,673 feature +24 chapter checks =2,697**; four chapters and117 assigned function names unchanged. Public/source1.23.2 is verified. Instruction recognition, effective XPath version and host profile are distinct. REQ-126 remains In Progress; D2/D3/D4 and AC-03 remain partial. No engine/API/harness/version/gate change or release; earlier status/count snapshots are historical.
+
 This ledger covers the 28 entries present at the completeness-audit baseline.
 The [machine-readable ledger](provenance.json) records immutable Bosak revisions,
 delivery dates, named tests and assigned promoted sets. Every entry also carries
