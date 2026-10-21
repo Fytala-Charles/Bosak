@@ -1,3 +1,9 @@
+# Bosak 1.23.2 publication preparation — 21 October 2026
+
+**1.23.2 publication preparation — 21 October 2026:** [Release readiness](RELEASE-1.23.2-READINESS.md) and [notes](RELEASE-NOTES-1.23.2.md) pin proposed v1.23.2 to PR #399 merge `7832b785925d2491e0ceac0dd9faa60261619bc4`, including the previously unpublished switch identity correction. Ten unsigned candidate packages pass153 broad +176 focused public checks with matching provenance. Publication is pending separate approval; public1.23.0, completed Braid REQ-135 acceptance and REQ-126 In Progress remain unchanged. Earlier no-release entries describe their historical checkpoints.
+
+What was built: immutable-source release notes/readiness, ten exact-merge local packages, package-only153/176 consumer verification, identity/cache/source audits and read-only publication preflight. Proposed tag source7832b785 must survive later documentation merges. No tag, Release dispatch, upload or GitHub release created. Next: clear preparation PR checks, obtain publication approval and repeat live preflight; one annotated tag push, then signed public-package verification. Keep original missing-fixture and copied-version-guard failures, root pending PR33 edits, sweep data and PR132. README build/quick-start remains current; no structural/CLI/public-install change is made by preparation.
+
 # Index-of empty-collation correction - 21 October 2026
 
 **Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](xpath40-catalog/INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
