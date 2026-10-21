@@ -1,3 +1,7 @@
+# REQ-130 acceptance evidence reconciliation - 21 October 2026
+
+**REQ-130 acceptance evidence reconciled - 21 October 2026:** [Formal consumer acceptance](REQ-130-BRAID-ACCEPTANCE.md) remains accepted in published1.18.0. Original notification PR366 adds immutable Braid evidence links at `6d89fcd5e53d65560c4004b18b98264aa20e1fee`, confirming the acceptance records are pushed. Current later REQ statuses and all historical execution receipts are retained. Documentation only; no engine, version or release change.
+
 # Switch slice merged; upstream draft submitted - 21 October 2026
 
 **Switch slice merged and upstream draft submitted - 21 October 2026:** [Bosak PR395](https://github.com/Fytala-Charles/Bosak/pull/395) merged as `d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4` after exact-head CI passed10,246 solution +84 language-server tests. [Upstream draft PR34](https://github.com/qt4cg/xslt40-test/pull/34) contains the12 native switch cases, based on refreshed default `91328fbf`; [submission proof](../contributions/xslt40/switch-comparison-boundaries/submission.json) records exact revisions and the unchanged prepared patch hash. Upstream review/acceptance and independent processor confirmation remain pending. Source1.23.1 is unpublished; public1.23.0 and Braid REQ-135 validation remain unchanged. Merged-main CI39572257850 is running at this checkpoint. Earlier prepared/not-submitted statements below are historical.
