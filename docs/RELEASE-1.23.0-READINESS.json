@@ -107,5 +107,7 @@
     "Exact archive/cache/output DLL and informational revision identity, signed archive SHA-512 versus NuGet contentHash/assets metadata",
     "Restore-source receipts and transitive vulnerability audits",
     "Only after verified signed public delivery: Braid adoption and independent LA17-LA22 integration/worker/export/reopen/native acceptance"
-  ]
+  ],
+  "recordKind": "Historical pre-approval readiness snapshot; original fields preserved",
+  "supersededBy": "RELEASE-1.23.0-PUBLICATION.json"
 }

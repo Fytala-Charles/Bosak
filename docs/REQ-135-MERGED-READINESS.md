@@ -1,5 +1,10 @@
 # REQ-135 immutable merge verification
 
+**1.23.0 published and verified - 21 October 2026:** [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md) records immutable `v1.23.0` at `9218a2b6`, one successful Release run (10,214 solution tests; ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /117 lifecycle** checks with exact provenance and clear audits. REQ-135 Create/Update/Delete is published after [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) cleared700 checks without blockers. Braid adoption and LA17–LA22 integration/native acceptance remain pending. Earlier source/preparation/review-pending checkpoints below are historical.
+
+**Historical checkpoint:** The original readiness/source statements below predate approved publication.
+
+
 **1.23.0 publication prepared — 21 October 2026:** [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) clears9218a2b6/REQ-135 with700 public-only passes and matching merge provenance. [Release readiness](RELEASE-1.23.0-READINESS.md), [notes](RELEASE-NOTES-1.23.0.md) and the publication plan pin proposed v1.23.0 to that immutable implementation merge, not this later documentation head. Live preflight finds no tag/release or public1.23.0 package. Publication is not authorized or performed; public1.22.0 and pending Braid adoption/native gates remain unchanged. Earlier pending exact-merge review statements are historical.
 
 21 October 2026. The user authorized merging PR #392. Immutable merge **`9218a2b6f2339f923fd6d018ba988c8325b2c44d`** contains source1.23.0, unpublished. Public packages remain1.22.0. [Braid implementation head review](REQ-135-CONSUMER-IMPLEMENTATION-REVIEW.md) cleared f9e618dc with700 public-only passes and no blockers. Runtime source and tests are identical from that reviewed head through the approved documentation head2ea4aea5 to this merge. This does not substitute for independently checking merge-specific package identities.

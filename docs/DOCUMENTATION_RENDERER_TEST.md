@@ -219,3 +219,8 @@ Render the publication report, release notes and canonical notices using unchang
 ## Literal-text design and consumer acceptance
 
 Render the new contract/matrix and accepted-status notices using unchanged Fytala CSS. Preserve the imported acceptance receipt byte-for-byte; its compact heading is an evidence-record exception. Verify XML examples, table escaping and explicit proposed/no-implementation wording.
+
+
+## Bosak1.23.0 publication verification - 2026-10-21
+
+Publication proof, release notes, canonical documents and updated delivery guides were rendered with markdown-it and the unchanged canonical Fytala CSS. HTML artifacts remain under `.guard-tmp/release1230-publication-render`. This is a render check, not a visual screenshot or PDF review. No kit-managed assets changed.

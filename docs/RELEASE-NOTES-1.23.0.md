@@ -4,7 +4,7 @@
 <p>21 October 2026</p>
 </div>
 
-**Prepared; not published.** Proposed immutable `v1.23.0` source: `9218a2b6f2339f923fd6d018ba988c8325b2c44d` (PR #392 merge). Publication requires a separate user decision. Public packages remain 1.22.0.
+**Published and verified.** Immutable `v1.23.0` source: `9218a2b6f2339f923fd6d018ba988c8325b2c44d`. [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md).
 
 Bosak 1.23.0 adds the complete source-preserving literal result attribute lifecycle (REQ-135): **Create, Update and Delete together**.
 
@@ -21,4 +21,4 @@ Conformance tooling adds bounded native-run receipts/timeouts, selected/unselect
 
 Verified source/merge CI: **10,214 solution +84 language-server tests**;136 new lifecycle source cases comprise117 public/19 internal controls. Exact-merge local packages pass 117 checks, and Braid independently passes700 (117 imported lifecycle +551 prior authoring/identity +32 probes), with no blockers and matching merge provenance. Counts overlap. Frozen QT3 remains31,142/0/679 and qt4 gated8,278/0/1,894 for the unchanged verified runtime source.
 
-Current package evidence covers **unsigned local candidates**. Signed public-package verification follows separately authorized publication. Braid stays on1.22.0 until its adoption/integration, actual worker/export/reopen/native lifecycle acceptance; the VS Code extension has a separate release cycle. [Release readiness](RELEASE-1.23.0-READINESS.md).
+Signed public delivery is verified: ten signatures and exact package identities, fresh nuget.org-only153 broad/117 lifecycle checks and clear dependency audits. Earlier source/consumer review evidence used unsigned local candidates. Braid stays on1.22.0 until its adoption/integration, actual worker/export/reopen/native lifecycle acceptance; the VS Code extension has a separate release cycle. [Release readiness](RELEASE-1.23.0-READINESS.md).
