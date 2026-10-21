@@ -1,0 +1,1 @@
+deep-equal(map{'reference':'ACME'},map{'reference':'acme'},'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive')

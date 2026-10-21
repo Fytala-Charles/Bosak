@@ -1,3 +1,11 @@
+# REQ-126 equality/collation documentation slice - 21 October 2026
+
+**REQ-126 equality/collation slice - 21 October 2026:** [Current catalog review](xpath40-catalog/EQUALITY-COLLATION-CONTRACT-REVIEW.md) adds a customer-reference family and58 executable checks:68 entries,2,636 feature +24 chapter checks =2,660. Six complete3.1/4.0 reports cover normal/empty/reordered input; current observations and pinned normative outcomes remain separate. No engine/API/version/gate/release changes. REQ-126 remains In Progress; source1.23.1/public1.23.0 and Braid acceptance are unchanged. Hash-only PR132 is untouched.
+
+Base5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f. What was built: dedicated16-field customer-reference entry, five-family signature/gate audit, full normal/empty/reordered3.1/4.0 expressions,58 manifest checks, current count/index/reading-path repairs and preserved first-run findings. Current draft3230573a is a review pin, not recovered historical adoption. Initial53/5 split into two engine boundaries and three metadata corrections; final focused58/0/0. Full Release solution validation passes10,304/0/0 (including7,363 XSLT); final focused58/0/0 and exact-head CI are recorded separately. D2/D3/D4 and AC-03 remain partial. No engine/C#/test-harness changes; existing manifest runner executes the new files. Root pending PR33 notes and sweep data are preserved; PR132 untouched.
+
+## Earlier checkpoints
+
 # REQ-130 acceptance evidence reconciliation - 21 October 2026
 
 **REQ-130 acceptance evidence reconciled - 21 October 2026:** [Formal consumer acceptance](REQ-130-BRAID-ACCEPTANCE.md) remains accepted in published1.18.0. Original notification PR366 adds immutable Braid evidence links at `6d89fcd5e53d65560c4004b18b98264aa20e1fee`, confirming the acceptance records are pushed. Current later REQ statuses and all historical execution receipts are retained. Documentation only; no engine, version or release change.

@@ -4,6 +4,9 @@
   <p>Frozen 4.0 — a changed existing-function contract</p>
 </div>
 
+**Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
+
+
 ## 1. Name and Classification
 
 [fn:compare](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-compare)

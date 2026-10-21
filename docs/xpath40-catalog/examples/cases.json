@@ -18918,5 +18918,454 @@
     "file": "order-contracts/max-key-not-a-parameter-mode-experimental.xpath",
     "error": "XPST0017",
     "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-distinct-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-codepoint.xpath",
+    "expected": "2",
+    "baselineExpected": "2"
+  },
+  {
+    "id": "equality-contract-distinct-ascii",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-ascii.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "equality-contract-distinct-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-empty.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "equality-contract-distinct-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-nan.xpath",
+    "expected": "1",
+    "baselineExpected": "1"
+  },
+  {
+    "id": "equality-contract-distinct-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "equality-contract-distinct-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-empty-collation.xpath",
+    "expected": "2",
+    "baselineExpected": "2"
+  },
+  {
+    "id": "equality-contract-index-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-codepoint.xpath",
+    "expected": "1,3",
+    "baselineExpected": "1,3"
+  },
+  {
+    "id": "equality-contract-index-ascii",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-ascii.xpath",
+    "expected": "1,2,3",
+    "baselineExpected": "1,2,3"
+  },
+  {
+    "id": "equality-contract-index-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-empty.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "equality-contract-index-empty-target",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-empty-target.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "equality-contract-index-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-nan.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "equality-contract-index-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "equality-contract-index-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-empty-collation.xpath",
+    "error": "XPTY0004",
+    "reviewStatus": "observed-implementation-gap",
+    "normative40Expected": "1"
+  },
+  {
+    "id": "equality-contract-deep-same-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-same-order.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-deep-reordered",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-reordered.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-deep-nan",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-nan.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-deep-map-keys",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-map-keys.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-deep-map-values",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-map-values.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-deep-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-empty-collation.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-deep-options-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-options-map.xpath",
+    "error": "FOTY0013",
+    "reviewStatus": "observed-implementation-gap",
+    "normative40Expected": "true"
+  },
+  {
+    "id": "equality-contract-compare-ascii",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-ascii.xpath",
+    "expected": "0",
+    "baselineExpected": "0"
+  },
+  {
+    "id": "equality-contract-compare-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-codepoint.xpath",
+    "expected": "-1",
+    "baselineExpected": "-1"
+  },
+  {
+    "id": "equality-contract-compare-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-empty.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-compare-numeric",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-numeric.xpath",
+    "expected": "-1",
+    "baselineError": "XPTY0004"
+  },
+  {
+    "id": "equality-contract-compare-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "equality-contract-token-whole",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-whole.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-token-substring",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-substring.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-token-ascii-boundary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-ascii-boundary.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-token-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-empty.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-token-two-words",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-two-words.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-token-unknown-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-unknown-collation.xpath",
+    "error": "FOCH0002"
+  },
+  {
+    "id": "equality-contract-token-empty-collation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-empty-collation.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-unicode-codepoint",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/unicode-codepoint.xpath",
+    "expected": "false",
+    "baselineExpected": "false"
+  },
+  {
+    "id": "equality-contract-unicode-normalized",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/unicode-normalized.xpath",
+    "expected": "true",
+    "baselineExpected": "true"
+  },
+  {
+    "id": "equality-contract-distinct-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/distinct-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-distinct-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/distinct-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-distinct-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/distinct-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-deep-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/deep-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-deep-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/deep-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-deep-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/deep-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-index-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/index-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-index-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/index-keyword-40.xpath",
+    "expected": "1,2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-index-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/index-keyword-experimental.xpath",
+    "expected": "1,2",
+    "baselineError": "XPST0003",
+    "frozenExpected": "1,2"
+  },
+  {
+    "id": "equality-contract-token-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/token-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-token-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/token-keyword-40.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-token-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/token-keyword-experimental.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003",
+    "frozenExpected": "true"
+  },
+  {
+    "id": "equality-contract-compare-implemented-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/compare-implemented-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-compare-implemented-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-implemented-keyword-40.xpath",
+    "expected": "0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-compare-implemented-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/compare-implemented-keyword-experimental.xpath",
+    "expected": "0",
+    "baselineError": "XPST0003",
+    "frozenExpected": "0"
+  },
+  {
+    "id": "equality-contract-compare-draft-keyword-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/compare-draft-keyword-31.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "equality-contract-compare-draft-keyword-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/compare-draft-keyword-40.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-compare-draft-keyword-experimental",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "equality-contracts/compare-draft-keyword-experimental.xpath",
+    "error": "XPST0017"
+  },
+  {
+    "id": "equality-contract-report-normal-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/report-normal-31.xpath",
+    "expected": "references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true"
+  },
+  {
+    "id": "equality-contract-report-normal-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/report-normal-40.xpath",
+    "expected": "references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-report-empty-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/report-empty-31.xpath",
+    "expected": "references=0;positions=;ids=;vip=0;expected-order=false"
+  },
+  {
+    "id": "equality-contract-report-empty-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/report-empty-40.xpath",
+    "expected": "references=0;positions=;ids=;vip=0;expected-order=false",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "equality-contract-report-reordered-31",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "equality-contracts/report-reordered-31.xpath",
+    "expected": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false"
+  },
+  {
+    "id": "equality-contract-report-reordered-40",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "equality-contracts/report-reordered-40.xpath",
+    "expected": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false",
+    "baselineError": "XPST0003"
   }
 ]

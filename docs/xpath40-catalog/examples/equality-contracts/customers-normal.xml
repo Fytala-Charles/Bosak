@@ -1,0 +1,1 @@
+<customers><customer id="C1" reference="ACME" tags="priority vip"/><customer id="C2" reference="acme" tags="VIP"/><customer id="C3" reference="CAFÉ" tags="standard"/><customer id="C4" reference="CAFÉ" tags="vip-plus"/></customers>

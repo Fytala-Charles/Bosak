@@ -1,0 +1,7 @@
+let $doc := parse-xml('<customers/>')/customers
+return let $coll := 'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive'
+return let $refs := $doc/customer/@reference ! string(.)
+return let $positions := index-of($refs,'acme',$coll)
+return let $matches := $doc/customer[compare(string(@reference),'acme',$coll) eq 0]
+return let $ids := $matches ! string(@id)
+return concat('references=',count(distinct-values($refs,$coll)),';positions=',string-join($positions,','),';ids=',string-join($ids,','),';vip=',count($matches[contains-token(string(@tags),'vip',$coll)]),';expected-order=',deep-equal($ids,('C1','C2')))

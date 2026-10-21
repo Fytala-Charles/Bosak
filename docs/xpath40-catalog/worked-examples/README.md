@@ -14,10 +14,9 @@ Start with a business problem and follow the transformation from input to expect
 | [Supplier invoices to ERP XML](invoice-to-erp/README.md) | Implemented; executable fixtures and tests supplied | Namespaces, selection, templates, optional fields, decimal calculations, grouping, exception output; a separate 3.1/4.0 migration pair. |
 | [XML manual to HTML](manual-to-html/README.md) | Implemented; fixtures and three checks | Mixed content, template modes, stable heading IDs, internal links, table of contents, and missing-link detection. |
 | [Order reconciliation report](order-reconciliation/README.md) | Implemented; fixtures and three checks | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
-
 | [Order validation and routing](order-routing/README.md) | Implemented; complete fixtures and eleven checks | Standalone XSLT 4.0 routing in source 1.1.1; explicit XPath40 planning plus XSLT 3.0 remains the 1.1.0 alternative. |
 
-The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 104 focused checks, including earlier-version baselines and compatibility refusals.
+The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 2,636 focused checks, including earlier-version baselines and compatibility refusals.
 
 ## Worked-example contract
 
@@ -33,4 +32,4 @@ The executable files are part of the teaching material. XSLT files carry a
 standalone input/output contract, a change history, documented helper edge cases,
 and template preconditions. Follow the [applicable XSLT comment conventions](../../XSLT_STYLE_GUIDE.md).
 
-The original three planned chapters and the new routing chapter are supplied and executable. The catalog has practical cases for its 38 current entries, but the wider inventory of shipped functions and deferred decisions remains incomplete; REQ-126 stays in progress.
+The original three planned chapters and the new routing chapter are supplied and executable. The catalog has practical cases for its 68 current entries, but the wider inventory of shipped functions and deferred decisions remains incomplete; REQ-126 stays in progress.

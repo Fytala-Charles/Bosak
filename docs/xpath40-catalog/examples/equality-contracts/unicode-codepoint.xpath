@@ -1,0 +1,1 @@
+compare('CAFÉ','CAFÉ','http://www.w3.org/2005/xpath-functions/collation/codepoint') eq 0

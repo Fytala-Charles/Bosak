@@ -234,3 +234,8 @@ The switch boundary evidence and canonical documentation were rendered using mar
 ## Switch upstream submission record - 2026-10-21
 
 The updated switch evidence, queue and canonical documents were rendered with markdown-it and the unchanged Fytala CSS under `.guard-tmp/switch-submission-render`. This is a render check, not a screenshot or PDF review. Kit assets remain unchanged.
+
+
+## REQ-126 equality/collation reference - 2026-10-21
+
+The changed catalog/reference pages and canonical documents were rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-equality-render`. The new entry has all16 required fields; the manifest keeps its2,578 original rows and adds58 checks. JSON/XML and new local links validate. This is a render check, not a screenshot or PDF review. Kit-managed assets are unchanged.

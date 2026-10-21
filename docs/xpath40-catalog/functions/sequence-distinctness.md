@@ -4,6 +4,9 @@
   <p>Frozen 4.0</p>
 </div>
 
+**Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
+
+
 ## 1. Name and Classification
 
 **Sequence identity checks — Frozen 4.0.** [Bosak PR #83](https://github.com/Fytala-Charles/Bosak/pull/83) / [immutable revision `532d04f4`](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39). This is the shipped engine delivery.

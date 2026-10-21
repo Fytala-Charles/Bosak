@@ -1,5 +1,8 @@
 # Supplementary coverage audit — 2026-10-12
 
+**REQ-126 equality/collation review - 21 October 2026:** [Five-family review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
+
+
 The catalog assigns all 117 registered 4.0-only names, but REQ-126 remains
 **In Progress**. This audit separates registration evidence from documented and
 tested contracts. At the preceding audit delivery, coverage was 54 entries and
