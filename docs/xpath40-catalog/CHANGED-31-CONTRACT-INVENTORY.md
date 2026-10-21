@@ -4,6 +4,9 @@
   <p>Dated 3.1 declarations, pinned 4.0 differences and consumer boundaries</p>
 </div>
 
+**REQ-126 equality/collation review - 21 October 2026:** [Five-family review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
+
+
 ## Scope and outcome
 
 Reviewed 2026-10-12 against Bosak `21ca1497df93b6c2d7186406be7189ef28b32618`, published version 1.1.3. The [raw inventory](audit-changed31-contracts.json) covers **all 197 fn/math/map/array names** in the dated [W3C F&O 3.1 Recommendation catalog](https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/function-catalog.xml), comparing signatures and contract-section fingerprints with [QT4CG F&O e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml). Namespace counts: array: 18, fn: 155, map: 10, math: 14. SHA-256 hashes record both exact downloaded sources.

@@ -1,0 +1,1 @@
+distinct-values(('A','a'),'urn:unsupported-collation')

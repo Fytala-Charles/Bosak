@@ -1,0 +1,1 @@
+deep-equal(input1 := 'A',input2 := 'A')

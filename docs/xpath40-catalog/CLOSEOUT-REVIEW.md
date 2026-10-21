@@ -4,7 +4,10 @@
   <p>Remaining acceptance work and observed implementation boundaries</p>
 </div>
 
-## Decision and evidence
+**REQ-126 equality/collation review - 21 October 2026:** [Five-family review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
+
+
+## Historical decision and evidence
 
 **REQ-126 remains In Progress; version remains 1.1.3.** Reviewed on 2026-10-12 against Bosak `28144810a56370d3901ceca5ef35bb1759053b47` (merged PR #197). The catalog contains 67 entries, four worked chapters, 2,578 feature checks and 24 chapter checks: 2,602 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
 
@@ -24,7 +27,7 @@ A current immutable review pin can describe today's comparison, but cannot recon
 
 ## Documentation delivery queue
 
-Current next slice: fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token equality/collation contracts. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
+The equality/collation review is now supplied. Next bounded documentation candidate: D3 grammar/version-gate mapping for the delivered switch/array/select surfaces; D2 defaults/options and engine findings remain separate. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
 
 
 

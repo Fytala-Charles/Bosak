@@ -4,6 +4,9 @@
   <p>Frozen 4.0 — identities, adjacent processing steps and event boundaries</p>
 </div>
 
+**Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
+
+
 ## 1. Name and Classification
 
 **Shipment-event sequence checks — Frozen 4.0.** Functions: [fn:all-equal](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [fn:contains-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [fn:starts-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [fn:ends-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence).

@@ -1,0 +1,1 @@
+string-join(index-of(('A','a','A'),'A'),',')

@@ -5,16 +5,19 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**REQ-126 equality/collation review - 21 October 2026:** [Five-family review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
+
+
 **Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](../XSLT40-PRIMITIVE-NUMERIC-COERCION.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.
 
 <!-- The Bosak XPath/XSLT 4.0 Feature Catalog -->
 <!-- Living document: one file per feature; index updated in the same PR as any entry. -->
 
-> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-12. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-21. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 67 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 68 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -31,7 +34,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 778 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 2,636 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -109,11 +112,11 @@ The 3.1 default is untouched by every tier: consumers on `XPath31` see zero chan
 
 The [completeness audit](COMPLETENESS-AUDIT.md) records acceptance gaps and the
 prioritized completion plan, originally against the published 1.1.1 engine and
-now reviewed against 1.1.2. Its
+reviewed against 1.1.2 at that checkpoint. Current review evidence is linked above. Its
 [function inventory](audit-function-inventory.json) distinguishes registered names
 from fully documented signatures; the catalog remains In Progress.
 
-67 entries now include practical cases or stable alternatives. The [2,578-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
+68 entries now include practical cases or stable alternatives. The [2,636-case manifest](examples/cases.json) records exact files, modes, results, and errors. The catalog is not a claim of complete coverage of every shipped 4.0 function or every deferred draft shape.
 
 ### Operators and syntax
 
@@ -153,8 +156,8 @@ from fully documented signatures; the catalog remains In Progress.
 
 These entries include complete synthetic inputs, exact output text, 3.1
 comparisons and edge contracts. The map entry distinguishes published 1.1.1 behavior from the corrected
-source-1.1.2 sequence contracts and the pinned draft. Current coverage is **778 feature checks plus
-24 worked-chapter checks (802 total)**. See the [audit](COMPLETENESS-AUDIT.md)
+source-1.1.2 sequence contracts and the pinned draft. That historical delivery had **778 feature checks plus
+24 worked-chapter checks (802 total)**; current coverage is2,636 feature +24 chapter checks. See the [audit](COMPLETENESS-AUDIT.md)
 for remaining signature/grammar coverage and engine follow-up findings.
 
 ### Shipment history and sequence contracts
@@ -167,6 +170,12 @@ This entry explains identity consistency, contiguous required steps and event
 boundaries with complete carrier-history inputs and report outputs. The empty
 history, missing identifiers/codes, unknown events, record comparators and
 XPath 3.1 comparison make the acceptance contract explicit.
+
+### Customer-reference equality and collation
+
+| Feature | Tier | Delivery / evidence |
+|---|---|---|
+| [Customer-reference equality and collation](functions/customer-reference-matching.md) | Existing3.1 functions; reviewed4.0 contracts | [REQ-126 review and executable evidence](EQUALITY-COLLATION-CONTRACT-REVIEW.md) |
 
 ### Type system
 

@@ -1,0 +1,850 @@
+{
+  "date": "2026-10-21",
+  "sourceBase": "5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f",
+  "sourceVersion": "1.23.1",
+  "publicVersion": "1.23.0",
+  "baselineUrl": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/function-catalog.xml",
+  "baselineSha256": "0a387a2a160d608788e293479412fc4b43152a07193184b315e6323b799426da",
+  "specRevision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+  "specSha256": "feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010",
+  "specUrl": "https://github.com/qt4cg/qtspecs/blob/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xpath-functions-40/src/function-catalog.xml",
+  "historicalAdoptionPinRecovered": false,
+  "functions": [
+    {
+      "name": "fn:distinct-values",
+      "registeredArities": [
+        1,
+        2
+      ],
+      "qt3Set": "fn-distinct-values",
+      "qt4Set": "fn-distinct-values",
+      "qt4Gated": false,
+      "scope": "Source-declared gate membership only; no fresh conformance execution claimed by this documentation slice.",
+      "implementedKeywordNames": null,
+      "baseline31": [
+        {
+          "returnType": "xs:anyAtomicType*",
+          "arguments": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            }
+          ]
+        },
+        {
+          "returnType": "xs:anyAtomicType*",
+          "arguments": [
+            {
+              "name": "arg",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ]
+        }
+      ],
+      "draft40": [
+        {
+          "returnType": "xs:anyAtomicType*",
+          "arguments": [
+            {
+              "name": "values",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fn:index-of",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "qt3Set": "fn-index-of",
+      "qt4Set": "fn-index-of",
+      "qt4Gated": false,
+      "scope": "Source-declared gate membership only; no fresh conformance execution claimed by this documentation slice.",
+      "implementedKeywordNames": [
+        "input",
+        "target",
+        "collation"
+      ],
+      "baseline31": [
+        {
+          "returnType": "xs:integer*",
+          "arguments": [
+            {
+              "name": "seq",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "search",
+              "type": "xs:anyAtomicType"
+            }
+          ]
+        },
+        {
+          "returnType": "xs:integer*",
+          "arguments": [
+            {
+              "name": "seq",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "search",
+              "type": "xs:anyAtomicType"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ]
+        }
+      ],
+      "draft40": [
+        {
+          "returnType": "xs:integer*",
+          "arguments": [
+            {
+              "name": "input",
+              "type": "xs:anyAtomicType*"
+            },
+            {
+              "name": "target",
+              "type": "xs:anyAtomicType"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fn:deep-equal",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "qt3Set": "fn-deep-equal",
+      "qt4Set": "fn-deep-equal",
+      "qt4Gated": false,
+      "scope": "Source-declared gate membership only; no fresh conformance execution claimed by this documentation slice.",
+      "implementedKeywordNames": null,
+      "baseline31": [
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "parameter1",
+              "type": "item()*",
+              "usage": "absorption"
+            },
+            {
+              "name": "parameter2",
+              "type": "item()*",
+              "usage": "absorption"
+            }
+          ]
+        },
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "parameter1",
+              "type": "item()*",
+              "usage": "absorption"
+            },
+            {
+              "name": "parameter2",
+              "type": "item()*",
+              "usage": "absorption"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ]
+        }
+      ],
+      "draft40": [
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "input1",
+              "type": "item()*",
+              "usage": "absorption"
+            },
+            {
+              "name": "input2",
+              "type": "item()*",
+              "usage": "absorption"
+            },
+            {
+              "name": "options",
+              "type": "(xs:string | map(*))?",
+              "default": "{}",
+              "note": "default-on-empty"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fn:compare",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "qt3Set": "fn-compare",
+      "qt4Set": "fn-compare",
+      "qt4Gated": true,
+      "scope": "Source-declared gate membership only; no fresh conformance execution claimed by this documentation slice.",
+      "implementedKeywordNames": [
+        "comparand1",
+        "comparand2",
+        "collation"
+      ],
+      "baseline31": [
+        {
+          "returnType": "xs:integer?",
+          "arguments": [
+            {
+              "name": "comparand1",
+              "type": "xs:string?"
+            },
+            {
+              "name": "comparand2",
+              "type": "xs:string?"
+            }
+          ]
+        },
+        {
+          "returnType": "xs:integer?",
+          "arguments": [
+            {
+              "name": "comparand1",
+              "type": "xs:string?"
+            },
+            {
+              "name": "comparand2",
+              "type": "xs:string?"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ]
+        }
+      ],
+      "draft40": [
+        {
+          "returnType": "xs:integer?",
+          "arguments": [
+            {
+              "name": "value1",
+              "type": "xs:anyAtomicType?"
+            },
+            {
+              "name": "value2",
+              "type": "xs:anyAtomicType?"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fn:contains-token",
+      "registeredArities": [
+        2,
+        3
+      ],
+      "qt3Set": "fn-contains-token",
+      "qt4Set": "fn-contains-token",
+      "qt4Gated": true,
+      "scope": "Source-declared gate membership only; no fresh conformance execution claimed by this documentation slice.",
+      "implementedKeywordNames": [
+        "value",
+        "token",
+        "collation"
+      ],
+      "baseline31": [
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "input",
+              "type": "xs:string*"
+            },
+            {
+              "name": "token",
+              "type": "xs:string"
+            }
+          ]
+        },
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "input",
+              "type": "xs:string*"
+            },
+            {
+              "name": "token",
+              "type": "xs:string"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string"
+            }
+          ]
+        }
+      ],
+      "draft40": [
+        {
+          "returnType": "xs:boolean",
+          "arguments": [
+            {
+              "name": "value",
+              "type": "xs:string*"
+            },
+            {
+              "name": "token",
+              "type": "xs:string"
+            },
+            {
+              "name": "collation",
+              "type": "xs:string?",
+              "default": "fn:default-collation()",
+              "note": "default-on-empty"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "newCases": [
+    {
+      "id": "equality-contract-distinct-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-codepoint.xpath",
+      "expected": "2",
+      "baselineExpected": "2"
+    },
+    {
+      "id": "equality-contract-distinct-ascii",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-ascii.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "equality-contract-distinct-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-empty.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "equality-contract-distinct-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-nan.xpath",
+      "expected": "1",
+      "baselineExpected": "1"
+    },
+    {
+      "id": "equality-contract-distinct-unknown-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-unknown-collation.xpath",
+      "error": "FOCH0002"
+    },
+    {
+      "id": "equality-contract-distinct-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-empty-collation.xpath",
+      "expected": "2",
+      "baselineExpected": "2"
+    },
+    {
+      "id": "equality-contract-index-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-codepoint.xpath",
+      "expected": "1,3",
+      "baselineExpected": "1,3"
+    },
+    {
+      "id": "equality-contract-index-ascii",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-ascii.xpath",
+      "expected": "1,2,3",
+      "baselineExpected": "1,2,3"
+    },
+    {
+      "id": "equality-contract-index-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-empty.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "equality-contract-index-empty-target",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-empty-target.xpath",
+      "error": "XPTY0004"
+    },
+    {
+      "id": "equality-contract-index-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-nan.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "equality-contract-index-unknown-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-unknown-collation.xpath",
+      "error": "FOCH0002"
+    },
+    {
+      "id": "equality-contract-index-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-empty-collation.xpath",
+      "error": "XPTY0004",
+      "reviewStatus": "observed-implementation-gap",
+      "normative40Expected": "1"
+    },
+    {
+      "id": "equality-contract-deep-same-order",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-same-order.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-deep-reordered",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-reordered.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-deep-nan",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-nan.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-deep-map-keys",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-map-keys.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-deep-map-values",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-map-values.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-deep-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-empty-collation.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-deep-options-map",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-options-map.xpath",
+      "error": "FOTY0013",
+      "reviewStatus": "observed-implementation-gap",
+      "normative40Expected": "true"
+    },
+    {
+      "id": "equality-contract-compare-ascii",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-ascii.xpath",
+      "expected": "0",
+      "baselineExpected": "0"
+    },
+    {
+      "id": "equality-contract-compare-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-codepoint.xpath",
+      "expected": "-1",
+      "baselineExpected": "-1"
+    },
+    {
+      "id": "equality-contract-compare-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-empty.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-compare-numeric",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-numeric.xpath",
+      "expected": "-1",
+      "baselineError": "XPTY0004"
+    },
+    {
+      "id": "equality-contract-compare-unknown-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-unknown-collation.xpath",
+      "error": "FOCH0002"
+    },
+    {
+      "id": "equality-contract-token-whole",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-whole.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-token-substring",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-substring.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-token-ascii-boundary",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-ascii-boundary.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-token-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-empty.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-token-two-words",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-two-words.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-token-unknown-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-unknown-collation.xpath",
+      "error": "FOCH0002"
+    },
+    {
+      "id": "equality-contract-token-empty-collation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-empty-collation.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-unicode-codepoint",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/unicode-codepoint.xpath",
+      "expected": "false",
+      "baselineExpected": "false"
+    },
+    {
+      "id": "equality-contract-unicode-normalized",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/unicode-normalized.xpath",
+      "expected": "true",
+      "baselineExpected": "true"
+    },
+    {
+      "id": "equality-contract-distinct-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/distinct-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-distinct-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/distinct-keyword-40.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-distinct-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/distinct-keyword-experimental.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-deep-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/deep-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-deep-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/deep-keyword-40.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-deep-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/deep-keyword-experimental.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-index-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/index-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-index-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/index-keyword-40.xpath",
+      "expected": "1,2",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "equality-contract-index-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/index-keyword-experimental.xpath",
+      "expected": "1,2",
+      "baselineError": "XPST0003",
+      "frozenExpected": "1,2"
+    },
+    {
+      "id": "equality-contract-token-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/token-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-token-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/token-keyword-40.xpath",
+      "expected": "true",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "equality-contract-token-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/token-keyword-experimental.xpath",
+      "expected": "true",
+      "baselineError": "XPST0003",
+      "frozenExpected": "true"
+    },
+    {
+      "id": "equality-contract-compare-implemented-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/compare-implemented-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-compare-implemented-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-implemented-keyword-40.xpath",
+      "expected": "0",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "equality-contract-compare-implemented-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/compare-implemented-keyword-experimental.xpath",
+      "expected": "0",
+      "baselineError": "XPST0003",
+      "frozenExpected": "0"
+    },
+    {
+      "id": "equality-contract-compare-draft-keyword-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/compare-draft-keyword-31.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "equality-contract-compare-draft-keyword-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/compare-draft-keyword-40.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-compare-draft-keyword-experimental",
+      "kind": "xpath",
+      "mode": "experimental",
+      "file": "equality-contracts/compare-draft-keyword-experimental.xpath",
+      "error": "XPST0017"
+    },
+    {
+      "id": "equality-contract-report-normal-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/report-normal-31.xpath",
+      "expected": "references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true"
+    },
+    {
+      "id": "equality-contract-report-normal-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/report-normal-40.xpath",
+      "expected": "references=3;positions=1,2;ids=C1,C2;vip=2;expected-order=true",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "equality-contract-report-empty-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/report-empty-31.xpath",
+      "expected": "references=0;positions=;ids=;vip=0;expected-order=false"
+    },
+    {
+      "id": "equality-contract-report-empty-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/report-empty-40.xpath",
+      "expected": "references=0;positions=;ids=;vip=0;expected-order=false",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "equality-contract-report-reordered-31",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "equality-contracts/report-reordered-31.xpath",
+      "expected": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false"
+    },
+    {
+      "id": "equality-contract-report-reordered-40",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "equality-contracts/report-reordered-40.xpath",
+      "expected": "references=3;positions=1,2;ids=C2,C1;vip=2;expected-order=false",
+      "baselineError": "XPST0003"
+    }
+  ],
+  "firstExecution": {
+    "firstResult": "53/5/0",
+    "firstManifestSha256": "071168eefa96dc38ef407b5fbb43bdd474d86b4a40cfe05125af88a73a890a0b",
+    "firstTrx": "D:\\Development\\Bosak\\.guard-tmp\\req126-equality-first-results\\charl_CHARLES_2026-10-21_15_33_52_net10.0.trx",
+    "firstTrxSha256": "b4c9d3d05e017ff2bccdc0d11598323fb6e3be9e4d312055ebb3ac19416133f6",
+    "initialFailures": [
+      "Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: \"equality-contract-index-keyword-experimental\")",
+      "Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: \"equality-contract-deep-options-map\")",
+      "Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: \"equality-contract-token-keyword-experimental\")",
+      "Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: \"equality-contract-compare-implemented-keyword-expe\"···)",
+      "Bosak.Xslt.Tests.Documentation.CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome(id: \"equality-contract-index-empty-collation\")"
+    ],
+    "fixtureMetadataCorrections": [
+      {
+        "id": "equality-contract-index-keyword-experimental",
+        "change": "Add frozenExpected: the same keyword works at frozen40; original missing metadata caused a false expected-refusal assertion."
+      },
+      {
+        "id": "equality-contract-token-keyword-experimental",
+        "change": "Add frozenExpected: the same keyword works at frozen40; original missing metadata caused a false expected-refusal assertion."
+      },
+      {
+        "id": "equality-contract-compare-implemented-keyword-experimental",
+        "change": "Add frozenExpected: the same keyword works at frozen40; original missing metadata caused a false expected-refusal assertion."
+      }
+    ],
+    "separateEngineFindings": [
+      {
+        "id": "equality-contract-index-empty-collation",
+        "normative40Expected": "1",
+        "observedError": "XPTY0004",
+        "classification": "Empty collation default-on-empty unsupported by positional index-of#3; separate engine follow-up."
+      },
+      {
+        "id": "equality-contract-deep-options-map",
+        "normative40Expected": "true",
+        "initialPredictedError": "XPTY0004",
+        "observedError": "FOTY0013",
+        "classification": "Draft deep-equal options map unsupported; current legacy third argument is atomized as a collation URI."
+      }
+    ],
+    "engineChanged": false,
+    "scope": "Existing manifest runner checks current observations. normative40Expected is separate explicit gap metadata; no normative expectation is weakened or claimed as conformance."
+  },
+  "finalFocusedResult": "58/0/0",
+  "entryCount": 68,
+  "featureChecks": 2636,
+  "chapterChecks": 24,
+  "totalDocumentationChecks": 2660,
+  "engineSourceChanged": false,
+  "versionChanged": false,
+  "gateMembershipChanged": false,
+  "req126Status": "In Progress",
+  "scope": "Current targeted declarations/observations, not exhaustive conformance; historical inventories retained unchanged."
+}

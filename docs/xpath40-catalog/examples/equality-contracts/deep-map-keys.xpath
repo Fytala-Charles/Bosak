@@ -1,0 +1,1 @@
+deep-equal(map{'A':1},map{'a':1},'http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive')
