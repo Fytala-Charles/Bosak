@@ -244,3 +244,8 @@ The changed catalog/reference pages and canonical documents were rendered with m
 ## Index-of empty-collation correction - 2026-10-21
 
 Correction evidence, updated catalog entries and canonical documents were rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/index-of-collation-render`. New local links/JSON, the exact one-row catalog correction and bounded engine/test diff validate. This is a render check, not screenshot/PDF review. Kit-managed assets are unchanged.
+
+
+## Release 1.23.2 preparation — 2026-10-21
+
+Changed readiness, notes and canonical documents render with markdown-it and the unchanged Fytala stylesheet under `.guard-tmp/release1232-render`. New relative links and machine-readable package provenance validate. This is an HTML render check, not screenshot/PDF review. Kit-managed assets are unchanged.
