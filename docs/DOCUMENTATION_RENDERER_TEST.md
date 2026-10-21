@@ -229,3 +229,8 @@ Publication proof, release notes, canonical documents and updated delivery guide
 ## XSLT4 switch boundary slice - 2026-10-21
 
 The switch boundary evidence and canonical documentation were rendered using markdown-it and the unchanged Fytala CSS. HTML artifacts remain under .guard-tmp/switch-boundaries-render. This is a render check, not a visual screenshot or PDF review. Kit-managed assets are unchanged.
+
+
+## Switch upstream submission record - 2026-10-21
+
+The updated switch evidence, queue and canonical documents were rendered with markdown-it and the unchanged Fytala CSS under `.guard-tmp/switch-submission-render`. This is a render check, not a screenshot or PDF review. Kit assets remain unchanged.

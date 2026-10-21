@@ -1,5 +1,11 @@
 # Native switch comparison and result boundaries
 
+**Switch slice merged and upstream draft submitted - 21 October 2026:** [Bosak PR395](https://github.com/Fytala-Charles/Bosak/pull/395) merged as `d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4` after exact-head CI passed10,246 solution +84 language-server tests. [Upstream draft PR34](https://github.com/qt4cg/xslt40-test/pull/34) contains the12 native switch cases, based on refreshed default `91328fbf`; [submission proof](submission.json) records exact revisions and the unchanged prepared patch hash. Upstream review/acceptance and independent processor confirmation remain pending. Source1.23.1 is unpublished; public1.23.0 and Braid REQ-135 validation remain unchanged. Merged-main CI39572257850 is running at this checkpoint. Earlier prepared/not-submitted statements below are historical.
+
+## Original preparation and verification
+
+# Native switch comparison and result boundaries
+
 Twelve native XSLT4 switch cases and32 public-API checks strengthen selector atomization, comparison, focus and result semantics. One case exposed a node-identity bug: a selected `when/@select` or `otherwise/@select` passed through result-tree copying inside a raw sequence constructor. Unpublished patch **1.23.1** reuses the existing sequence-placeholder mechanism. Serialized result-tree delivery and function-body collection retain their existing paths. No API or processor-profile default changes.
 
 The initial native result is11/1/0 in each profile; direct public checks are22/2/0. The same input without switch preserves identity; the switch still fails with rooted input nodes. Final new native results are **12/0/0** in both profiles; expanded switch is **22/0/2**, retaining the two existing dependency skips. The original failing assertion remains unchanged. Eight additional direct controls cover when/otherwise in template/function dispatch, giving32 total new public checks. Native and unit counts overlap.
