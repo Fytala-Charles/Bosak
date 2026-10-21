@@ -1,0 +1,243 @@
+{
+  "date": "2026-10-21",
+  "status": "VERIFIED_SOURCE_CANDIDATE_UPSTREAM_PATCH_PREPARED",
+  "bosakBase": "00788b46d001daa6db5baf2b12821d77f239e1a0",
+  "version": "1.23.1",
+  "publishedVersion": "1.23.0",
+  "upstreamBase": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "upstreamDefault": "upstream/master",
+  "specRevision": "d071fac94ca4f29fa8d515eb8cde5b1f34d22aa5",
+  "specSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+  "nativeNewCases": 12,
+  "directPublicApiChecks": 32,
+  "originalNativeResults": {
+    "eachProfile": "11/1/0",
+    "failure": "switch-018 returns correct reverse order but node identity false"
+  },
+  "originalDirectResults": "22/2/0 (24 original checks; eight dispatcher controls added after reduction)",
+  "finalNativeRuns": [
+    {
+      "profile": "legacy",
+      "scope": "new",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\Fixtures\\SwitchBoundaries\\catalog.xml"
+      ],
+      "exitCode": 0,
+      "seconds": 1.388,
+      "counts": {
+        "Total": 12,
+        "Passed": 12,
+        "Failed": 0,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 12,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "ea7e94afb27c67cc445b2c006ce735ad88b4b878b2e8404dcdf2009f7935d1c0"
+    },
+    {
+      "profile": "legacy",
+      "scope": "expanded",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "legacy",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-upstream\\catalog.xml",
+        "switch"
+      ],
+      "exitCode": 0,
+      "seconds": 1.42,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 0,
+        "Skipped": 2,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 2,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "9c4a8af76e78e6a1fb8ceac54f5858c627754d25f6827cccab2f09483438d552"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "new",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\Fixtures\\SwitchBoundaries\\catalog.xml"
+      ],
+      "exitCode": 0,
+      "seconds": 0.429,
+      "counts": {
+        "Total": 12,
+        "Passed": 12,
+        "Failed": 0,
+        "Skipped": 0,
+        "Unselected": 0,
+        "Selected": 12,
+        "Selected skipped": 0,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "1181ed493315cfe07af4feacb769fab4345e9083ff5501dcbd6c97820916a9b7"
+    },
+    {
+      "profile": "xslt40-draft",
+      "scope": "expanded",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+        "--xslt40",
+        "--processor-profile",
+        "xslt40-draft",
+        "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-upstream\\catalog.xml",
+        "switch"
+      ],
+      "exitCode": 0,
+      "seconds": 0.449,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 0,
+        "Skipped": 2,
+        "Unselected": 0,
+        "Selected": 24,
+        "Selected skipped": 2,
+        "Missing test sets": 0
+      },
+      "failures": [],
+      "logSha256": "a6855ce8ab8d0df4f4b3716b26f2588ad2d387552ed6adef35b4e69d5466920b"
+    }
+  ],
+  "solution": {
+    "passed": 10246,
+    "failed": 0,
+    "skipped": 0,
+    "trxSha256": {
+      "charl_CHARLES_2026-10-21_10_20_21_net10.0.trx": "9bc43d7b1dfb3439cc4910e9aa6398d75f15e925fad417feeef281bb8d38ae88",
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0[1].trx": "2b36b1bbc2bbc82a8e9f642df80435b62361504cdbd0bc85994d8bcbe86e71fb",
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0[2].trx": "a7b61582902adebd84b59672be3a0b6dbc8f046ccb0990ef6ad4ccb738d2a44e",
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0[3].trx": "38a96b53576cb4329c6e80b31baa3572371314cf8fcee07dce6971eaca69beff",
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0[4].trx": "921c00c1bb6e84caa8011bb8ea28ec4f0885e5fa348d8173c948948873f606d6",
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0[5].trx": "309c989d6e7addfba3567577947a7bc33976e2707d442f5e2dcbe1a2448c58ce",
+      "charl_CHARLES_2026-10-21_10_15_22_net10.0.trx": "0375757f7eff691c855cd2417b286f91a8d053e6378c386e8dee69eb55b4f389",
+      "charl_CHARLES_2026-10-21_10_15_22_net10.0[1].trx": "312683ca14bb046cc7c85100b93e704afd92214e6431bb4d260dc1c048c3c534",
+      "charl_CHARLES_2026-10-21_10_15_22_net10.0[2].trx": "b2cbe79b773aa7a9aca0518abdb6e03febc184b1790c74bf7a63d5007b3df69e",
+      "charl_CHARLES_2026-10-21_10_15_23_net10.0.trx": "9379932249e09fe7c48017cbc349994d0e4671c21b00f21516d89226341fc8c9"
+    },
+    "initialSandboxDatabaseFailureTrxSha256": {
+      "charl_CHARLES_2026-10-21_10_15_21_net10.0.trx": "b5fb1d56928e6c62d38e2652d5441bebd151af0d3726fadcd0e0b21af8c72ffe"
+    },
+    "scope": "Nine original projects pass; initial database47 has45 sandbox HttpListener invalid-handle failures; same unchanged database project rerun outside sandbox passes47. Totals use its replacement receipt. Final refined fixture checks separately pass32."
+  },
+  "qt3": "31142/0/679",
+  "qt4Gated": "8278/0/1894",
+  "nativeSchemasValidated": 3,
+  "upstreamOriginalCasesUnchanged": 12,
+  "patchSha256": "16e650accf43d1ae2994473d4b1df898478ce13f9a368579664006b2e2045ce2",
+  "cases": [
+    {
+      "id": "switch-010",
+      "description": "A singleton selector node is atomized before numeric general comparison.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "dcf07079b711f9ff4fea11c4701ce49f6b2e23d2c43b23834ac8c5fe86ff3d55"
+    },
+    {
+      "id": "switch-011",
+      "description": "An empty selector cannot satisfy the required single atomic item.",
+      "expectedXml": null,
+      "expectedError": "XPTY0004",
+      "stylesheetSha256": "33b8e91be7407984620b69bcd103cc0a9f98063c717d7f79db76ef552f43617d"
+    },
+    {
+      "id": "switch-012",
+      "description": "Selector node atomization must still produce only one atomic item.",
+      "expectedXml": null,
+      "expectedError": "XPTY0004",
+      "stylesheetSha256": "0a80815b4f8cce0ca28f491c62daa5a5846f1acc08af1fa92f4450953cddccc6"
+    },
+    {
+      "id": "switch-013",
+      "description": "A node-valued test sequence is atomized before general comparison.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "679569143e82c7a84f0d9905ab002dbdddda0e0c1dde1e6fc7c476532792ef0a"
+    },
+    {
+      "id": "switch-014",
+      "description": "NaN does not equal NaN and the otherwise branch is selected.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "2a5aa7a3bcae5e2abf16e83bb609c74aea17d79efe769ca49c8cda4ac4a18950"
+    },
+    {
+      "id": "switch-015",
+      "description": "QName comparison uses expanded names rather than prefix spelling or local name alone.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "5bfcd5c0d7f922913afbad0f7b3c3f11afbc6a65454aa4c4474c2879d358f00a"
+    },
+    {
+      "id": "switch-016",
+      "description": "Switch collation governs branch comparison even with a different collation on when.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "7ece994db0d4784e31a2366fceac91d5ecb25c53cf9abff78cdf74868ef412ad"
+    },
+    {
+      "id": "switch-017",
+      "description": "Selector, test and result expressions retain the caller item, position and size.",
+      "expectedXml": "<out><v item=\"10\" position=\"1\" size=\"2\"/><after item=\"10\" position=\"1\" size=\"2\"/><v item=\"20\" position=\"2\" size=\"2\"/><after item=\"20\" position=\"2\" size=\"2\"/></out>",
+      "expectedError": null,
+      "stylesheetSha256": "d9b5a18d1241717a248a556c58a738fb0baeb43400c01e802655a41825b70b17"
+    },
+    {
+      "id": "switch-018",
+      "description": "A selected node sequence retains identity and explicitly reversed order.",
+      "expectedXml": "<out count=\"2\" first=\"B\" same=\"true\" last=\"A\"/>",
+      "expectedError": null,
+      "stylesheetSha256": "aeb1f908441e5d67bfb9bb509f2318fccdec28c25e8807cba127fe138b841fe0"
+    },
+    {
+      "id": "switch-019",
+      "description": "A selected function item is returned without atomization and remains callable.",
+      "expectedXml": "<out value=\"42\"/>",
+      "expectedError": null,
+      "stylesheetSha256": "c9ed965f7a7eefb2bc8b664311c7bfdec06c110098fffcb54ec8720b896d0040"
+    },
+    {
+      "id": "switch-020",
+      "description": "An error in the selected result propagates without falling through to otherwise.",
+      "expectedXml": null,
+      "expectedError": "FOER0000",
+      "stylesheetSha256": "05727b56df350bf8643f0ba3bb7cee11856a70df1bdf93e31bd170325e7d1182"
+    },
+    {
+      "id": "switch-021",
+      "description": "An earlier nonmatching result is not evaluated before the selected constructor.",
+      "expectedXml": "<out>42</out>",
+      "expectedError": null,
+      "stylesheetSha256": "395c082a7b028d55e6f375a7cd7113b56907ec65d044916c035443cea83e6efb"
+    }
+  ],
+  "fixtureRefinement": "Original passing switch-010 duplicated accepted switch-009 empty-test coverage; replaced with singleton selector node atomization. Original bytes retained; no expectations weakened.",
+  "independentProcessorVerification": false,
+  "upstreamSubmitted": false,
+  "published": false,
+  "braidValidation": "Separate published1.23.0 REQ-135 validation; no dependency or runtime changes"
+}

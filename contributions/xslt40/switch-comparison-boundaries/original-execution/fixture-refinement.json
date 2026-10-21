@@ -1,0 +1,6 @@
+{
+  "case": "switch-010",
+  "reason": "Original passing control duplicated empty-test coverage already present in accepted switch-009; replace it with singleton selector-node atomization.",
+  "expectedXmlUnchanged": "<out>42</out>",
+  "engineFixIndependent": true
+}

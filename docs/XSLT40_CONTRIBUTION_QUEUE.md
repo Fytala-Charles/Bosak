@@ -4,6 +4,9 @@
   <p>New instructions, likely everyday use and evidence before submission</p>
 </div>
 
+**XSLT4 switch boundaries - 21 October 2026:** [Twelve new native cases](XSLT40-SWITCH-BOUNDARIES.md) expose and verify a narrow selected-node identity correction in unpublished source1.23.1.32 public checks and10,246 full solution tests pass; QT3 stays31,142/0/679 and qt4 gated8,278/0/1,894. Native new cases12/0/0 and expanded switch22/0/2 pass in both profiles; original assertions/receipts and dependency skips are retained. Upstream patch prepared, not submitted. Public1.23.0 and separate Braid REQ-135 validation remain unchanged.
+
+
 ## 2026-10-16 - 1.16.5 published and verified
 
 All ten .NET10 libraries are published as1.16.5 from approved immutable `v1.16.5` at`09940e90f702566107bb2eed521b7f8d789a6410`. The single release workflow passes9,577 solution tests and all ten uploads. Fresh nuget.org-only consumers pass153 broad checks and338 public focused tests; public signatures, archive/cache/output hashes, restore hashes and exact assembly revisions verify. Dependency audits report no vulnerable packages. [Publication verification](RELEASE-1.16.5-PUBLICATION.md); [release notes](RELEASE-NOTES-1.16.5.md). VS Code0.2.4 still bundles1.8.0; Braid adoption, REQ acceptance and upstream work are unchanged. No further engine PR is planned.

@@ -1,0 +1,27 @@
+{
+  "profile": "legacy",
+  "scope": "expanded",
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-source\\tests\\Bosak.Xslt.Conformance\\bin\\Release\\net10.0\\Bosak.Xslt.Conformance.dll",
+    "--xslt40",
+    "--processor-profile",
+    "legacy",
+    "D:\\Development\\Bosak\\.guard-tmp\\switch-boundaries-upstream\\catalog.xml",
+    "switch"
+  ],
+  "exitCode": 0,
+  "seconds": 1.386,
+  "counts": {
+    "Total": 24,
+    "Passed": 22,
+    "Failed": 0,
+    "Skipped": 2,
+    "Unselected": 0,
+    "Selected": 24,
+    "Selected skipped": 2,
+    "Missing test sets": 0
+  },
+  "failures": [],
+  "logSha256": "9c4a8af76e78e6a1fb8ceac54f5858c627754d25f6827cccab2f09483438d552"
+}

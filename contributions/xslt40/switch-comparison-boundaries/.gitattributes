@@ -1,0 +1,6 @@
+*.patch -text
+**/*.xsl text eol=lf
+**/*.xml text eol=lf
+**/*.log -text
+original-execution/** -text whitespace=cr-at-eol
+identity-reduction/** -text whitespace=cr-at-eol

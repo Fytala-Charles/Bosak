@@ -572,6 +572,7 @@
 //                      | Charles Korthout | 7.56  | 16-10-2026     | Use the captured processor profile for runtime forward compatibility and fallback versions. |
 //                      | Charles Korthout | 7.57  | 16-10-2026     | Evaluate draft future-instruction fallbacks in function bodies with isolated variable scope. |
 //                      | Charles Korthout | 7.58  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 7.59  | 21-10-2026     | Preserve switch branch select node identity in raw sequence constructors.                |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -8929,7 +8930,15 @@ internal sealed class TransformEngine
                         var branchSelect = branch.Attribute("select")?.Value;
                         if (!string.IsNullOrEmpty(branchSelect))
                         {
-                            CopyToResult(CompileXPath(branchSelect, branch).Evaluate(_context));
+                            var value = CompileXPath(branchSelect, branch).Evaluate(_context);
+                            if (_sequenceAccumulator != null)
+                            {
+                                var items = new List<XdmValue>();
+                                FlattenToList(value, items, preserveUndefined: true);
+                                AddSequencePlaceholder(_currentContainer, items);
+                            }
+                            else
+                                CopyToResult(value);
                             return;
                         }
                         foreach (var childNode in branch.Nodes())

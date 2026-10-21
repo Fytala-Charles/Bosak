@@ -1,0 +1,86 @@
+[
+  {
+    "id": "switch-010",
+    "description": "A singleton selector node is atomized before numeric general comparison.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "dcf07079b711f9ff4fea11c4701ce49f6b2e23d2c43b23834ac8c5fe86ff3d55"
+  },
+  {
+    "id": "switch-011",
+    "description": "An empty selector cannot satisfy the required single atomic item.",
+    "expectedXml": null,
+    "expectedError": "XPTY0004",
+    "stylesheetSha256": "33b8e91be7407984620b69bcd103cc0a9f98063c717d7f79db76ef552f43617d"
+  },
+  {
+    "id": "switch-012",
+    "description": "Selector node atomization must still produce only one atomic item.",
+    "expectedXml": null,
+    "expectedError": "XPTY0004",
+    "stylesheetSha256": "0a80815b4f8cce0ca28f491c62daa5a5846f1acc08af1fa92f4450953cddccc6"
+  },
+  {
+    "id": "switch-013",
+    "description": "A node-valued test sequence is atomized before general comparison.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "679569143e82c7a84f0d9905ab002dbdddda0e0c1dde1e6fc7c476532792ef0a"
+  },
+  {
+    "id": "switch-014",
+    "description": "NaN does not equal NaN and the otherwise branch is selected.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "2a5aa7a3bcae5e2abf16e83bb609c74aea17d79efe769ca49c8cda4ac4a18950"
+  },
+  {
+    "id": "switch-015",
+    "description": "QName comparison uses expanded names rather than prefix spelling or local name alone.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "5bfcd5c0d7f922913afbad0f7b3c3f11afbc6a65454aa4c4474c2879d358f00a"
+  },
+  {
+    "id": "switch-016",
+    "description": "Switch collation governs branch comparison even with a different collation on when.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "7ece994db0d4784e31a2366fceac91d5ecb25c53cf9abff78cdf74868ef412ad"
+  },
+  {
+    "id": "switch-017",
+    "description": "Selector, test and result expressions retain the caller item, position and size.",
+    "expectedXml": "<out><v item=\"10\" position=\"1\" size=\"2\"/><after item=\"10\" position=\"1\" size=\"2\"/><v item=\"20\" position=\"2\" size=\"2\"/><after item=\"20\" position=\"2\" size=\"2\"/></out>",
+    "expectedError": null,
+    "stylesheetSha256": "d9b5a18d1241717a248a556c58a738fb0baeb43400c01e802655a41825b70b17"
+  },
+  {
+    "id": "switch-018",
+    "description": "A selected node sequence retains identity and explicitly reversed order.",
+    "expectedXml": "<out count=\"2\" first=\"B\" same=\"true\" last=\"A\"/>",
+    "expectedError": null,
+    "stylesheetSha256": "aeb1f908441e5d67bfb9bb509f2318fccdec28c25e8807cba127fe138b841fe0"
+  },
+  {
+    "id": "switch-019",
+    "description": "A selected function item is returned without atomization and remains callable.",
+    "expectedXml": "<out value=\"42\"/>",
+    "expectedError": null,
+    "stylesheetSha256": "c9ed965f7a7eefb2bc8b664311c7bfdec06c110098fffcb54ec8720b896d0040"
+  },
+  {
+    "id": "switch-020",
+    "description": "An error in the selected result propagates without falling through to otherwise.",
+    "expectedXml": null,
+    "expectedError": "FOER0000",
+    "stylesheetSha256": "05727b56df350bf8643f0ba3bb7cee11856a70df1bdf93e31bd170325e7d1182"
+  },
+  {
+    "id": "switch-021",
+    "description": "An earlier nonmatching result is not evaluated before the selected constructor.",
+    "expectedXml": "<out>42</out>",
+    "expectedError": null,
+    "stylesheetSha256": "395c082a7b028d55e6f375a7cd7113b56907ec65d044916c035443cea83e6efb"
+  }
+]
