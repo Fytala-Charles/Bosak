@@ -187,7 +187,13 @@
     "qt4Gated": "8278/0/1894",
     "scope": "Previously verified unchanged runtime source; not rerun by this documentation checkpoint."
   },
-  "consumerExactMergeConfirmation": "Pending",
+  "consumerExactMergeConfirmation": {
+    "date": "2026-10-21",
+    "disposition": "No blocking findings",
+    "reportedPassed": 700,
+    "review": "REQ-135-CONSUMER-MERGE-REVIEW.md",
+    "sha256": "1a9434b348407596dcbb9cbac77997ec771033084957e9dca436ab17621c5896"
+  },
   "releaseAuthorized": false,
   "publicReleasePerformed": false,
   "braidAdoption": "Pending",
