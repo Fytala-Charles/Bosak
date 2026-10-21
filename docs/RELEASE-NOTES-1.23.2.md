@@ -4,7 +4,7 @@
   <p>21 October 2026</p>
 </div>
 
-**Prepared; not published.** Proposed `v1.23.2` source: `7832b785925d2491e0ceac0dd9faa60261619bc4` ([PR #399](https://github.com/Fytala-Charles/Bosak/pull/399)). Public packages remain 1.23.0 until separately approved publication completes.
+**Published and verified.** Immutable `v1.23.2` source: `7832b785925d2491e0ceac0dd9faa60261619bc4`. [Public delivery proof](RELEASE-1.23.2-PUBLICATION.md).
 
 Bosak 1.23.2 corrects two focused XPath/XSLT behaviors:
 
@@ -15,6 +15,6 @@ The REQ-126 catalog also adds a customer-reference matching example and executab
 
 Source verification covers 10,331 solution tests and 84 separate language-server tests. New regression coverage includes 32 public switch checks, 27 index-of checks and 58 catalog checks; these counts overlap the solution total. Frozen QT3 remains 31,142/0/679 and qt4 gated remains 8,278/0/1,894, as verified for the unchanged reviewed implementation tree.
 
-Exact-merge unsigned packages pass 153 broad public checks and 176 focused checks (117 existing attribute-lifecycle +32 switch +27 index-of). All ten package revisions and archive/cache/output identities match; dependency audits report no vulnerabilities. These local candidates do not certify signed public packages. The existing conformance CS8604 warning remains documented and is not fixed by this release.
+Exact-merge unsigned candidate packages passed 153 broad public checks and 176 focused checks (117 existing attribute-lifecycle +32 switch +27 index-of). All ten package revisions and archive/cache/output identities match; dependency audits report no vulnerabilities. Signed public delivery is now separately verified: all ten signatures, fresh nuget.org-only153 broad/176 focused checks, matching archive/cache/output provenance and clear dependency audits. The existing conformance CS8604 warning remains documented and is not fixed by this release.
 
 REQ-135's completed Braid acceptance applies to public 1.23.0 and remains valid. A future 1.23.2 consumer upgrade smoke check is distinct from that completed acceptance. The VS Code extension follows its own release cycle. See [release readiness](RELEASE-1.23.2-READINESS.md).

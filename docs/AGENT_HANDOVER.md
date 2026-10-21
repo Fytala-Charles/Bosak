@@ -1,3 +1,11 @@
+# Bosak1.23.2 published and verified — 21 October 2026
+
+**1.23.2 published and verified — 21 October 2026:** [Public delivery proof](RELEASE-1.23.2-PUBLICATION.md) records immutable `v1.23.2` at `7832b785`, one successful Release run (10,331 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /176 focused checks with matching provenance and clear audits. Includes the unpublished1.23.1 switch identity and4.0 index-of empty-collation fixes. REQ-126 stays In Progress; completed Braid REQ-135 acceptance on1.23.0 is unchanged. Braid1.23.2 adoption is a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.
+
+What was built: public signed1.23.2 at7832b785925d2491e0ceac0dd9faa60261619bc4; annotated tag34fe2692f97e1fd07c9474a2aa01089b2d4e8b50; Release run39627053490;10331 solution tests/ten uploads, ten signatures,153 broad/176 focused consumers and exact archive/cache/output provenance verified. Documentation base245f243e; publication documentation commit follows. User approved actual publication. No duplicate dispatch. Next: normal Braid public1.23.2 upgrade smoke; continue REQ-126 or an XSLT4 test slice independently while upstream review proceeds. Keep all original/corrected receipts, root pending PR33 notes, sweep data, stashes and worktrees; PR132 untouched.
+
+## Historical preparation checkpoints
+
 # Bosak 1.23.2 publication preparation — 21 October 2026
 
 **1.23.2 publication preparation — 21 October 2026:** [Release readiness](RELEASE-1.23.2-READINESS.md) and [notes](RELEASE-NOTES-1.23.2.md) pin proposed v1.23.2 to PR #399 merge `7832b785925d2491e0ceac0dd9faa60261619bc4`, including the previously unpublished switch identity correction. Ten unsigned candidate packages pass153 broad +176 focused public checks with matching provenance. Publication is pending separate approval; public1.23.0, completed Braid REQ-135 acceptance and REQ-126 In Progress remain unchanged. Earlier no-release entries describe their historical checkpoints.
