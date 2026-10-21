@@ -249,3 +249,8 @@ Correction evidence, updated catalog entries and canonical documents were render
 ## Release 1.23.2 preparation — 2026-10-21
 
 Changed readiness, notes and canonical documents render with markdown-it and the unchanged Fytala stylesheet under `.guard-tmp/release1232-render`. New relative links and machine-readable package provenance validate. This is an HTML render check, not screenshot/PDF review. Kit-managed assets are unchanged.
+
+
+## Release1.23.2 publication — 2026-10-21
+
+README package links, canonical status, release notes/readiness and new publication proof render with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1232-publication-render`. New local links, JSON identities and public package versions validate. This is an HTML render check, not screenshot/PDF review. Kit-managed assets are unchanged.

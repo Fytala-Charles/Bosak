@@ -1,6 +1,6 @@
 {
   "date": "2026-10-21",
-  "status": "PREPARED_PUBLICATION_APPROVAL_PENDING",
+  "status": "HISTORICAL_PREPARATION_COMPLETED_PUBLICATION_VERIFIED",
   "version": "1.23.2",
   "proposedTag": "v1.23.2",
   "immutableSource": "7832b785925d2491e0ceac0dd9faa60261619bc4",
@@ -12,11 +12,11 @@
   "languageServerTests": 84,
   "exactHeadCI": 39614088983,
   "mergedMainCI": 39615240217,
-  "mergedMainCIConclusion": "All build/test/LS steps succeeded; GitHub final job/workflow status pending",
-  "publicationPerformed": false,
-  "tagCreated": false,
-  "githubReleaseCreated": false,
-  "publicVersionCurrently": "1.23.0",
+  "mergedMainCIConclusion": "success",
+  "publicationPerformed": true,
+  "tagCreated": true,
+  "githubReleaseCreated": true,
+  "publicVersionCurrently": "1.23.2",
   "publicationTrigger": "One annotated immutable tag push after explicit publication approval; no duplicate workflow_dispatch",
   "packageVerification": {
     "date": "2026-10-21",
@@ -526,26 +526,10 @@
     "correction": "Pinned QT3 fixture submodule initialized; only affected runtime suite rerun. Original full attempt preserved."
   },
   "mergedMainCIReceipt": {
-    "status": "in_progress",
-    "conclusion": "",
-    "jobs": [
-      {
-        "name": "VS Code highlighting",
-        "status": "completed",
-        "conclusion": "success"
-      },
-      {
-        "name": "Build & test (net10.0)",
-        "status": "in_progress",
-        "conclusion": ""
-      },
-      {
-        "name": "XSLT wrapper controls (Windows)",
-        "status": "completed",
-        "conclusion": "success"
-      }
-    ]
+    "status": "completed",
+    "conclusion": "success"
   },
   "rootMainSyncedToImplementationMerge": true,
-  "pendingLocalNotesBackup": "6402b2cd78e38ae5ff3d33e55fa5e6320995c572"
+  "pendingLocalNotesBackup": "6402b2cd78e38ae5ff3d33e55fa5e6320995c572",
+  "publicationRecord": "RELEASE-1.23.2-PUBLICATION.json"
 }
