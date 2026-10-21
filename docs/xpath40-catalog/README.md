@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**REQ-126 type/pattern review — 21 October 2026:** [Current grammar mapping](TYPE-PATTERN-GRAMMAR.md) and [intake reports](examples/intake-types/README.md) add40 executable checks and one16-field structured-value pattern entry. Current catalog: **70 entries;2,713 feature +24 chapter checks =2,737**. Existing alias/record pages now describe bounded published1.23.2 XSLT support; older source/deferral logs are preserved separately. D2/D3/D4 and AC-03 remain partial; REQ-126 stays In Progress. No engine/API/harness/version/profile/gate/release change. Earlier count/status snapshots are historical.
+
 **REQ-126 D3 grammar review — 21 October 2026:** [Switch/array/select mapping](SWITCH-ARRAY-SELECT-GRAMMAR.md) adds a16-field [xsl:select entry](xslt-instructions/xsl-select.md) and37 executable checks, including six full dispatch reports. Current catalog: **69 entries;2,673 feature +24 chapter checks =2,697**; four chapters and117 assigned function names unchanged. Public/source1.23.2 is verified. Instruction recognition, effective XPath version and host profile are distinct. REQ-126 remains In Progress; D2/D3/D4 and AC-03 remain partial. No engine/API/harness/version/gate change or release; earlier status/count snapshots are historical.
 
 **Index-of empty-collation correction - 21 October 2026:** Unpublished source1.23.2 [uses the evaluation default collation for an empty third argument only in4.0](INDEX-OF-EMPTY-COLLATION.md).27 focused checks and10,331 full solution tests pass; XPath3.1 refusal, explicit strings/validation and all other equality behavior are retained. QT3 stays31,142/0/679; qt4 gated stays8,278/0/1,894. One catalog outcome is corrected; documentation totals remain68 entries/2,660 checks. Public1.23.0, REQ-126 In Progress and old PR132 remain unchanged. No release.
@@ -22,7 +24,7 @@
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 69 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 70 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -39,7 +41,7 @@ Keep reader-facing explanations before engine implementation details. Chapter in
 
 ## Start with a worked chapter
 
-[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 2,673 focused catalog cases and migration baselines.
+[Supplier invoices to ERP XML](worked-examples/invoice-to-erp/README.md) is the first complete case: a 3.0 stylesheet, realistic inputs, expected principal/exception outputs, and seven executable checks. It includes a separate verified 3.1/4.0 map-destructuring comparison. Continue with [XML manual publishing](worked-examples/manual-to-html/README.md) and [order reconciliation](worked-examples/order-reconciliation/README.md). The [example runner](examples/README.md) verifies 2,713 focused catalog cases and migration baselines.
 
 ## External specifications and source documentation
 
@@ -207,6 +209,9 @@ XPath 3.1 comparison make the acceptance contract explicit.
 | [xsl:map selection and duplicate policy](xslt-instructions/xsl-map.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [xsl:array and xsl:array-member](xslt-instructions/xsl-array.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [xsl:select](xslt-instructions/xsl-select.md) | Bosak XSLT 4.0 surface | Text-body XPath; explicit host/version/type evidence |
+| [Type/map/array patterns](xslt-instructions/structured-value-patterns.md) | Bounded XSLT4.0 surface | Key presence, member sequences, annotation and identity |
+| [xsl:item-type](deferred/xslt-item-type.md) | Bounded published XSLT aliases | Enum/structural alias binding versus noncoercing tests |
+| [xsl:record-type](deferred/xslt-record-type.md) | Bounded published XSLT support | Constructor/identity evidence; historical deferral retained |
 | [xsl:switch](xslt-instructions/xsl-switch.md) | Bosak XSLT 4.0 surface | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Experimental
@@ -225,8 +230,6 @@ XPath 3.1 comparison make the acceptance contract explicit.
 | [fn:apply-templates](deferred/fn-apply-templates.md) | Deferred | REQ-118 tier 4; 28 refusal and invoice alternative checks |
 | [Capturing accumulators](deferred/capturing-accumulators.md) | Deferred | REQ-118 tier 4; 16 capture identity and supported alternative checks |
 | [Enclosing modes](deferred/enclosing-modes.md) | Deferred | REQ-118 tier 4; 20 refusal and named-mode dispatch checks |
-| [xsl:item-type](deferred/xslt-item-type.md) | Deferred | REQ-118 tier 4; named alias use and portable alternatives |
-| [xsl:record-type](deferred/xslt-record-type.md) | Deferred | REQ-118 tier 4; named constructor and structural binding boundaries |
 | [Computed XPath node constructors](deferred/computed-node-constructors.md) | Deferred in XPath | REQ-118 tier 2; 30 refusal/alternative checks |
 
 ### Rejected / superseded
@@ -255,7 +258,7 @@ XPath 3.1 comparison make the acceptance contract explicit.
 | [Numeric import diagnostics](functions/numeric-import-diagnostics.md) | Frozen 4.0 | NaN, atomic reflection and operator callbacks; 15 cases |
 | [Payload fingerprints](functions/payload-fingerprints.md) | Frozen 4.0 | Explicit hash input and algorithm contracts; 10 cases |
 | [Sequence identity checks](functions/sequence-distinctness.md) | Frozen 4.0 | [#83](https://github.com/Fytala-Charles/Bosak/pull/83); named evidence and executable cases |
-| [Nominative record types](type-system/nominative-records.md) | Deferred | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |
+| [Nominative record types](type-system/nominative-records.md) | Bounded XSLT host identity | Standalone declaration facility not implied; historical PR77 retained |
 | [Iteration across collection sequences](operators-and-syntax/sequence-collection-iteration.md) | Frozen 4.0 | [#87](https://github.com/Fytala-Charles/Bosak/pull/87); named evidence and executable cases |
 | [JNode model and template boundary](data-model/jnode-template-boundary.md) | Deferred remainder; partial Frozen 4.0 | [#116](https://github.com/Fytala-Charles/Bosak/pull/116); named evidence and executable cases |
 | [Never-adopted quantifier names](rejected/obsolete-quantifier-functions.md) | Rejected | [#77](https://github.com/Fytala-Charles/Bosak/pull/77); named evidence and executable cases |

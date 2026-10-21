@@ -1,0 +1,667 @@
+{
+  "date": "2026-10-21",
+  "sourceBase": "9ddf46b0b5232cc69ea845014eb252ef6a7ee925",
+  "sourceAndPublishedVersion": "1.23.2",
+  "previousPR": {
+    "number": 402,
+    "reviewedHead": "8fde14e20f69d973a3b9f2d4efcf5bdb3e1f2578",
+    "ci": 39633664285,
+    "merge": "9ddf46b0b5232cc69ea845014eb252ef6a7ee925",
+    "status": "Merged after green checks; bounded diff reviewed without blocking findings"
+  },
+  "specification": {
+    "revision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+    "url": "https://raw.githubusercontent.com/qt4cg/qtspecs/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xslt-40/src/xslt.xml",
+    "sha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "sections": [
+      "named-item-types",
+      "named-record-types",
+      "id-map-patterns",
+      "id-record-patterns",
+      "id-array-patterns",
+      "pattern-syntax"
+    ],
+    "role": "Current review pin; historical adoption gaps remain"
+  },
+  "scope": "Bounded aliases, structural/named records and type/map/array patterns; not complete grammar or broad feature-tier promotion",
+  "entryCount": 70,
+  "featureChecks": 2713,
+  "chapterChecks": 24,
+  "totalChecks": 2737,
+  "workedChapters": 4,
+  "assignedFunctionNames": 117,
+  "newChecks": 40,
+  "newCases": [
+    {
+      "id": "intake-types-report-3-normal",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/report-3.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+    },
+    {
+      "id": "intake-types-report-3-empty",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/report-3.xsl",
+      "input": "intake-types/empty.xml",
+      "expected": "orders=0"
+    },
+    {
+      "id": "intake-types-report-3-reordered",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/report-3.xsl",
+      "input": "intake-types/reordered.xml",
+      "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+    },
+    {
+      "id": "intake-types-report-4-normal",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/report-4.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+    },
+    {
+      "id": "intake-types-report-4-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/report-4.xsl",
+      "input": "intake-types/empty.xml",
+      "expected": "orders=0"
+    },
+    {
+      "id": "intake-types-report-4-reordered",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/report-4.xsl",
+      "input": "intake-types/reordered.xml",
+      "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+    },
+    {
+      "id": "intake-types-enum-allowed",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/enum-allowed.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "true"
+    },
+    {
+      "id": "intake-types-enum-rejected",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/enum-rejected.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "false"
+    },
+    {
+      "id": "intake-types-enum-treat-error",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/enum-treat-error.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XPDY0050"
+    },
+    {
+      "id": "intake-types-structural-binding",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/structural-binding.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "true|false"
+    },
+    {
+      "id": "intake-types-alias-expanded-name",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/alias-expanded-name.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "true"
+    },
+    {
+      "id": "intake-types-alias-version30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/alias-version30.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "intake-types-nominal-own",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/nominal-own.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "true"
+    },
+    {
+      "id": "intake-types-nominal-other",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/nominal-other.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "false"
+    },
+    {
+      "id": "intake-types-nominal-plain-map",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/nominal-plain-map.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "false"
+    },
+    {
+      "id": "intake-types-nominal-no-constructor",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/nominal-no-constructor.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XPST0017"
+    },
+    {
+      "id": "intake-types-type-structural-annotated",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/type-structural-annotated.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-type-structural-map",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/type-structural-map.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-type-nominal-own",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/type-nominal-own.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-type-nominal-other",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/type-nominal-other.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-map-closed",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-closed.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-map-extra-closed",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-extra-closed.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-map-extra-open",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-extra-open.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-map-empty-present",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-empty-present.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-map-empty-missing",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-empty-missing.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-map-singleton-required",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-singleton-required.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-map-sequence-allowed",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-sequence-allowed.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-map-numeric-key",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/map-numeric-key.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-array-singletons",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-singletons.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-array-whole-sequence",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-whole-sequence.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-array-member-plus",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-member-plus.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-array-vacuous",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-vacuous.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-array-empty-member",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-empty-member.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-array-member-star",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-member-star.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "match"
+    },
+    {
+      "id": "intake-types-array-not-map",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-not-map.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-array-wrong-type",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/array-wrong-type.xsl",
+      "input": "intake-types/normal.xml",
+      "expected": "fallback"
+    },
+    {
+      "id": "intake-types-alias-duplicate",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/alias-duplicate.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XTSE4030"
+    },
+    {
+      "id": "intake-types-alias-missing-as",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "intake-types/alias-missing-as.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XTSE0010"
+    },
+    {
+      "id": "intake-types-array-pattern-version30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/array-pattern-version30.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XTSE0340"
+    },
+    {
+      "id": "intake-types-map-pattern-version30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "intake-types/map-pattern-version30.xsl",
+      "input": "intake-types/normal.xml",
+      "error": "XTSE0340"
+    }
+  ],
+  "originalManifestRowsUnchanged": 2673,
+  "firstFocused": {
+    "passed": 40,
+    "failed": 0,
+    "skipped": 0
+  },
+  "fullSolution": {
+    "passed": 10408,
+    "failed": 0,
+    "skipped": 0,
+    "projects": [
+      {
+        "file": "req126-types_net10.0_20261021183212.trx",
+        "passed": 202,
+        "sha256": "47e211737c1fb699c732486371c85c70ec97feb974e932bf1c24d9d442ace42b"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183213.trx",
+        "passed": 66,
+        "sha256": "1cabdc4cd5c2235a6f02058691faf1cefe4e15ef6956bec6af763933890f01ae"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183214.trx",
+        "passed": 269,
+        "sha256": "8fb8ee86cddc76d23e31d2c1da047e046380ae9894428f6e422fa3a5a737aa2a"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183215.trx",
+        "passed": 411,
+        "sha256": "eaacddbe3210e8a2e92048eaa05a617301378071432d7b7bcbb2f0ec38efc0bd"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183216.trx",
+        "passed": 132,
+        "sha256": "3b7ddf25f89c449121aa54ae490a7139e4a17d5ab2e6dc84e801fba9fb27e109"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183217.trx",
+        "passed": 303,
+        "sha256": "fcb4309f2213a59fe4919e7a8ead185a248e97fe027038fc5ce46bd03c3a3748"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183218.trx",
+        "passed": 1385,
+        "sha256": "be91d4c405d7525f7f09874dff588b565a78c010f837525fc39e925df4005309"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183219.trx",
+        "passed": 47,
+        "sha256": "b0a47939d6474a6d32af4482f08ba6a95288e97eb185130332c54beea9869738"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183222.trx",
+        "passed": 153,
+        "sha256": "edfa62621c629f788966e99c7ed16c94423f81900b31ad1a4069a443a207d2a0"
+      },
+      {
+        "file": "req126-types_net10.0_20261021183538.trx",
+        "passed": 7440,
+        "sha256": "9f72ff609052a0be4d626d22131380ca719bf6facb2369ac2e988da56e242e62"
+      }
+    ],
+    "xsltPassed": 7440
+  },
+  "historicalSnapshots": [
+    {
+      "originalPath": "docs/xpath40-catalog/deferred/xslt-item-type.md",
+      "originalRevision": "9ddf46b0b5232cc69ea845014eb252ef6a7ee925",
+      "originalGitBlobSha256": "d18a067fe15df2539fabefe7edc430e07721c6ad8cc8de78215204d5f5955e11",
+      "archivePath": "docs/history/REQ126-ITEM-TYPE-SNAPSHOT-20261021.md",
+      "archiveSha256": "e2137be41c7e85882cb6e68341d252e8b81ae7a14d08cdd8cfb9efe35a5ae837",
+      "changes": "Historical notice, immutable relative-link rebasing and relocated banner path only"
+    },
+    {
+      "originalPath": "docs/xpath40-catalog/deferred/xslt-record-type.md",
+      "originalRevision": "9ddf46b0b5232cc69ea845014eb252ef6a7ee925",
+      "originalGitBlobSha256": "971330d4acb64c2f20d3f6a89fa8a49eca17179eb50d4eeed1fc8b159cb32dec",
+      "archivePath": "docs/history/REQ126-RECORD-TYPE-SNAPSHOT-20261021.md",
+      "archiveSha256": "bb4d706818222f787e1abd058d28e2ae78f5423acec6d558de24c8bc2c74cc9d",
+      "changes": "Historical notice, immutable relative-link rebasing and relocated banner path only"
+    },
+    {
+      "originalPath": "docs/xpath40-catalog/type-system/nominative-records.md",
+      "originalRevision": "9ddf46b0b5232cc69ea845014eb252ef6a7ee925",
+      "originalGitBlobSha256": "931dd2ba98edcf0cdbec4ff3b857947023d0d7cbbee004e47e2d773fca2a7c37",
+      "archivePath": "docs/history/REQ126-NOMINATIVE-RECORDS-SNAPSHOT-20261021.md",
+      "archiveSha256": "b4a772d1ad549d30ac826d57ed5055b9f3673f9be44e2e652bc99fb672546a3f",
+      "changes": "Historical notice, immutable relative-link rebasing and relocated banner path only"
+    }
+  ],
+  "engineChanges": false,
+  "harnessChanges": false,
+  "versionChanges": false,
+  "gateMembershipChanges": false,
+  "manualEngineGatesRerun": false,
+  "gateRationale": "Documentation/executable fixtures only; engine/compiler/parser/runtime and harness source unchanged",
+  "profileScope": "Default Legacy in new cases; xslt31/xslt40 are stylesheet versions, not host selections",
+  "req126Status": "In Progress",
+  "remaining": [
+    "Other D3 grammar/compound/set/union/priority contexts",
+    "D2 full contracts/options",
+    "D4 historical adoption and complete decision lifecycle",
+    "AC-03 applicable gate acceptance reconciliation"
+  ],
+  "upstreamSubmissionPerformed": false,
+  "executionReceipts": [
+    {
+      "path": "focused-original\\focused-original.trx",
+      "sha256": "488dd25bfe39aa77b87b03ff073a554be86a31765edc91ca5006758d1db42428"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183212.trx",
+      "sha256": "47e211737c1fb699c732486371c85c70ec97feb974e932bf1c24d9d442ace42b"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183213.trx",
+      "sha256": "1cabdc4cd5c2235a6f02058691faf1cefe4e15ef6956bec6af763933890f01ae"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183214.trx",
+      "sha256": "8fb8ee86cddc76d23e31d2c1da047e046380ae9894428f6e422fa3a5a737aa2a"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183215.trx",
+      "sha256": "eaacddbe3210e8a2e92048eaa05a617301378071432d7b7bcbb2f0ec38efc0bd"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183216.trx",
+      "sha256": "3b7ddf25f89c449121aa54ae490a7139e4a17d5ab2e6dc84e801fba9fb27e109"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183217.trx",
+      "sha256": "fcb4309f2213a59fe4919e7a8ead185a248e97fe027038fc5ce46bd03c3a3748"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183218.trx",
+      "sha256": "be91d4c405d7525f7f09874dff588b565a78c010f837525fc39e925df4005309"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183219.trx",
+      "sha256": "b0a47939d6474a6d32af4482f08ba6a95288e97eb185130332c54beea9869738"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183222.trx",
+      "sha256": "edfa62621c629f788966e99c7ed16c94423f81900b31ad1a4069a443a207d2a0"
+    },
+    {
+      "path": "full-results\\req126-types_net10.0_20261021183538.trx",
+      "sha256": "9f72ff609052a0be4d626d22131380ca719bf6facb2369ac2e988da56e242e62"
+    }
+  ],
+  "fixtureHashes": [
+    {
+      "path": "examples\\intake-types\\alias-duplicate.xsl",
+      "sha256": "12664636224959025554598240a9f0b41565bc472755945743aa8df28346fea1"
+    },
+    {
+      "path": "examples\\intake-types\\alias-expanded-name.xsl",
+      "sha256": "831ad49886964f1efe7956f33774ff4b8ae25d97b8a2dc69173f2b7dbca405ce"
+    },
+    {
+      "path": "examples\\intake-types\\alias-missing-as.xsl",
+      "sha256": "27b31e61e507cae9dd1d275476900359812b014842a66471e018cee420b43f20"
+    },
+    {
+      "path": "examples\\intake-types\\alias-version30.xsl",
+      "sha256": "3a7aa2317c51d539c4037500a35346577f9c8b4fc5b130ca5a1603735bfbd1e3"
+    },
+    {
+      "path": "examples\\intake-types\\array-empty-member.xsl",
+      "sha256": "15e3b2b245dbb3902cce204ef7a41d51c3c1b7213a30f2bdc8685c3b4ebfa4d7"
+    },
+    {
+      "path": "examples\\intake-types\\array-member-plus.xsl",
+      "sha256": "a7efbbbae3621540ae7d4743483286ec18baa37b9dc439a1b8a77fc80f00ea0d"
+    },
+    {
+      "path": "examples\\intake-types\\array-member-star.xsl",
+      "sha256": "f674a598a9d44e95e1e2a47bef0df9dd4d259eafe3b3dde4ad58aaeb39adf73a"
+    },
+    {
+      "path": "examples\\intake-types\\array-not-map.xsl",
+      "sha256": "0df99f1c7c5a8a0c5a695517484e7b8400cbc8e8e016c6275dd24fed11cdf089"
+    },
+    {
+      "path": "examples\\intake-types\\array-pattern-version30.xsl",
+      "sha256": "4875a8ee3a06c9f271152dfc42080d573e52fe509643d8d80100b7832dabf01c"
+    },
+    {
+      "path": "examples\\intake-types\\array-singletons.xsl",
+      "sha256": "19198ac10c345913b2d32c1f46f908049b51dc6a7bc745973d98d4414781e465"
+    },
+    {
+      "path": "examples\\intake-types\\array-vacuous.xsl",
+      "sha256": "d2d23526983b871c7c1de3368fa1d3b54d77563bd3da8c329765adbb432df458"
+    },
+    {
+      "path": "examples\\intake-types\\array-whole-sequence.xsl",
+      "sha256": "9f5475ef90f9763f4709f5c04db808cc822f151fbe64c2b7b2928cb612765610"
+    },
+    {
+      "path": "examples\\intake-types\\array-wrong-type.xsl",
+      "sha256": "1e10a77046ea30526cb8f368e0459a81aa786f759a46c7c27fbc344a6fa5b89c"
+    },
+    {
+      "path": "examples\\intake-types\\empty.xml",
+      "sha256": "50e696d7b738c6767c8b2cec16b9a497d5dadf9846e470ed1d64c1e2f7cfcda4"
+    },
+    {
+      "path": "examples\\intake-types\\enum-allowed.xsl",
+      "sha256": "5db62b1bca2f608dc7ce23cd7662075362ffc8842dfb441588cc55e153726cf4"
+    },
+    {
+      "path": "examples\\intake-types\\enum-rejected.xsl",
+      "sha256": "e10a29dae619c3a9163f6dfd8df37356ff54299b8fa65f23f9c1dc6c3ce8a1fe"
+    },
+    {
+      "path": "examples\\intake-types\\enum-treat-error.xsl",
+      "sha256": "2bbd57ba29e6d28d793510f9ebb0a1946e650cc522f0036ef1082aca91448901"
+    },
+    {
+      "path": "examples\\intake-types\\map-closed.xsl",
+      "sha256": "2aca81c0217228c97585e65f5a8bfa55a037487c958774e1a95099bc02ebb084"
+    },
+    {
+      "path": "examples\\intake-types\\map-empty-missing.xsl",
+      "sha256": "852089e78632dc11e368358d3a3fe09891864fc02b5e6b09fe85a8a005091108"
+    },
+    {
+      "path": "examples\\intake-types\\map-empty-present.xsl",
+      "sha256": "53549c87bb3a2503a0f74de768f27c17178b5d2448c730bbab4f9d3a0dd1d446"
+    },
+    {
+      "path": "examples\\intake-types\\map-extra-closed.xsl",
+      "sha256": "b2b4a5d3af8718b403aa6c2e437bbfae6611789d5828050438660efe48f16820"
+    },
+    {
+      "path": "examples\\intake-types\\map-extra-open.xsl",
+      "sha256": "688ab71a621337e95901a44a0aa3b13166869a004a2ea7a0338424411f5d3e8c"
+    },
+    {
+      "path": "examples\\intake-types\\map-numeric-key.xsl",
+      "sha256": "836d6d8639bdb05c170342d7a58ba1a5e470bd42aea719aa113ff85280d71d00"
+    },
+    {
+      "path": "examples\\intake-types\\map-pattern-version30.xsl",
+      "sha256": "50a818a8acfaab5a3a573594f06b9c2c39d3aa085b4db9e3018d266008f09bc9"
+    },
+    {
+      "path": "examples\\intake-types\\map-sequence-allowed.xsl",
+      "sha256": "5c8c0c55812f32822aa589aa5d19996e081592dba50e30bd05d3cf591ba50326"
+    },
+    {
+      "path": "examples\\intake-types\\map-singleton-required.xsl",
+      "sha256": "d7cddd2db271d0d30eb03006964c811a1d0f2365d58a2c8c3923f63e8337826a"
+    },
+    {
+      "path": "examples\\intake-types\\nominal-no-constructor.xsl",
+      "sha256": "dc9388ed9d9fd16f9aa53f204e2adc881abd0365289afef1527eaa00f6c35577"
+    },
+    {
+      "path": "examples\\intake-types\\nominal-other.xsl",
+      "sha256": "d24b12e323a3462358a9c3f5644e563dd7abe8307eeb4574203882f44cac2350"
+    },
+    {
+      "path": "examples\\intake-types\\nominal-own.xsl",
+      "sha256": "c43b2ee588508f8ed63938629c4455c2f67dd40d7ec870832fc096c5356739a3"
+    },
+    {
+      "path": "examples\\intake-types\\nominal-plain-map.xsl",
+      "sha256": "98b3dc1404e8bb2a66b1ca32956d168d9a5f08afaf687368e4be61ca8435aad4"
+    },
+    {
+      "path": "examples\\intake-types\\normal.xml",
+      "sha256": "3b92edc4719028e44aa0e5391542f694527b174a49b092700285bf9c341b1024"
+    },
+    {
+      "path": "examples\\intake-types\\reordered.xml",
+      "sha256": "4a60b0e396fec35de28602591eaf1c034c90df269f2e057acabdf6bc46aace09"
+    },
+    {
+      "path": "examples\\intake-types\\report-3.xsl",
+      "sha256": "90b78e940592e762a876cb515994efe06f2393250c3202aea9b1210fe74b56e0"
+    },
+    {
+      "path": "examples\\intake-types\\report-4.xsl",
+      "sha256": "15ad0d78b71ebb6ea53af03febf815c461b03b7d5ec8235e4a45b46488e7b576"
+    },
+    {
+      "path": "examples\\intake-types\\structural-binding.xsl",
+      "sha256": "69094005caec20f01f3b17fb4623feddbb00458a8b02c949a353e9dc836f6057"
+    },
+    {
+      "path": "examples\\intake-types\\type-nominal-other.xsl",
+      "sha256": "9801d35b7ff680a8f706f958b1337f84b96f6e1d62b93c937294d38ba4db2a30"
+    },
+    {
+      "path": "examples\\intake-types\\type-nominal-own.xsl",
+      "sha256": "2523303e66c6248f7806f102a753d4651471a26a70d3675f3ef73d7c18ff2906"
+    },
+    {
+      "path": "examples\\intake-types\\type-structural-annotated.xsl",
+      "sha256": "c24a84412056ab1f9a16c83670b8d38dd55da1771c8bba2d20a62a82d0f27fe7"
+    },
+    {
+      "path": "examples\\intake-types\\type-structural-map.xsl",
+      "sha256": "f2b1c7a5b2574c73c1ac9e071ef9cbe3e9fcc1eed2ea63d0c835ccb5943348d1"
+    }
+  ],
+  "originalManifestSha256": "ef0cd4adb86e8ab274739a25de718e4aed9c40d2026a5d60194a84ba94d25157",
+  "historicalProsePreservationVerified": true
+}

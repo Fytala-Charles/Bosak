@@ -4,6 +4,9 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**XSLT host/type review — 21 October 2026:** [Current mapping](../TYPE-PATTERN-GRAMMAR.md) distinguishes stylesheet aliases, conversion in bindings and noncoercing type/pattern tests. Named XSLT record identity is a separate bounded published contract; this does not add standalone XPath declarations.
+
+
 ## 1. Name and Classification
 
 **Structural record types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6b; structural record evidence in RecordTypeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.

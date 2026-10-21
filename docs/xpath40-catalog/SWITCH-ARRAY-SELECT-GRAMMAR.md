@@ -4,6 +4,9 @@
   <p>21 October 2026</p>
 </div>
 
+**Type/pattern follow-up supplied — 21 October 2026:** The [next bounded inventory](TYPE-PATTERN-GRAMMAR.md) now maps aliases, named/structural record identity and map/array patterns. Original counts and queue below describe this earlier switch/array/select checkpoint; original audit/receipts remain unchanged.
+
+
 This bounded REQ-126 D3 review maps implemented stylesheet grammar, types and version context to catalog entries and executable evidence. **Public/source version is 1.23.2**, with [signed delivery proof](../RELEASE-1.23.2-PUBLICATION.md). No engine, API, harness, profile default or package version changes are included.
 
 ## Business case and boundaries
