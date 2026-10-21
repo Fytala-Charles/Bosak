@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Formal Braid REQ-135 acceptance - 21 October 2026:** [Consumer acceptance receipt](REQ-135-BRAID-ACCEPTANCE.md) records published1.23.0 at9218a2b6, pushed Braid checkpoint3caa613, complete Create/Update/Delete integration, **1,373 Release /700 signed public-package passes**, and the product owner's completed native procedure with all hashes reported correct. Disposition: implemented, published and consumer-accepted within the delivered bounded profile; exact native hash values, destinations, variants and accessibility observations remain unspecified. LA17-LA22 consumer evidence is recorded separately from engine/source gates. Earlier pending-adoption/native entries are historical. Documentation only; no engine/release change or acceptance of unrelated unpublished1.23.1 work.
+
 **XSLT4 switch boundaries - 21 October 2026:** [Twelve new native cases](XSLT40-SWITCH-BOUNDARIES.md) expose and verify a narrow selected-node identity correction in unpublished source1.23.1.32 public checks and10,246 full solution tests pass; QT3 stays31,142/0/679 and qt4 gated8,278/0/1,894. Native new cases12/0/0 and expanded switch22/0/2 pass in both profiles; original assertions/receipts and dependency skips are retained. Upstream patch prepared, not submitted. Public1.23.0 and separate Braid REQ-135 validation remain unchanged.
 
 
