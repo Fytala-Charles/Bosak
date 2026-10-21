@@ -19665,5 +19665,325 @@
     "file": "dispatch-grammar/select-focus-text.xsl",
     "input": "dispatch-grammar/normal.xml",
     "expected": "10:1/2;20:2/2;"
+  },
+  {
+    "id": "intake-types-report-3-normal",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/report-3.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+  },
+  {
+    "id": "intake-types-report-3-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/report-3.xsl",
+    "input": "intake-types/empty.xml",
+    "expected": "orders=0"
+  },
+  {
+    "id": "intake-types-report-3-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/report-3.xsl",
+    "input": "intake-types/reordered.xml",
+    "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+  },
+  {
+    "id": "intake-types-report-4-normal",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/report-4.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+  },
+  {
+    "id": "intake-types-report-4-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/report-4.xsl",
+    "input": "intake-types/empty.xml",
+    "expected": "orders=0"
+  },
+  {
+    "id": "intake-types-report-4-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/report-4.xsl",
+    "input": "intake-types/reordered.xml",
+    "expected": "orders=4|O-100:ship|O-200:bundle|O-300:review|O-400:review"
+  },
+  {
+    "id": "intake-types-enum-allowed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/enum-allowed.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "true"
+  },
+  {
+    "id": "intake-types-enum-rejected",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/enum-rejected.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "false"
+  },
+  {
+    "id": "intake-types-enum-treat-error",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/enum-treat-error.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XPDY0050"
+  },
+  {
+    "id": "intake-types-structural-binding",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/structural-binding.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "true|false"
+  },
+  {
+    "id": "intake-types-alias-expanded-name",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/alias-expanded-name.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "true"
+  },
+  {
+    "id": "intake-types-alias-version30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/alias-version30.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "intake-types-nominal-own",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/nominal-own.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "true"
+  },
+  {
+    "id": "intake-types-nominal-other",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/nominal-other.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "false"
+  },
+  {
+    "id": "intake-types-nominal-plain-map",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/nominal-plain-map.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "false"
+  },
+  {
+    "id": "intake-types-nominal-no-constructor",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/nominal-no-constructor.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "intake-types-type-structural-annotated",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/type-structural-annotated.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-type-structural-map",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/type-structural-map.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-type-nominal-own",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/type-nominal-own.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-type-nominal-other",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/type-nominal-other.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-map-closed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-closed.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-map-extra-closed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-extra-closed.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-map-extra-open",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-extra-open.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-map-empty-present",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-empty-present.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-map-empty-missing",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-empty-missing.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-map-singleton-required",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-singleton-required.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-map-sequence-allowed",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-sequence-allowed.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-map-numeric-key",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/map-numeric-key.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-array-singletons",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-singletons.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-array-whole-sequence",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-whole-sequence.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-array-member-plus",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-member-plus.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-array-vacuous",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-vacuous.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-array-empty-member",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-empty-member.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-array-member-star",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-member-star.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "match"
+  },
+  {
+    "id": "intake-types-array-not-map",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-not-map.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-array-wrong-type",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/array-wrong-type.xsl",
+    "input": "intake-types/normal.xml",
+    "expected": "fallback"
+  },
+  {
+    "id": "intake-types-alias-duplicate",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/alias-duplicate.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XTSE4030"
+  },
+  {
+    "id": "intake-types-alias-missing-as",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "intake-types/alias-missing-as.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XTSE0010"
+  },
+  {
+    "id": "intake-types-array-pattern-version30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/array-pattern-version30.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XTSE0340"
+  },
+  {
+    "id": "intake-types-map-pattern-version30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "intake-types/map-pattern-version30.xsl",
+    "input": "intake-types/normal.xml",
+    "error": "XTSE0340"
   }
 ]

@@ -1,80 +1,69 @@
 <div align="center">
-  <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak catalog: Nominative record types">
-  <br><br><h1>Nominative record types</h1>
-  <p>Deferred</p>
+  <img src="../../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Nominative records: host-defined identity">
+  <h1>Nominative records: host-defined identity</h1>
+  <p>21 October 2026</p>
 </div>
 
 ## 1. Name and Classification
 
-**Nominative record types — Deferred.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.
-
-**External specification references (current drafts; links checked 2026-10-11):** [XPath nominative records](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-nominative-record-types), [QT4CG proposal history](https://github.com/qt4cg/qtspecs/pull/2934). Historical adopted specification source revision was not retained; this remains an explicit provenance gap.
+**Bounded XSLT-defined identity is implemented in public1.23.2; this is not a standalone XPath declaration facility or a complete promotion of the historical deferred proposal.** [Current mapping](../TYPE-PATTERN-GRAMMAR.md).
 
 ## 2. Intent
 
-Record the boundary between structural data contracts and named record identity.
+Explain why a host-declared name can matter beyond the field shape of a record.
 
 ## 3. Also Known As
 
-Use the exact spellings in the linked examples; no undocumented aliases are adopted.
+Named/nominal/nominative record identity in the tested XSLT declaration context.
 
 ## 4. History / Supersedes
 
-Structural records are shipped; nominative records remain deferred while the specification evolves. A named type identity is a distinct contract, not an alias for a structural record. Do not advertise custom named record declarations or identity-preserving constructors as supported. QT4CG PR 2934 supplies the historical split; no Bosak engine delivery is claimed for nominative identity.
+The original PR77 disposition at27bc663b and its earlier blanket deferral prose are retained in the [historical snapshot](../../history/REQ126-NOMINATIVE-RECORDS-SNAPSHOT-20261021.md). Later XSLT source supplies bounded named identity. This does not recover historical adopted specification pins or claim a new standalone XPath feature.
 
 ## 5. Motivation
 
-Record the boundary between structural data contracts and named record identity. The order-routing chapter places validation before dispatch so rejected records stay available for repair.
+Distinct application interfaces may share a field named x while requiring different declared identities.
 
 ## 6. Language Alignment
 
-A C# record class name or TypeScript type alias does not establish XPath nominative identity. Structural matching, coercion and casts are separate behaviors.
+Unlike a structural alias, nominal identity is not established by matching fields alone. A C# or TypeScript name does not register a type in Bosak; the compiled XSLT declaration provides the tested context.
 
 ## 7. Applicability
 
-Use within the declared compatibility and business contract. Deferred/rejected contracts require explicit alternatives; they must not be advertised as implemented.
+Use the tested XSLT declaration/constructor path. A bare XPath expression without the host-defined type context cannot assume these names are registered.
 
 ## 8. Structure
 
-```xquery
-(map {'id':'R1'} cast as record(id as xs:string))?id
-```
-
-This complete expression demonstrates the stated contract, not the full grammar.
+Declare t:point and t:other with identical x fields; compare constructor results using instance-of or `record(t:point)` pattern. See complete fixtures rather than treating the name as a globally available XPath keyword.
 
 ## 9. Participants
 
-The public XPath API compiles at the manifest mode and evaluates without application variables. The routing chapter additionally supplies an XML document context.
+[xsl:record-type](../deferred/xslt-record-type.md) supplies the context and constructor; [RecordPattern](../../../src/Bosak.Xslt/Patterns/RecordPattern.cs) tests the value without coercing it.
 
 ## 10. Collaborations
 
-The routing planner passes an XDM map to portable XSLT through a required parameter. See [the full chapter](../worked-examples/order-routing/README.md).
+Structural record aliases can describe field shapes separately; map patterns can inspect keys/entry sequences. None is a synonym for nominal identity.
 
 ## 11. Consequences
 
-Structural records are shipped; nominative records remain deferred while the specification evolves. A named type identity is a distinct contract, not an alias for a structural record. Do not advertise custom named record declarations or identity-preserving constructors as supported. QT4CG PR 2934 supplies the historical split; no Bosak engine delivery is claimed for nominative identity. A C# record class name or TypeScript type alias does not establish XPath nominative identity. Structural matching, coercion and casts are separate behaviors.
+Equal fields need not satisfy a different named type. Binding/function conversion rules require separate evidence; an identity check does not establish every coercion/recursive/package rule.
 
 ## 12. Implementation
 
-The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
+New manifest checks use default Legacy host and effective version4.0, hence frozen XPath40. Legacy3.0 declaration/pattern refusals are explicit. Host selection, module/package identity, imports and authoring contexts need their own applicable tests; no exhaustive cross-context claim follows. No engine behavior changes.
 
 ## 13. Sample Code
 
-[alternative.xpath](../examples/nominative-records/alternative.xpath): returns `R1` at mode 40.
+[nominal-own](../examples/intake-types/nominal-own.xsl), [nominal-other](../examples/intake-types/nominal-other.xsl), [type-nominal-own](../examples/intake-types/type-nominal-own.xsl) and [type-nominal-other](../examples/intake-types/type-nominal-other.xsl) give positive and negative examples. The older standalone [structural alternative](../examples/nominative-records/alternative.xpath) remains unchanged.
 
 ## 14. Performance Notes
 
-Predicates and duplicate checks scan their inputs; partitioning allocates arrays and retains accepted nodes. These are qualitative expectations, not benchmark results. Stateful or expensive callbacks change workload costs.
+Cost follows the value/type/pattern being checked and any conversion/materialization. Field/member walks and predicates can add work; no benchmark, universal speedup or measured memory claim is supplied.
 
 ## 15. Known Uses
 
-Executable IDs: `nominative-records-alternative`.  No additional gate promotion is claimed by this decision record. [Gate runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs).
+New nominal and record-pattern rows plus [Xslt40RecordPatternTests](../../../tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs). No new XPath GatedSets member or upstream acceptance is inferred from host-specific XSLT examples.
 
 ## 16. Related Features
 
-[Deferred xsl:record-type declarations](../deferred/xslt-record-type.md) supplies
-complete invoice cases for named type/constructor use and supported alternatives.
-[xsl:item-type](../deferred/xslt-item-type.md) covers aliases separately.
-
-[Catalog index](../README.md), [routing chapter](../worked-examples/order-routing/README.md), [structural records](../type-system/structural-records.md), [experimental scan](../experimental/fn-scan.md).
-
+[Structural records](structural-records.md), [item aliases](../deferred/xslt-item-type.md), [grammar inventory](../TYPE-PATTERN-GRAMMAR.md).

@@ -1,0 +1,1 @@
+<intake xmlns="urn:fytala:intake"><order id="O-300" kind="line" sku="B" qty="0"/><order id="O-100" kind="line" sku="A" qty="2"/><order id="O-400" kind="bundle"/><order id="O-200" kind="bundle"><sku>A</sku><sku>B</sku></order></intake>
