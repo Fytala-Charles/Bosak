@@ -37,3 +37,6 @@
 
 # Preserve updated exact-merge review separately from the original head review.
 /docs/REQ-135-CONSUMER-MERGE-REVIEW.md -text whitespace=cr-at-eol
+
+# Keep native switch fixtures identical to the executed portable contribution.
+/tests/Bosak.Xslt.Conformance/Fixtures/SwitchBoundaries/** text eol=lf

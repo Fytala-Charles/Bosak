@@ -4,6 +4,9 @@
   <p>Upstream-native tests, Bosak adapter and reproducible evidence</p>
 </div>
 
+**XSLT4 switch boundaries - 21 October 2026:** [Twelve new native cases](XSLT40-SWITCH-BOUNDARIES.md) expose and verify a narrow selected-node identity correction in unpublished source1.23.1.32 public checks and10,246 full solution tests pass; QT3 stays31,142/0/679 and qt4 gated8,278/0/1,894. Native new cases12/0/0 and expanded switch22/0/2 pass in both profiles; original assertions/receipts and dependency skips are retained. Upstream patch prepared, not submitted. Public1.23.0 and separate Braid REQ-135 validation remain unchanged.
+
+
 **Array/select test batch prepared -20 October2026:** [Twenty-four native array/xsl:select cases](../contributions/xslt40/array-select-boundaries/README.md) and48 public-API checks add missing iteration, identity, callable-value, coercion and fallback boundaries. Native placement is array/seqtor; existing expectations and engine code are unchanged. Original failed runs and the corrected template-invocation assumptions are preserved. Exact native FOER0000 recognition is handled by a separate harness patch. Source1.22.1 remains unpublished; no upstream submission, gate promotion, REQ status or Braid acceptance change.
 
 **Exact structured error harness correction -20 October2026:** [Structured error identity matching](XSLT40-STRUCTURED-ERROR-MATCHING.md) recognizes the actual FOER0000 code before excluding legacy aliases. Seven identity controls reject wrong code/namespace pairs and misleading descriptions; all16 process controls pass locally. No engine, package version, skip-list, upstream expectation or consumer status change. This supports a separate24-case array/seqtor test batch.

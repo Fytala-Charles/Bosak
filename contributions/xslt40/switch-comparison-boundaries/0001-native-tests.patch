@@ -1,0 +1,261 @@
+diff --git a/tests/insn/switch/_switch-test-set.xml b/tests/insn/switch/_switch-test-set.xml
+index ee0b32bc..1989628c 100644
+--- a/tests/insn/switch/_switch-test-set.xml
++++ b/tests/insn/switch/_switch-test-set.xml
+@@ -160,4 +160,100 @@
+       <test><stylesheet file="switch-009.xsl"/></test>
+       <result><assert-xml><![CDATA[<out count="0"/>]]></assert-xml></result>
+    </test-case>
++
++   <test-case name="switch-010">
++      <description>A singleton selector node is atomized before numeric general comparison.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-010.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-011">
++      <description>An empty selector cannot satisfy the required single atomic item.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-011.xsl"/></test>
++      <result><error code="XPTY0004"/></result>
++   </test-case>
++
++   <test-case name="switch-012">
++      <description>Selector node atomization must still produce only one atomic item.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-012.xsl"/></test>
++      <result><error code="XPTY0004"/></result>
++   </test-case>
++
++   <test-case name="switch-013">
++      <description>A node-valued test sequence is atomized before general comparison.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-013.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-014">
++      <description>NaN does not equal NaN and the otherwise branch is selected.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-014.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-015">
++      <description>QName comparison uses expanded names rather than prefix spelling or local name alone.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-015.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-016">
++      <description>Switch collation governs branch comparison even with a different collation on when.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-016.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-017">
++      <description>Selector, test and result expressions retain the caller item, position and size.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-017.xsl"/></test>
++      <result><assert-xml><![CDATA[<out><v item="10" position="1" size="2"/><after item="10" position="1" size="2"/><v item="20" position="2" size="2"/><after item="20" position="2" size="2"/></out>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-018">
++      <description>A selected node sequence retains identity and explicitly reversed order.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-018.xsl"/></test>
++      <result><assert-xml><![CDATA[<out count="2" first="B" same="true" last="A"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-019">
++      <description>A selected function item is returned without atomization and remains callable.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-019.xsl"/></test>
++      <result><assert-xml><![CDATA[<out value="42"/>]]></assert-xml></result>
++   </test-case>
++
++   <test-case name="switch-020">
++      <description>An error in the selected result propagates without falling through to otherwise.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-020.xsl"/></test>
++      <result><error code="FOER0000"/></result>
++   </test-case>
++
++   <test-case name="switch-021">
++      <description>An earlier nonmatching result is not evaluated before the selected constructor.</description>
++      <created by="Charles Korthout" on="2026-10-21"/>
++      <dependencies><spec value="XSLT40+"/></dependencies>
++      <test><stylesheet file="switch-021.xsl"/></test>
++      <result><assert-xml><![CDATA[<out>42</out>]]></assert-xml></result>
++   </test-case>
+ </test-set>
+diff --git a/tests/insn/switch/switch-010.xsl b/tests/insn/switch/switch-010.xsl
+new file mode 100644
+index 00000000..1af29915
+--- /dev/null
++++ b/tests/insn/switch/switch-010.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="n" as="element(n)"><n>42</n></xsl:variable><out><xsl:switch select="$n"><xsl:when test="42" select="42"/><xsl:otherwise select="0"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-011.xsl b/tests/insn/switch/switch-011.xsl
+new file mode 100644
+index 00000000..52ac23ba
+--- /dev/null
++++ b/tests/insn/switch/switch-011.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="()"><xsl:when test="()" select="42"/><xsl:otherwise select="0"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-012.xsl b/tests/insn/switch/switch-012.xsl
+new file mode 100644
+index 00000000..66787c12
+--- /dev/null
++++ b/tests/insn/switch/switch-012.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="nodes" as="element()*"><n>1</n><n>2</n></xsl:variable><out><xsl:switch select="$nodes"><xsl:when test="1" select="42"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-013.xsl b/tests/insn/switch/switch-013.xsl
+new file mode 100644
+index 00000000..97e08176
+--- /dev/null
++++ b/tests/insn/switch/switch-013.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="nodes" as="element()*"><n>1</n><n>2</n></xsl:variable><out><xsl:switch select="2"><xsl:when test="$nodes" select="42"/><xsl:otherwise select="0"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-014.xsl b/tests/insn/switch/switch-014.xsl
+new file mode 100644
+index 00000000..ea0d8724
+--- /dev/null
++++ b/tests/insn/switch/switch-014.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="xs:double('NaN')"><xsl:when test="xs:double('NaN')" select="error()"/><xsl:otherwise select="42"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-015.xsl b/tests/insn/switch/switch-015.xsl
+new file mode 100644
+index 00000000..3a2ca1dd
+--- /dev/null
++++ b/tests/insn/switch/switch-015.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="QName('urn:one','a:n')"><xsl:when test="QName('urn:two','a:n')" select="error()"/><xsl:when test="QName('urn:one','b:n')" select="42"/><xsl:otherwise select="0"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-016.xsl b/tests/insn/switch/switch-016.xsl
+new file mode 100644
+index 00000000..8d449ae8
+--- /dev/null
++++ b/tests/insn/switch/switch-016.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="'RED'" default-collation="http://www.w3.org/2005/xpath-functions/collation/html-ascii-case-insensitive"><xsl:when test="'red'" default-collation="http://www.w3.org/2005/xpath-functions/collation/codepoint" select="42"/><xsl:otherwise select="0"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-017.xsl b/tests/insn/switch/switch-017.xsl
+new file mode 100644
+index 00000000..c27a62b0
+--- /dev/null
++++ b/tests/insn/switch/switch-017.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:for-each select="(10,20)"><xsl:switch select="."><xsl:when test="if (position() eq 1) then 10 else 20"><v item="{.}" position="{position()}" size="{last()}"/></xsl:when></xsl:switch><after item="{.}" position="{position()}" size="{last()}"/></xsl:for-each></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-018.xsl b/tests/insn/switch/switch-018.xsl
+new file mode 100644
+index 00000000..41bf16ae
+--- /dev/null
++++ b/tests/insn/switch/switch-018.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="nodes" as="element()*"><n id="A"/><n id="B"/></xsl:variable><xsl:variable name="result" as="element()*"><xsl:switch select="1"><xsl:when test="1" select="reverse($nodes)"/></xsl:switch></xsl:variable><out count="{count($result)}" first="{$result[1]/@id}" same="{$result[1] is $nodes[2]}" last="{$result[2]/@id}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-019.xsl b/tests/insn/switch/switch-019.xsl
+new file mode 100644
+index 00000000..c820a87d
+--- /dev/null
++++ b/tests/insn/switch/switch-019.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<xsl:variable name="result" as="function(xs:integer) as xs:integer"><xsl:switch select="1"><xsl:when test="1" select="function($n as xs:integer) as xs:integer {$n + 1}"/></xsl:switch></xsl:variable><out value="{$result(41)}"/>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-020.xsl b/tests/insn/switch/switch-020.xsl
+new file mode 100644
+index 00000000..3f86d2fc
+--- /dev/null
++++ b/tests/insn/switch/switch-020.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="1"><xsl:when test="1" select="error()"/><xsl:otherwise select="42"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>
+diff --git a/tests/insn/switch/switch-021.xsl b/tests/insn/switch/switch-021.xsl
+new file mode 100644
+index 00000000..56e35e07
+--- /dev/null
++++ b/tests/insn/switch/switch-021.xsl
+@@ -0,0 +1,7 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<xsl:stylesheet version="4.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all">
++<xsl:output omit-xml-declaration="yes"/>
++<xsl:template name="xsl:initial-template">
++<out><xsl:switch select="2"><xsl:when test="1" select="error()"/><xsl:when test="2"><xsl:sequence select="42"/></xsl:when><xsl:otherwise select="error()"/></xsl:switch></out>
++</xsl:template>
++</xsl:stylesheet>

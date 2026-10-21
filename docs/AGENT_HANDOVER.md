@@ -1,3 +1,11 @@
+# XSLT4 switch boundary slice - 21 October 2026
+
+**XSLT4 switch boundaries - 21 October 2026:** [Twelve new native cases](XSLT40-SWITCH-BOUNDARIES.md) expose and verify a narrow selected-node identity correction in unpublished source1.23.1.32 public checks and10,246 full solution tests pass; QT3 stays31,142/0/679 and qt4 gated8,278/0/1,894. Native new cases12/0/0 and expanded switch22/0/2 pass in both profiles; original assertions/receipts and dependency skips are retained. Upstream patch prepared, not submitted. Public1.23.0 and separate Braid REQ-135 validation remain unchanged.
+
+Base `00788b46d001daa6db5baf2b12821d77f239e1a0`; new slice commit follows. What was built:12 portable native fixtures,32 public API controls, a narrow switch-select node identity fix, complete original/final receipts and test-only upstream patch at freshly fetched default 91328fbf0fed4a5d2813eb3661808ee53cb961ba. The original without-switch reduction passes; rooted switch reduction fails. Source1.23.1 remains unpublished. Next: exact-head CI/review before merge; refresh upstream default immediately before any later submission. PR394 release documentation is merged; published1.23.0 immutable tag stays9218a2b6. Braid continues independent REQ-135 acceptance. Preserve all original failure receipts, fixture refinement, pending root PR33 notes, sweep data, stashes and worktrees. README public package links and commands remain current; no product/CLI structure changed.
+
+## Earlier checkpoints
+
 # Bosak 1.23.0 published and verified - 21 October 2026
 
 **1.23.0 published and verified - 21 October 2026:** [Public delivery proof](RELEASE-1.23.0-PUBLICATION.md) records immutable `v1.23.0` at `9218a2b6`, one successful Release run (10,214 solution tests; ten uploads), ten verified signed archives and fresh nuget.org-only **153 broad /117 lifecycle** checks with exact provenance and clear audits. REQ-135 Create/Update/Delete is published after [Braid exact-merge review](REQ-135-CONSUMER-MERGE-REVIEW.md) cleared700 checks without blockers. Braid adoption and LA17–LA22 integration/native acceptance remain pending. Earlier source/preparation/review-pending checkpoints below are historical.

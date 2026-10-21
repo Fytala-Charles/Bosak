@@ -224,3 +224,8 @@ Render the new contract/matrix and accepted-status notices using unchanged Fytal
 ## Bosak1.23.0 publication verification - 2026-10-21
 
 Publication proof, release notes, canonical documents and updated delivery guides were rendered with markdown-it and the unchanged canonical Fytala CSS. HTML artifacts remain under `.guard-tmp/release1230-publication-render`. This is a render check, not a visual screenshot or PDF review. No kit-managed assets changed.
+
+
+## XSLT4 switch boundary slice - 2026-10-21
+
+The switch boundary evidence and canonical documentation were rendered using markdown-it and the unchanged Fytala CSS. HTML artifacts remain under .guard-tmp/switch-boundaries-render. This is a render check, not a visual screenshot or PDF review. Kit-managed assets are unchanged.
