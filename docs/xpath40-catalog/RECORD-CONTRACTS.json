@@ -2,7 +2,7 @@
   "date": "2026-10-22",
   "base": "7f84f7156639f6c42b82073b03cbadd69ba10864",
   "basePr": 410,
-  "basePrState": "Open with independent successful CI; not merged or modified by this slice",
+  "basePrState": "Merged independently after successful exact-head CI",
   "sourceVersion": "1.23.6",
   "publicVersion": "1.23.4",
   "requirement": "REQ-126 In Progress; D2/D3/D4 and AC03 partial",
@@ -599,10 +599,10 @@
     "Nominal static/default fields and broad host/schema/module/package behavior remain separate.",
     "Named tests/examples are applicable evidence; no exact qt4 set assignment or automatic AC03 closure."
   ],
-  "delivery": "Local independently reviewed record slice; not pushed or released; Braid dependency remains1.23.4",
+  "delivery": "Prepared for a separate PR; no release; Braid dependency remains1.23.4",
   "render": {
     "pages": 14,
-    "sha256": "89800777ef6ab29a3492086f33d65f6daf65dbd4df74a253d65230959e41c993",
+    "sha256": "7239780cd2bc1dbc51ee9f16cada5e0b9fc58430990865e9a29d2b894adf2b6d",
     "scope": "HTML with unchanged canonical Fytala CSS; no screenshot/PDF acceptance"
   },
   "inventorySha256": "8842873e688348d9688bf2d79e57bd1d12471c8ffb282dee5cc1b0b09a461efc",
@@ -611,5 +611,7 @@
     "failed": 0,
     "skipped": 0,
     "sha256": "0709ab732bc6d970b8469ec6f2c14e0749697e701b28f1909dbd3663a7549f6d"
-  }
+  },
+  "basePrMerge": "b14b27b4023336af904ec0db88f50e78480051c0",
+  "submissionBase": "b14b27b4023336af904ec0db88f50e78480051c0"
 }
