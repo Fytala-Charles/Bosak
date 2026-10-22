@@ -1,3 +1,11 @@
+# Bosak1.23.4 published and verified — 22 October 2026
+
+**1.23.4 published and verified — 22 October 2026:** [Public delivery proof](RELEASE-1.23.4-PUBLICATION.md) records immutable `v1.23.4` at `2b5ffc50`, one successful Release run (10,470 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /270 focused checks with matching provenance and clear audits. Includes the union-minimum and EQName-priority corrections; opening-bracket URI parsing remains separately limited. REQ-126 stays In Progress; completed Braid acceptance on1.23.0 is unchanged. Braid1.23.4 adoption remains a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.
+
+What was built: signed public1.23.4 at2b5ffc5076af0411dee606b010368a36d637863a; annotated taga044b1206c6d1f722a089a6eb37d20653b2ebfdd; Release run39751206130;10470 solution tests/ten uploads, ten signatures,153 broad/270 focused public consumers and exact archive/cache/output provenance verified. Documentation base4decc84b; publication record commit follows. Publication explicitly approved; no duplicate dispatch. Next: normal Braid public1.23.4 upgrade smoke; independent REQ-126 follow-up. Keep root pending upstream notes, original receipts, stashes, worktrees, sweep data and PR132 intact.
+
+## Historical preparation checkpoints
+
 # Bosak 1.23.4 release preparation — 22 October 2026
 
 **1.23.4 release preparation — 22 October 2026:** [Readiness](RELEASE-1.23.4-READINESS.md) and [notes](RELEASE-NOTES-1.23.4.md) pin proposed v1.23.4 to PR #406 merge `2b5ffc50`, including unpublished1.23.3 union-minimum and1.23.4 EQName-priority corrections. Ten unsigned packages pass153 broad +270 focused package-only checks with matching provenance. Publication has not started; public1.23.2, completed Braid acceptance and REQ-126 In Progress remain unchanged.

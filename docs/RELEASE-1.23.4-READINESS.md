@@ -4,6 +4,11 @@
   <p>22 October 2026</p>
 </div>
 
+**1.23.4 published and verified — 22 October 2026:** [Public delivery proof](RELEASE-1.23.4-PUBLICATION.md) records immutable `v1.23.4` at `2b5ffc50`, one successful Release run (10,470 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /270 focused checks with matching provenance and clear audits. Includes the union-minimum and EQName-priority corrections; opening-bracket URI parsing remains separately limited. REQ-126 stays In Progress; completed Braid acceptance on1.23.0 is unchanged. Braid1.23.4 adoption remains a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.
+
+**Historical preparation record:** The checklist below predates completed publication.
+
+
 **Prepared; publication not started.** Proposed annotated tag `v1.23.4` must point to **`2b5ffc5076af0411dee606b010368a36d637863a`**, the PR #406 implementation merge, even after preparation documents merge later. Public release remains 1.23.2. Read the [release notes](RELEASE-NOTES-1.23.4.md) and [machine-readable readiness record](RELEASE-1.23.4-READINESS.json).
 
 | Gate | Evidence |

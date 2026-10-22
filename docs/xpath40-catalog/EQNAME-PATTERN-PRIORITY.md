@@ -4,6 +4,8 @@
   <p>22 October 2026 — source 1.23.4, unpublished</p>
 </div>
 
+**Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.
+
 Source 1.23.4 ignores namespace URI punctuation when classifying an effective 4.0 name test's default priority. For `<root xmlns="urn:n|part"/>`, the pattern `Q{urn:n|part}root` now has priority 0, so an explicit priority 0.25 competitor wins. Source 1.23.3 and public 1.23.2 classified that name as a fallback pattern with priority 0.5. Stylesheets relying on this implicit priority can select a different template after upgrading; explicit priorities remain authoritative.
 
 ## Contract and implementation
