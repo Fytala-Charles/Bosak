@@ -1,0 +1,573 @@
+{
+  "date": "2026-10-21",
+  "sourceBase": "d7ccd80d901813876f6889f955c87ac760575b2c",
+  "sourceAndPublishedVersion": "1.23.2",
+  "previousPR": {
+    "number": 403,
+    "head": "7df2ce1f1343ccc919125c094bc0e182fce4951b",
+    "ci": 39637016178,
+    "merge": "d7ccd80d901813876f6889f955c87ac760575b2c",
+    "review": "No blocking semantic findings; original snapshot trailing blank preserved with its original content/hash"
+  },
+  "specification": {
+    "revision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+    "url": "https://raw.githubusercontent.com/qt4cg/qtspecs/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xslt-40/src/xslt.xml",
+    "sha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "sections": [
+      "pattern-syntax",
+      "node-patterns",
+      "xnode-pattern-matching-process",
+      "default-priority-for-xnode-patterns"
+    ],
+    "role": "Current review pin, not recovered historical adoption"
+  },
+  "deliveryRevisions": {
+    "leftAssociation": "17bf95aa42d9d7ebce255110b6a70e7a8a008d91",
+    "nodeUnion": "62fa90dd495b1cd8fc7414f6fec7aebf1d733e26",
+    "setPriority": "b161cdd0f9b2d5a10f47d1180f39f8ffd6ad0aba",
+    "axisFocus": "8a80f2ee4d375a8e8f5ee9037b261cc4970b022c",
+    "parenthesizedItems": "c2290f6798036dda295a7d2dd5f7a8d8471405a9"
+  },
+  "entryCount": 71,
+  "featureChecks": 2743,
+  "chapterChecks": 24,
+  "totalChecks": 2767,
+  "workedChapters": 4,
+  "assignedFunctionNames": 117,
+  "newChecks": 30,
+  "newCases": [
+    {
+      "id": "manual-patterns-report-3-normal",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/report-3.xsl",
+      "input": "manual-patterns/normal.xml",
+      "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+    },
+    {
+      "id": "manual-patterns-report-3-empty",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/report-3.xsl",
+      "input": "manual-patterns/empty.xml",
+      "expected": "articles=0"
+    },
+    {
+      "id": "manual-patterns-report-3-reordered",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/report-3.xsl",
+      "input": "manual-patterns/reordered.xml",
+      "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+    },
+    {
+      "id": "manual-patterns-report-4-normal",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/report-4.xsl",
+      "input": "manual-patterns/normal.xml",
+      "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+    },
+    {
+      "id": "manual-patterns-report-4-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/report-4.xsl",
+      "input": "manual-patterns/empty.xml",
+      "expected": "articles=0"
+    },
+    {
+      "id": "manual-patterns-report-4-reordered",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/report-4.xsl",
+      "input": "manual-patterns/reordered.xml",
+      "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+    },
+    {
+      "id": "manual-patterns-set-left40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-left40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-set-grouped40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-grouped40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-set-explicit-left40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-explicit-left40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-set-earlier30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/set-earlier30.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern",
+      "evidenceClass": "compatibility-observation",
+      "reviewStatus": "bounded-earlier-version-observation"
+    },
+    {
+      "id": "manual-patterns-union-max40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/union-max40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern",
+      "evidenceClass": "implementation-observation",
+      "reviewStatus": "observed-current-draft-gap",
+      "normative40Expected": "competitor",
+      "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+    },
+    {
+      "id": "manual-patterns-union-word40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/union-word40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern",
+      "evidenceClass": "implementation-observation",
+      "reviewStatus": "observed-current-draft-gap",
+      "normative40Expected": "competitor",
+      "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+    },
+    {
+      "id": "manual-patterns-union-earlier30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/union-earlier30.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor",
+      "evidenceClass": "compatibility-observation",
+      "reviewStatus": "bounded-earlier-version-observation"
+    },
+    {
+      "id": "manual-patterns-union-explicit40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/union-explicit40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-next40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/next40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "UT"
+    },
+    {
+      "id": "manual-patterns-next30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/next30.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "UUT",
+      "evidenceClass": "compatibility-observation",
+      "reviewStatus": "bounded-earlier-version-observation"
+    },
+    {
+      "id": "manual-patterns-next-local40",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/next-local40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "UT"
+    },
+    {
+      "id": "manual-patterns-next-local30",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/next-local30.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "UUT",
+      "evidenceClass": "compatibility-observation",
+      "reviewStatus": "bounded-earlier-version-observation"
+    },
+    {
+      "id": "manual-patterns-set-priority-high",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-priority-high.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-set-priority-low",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-priority-low.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-set-priority-first",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-priority-first.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-set-priority-predicate",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/set-priority-predicate.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-axis40",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/axis40.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-axis30",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "manual-patterns/axis30.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor",
+      "evidenceClass": "compatibility-observation",
+      "reviewStatus": "bounded-earlier-version-observation"
+    },
+    {
+      "id": "manual-patterns-parenthesized-atomic",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/parenthesized-atomic.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "competitor"
+    },
+    {
+      "id": "manual-patterns-direct-atomic",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/direct-atomic.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-parenthesized-node",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/parenthesized-node.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-quoted-operators",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/quoted-operators.xsl",
+      "input": "manual-patterns/probe.xml",
+      "expected": "pattern"
+    },
+    {
+      "id": "manual-patterns-missing-operand",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/missing-operand.xsl",
+      "input": "manual-patterns/probe.xml",
+      "error": "XTSE0340"
+    },
+    {
+      "id": "manual-patterns-invalid-item-set",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "manual-patterns/invalid-item-set.xsl",
+      "input": "manual-patterns/probe.xml",
+      "error": "XTSE0340"
+    }
+  ],
+  "originalManifestRowsUnchanged": 2713,
+  "firstFocused": {
+    "passed": 30,
+    "failed": 0,
+    "skipped": 0
+  },
+  "finalAnnotatedFocused": {
+    "passed": 30,
+    "failed": 0,
+    "skipped": 0
+  },
+  "observedGap": {
+    "family": "4.0 node-union default priority",
+    "currentSource": "maximum alternative priority",
+    "pinnedDraft": "minimum alternative priority",
+    "currentResult": "pattern",
+    "normative40Expected": "competitor",
+    "caseIds": [
+      "manual-patterns-union-max40",
+      "manual-patterns-union-word40"
+    ],
+    "expectedResultsChanged": false,
+    "engineTestsChanged": false,
+    "historicalAdoptionRecovered": false,
+    "record": "UNION-PRIORITY-ENGINE-FINDING.md"
+  },
+  "fullSolution": {
+    "passed": 10438,
+    "failed": 0,
+    "skipped": 0,
+    "xsltPassed": 7470,
+    "projects": [
+      {
+        "file": "req126-compound_net10.0_20261021224922.trx",
+        "passed": 66,
+        "sha256": "4bd1f0f5f7257c96c88310249ad5dd44268c0ee66fe7ff83711ffd13e840ab42"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224923.trx",
+        "passed": 202,
+        "sha256": "6c9a43ecaa41b9db38eb6f8f23bb09ff432856c97d3da0857dba2f6c66b21bd0"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224924.trx",
+        "passed": 411,
+        "sha256": "0c3157a6a45afee5972eadd36e512cffbfeaf83bd650c39e83294327719a2335"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224925.trx",
+        "passed": 269,
+        "sha256": "7a2b6dd461d7bcdb22eaf996462181245ab47c4008305287d6f8ad8bcfcb8bac"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224926.trx",
+        "passed": 132,
+        "sha256": "8d5b2915fb6befa670d7cfd97ba2c3315be7d8935260ee579c671dda84383694"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224927.trx",
+        "passed": 303,
+        "sha256": "1d7c3da23c717c6126514b8a993c4ee0dee0a25adc2a340778b31fa21aa42faf"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224928.trx",
+        "passed": 1385,
+        "sha256": "ca114e0da796bb2c75b22cb019b5a4496d189c5a268e9e3b2626c09a07db6843"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224929.trx",
+        "passed": 47,
+        "sha256": "9b37c24f3aa39ba97fc438d540b7df4c550e2352775d86e40488368c6cbee1ed"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021224930.trx",
+        "passed": 153,
+        "sha256": "e3ec24b115b58cfe80c84f79d8496d203e1a807c9da6f08c9366a417dd4302b8"
+      },
+      {
+        "file": "req126-compound_net10.0_20261021225249.trx",
+        "passed": 7470,
+        "sha256": "7391168e4650a9417fb670d377e216a2c7b872ffb5084b041d1636fe0b6cb4b8"
+      }
+    ]
+  },
+  "engineChanges": false,
+  "harnessChanges": false,
+  "versionChanges": false,
+  "gateMembershipChanges": false,
+  "manualEngineGatesRerun": false,
+  "gateRationale": "Documentation/examples only; no engine/compiler/parser/runtime/harness source change",
+  "upstreamSubmissionPerformed": false,
+  "req126Status": "In Progress",
+  "scope": "Bounded compound/set/union grammar, priorities and identity; current gap observations are not draft conformance",
+  "remaining": [
+    "Narrow union minimum-priority correction review",
+    "Complete D3 coverage matrix",
+    "D2 full defaults/options",
+    "D4 historical adoption/lifecycle",
+    "AC-03 applicable-gate acceptance"
+  ],
+  "engineAndHarnessTreeMatchesPublishedTag": "v1.23.2",
+  "executionReceipts": [
+    {
+      "path": "focused-original\\focused-original.trx",
+      "sha256": "e950760c36c299ba695e401ec6b2ecada08789dd8bd476c6a552b26ffbe75b31"
+    },
+    {
+      "path": "focused-verified\\focused-verified.trx",
+      "sha256": "5d17a4f4779fea0c7567806d51ba9f3c52041d1f3ef11327517af626f3bb50df"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224922.trx",
+      "sha256": "4bd1f0f5f7257c96c88310249ad5dd44268c0ee66fe7ff83711ffd13e840ab42"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224923.trx",
+      "sha256": "6c9a43ecaa41b9db38eb6f8f23bb09ff432856c97d3da0857dba2f6c66b21bd0"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224924.trx",
+      "sha256": "0c3157a6a45afee5972eadd36e512cffbfeaf83bd650c39e83294327719a2335"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224925.trx",
+      "sha256": "7a2b6dd461d7bcdb22eaf996462181245ab47c4008305287d6f8ad8bcfcb8bac"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224926.trx",
+      "sha256": "8d5b2915fb6befa670d7cfd97ba2c3315be7d8935260ee579c671dda84383694"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224927.trx",
+      "sha256": "1d7c3da23c717c6126514b8a993c4ee0dee0a25adc2a340778b31fa21aa42faf"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224928.trx",
+      "sha256": "ca114e0da796bb2c75b22cb019b5a4496d189c5a268e9e3b2626c09a07db6843"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224929.trx",
+      "sha256": "9b37c24f3aa39ba97fc438d540b7df4c550e2352775d86e40488368c6cbee1ed"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021224930.trx",
+      "sha256": "e3ec24b115b58cfe80c84f79d8496d203e1a807c9da6f08c9366a417dd4302b8"
+    },
+    {
+      "path": "full-results\\req126-compound_net10.0_20261021225249.trx",
+      "sha256": "7391168e4650a9417fb670d377e216a2c7b872ffb5084b041d1636fe0b6cb4b8"
+    }
+  ],
+  "fixtureHashes": [
+    {
+      "path": "examples\\manual-patterns\\axis30.xsl",
+      "sha256": "1fce8e5840b17e5b465ca48548ca9503d50ac6edc9bebd66ef4ba0d745396e81"
+    },
+    {
+      "path": "examples\\manual-patterns\\axis40.xsl",
+      "sha256": "6957d97da174eaf885e1f9faffd3d03d26762ef96ada786660e000fed77526ea"
+    },
+    {
+      "path": "examples\\manual-patterns\\direct-atomic.xsl",
+      "sha256": "09db53cc7cc6141558e01bdd7a555271de352bc96131167f51d8a575c9316434"
+    },
+    {
+      "path": "examples\\manual-patterns\\empty.xml",
+      "sha256": "bc56ff8a2092afe4e5dd3f69fe19a07d18a6fcd63d8a27005086bc0c66094a69"
+    },
+    {
+      "path": "examples\\manual-patterns\\invalid-item-set.xsl",
+      "sha256": "3c96c3bdbafb2b07173ff1363010070522d482e864d0312d237ce2347d3808de"
+    },
+    {
+      "path": "examples\\manual-patterns\\missing-operand.xsl",
+      "sha256": "09381534cb62fc81aa6fcad30c74ebab7a172168391f5425628a7d659aeb56a6"
+    },
+    {
+      "path": "examples\\manual-patterns\\next-local30.xsl",
+      "sha256": "dad0ae0e15df6b7d8ee038d331a93477e4e10963321a2a22ea11c13e0198d4b7"
+    },
+    {
+      "path": "examples\\manual-patterns\\next-local40.xsl",
+      "sha256": "feb47394de0f1ce5182485806b73da595ac5b19662638e91d875f5eb49a14beb"
+    },
+    {
+      "path": "examples\\manual-patterns\\next30.xsl",
+      "sha256": "1bd27743a537cb3bb89e3d865c37bbe0a6d337153319c743bf07125d370fb7e8"
+    },
+    {
+      "path": "examples\\manual-patterns\\next40.xsl",
+      "sha256": "b02ff363cb0d0cd4da38ed7f9e1ba81f59ce3a2d2ce562bac63106acc2895dcd"
+    },
+    {
+      "path": "examples\\manual-patterns\\normal.xml",
+      "sha256": "0f06a6ce94f5f1a10ed14cbe8a5c89638c56eea133d48ce6358861a7cf81309d"
+    },
+    {
+      "path": "examples\\manual-patterns\\parenthesized-atomic.xsl",
+      "sha256": "4da8e878a4fd5848a300223aca5942e61fb5060f9bd5db8f93c1f97746e72413"
+    },
+    {
+      "path": "examples\\manual-patterns\\parenthesized-node.xsl",
+      "sha256": "e7defe56dd502a54704ea45e159efb41c08d032614f558298bbf4dc4cc9dc9e4"
+    },
+    {
+      "path": "examples\\manual-patterns\\probe.xml",
+      "sha256": "5c8ea17eba2ac9369aa7b728c0dda539c1694092619fe02068aa6d7d0217cb84"
+    },
+    {
+      "path": "examples\\manual-patterns\\quoted-operators.xsl",
+      "sha256": "a37aa4192707e9f19275c1ea7fb80c96f33141e26fe56632c539f3a08b7d78a7"
+    },
+    {
+      "path": "examples\\manual-patterns\\reordered.xml",
+      "sha256": "6242e6e7f0b5a151e9435905720b69715dc4c7b3ae7fb988d81613b9ab8df8a9"
+    },
+    {
+      "path": "examples\\manual-patterns\\report-3.xsl",
+      "sha256": "424bb871519bbc3aeb76793f40d289ceb7a8dcc9d70b454d1f707020f96afea0"
+    },
+    {
+      "path": "examples\\manual-patterns\\report-4.xsl",
+      "sha256": "cd98c61fc9493d308ef8e1e03fa4bee84c6921ba0291f922a49dd8020dad1cd4"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-earlier30.xsl",
+      "sha256": "5581a6109135a6caaa4f74505770e1cba1307eed173ce3fce7ded1c0582c841c"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-explicit-left40.xsl",
+      "sha256": "46f37ed1f50b1cfa1149ce3774edf938ecfdec8682a0c164c5f6a02892223408"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-grouped40.xsl",
+      "sha256": "f931435e863d5ab3b806b46718d04b9051dbdecce01d55a7d454e37efdbaecff"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-left40.xsl",
+      "sha256": "e842e59c981aee621beb426347842454f5b02b29abddec8693fe187db30e45f2"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-priority-first.xsl",
+      "sha256": "1af84b843c6e8182dd8e7c84857278279ded2de5001a3be066659440efda5b90"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-priority-high.xsl",
+      "sha256": "36d2264c68f7487743c861e94d6f1df2c2bccfa70401424478942d9aa6e66726"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-priority-low.xsl",
+      "sha256": "ca3c30d94c2c640e489b3c3744428c1f89d727b484d1a5320a20ce16f6192cd3"
+    },
+    {
+      "path": "examples\\manual-patterns\\set-priority-predicate.xsl",
+      "sha256": "84a71021aa0b4200127e72a886559785ec08ff65905ae0a5a88a77da337652e3"
+    },
+    {
+      "path": "examples\\manual-patterns\\union-earlier30.xsl",
+      "sha256": "cef3f3ced0fa6d00938d295fffc5c2eb8e65361a3ebce338f29c5747dbd1cbd1"
+    },
+    {
+      "path": "examples\\manual-patterns\\union-explicit40.xsl",
+      "sha256": "56075971ed0effff5e570368698d66d8263d70bdf33dc12ecdf44372e1a0219c"
+    },
+    {
+      "path": "examples\\manual-patterns\\union-max40.xsl",
+      "sha256": "21c4836b7eefc6b5f0fa38170101fca2e82d21ef40b8de2005af3ded144eba06"
+    },
+    {
+      "path": "examples\\manual-patterns\\union-word40.xsl",
+      "sha256": "ffbad150db563b527134246c2255f328fc67adfcecf1e09313539810b9062e0e"
+    }
+  ],
+  "originalManifestSha256": "ff56cde6ae19cab28b0600bd05625c53abce5ed940049bda6ad045c606dc88df",
+  "firstExecutionManifestSha256": "d0c72485da107a2ef6359600dd1fc588f8c1739b1db84605ea5f52b398fb58cc"
+}

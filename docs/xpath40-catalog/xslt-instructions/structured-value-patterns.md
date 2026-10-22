@@ -4,6 +4,9 @@
   <p>21 October 2026</p>
 </div>
 
+**Compound-pattern follow-up supplied — 21 October 2026:** [New bounded mapping](../COMPOUND-PATTERN-GRAMMAR.md) now covers set/union grouping, priority and rule identity, with a separately labelled current-draft union-priority gap. Original counts/queues below describe their earlier checkpoint.
+
+
 ## 1. Name and Classification
 
 **Implemented bounded XSLT4.0 surface in public1.23.2.** This entry maps tested type, record, map-entry and array-member patterns; it is not the complete pattern grammar. [Pinned source/deliveries](../TYPE-PATTERN-GRAMMAR.md).

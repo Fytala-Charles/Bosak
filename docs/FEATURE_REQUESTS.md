@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**REQ-126 compound-pattern slice — 21 October 2026:** [Grammar review](xpath40-catalog/COMPOUND-PATTERN-GRAMMAR.md) adds30 checks and six complete manual reports. Catalog71 entries /2,767 checks. Current union maximum-priority behavior differs from pinned draft minimum; two observation rows and a [separate engine finding](xpath40-catalog/UNION-PRIORITY-ENGINE-FINDING.md) keep that gap explicit. Practical examples use explicit priorities. REQ-126 stays In Progress; no engine/API/harness/version/gate/release change; public/source1.23.2 unchanged.
+
 **REQ-126 type/pattern slice — 21 October 2026:** [Grammar inventory](xpath40-catalog/TYPE-PATTERN-GRAMMAR.md) adds40 public manifest checks, six complete intake reports and a structured-value pattern entry. Catalog70 entries /2,737 checks; alias, structural annotation and nominal identity are distinct. Current record/type pages replace stale blanket deferral wording; historical snapshots/logs remain linked separately. REQ-126 stays In Progress; D2/D3/D4 and AC-03 partial. Published/source1.23.2 unchanged; no engine/API/harness/version/gate/release change.
 
 **REQ-126 grammar slice — 21 October 2026:** [Switch/array/select review](xpath40-catalog/SWITCH-ARRAY-SELECT-GRAMMAR.md) maps implemented syntax, result types and effective-version/host boundaries;37 new public manifest checks include six complete dispatch reports. Catalog69 entries /2,697 checks; REQ-126 stays In Progress, D2/D3/D4 and AC-03 partial. Public/source1.23.2 and existing Braid acceptance remain unchanged. No engine/API/harness/version/gate change or release. Old PR132 and pending upstream notes remain separate.

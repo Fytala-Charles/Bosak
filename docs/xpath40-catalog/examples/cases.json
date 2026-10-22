@@ -19985,5 +19985,263 @@
     "file": "intake-types/map-pattern-version30.xsl",
     "input": "intake-types/normal.xml",
     "error": "XTSE0340"
+  },
+  {
+    "id": "manual-patterns-report-3-normal",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/report-3.xsl",
+    "input": "manual-patterns/normal.xml",
+    "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+  },
+  {
+    "id": "manual-patterns-report-3-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/report-3.xsl",
+    "input": "manual-patterns/empty.xml",
+    "expected": "articles=0"
+  },
+  {
+    "id": "manual-patterns-report-3-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/report-3.xsl",
+    "input": "manual-patterns/reordered.xml",
+    "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+  },
+  {
+    "id": "manual-patterns-report-4-normal",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/report-4.xsl",
+    "input": "manual-patterns/normal.xml",
+    "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+  },
+  {
+    "id": "manual-patterns-report-4-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/report-4.xsl",
+    "input": "manual-patterns/empty.xml",
+    "expected": "articles=0"
+  },
+  {
+    "id": "manual-patterns-report-4-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/report-4.xsl",
+    "input": "manual-patterns/reordered.xml",
+    "expected": "articles=4|A-100:publish|A-200:hold|A-300:hold|A-400:review"
+  },
+  {
+    "id": "manual-patterns-set-left40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-left40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-set-grouped40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-grouped40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-set-explicit-left40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-explicit-left40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-set-earlier30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/set-earlier30.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern",
+    "evidenceClass": "compatibility-observation",
+    "reviewStatus": "bounded-earlier-version-observation"
+  },
+  {
+    "id": "manual-patterns-union-max40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/union-max40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern",
+    "evidenceClass": "implementation-observation",
+    "reviewStatus": "observed-current-draft-gap",
+    "normative40Expected": "competitor",
+    "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+  },
+  {
+    "id": "manual-patterns-union-word40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/union-word40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern",
+    "evidenceClass": "implementation-observation",
+    "reviewStatus": "observed-current-draft-gap",
+    "normative40Expected": "competitor",
+    "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+  },
+  {
+    "id": "manual-patterns-union-earlier30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/union-earlier30.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor",
+    "evidenceClass": "compatibility-observation",
+    "reviewStatus": "bounded-earlier-version-observation"
+  },
+  {
+    "id": "manual-patterns-union-explicit40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/union-explicit40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-next40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/next40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "UT"
+  },
+  {
+    "id": "manual-patterns-next30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/next30.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "UUT",
+    "evidenceClass": "compatibility-observation",
+    "reviewStatus": "bounded-earlier-version-observation"
+  },
+  {
+    "id": "manual-patterns-next-local40",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/next-local40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "UT"
+  },
+  {
+    "id": "manual-patterns-next-local30",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/next-local30.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "UUT",
+    "evidenceClass": "compatibility-observation",
+    "reviewStatus": "bounded-earlier-version-observation"
+  },
+  {
+    "id": "manual-patterns-set-priority-high",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-priority-high.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-set-priority-low",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-priority-low.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-set-priority-first",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-priority-first.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-set-priority-predicate",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/set-priority-predicate.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-axis40",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/axis40.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-axis30",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "manual-patterns/axis30.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor",
+    "evidenceClass": "compatibility-observation",
+    "reviewStatus": "bounded-earlier-version-observation"
+  },
+  {
+    "id": "manual-patterns-parenthesized-atomic",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/parenthesized-atomic.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "competitor"
+  },
+  {
+    "id": "manual-patterns-direct-atomic",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/direct-atomic.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-parenthesized-node",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/parenthesized-node.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-quoted-operators",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/quoted-operators.xsl",
+    "input": "manual-patterns/probe.xml",
+    "expected": "pattern"
+  },
+  {
+    "id": "manual-patterns-missing-operand",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/missing-operand.xsl",
+    "input": "manual-patterns/probe.xml",
+    "error": "XTSE0340"
+  },
+  {
+    "id": "manual-patterns-invalid-item-set",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "manual-patterns/invalid-item-set.xsl",
+    "input": "manual-patterns/probe.xml",
+    "error": "XTSE0340"
   }
 ]
