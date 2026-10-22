@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-10-2026     | Verify minimum 4.0 union priorities and retain 3.0 dispatch controls.                     |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -27,7 +28,7 @@ public class Xslt40UnionPatternTests
         new Api.XsltCompiler().Compile("<xsl:stylesheet version='" + version + "' xmlns:xsl='http://www.w3.org/1999/XSL/Transform' xmlns:n='urn:n' exclude-result-prefixes='#all' " + extra + ">" + body + "</xsl:stylesheet>")
             .TransformToString(new XDocumentNode(XDocument.Parse(source)))).Value;
 
-    /// <summary>Raises a less-specific matching alternative to the union's maximum priority.</summary>
+    /// <summary>Uses the minimum alternative priority, including alternatives that do not match.</summary>
     /// <param name="pattern">The union match pattern.</param>
     [Theory]
     [InlineData("root|missing/child")]
@@ -39,11 +40,39 @@ public class Xslt40UnionPatternTests
     [InlineData("root|missing[true()]")]
     [InlineData("element(*)|element(root)")]
     [InlineData("element(*:root)|element(missing)")]
-    public void MaximumAlternativePriority(string pattern)
+    public void MinimumAlternativePriority(string pattern)
     {
         string competitor = pattern.Contains("missing/") || pattern.Contains("[true()]") ? "0.25" : "-0.1";
-        Assert.Equal("union", Run("<xsl:template match='/'><out><xsl:apply-templates select='/*'/></out></xsl:template>" +
+        Assert.Equal("competitor", Run("<xsl:template match='/'><out><xsl:apply-templates select='/*'/></out></xsl:template>" +
             "<xsl:template match='" + pattern + "'>union</xsl:template><xsl:template match='*' priority='" + competitor + "'>competitor</xsl:template>"));
+    }
+
+    /// <summary>Applies minimum priority only in the effective 4.0 template profile.</summary>
+    /// <param name="rootVersion">The stylesheet version.</param>
+    /// <param name="templateVersion">The template version.</param>
+    /// <param name="expected">The selected template output.</param>
+    [Theory]
+    [InlineData("3.0", "3.0", "union")]
+    [InlineData("4.0", "4.0", "competitor")]
+    [InlineData("3.0", "4.0", "competitor")]
+    [InlineData("4.0", "3.0", "union")]
+    public void UnmatchedLowerPriorityAlternative(string rootVersion, string templateVersion, string expected)
+    {
+        Assert.Equal(expected, Run("<xsl:template match='/'><out><xsl:apply-templates select='/*'/></out></xsl:template>" +
+            "<xsl:template version='" + templateVersion + "' match='root[true()]|missing'>union</xsl:template>" +
+            "<xsl:template match='*' priority='0.25'>competitor</xsl:template>", rootVersion));
+    }
+
+    /// <summary>Preserves equal alternative priorities in both union spellings.</summary>
+    /// <param name="pattern">The union pattern.</param>
+    [Theory]
+    [InlineData("root|missing")]
+    [InlineData("root union missing")]
+    public void EqualAlternativePriorities(string pattern)
+    {
+        Assert.Equal("union", Run("<xsl:template match='/'><out><xsl:apply-templates select='/*'/></out></xsl:template>" +
+            "<xsl:template match='" + pattern + "'>union</xsl:template>" +
+            "<xsl:template match='*' priority='-0.1'>competitor</xsl:template>"));
     }
 
     /// <summary>Invokes a union rule once even when multiple alternatives match.</summary>

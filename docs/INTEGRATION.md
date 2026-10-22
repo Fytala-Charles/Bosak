@@ -5,6 +5,8 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](xpath40-catalog/UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
+
 **REQ-126 compound-pattern slice — 21 October 2026:** [Grammar review](xpath40-catalog/COMPOUND-PATTERN-GRAMMAR.md) adds30 checks and six complete manual reports. Catalog71 entries /2,767 checks. Current union maximum-priority behavior differs from pinned draft minimum; two observation rows and a [separate engine finding](xpath40-catalog/UNION-PRIORITY-ENGINE-FINDING.md) keep that gap explicit. Practical examples use explicit priorities. REQ-126 stays In Progress; no engine/API/harness/version/gate/release change; public/source1.23.2 unchanged.
 
 **REQ-126 type/pattern slice — 21 October 2026:** [Grammar inventory](xpath40-catalog/TYPE-PATTERN-GRAMMAR.md) adds40 public manifest checks, six complete intake reports and a structured-value pattern entry. Catalog70 entries /2,737 checks; alias, structural annotation and nominal identity are distinct. Current record/type pages replace stale blanket deferral wording; historical snapshots/logs remain linked separately. REQ-126 stays In Progress; D2/D3/D4 and AC-03 partial. Published/source1.23.2 unchanged; no engine/API/harness/version/gate/release change.

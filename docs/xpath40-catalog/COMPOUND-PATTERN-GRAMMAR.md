@@ -4,7 +4,9 @@
   <p>21 October 2026</p>
 </div>
 
-This REQ-126 D3 slice maps existing compound-pattern parsing, membership, grouping, default priority and rule identity. **Public/source1.23.2 remains unchanged.** No engine, API, C#, harness, profile-default, gate or release change is included.
+**22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
+
+This REQ-126 D3 slice maps existing compound-pattern parsing, membership, grouping, default priority and rule identity. The original 21 October documentation delivery left source/public1.23.2 unchanged; the separately validated 22 October source correction above supersedes its priority observations.
 
 Reviewed PR #403 merged as `d7ccd80d901813876f6889f955c87ac760575b2c` after exact-head CI39637016178 passed10,408 solution +84 language-server tests. Its type/pattern inventory remains unchanged. New totals: **71 entries;2,743 feature +24 chapter checks =2,767**; four worked chapters and117 assigned function names unchanged. All2,713 prior manifest rows are retained;30 rows are appended.
 
@@ -16,7 +18,7 @@ The [manual publication example](examples/manual-patterns/README.md) sorts uniqu
 
 Fresh qtspecs HEAD is `3230573afe246f1b502ed2e22d187ce9928155b1`; [immutable XSLT source](https://raw.githubusercontent.com/qt4cg/qtspecs/3230573afe246f1b502ed2e22d187ce9928155b1/specifications/xslt-40/src/xslt.xml) SHA-256 `6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8`. Review sections: pattern-syntax, node-patterns, xnode-pattern-matching-process and default-priority-for-xnode-patterns. This is a current review pin, not recovered historical adoption.
 
-**Important current-draft gap:** implemented4.0 node unions aggregate default alternative priorities with **maximum**, while the pinned draft says **minimum**. Two new checks deliberately record current observations and separate normative expected results. They do not certify draft support. [Exact reproducer and proposed correction](UNION-PRIORITY-ENGINE-FINDING.md). No engine fix is authorized or performed by this documentation delivery.
+**Priority correction:** public1.23.2 aggregates with maximum; source1.23.3 uses the pinned minimum. The two reproducers now expect `competitor`, retaining their earlier `pattern` observations as metadata. [Original finding](UNION-PRIORITY-ENGINE-FINDING.md) and [correction](UNION-MINIMUM-PRIORITY.md).
 
 ## Descriptive grammar and dispatch mapping
 
@@ -25,7 +27,7 @@ These shapes map the reviewed contexts; they are not an exhaustive normative gra
 | Boundary | Implemented observation / reviewed expectation | New manifest IDs after `manual-patterns-` |
 |---|---|---|
 | Mixed `except` / `intersect` |4.0 evaluates the tested chain left to right; parentheses change membership. The3.0 result is recorded separately as a compatibility observation. | set-left40, set-grouped40, set-explicit-left40, set-earlier30 |
-| Node union `\|` / `union` | Both spellings match alternatives. Current4.0 default priority is maximum; draft minimum is not implemented in the two reproductions. | union-max40, union-word40; both explicitly labelled observed gaps |
+| Node union `\|` / `union` | Both spellings match alternatives. Source1.23.3 uses the pinned minimum default priority; public1.23.2 uses maximum. | union-max40, union-word40; both corrected in source1.23.3 with prior observations retained |
 | Explicit priority | A declared priority overrides aggregation and keeps application policy visible. | union-explicit40 and both full reports |
 |3.0 branch-specific ranking | A matching lower-ranked alternative loses to the explicit competitor in the tested3.0 fixture. This is a bounded observation, not a universal3.0 conformance certificate. | union-earlier30 |
 |4.0 union rule identity | Matching duplicate alternatives do not cause a second visit by next-match;3.0 retains the tested repeated branch visits. Template-local effective versions govern the observed behavior under Legacy. | next40, next30, next-local40, next-local30 |
@@ -42,7 +44,7 @@ These shapes map the reviewed contexts; they are not an exhaustive normative gra
 | Pattern validation, lexical splitting and matching | [PatternCompiler](../../src/Bosak.Xslt/Patterns/PatternCompiler.cs) |
 | Default priorities, union-rule representation | [TemplateRule](../../src/Bosak.Xslt/Stylesheet/TemplateRule.cs); ComputeDefaultPriority currently uses branches.Max for node unions |
 | Mixed set membership | [Xslt40SetPatternAssociativityTests](../../tests/Bosak.Xslt.Tests/Xslt40SetPatternAssociativityTests.cs): LeftAssociativeMembership, EarlierProfile, MissingOperand |
-| Union priority and identity | [Xslt40UnionPatternTests](../../tests/Bosak.Xslt.Tests/Xslt40UnionPatternTests.cs): MaximumAlternativePriority (current implementation), NextMatchVisitsSingleRule, ExplicitPriority, TemplateProfileOverride |
+| Union priority and identity | [Xslt40UnionPatternTests](../../tests/Bosak.Xslt.Tests/Xslt40UnionPatternTests.cs): MinimumAlternativePriority (source1.23.3), NextMatchVisitsSingleRule, ExplicitPriority, TemplateProfileOverride |
 | Set/predicate ranking | [Xslt40SetPatternPriorityTests](../../tests/Bosak.Xslt.Tests/Xslt40SetPatternPriorityTests.cs): FirstOperandPriority, PredicatePriority, OperatorTextBoundaries |
 | Candidate axis focus | [Xslt40SetPatternAxisFocusTests](../../tests/Bosak.Xslt.Tests/Xslt40SetPatternAxisFocusTests.cs): AxisMembership, MixedPaths, AllPathPositions |
 | Grouping and item boundary | [Xslt40ParenthesizedItemPatternTests](../../tests/Bosak.Xslt.Tests/Xslt40ParenthesizedItemPatternTests.cs): MatchesNodes, NonNodesDoNotMatch; [delimiter tests](../../tests/Bosak.Xslt.Tests/XsltPatternDelimiterTests.cs) |

@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](../UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
+
 ## 1. Name and Classification
 
 **Implemented bounded XSLT4.0 compound contexts, with an explicit current-draft union-priority gap.** Public/source1.23.2 unchanged. [Pinned review](../COMPOUND-PATTERN-GRAMMAR.md) distinguishes observed behavior from normative expectation.
@@ -30,7 +32,7 @@ Pattern operators do not inherit every XPath-expression or C#/SQL precedence int
 
 ## 7. Applicability
 
-Use supporting XSLT contexts with explicit business priorities. Avoid relying on implicit union priority while the recorded minimum-versus-maximum draft discrepancy remains.
+Use supporting XSLT contexts with explicit business priorities. Source1.23.3 corrects implicit union priority to the pinned minimum; public1.23.2 retains the recorded discrepancy.
 
 ## 8. Structure
 
@@ -46,7 +48,7 @@ Combine rule membership with explicit priority, modes, sorted apply-templates an
 
 ## 11. Consequences
 
-Grouping can change membership;4.0 node unions have a single rule identity in the tested chains. Current maximum alternative priority diverges from the pinned minimum rule. An explicit priority is an application policy, not a conformance fix for the engine.
+Grouping can change membership;4.0 node unions have a single rule identity in the tested chains. Source1.23.3 uses the pinned minimum alternative priority; public1.23.2 retains maximum. An explicit priority is an application policy, not a conformance fix for the engine.
 
 ## 12. Implementation
 
@@ -54,7 +56,7 @@ New manifest cases use default Legacy host with root/local effective3.0/4.0 vers
 
 ## 13. Sample Code
 
-Run normal, empty and reordered [manual reports](../examples/manual-patterns/README.md). Compare [set-left40](../examples/manual-patterns/set-left40.xsl) and [set-grouped40](../examples/manual-patterns/set-grouped40.xsl). The [union reproducer](../examples/manual-patterns/union-max40.xsl) is explicitly an observed gap; [explicit priority](../examples/manual-patterns/union-explicit40.xsl) is the safe supported control.
+Run normal, empty and reordered [manual reports](../examples/manual-patterns/README.md). Compare [set-left40](../examples/manual-patterns/set-left40.xsl) and [set-grouped40](../examples/manual-patterns/set-grouped40.xsl). The [union reproducer](../examples/manual-patterns/union-max40.xsl) verifies the source1.23.3 minimum-priority correction; [explicit priority](../examples/manual-patterns/union-explicit40.xsl) is the safe supported control.
 
 ## 14. Performance Notes
 
@@ -62,7 +64,7 @@ Matching costs depend on operands, candidate count, paths and predicates. Priori
 
 ## 15. Known Uses
 
-New manual-patterns cases; existing Xslt40SetPatternAssociativityTests, Xslt40UnionPatternTests, Xslt40SetPatternPriorityTests and Xslt40ParenthesizedItemPatternTests are linked in the [review](../COMPOUND-PATTERN-GRAMMAR.md). Current-implementation union tests do not certify draft minimum priority. No new qt4tests GatedSets member; AC-03 remains partial.
+New manual-patterns cases; existing Xslt40SetPatternAssociativityTests, Xslt40UnionPatternTests, Xslt40SetPatternPriorityTests and Xslt40ParenthesizedItemPatternTests are linked in the [review](../COMPOUND-PATTERN-GRAMMAR.md). The bounded union regressions verify the pinned minimum rule in source1.23.3; the separate EQName-priority limitation remains documented. No new qt4tests GatedSets member; AC-03 remains partial.
 
 ## 16. Related Features
 

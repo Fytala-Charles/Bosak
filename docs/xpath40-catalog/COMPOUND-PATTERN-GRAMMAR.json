@@ -124,11 +124,13 @@
       "mode": "xslt40",
       "file": "manual-patterns/union-max40.xsl",
       "input": "manual-patterns/probe.xml",
-      "expected": "pattern",
-      "evidenceClass": "implementation-observation",
-      "reviewStatus": "observed-current-draft-gap",
+      "expected": "competitor",
+      "evidenceClass": "supported-contract",
+      "reviewStatus": "corrected-in-source-1.23.3",
       "normative40Expected": "competitor",
-      "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+      "reason": "Source 1.23.3 uses the pinned minimum alternative priority; original 1.23.2 observation receipts are preserved separately.",
+      "priorObservedExpected": "pattern",
+      "priorObservedVersion": "1.23.2"
     },
     {
       "id": "manual-patterns-union-word40",
@@ -136,11 +138,13 @@
       "mode": "xslt40",
       "file": "manual-patterns/union-word40.xsl",
       "input": "manual-patterns/probe.xml",
-      "expected": "pattern",
-      "evidenceClass": "implementation-observation",
-      "reviewStatus": "observed-current-draft-gap",
+      "expected": "competitor",
+      "evidenceClass": "supported-contract",
+      "reviewStatus": "corrected-in-source-1.23.3",
       "normative40Expected": "competitor",
-      "reason": "Pinned draft uses minimum alternative priority; current source chooses maximum. Existing source tests and expected observations retained."
+      "reason": "Source 1.23.3 uses the pinned minimum alternative priority; original 1.23.2 observation receipts are preserved separately.",
+      "priorObservedExpected": "pattern",
+      "priorObservedVersion": "1.23.2"
     },
     {
       "id": "manual-patterns-union-earlier30",
@@ -569,5 +573,12 @@
     }
   ],
   "originalManifestSha256": "ff56cde6ae19cab28b0600bd05625c53abce5ed940049bda6ad045c606dc88df",
-  "firstExecutionManifestSha256": "d0c72485da107a2ef6359600dd1fc588f8c1739b1db84605ea5f52b398fb58cc"
+  "firstExecutionManifestSha256": "d0c72485da107a2ef6359600dd1fc588f8c1739b1db84605ea5f52b398fb58cc",
+  "snapshotRole": "Historical 21 October compound-pattern execution snapshot, with separately labelled 22 October source correction.",
+  "currentCorrection": {
+    "sourceVersion": "1.23.3",
+    "record": "UNION-MINIMUM-PRIORITY.md",
+    "result": "competitor",
+    "date": "2026-10-22"
+  }
 }

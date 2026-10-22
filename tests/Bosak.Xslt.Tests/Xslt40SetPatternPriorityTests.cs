@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-10-2026     | Align outer node-union expectations with minimum alternative priority.                   |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -46,8 +47,8 @@ public class Xslt40SetPatternPriorityTests
     [InlineData("(root)intersect(*)", "0.1", "explicit")]
     [InlineData("root except(missing)", "0.1", "explicit")]
     [InlineData("(root|*) intersect *", "0.1", "explicit")]
-    [InlineData("(* except missing)|root", "-0.1", "default")]
-    [InlineData("root intersect * | missing/child", "0.25", "default")]
+    [InlineData("(* except missing)|root", "-0.1", "explicit")]
+    [InlineData("root intersect * | missing/child", "0.25", "explicit")]
     [InlineData("root[true()] except missing", "0.25", "default")]
     [InlineData("root except (: nested (: comment :) :) missing", "0.1", "explicit")]
     public void FirstOperandPriority(string pattern, string priority, string expected) => Assert.Equal(expected, Run(pattern, priority));
