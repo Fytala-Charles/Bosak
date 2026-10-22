@@ -1,0 +1,2 @@
+(: REQ-126 record contract: coerce-extra; explicit input, no external context. :)
+function($r as record(a)) { $r }(map{'a':1,'extra':2})

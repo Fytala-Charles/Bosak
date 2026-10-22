@@ -1,19 +1,19 @@
 {
   "date": "2026-10-22",
-  "sourceBase": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
-  "sourceVersion": "1.23.5",
+  "sourceBase": "7f84f7156639f6c42b82073b03cbadd69ba10864",
+  "sourceVersion": "1.23.6",
   "publishedVersion": "1.23.4",
-  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; no tier, gate, engine, fixture or release change",
+  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record-slice parser correction is audited separately; no tier/gate promotion or release",
   "summary": {
-    "entries": 72,
-    "featureChecks": 2773,
+    "entries": 73,
+    "featureChecks": 2819,
     "chapterChecks": 24,
     "workedChapters": 4,
-    "totalDocumentationChecks": 2797,
+    "totalDocumentationChecks": 2843,
     "currentGatedSetCount": 218,
     "entriesMentioningCurrentGatedSet": 25,
-    "entriesWithoutLiteralCurrentGatedSet": 47,
-    "entriesWithExactManifestIdsInKnownUses": 37,
+    "entriesWithoutLiteralCurrentGatedSet": 48,
+    "entriesWithExactManifestIdsInKnownUses": 38,
     "historicalAdoptedSpecPinsMissing": 28,
     "countPolicy": "Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.",
     "mappedGrammarClusterRows": 18
@@ -1960,6 +1960,33 @@
       "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
     },
     {
+      "entry": "type-system/record-updates.md",
+      "classification": "**Record updates (`but with`)** - **Frozen 4.0**, REQ-118 S6b. The result is a new record with the original record's type annotation; merged values must satisfy that annotation through coercion. This entry maps existing structural behavior, not a new nominal declaration facility.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "3fefb4e35c37bccc40df3420a94c86f9a38dddb68ee2de8abe502087524e377f",
+      "exactManifestIdsInKnownUses": [
+        "record-contract-update-annotation",
+        "record-contract-update-empty-optional",
+        "record-contract-update-extra",
+        "record-contract-update-original",
+        "record-contract-update-promote",
+        "record-contract-update-value"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/RECORD-CONTRACTS.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+        "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/record-contracts/README.md"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
       "entry": "type-system/structural-records.md",
       "classification": "**Structural record types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6b; structural record evidence in RecordTypeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
       "numberedFields": 16,
@@ -2470,7 +2497,7 @@
     "rejected/mapping-arrow-gtgt.md"
   ],
   "inputHashes": {
-    "docs\\xpath40-catalog\\examples\\cases.json": "f9d52036caeb27db2039f0901c4f6b11bba8371dddbf13802278c81e67d16a61",
+    "docs\\xpath40-catalog\\examples\\cases.json": "4b835d14dd77769e6b1d122e7711f49330c2668782669b05973e6a360f1a3ca6",
     "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
     "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
   },

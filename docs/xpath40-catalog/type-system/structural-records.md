@@ -61,6 +61,21 @@ The case combines source values, the named feature, and explicit output formatti
 
 Benefit: Cast the agreed shape to an annotated record before using the record type contract. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. A plain map is not an annotated record in Bosak. Coercion policy and undeclared fields must be understood before adapting broad payloads.
 
+The [record-contract delivery](../RECORD-CONTRACTS.md) and [complete stock task](../examples/record-contracts/README.md) add bounded value/error comparisons and the separate [record-update entry](record-updates.md).
+
+| Contract | Cast | Coercion / record update |
+|---|---|---|
+| Extra source key | Discarded when outside the target record fields | Rejected with XPTY0004. |
+| String quantity to integer | Cast when required; invalid lexical value raises FORG0001 | A string is not automatically an integer; supplied parameter/update probes raise XPTY0004. |
+| Missing optional field | Create a key whose value is empty | Create that present empty entry; it is not absence. |
+| Missing/empty required field | XPTY0004 | XPTY0004. |
+| Numeric/nested conversion | Keep matching values or apply the field cast | Apply field coercion recursively; tested integer-to-double promotion. |
+| Field order | Constrained by the target record | Coercion/recoercion follows field declaration order in the probes. |
+| record(*) | Assertion of an already annotated record | A plain map is not itself an annotated record. |
+| Changed value | Construct a record | but with reconstructs under the existing annotation; original value remains available. |
+
+These are tested structural cases, not exhaustive casts, nominal static/default fields or host declarations. Source1.23.6 also fixes an earlier-profile inline-signature leak; [the finding](../INLINE-RECORD-TYPE-GATE.md) preserves the original failing3.1 refusals instead of treating them as supported syntax.
+
 ## 12. Implementation
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
@@ -81,11 +96,9 @@ Executable example IDs: `structural-records-main`, `structural-records-edge`, `s
 
 ## 16. Related Features
 
-[Deferred xsl:record-type](../deferred/xslt-record-type.md) separates named
-stylesheet declarations from this shipped XPath structural contract. It also
-records the observed XSLT structural-record `@as` conversion boundary and the
-verified cast-in-`select` alternative.
+[XSLT named-record boundary](../deferred/xslt-record-type.md) separates named
+stylesheet declarations from this shipped XPath structural contract. It also separates supported structural bindings from named identity; older deferral and source snapshots remain historical.
 
-See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
+See [record updates](record-updates.md), the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*

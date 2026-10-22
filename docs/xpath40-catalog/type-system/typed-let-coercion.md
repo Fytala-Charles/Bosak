@@ -62,6 +62,8 @@ Benefit: State the type requirement at the binding; integral in-range values can
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
+The [record-contract slice](../RECORD-CONTRACTS.md) adds typed-let record promotion and surplus-field refusal probes. A typed binding uses coercion, not an import cast; extra fields are rejected. See [casts versus coercion](structural-records.md) and [record updates](record-updates.md) for the bounded record-specific matrix.
+
 ## 13. Sample Code
 
 Input is synthetic and declared directly in the complete expression. The [complete expression](../examples/typed-let-coercion/main.xpath) yields `true`. The [edge case](../examples/typed-let-coercion/edge.xpath) yields `XPTY0004 (expected error)`. No external resources or application variables are required. See the [example runner](../examples/README.md) for commands and host context.

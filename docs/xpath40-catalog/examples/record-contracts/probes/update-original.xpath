@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-original; explicit input, no external context. :)
+let $r := (map{'a':1} cast as record(a as xs:integer)) let $u := $r but with map{'a':2} return concat($r?a,'|',$u?a)

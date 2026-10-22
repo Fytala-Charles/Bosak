@@ -20483,5 +20483,356 @@
     "mode": "31",
     "file": "focus-function-syntax/probes/pipeline-whole.xpath",
     "error": "XPST0003"
+  },
+  {
+    "id": "record-contract-report-3-normal",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "record-contracts/report-3.xsl",
+    "input": "record-contracts/normal.xml",
+    "expected": "BOLT:10->12|NUT:4->3|items=2;total=15"
+  },
+  {
+    "id": "record-contract-report-3-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "record-contracts/report-3.xsl",
+    "input": "record-contracts/empty.xml",
+    "expected": "items=0;total=0"
+  },
+  {
+    "id": "record-contract-report-3-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "record-contracts/report-3.xsl",
+    "input": "record-contracts/reordered.xml",
+    "expected": "NUT:4->3|BOLT:10->12|items=2;total=15"
+  },
+  {
+    "id": "record-contract-report-3-invalid",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "record-contracts/report-3.xsl",
+    "input": "record-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "record-contract-report-4-normal",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "record-contracts/report-4.xsl",
+    "input": "record-contracts/normal.xml",
+    "expected": "BOLT:10->12|NUT:4->3|items=2;total=15"
+  },
+  {
+    "id": "record-contract-report-4-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "record-contracts/report-4.xsl",
+    "input": "record-contracts/empty.xml",
+    "expected": "items=0;total=0"
+  },
+  {
+    "id": "record-contract-report-4-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "record-contracts/report-4.xsl",
+    "input": "record-contracts/reordered.xml",
+    "expected": "NUT:4->3|BOLT:10->12|items=2;total=15"
+  },
+  {
+    "id": "record-contract-report-4-invalid",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "record-contracts/report-4.xsl",
+    "input": "record-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "record-contract-cast-extra",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/cast-extra.xpath",
+    "expected": "false",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-cast-lexical",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/cast-lexical.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-cast-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/cast-invalid.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "record-contract-coerce-extra",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-extra.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-coerce-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-coerce-promote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-promote.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-coerce-nested",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-nested.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-missing-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/missing-empty.xpath",
+    "expected": "true:0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-missing-required",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/missing-required.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-coerce-missing",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-missing.xpath",
+    "expected": "true:0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-coerce-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-order.xpath",
+    "expected": "b|a",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-plain-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/plain-map.xpath",
+    "expected": "false",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-record-star-plain",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/record-star-plain.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-record-star-assert",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/record-star-assert.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-castable-plain",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/castable-plain.xpath",
+    "expected": "false",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-castable-invalid",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/castable-invalid.xpath",
+    "expected": "false",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-lookup-unknown",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/lookup-unknown.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-map-get-unknown",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/map-get-unknown.xpath",
+    "expected": "0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-value",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-value.xpath",
+    "expected": "2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-annotation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-annotation.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-original",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-original.xpath",
+    "expected": "1|2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-extra",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-extra.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-plain",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-plain.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-nonmap",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-nonmap.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-promote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-promote.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-string.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-decimal",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-decimal.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-empty-optional",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-empty-optional.xpath",
+    "expected": "true:0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-empty-required",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-empty-required.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-update-order",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-order.xpath",
+    "expected": "b|a",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-nested",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-nested.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-update-key-type",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/update-key-type.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-typed-let-promote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/typed-let-promote.xpath",
+    "expected": "true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-typed-let-extra",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/typed-let-extra.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "record-contract-coerce-original",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "record-contracts/probes/coerce-original.xpath",
+    "expected": "true:true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "record-contract-refuse31-cast-lexical",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "record-contracts/probes/cast-lexical.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "record-contract-refuse31-coerce-promote",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "record-contracts/probes/coerce-promote.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "record-contract-refuse31-update-value",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "record-contracts/probes/update-value.xpath",
+    "error": "XPST0003"
   }
 ]

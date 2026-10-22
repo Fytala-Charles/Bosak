@@ -1,0 +1,2 @@
+(: REQ-126 record contract: cast-invalid; explicit input, no external context. :)
+map{'a':'oops'} cast as record(a as xs:integer)

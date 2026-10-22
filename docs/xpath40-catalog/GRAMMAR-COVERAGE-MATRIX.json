@@ -227,9 +227,13 @@
         {
           "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
           "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/InlineRecordTypeVersionGateTests.cs",
+          "method": "RecordSignatures"
         }
       ],
-      "remaining": "Entry examples do not exhaust cast/coercion differences, missing/extra fields, order, nested conversion and error contracts.",
+      "remaining": "Bounded cast/coercion/lookup comparisons, 46 public cases and paired stock reports supplied. Full composite/nominal/static/default-field and host coverage remain unclaimed.",
       "source": [
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
@@ -241,7 +245,8 @@
       "key": "S6-update",
       "area": "Record but-with updates",
       "entries": [
-        "type-system/structural-records.md"
+        "type-system/structural-records.md",
+        "type-system/record-updates.md"
       ],
       "testEvidence": [
         {
@@ -257,7 +262,7 @@
           "method": "ButWith_CoercesRhsValuesToFieldTypes"
         }
       ],
-      "remaining": "No dedicated update entry or complete business example; existing unit support is not a missing implementation.",
+      "remaining": "Dedicated entry and complete stock task supplied; recursive/optional/order/annotation cases are bounded, not exhaustive named-record or host contracts.",
       "source": [
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",

@@ -1,0 +1,2 @@
+(: REQ-126 record contract: map-get-unknown; explicit input, no external context. :)
+count(map:get((map{'a':1} cast as record(a as xs:integer)), 'missing'))

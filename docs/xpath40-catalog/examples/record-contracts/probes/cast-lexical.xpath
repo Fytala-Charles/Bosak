@@ -1,0 +1,2 @@
+(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)
+(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer
