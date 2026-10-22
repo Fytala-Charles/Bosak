@@ -5,6 +5,9 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**1.23.4 release preparation — 22 October 2026:** [Readiness](RELEASE-1.23.4-READINESS.md) and [notes](RELEASE-NOTES-1.23.4.md) pin proposed v1.23.4 to PR #406 merge `2b5ffc50`, including unpublished1.23.3 union-minimum and1.23.4 EQName-priority corrections. Ten unsigned packages pass153 broad +270 focused package-only checks with matching provenance. Publication has not started; public1.23.2, completed Braid acceptance and REQ-126 In Progress remain unchanged.
+
+
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](xpath40-catalog/EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
 
 **22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](xpath40-catalog/UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
