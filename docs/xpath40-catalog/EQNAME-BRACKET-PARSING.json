@@ -1,0 +1,284 @@
+{
+  "date": "2026-10-22",
+  "base": "0f1c4b2158235bb92dd62ea3aed645efcd9a8879",
+  "branch": "fix/req126-eqname-brackets",
+  "sourceVersion": "1.23.5",
+  "publishedVersion": "1.23.4",
+  "requirement": "REQ-126 In Progress; D2/D3/D4 and AC-03 partial",
+  "scope": "Predicate brackets outside EQName URI literals in 3.0/4.0 XSLT patterns; existing URI mask in remaining 4.0 predicate-priority check; earlier-profile priority classification unchanged",
+  "specification": {
+    "revision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+    "refreshed": "2026-10-22",
+    "historicalAdoptionRecovered": false,
+    "files": {
+      "xslt.xml": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+      "xpath-grammar.xml": "55122f68f6dd89ac5c577205fabf003de66f2d100c758774d27bcc756e2c27bd"
+    },
+    "stableGrammar": "https://www.w3.org/TR/xpath-31/#doc-xpath31-BracedURILiteral"
+  },
+  "newMatchingCases": 44,
+  "newPriorityCases": 2,
+  "initialRed": [
+    {
+      "file": "red.trx",
+      "sha256": "b0b4e9cddbe604d365c64cf82c4927e86fea4142d132c46cd2cb3268dc284b93",
+      "total": 32,
+      "passed": 0,
+      "failed": 32,
+      "skipped": 0
+    }
+  ],
+  "priorityRedAfterParserFix": [
+    {
+      "file": "priority-red.trx",
+      "sha256": "eef32468cb0f27b665de5bb636c9b6fed66754ad1de45cc73bc144b9d3dcb70c",
+      "total": 10,
+      "passed": 8,
+      "failed": 2,
+      "skipped": 0
+    }
+  ],
+  "focused": [
+    {
+      "file": "focused.trx",
+      "sha256": "f8d4293d406c46ceedf5556d0fcc7cbc5595d93536ea3009696c6b93fe4c0634",
+      "total": 159,
+      "passed": 159,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "fullSolution": [
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0.trx",
+      "sha256": "c6ef8eff5c3245474bc970319515a06609a4a43b01366c03616e1cb6f865084f",
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0[1].trx",
+      "sha256": "3657e120f6e1b47445652c98e82b171d1919c34f84eb3a2b498f84c5272ce789",
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0[2].trx",
+      "sha256": "6aa4ff46a0572a3b1daaf5f78d80e25d563ff41a6ef8fa7a9513ddb0f5a12579",
+      "total": 269,
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0[3].trx",
+      "sha256": "1693e977814937c2475bade9a8d35d0dbb79961e832df83b4ba93b5ae4deee90",
+      "total": 411,
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0[4].trx",
+      "sha256": "15357c772fde3940d7250462b6f7e20ddb995415ca86bfd80fc53466add38884",
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_49_net10.0[5].trx",
+      "sha256": "8655b7f2571348ea21c97428194d00fdb4fd1b96d8ddf0c755a231c4bd0cc87e",
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_50_net10.0.trx",
+      "sha256": "517bf7805de5a00f2d02154112fe6daa5b662ad92e1e6bc5d3e69a97e9d16052",
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_50_net10.0[1].trx",
+      "sha256": "af3a4bef3e831fee16a8198cfeaf0609090559489554d46593bad7225910453d",
+      "total": 1385,
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_50_net10.0[2].trx",
+      "sha256": "7cd3ca4b63254dcb7e20dd2125bff66431f8da93e2f2de603eaade4a96a9c33e",
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_07_52_net10.0.trx",
+      "sha256": "c505b22f8633071543369f0c3df9e1af5aee77d6d42589b282c30ede708af173",
+      "total": 7548,
+      "passed": 7548,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "fullTotals": {
+    "passed": 10516,
+    "failed": 0,
+    "skipped": 0
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "initialFullRun": [
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_16_net10.0.trx",
+      "sha256": "c6c59cb54680040c9b818bda5caf32067f7ddd50bf1195fda2a473614d5c8208",
+      "total": 47,
+      "passed": 2,
+      "failed": 45,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_16_net10.0[1].trx",
+      "sha256": "c81e927729359cbf876e8ad4af42ba1a966568c686c878397c18582ad9967e2e",
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_16_net10.0[2].trx",
+      "sha256": "0a342b045bfae9519ffb79a33cf509ac173b7c6a755fc6a64ec50465f84d660d",
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_16_net10.0[3].trx",
+      "sha256": "106ff556e8af8498f2c2da07151aba6cacd880f858024a647579c026c8968c40",
+      "total": 411,
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_16_net10.0[4].trx",
+      "sha256": "d92d5f7f319bbe5afe1c77173ef784972ffaaf8d6ad240a869bb3e4fd82f9a73",
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_17_net10.0.trx",
+      "sha256": "7f5c39f9baef79899bbae4051f6a096738becbe0e370e0c9a7ae5e7a2c8d4567",
+      "total": 269,
+      "passed": 218,
+      "failed": 51,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_17_net10.0[1].trx",
+      "sha256": "877710aa31585b3db555faadd93670c6ebb42a316d83fbedb20f1224dad4bfb0",
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_17_net10.0[2].trx",
+      "sha256": "ef3a93062dc71f1d76e08b1b1aa418832235e129633b8f09cbf30602715eb708",
+      "total": 1385,
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_17_net10.0[3].trx",
+      "sha256": "2c17a6de1909e62be352f83320c7ce79d8e9dcebaab39ad16f0f38e24ef6618e",
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_17_03_17_net10.0[4].trx",
+      "sha256": "9abf26041a18ba864d69a7ecebe161a055fd5e64477782716db80cb9c75cdd04",
+      "total": 7546,
+      "passed": 7546,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "intermediateGreen": [
+    {
+      "file": "green.trx",
+      "sha256": "bf73857cf295cd5a2a78a83ba00c765f66caf4fd15178565e1c0a7d9d3457c8f",
+      "total": 77,
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "retainedIntermediateFailures": [
+    "Initial gates used empty worktree submodule placeholders; rerun with existing absolute catalog paths.",
+    "First full run lacked schema fixtures and sandbox HTTP listeners: 51 runtime fixture failures and 45 database listener failures; all passed in final authorized run.",
+    "Priority red build collided with running XSLT assembly; failed build retained and red probe executed from isolated temp output using the newly compiled test assembly.",
+    "An initial guessed upstream grammar path returned HTTP 404; actual immutable xpath-grammar.xml was located and saved.",
+    "Initial build had NU1900 audit-network warnings; authorized restore and final build recorded separately."
+  ],
+  "catalog": {
+    "entries": 71,
+    "featureChecks": 2743,
+    "chapterChecks": 24,
+    "manifestChanged": false,
+    "manifestSha256": "77b2317bda9419ed7c3e922a6201c5843dea2eb330476d47857ce4ccc9edc6ec"
+  },
+  "evidenceDirectory": "D:\\Development\\Bosak\\.guard-tmp\\req126-eqname-parser-evidence",
+  "artifacts": {
+    "build-clean.log": "e991d87cc0b00e29229b8a6426ce842a68db25ab56e08024eaa22f8f6e0a9b58",
+    "restore-verified.log": "b2c6179aca1e682b04b6c9419e1e05b5f83ffc1a2136fd10e72de67f64caa1e4",
+    "render.log": "7b1501352fb51b0e5b1a007c44d024a248265e3b28145bf0e77901a776844356",
+    "qt3-final.log": "e5a953980c94a62b00884bfb0a6f3602f163bf2483a8983555913668857bec4b",
+    "qt4-final.log": "68196f4296cc1d509249b0f81a3edf483624ac9eba456094206dec0fe443e88e",
+    "render-final.log": "261d40875abb4ee08358e3583012155e60cfeca9ef8fb6844829d93e293d82dc"
+  },
+  "delivery": "Prepared for PR on fix/req126-eqname-brackets; not released; public/Braid pin remains 1.23.4",
+  "limitations": [
+    "Earlier-profile URI-punctuation default priorities are not exhaustively corrected by this slice.",
+    "No new catalog gate promotion, public API or native consumer acceptance."
+  ],
+  "build": {
+    "errors": 0,
+    "warnings": 10,
+    "warningCodes": [
+      "NU1900"
+    ],
+    "vulnerabilityAuditAvailable": false
+  },
+  "implementationSha256": {
+    "src/Bosak.Xslt/Patterns/PatternCompiler.cs": "81d7a5f51a1f4558d15c78ae3a1f3fe4bcba8053e1ff1b4a657fcf1d7639a894",
+    "src/Bosak.Xslt/Stylesheet/TemplateRule.cs": "79de234517662897ec0b022e0b94959b8488ae040507370198f967814a221592",
+    "src/Directory.Build.props": "9c6bbb707f8f61745c286a91be8b5928e786492d04e889b9a72d7b4b5e9d97af",
+    "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs": "14ce85074c98cd824ede42f2d979375fd50f9e8739e14de62fdc4d747abfdd6a",
+    "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs": "d37ed1b2b44cbb0feff202c966d518eeda164d6eae706b57d09d4e1ee10a85c5"
+  },
+  "fixtureSetup": "Temporary junctions to existing checked-out submodules used for validation and removed afterwards; no shared fixture changes."
+}

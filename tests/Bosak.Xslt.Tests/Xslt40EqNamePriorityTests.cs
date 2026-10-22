@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 22-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 22-10-2026     | Cover newly supported opening brackets in namespace URI priorities.                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -41,6 +42,8 @@ public class Xslt40EqNamePriorityTests
     /// <summary>Keeps URI punctuation out of the name test's implicit priority calculation.</summary>
     /// <param name="uri">The namespace URI containing punctuation.</param>
     [Theory]
+    [InlineData("urn:n[part]")]
+    [InlineData("urn:n[part")]
     [InlineData("urn:n|part")]
     [InlineData("https://example.test/ns")]
     [InlineData("urn:n(part)|more")]

@@ -103,6 +103,7 @@
 //                      | Charles Korthout | 3.31  | 16-10-2026     | Match current atomic type patterns and validate atomic alternatives.                      |
 //                      | Charles Korthout | 3.32  | 16-10-2026     | Match named record patterns using existing record identity and instance checks.           |
 //                      | Charles Korthout | 3.33  | 16-10-2026     | Match every array member using shared nested sequence-pattern checks.                     |
+//                      | Charles Korthout | 3.34  | 22-10-2026     | Locate predicate brackets outside EQName namespace literals and quoted content.         |
 // ===========================================================================================================================================================
 
 using System.Text.RegularExpressions;
@@ -1607,7 +1608,7 @@ internal sealed class PatternCompiler
 
         // Attribute pattern with predicates (@*[pred], @name[pred]): route through
         // CompilePredicatePattern so the predicate is evaluated against the candidate.
-        if (trimmed.StartsWith('@') && trimmed.Contains('['))
+        if (trimmed.StartsWith('@') && FindPredicateStart(trimmed) >= 0)
         {
             return CompilePredicatePattern(trimmed);
         }
@@ -1648,7 +1649,7 @@ internal sealed class PatternCompiler
         }
 
         // Predicate pattern: foo[bar]
-        if (trimmed.Contains('['))
+        if (FindPredicateStart(trimmed) >= 0)
         {
             return CompilePredicatePattern(trimmed);
         }
@@ -2106,7 +2107,7 @@ internal sealed class PatternCompiler
         }
 
         string lastStepStr = steps[^1];
-        bool lastStepHasPredicate = lastStepStr.Contains('[');
+        bool lastStepHasPredicate = FindPredicateStart(lastStepStr) >= 0;
 
         // Simple element/attribute predicates are handled correctly by CompilePredicatePattern
         // because it evaluates child::base[pred] from the parent. Axis steps and other
@@ -2152,7 +2153,7 @@ internal sealed class PatternCompiler
         var ancestorTests = new List<PatternPredicate>();
         for (int s = steps.Count - 2; s >= 0; s--)
         {
-            if (steps[s].Contains('['))
+            if (FindPredicateStart(steps[s]) >= 0)
                 ancestorTests.Add(CompilePredicatePattern(steps[s]));
             else
                 ancestorTests.Add(CompileSinglePattern(steps[s]));
@@ -3515,9 +3516,38 @@ internal sealed class PatternCompiler
             && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
     }
 
+    /// <summary>Finds a predicate bracket outside EQName namespace literals and quoted strings.</summary>
+    private static int FindPredicateStart(string pattern)
+    {
+        char quote = '\0';
+        bool uri = false;
+        for (int i = 0; i < pattern.Length; i++)
+        {
+            char c = pattern[i];
+            if (uri)
+            {
+                if (c == '}') uri = false;
+                continue;
+            }
+            if (quote != '\0')
+            {
+                if (c == quote)
+                {
+                    if (i + 1 < pattern.Length && pattern[i + 1] == quote) i++;
+                    else quote = '\0';
+                }
+                continue;
+            }
+            if (c is '\'' or '"') { quote = c; continue; }
+            if (c == 'Q' && i + 1 < pattern.Length && pattern[i + 1] == '{') { uri = true; i++; continue; }
+            if (c == '[') return i;
+        }
+        return -1;
+    }
+
     private PatternPredicate CompilePredicatePattern(string pattern)
     {
-        int bracketOpen = pattern.IndexOf('[');
+        int bracketOpen = FindPredicateStart(pattern);
         if (bracketOpen < 0)
             return CompileSinglePattern(pattern);
 
