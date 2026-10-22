@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 2.19  | 16-10-2026     | Compute atomic pattern priorities using resolved types and minimum alternatives.          |
 //                      | Charles Korthout | 2.20  | 16-10-2026     | Compute named record pattern priorities independently of record shape.                   |
 //                      | Charles Korthout | 2.21  | 16-10-2026     | Compute array priorities recursively with lexical predicate detection.                    |
+//                      | Charles Korthout | 2.22  | 22-10-2026     | Use minimum alternative priority for 4.0 node unions; preserve 3.0 dispatch.               |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -180,9 +181,12 @@ internal sealed class TemplateRule
 
     /// <summary>
     /// Creates one or more <see cref="TemplateRule"/> instances from an xsl:template element.
-    /// Union patterns in the match attribute (e.g. <c>match="a|b"</c>) are split into
-    /// separate rules so that <c>xsl:next-match</c> can continue to the other branches.
+    /// Earlier-profile union patterns are split into separate rules for <c>xsl:next-match</c>.
+    /// Effective 4.0 node unions remain one rule with the minimum alternative default priority.
     /// </summary>
+    /// <param name="element">The declaring template element.</param>
+    /// <param name="stylesheet">The owning stylesheet and its effective static context.</param>
+    /// <returns>The compiled template rules for the effective profile.</returns>
     public static IReadOnlyList<TemplateRule> FromElement(XElement element, Stylesheet stylesheet)
     {
         var contextItem = ContextItemDeclaration.FromTemplate(element, stylesheet);
@@ -677,10 +681,12 @@ internal sealed class TemplateRule
                 return ComputeDefaultPriority(trimmed[1..close].Trim(), xpath40, typeResolver);
         }
 
-        // Union patterns: take the maximum priority of all branches
+        // XSLT 4.0 assigns one rule the minimum alternative priority; retain the 3.0 path.
         var branches = xpath40 ? SplitNodeUnion40(trimmed) : SplitUnionBranches(trimmed);
         if (branches.Length > 1)
-            return branches.Max(branch => xpath40 ? ComputeDefaultPriority(branch, true, typeResolver) : ComputeSinglePatternPriority(branch));
+            return xpath40
+                ? branches.Min(branch => ComputeDefaultPriority(branch, true, typeResolver))
+                : branches.Max(branch => ComputeSinglePatternPriority(branch));
 
         if (xpath40)
         {

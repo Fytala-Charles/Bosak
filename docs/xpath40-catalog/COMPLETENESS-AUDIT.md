@@ -4,6 +4,8 @@
   <p>Evidence, missing coverage, and the next documentation deliveries</p>
 </div>
 
+**22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
+
 ## Finding and scope
 
 **REQ-126 is not ready to close.** Four worked chapters are supplied, but

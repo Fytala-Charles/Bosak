@@ -1,0 +1,239 @@
+{
+  "date": "2026-10-22",
+  "sourceVersion": "1.23.3",
+  "publishedVersion": "1.23.2",
+  "base": "beac211f",
+  "requirement": "REQ-126 In Progress",
+  "specification": {
+    "revision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+    "section": "default-priority-for-xnode-patterns",
+    "sha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "refreshed": "2026-10-22",
+    "historicalAdoptionRecovered": false
+  },
+  "scope": "4.0 node-union minimum default priority only; 3.0 branch dispatch, explicit priority, local version, single-rule next-match and unrelated maxima retained",
+  "originalRed": [
+    {
+      "file": "red.trx",
+      "total": 34,
+      "passed": 22,
+      "failed": 12,
+      "skipped": 0,
+      "sha256": "afe84dcb918e4b014b53f6ab8b7309e927c0958213f4d21edfc2416ed3c88248"
+    }
+  ],
+  "intermediate": [
+    {
+      "file": "green.trx",
+      "total": 34,
+      "passed": 33,
+      "failed": 1,
+      "skipped": 0,
+      "sha256": "2ad3d340873e4cba95cbcb519914c6d15bf0391cc6933972b7526c1e754073bf"
+    }
+  ],
+  "focused": [
+    {
+      "file": "verified.trx",
+      "total": 68,
+      "passed": 68,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "d7bdbe2fe0b0f76bd9664495eddc02beadf1c609bd0291824c6b8d41c2d636ce"
+    }
+  ],
+  "fullSolution": [
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0.trx",
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "41154ceb279ad8207c557e0ea4967319ad07b35332dc80791947f6a4e92cef73"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[1].trx",
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "da9da4ed1288665fa24dff8f79bce05b9578441293db7e59bcc8533be32080e1"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[2].trx",
+      "total": 269,
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "749f9cebf033702120a18fcd50d27879465e442980b9bd175f45fe58e5700098"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[3].trx",
+      "total": 411,
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "baff59cea06036b2ec3af843155a1260276a5bf346a5977d093caef3e20b193b"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[4].trx",
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "77171040ae09cb932c4c6b3652d98af92274ecac0337279fb87d9ec38049ecfe"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[5].trx",
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "376946e59643294a2a9907ed2aa09d16b65ed20d7d47c7fc7c4cbe5e9f534907"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[6].trx",
+      "total": 1385,
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "083a72bf75fa1df094699182adf41ccaca6432eb14851d48a0416c1fd5bc8b00"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[8].trx",
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "44de77c36fcf6bf809f30714610472cbef7b81ca8f1692c1ee8619869b79792f"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_31_net10.0.trx",
+      "total": 7476,
+      "passed": 7476,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "6d07be58bf4c46f458c9b94c61df781ad6491b3ea1345b94d72d0a4ec6c16685"
+    },
+    {
+      "file": "database-retry.trx",
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "3a46c8eaea5858356f8f65cb7cfc632e9b548d3049908aafa55a692c11618fd3"
+    }
+  ],
+  "originalFullRun": [
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0.trx",
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "41154ceb279ad8207c557e0ea4967319ad07b35332dc80791947f6a4e92cef73"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[1].trx",
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "da9da4ed1288665fa24dff8f79bce05b9578441293db7e59bcc8533be32080e1"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[2].trx",
+      "total": 269,
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "749f9cebf033702120a18fcd50d27879465e442980b9bd175f45fe58e5700098"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[3].trx",
+      "total": 411,
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "baff59cea06036b2ec3af843155a1260276a5bf346a5977d093caef3e20b193b"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[4].trx",
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "77171040ae09cb932c4c6b3652d98af92274ecac0337279fb87d9ec38049ecfe"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[5].trx",
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "376946e59643294a2a9907ed2aa09d16b65ed20d7d47c7fc7c4cbe5e9f534907"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[6].trx",
+      "total": 1385,
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "083a72bf75fa1df094699182adf41ccaca6432eb14851d48a0416c1fd5bc8b00"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[7].trx",
+      "total": 47,
+      "passed": 46,
+      "failed": 1,
+      "skipped": 0,
+      "sha256": "9d30578fe1999fd382d9e1f537b1739778d1d32d0545e9170711ab330f2f503a"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_29_net10.0[8].trx",
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "44de77c36fcf6bf809f30714610472cbef7b81ca8f1692c1ee8619869b79792f"
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_06_40_31_net10.0.trx",
+      "total": 7476,
+      "passed": 7476,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "6d07be58bf4c46f458c9b94c61df781ad6491b3ea1345b94d72d0a4ec6c16685"
+    }
+  ],
+  "fullTotals": {
+    "passed": 10444,
+    "failed": 0,
+    "skipped": 0,
+    "qualification": "Aggregate after isolated database project retry; original run had one HTTP listener registration collision"
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "catalog": {
+    "entries": 71,
+    "featureChecks": 2743,
+    "chapterChecks": 24,
+    "changedIds": [
+      "manual-patterns-union-max40",
+      "manual-patterns-union-word40"
+    ],
+    "originalManifestSha256": "1e785932611c4764c4f022878144a303970cde59521e03c6774f4b8581c7a04f",
+    "correctedManifestSha256": "77b2317bda9419ed7c3e922a6201c5843dea2eb330476d47857ce4ccc9edc6ec"
+  },
+  "limitation": "EQName URI pipe misclassified by existing IsQNameNodeTest; original OperatorDelimiters assertion retained; separate follow-up",
+  "receipts": "Original failed/intermediate logs, all TRXs and gate output retained under .guard-tmp/req126-union-minimum-evidence; prior compound receipts untouched",
+  "release": "Not published"
+}
