@@ -64,6 +64,7 @@
 //                      | Charles Korthout | 2.20  | 16-10-2026     | Compute named record pattern priorities independently of record shape.                   |
 //                      | Charles Korthout | 2.21  | 16-10-2026     | Compute array priorities recursively with lexical predicate detection.                    |
 //                      | Charles Korthout | 2.22  | 22-10-2026     | Use minimum alternative priority for 4.0 node unions; preserve 3.0 dispatch.               |
+//                      | Charles Korthout | 2.23  | 22-10-2026     | Ignore EQName URI punctuation in effective 4.0 name-test default priorities.               |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -885,7 +886,7 @@ internal sealed class TemplateRule
             return 0.5;
 
         // QName without axis (implicit child::)
-        if (IsQNameNodeTest(trimmed))
+        if (IsQNameNodeTest(xpath40 ? axisText : trimmed))
             return 0.0;
 
         // Fallback: any other pattern

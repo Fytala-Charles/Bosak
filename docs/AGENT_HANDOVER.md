@@ -1,3 +1,9 @@
+# REQ-126 EQName priority correction — 22 October 2026
+
+**22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](xpath40-catalog/EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
+
+Base: `9964e2399976dc4f831d550f94f233c75f9a64d1` (PR #405 merged). What was built: one-line effective 4.0 name-test priority correction, 26 new dispatch regressions and corrected OperatorDelimiters expectation. Source 1.23.4 unpublished; public 1.23.2. Keep pending upstream notes, original receipts, worktrees, stashes and PR #132 intact.
+
 # REQ-126 union minimum-priority correction — 22 October 2026
 
 **22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](xpath40-catalog/UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.

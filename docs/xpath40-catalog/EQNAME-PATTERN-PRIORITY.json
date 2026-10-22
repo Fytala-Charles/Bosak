@@ -1,0 +1,164 @@
+{
+  "date": "2026-10-22",
+  "base": "9964e2399976dc4f831d550f94f233c75f9a64d1",
+  "previousPR": 405,
+  "sourceVersion": "1.23.4",
+  "publishedVersion": "1.23.2",
+  "requirement": "REQ-126 In Progress",
+  "scope": "Effective 4.0 QName classification uses the existing URI-masked text; earlier profiles, predicates, paths, explicit priorities and union aggregation unchanged",
+  "specification": {
+    "revision": "3230573afe246f1b502ed2e22d187ce9928155b1",
+    "refreshed": "2026-10-22",
+    "section": "default-priority-for-xnode-patterns",
+    "sha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+    "historicalAdoptionRecovered": false
+  },
+  "newRegressionCases": 26,
+  "focused": [
+    {
+      "file": "verified.trx",
+      "sha256": "3846852ba939a84b4405d5ef5cd0cba92649a47af3baef584227f615ac8e5729",
+      "passed": 94,
+      "failed": 0,
+      "skipped": 0,
+      "total": 94
+    }
+  ],
+  "scopedRed": [
+    {
+      "file": "red-scoped.trx",
+      "sha256": "5d79e2275966cd6a35c2fb5d53c80db97344699a4504c64667513ef5445a5391",
+      "passed": 9,
+      "failed": 17,
+      "skipped": 0,
+      "total": 26
+    }
+  ],
+  "initialExploratoryRed": [
+    {
+      "file": "red.trx",
+      "sha256": "557ffb6d296d07a7dbe3ed969412aa1e6924885e3b953e6c7de8fde83dd93658",
+      "passed": 6,
+      "failed": 20,
+      "skipped": 0,
+      "total": 26
+    }
+  ],
+  "initialIntermediate": [
+    {
+      "file": "green.trx",
+      "sha256": "44affd369bd5c2d97c9ebc0268d2dfe920cde448b43100e611d7f7101cc18dd5",
+      "passed": 88,
+      "failed": 6,
+      "skipped": 0,
+      "total": 94
+    }
+  ],
+  "fullSolution": [
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0.trx",
+      "sha256": "f646e4b926b83a697f1a6cee752ec0d00068cec9b4e0fecefb921fe490d3ecd8",
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0,
+      "total": 202
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[1].trx",
+      "sha256": "f1e9c4a34893312db0c35b6d32df3da9da47a1d67e766bedaafea241366a57db",
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0,
+      "total": 66
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[2].trx",
+      "sha256": "af75a5632e2d32911f469b32703410ff3109817243252b2221f22c35ca772fc6",
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0,
+      "total": 132
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[3].trx",
+      "sha256": "43f10aaed3b5ef3c2d8cb3e642f7d40d59477a76cf91610665ba846d1e917eb6",
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0,
+      "total": 411
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[4].trx",
+      "sha256": "8cfddd1aecd2207cdb4c3470035f38440eb89b59f7f4a99b4cb2a5bf26540140",
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0,
+      "total": 47
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[5].trx",
+      "sha256": "61d8be47eaeefc8f249ee4100d5fc453b820b11ae60f2114b30ab5a2ed60bba9",
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0,
+      "total": 153
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_10_net10.0[6].trx",
+      "sha256": "f539e1b50ec0fa5b1f9274d0b7e1067de58c31e65b3b7932cb94f8b8d218bf51",
+      "passed": 7502,
+      "failed": 0,
+      "skipped": 0,
+      "total": 7502
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_11_net10.0.trx",
+      "sha256": "fc36cc146615d77f391c94408e4cba6650f8b78e54215dd063c6df1b877f4571",
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0,
+      "total": 269
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_11_net10.0[1].trx",
+      "sha256": "cfc4f90a1013da8c22fd25e7f44b180986da222342097b70a28324171af5c2d0",
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0,
+      "total": 303
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_08_19_11_net10.0[2].trx",
+      "sha256": "9da1efb4eb91744e767815f5922dce793a0160f869cf20c1e7a39e97a6385609",
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0,
+      "total": 1385
+    }
+  ],
+  "fullTotals": {
+    "passed": 10470,
+    "failed": 0,
+    "skipped": 0
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "catalog": {
+    "entries": 71,
+    "featureChecks": 2743,
+    "chapterChecks": 24,
+    "manifestChanged": false,
+    "manifestSha256": "77b2317bda9419ed7c3e922a6201c5843dea2eb330476d47857ce4ccc9edc6ec"
+  },
+  "retainedLimitation": "Opening bracket inside EQName URI encounters independent parser errors; original probes/receipts preserved, not covered by this priority correction",
+  "evidenceDirectory": ".guard-tmp/req126-eqname-priority-evidence",
+  "release": "Not published"
+}
