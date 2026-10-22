@@ -65,6 +65,7 @@
 //                      | Charles Korthout | 2.21  | 16-10-2026     | Compute array priorities recursively with lexical predicate detection.                    |
 //                      | Charles Korthout | 2.22  | 22-10-2026     | Use minimum alternative priority for 4.0 node unions; preserve 3.0 dispatch.               |
 //                      | Charles Korthout | 2.23  | 22-10-2026     | Ignore EQName URI punctuation in effective 4.0 name-test default priorities.               |
+//                      | Charles Korthout | 2.24  | 22-10-2026     | Ignore URI brackets in the remaining effective 4.0 predicate-priority check.               |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -881,8 +882,8 @@ internal sealed class TemplateRule
             (trimmed.StartsWith("Q{") && trimmed.EndsWith("*")))
             return -0.25;
 
-        // Patterns with a predicate
-        if (trimmed.Contains('['))
+        // Patterns with a predicate outside the namespace literal.
+        if ((xpath40 ? axisText : trimmed).Contains('['))
             return 0.5;
 
         // QName without axis (implicit child::)

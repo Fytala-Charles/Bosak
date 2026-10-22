@@ -1,3 +1,9 @@
+# REQ-126 EQName bracket parsing - 22 October 2026
+
+**22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](xpath40-catalog/EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.
+
+Base: `0f1c4b2158235bb92dd62ea3aed645efcd9a8879`. Built: shared predicate-boundary scan and end-to-end regressions. Validation: 10,516 solution tests and 159 focused checks pass; QT3 31,142/0/679 and qt4 gate 8,278/0/1,894 unchanged. Build: zero errors, ten NU1900 audit-network warnings. Matching is corrected in 3.0/4.0; the additional priority correction is effective 4.0 only. Isolated branch `fix/req126-eqname-brackets`; preserve pending upstream notes, receipts, stashes, worktrees and PR #132. README build/test/install commands remain current; no structural or CLI change.
+
 # Bosak1.23.4 published and verified — 22 October 2026
 
 **1.23.4 published and verified — 22 October 2026:** [Public delivery proof](RELEASE-1.23.4-PUBLICATION.md) records immutable `v1.23.4` at `2b5ffc50`, one successful Release run (10,470 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /270 focused checks with matching provenance and clear audits. Includes the union-minimum and EQName-priority corrections; opening-bracket URI parsing remains separately limited. REQ-126 stays In Progress; completed Braid acceptance on1.23.0 is unchanged. Braid1.23.4 adoption remains a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.
