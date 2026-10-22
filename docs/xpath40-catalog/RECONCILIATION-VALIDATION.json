@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-22",
+  "base": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
+  "sourceVersion": "1.23.5",
+  "publicVersion": "1.23.4",
+  "fullSolution": [
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_20_net10.0.trx",
+      "sha256": "5092288946576df4bfe75beafa4cd0f662e0fe9f86a7f71927664663b719689c",
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_20_net10.0[1].trx",
+      "sha256": "fe08b37ee94e8d0dd5ae4cedd9472d1c5841a3039fbea3d14e8a594474f94cb8",
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_20_net10.0[2].trx",
+      "sha256": "eec473ea0d620e46cbde52646f2df0eaae460b24ed2d634ad5ae24694c47dded",
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_20_net10.0[3].trx",
+      "sha256": "a4a0a34944cbf27bb330bdd43958a0789751524bc1285b60393a93ad12a04764",
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_20_net10.0[4].trx",
+      "sha256": "d9ed1722c0012bc9524e164a33a4214a0cb384a50d14e1901a9a981aeab62dbf",
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_21_net10.0.trx",
+      "sha256": "058e619e5f6ac52d7dc685d24b1c04bcb9669ad07c637a09e65b84ce6e251695",
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_21_net10.0[1].trx",
+      "sha256": "c4cb9d37caa36af563a8c91a9b399f5aacc9ee41e446dc9742b230576c2c0874",
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_21_net10.0[2].trx",
+      "sha256": "e2aea51cc7ac096a869a7ad11f0497decdb7d35bd3ecee931c29bdf820c9279b",
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_21_net10.0[3].trx",
+      "sha256": "bf8d6cf818abac2582d2c2d67214e47a7b95dec5d1ec77d93e61c5fdfd0a3597",
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_22_23_net10.0.trx",
+      "sha256": "02f9f6b856f8c318f75115321659197d3e896246f960ea8c3acf2db3333dda12",
+      "passed": 7548,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "totals": {
+    "passed": 10516,
+    "failed": 0,
+    "skipped": 0
+  },
+  "documentationCases": {
+    "CatalogExampleTests": 2743,
+    "InvoiceReferenceGuideTests": 7,
+    "OrderRoutingReferenceGuideTests": 11,
+    "WorkedExampleTests": 6
+  },
+  "build": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Pre-existing CS8604 in Bosak.Xslt.Conformance Program.cs:1868",
+    "sha256": "97f66e16c9f0d5c7b69137d49f24d96706c30d1a1fd0d9a9280539af7426741e"
+  },
+  "engineChanges": false,
+  "fixtureChanges": false,
+  "versionChanges": false,
+  "gateChanges": false,
+  "manualGatesRerun": false,
+  "manualGateRationale": "Documentation/inventory only; retains PR409 engine validation receipts without claiming a new gate run.",
+  "inventoryScriptSha256": "8c72118320eb902cbfde384af9fa32aee7a76fa069121187cd43eadb5852098e",
+  "grammarMatrixSha256": "547661ac4c98cb96f97ddb2ac241b0f020b1ecab8354ad82a9f4861e267a0925",
+  "inventorySha256": "23a2872aaa444e4ff2a1ab21e65061e101bfedfb1ca47343259ecfea4f6a4f5b",
+  "acceptancePolicy": "Owner approved applicable-evidence policy on 2026-10-22; AC03 amended, still partial pending entry-by-entry validation",
+  "evidenceDirectory": "D:\\Development\\Bosak\\.guard-tmp\\req126-reconciliation-evidence",
+  "render": {
+    "pages": 8,
+    "receiptSha256": "6511e5d9894c76d4b90174161f56ae53c0288de0b2fb3c05ba1a03ee751a26c3",
+    "scope": "HTML render only; no screenshot/PDF acceptance; canonical kit assets unchanged"
+  },
+  "delivery": "Local uncommitted documentation slice on docs/req126-coverage-reconciliation; owner-approved AC03 amendment applied; not pushed or released",
+  "ac03OwnerDecision": {
+    "date": "2026-10-22",
+    "choice": "Adopt applicable-evidence policy (recommended)",
+    "criterionAmended": true,
+    "criterionClosed": false
+  },
+  "policyAmendmentValidation": "Regenerated inventory; checked JSON, changed links and documentation render. Prior full solution pass retained; engine/tests/fixtures unchanged."
+}

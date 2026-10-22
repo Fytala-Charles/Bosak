@@ -17,6 +17,10 @@
 **REQ-126 equality/collation review - 21 October 2026:** [Five-family review](EQUALITY-COLLATION-CONTRACT-REVIEW.md) and [customer-reference matching](functions/customer-reference-matching.md) add58 executable checks, including six complete3.1/4.0 reports. Current catalog: **68 entries;2,636 feature +24 chapter checks =2,660**; four worked chapters and117 assigned names unchanged. Source1.23.1 remains unpublished; public1.23.0 unchanged. Two engine boundaries and compare keyword drift are explicitly separate observations, not supported draft contracts. REQ-126 remains In Progress; earlier counts/version statements below are historical.
 
 
+## Current reconciliation - 22 October 2026
+
+[The consolidated review](COVERAGE-RECONCILIATION.md) supplies 18 bounded source/test/catalog grammar rows, a current decision lifecycle table, a reproducible 71-entry evidence inventory and the owner-approved applicable-evidence AC-03 amendment. Current totals are 71 entries / 2,767 documentation checks. PR #409 is merged; union-minimum and URI-priority corrections are published in 1.23.4, while bracket parsing is in unpublished source 1.23.5. The policy was owner-approved on 22 October 2026 and the registry criterion amended; AC-03 remains partial pending entry validation.
+
 ## Historical decision and evidence
 
 **REQ-126 remains In Progress; version remains 1.1.3.** Reviewed on 2026-10-12 against Bosak `28144810a56370d3901ceca5ef35bb1759053b47` (merged PR #197). The catalog contains 67 entries, four worked chapters, 2,578 feature checks and 24 chapter checks: 2,602 executable documentation checks. The [name inventory](audit-function-inventory.json) assigns all 117 registered names; the [registration inventory](audit-registration-arities.json) scopes 68 non-constructor names. The remaining 49 names are focus constructors. These inventories do not prove all signatures, productions or conformance.
@@ -29,7 +33,7 @@ The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLE
 |---|---|---|
 | AC-01: landed slices and traceability | Partial | Full slice/grammar/signature mapping, exact tiers, per-contract source/tests. The 28 baseline provenance rows have delivery evidence but no historical adopted-specification pins. |
 | AC-02: deferred/rejected decisions | Partial | Validate the dossier-to-record matrix and superseded decisions against source/history; supplied records alone do not certify exhaustive lifecycle coverage. |
-| AC-03: examples and qt4tests gate references | Partial | Current fixtures establish their stated outcomes. The criterion literally requests qt4tests sets for every entry. XSLT-only, refusal and out-of-scope records need applicable harness evidence and explicit absent-gate status; acceptance treatment remains unresolved. Do not invent gates or silently waive this requirement. |
+| AC-03: applicable evidence and verified examples | Partial | Current fixtures establish their stated outcomes. The owner-amended criterion accepts applicable XPath, XSLT and disposition/refusal evidence, with absent-gate status explicit. Validate each entry under the approved policy; no conformance or closure is inferred. |
 | AC-04: structure and drift | Partial | All 71 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
 | AC-05: discoverability | Met for current scope | Keep canonical links/status synchronized through the remaining deliveries. |
 
@@ -37,7 +41,7 @@ A current immutable review pin can describe today's comparison, but cannot recon
 
 ## Documentation delivery queue
 
-The equality/collation review is now supplied. The bounded switch/array/select D3 mapping is now supplied. The bounded named/structural type and map/array pattern inventory is now supplied. The bounded compound/set/union review is supplied, including an explicit draft union-priority gap. Next: review that narrow correction and reconcile the remaining D3 matrix/AC-03 treatment; D2 defaults/options and engine findings remain separate. The exhaustive 197-name baseline declaration inventory is supplied; older inventory queue items below are historical. Normative prose impact and full behavior remain partial.
+The equality/collation, switch/array/select, type/structured-pattern and compound-pattern reviews are supplied. The union-minimum and EQName corrections have landed. [The current reconciliation](COVERAGE-RECONCILIATION.md) replaces the obsolete correction-review queue with bounded remaining grammar work: focus-function syntax and pipeline focus first, record casts/coercion/updates next, then lexical and host/declaration boundaries. D2 defaults/options and D4 historical pins/acceptance policy remain separate.
 
 
 
@@ -45,8 +49,8 @@ The equality/collation review is now supplied. The bounded switch/array/select D
 |---|---|---|
 | D1 — supplied | Expand [focus constructors](operators-and-syntax/focus-functions.md) across all 49 names | 508 new checks cover all 49 names, representative values/types, errors/context/cardinality, explicit modes and full typed delivery-import input/output. Exhaustive casting remains unclaimed; no engine behavior changed. |
 | D2 — partial | Signature, keyword, default and options matrix | [First matrix](SIGNATURE-CONTRACT-AUDIT.md) supplies all 68 families and 20 selected existing functions, plus 187 availability/behavior checks. The [complete 197-name baseline inventory](CHANGED-31-CONTRACT-INVENTORY.md) is supplied. Complete missing keyword metadata, normative prose classification and semantic defaults/types/options; declaration coverage does not close D2. [Text review](TEXT-CONTRACT-REVIEW.md) and [sequence review](SEQUENCE-CONTRACT-REVIEW.md) and [predicate review](PREDICATE-CONTRACT-REVIEW.md) and [selection review](SELECTION-CONTRACT-REVIEW.md) and [container review](CONTAINER-CONTRACT-REVIEW.md) and [date/time review](DATE-TIME-CONTRACT-REVIEW.md) and [URI/utility review](URI-UTILITY-CONTRACT-REVIEW.md) now supply all 37 absent-metadata families; none await first targeted review. All 37 still lack metadata; conversion/default/options and normative prose impact remain incomplete. |
-| D3 | Grammar/type/pattern matrix | Map REQ-118 S0–S8 and REQ-123 productions to parser/compiler tests, catalog entries and version gates. Include coercion/casts, focus syntax, record updates and XSLT patterns. Name absent productions rather than infer completeness from function counts. |
-| D4 | Acceptance reconciliation | Validate disposition lifecycle and feature-specific drift, retain unavailable historical pins, and record the agreed treatment of AC-03's blanket gate requirement. Close only when each criterion has reviewable evidence. |
+| D3 - partial | Grammar/type/pattern matrix | [18-row current mapping](COVERAGE-RECONCILIATION.md) supplied. Complete remaining dedicated entries and per-contract evidence. Historical scope: map REQ-118 S0–S8 and REQ-123 productions to parser/compiler tests, catalog entries and version gates. Include coercion/casts, focus syntax, record updates and XSLT patterns. Name absent productions rather than infer completeness from function counts. |
+| D4 - partial | Acceptance reconciliation | [Current lifecycle and approved AC-03 policy](COVERAGE-RECONCILIATION.md) supplied; owner policy approved; entry validation pending. Validate exhaustive disposition lifecycle and feature-specific drift, retain unavailable historical pins, and validate entry evidence under the approved applicable-evidence AC-03 policy. Close only when each criterion has reviewable evidence. |
 
 Each delivery needs canonical documentation synchronization, executable examples where behavior is asserted, solution build/tests and rendered-document verification. Engine changes additionally require the manual gates in AGENTS.md. This review authorizes no new release or deferred feature implementation.
 

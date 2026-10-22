@@ -30,7 +30,11 @@
 <!-- The Bosak XPath/XSLT 4.0 Feature Catalog -->
 <!-- Living document: one file per feature; index updated in the same PR as any entry. -->
 
-> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-21. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-22. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+
+## Current coverage and acceptance
+
+[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 71 entries. It records missing focus-function syntax, binary-literal and record-update catalog coverage. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
 
 ## Direction: a book and a working reference
 

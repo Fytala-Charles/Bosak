@@ -1,3 +1,9 @@
+# REQ-126 coverage reconciliation - 22 October 2026
+
+Base: `47b4f3a9c1ec624f53407101f261d0c2ae55ca65` (PR #409 merged). Source 1.23.5 remains unpublished; public and Braid dependency remain 1.23.4. [Current review](xpath40-catalog/COVERAGE-RECONCILIATION.md) supplies 18 bounded grammar/cluster rows, a 71-entry citation/structure inventory, decision lifecycle reconciliation and the owner-approved applicable-evidence AC-03 amendment (22 October 2026); entry validation remains open. Primary registry status/counts are corrected to 71 entries /2,767 documentation checks. Validation: all 10,516 solution tests pass, including 2,743 catalog and 24 chapter cases; build has zero errors and one pre-existing CS8604 warning. Eight changed Markdown pages render with unchanged Fytala CSS. Inventory regeneration is deterministic; local links, JSON, named methods and diff checks pass. No engine, fixtures, tier, gates, version or release change. Earlier session headers below are historical.
+
+Next bounded slice: a dedicated focus-function syntax/pipeline-focus entry with realistic baseline/edge examples; constructors remain a separate entry. Then record casts/coercion/updates. D2/D3/D4 and AC-03 stay partial; retain 28 unavailable historical adoption pins. Preserve pending upstream notes, sweep baselines, receipts, worktrees, stashes and protected PR #132. README commands/install instructions remain current.
+
 # REQ-126 EQName bracket parsing - 22 October 2026
 
 **22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](xpath40-catalog/EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.
