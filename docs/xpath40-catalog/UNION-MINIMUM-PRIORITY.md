@@ -4,6 +4,8 @@
   <p>22 October 2026 — source 1.23.3, unpublished</p>
 </div>
 
+**22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
+
 Source 1.23.3 assigns a 4.0 node-union template the **minimum** default priority of its alternatives, including alternatives that do not match the current item. Public 1.23.2 uses the maximum. This can change template selection when competing rules rely on implicit priorities. Explicit template priorities remain authoritative.
 
 For `<root/>`, `match="root | missing/child"` now has priority 0 rather than 0.5. A competing rule with explicit priority 0.25 therefore produces `competitor`. Both symbolic and keyword union catalog examples now declare this result; their previous `pattern` outcomes remain labelled as observations of 1.23.2. Existing example filenames are retained for stable links.

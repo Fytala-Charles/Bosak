@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 13-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 22-10-2026     | Verify minimum 4.0 union priorities and retain 3.0 dispatch controls.                     |
+//                      | Charles Korthout | 0.3   | 22-10-2026     | Verify URI pipe punctuation does not raise a union alternative's name priority.           |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -148,7 +149,7 @@ public class Xslt40UnionPatternTests
     [Fact]
     public void OperatorDelimiters()
     {
-        Assert.Equal("union", Run("""
+        Assert.Equal("fallback", Run("""
             <xsl:template match='/'><out><xsl:apply-templates select='/*'/></out></xsl:template>
             <xsl:template match="Q{urn:n|part}root | missing[.='x union y']">union</xsl:template>
             <xsl:template match='*' priority='0.25'>fallback</xsl:template>

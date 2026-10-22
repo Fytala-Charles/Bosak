@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
+
 **22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.
 
 **REQ-126 compound-pattern review — 21 October 2026:** [Grammar mapping](COMPOUND-PATTERN-GRAMMAR.md) adds30 manifest checks, including six complete3.0/4.0 manual reports. Two rows are explicit implementation observations: source1.23.2 uses maximum union alternative priority, while the pinned draft requires minimum; [separate finding](UNION-PRIORITY-ENGINE-FINDING.md) records the normative outcome and correction scope. Catalog71 entries /2,767 checks. REQ-126 remains In Progress; D2/D3/D4 and AC-03 partial. No engine/API/harness/version/gate/release change; prior count snapshots are historical.
