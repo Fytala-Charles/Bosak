@@ -1,3 +1,9 @@
+# Bosak 1.23.4 release preparation — 22 October 2026
+
+**1.23.4 release preparation — 22 October 2026:** [Readiness](RELEASE-1.23.4-READINESS.md) and [notes](RELEASE-NOTES-1.23.4.md) pin proposed v1.23.4 to PR #406 merge `2b5ffc50`, including unpublished1.23.3 union-minimum and1.23.4 EQName-priority corrections. Ten unsigned packages pass153 broad +270 focused package-only checks with matching provenance. Publication has not started; public1.23.2, completed Braid acceptance and REQ-126 In Progress remain unchanged.
+
+Base/immutable implementation: `2b5ffc5076af0411dee606b010368a36d637863a`. What was built: exact-merge release notes/readiness, ten unsigned candidate packages, fresh package-only153/270 consumers, identity/cache/source audits and read-only publication preflight. Preserve this proposed tag source after documentation merges. No tag, workflow dispatch, upload or GitHub release created. Next: preparation PR review/CI, then publication approval and repeated live preflight. README build/quick-start stays current; root pending upstream notes and PR132 are preserved.
+
 # REQ-126 EQName priority correction — 22 October 2026
 
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](xpath40-catalog/EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
