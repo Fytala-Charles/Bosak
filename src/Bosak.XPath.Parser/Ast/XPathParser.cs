@@ -170,6 +170,7 @@
 //                      | Charles Korthout | 1.75  | 13-10-2026     | Parse XPath 4.0 inline namespace declarations
 //                      | Charles Korthout | 1.76  | 13-10-2026     | Validate targeted processing-instruction sequence types with shared target parsing
 //                      | Charles Korthout | 1.77 | 13-10-2026     | Parse XPath 4.0 fn function types and documentary parameters
+//                      | Charles Korthout | 1.78 | 22-10-2026     | Gate record types while retaining inline-function signature text in older profiles.
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -4528,6 +4529,12 @@ internal sealed class XPathParser
         {
             if (Current.Kind == TokenKind.Eof)
                 break;
+
+            // Inline signatures retain their type text rather than using ParseSequenceType.
+            // Apply the same record gate here, including nested map/array/function types.
+            if (!_xpath40 && Current.Kind == TokenKind.Name && GetString(Current) == "record"
+                && Peek(1).Kind == TokenKind.LParen)
+                throw new XPathParseException("XPST0003: A record type ('record(...)') requires XPath 4.0.", Current.Start);
 
             if (Current.Kind == TokenKind.LParen)
             {

@@ -1,0 +1,2 @@
+(: REQ-126 record contract: coerce-nested; explicit input, no external context. :)
+function($r as record(nested as record(a as xs:double))) { $r?nested?a instance of xs:double }(map{'nested':map{'a':1}})

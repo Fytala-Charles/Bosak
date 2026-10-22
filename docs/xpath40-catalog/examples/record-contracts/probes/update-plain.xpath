@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-plain; explicit input, no external context. :)
+map{'a':1} but with map{'a':2}

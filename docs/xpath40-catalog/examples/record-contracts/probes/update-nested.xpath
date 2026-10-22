@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-nested; explicit input, no external context. :)
+let $r := map{'nested':map{'a':1}} cast as record(nested as record(a as xs:double)) return ($r but with map{'nested':map{'a':2}})?nested?a instance of xs:double

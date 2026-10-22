@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-annotation; explicit input, no external context. :)
+((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2}) instance of record(a as xs:integer)

@@ -1,0 +1,2 @@
+(: REQ-126 record contract: record-star-assert; explicit input, no external context. :)
+((map{'a':1} cast as record(a as xs:integer)) cast as record(*)) instance of record(a as xs:integer)

@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-empty-optional; explicit input, no external context. :)
+let $r := map{'note':'x'} cast as record(note as xs:string?) let $u := $r but with map{'note':()} return concat(map:contains($u,'note'),':',count($u?note))

@@ -1,0 +1,2 @@
+(: REQ-126 record contract: cast-extra; explicit input, no external context. :)
+map:contains(map{'a':1,'extra':2} cast as record(a as xs:integer),'extra')

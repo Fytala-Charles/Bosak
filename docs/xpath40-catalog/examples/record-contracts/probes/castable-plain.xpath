@@ -1,0 +1,2 @@
+(: REQ-126 record contract: castable-plain; explicit input, no external context. :)
+map{'a':1} castable as record(*)

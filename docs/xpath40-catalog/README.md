@@ -34,13 +34,13 @@
 
 ## Current coverage and acceptance
 
-Current totals: **72 entries; 2,773 feature +24 chapter checks =2,797**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; source 1.23.5/public 1.23.4 and REQ-126 In Progress are unchanged.
+Current totals: **73 entries; 2,819 feature +24 chapter checks =2,843**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; the subsequent [record-contract slice](RECORD-CONTRACTS.md) adds46 checks and a separate update entry, and fixes an inline-record signature gate in source1.23.6. Public1.23.4 and REQ-126 In Progress remain unchanged.
 
-[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 72 entries. The [focus-function syntax slice](FOCUS-FUNCTION-SYNTAX.md) supplies the dedicated syntax entry and 30 checks; binary-literal and record-update catalog expansion remains open. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
+[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 73 entries. The [focus-function syntax slice](FOCUS-FUNCTION-SYNTAX.md) supplies the dedicated syntax entry and 30 checks; [record casts/coercion/updates](RECORD-CONTRACTS.md) are now supplied in a bounded slice; binary-literal and broader host coverage remain open. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 72 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 73 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -208,6 +208,7 @@ XPath 3.1 comparison make the acceptance contract explicit.
 | [Enumeration types](type-system/enum-types.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Choice item types](type-system/choice-types.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Structural record types](type-system/structural-records.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Record updates with but with](type-system/record-updates.md) | Frozen 4.0 | REQ-118 S6b; cast/coercion distinctions, reconstruction and46 executable contract checks |
 | [Typed let coercion](type-system/typed-let-coercion.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Data model

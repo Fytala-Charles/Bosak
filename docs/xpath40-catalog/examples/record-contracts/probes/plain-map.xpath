@@ -1,0 +1,2 @@
+(: REQ-126 record contract: plain-map; explicit input, no external context. :)
+map{'a':1} instance of record(a)

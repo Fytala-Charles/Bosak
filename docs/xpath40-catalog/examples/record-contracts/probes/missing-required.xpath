@@ -1,0 +1,2 @@
+(: REQ-126 record contract: missing-required; explicit input, no external context. :)
+map{} cast as record(a as xs:integer)

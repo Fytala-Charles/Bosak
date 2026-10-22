@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-promote; explicit input, no external context. :)
+((map{'a':1} cast as record(a as xs:double)) but with map{'a':2})?a instance of xs:double

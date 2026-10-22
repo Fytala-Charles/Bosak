@@ -1,0 +1,2 @@
+(: REQ-126 record contract: typed-let-extra; explicit input, no external context. :)
+let $r as record(a) := map{'a':1,'extra':2} return $r?a

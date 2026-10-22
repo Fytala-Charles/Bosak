@@ -1,0 +1,2 @@
+(: REQ-126 record contract: typed-let-promote; explicit input, no external context. :)
+let $r as record(a as xs:double) := map{'a':1} return $r?a instance of xs:double

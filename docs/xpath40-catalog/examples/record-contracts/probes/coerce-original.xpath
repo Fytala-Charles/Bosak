@@ -1,0 +1,2 @@
+(: REQ-126 record contract: coerce-original; explicit input, no external context. :)
+let $raw := map{'a':1} let $r := function($x as record(a as xs:double)) {$x}($raw) return concat($raw?a instance of xs:integer,':',$r?a instance of xs:double)

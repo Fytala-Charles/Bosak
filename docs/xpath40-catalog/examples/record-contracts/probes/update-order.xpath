@@ -1,0 +1,2 @@
+(: REQ-126 record contract: update-order; explicit input, no external context. :)
+map:keys((map{'a':1,'b':2} cast as record(b,a)) but with map{'a':3}) => string-join('|')

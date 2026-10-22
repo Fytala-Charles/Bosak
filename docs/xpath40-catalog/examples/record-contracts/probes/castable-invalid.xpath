@@ -1,0 +1,2 @@
+(: REQ-126 record contract: castable-invalid; explicit input, no external context. :)
+map{'a':'oops'} castable as record(a as xs:integer)

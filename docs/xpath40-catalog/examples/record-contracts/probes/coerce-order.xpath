@@ -1,0 +1,2 @@
+(: REQ-126 record contract: coerce-order; explicit input, no external context. :)
+map:keys(function($r as record(b,a)) { $r }(map{'a':1,'b':2})) => string-join('|')

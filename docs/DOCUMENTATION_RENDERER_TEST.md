@@ -4,6 +4,8 @@
 
 # Documentation Renderer Test
 
+22 October2026: record-contract reference, complete stock task, inline-record signature finding and canonical status/counterpart updates rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-record-contract-render`. Field/index, local-link, XML/JSON and source header checks pass. HTML check only; no screenshot/PDF acceptance. Kit assets unchanged.
+
 22 October 2026: focus-function syntax entry, complete order-line examples, corrected pipeline prose and synchronized canonical coverage references rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-focus-syntax-render`. Local links, XML/JSON and 16-field/index checks pass. HTML check only; no screenshot/PDF acceptance. Kit assets unchanged.
 
 22 October 2026: REQ-126 coverage/acceptance reconciliation, corrected primary registry counts and canonical references rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-reconciliation-render`. Local links, JSON and matrix references validated. HTML check only; no screenshot/PDF acceptance. Kit assets unchanged.
