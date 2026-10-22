@@ -4,6 +4,8 @@
   <p>22 October 2026 — source 1.23.3, unpublished</p>
 </div>
 
+**Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.
+
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
 
 Source 1.23.3 assigns a 4.0 node-union template the **minimum** default priority of its alternatives, including alternatives that do not match the current item. Public 1.23.2 uses the maximum. This can change template selection when competing rules rely on implicit priorities. Explicit template priorities remain authoritative.

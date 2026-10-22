@@ -1,6 +1,6 @@
 {
   "date": "2026-10-22",
-  "status": "PREPARED_PUBLICATION_NOT_STARTED",
+  "status": "HISTORICAL_PREPARATION_COMPLETED_PUBLICATION_VERIFIED",
   "version": "1.23.4",
   "proposedTag": "v1.23.4",
   "immutableSource": "2b5ffc5076af0411dee606b010368a36d637863a",
@@ -13,10 +13,10 @@
   "exactHeadCI": 39733650315,
   "mergedMainCI": 39739617913,
   "mergedMainCIConclusion": "success",
-  "publicationPerformed": false,
-  "tagCreated": false,
-  "githubReleaseCreated": false,
-  "publicVersionCurrently": "1.23.2",
+  "publicationPerformed": true,
+  "tagCreated": true,
+  "githubReleaseCreated": true,
+  "publicVersionCurrently": "1.23.4",
   "packageVerification": {
     "date": "2026-10-22",
     "version": "1.23.4",
@@ -452,5 +452,6 @@
         "sha256": "4497a284ff70a540583f1c3cf0cb6e1b2054d96c4e40a780a960c4ea6d54e187"
       }
     ]
-  }
+  },
+  "publicationRecord": "RELEASE-1.23.4-PUBLICATION.json"
 }

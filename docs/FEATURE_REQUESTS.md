@@ -5,7 +5,7 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
-**1.23.4 release preparation — 22 October 2026:** [Readiness](RELEASE-1.23.4-READINESS.md) and [notes](RELEASE-NOTES-1.23.4.md) pin proposed v1.23.4 to PR #406 merge `2b5ffc50`, including unpublished1.23.3 union-minimum and1.23.4 EQName-priority corrections. Ten unsigned packages pass153 broad +270 focused package-only checks with matching provenance. Publication has not started; public1.23.2, completed Braid acceptance and REQ-126 In Progress remain unchanged.
+**1.23.4 published and verified — 22 October 2026:** [Public delivery proof](RELEASE-1.23.4-PUBLICATION.md) records immutable `v1.23.4` at `2b5ffc50`, one successful Release run (10,470 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /270 focused checks with matching provenance and clear audits. Includes the union-minimum and EQName-priority corrections; opening-bracket URI parsing remains separately limited. REQ-126 stays In Progress; completed Braid acceptance on1.23.0 is unchanged. Braid1.23.4 adoption remains a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.
 
 
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](xpath40-catalog/EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
