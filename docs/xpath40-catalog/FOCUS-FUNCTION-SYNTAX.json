@@ -1,0 +1,430 @@
+{
+  "date": "2026-10-22",
+  "base": "73403b918cf8955046986ad675792c12b4cece7c",
+  "engineBase": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
+  "reconciliationCommit": "73403b918cf8955046986ad675792c12b4cece7c",
+  "sourceVersion": "1.23.5",
+  "publishedVersion": "1.23.4",
+  "requirement": "REQ-126 In Progress; D2/D3/D4 and AC03 partial",
+  "scope": "Dedicated focus-function syntax/abbreviation entry, corrected pipeline context prose, complete order-line task and 30 executable checks; no engine change",
+  "specification": {
+    "revision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+    "refreshed": "2026-10-22",
+    "sections": [
+      "id-inline-func",
+      "id-focus-functions",
+      "id-pipeline-operator"
+    ],
+    "historicalAdoptionRecovered": false,
+    "files": {
+      "expressions.xml": "1fa994d200e67ff986d4a4787a0ac46b6ee545f4eb5613192cfafc3cde3dabd7",
+      "xpath-grammar.xml": "55122f68f6dd89ac5c577205fabf003de66f2d100c758774d27bcc756e2c27bd"
+    }
+  },
+  "originalDelivery": {
+    "pr": 87,
+    "revision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+    "verification": "Named focus-function tests present in immutable delivery source"
+  },
+  "newCases": [
+    {
+      "id": "focus-syntax-report-3-normal",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "focus-function-syntax/report-3.xsl",
+      "input": "focus-function-syntax/normal.xml",
+      "expected": "BOLT=25.00|NUT=10.00|FREE=0.00|lines=3;total=35.00"
+    },
+    {
+      "id": "focus-syntax-report-3-empty",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "focus-function-syntax/report-3.xsl",
+      "input": "focus-function-syntax/empty.xml",
+      "expected": "lines=0;total=0.00"
+    },
+    {
+      "id": "focus-syntax-report-3-reordered",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "focus-function-syntax/report-3.xsl",
+      "input": "focus-function-syntax/reordered.xml",
+      "expected": "FREE=0.00|NUT=10.00|BOLT=25.00|lines=3;total=35.00"
+    },
+    {
+      "id": "focus-syntax-report-3-invalid",
+      "kind": "xslt",
+      "mode": "xslt31",
+      "file": "focus-function-syntax/report-3.xsl",
+      "input": "focus-function-syntax/invalid.xml",
+      "error": "FORG0001"
+    },
+    {
+      "id": "focus-syntax-report-4-normal",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "focus-function-syntax/report-4.xsl",
+      "input": "focus-function-syntax/normal.xml",
+      "expected": "BOLT=25.00|NUT=10.00|FREE=0.00|lines=3;total=35.00"
+    },
+    {
+      "id": "focus-syntax-report-4-empty",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "focus-function-syntax/report-4.xsl",
+      "input": "focus-function-syntax/empty.xml",
+      "expected": "lines=0;total=0.00"
+    },
+    {
+      "id": "focus-syntax-report-4-reordered",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "focus-function-syntax/report-4.xsl",
+      "input": "focus-function-syntax/reordered.xml",
+      "expected": "FREE=0.00|NUT=10.00|BOLT=25.00|lines=3;total=35.00"
+    },
+    {
+      "id": "focus-syntax-report-4-invalid",
+      "kind": "xslt",
+      "mode": "xslt40",
+      "file": "focus-function-syntax/report-4.xsl",
+      "input": "focus-function-syntax/invalid.xml",
+      "error": "FORG0001"
+    },
+    {
+      "id": "focus-syntax-short",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/short.xpath",
+      "expected": "3",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-long",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/long.xpath",
+      "expected": "0",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-abbreviation",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/abbreviation.xpath",
+      "expected": "5",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-ordinary",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/ordinary.xpath",
+      "expected": "5",
+      "baselineExpected": "5"
+    },
+    {
+      "id": "focus-syntax-whole-focus",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/whole-focus.xpath",
+      "expected": "2:1:1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-empty-focus",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/empty-focus.xpath",
+      "expected": "0:1:1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-mapped-focus",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/mapped-focus.xpath",
+      "expected": "1:1:1|1:1:1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-source-positions",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/source-positions.xpath",
+      "expected": "1/2|2/2",
+      "baselineExpected": "1/2|2/2"
+    },
+    {
+      "id": "focus-syntax-function-positions",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/function-positions.xpath",
+      "expected": "1/1|1/1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-pipeline-whole",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/pipeline-whole.xpath",
+      "expected": "2:1:1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-pipeline-empty",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/pipeline-empty.xpath",
+      "expected": "0:1:1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-capture",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/capture.xpath",
+      "expected": "6",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-caller-restored",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/caller-restored.xpath",
+      "expected": "inner/outer",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-pipeline-restored",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/pipeline-restored.xpath",
+      "expected": "1/1/2|1/2/2",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-nested",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/nested.xpath",
+      "expected": "a,2",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-arity",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/arity.xpath",
+      "expected": "1",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-identity",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/identity.xpath",
+      "expected": "1,2",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-pipeline-expression",
+      "kind": "xpath",
+      "mode": "40",
+      "file": "focus-function-syntax/probes/pipeline-expression.xpath",
+      "expected": "9",
+      "baselineError": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-refuse31-short",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "focus-function-syntax/probes/short.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-refuse31-long",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "focus-function-syntax/probes/long.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-refuse31-abbreviation",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "focus-function-syntax/probes/abbreviation.xpath",
+      "error": "XPST0003"
+    },
+    {
+      "id": "focus-syntax-refuse31-pipeline-whole",
+      "kind": "xpath",
+      "mode": "31",
+      "file": "focus-function-syntax/probes/pipeline-whole.xpath",
+      "error": "XPST0003"
+    }
+  ],
+  "newCaseCount": 30,
+  "priorManifestRowsUnchanged": true,
+  "fullSolution": [
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0.trx",
+      "sha256": "4fe97bbc5134cbe599c0725694c9a2138440d792a6f9230f52b69aaa09d516ff",
+      "passed": 202,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[1].trx",
+      "sha256": "93e6511814c46b37578bd76ac3ef01eeda38dbed7f0b30a62ee912ed23a6df11",
+      "passed": 66,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[2].trx",
+      "sha256": "c542b0f195c434c0c3f2190f64c8ee85b8d9af0a2d321d4cdfbb7aa6d9e59164",
+      "passed": 269,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[3].trx",
+      "sha256": "fbba6e831e384e50f1596ee6bb97a910b9e40a08f1a16a5723a1332534e8ebf4",
+      "passed": 132,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[4].trx",
+      "sha256": "0b613652ff95481342b6f3e892480ae8cb7493f9c864655153f2b38fe455741c",
+      "passed": 411,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[5].trx",
+      "sha256": "d8803d8764f31204a22fb442bcc56330d212fa7d60bde4a84c84f6c5eef3b07b",
+      "passed": 1385,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[6].trx",
+      "sha256": "4cda7038899f9ef8e38f1c24b8a6ee789af9311f78085dd3048c09501147643b",
+      "passed": 47,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_43_net10.0[7].trx",
+      "sha256": "e5808b46e714d44812392f226fca69b3f7cd9e1763acc195366543f3c0f7448f",
+      "passed": 153,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_44_net10.0.trx",
+      "sha256": "3b28cb905ee509e88c244b375d33976064ef78d6ca7fb8c04290d74e6a935637",
+      "passed": 303,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "file": "charl_CHARLES_2026-10-22_18_41_44_net10.0[1].trx",
+      "sha256": "0bc98d4b08dbfc9a54a8f02afe7d21d1e67896fdf73ab2fbe4371e277e9db9b3",
+      "passed": 7578,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "fullTotals": {
+    "passed": 10546,
+    "failed": 0,
+    "skipped": 0
+  },
+  "focused": [
+    {
+      "file": "focused-final.trx",
+      "sha256": "2d596bd97207745427246439d1c073f958aeba1cfaaad68895d18019344203fa",
+      "passed": 30,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "initial": [
+    {
+      "file": "focused.trx",
+      "sha256": "8f1f4ed9af0e130dfd3b1bafbd564bd037bdfb200da041a5fa7844905ef88b78",
+      "passed": 29,
+      "failed": 1,
+      "skipped": 0
+    }
+  ],
+  "initialProbeFinding": "Caller-restored result was a singleton sequence wrapper displayed as (sequence) by the existing ToString-based harness. Explicit string-join makes the same restored value a scalar; original input and failure receipt preserved. No expected semantic value weakened.",
+  "catalog": {
+    "entries": 72,
+    "featureChecks": 2773,
+    "chapterChecks": 24,
+    "totalChecks": 2797,
+    "workedChapters": 4,
+    "assignedFunctionNames": 117
+  },
+  "engineChanges": false,
+  "runnerChanges": false,
+  "versionChanges": false,
+  "gateChanges": false,
+  "manualGatesRerun": false,
+  "gateRationale": "Documentation/examples only; no engine/test-runner changes. PR409 gate evidence retained as historical engine validation.",
+  "acceptancePolicy": "Owner-approved applicable evidence; no feature-specific qt4 gated-set assignment, no automatic entry/AC03 closure",
+  "profileScope": "Default Legacy host with effective stylesheet 3.0/4.0 plus explicit XPath31/XPath40 probes; exhaustive host/module/package/callback/type coverage unclaimed",
+  "evidenceDirectory": "D:\\Development\\Bosak\\.guard-tmp\\req126-focus-syntax-evidence",
+  "fixtureHashes": {
+    "examples\\focus-function-syntax\\empty.xml": "652c096e0b7f990a697ecfd2cb84da2685f732cf890b4aa5fa13001e7837b3e0",
+    "examples\\focus-function-syntax\\invalid.xml": "fd3cf72307704c69269764abc0a7ae1841d38ca79ab67af9b5eda05f5263dcfd",
+    "examples\\focus-function-syntax\\normal.xml": "9fa56fce5749cf2a4dee99e40fba67812588138fd1f80e2db48125a93ff6d0f0",
+    "examples\\focus-function-syntax\\probes\\abbreviation.xpath": "ee20b821f1d56eeed0371c5ce9186c49141b7f013ec209283ff91ebd8f3c1f5e",
+    "examples\\focus-function-syntax\\probes\\arity.xpath": "ff96550e0f55cf03f03a659725ad8cb836f74240d225740889de4212d63c10d3",
+    "examples\\focus-function-syntax\\probes\\caller-restored.xpath": "99ef024946987db41beb08d3abc1ee49b928240a0f57fb385abb33fcccd4681c",
+    "examples\\focus-function-syntax\\probes\\capture.xpath": "479081f06576c1509e5f4c51a5994514f1ac8f539ace2dbe38b98d1bb9e43146",
+    "examples\\focus-function-syntax\\probes\\empty-focus.xpath": "b73e868a5aa34cd7b88fa2b064d3fc7f4f8b5787f088ea17c8e7e3c2dde51205",
+    "examples\\focus-function-syntax\\probes\\function-positions.xpath": "0da1e884384a8b13ade422e42d12359b3da05118e750dd0027c8563ab9aa6735",
+    "examples\\focus-function-syntax\\probes\\identity.xpath": "8accb3a57548337448545cb74eede6b61adbfe9ad75d12fed5ca1fc295eea6be",
+    "examples\\focus-function-syntax\\probes\\long.xpath": "2fb577463ba876a4a70b967f0614143bc2cd6129240954351c645e2b6ac625be",
+    "examples\\focus-function-syntax\\probes\\mapped-focus.xpath": "4a6be3f88b70087f4cbb52c7ebf9fc3127060b7574cfadc715a33bf8b8148887",
+    "examples\\focus-function-syntax\\probes\\nested.xpath": "ce7204c24b3e9de711b0fdee66f167749859955cc2b9ff9ba3c1c41dd983677d",
+    "examples\\focus-function-syntax\\probes\\ordinary.xpath": "fc1a4251bd6396d3101f79b71e5e4ca907de15e544ab6f1abc99864ccac57481",
+    "examples\\focus-function-syntax\\probes\\pipeline-empty.xpath": "669a112777e1e6f037a22905c1d437a03d4462804a772ec5185c9b918a91512a",
+    "examples\\focus-function-syntax\\probes\\pipeline-expression.xpath": "c90513f41739d5d3c1e856bdfe2c9d28930d1e83a4261cc42d5bbddcd5dae00e",
+    "examples\\focus-function-syntax\\probes\\pipeline-restored.xpath": "828db4c3aaf87309030912a3f5a11d448950a8ed4eb2681f7ec412c793cc0366",
+    "examples\\focus-function-syntax\\probes\\pipeline-whole.xpath": "29a0c257facb230e84c212249542714ceecbe49eeb9664dfdc93cae8f600657d",
+    "examples\\focus-function-syntax\\probes\\short.xpath": "6a1e73f183f064f0d0c0cbc7d816489de7b10713d0d37fe68afdd16374809c7f",
+    "examples\\focus-function-syntax\\probes\\source-positions.xpath": "e194f487e1d63251b2d687e89092f4800902f2e76058dddbb791f07e8ea01d67",
+    "examples\\focus-function-syntax\\probes\\whole-focus.xpath": "c51375249cf800447ed2168f87c9582b772944f77b8a7374432ea61cf5790869",
+    "examples\\focus-function-syntax\\README.md": "6bccc604a9ff7f9bcce92995c982ca747638ca3e689448574a7d1c56ff8da70e",
+    "examples\\focus-function-syntax\\reordered.xml": "67205ac5033b22649ed70ee57bc2ac43587b6239627ece805c199ce844debacc",
+    "examples\\focus-function-syntax\\report-3.xsl": "0d1664a7c7b3f86aac7d2d3833f2da3a18440aef48601a0d3bd5e9fc3d2d288a",
+    "examples\\focus-function-syntax\\report-4.xsl": "0508f2253aef40a26d8ff8445e6c1604a37236e5f38abfbe01a62a587f1e71cf"
+  },
+  "build": {
+    "errors": 0,
+    "warnings": 1,
+    "warning": "Pre-existing CS8604 in conformance runner",
+    "receiptSha256": "343a97659b113d62e6ce3e0b9336f7f876aa0f2f152c7fb7962abc341b06865a"
+  },
+  "release": "No release; public/Braid pin remains 1.23.4",
+  "documentationCases": {
+    "CatalogExampleTests": 2773,
+    "WorkedExampleTests": 6,
+    "OrderRoutingReferenceGuideTests": 11,
+    "InvoiceReferenceGuideTests": 7
+  },
+  "inventorySha256": "434b0ad4bfa12d60a515050ee29d75415e73c8b8d4a992de3dcaba8c904b3ace",
+  "inventoryScriptSha256": "56164ab013d3dea14891bafb958a7a98a65c4c1dc97580b7e22d3fe2775c1dfd",
+  "render": {
+    "pages": 13,
+    "receiptSha256": "c00199c7483eb42cd3c9b031cb9b3ffdd8d643f5f9b13a01cd8d5d48921cf3cc",
+    "scope": "HTML render with unchanged Fytala CSS only; no screenshot/PDF acceptance"
+  },
+  "delivery": "Local focused documentation slice on reconciliation commit; not pushed or released"
+}

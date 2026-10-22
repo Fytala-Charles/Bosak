@@ -1,0 +1,2484 @@
+{
+  "date": "2026-10-22",
+  "sourceBase": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
+  "sourceVersion": "1.23.5",
+  "publishedVersion": "1.23.4",
+  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; no tier, gate, engine, fixture or release change",
+  "summary": {
+    "entries": 72,
+    "featureChecks": 2773,
+    "chapterChecks": 24,
+    "workedChapters": 4,
+    "totalDocumentationChecks": 2797,
+    "currentGatedSetCount": 218,
+    "entriesMentioningCurrentGatedSet": 25,
+    "entriesWithoutLiteralCurrentGatedSet": 47,
+    "entriesWithExactManifestIdsInKnownUses": 37,
+    "historicalAdoptedSpecPinsMissing": 28,
+    "countPolicy": "Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.",
+    "mappedGrammarClusterRows": 18
+  },
+  "entries": [
+    {
+      "entry": "data-model/jnode-navigation.md",
+      "classification": "**JNode navigation** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 JNode cluster; JNodeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/JNodeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "02de0407da9fc37d59941cc090687dc055ffb76d4791f11ef3eedd1bbd1615a7",
+      "exactManifestIdsInKnownUses": [
+        "jnode-navigation-before",
+        "jnode-navigation-edge",
+        "jnode-navigation-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-jkey",
+        "fn-jtree",
+        "fn-jvalue"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/jnode-navigation/edge.xpath",
+        "docs/xpath40-catalog/examples/jnode-navigation/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "data-model/jnode-template-boundary.md",
+      "classification": "**JNode model and template boundary \u2014 Deferred remainder; partial Frozen 4.0.** Shipped delivery remains [PR #116](https://github.com/Fytala-Charles/Bosak/pull/116), [revision 345ae58e](https://github.com/Fytala-Charles/Bosak/commit/345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0). Scope review: 2026-10-12, engine 1.1.2, [revision 3c0bd599](https://github.com/Fytala-Charles/Bosak/commit/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee). This reconciles the [original full-model exclusion](../../REQ-118-xpath-xslt-40.md) with partial delivered support.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "5a897057a597bb5932d6557db4c8b3fcc83f110b245272da5948bd6453dc291c",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/worked-examples/order-routing/README.md"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/jnode-scope/array-keys.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/attribute-axis.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/identity.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/missing-key.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/navigation-empty.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/navigation-main.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/navigation-reordered.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/parent-value.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/portable-empty.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/portable-main.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/portable-reordered.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/root-parent.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/type-jnode.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/type-node.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/wrong-jvalue.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/xnode-type-31.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/xnode-type-40.xpath",
+        "docs/xpath40-catalog/examples/jnode-scope/xnode-type-experimental.xpath",
+        "docs/xpath40-catalog/examples/jnode-template-boundary/navigation.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/capturing-accumulators.md",
+      "classification": "**Capturing accumulators \u2014 Deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the deferral. Bosak reviewed 2026-10-12 at [revision 7c827ace](https://github.com/Fytala-Charles/Bosak/commit/7c827ace77b917c130bba81f8599984ce54ab809), engine 1.1.2. This is a disposition reference, not implementation of capture semantics.\nExternal reference: [XSLT 4.0 capturing accumulators](https://qt4cg.org/specifications/xslt-40/Overview.html#capturing-accumulators). Immutable review source: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), ID `capturing-accumulators`, issue 211 / PR 717 (2023-09-29). This review does not recover the historical adopted specification pin.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "5b9f1e5c9c768b585332b77c984578631e9ba0ae6da3d4ea2037bfd8c9e00ecc",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/StreamingAccumulatorTests.cs",
+        "tests/Bosak.Xslt.Tests/StreamingSnapshotTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/capturing-accumulators/capture-absent.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/capture-empty.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/capture-no.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/capture31.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/input.xml",
+        "docs/xpath40-catalog/examples/capturing-accumulators/invalid-capture-observed.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/main-observed.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/not-applicable.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/ordinary-counter.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/ordinary31.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/projection-empty.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/projection31.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-empty.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-reordered.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/snapshot31.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/start-capture-observed.xsl",
+        "docs/xpath40-catalog/examples/capturing-accumulators/unknown-accumulator.xsl",
+        "docs/xpath40-catalog/examples/cases.json"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/computed-node-constructors.md",
+      "classification": "**Computed XPath node constructors \u2014 Deferred.** [REQ-118 tier-2 decision](../../REQ-118-xpath-xslt-40.md) records the original deferral: February-2026 draft movement and overlap with existing XQuery construction.\nBosak source reviewed 2026-10-12 at [revision 28d8dccc](https://github.com/Fytala-Charles/Bosak/commit/28d8dccc74ab35e27db92584a7bc3e1a202b7cb5) (URI documentation delivery; engine version 1.1.2). This is a new disposition record, not a constructor implementation or tier promotion.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "4605de22e068a51e4cff31b18dc932bedfd435d2ca60dd8e66413e1721b354b7",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "misc-FocusConstructors"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XQuery.Tests/PlaceholderTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/cases.json",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline-empty.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline-escaped.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/document-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/document-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/document-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/element-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/element-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/element-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/empty.xml",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/input.xml",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/main-refusal.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/text-31.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/text-40.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/text-experimental.xpath",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-empty.xsl",
+        "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-main.xsl",
+        "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/enclosing-modes.md",
+      "classification": "**Enclosing modes \u2014 Deferred.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) records the deferral. This record documents the boundary without enabling nested declarations. Bosak baseline reviewed 2026-10-12: [revision d7cc935a](https://github.com/Fytala-Charles/Bosak/commit/d7cc935a3690c767fc17b01b90de4105a7140bed), engine 1.1.2.\nExternal reference: [XSLT 4.0 enclosing modes](https://qt4cg.org/specifications/xslt-40/Overview.html#enclosing-modes). Immutable review source: [QT4CG xslt.xml at e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xslt-40/src/xslt.xml), section ID `enclosing-modes`. The source records issue 82 / PR 542 (2023-06-20). This review does not recover the historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "3c47b0ab167a456eb7616c1883ede3626ced505f2e56ee3fa3eb78beec3a494f",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/ModeConflictResolutionTests.cs",
+        "tests/Bosak.Xslt.Tests/StylesheetTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/cases.json",
+        "docs/xpath40-catalog/examples/enclosing-modes/audit.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/current-mode.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/default-conflict.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/duplicate.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/empty-declaration.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/explicit-child-mode.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/external-rule.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/input.xml",
+        "docs/xpath40-catalog/examples/enclosing-modes/lexical-default-mode.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/main-refusal3.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/main-refusal4.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/missing-child-match.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/named-child.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/namespace-alias.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/omitted-recursion-mode.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/portable-empty.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/portable-reordered.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/portable-reverse.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/portable3.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/portable4.xsl",
+        "docs/xpath40-catalog/examples/enclosing-modes/unnamed.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/external-input-functions.md",
+      "classification": "**External-input function proposals \u2014 Out of scope in the original dossier; absent in the reviewed Bosak paths.** Covers `fn:parse-html`, `fn:html-doc`, `fn:invisible-xml`, `fn:unparsed-binary` and `fn:xsd-validator`. The [REQ-118 decision](../../REQ-118-xpath-xslt-40.md) is preserved. Engine 1.1.2 reviewed against [revision bce0d9b1](https://github.com/Fytala-Charles/Bosak/commit/bce0d9b1e21ce2ed875821e592f64bf2ed69ee55).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "b7d96dabaf4bf9731ed814cea2db9c3041d970116e13f1f7015ca54abf01438e",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/external-input-functions/binary-empty.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/binary-invalid.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/binary-main.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/binary-zero-octet.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/fixed-record-empty.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/fixed-record-main.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/fixed-record-second.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-31-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-31-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-40-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-40-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-experimental-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-experimental-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-lookup-31.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/html-doc-lookup-40.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-2.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-2.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-2.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-lookup-31.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-lookup-40.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-empty.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-invalid.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-main.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-zero.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-empty.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-reordered.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-31-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-31-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-40-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-40-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-experimental-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-experimental-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-lookup-31.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/parse-html-lookup-40.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-31-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-40-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-experimental-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-lookup-31.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-lookup-40.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xml-is-not-html.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-31-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-31-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-40-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-40-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-experimental-0.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-experimental-1.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-lookup-31.xpath",
+        "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-lookup-40.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/fn-apply-templates.md",
+      "classification": "**fn:apply-templates \u2014 Deferred.** The [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains in force. Bosak engine 1.1.2 reviewed against [revision 7758c568](https://github.com/Fytala-Charles/Bosak/commit/7758c568612a19781c36bb1ca30c01e973a6246a).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "76245839574b45bd7e6782dc36075f200ec277285c0650604d2af8a60594209e",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/fn-apply-templates/availability-xslt31.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/availability-xslt40.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/call1-xslt31.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/call1-xslt40.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt31.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt40.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/empty.xml",
+        "docs/xpath40-catalog/examples/fn-apply-templates/input.xml",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-empty.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-input.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-reordered.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-empty.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-input.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-reordered.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/lookup-31.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/lookup-40.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/reference-xslt31.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/reference-xslt40.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/reordered.xml",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-empty.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-input.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-reordered.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-empty.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-input.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-reordered.xsl",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-31-arity1.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-31-arity2.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-40-arity1.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-40-arity2.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-experimental-arity1.xpath",
+        "docs/xpath40-catalog/examples/fn-apply-templates/xpath-experimental-arity2.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/language-streaming-scope.md",
+      "classification": "**XQuery and streaming language boundaries \u2014 Existing support; 4.0 deltas outside the original schedule.** Reviewed engine 1.1.2 at [revision 2184e920](https://github.com/Fytala-Charles/Bosak/commit/2184e9200394ca2e06f720bb9cdb95afd927aa51) on 2026-10-12. The [REQ-118 exclusion](../../REQ-118-xpath-xslt-40.md) does not mean that XQuery FLWOR or streaming input is absent.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "0a5aa282d0c1f165eea9ca27597857bbe427491b0e759c234dcafe62328e115f",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/language-streaming-scope/portable-empty.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/portable-main.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/portable-reordered.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-empty.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-main.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-reordered.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-empty.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-main.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-reordered.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-empty.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-main.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-reordered.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-empty.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-main.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-reordered.xsl",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-31.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-40.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-experimental.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-31.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-40.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-experimental.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-31.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-40.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-experimental.xpath",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xquery-empty.xq",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xquery-main.xq",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xquery-reordered.xq",
+        "docs/xpath40-catalog/examples/language-streaming-scope/xquery-version40.xq"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/serialization-parameters.md",
+      "classification": "**Serialization 4.0 parameter additions \u2014 Deferred, with a supported XSLT solidus control.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains; it must not imply that all serialization is missing. Bosak engine 1.1.2 reviewed against [revision 23218073](https://github.com/Fytala-Charles/Bosak/commit/232180733358fc4239229267763854fda0fa2791).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c5b15bd75ad21ef6e874cb134b308a6b482b4ae5de1a57c54d139b649ced5524",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical-main.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-header.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-method.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-quote-character.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-separator.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-escape-solidus.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-attributes.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-unit.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-canonical.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-header.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-quote-character.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-separator.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-escape-solidus.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-attributes.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-unit.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-json-lines.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-line-ending.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-json-lines-multiple.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-json-lines.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-line-ending.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-false.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-main.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-empty.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-reordered.xpath",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-header-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-header-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-quote-character-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-quote-character-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-separator-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-separator-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-attributes-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-attributes-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-unit-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-unit-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt40.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-yes-xslt31.xsl",
+        "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-yes-xslt40.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/xslt-item-type.md",
+      "classification": "**Implemented bounded XSLT4.0 surface in public1.23.2; complete declaration contract not certified.** This existing path is retained for links; deferred describes its historical dossier, not all present behavior. [Current pinned review](../TYPE-PATTERN-GRAMMAR.md).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "85196b2148d28666f372241afc8746d807e176d40087678e4416567943f67d9e",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+        "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordAliasTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/intake-types/enum-allowed.xsl",
+        "docs/xpath40-catalog/examples/intake-types/enum-rejected.xsl",
+        "docs/xpath40-catalog/examples/intake-types/structural-binding.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "deferred/xslt-record-type.md",
+      "classification": "**Implemented bounded XSLT4.0 named-record behavior in public1.23.2; broader contracts remain separately scoped.** The historical deferred URL is retained. [Current review](../TYPE-PATTERN-GRAMMAR.md) separates constructor identity, structural annotation and noncoercing type/pattern tests.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "68eb793a89d5b7cbf7bb47401bdac7cbb2e3cab5968d26c7eb1d7eeff96fe3cf",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+        "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/intake-types/nominal-no-constructor.xsl",
+        "docs/xpath40-catalog/examples/intake-types/nominal-other.xsl",
+        "docs/xpath40-catalog/examples/intake-types/nominal-own.xsl",
+        "docs/xpath40-catalog/examples/intake-types/nominal-plain-map.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "experimental/fn-scan.md",
+      "classification": "**`fn:scan`** \u2014 **Experimental** (ships only at the `XPath40Experimental` level; static XPST0017 at both `XPath31` *and* frozen `XPath40`). Spec: F&O 4.0 \u00a72.5.15, added by qt4cg Issue 2823 / PR 2824 (31 July 2026). Landed: REQ-123 S1 (1.1.0 track), level-plumbing slice 2026-10-09.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "23a400b6c92adc2201a33565a0338715a6d9c3cb19674542420bcae1750265c8",
+      "exactManifestIdsInKnownUses": [
+        "fn-scan-before",
+        "fn-scan-edge",
+        "fn-scan-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-scan"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/fn-scan/before.xpath",
+        "docs/xpath40-catalog/examples/fn-scan/edge.xpath",
+        "docs/xpath40-catalog/examples/fn-scan/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/atomic-equal.md",
+      "classification": "**Atomic equality** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "6760c2917db513ace0159d10aed926dfeae5a6ba527af621ace9c0b151919ce5",
+      "exactManifestIdsInKnownUses": [
+        "atomic-equal-before",
+        "atomic-equal-edge",
+        "atomic-equal-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-atomic-equal"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/atomic-equal/edge.xpath",
+        "docs/xpath40-catalog/examples/atomic-equal/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/batch-extrema.md",
+      "classification": "[fn:min](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-min)\nand [fn:max](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-max)\nalready exist in XPath 3.1. Their changed 4.0 contracts are outside the\n117-name inventory of 4.0-only functions. Bosak's QName extension was delivered\nin [PR #114](https://github.com/Fytala-Charles/Bosak/pull/114),\n[33894747](https://github.com/Fytala-Charles/Bosak/commit/33894747f04da970a1f3c0f17fa960fa1f620605).\nReviewed 2026-10-12 against immutable\n[QT4CG F&O source e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review does not recover the historical adopted draft.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c079e3f8657c603383a34207b4b55a5f91d1eb928081ea86a27e9b87b3fd2688",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/batch-extrema/all-invalid.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/ascii-collation.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/bad-untyped.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/baseline.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/booleans.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/codepoint-collation.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/decimal-range.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/decimal-result-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/empty-collation.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/empty-values.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/empty.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/keyword-values.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/main.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/mixed-max-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/mixed-max.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/mixed-min-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/mixed-min.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/mixed-order-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/nan-max.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/nan-min.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/plain-duration-max-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/plain-duration-min-observed.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/qname-max.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/qname-min.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/qname-prefix.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/qname-string.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/string-values.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/unknown-collation.xpath",
+        "docs/xpath40-catalog/examples/batch-extrema/untyped-values.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/bounded-retries.md",
+      "classification": "**Bounded retry state \u2014 Frozen 4.0.** [fn:while-do](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-while-do) and [fn:do-until](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-do-until).\nInitial engine delivery: [PR #88](https://github.com/Fytala-Charles/Bosak/pull/88),\n[revision 0a928bb8](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790), REQ-118 4.0-S5.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "a8ca53b74f5f33abab2991e929d19d110d49ac6ae2ced938a59463517d0754cd",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-do-until",
+        "fn-while-do"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/bounded-retries/baseline.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-action-error.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-empty-decision.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-empty-state.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-exhausted.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-initially-accepted.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-main.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-missing-status.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-nonboolean.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-noncallable-action.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-noncallable-predicate.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-one-attempt.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/until-zero-budget.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-action-error.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-empty-decision.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-exhausted.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-initially-accepted.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-main.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-missing-status.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-nonboolean.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-noncallable-action.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-noncallable-predicate.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-one-attempt.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-sequence-state.xpath",
+        "docs/xpath40-catalog/examples/bounded-retries/while-zero-budget.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/configured-label-callbacks.md",
+      "classification": "**Configured label callbacks \u2014 Frozen 4.0.** [fn:partial-apply](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-partial-apply) and [fn:identity](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-identity).\nInitial engine delivery: [PR #88](https://github.com/Fytala-Charles/Bosak/pull/88),\n[revision 0a928bb8](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790), REQ-118 4.0-S5.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c8896b59ea23f037b51fed4c1cd5e94509d0e0d3673371c0b2bf9b812733e858",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-identity"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/configured-label-callbacks/all-bound.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/baseline.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/bound-sequence.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/bound-type-error.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/callable-array.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/callable-map.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/empty-bindings.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/empty-input.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-baseline.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-container.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-empty.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-labels.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-node.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/identity-sequence.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/ignored-high-key.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/main.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/negative-key.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/noncallable.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/preserve-case.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/remaining-order.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/string-key.xpath",
+        "docs/xpath40-catalog/examples/configured-label-callbacks/zero-key.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/consecutive-partition.md",
+      "classification": "**Consecutive partitioning \u2014 Frozen 4.0.** [Bosak PR #88](https://github.com/Fytala-Charles/Bosak/pull/88) / [immutable revision `0a928bb8`](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790). This is the shipped engine delivery.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "b639b51404da904e8cff859d8774a2d97a97ec6a1aa3a6249fab209ae50e1566",
+      "exactManifestIdsInKnownUses": [
+        "consecutive-partition-edge",
+        "consecutive-partition-main",
+        "consecutive-partition-singleton"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-partition"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/consecutive-partition/edge.xpath",
+        "docs/xpath40-catalog/examples/consecutive-partition/main.xpath",
+        "docs/xpath40-catalog/examples/consecutive-partition/singleton.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/csv-parsing.md",
+      "classification": "**CSV parsing** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 CSV cluster; local FunctionLibrary CSV implementation. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "aacde77e7f44b615c294e4a395b83ab18bfb9d72e0d970ef358f627bb892871d",
+      "exactManifestIdsInKnownUses": [
+        "csv-parsing-before",
+        "csv-parsing-edge",
+        "csv-parsing-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-csv-doc",
+        "fn-csv-to-xml",
+        "fn-parse-csv"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/csv-parsing/edge.xpath",
+        "docs/xpath40-catalog/examples/csv-parsing/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/customer-reference-matching.md",
+      "classification": "**Customer-reference equality and collation \u2014 existing 3.1 functions with reviewed 4.0 contracts.** Covers fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token. Functions are not4.0-only names; this adds no name to the 117-name inventory. [REQ-126](../../FEATURE_REQUESTS.md) equality/collation documentation slice; [review and source pins](../EQUALITY-COLLATION-CONTRACT-REVIEW.md), source base `5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f`. Keyword syntax requires4.0. Unsupported draft forms are explicitly separated from supported calls.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "4bd50abee4afd1324f3cad4d02795e3111db0c663b23db9d5f3f7c8976c5746e",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-compare",
+        "fn-contains-token"
+      ],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/equality-contracts/README.md"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/customer-text-cleanup.md",
+      "classification": "**Customer text cleanup \u2014 Frozen 4.0.** [fn:trim-space](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trim-space), [fn:pad-string](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-pad-string), [fn:characters](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-characters), [fn:graphemes](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-graphemes) and [fn:char](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-char).\nInitial char/characters delivery: [PR #82](https://github.com/Fytala-Charles/Bosak/pull/82), [40ebaa79](https://github.com/Fytala-Charles/Bosak/commit/40ebaa79032b17fc45d6d3bb3e58cb00e2fda742), REQ-118 S0/S1 part 1. Remaining string functions: [PR #83](https://github.com/Fytala-Charles/Bosak/pull/83), [532d04f4](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39), S1 part 2.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "57ff688f40c518647291f4c70cb25814bea79ab0541726af0d66c22a71d421b6",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-characters"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/customer-text-cleanup/baseline.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/codepoint-split.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/combining-grapheme.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/emoji-zwj.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/empty-characters.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/empty-graphemes.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/empty-pad.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/empty-padding.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/empty-trim.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/entity-name.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/invalid-pad-side.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/invalid-trim-side.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/main.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/multi-codepoint-entity.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/nbsp-preserved.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/never-truncate.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/nonstring-characters.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/pad-both.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/preserve-interior.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/surrogate.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/trim-start.xpath",
+        "docs/xpath40-catalog/examples/customer-text-cleanup/unknown-entity.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/element-to-map.md",
+      "classification": "**Element-to-map conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "2ed6591342b473d57bc41a85723673e4b36ba36b4470362f129a0987c9ab8f39",
+      "exactManifestIdsInKnownUses": [
+        "element-to-map-before",
+        "element-to-map-edge",
+        "element-to-map-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "fn-element-to-map",
+        "fn-element-to-map-plan"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/element-to-map/edge.xpath",
+        "docs/xpath40-catalog/examples/element-to-map/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/higher-order-selection.md",
+      "classification": "**Higher-order selection \u2014 Frozen 4.0.** [Bosak PR #88](https://github.com/Fytala-Charles/Bosak/pull/88) / [immutable revision `0a928bb8`](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790). This is the shipped engine delivery.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "3009fef1682f10f37ffd88664ec789c576196a5070dfc862bf6465812960f025",
+      "exactManifestIdsInKnownUses": [
+        "higher-order-selection-before",
+        "higher-order-selection-edge",
+        "higher-order-selection-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/higher-order-selection/before.xpath",
+        "docs/xpath40-catalog/examples/higher-order-selection/edge.xpath",
+        "docs/xpath40-catalog/examples/higher-order-selection/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/import-array-batches.md",
+      "classification": "**Import batches with arrays \u2014 Frozen 4.0.** Shipped in [Bosak PR #84](https://github.com/Fytala-Charles/Bosak/pull/84) at immutable revision [`f7f55b4e`](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "dc58e0e7ef68e6b01145a94e42fd2d4703266a3945b3777b3e41f9d1b5f15024",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "array-build",
+        "array-items",
+        "array-slice"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/import-array-batches/baseline.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/edge.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/empty-member.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/incompatible-direction.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/main.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/negative-bounds.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/nested-array.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/out-of-range.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/positions.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/reverse.xpath",
+        "docs/xpath40-catalog/examples/import-array-batches/step.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/import-file-names.md",
+      "classification": "**Import file names \u2014 Frozen 4.0.** [fn:substring-before-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [fn:substring-after-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), and [fn:index-of-substring](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring).\nInitial delivery: [PR #83](https://github.com/Fytala-Charles/Bosak/pull/83), [532d04f4](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39), REQ-118 S1 part 2.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "7639f1b869bcaf7d79d19297400021733ebc3cb1c49699baa6ebd87ef1e52cce",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-index-of-substring"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/import-file-names/baseline.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/compound-extension.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/empty-both.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/empty-delimiter.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/empty-search.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/empty-source.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/explicit-collation.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/main.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/missing-delimiter.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/multi-item-source.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/no-matches.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/overlapping.xpath",
+        "docs/xpath40-catalog/examples/import-file-names/supplementary-position.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/invoice-api-uris.md",
+      "classification": "**Invoice API URIs \u2014 Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri), [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri), and [fn:decode-from-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-decode-from-uri).\nInitial engine delivery: [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84),\n[revision f7f55b4e](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19), REQ-118 4.0-S2.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.\nGeneral syntax references: [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986) and\n[RFC 3987](https://www.rfc-editor.org/rfc/rfc3987). The pinned function draft\nalso specifies convenient handling for some URI-adjacent strings.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "3adf9ecbfb652905e51117bbf2b85ec8dfb48491e75f9c9e772de94df8ac6848",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/invoice-api-uris/baseline.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/build-duplicate-query.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/build-nonmap.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/custom-port.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/decode-empty.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/decode-form.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/decode-plus.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/decode-utf8.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/default-port.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/delimiter-in-id.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/duplicate-query.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/encode-decode.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/fragment-only.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/invalid-utf8.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/ipv6-host.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/literal-plus.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/main.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/malformed-escape.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/nonhierarchical.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/normalized-roundtrip.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/parse-empty.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/port-type.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/query-plus.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/query-precedence.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/relative-reference.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/segment-precedence.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/space-in-id.xpath",
+        "docs/xpath40-catalog/examples/invoice-api-uris/unmatched-ipv6.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/map-to-element.md",
+      "classification": "**Map-to-element conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "947185d70fb4ed24e13599537ec9ca033b151d703cccf84d56a1d8e431419244",
+      "exactManifestIdsInKnownUses": [
+        "map-to-element-before",
+        "map-to-element-edge",
+        "map-to-element-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/map-to-element/edge.xpath",
+        "docs/xpath40-catalog/examples/map-to-element/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/measurement-comparison.md",
+      "classification": "[fn:compare](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-compare)\nis an existing XPath 3.1 function with expanded 4.0 comparison semantics. It is\ntherefore absent from the 117-name inventory of **4.0-only** functions.\nBosak delivery: [PR #112](https://github.com/Fytala-Charles/Bosak/pull/112),\n[89c90b4d](https://github.com/Fytala-Charles/Bosak/commit/89c90b4d5b6a216a4a37223e169d36e3a1a832bd).\nReviewed 2026-10-12 against immutable\n[QT4CG F&O source e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml).\nThis is a current review, not recovery of a historical adoption pin.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "48bb5fcdb2d100ee87228ea37de897813eaa01a17e78b4dec0849c609fa9f226",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-compare"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/measurement-comparison/ascii-labels.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/baseline.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/binary-octets.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/booleans.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/codepoint-labels.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/double-decimal.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/empty-collation.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/empty-left.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/empty-report.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/empty-right.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/equal-numeric.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/float-decimal.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/infinity.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/keyword-31.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/keyword-draft.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/keyword-engine.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/main.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/map-value.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/mixed-family.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/multiple-values.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/nan-equal.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/nan-low.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/negative-zero.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/promoted-equality.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/reversed-numeric.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/unknown-collation.xpath",
+        "docs/xpath40-catalog/examples/measurement-comparison/utc-instant.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/month-end-cutoffs.md",
+      "classification": "**Month-end cutoffs \u2014 Frozen 4.0.** [fn:build-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-dateTime) and [fn:days-in-month](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-days-in-month).\nInitial engine delivery: [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84),\n[revision f7f55b4e](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19), REQ-118 4.0-S2.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "0a872005a7f8c0155cdd32c970d047dc2182a6cdfc280a041205bbee207546e9",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/month-end-cutoffs/baseline.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/century-common.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/century-leap.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/common-year.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/date-only.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/empty-build.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/empty-month.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/fractional-time.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-day.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-fields.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-offset.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/local-month.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/main.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/midnight-24.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/negative-offset.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/stamp-type.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/thirty-day-month.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/without-timezone.xpath",
+        "docs/xpath40-catalog/examples/month-end-cutoffs/year-zero-month.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/numeric-import-diagnostics.md",
+      "classification": "Functions: [fn:is-NaN](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-is-NaN), [fn:atomic-type-annotation](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-type-annotation), [fn:op](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-op). Frozen 4.0.\nType/NaN delivery [PR #112](https://github.com/Fytala-Charles/Bosak/pull/112), [89c90b4d](https://github.com/Fytala-Charles/Bosak/commit/89c90b4d5b6a216a4a37223e169d36e3a1a832bd); operator accessor [PR #102](https://github.com/Fytala-Charles/Bosak/pull/102), [2c71d1ea](https://github.com/Fytala-Charles/Bosak/commit/2c71d1ea544ec2d5ab94c40c7bfabb0bc94e63c5).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "f675750003a5b53fc158e184c629ed81e7567368c58aadb15ced2d5daba465c1",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-op"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/FnOpTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/all-invalid.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/baseline.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/derived-type.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/division-zero.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/empty-nan.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/empty.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/main.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/map-nan.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/nan-number.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/nan-string.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/operator-arity.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/operator-pairs.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/ordinary-number.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/type-not-validator.xpath",
+        "docs/xpath40-catalog/examples/numeric-import-diagnostics/unknown-operator.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/order-sequence-selection.md",
+      "classification": "**Order-export sequence selection \u2014 Frozen 4.0.** Shipped in [Bosak PR #82](https://github.com/Fytala-Charles/Bosak/pull/82) at immutable revision [`40ebaa79`](https://github.com/Fytala-Charles/Bosak/commit/40ebaa79032b17fc45d6d3bb3e58cb00e2fda742).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c823cfd16aabb5c4af89ca24dd6a2ada4d1818f91a08ae7aa9947230f2053bc3",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-foot",
+        "fn-insert-separator",
+        "fn-items-at",
+        "fn-replicate",
+        "fn-trunk"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/order-sequence-selection/automatic-direction.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/baseline.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/edge.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/fractional-position.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/main.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/negative-bounds.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/negative-repeat.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/requested-baseline.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/requested-positions.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/reverse.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/separator-block.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/singleton.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/step.xpath",
+        "docs/xpath40-catalog/examples/order-sequence-selection/zero-repeat.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/ordered-queue-prefix.md",
+      "classification": "**Ordered queue prefix \u2014 Frozen 4.0.** [fn:take-while](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-take-while) and [fn:drop-while](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-drop-while).\nInitial engine delivery: [PR #88](https://github.com/Fytala-Charles/Bosak/pull/88),\n[revision 0a928bb8](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790), REQ-118 4.0-S5.\nDefinitions reviewed 2026-10-11 against the immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "225cdc9273e37dfd33a1e55248ef94355c1f3c50ef24c79c828ebf30c52794b9",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-take-while"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/all-ready.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/baseline.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-early-stop.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-empty-decision.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-nonboolean.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-noncallable.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/empty.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/filter-comparison.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/first-held.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/main.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/map-predicate.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/missing-status.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/position-cap.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/reconstruction.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/take-early-stop.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/take-empty-decision.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/take-nonboolean.xpath",
+        "docs/xpath40-catalog/examples/ordered-queue-prefix/take-noncallable.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/payload-fingerprints.md",
+      "classification": "Function: [fn:hash](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-hash). Frozen 4.0.\nOriginal delivery [PR #83](https://github.com/Fytala-Charles/Bosak/pull/83), [532d04f4](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "9bf173cff9ac9baed1dd402d68dd6c720b537a9bd4b4b77aa39858d0c7faab92",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/payload-fingerprints/binary-equivalent.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/changed-payload.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/default-md5.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/empty-sequence.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/empty-string.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/main.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/nonstring.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/normalized-algorithm.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/unsupported.xpath",
+        "docs/xpath40-catalog/examples/payload-fingerprints/whitespace-matters.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/product-dependency-closure.md",
+      "classification": "**Product dependency closure \u2014 Frozen 4.0.** [fn:transitive-closure](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-transitive-closure).\nInitial engine delivery: [PR #88](https://github.com/Fytala-Charles/Bosak/pull/88),\n[revision 0a928bb8](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790), REQ-118 4.0-S5.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c5ed5f7bacee39d63c9c26160960e1b53b27bf8c6a8fe3d91909f154b36d866a",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/product-dependency-closure/baseline.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/cycle.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/dangling-reference.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/duplicate-edge.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/include-start.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/leaf.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/main.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/missing-start.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/multiple-starts.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/node-identity.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/non-node-start.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/non-node-step.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/noncallable-step.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/reference-validation.xpath",
+        "docs/xpath40-catalog/examples/product-dependency-closure/self-cycle.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/product-map-index.md",
+      "classification": "**Product indexing with maps \u2014 Frozen 4.0.** Shipped in [Bosak PR #84](https://github.com/Fytala-Charles/Bosak/pull/84) at immutable revision [`f7f55b4e`](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "4dbe56c062ee77b523eb21d3f19b16c453f552968138867ce45ca0870e0cd485",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/product-map-index/baseline.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/combine.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/combiner.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/edge.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/empty-key.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/empty-predicate.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/entries-baseline.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/entries-boundary.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/invalid-policy.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/items-baseline.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/items-sequence-boundary.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/main.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/multi-key.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/positions.xpath",
+        "docs/xpath40-catalog/examples/product-map-index/reject.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/sequence-distinctness.md",
+      "classification": "**Sequence identity checks \u2014 Frozen 4.0.** [Bosak PR #83](https://github.com/Fytala-Charles/Bosak/pull/83) / [immutable revision `532d04f4`](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39). This is the shipped engine delivery.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "65545145777e53c01983762370f5dd71c900d2541e25e0f7d94174b8fa1410df",
+      "exactManifestIdsInKnownUses": [
+        "sequence-distinctness-before",
+        "sequence-distinctness-edge",
+        "sequence-distinctness-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/sequence-distinctness/before.xpath",
+        "docs/xpath40-catalog/examples/sequence-distinctness/edge.xpath",
+        "docs/xpath40-catalog/examples/sequence-distinctness/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/shipment-event-sequences.md",
+      "classification": "**Shipment-event sequence checks \u2014 Frozen 4.0.** Functions: [fn:all-equal](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-all-equal), [fn:contains-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-contains-subsequence), [fn:starts-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-starts-with-subsequence), [fn:ends-with-subsequence](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-ends-with-subsequence).\nInitial engine delivery: [Bosak PR #83](https://github.com/Fytala-Charles/Bosak/pull/83),\nimmutable revision [`532d04f4`](https://github.com/Fytala-Charles/Bosak/commit/532d04f40c3f1cbad93752e3158fc3cdfd4c7c39),\nREQ-118 4.0-S1 part 2. Definitions reviewed **2026-10-11** against immutable\n[QT4CG function source `a014e1b4`](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml). This review pin does not recover\nthe unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "b6ea670d8525cf4af2bf7dc69fc370f5706f2ac4432e5609ae8af1a4ad6a99c2",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-contains-subsequence"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/shipment-event-sequences/baseline.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/case-sensitive-identities.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-empty-result.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-nonboolean.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-not-function.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-wrong-arity.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/edge.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/empty-comparator-default.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/empty-requirement.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/equal-singleton.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/identity-collation-baseline.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/identity-collation.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/long-pattern.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/main.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/missing-event-code.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/missing-shipment.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/mixed-shipment.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/nan-equality.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/noncontiguous-baseline.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/noncontiguous.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/numeric-equality.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/record-comparator.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/repeated-events.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/unequal-identities.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/unexpected-event.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/unfinished-history.xpath",
+        "docs/xpath40-catalog/examples/shipment-event-sequences/wrong-start.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/sort-with.md",
+      "classification": "**Comparator-based sorting** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "e3594801e90b65c7bd4a2fc7c34c7d96a60fe2430c108668641bf138a818244a",
+      "exactManifestIdsInKnownUses": [
+        "sort-with-before",
+        "sort-with-edge",
+        "sort-with-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "array-sort-with",
+        "fn-sort-with"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/sort-with/edge.xpath",
+        "docs/xpath40-catalog/examples/sort-with/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/supplier-offer-ranking.md",
+      "classification": "Functions: [fn:highest](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-highest), [fn:lowest](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-lowest), [fn:sort-by](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-by), [fn:collation-available](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-collation-available). Frozen 4.0.\nOriginal ranking delivery [PR #83](https://github.com/Fytala-Charles/Bosak/pull/83), [532d04f4](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39); collation availability [PR #114](https://github.com/Fytala-Charles/Bosak/pull/114), [33894747](https://github.com/Fytala-Charles/Bosak/commit/33894747f04da970a1f3c0f17fa960fa1f620605).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "e8370e82dd12fe10d003c29dad0a3403e6362b7d77151a9c0408eda627c0054b",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-collation-available"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/all-boundary-ties.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/available-ascii.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/bad-untyped.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/baseline.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/computed-key-tie-observed.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/default-sort.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/descending.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/empty-offers.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/fallback.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/invalid-order.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/invalid-record.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/main.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/numeric-untyped.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/stable-ties.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/string-key.xpath",
+        "docs/xpath40-catalog/examples/supplier-offer-ranking/unavailable.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/timestamp-deadlines.md",
+      "classification": "**Timestamp deadlines \u2014 Frozen 4.0.** [fn:unix-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-unix-dateTime), [fn:seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-seconds), and [fn:duration-to-seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-duration-to-seconds).\nInitial engine delivery: [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84),\n[revision f7f55b4e](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19), REQ-118 4.0-S2.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "646e69166b823086f13cd35044629995e7b11d4d7a3fe7d6cc72f35f7321c343",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-seconds-from-duration",
+        "fn-unix-dateTime"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/timestamp-deadlines/baseline.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/duration-roundtrip.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/empty-seconds.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/empty-total.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/epoch-default.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/epoch-empty.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/exact-budget.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/fractional-duration.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/main.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/negative-duration.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/negative-epoch.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/one-day.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/one-millisecond.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/over-budget.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/stamp-type.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/total-versus-component.xpath",
+        "docs/xpath40-catalog/examples/timestamp-deadlines/zero-duration.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/uri-option-policy.md",
+      "classification": "**URI option policy \u2014 Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri) and [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri).\nInitial engine delivery: [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84), [revision f7f55b4e](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19), REQ-118 4.0-S2.\nDefinitions reviewed 2026-10-12 against immutable [QT4CG function source e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review does not recover the historical adopted specification snapshot.\nGeneral syntax: [RFC 3986](https://www.rfc-editor.org/rfc/rfc3986) and [RFC 3987](https://www.rfc-editor.org/rfc/rfc3987).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "a5d7f599bfe26ebcab9a340be25c6d75b3c4050d72406ff283fbf0fe16c46518",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/cases.json",
+        "docs/xpath40-catalog/examples/uri-option-policy/baseline.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/build-nonmap-options.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/build-password-allow.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/build-password-default.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/component-precedence.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-input-invalid-options.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-options.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-password.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-query-map-observed.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-segments-fallback.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/empty-string-segment.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/invalid-ipv6.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/keyword-options.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/main.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/nonboolean-build-observed.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/nonboolean-parse-observed.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/nonboolean-unc-observed.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/omit-default-port.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/parse-nonmap-options.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/parse-password-allow.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/parse-password-default.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/query-map-override.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/raw-authority-bypass.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/retain-nondefault-port.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/unc-build-default.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/unc-build.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/unc-default.xpath",
+        "docs/xpath40-catalog/examples/uri-option-policy/unc-enabled.xpath",
+        "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "functions/warehouse-pick-sorting.md",
+      "classification": "[fn:sort](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort)\nand [array:sort](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort)\nare existing 3.1 functions retained in the 4.0 draft. They are outside the\n117-name inventory of 4.0-only functions. Implementation reviewed at Bosak\n[source baseline 0597047a](https://github.com/Fytala-Charles/Bosak/blob/0597047aed99851d10445993e2e636f3aeb437f2/src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs),\nwith the named tests below. Historical adopted draft pins remain unavailable.\nCurrent review: 2026-10-12 against immutable\n[QT4CG F&O source e7ee4ab8](https://github.com/qt4cg/qtspecs/blob/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "2c30f0106c349ffa7ba0f361be1716170840f1b06a2149fa5592ba1a7af79d24",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "array-sort",
+        "fn-sort"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/array-empty-default-key.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/ascii-labels.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/baseline.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/codepoint-labels.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/default-numeric.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/empty-array.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/empty-default-key.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/empty-invalid-collation-observed.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/empty-key-sequence.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/empty.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/explicit-data-key.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/incomparable-keys.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/invalid-bin.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/keyword-array.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/keyword-sequence.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/main.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/multi-item-members.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/nan-forward-observed.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/nan-reversed-observed.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/nested-array-members.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/non-callable-key.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/numeric-array-key-observed.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/numeric-key-observed.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/qname-key.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/singleton-array.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/sort-by-equivalence.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/stable-ties.xpath",
+        "docs/xpath40-catalog/examples/warehouse-pick-sorting/unknown-collation.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/array-member-iteration.md",
+      "classification": "**Array member iteration** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "474ebe098a02f2731f7ed00e88ca5f2e2406576fa97f8b065a908b6bdc1704ac",
+      "exactManifestIdsInKnownUses": [
+        "array-member-iteration-before",
+        "array-member-iteration-edge",
+        "array-member-iteration-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/array-member-iteration/edge.xpath",
+        "docs/xpath40-catalog/examples/array-member-iteration/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/destructuring-let.md",
+      "classification": "**Destructuring `let` bindings** \u2014 **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 \u00a74.14 (FLWOR expressions), [QT4CG PR #1131](https://github.com/qt4cg/qtspecs/pull/1131). Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "5dd0a363abe9396d477a6b9050b7646df72b177528b54c0f280e09a9ef6932e5",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "fn-compare",
+        "prod-LetClause"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/destructuring-let/edge.xpath",
+        "docs/xpath40-catalog/examples/destructuring-let/main.xpath",
+        "docs/xpath40-catalog/worked-examples/invoice-to-erp/README.md"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/focus-function-syntax.md",
+      "classification": "**Focus-function syntax** - **Frozen 4.0**, REQ-118 S4. `fn { E }` and `function { E }` omit the signature and take one `item()*` argument, bound as the whole context value. `fn($x) { E }` abbreviates an ordinary explicit-signature inline function; it is not a focus function. This entry is distinct from the [zero-argument focus constructors](focus-functions.md).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "a03ec00f2cb020d1bfd47513096e39353fcfbadeb7b050cd4d4159cc99597333",
+      "exactManifestIdsInKnownUses": [
+        "focus-syntax-report-3-normal",
+        "focus-syntax-report-4-normal"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/FOCUS-FUNCTION-SYNTAX.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/focus-function-syntax/README.md"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/focus-functions.md",
+      "classification": "**Focus-based constructors** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "611a0dbe0e5294cc09a34da0f7c16bee4541d3d9e5bcd1c3da58418e16a5ec0e",
+      "exactManifestIdsInKnownUses": [
+        "focus-functions-before",
+        "focus-functions-edge",
+        "focus-functions-main"
+      ],
+      "mentionedCurrentGatedSets": [
+        "misc-FocusConstructors",
+        "xs-normalizedString",
+        "xs-numeric",
+        "xs-token"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/audit-focus-constructors.json",
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/focus-functions/README.md",
+        "docs/xpath40-catalog/examples/focus-functions/audit/import-31.xpath",
+        "docs/xpath40-catalog/examples/focus-functions/audit/import-40.xpath",
+        "docs/xpath40-catalog/examples/focus-functions/edge.xpath",
+        "docs/xpath40-catalog/examples/focus-functions/main.xpath",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+        "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/keyword-arguments.md",
+      "classification": "**Keyword arguments** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "254083e25085f582a2948e6fcf2482daab80c9360be3afca0eeab2fe53c50784",
+      "exactManifestIdsInKnownUses": [
+        "keyword-arguments-before",
+        "keyword-arguments-edge",
+        "keyword-arguments-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/keyword-arguments/edge.xpath",
+        "docs/xpath40-catalog/examples/keyword-arguments/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/map-entry-iteration.md",
+      "classification": "**Map entry iteration** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "ad4f2df2ebd30274916565822a8e88c9131650105bcf9f4d5dfe2cf6e472917b",
+      "exactManifestIdsInKnownUses": [
+        "map-entry-iteration-before",
+        "map-entry-iteration-edge",
+        "map-entry-iteration-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/map-entry-iteration/edge.xpath",
+        "docs/xpath40-catalog/examples/map-entry-iteration/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/mapping-arrow.md",
+      "classification": "**Mapping arrow** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "78f3c315d2743b712202f496a4594671453312493ea80303ba9eb1edbb165ee6",
+      "exactManifestIdsInKnownUses": [
+        "mapping-arrow-before",
+        "mapping-arrow-edge",
+        "mapping-arrow-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/mapping-arrow/edge.xpath",
+        "docs/xpath40-catalog/examples/mapping-arrow/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "classification": "**Method-call operator `=?>`** \u2014 **Deferred** (deliberately not implemented). Spec: XPath 4.0 \u00a74.22.3 (operator summary), [QT4CG issue #2219](https://github.com/qt4cg/qtspecs/issues/2219). Deferral recorded: REQ-118 dossier \u00a71.2 \"Still moving \u2014 do NOT build yet\" (semantics changed 25 June 2026).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "271bfb5bb698e9df358f9472f41427893ac3b97b158b636512522b6b1ec21b9d",
+      "exactManifestIdsInKnownUses": [
+        "method-call-alternative-edge",
+        "method-call-alternative-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/method-call-alternative/edge.xpath",
+        "docs/xpath40-catalog/examples/method-call-alternative/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/otherwise-operator.md",
+      "classification": "**Otherwise operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "b0f09dabf89ecd2c666a28579ac2739991743031f822f2189b28e016ad63e740",
+      "exactManifestIdsInKnownUses": [
+        "otherwise-operator-before",
+        "otherwise-operator-edge",
+        "otherwise-operator-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/otherwise-operator/edge.xpath",
+        "docs/xpath40-catalog/examples/otherwise-operator/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/pipeline-operator.md",
+      "classification": "**Pipeline operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "76ff49fe1358989ef52dd72f351c5001131ae0f2a2cc5f913f9b4469da5c7ad7",
+      "exactManifestIdsInKnownUses": [
+        "pipeline-operator-before",
+        "pipeline-operator-edge",
+        "pipeline-operator-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/pipeline-operator/edge.xpath",
+        "docs/xpath40-catalog/examples/pipeline-operator/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/sequence-collection-iteration.md",
+      "classification": "**Iteration across collection sequences \u2014 Frozen 4.0.** [Bosak PR #87](https://github.com/Fytala-Charles/Bosak/pull/87) / [immutable revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813). This is the shipped engine delivery.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "198dec0d09c8525291c9b18471cb4b6b17231d0dd511ded182cdb57b89b6f0d2",
+      "exactManifestIdsInKnownUses": [
+        "sequence-collection-iteration-arrays",
+        "sequence-collection-iteration-invalid",
+        "sequence-collection-iteration-maps"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/sequence-collection-iteration/arrays.xpath",
+        "docs/xpath40-catalog/examples/sequence-collection-iteration/invalid.xpath",
+        "docs/xpath40-catalog/examples/sequence-collection-iteration/maps.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "operators-and-syntax/string-templates.md",
+      "classification": "**String templates** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "a4ecd10b15664c7f7ff7fae8852de97928fcde174dd1bab05d49731216033fa9",
+      "exactManifestIdsInKnownUses": [
+        "string-templates-before",
+        "string-templates-edge",
+        "string-templates-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/string-templates/edge.xpath",
+        "docs/xpath40-catalog/examples/string-templates/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "rejected/directional-scan.md",
+      "classification": "**Directional scan names \u2014 Rejected / superseded.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "ec3ca549c4df49f8c403dfa144104969e5e8d7ed311b227df7b19e0bcd81491f",
+      "exactManifestIdsInKnownUses": [
+        "directional-scan-left",
+        "directional-scan-right"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/directional-scan/left.xpath",
+        "docs/xpath40-catalog/examples/directional-scan/right.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "rejected/extensible-map-types.md",
+      "classification": "**Extensible map type proposal \u2014 Rejected proposal; record alternatives shipped.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "fcfbc45c84d780c2e2300acfe9cbc1dfdc2f6ecb6bf6061ad3e8e530c933b517",
+      "exactManifestIdsInKnownUses": [
+        "extensible-map-types-cast",
+        "extensible-map-types-coercion"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/extensible-map-types/cast.xpath",
+        "docs/xpath40-catalog/examples/extensible-map-types/coercion.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "rejected/mapping-arrow-gtgt.md",
+      "classification": "**Mapping arrow, original spelling `=>>`** \u2014 **Rejected\u2013Superseded**. Bosak never shipped this spelling; the engine implemented the renamed form directly. Disposition recorded: REQ-118 dossier \u00a71.2 \"Deliberately rejected / renamed (do not implement old shapes)\".",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "567d7c87cf6826636e1cd1ae0f03cd88b059bd8ec87c971732f9a82ad5a15afc",
+      "exactManifestIdsInKnownUses": [
+        "rejected-mapping-arrow-edge",
+        "rejected-mapping-arrow-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/examples/rejected-mapping-arrow/edge.xpath",
+        "docs/xpath40-catalog/operators-and-syntax/mapping-arrow.md",
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "rejected/obsolete-quantifier-functions.md",
+      "classification": "**Never-adopted quantifier names \u2014 Rejected.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "81ec1bd1dfa04e210686619dafd00014f6e6ea74278b020ed19411dde46646c6",
+      "exactManifestIdsInKnownUses": [
+        "obsolete-quantifier-functions-all",
+        "obsolete-quantifier-functions-alternative",
+        "obsolete-quantifier-functions-some-of"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/obsolete-quantifier-functions/all.xpath",
+        "docs/xpath40-catalog/examples/obsolete-quantifier-functions/alternative.xpath",
+        "docs/xpath40-catalog/examples/obsolete-quantifier-functions/some-of.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "rejected/xpath-switch-expression.md",
+      "classification": "**XPath switch expression \u2014 Rejected in XPath.** [Bosak PR #77](https://github.com/Fytala-Charles/Bosak/pull/77) / [immutable revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525). This is a disposition dossier, not implementation of the refused/deferred shape.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "e3fd5d613e664ef1c75da00fba125dcc85f5bc1af09e35710d3711aa05093f26",
+      "exactManifestIdsInKnownUses": [
+        "xpath-switch-expression-alternative",
+        "xpath-switch-expression-refusal"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/xpath-switch-expression/alternative.xpath",
+        "docs/xpath40-catalog/examples/xpath-switch-expression/refusal.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "type-system/choice-types.md",
+      "classification": "**Choice item types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; choice item type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c3771328882218efdeaeab191e05c2a0a8c35287771825efa71945d1c54e904a",
+      "exactManifestIdsInKnownUses": [
+        "choice-types-before",
+        "choice-types-edge",
+        "choice-types-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/choice-types/edge.xpath",
+        "docs/xpath40-catalog/examples/choice-types/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "type-system/enum-types.md",
+      "classification": "**Enumeration types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; XPath enum type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "8728acdbef40ed39a34d09f709f1c6d2ac6b67c8cb9c4b0043417b742bfe76f5",
+      "exactManifestIdsInKnownUses": [
+        "enum-types-before",
+        "enum-types-edge",
+        "enum-types-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/enum-types/edge.xpath",
+        "docs/xpath40-catalog/examples/enum-types/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "type-system/nominative-records.md",
+      "classification": "**Bounded XSLT-defined identity is implemented in public1.23.2; this is not a standalone XPath declaration facility or a complete promotion of the historical deferred proposal.** [Current mapping](../TYPE-PATTERN-GRAMMAR.md).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "f4619d78cb898d1ca27c39c36852dab203865a306c5646f337cd159093b5aa3a",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/intake-types/nominal-other.xsl",
+        "docs/xpath40-catalog/examples/intake-types/nominal-own.xsl",
+        "docs/xpath40-catalog/examples/intake-types/type-nominal-other.xsl",
+        "docs/xpath40-catalog/examples/intake-types/type-nominal-own.xsl",
+        "docs/xpath40-catalog/examples/nominative-records/alternative.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "type-system/structural-records.md",
+      "classification": "**Structural record types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6b; structural record evidence in RecordTypeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "d8eae5d88121058a7a86c75e7aa2a940b7d5fcae582834fb462d323d26737a15",
+      "exactManifestIdsInKnownUses": [
+        "structural-records-before",
+        "structural-records-edge",
+        "structural-records-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/structural-records/edge.xpath",
+        "docs/xpath40-catalog/examples/structural-records/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "type-system/typed-let-coercion.md",
+      "classification": "**Typed let coercion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 destructuring/typed-let cluster; local coercion tests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "7fe4ab37878bf1647a607da0da62b8a42cf1109e3a61b03ea40b539d71caa3b3",
+      "exactManifestIdsInKnownUses": [
+        "typed-let-coercion-before",
+        "typed-let-coercion-edge",
+        "typed-let-coercion-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/typed-let-coercion/edge.xpath",
+        "docs/xpath40-catalog/examples/typed-let-coercion/main.xpath"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/compound-patterns.md",
+      "classification": "**Implemented bounded XSLT4.0 compound contexts, with an explicit current-draft union-priority gap.** Public/source1.23.2 unchanged. [Pinned review](../COMPOUND-PATTERN-GRAMMAR.md) distinguishes observed behavior from normative expectation.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "69014e55be8dc4cf5fcb027fe20157a141a127ac10cb6ae669d7383903f896fe",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/COMPOUND-PATTERN-GRAMMAR.md"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/manual-patterns/README.md",
+        "docs/xpath40-catalog/examples/manual-patterns/set-grouped40.xsl",
+        "docs/xpath40-catalog/examples/manual-patterns/set-left40.xsl",
+        "docs/xpath40-catalog/examples/manual-patterns/union-explicit40.xsl",
+        "docs/xpath40-catalog/examples/manual-patterns/union-max40.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/instruction-separators.md",
+      "classification": "**Instruction separators** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "f5206c51172ecd31215133d207a9b1d1bc901125d8c7d52f74327e942472e190",
+      "exactManifestIdsInKnownUses": [
+        "instruction-separators-before",
+        "instruction-separators-edge",
+        "instruction-separators-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/instruction-separators/edge.xml",
+        "docs/xpath40-catalog/examples/instruction-separators/main.xml",
+        "docs/xpath40-catalog/examples/instruction-separators/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/structured-value-patterns.md",
+      "classification": "**Implemented bounded XSLT4.0 surface in public1.23.2.** This entry maps tested type, record, map-entry and array-member patterns; it is not the complete pattern grammar. [Pinned source/deliveries](../TYPE-PATTERN-GRAMMAR.md).",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "cde72eff4f449584ec86365ab06a1724586c58528be892dd8f00e62e04cebce2",
+      "exactManifestIdsInKnownUses": [],
+      "mentionedCurrentGatedSets": [
+        "map-entry"
+      ],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40ArrayPatternTests.cs",
+        "tests/Bosak.Xslt.Tests/Xslt40MapEntryPatternTests.cs",
+        "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/intake-types/README.md",
+        "docs/xpath40-catalog/examples/intake-types/array-empty-member.xsl",
+        "docs/xpath40-catalog/examples/intake-types/array-vacuous.xsl",
+        "docs/xpath40-catalog/examples/intake-types/map-empty-missing.xsl",
+        "docs/xpath40-catalog/examples/intake-types/map-empty-present.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-array.md",
+      "classification": "**xsl:array and xsl:array-member** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "a97baffeec5a55c94f970ffe06e4aee07dc86b6bdfb6016c2bf68b66b886082d",
+      "exactManifestIdsInKnownUses": [
+        "xsl-array-before",
+        "xsl-array-edge",
+        "xsl-array-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/xsl-array/edge.xml",
+        "docs/xpath40-catalog/examples/xsl-array/main.xml",
+        "docs/xpath40-catalog/examples/xsl-array/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-if.md",
+      "classification": "**xsl:if then/else** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "e6dbf949ad8710ee6845af91da0b4b7d6837327c4314df3787ccd60baa20036a",
+      "exactManifestIdsInKnownUses": [
+        "xsl-if-before",
+        "xsl-if-edge",
+        "xsl-if-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/xsl-if/edge.xml",
+        "docs/xpath40-catalog/examples/xsl-if/main.xml",
+        "docs/xpath40-catalog/examples/xsl-if/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-map.md",
+      "classification": "**xsl:map selection and duplicate policy** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "53e5d767949949d5bd9e3718074cf98cc3d25a9a95a9b468c51f7f1969e31090",
+      "exactManifestIdsInKnownUses": [
+        "xsl-map-before",
+        "xsl-map-edge",
+        "xsl-map-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/xsl-map/edge.xml",
+        "docs/xpath40-catalog/examples/xsl-map/main.xml",
+        "docs/xpath40-catalog/examples/xsl-map/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-note.md",
+      "classification": "**xsl:note** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "bf80f2dd12a24fa8d9479d80cbdda4d6a32db2a099e6cff7a75dfe8bdcca2157",
+      "exactManifestIdsInKnownUses": [
+        "xsl-note-before",
+        "xsl-note-edge",
+        "xsl-note-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/xsl-note/edge.xml",
+        "docs/xpath40-catalog/examples/xsl-note/main.xml",
+        "docs/xpath40-catalog/examples/xsl-note/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-select.md",
+      "classification": "**xsl:select \u2014 implemented Bosak XSLT4.0 surface.** [Body-expression delivery `69a7cfd3`](https://github.com/Fytala-Charles/Bosak/commit/69a7cfd3c84e405c037be41786464950d1c06696); [current source review](../SWITCH-ARRAY-SELECT-GRAMMAR.md). This entry documents shipped behavior under REQ-126, not a new engine feature. Historical adopted specification revision is not recovered; current review pin is3230573afe246f1b502ed2e22d187ce9928155b1 section `select-instruction`.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "2afd36c68d50abbda17b3c5eb9e741ccdb430b63c70640933f49e4572bf25d97",
+      "exactManifestIdsInKnownUses": [
+        "dispatch-grammar-select-cdata"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/ArraySelectNativeBoundaryTests.cs",
+        "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/dispatch-grammar/README.md",
+        "docs/xpath40-catalog/examples/dispatch-grammar/select-focus-text.xsl",
+        "docs/xpath40-catalog/examples/dispatch-grammar/select-focus.xsl",
+        "docs/xpath40-catalog/examples/dispatch-grammar/select-required-empty.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
+      "entry": "xslt-instructions/xsl-switch.md",
+      "classification": "**xsl:switch** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "f31146fc9562e3e57de304d5f1bb690e2ec66e3aee55ed1c90922f55e21fd6b7",
+      "exactManifestIdsInKnownUses": [
+        "xsl-switch-before",
+        "xsl-switch-edge",
+        "xsl-switch-main"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/README.md",
+        "docs/xpath40-catalog/examples/xsl-switch/edge.xml",
+        "docs/xpath40-catalog/examples/xsl-switch/main.xml",
+        "docs/xpath40-catalog/examples/xsl-switch/transform.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    }
+  ],
+  "currentGatedSets": [
+    "app-FunctxFn",
+    "app-UseCaseJSON",
+    "app-UseCaseNLP",
+    "app-UseCaseSEQ",
+    "app-UseCaseSTRING",
+    "array-append",
+    "array-build",
+    "array-flatten",
+    "array-head",
+    "array-insert-before",
+    "array-items",
+    "array-join",
+    "array-put",
+    "array-remove",
+    "array-reverse",
+    "array-size",
+    "array-slice",
+    "array-sort",
+    "array-sort-with",
+    "array-tail",
+    "fn-QName",
+    "fn-abs",
+    "fn-adjust-date-to-timezone",
+    "fn-adjust-dateTime-to-timezone",
+    "fn-adjust-time-to-timezone",
+    "fn-atomic-equal",
+    "fn-available-environment-variables",
+    "fn-boolean",
+    "fn-ceiling",
+    "fn-characters",
+    "fn-codepoint-equal",
+    "fn-collation-available",
+    "fn-collation-key",
+    "fn-collection",
+    "fn-compare",
+    "fn-contains-subsequence",
+    "fn-contains-token",
+    "fn-count",
+    "fn-csv-doc",
+    "fn-csv-to-xml",
+    "fn-current-date",
+    "fn-current-dateTime",
+    "fn-current-time",
+    "fn-data",
+    "fn-dateTime",
+    "fn-day-from-date",
+    "fn-default-collation",
+    "fn-default-language",
+    "fn-do-until",
+    "fn-element-to-map",
+    "fn-element-to-map-plan",
+    "fn-element-with-id",
+    "fn-empty",
+    "fn-encode-for-uri",
+    "fn-ends-with",
+    "fn-environment-variable",
+    "fn-escape-html-uri",
+    "fn-exactly-one",
+    "fn-exists",
+    "fn-false",
+    "fn-floor",
+    "fn-foot",
+    "fn-function-arity",
+    "fn-head",
+    "fn-hours-from-time",
+    "fn-id",
+    "fn-identity",
+    "fn-idref",
+    "fn-implicit-timezone",
+    "fn-in-scope-prefixes",
+    "fn-index-of-substring",
+    "fn-insert-separator",
+    "fn-iri-to-uri",
+    "fn-items-at",
+    "fn-jkey",
+    "fn-jtree",
+    "fn-jvalue",
+    "fn-lang",
+    "fn-last",
+    "fn-local-name-from-QName",
+    "fn-lower-case",
+    "fn-minutes-from-time",
+    "fn-month-from-date",
+    "fn-namespace-uri-for-prefix",
+    "fn-namespace-uri-from-QName",
+    "fn-not",
+    "fn-one-or-more",
+    "fn-op",
+    "fn-parse-csv",
+    "fn-parse-ietf-date",
+    "fn-partition",
+    "fn-position",
+    "fn-prefix-from-QName",
+    "fn-replicate",
+    "fn-resolve-QName",
+    "fn-reverse",
+    "fn-scan",
+    "fn-seconds-from-duration",
+    "fn-seconds-from-time",
+    "fn-sort",
+    "fn-sort-with",
+    "fn-starts-with",
+    "fn-static-base-uri",
+    "fn-string-to-codepoints",
+    "fn-tail",
+    "fn-take-while",
+    "fn-timezone-from-date",
+    "fn-timezone-from-time",
+    "fn-trace",
+    "fn-translate",
+    "fn-true",
+    "fn-trunk",
+    "fn-unix-dateTime",
+    "fn-unordered",
+    "fn-upper-case",
+    "fn-uri-collection",
+    "fn-while-do",
+    "fn-year-from-date",
+    "fn-zero-or-one",
+    "map-contains",
+    "map-entry",
+    "map-find",
+    "map-remove",
+    "map-size",
+    "map-to-element",
+    "math-acos",
+    "math-asin",
+    "math-atan",
+    "math-atan2",
+    "math-cos",
+    "math-exp",
+    "math-exp10",
+    "math-log",
+    "math-log10",
+    "math-pi",
+    "math-pow",
+    "math-sin",
+    "math-sqrt",
+    "math-tan",
+    "misc-AppendixA4",
+    "misc-FocusConstructors",
+    "misc-Surrogates",
+    "misc-UCACollation",
+    "misc-XMLEdition",
+    "op-add-dayTimeDuration-to-date",
+    "op-add-dayTimeDuration-to-time",
+    "op-add-yearMonthDuration-to-date",
+    "op-add-yearMonthDuration-to-dateTime",
+    "op-add-yearMonthDurations",
+    "op-anyURI-equal",
+    "op-anyURI-greater-than",
+    "op-anyURI-less-than",
+    "op-boolean-equal",
+    "op-boolean-greater-than",
+    "op-boolean-less-than",
+    "op-concatenate",
+    "op-date-equal",
+    "op-date-greater-than",
+    "op-date-less-than",
+    "op-dateTime-equal",
+    "op-dateTime-greater-than",
+    "op-dateTime-less-than",
+    "op-dayTimeDuration-greater-than",
+    "op-dayTimeDuration-less-than",
+    "op-gDay-equal",
+    "op-gMonth-equal",
+    "op-gMonthDay-equal",
+    "op-gYear-equal",
+    "op-gYearMonth-equal",
+    "op-hexBinary-greater-than",
+    "op-hexBinary-less-than",
+    "op-numeric-equal",
+    "op-numeric-greater-than",
+    "op-numeric-integer-divide",
+    "op-numeric-less-than",
+    "op-numeric-mod",
+    "op-numeric-unary-plus",
+    "op-pipeline",
+    "op-string-equal",
+    "op-string-greater-than",
+    "op-string-less-than",
+    "op-subtract-dateTimes",
+    "op-subtract-dates",
+    "op-subtract-dayTimeDuration-from-date",
+    "op-subtract-dayTimeDuration-from-dateTime",
+    "op-subtract-dayTimeDuration-from-time",
+    "op-subtract-dayTimeDurations",
+    "op-subtract-times",
+    "op-subtract-yearMonthDuration-from-date",
+    "op-subtract-yearMonthDuration-from-dateTime",
+    "op-subtract-yearMonthDurations",
+    "op-time-equal",
+    "op-time-greater-than",
+    "op-time-less-than",
+    "op-yearMonthDuration-greater-than",
+    "op-yearMonthDuration-less-than",
+    "prod-Comment",
+    "prod-ContextItemExpr",
+    "prod-CurlyArrayConstructor",
+    "prod-DirElemContent",
+    "prod-DirectConstructor",
+    "prod-IfExpr",
+    "prod-KeywordArguments",
+    "prod-LambdaExpr",
+    "prod-LetClause",
+    "prod-NameTest",
+    "prod-OrExpr",
+    "prod-ParenthesizedExpr",
+    "prod-ReturnClause",
+    "prod-SquareArrayConstructor",
+    "prod-StringTemplate",
+    "prod-TreatExpr",
+    "xs-anyAtomicType",
+    "xs-anySimpleType",
+    "xs-normalizedString",
+    "xs-notation",
+    "xs-numeric",
+    "xs-token"
+  ],
+  "historicalAdoptedSpecPinsMissing": [
+    "operators-and-syntax/array-member-iteration.md",
+    "operators-and-syntax/destructuring-let.md",
+    "operators-and-syntax/focus-functions.md",
+    "operators-and-syntax/keyword-arguments.md",
+    "operators-and-syntax/map-entry-iteration.md",
+    "operators-and-syntax/mapping-arrow.md",
+    "operators-and-syntax/method-call-operator.md",
+    "operators-and-syntax/otherwise-operator.md",
+    "operators-and-syntax/pipeline-operator.md",
+    "operators-and-syntax/string-templates.md",
+    "functions/atomic-equal.md",
+    "functions/csv-parsing.md",
+    "functions/element-to-map.md",
+    "functions/map-to-element.md",
+    "functions/sort-with.md",
+    "type-system/choice-types.md",
+    "type-system/enum-types.md",
+    "type-system/structural-records.md",
+    "type-system/typed-let-coercion.md",
+    "data-model/jnode-navigation.md",
+    "xslt-instructions/instruction-separators.md",
+    "xslt-instructions/xsl-array.md",
+    "xslt-instructions/xsl-if.md",
+    "xslt-instructions/xsl-map.md",
+    "xslt-instructions/xsl-note.md",
+    "xslt-instructions/xsl-switch.md",
+    "experimental/fn-scan.md",
+    "rejected/mapping-arrow-gtgt.md"
+  ],
+  "inputHashes": {
+    "docs\\xpath40-catalog\\examples\\cases.json": "f9d52036caeb27db2039f0901c4f6b11bba8371dddbf13802278c81e67d16a61",
+    "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
+    "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
+  },
+  "ac03OwnerDecision": {
+    "date": "2026-10-22",
+    "choice": "Adopt applicable-evidence policy (recommended)",
+    "criterionAmended": true,
+    "criterionClosed": false
+  },
+  "ac03PolicyStatus": "Owner approved applicable-evidence policy on 2026-10-22; registry criterion amended. AC-03 remains partial pending entry-by-entry evidence validation."
+}

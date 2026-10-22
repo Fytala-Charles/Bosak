@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: caller-restored; no external context or resources. :)
+('outer' ! concat(fn { . }('inner'), '/', .)) => string-join('|')

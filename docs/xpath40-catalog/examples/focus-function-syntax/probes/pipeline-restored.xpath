@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: pipeline-restored; no external context or resources. :)
+(9,8) ! concat((42 -> count(.)), '/', position(), '/', last()) => string-join('|')

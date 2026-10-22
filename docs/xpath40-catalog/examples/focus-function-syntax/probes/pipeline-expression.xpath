@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: pipeline-expression; no external context or resources. :)
+(1,2,3) -> (sum(.) + count(.))

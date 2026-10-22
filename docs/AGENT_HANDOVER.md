@@ -1,3 +1,15 @@
+# REQ-126 focus-function syntax - 22 October 2026
+
+Base/reconciliation commit: `73403b918cf8955046986ad675792c12b4cece7c`; engine base remains PR409 `47b4f3a9c1ec624f53407101f261d0c2ae55ca65`. [Focused delivery](xpath40-catalog/FOCUS-FUNCTION-SYNTAX.md): dedicated 16-field focus-function syntax entry, corrected pipeline whole-context prose, paired complete order-line reports and30 manifest checks. Zero-argument constructor page remains separate. Current catalog72 entries /2,797 documentation checks, four chapters and117 assigned names. All10,546 solution tests pass, including7,578 XSLT; focused30/0/0. Build: zero errors, pre-existing CS8604 warning. No engine/runner/version/gate change; source1.23.5 unpublished, public/Braid pin1.23.4 unchanged.
+
+Owner-approved applicable-evidence AC03 amendment is committed in the reconciliation; entry-by-entry validation and D2/D3/D4 remain partial. Next bounded D3 scope: record casts/coercion/updates; binary literals and broader host/declaration coverage remain separate. Retain the initial failed scalar-display probe, all receipts, pending upstream notes, sweep baselines, stashes, worktrees and protected PR132. Initial reconciliation checkpoint headers and hash receipts below are historical. README commands/install instructions remain current.
+
+# REQ-126 coverage reconciliation - 22 October 2026
+
+Base: `47b4f3a9c1ec624f53407101f261d0c2ae55ca65` (PR #409 merged). Source 1.23.5 remains unpublished; public and Braid dependency remain 1.23.4. [Current review](xpath40-catalog/COVERAGE-RECONCILIATION.md) supplies 18 bounded grammar/cluster rows, a 71-entry citation/structure inventory, decision lifecycle reconciliation and the owner-approved applicable-evidence AC-03 amendment (22 October 2026); entry validation remains open. Primary registry status/counts are corrected to 71 entries /2,767 documentation checks. Validation: all 10,516 solution tests pass, including 2,743 catalog and 24 chapter cases; build has zero errors and one pre-existing CS8604 warning. Eight changed Markdown pages render with unchanged Fytala CSS. Inventory regeneration is deterministic; local links, JSON, named methods and diff checks pass. No engine, fixtures, tier, gates, version or release change. Earlier session headers below are historical.
+
+Next bounded slice: a dedicated focus-function syntax/pipeline-focus entry with realistic baseline/edge examples; constructors remain a separate entry. Then record casts/coercion/updates. D2/D3/D4 and AC-03 stay partial; retain 28 unavailable historical adoption pins. Preserve pending upstream notes, sweep baselines, receipts, worktrees, stashes and protected PR #132. README commands/install instructions remain current.
+
 # REQ-126 EQName bracket parsing - 22 October 2026
 
 **22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](xpath40-catalog/EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.

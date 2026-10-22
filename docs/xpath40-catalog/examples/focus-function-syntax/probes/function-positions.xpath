@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: function-positions; no external context or resources. :)
+(9,8) ! fn { concat(position(), '/', last()) }(.) => string-join('|')

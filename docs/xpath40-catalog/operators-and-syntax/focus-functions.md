@@ -14,6 +14,8 @@
 
 **Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).
 
+This page covers zero-argument constructors. For `fn { ... }`, `function { ... }`, the `fn(...)` abbreviation and pipeline focus, use the separate [focus-function syntax entry](focus-function-syntax.md). Constructor coverage does not establish that grammar.
+
 ## 2. Intent
 
 Use the current item as the argument to a zero-arity constructor inside a simple map.

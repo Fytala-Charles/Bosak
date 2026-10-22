@@ -30,11 +30,17 @@
 <!-- The Bosak XPath/XSLT 4.0 Feature Catalog -->
 <!-- Living document: one file per feature; index updated in the same PR as any entry. -->
 
-> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-21. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-22. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+
+## Current coverage and acceptance
+
+Current totals: **72 entries; 2,773 feature +24 chapter checks =2,797**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; source 1.23.5/public 1.23.4 and REQ-126 In Progress are unchanged.
+
+[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 72 entries. The [focus-function syntax slice](FOCUS-FUNCTION-SYNTAX.md) supplies the dedicated syntax entry and 30 checks; binary-literal and record-update catalog expansion remains open. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
 
 ## Direction: a book and a working reference
 
-This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 71 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
+This catalog is intended to develop into a book or reference guide. Readers should be able to follow chapters to learn how features solve document-processing problems, or look up a single entry while implementing a transformation. The catalog now contains 72 entries and four worked chapters. Further coverage of shipped functions and deferred draft decisions remains REQ-126 work.
 
 Examples must reflect real work. Use synthetic but plausible fixtures: supplier invoices mapped into an ERP format, order lines grouped into a reconciliation report, XML manuals published as HTML, or transaction amounts accumulated into running balances. State the business problem before introducing the syntax, and explain why the feature helps. Publishing examples should preserve mixed content and cross-references; mapping examples should handle namespaces, repeated records, optional fields, and conversions.
 
@@ -148,6 +154,7 @@ from fully documented signatures; the catalog remains In Progress.
 | [String templates](operators-and-syntax/string-templates.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Array member iteration](operators-and-syntax/array-member-iteration.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 | [Map entry iteration](operators-and-syntax/map-entry-iteration.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
+| [Focus-function syntax and pipeline focus](operators-and-syntax/focus-function-syntax.md) | Frozen 4.0 | REQ-118 S4; explicit applicable evidence, 30 new checks and paired order-line reports |
 | [Focus-based constructors](operators-and-syntax/focus-functions.md) | Frozen 4.0 | REQ-118 / REQ-123; linked primary tests and executable cases |
 
 ### Functions

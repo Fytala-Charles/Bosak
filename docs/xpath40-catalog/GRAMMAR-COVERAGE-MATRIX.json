@@ -1,0 +1,444 @@
+{
+  "date": "2026-10-22",
+  "base": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
+  "scope": "Bounded source/test/catalog mapping; no exhaustive production or conformance claim",
+  "rows": [
+    {
+      "key": "S0",
+      "area": "Compatibility and arity-sensitive visibility",
+      "entries": [
+        "README.md",
+        "experimental/fn-scan.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+        }
+      ],
+      "remaining": "Reconcile every family and host/local-profile boundary; promotion of a test set does not freeze fn:scan.",
+      "source": [
+        "src/Bosak.XPath.Api/CompileOptions.cs",
+        "src/Bosak.XPath.Api/XPathCompatibility.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S1-S2-S5",
+      "area": "Function waves and HOF contracts",
+      "entries": [
+        "SIGNATURE-CONTRACT-AUDIT.md",
+        "CHANGED-31-CONTRACT-INVENTORY.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_HigherOrderFunctions_DefaultOptions_ThrowXpst0017"
+        }
+      ],
+      "remaining": "D2 signature/default/options and callback conversion remain open; registered names are not grammar completeness.",
+      "source": [
+        "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S3-otherwise",
+      "area": "Otherwise and guarded focus",
+      "entries": [
+        "operators-and-syntax/otherwise-operator.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Otherwise_RightOperandGetsContainingFocus"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Otherwise_RightOperandIsGuarded"
+        }
+      ],
+      "remaining": "Complete guarded-expression/type/error timing matrix; distinguish empty sequence from truthiness.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S3-keywords",
+      "area": "Keyword arguments",
+      "entries": [
+        "operators-and-syntax/keyword-arguments.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_PositionalAfterKeyword_XPath40Mode_ThrowsXpst0003"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_UnknownKeyword_XPath40Mode_ThrowsXpst0017"
+        }
+      ],
+      "remaining": "D2 per-function keyword metadata/defaults and known spelling drift remain separate.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S3-lexical",
+      "area": "Binary literals, separators and string templates",
+      "entries": [
+        "operators-and-syntax/string-templates.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_HexBinaryLiterals_XPath40Mode_Work"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_StringTemplate_31Mode_ThrowsXpst0003"
+        }
+      ],
+      "remaining": "No dedicated binary/hex/underscore literal entry; function counts do not cover this lexical family.",
+      "source": [
+        "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S4-focus",
+      "area": "Pipeline, mapping arrow and focus-function syntax",
+      "entries": [
+        "operators-and-syntax/pipeline-operator.md",
+        "operators-and-syntax/mapping-arrow.md",
+        "operators-and-syntax/focus-functions.md",
+        "operators-and-syntax/focus-function-syntax.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Pipeline_SetsFixedFocusPositionOneSizeOne"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Pipeline_FocusRestoredAfterEvaluation"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_FocusFunction_BindsArgumentAsWholeContextValue"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_FocusFunction_31Mode_ThrowsXpst0003"
+        }
+      ],
+      "remaining": "Dedicated fn { ... } / fn abbreviation entry, 30 public examples and paired business reports supplied. Constructor page remains separate; exhaustive focus/coercion/callback/host combinations are not certified.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S4-iteration",
+      "area": "Member/key iteration including sequences of containers",
+      "entries": [
+        "operators-and-syntax/array-member-iteration.md",
+        "operators-and-syntax/map-entry-iteration.md",
+        "operators-and-syntax/sequence-collection-iteration.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_ForMember_31Mode_ThrowsXpst0003"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_ForMember_SequenceOfArraysCountsPositionsAcrossArrays"
+        }
+      ],
+      "remaining": "Complete position/cardinality/coercion and per-production mapping; older moving-draft deferral is superseded only within delivered scope.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S6-types",
+      "area": "Enums and choice item types",
+      "entries": [
+        "type-system/enum-types.md",
+        "type-system/choice-types.md",
+        "TYPE-PATTERN-GRAMMAR.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Enum_Castable_ReportsMembership"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+        }
+      ],
+      "remaining": "Casting versus in-order coercion, cardinality, nested values and namespace/type aliases need systematic contract coverage.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S6-record-conversion",
+      "area": "Record casts, coercion and lookup",
+      "entries": [
+        "type-system/structural-records.md",
+        "type-system/typed-let-coercion.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "Cast_DiscardsSurplusKeys"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "Coercion_SurplusKeys_XPTY0004"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "Coercion_PromotesFieldValuesRecursively"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "Lookup_UnknownFieldOnRecord_XPTY0004"
+        }
+      ],
+      "remaining": "Entry examples do not exhaust cast/coercion differences, missing/extra fields, order, nested conversion and error contracts.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S6-update",
+      "area": "Record but-with updates",
+      "entries": [
+        "type-system/structural-records.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "ButWith_ResultKeepsRecordAnnotation"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "ButWith_UnknownField_XPTY0004"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "method": "ButWith_CoercesRhsValuesToFieldTypes"
+        }
+      ],
+      "remaining": "No dedicated update entry or complete business example; existing unit support is not a missing implementation.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S7",
+      "area": "XSLT note/if/map and instruction separators",
+      "entries": [
+        "xslt-instructions/xsl-note.md",
+        "xslt-instructions/xsl-if.md",
+        "xslt-instructions/xsl-map.md",
+        "xslt-instructions/instruction-separators.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "method": ""
+        }
+      ],
+      "remaining": "Complete instruction forms, static errors, module/package/authoring contexts and version/host combinations.",
+      "source": [
+        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S8-dispatch",
+      "area": "XSLT array, switch and select",
+      "entries": [
+        "SWITCH-ARRAY-SELECT-GRAMMAR.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+          "method": ""
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40SelectTests.cs",
+          "method": ""
+        }
+      ],
+      "remaining": "Bounded mapping is supplied; independent upstream review, full host/profile and all native/fallback cases remain separate.",
+      "source": [
+        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S8-patterns",
+      "area": "Aliases, records and map/array patterns",
+      "entries": [
+        "TYPE-PATTERN-GRAMMAR.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+          "method": ""
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+          "method": ""
+        }
+      ],
+      "remaining": "Do not infer full named-type declaration/module/package or Draft-host coverage.",
+      "source": [
+        "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "S8-compound",
+      "area": "Compound patterns, priorities and EQNames",
+      "entries": [
+        "COMPOUND-PATTERN-GRAMMAR.md",
+        "UNION-MINIMUM-PRIORITY.md",
+        "EQNAME-BRACKET-PARSING.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/EqNameBracketPatternTests.cs",
+          "method": "NamespaceBrackets"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40EqNamePriorityTests.cs",
+          "method": "NamedElementPriority"
+        }
+      ],
+      "remaining": "PR409 merged parsing correction and 4.0 priority checks; exhaustive earlier-profile URI-punctuation priorities remain unclaimed.",
+      "source": [
+        "src/Bosak.Xslt/Patterns/PatternCompiler.cs",
+        "src/Bosak.Xslt/Stylesheet/TemplateRule.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "REQ123-constructors",
+      "area": "Zero-argument focus constructors",
+      "entries": [
+        "operators-and-syntax/focus-functions.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/FocusConstructorTests.cs",
+          "method": "Evaluate_FocusConstructor_NoContextItem_ThrowsXpdy0002"
+        }
+      ],
+      "remaining": "All 49 names have representative coverage; not all casting/focus-function grammar.",
+      "source": [
+        "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "REQ123-destructuring",
+      "area": "Typed let and sequence/array/map destructuring",
+      "entries": [
+        "operators-and-syntax/destructuring-let.md",
+        "type-system/typed-let-coercion.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_TypedLet_FrozenXPath40_Coerces"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+        }
+      ],
+      "remaining": "Per-shape cardinality, scope and conversion/error matrix remains partial.",
+      "source": [
+        "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
+        "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
+        "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "REQ123-jnode",
+      "area": "JNode navigation and deferred model remainder",
+      "entries": [
+        "data-model/jnode-navigation.md",
+        "data-model/jnode-template-boundary.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+        }
+      ],
+      "remaining": "Navigation delivery does not establish complete GNode/JNode model/template rules.",
+      "source": [
+        "src/Bosak.XPath.Core/Xdm/XdmJNode.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    },
+    {
+      "key": "REQ123-scan",
+      "area": "Experimental scan visibility and set membership",
+      "entries": [
+        "experimental/fn-scan.md"
+      ],
+      "testEvidence": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Compile_ExperimentalFunctions_FrozenXPath40_ThrowXpst0017"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "method": "Evaluate_Scan_XPath40Experimental_Works"
+        }
+      ],
+      "remaining": "fn-scan is gated with experimental retry; gate membership is not frozen API promotion.",
+      "source": [
+        "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
+      ],
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+    }
+  ]
+}

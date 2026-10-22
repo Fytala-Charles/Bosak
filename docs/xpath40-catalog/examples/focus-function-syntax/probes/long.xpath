@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: long; no external context or resources. :)
+function { count(.) }(())

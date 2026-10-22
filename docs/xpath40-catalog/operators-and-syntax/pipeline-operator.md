@@ -16,7 +16,7 @@
 
 ## 2. Intent
 
-Pass the value to the first argument while keeping the processing order readable.
+Bind the complete left-hand value as context for the right-hand expression.
 
 ## 3. Also Known As
 
@@ -28,15 +28,15 @@ Use the 3.1 => arrow or a nested function call for this unary case. Compare the 
 
 ## 5. Motivation
 
-A product label needs whitespace normalization before presentation. Pass the value to the first argument while keeping the processing order readable. Keeping this task explicit makes it possible to choose the feature for a practical reason and verify what the receiving application will see.
+A product label needs whitespace normalization before presentation. Bind the complete left-hand value as context for the right-hand expression. Keeping this task explicit makes it possible to choose the feature for a practical reason and verify what the receiving application will see.
 
 ## 6. Language Alignment
 
-Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. XPath pipelines pass the first argument; do not assume the last-argument convention of another language.
+The pipeline binds the whole sequence as context, with position/size 1/1. Unlike the 3.1 => arrow, it does not insert a first argument; unlike =!>, it does not invoke once per item. See [focus-function syntax and concrete focus probes](focus-function-syntax.md).
 
 ## 7. Applicability
 
-Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. XPath pipelines pass the first argument; do not assume the last-argument convention of another language.
+Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets.
 
 ## 8. Structure
 
@@ -56,7 +56,7 @@ The case combines source values, the named feature, and explicit output formatti
 
 ## 11. Consequences
 
-Benefit: Pass the value to the first argument while keeping the processing order readable. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. XPath pipelines pass the first argument; do not assume the last-argument convention of another language.
+Benefit: Bind the complete left-hand value as context for the right-hand expression. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract.
 
 ## 12. Implementation
 
@@ -68,7 +68,7 @@ Input is synthetic and declared directly in the complete expression. The [comple
 
 ## 14. Performance Notes
 
-Expected class: function-call/argument flow. This example does not claim a speed advantage over the 3.1 arrow. These are implementation expectations, not measured deltas. No benchmark is claimed; use the repository benchmark harness before making workload-specific speed or memory claims.
+Expected class: whole-value context binding and evaluation. This example does not claim a speed advantage over the 3.1 arrow. These are implementation expectations, not measured deltas. No benchmark is claimed; use the repository benchmark harness before making workload-specific speed or memory claims.
 
 ## 15. Known Uses
 
@@ -78,6 +78,6 @@ Executable example IDs: `pipeline-operator-main`, `pipeline-operator-edge`, `pip
 
 ## 16. Related Features
 
-See the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
+See [focus-function syntax](focus-function-syntax.md), the [catalog index](../README.md), [worked chapters](../worked-examples/README.md), and the alternatives in section 4. The case may be used independently of the larger chapters.
 
 *Created 2026-10-11: verified practical catalog example and earlier-version baseline.*

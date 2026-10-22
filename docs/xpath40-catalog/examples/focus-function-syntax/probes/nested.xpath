@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: nested; no external context or resources. :)
+fn { (., fn { count(.) }((5,6))) }('a') => string-join(',')
