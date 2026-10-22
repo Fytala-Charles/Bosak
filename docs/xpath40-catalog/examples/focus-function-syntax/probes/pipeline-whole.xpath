@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: pipeline-whole; no external context or resources. :)
+(9,8) -> concat(count(.), ':', position(), ':', last())

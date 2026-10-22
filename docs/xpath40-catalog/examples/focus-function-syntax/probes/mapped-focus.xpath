@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: mapped-focus; no external context or resources. :)
+(9,8) =!> fn { concat(count(.), ':', position(), ':', last()) }() => string-join('|')

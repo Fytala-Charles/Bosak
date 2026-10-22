@@ -20247,5 +20247,241 @@
     "file": "manual-patterns/invalid-item-set.xsl",
     "input": "manual-patterns/probe.xml",
     "error": "XTSE0340"
+  },
+  {
+    "id": "focus-syntax-report-3-normal",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "focus-function-syntax/report-3.xsl",
+    "input": "focus-function-syntax/normal.xml",
+    "expected": "BOLT=25.00|NUT=10.00|FREE=0.00|lines=3;total=35.00"
+  },
+  {
+    "id": "focus-syntax-report-3-empty",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "focus-function-syntax/report-3.xsl",
+    "input": "focus-function-syntax/empty.xml",
+    "expected": "lines=0;total=0.00"
+  },
+  {
+    "id": "focus-syntax-report-3-reordered",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "focus-function-syntax/report-3.xsl",
+    "input": "focus-function-syntax/reordered.xml",
+    "expected": "FREE=0.00|NUT=10.00|BOLT=25.00|lines=3;total=35.00"
+  },
+  {
+    "id": "focus-syntax-report-3-invalid",
+    "kind": "xslt",
+    "mode": "xslt31",
+    "file": "focus-function-syntax/report-3.xsl",
+    "input": "focus-function-syntax/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-syntax-report-4-normal",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "focus-function-syntax/report-4.xsl",
+    "input": "focus-function-syntax/normal.xml",
+    "expected": "BOLT=25.00|NUT=10.00|FREE=0.00|lines=3;total=35.00"
+  },
+  {
+    "id": "focus-syntax-report-4-empty",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "focus-function-syntax/report-4.xsl",
+    "input": "focus-function-syntax/empty.xml",
+    "expected": "lines=0;total=0.00"
+  },
+  {
+    "id": "focus-syntax-report-4-reordered",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "focus-function-syntax/report-4.xsl",
+    "input": "focus-function-syntax/reordered.xml",
+    "expected": "FREE=0.00|NUT=10.00|BOLT=25.00|lines=3;total=35.00"
+  },
+  {
+    "id": "focus-syntax-report-4-invalid",
+    "kind": "xslt",
+    "mode": "xslt40",
+    "file": "focus-function-syntax/report-4.xsl",
+    "input": "focus-function-syntax/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "focus-syntax-short",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/short.xpath",
+    "expected": "3",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-long",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/long.xpath",
+    "expected": "0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-abbreviation",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/abbreviation.xpath",
+    "expected": "5",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-ordinary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/ordinary.xpath",
+    "expected": "5",
+    "baselineExpected": "5"
+  },
+  {
+    "id": "focus-syntax-whole-focus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/whole-focus.xpath",
+    "expected": "2:1:1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-empty-focus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/empty-focus.xpath",
+    "expected": "0:1:1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-mapped-focus",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/mapped-focus.xpath",
+    "expected": "1:1:1|1:1:1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-source-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/source-positions.xpath",
+    "expected": "1/2|2/2",
+    "baselineExpected": "1/2|2/2"
+  },
+  {
+    "id": "focus-syntax-function-positions",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/function-positions.xpath",
+    "expected": "1/1|1/1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-pipeline-whole",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/pipeline-whole.xpath",
+    "expected": "2:1:1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-pipeline-empty",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/pipeline-empty.xpath",
+    "expected": "0:1:1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-capture",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/capture.xpath",
+    "expected": "6",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-caller-restored",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/caller-restored.xpath",
+    "expected": "inner/outer",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-pipeline-restored",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/pipeline-restored.xpath",
+    "expected": "1/1/2|1/2/2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-nested",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/nested.xpath",
+    "expected": "a,2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-arity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/arity.xpath",
+    "expected": "1",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-identity",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/identity.xpath",
+    "expected": "1,2",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-pipeline-expression",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "focus-function-syntax/probes/pipeline-expression.xpath",
+    "expected": "9",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-refuse31-short",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-function-syntax/probes/short.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-refuse31-long",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-function-syntax/probes/long.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-refuse31-abbreviation",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-function-syntax/probes/abbreviation.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "focus-syntax-refuse31-pipeline-whole",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "focus-function-syntax/probes/pipeline-whole.xpath",
+    "error": "XPST0003"
   }
 ]

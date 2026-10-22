@@ -123,7 +123,8 @@
       "entries": [
         "operators-and-syntax/pipeline-operator.md",
         "operators-and-syntax/mapping-arrow.md",
-        "operators-and-syntax/focus-functions.md"
+        "operators-and-syntax/focus-functions.md",
+        "operators-and-syntax/focus-function-syntax.md"
       ],
       "testEvidence": [
         {
@@ -143,7 +144,7 @@
           "method": "Compile_FocusFunction_31Mode_ThrowsXpst0003"
         }
       ],
-      "remaining": "Dedicated fn { ... } / fn abbreviation entry and realistic baseline/edge report absent. Existing focus-functions page is constructor-only; preserve that scope.",
+      "remaining": "Dedicated fn { ... } / fn abbreviation entry, 30 public examples and paired business reports supplied. Constructor page remains separate; exhaustive focus/coercion/callback/host combinations are not certified.",
       "source": [
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs",
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",

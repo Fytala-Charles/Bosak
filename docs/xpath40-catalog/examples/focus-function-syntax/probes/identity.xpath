@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: identity; no external context or resources. :)
+fn { . }((1,2)) => string-join(',')

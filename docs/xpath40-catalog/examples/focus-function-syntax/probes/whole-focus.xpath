@@ -1,0 +1,2 @@
+(: REQ-126 focus syntax: whole-focus; no external context or resources. :)
+fn { concat(count(.), ':', position(), ':', last()) }((9,8))

@@ -3142,7 +3142,7 @@ Install in VS Code: **Extensions** → **⋯** → **Install from VSIX…**
 
 ### Choosing XSLT and learning from the catalogs
 
-REQ-126 retains 71 entries and 2,767 executable documentation checks. [The current coverage and acceptance reconciliation](xpath40-catalog/COVERAGE-RECONCILIATION.md) maps grammar families to source/tests, records remaining focus-function/record-update/lexical coverage, and records the owner-approved applicable-evidence AC-03 amendment for XSLT-only and deferred/rejected entries. D2/D3/D4 and AC-03 remain partial; no compatibility, public API or gate change is implied.
+REQ-126 now has72 entries and2,797 executable documentation checks; [focus-function syntax and pipeline focus](xpath40-catalog/FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and30 checks. [The current coverage and acceptance reconciliation](xpath40-catalog/COVERAGE-RECONCILIATION.md) maps grammar families to source/tests, records supplied bounded focus-function coverage and remaining record-update/lexical coverage, and records the owner-approved applicable-evidence AC-03 amendment for XSLT-only and deferred/rejected entries. D2/D3/D4 and AC-03 remain partial; no compatibility, public API or gate change is implied.
 
 Use XSLT for reusable rules that reshape XML documents, such as invoice mapping, publishing XML manuals as HTML, or grouping order records into reports. See [why and when to use XSLT](../README.md#why-and-when-to-use-xslt). The [feature catalog](xpath40-catalog/README.md) is intended to grow into a book/reference guide with practical worked examples and compatibility notes; the initial 4.0 scaffold is still incomplete.
 

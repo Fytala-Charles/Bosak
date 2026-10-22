@@ -19,7 +19,7 @@
 
 ## Current reconciliation - 22 October 2026
 
-[The consolidated review](COVERAGE-RECONCILIATION.md) supplies 18 bounded source/test/catalog grammar rows, a current decision lifecycle table, a reproducible 71-entry evidence inventory and the owner-approved applicable-evidence AC-03 amendment. Current totals are 71 entries / 2,767 documentation checks. PR #409 is merged; union-minimum and URI-priority corrections are published in 1.23.4, while bracket parsing is in unpublished source 1.23.5. The policy was owner-approved on 22 October 2026 and the registry criterion amended; AC-03 remains partial pending entry validation.
+[The consolidated review](COVERAGE-RECONCILIATION.md) supplies 18 bounded source/test/catalog grammar rows, a current decision lifecycle table, a reproducible 71-entry evidence inventory and the owner-approved applicable-evidence AC-03 amendment. The [focus-function syntax delivery](FOCUS-FUNCTION-SYNTAX.md) adds a dedicated entry and30 checks: current totals are72 entries /2,797 documentation checks. PR #409 is merged; union-minimum and URI-priority corrections are published in 1.23.4, while bracket parsing is in unpublished source 1.23.5. The policy was owner-approved on 22 October 2026 and the registry criterion amended; AC-03 remains partial pending entry validation.
 
 ## Historical decision and evidence
 
@@ -34,14 +34,14 @@ The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLE
 | AC-01: landed slices and traceability | Partial | Full slice/grammar/signature mapping, exact tiers, per-contract source/tests. The 28 baseline provenance rows have delivery evidence but no historical adopted-specification pins. |
 | AC-02: deferred/rejected decisions | Partial | Validate the dossier-to-record matrix and superseded decisions against source/history; supplied records alone do not certify exhaustive lifecycle coverage. |
 | AC-03: applicable evidence and verified examples | Partial | Current fixtures establish their stated outcomes. The owner-amended criterion accepts applicable XPath, XSLT and disposition/refusal evidence, with absent-gate status explicit. Validate each entry under the approved policy; no conformance or closure is inferred. |
-| AC-04: structure and drift | Partial | All 71 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
+| AC-04: structure and drift | Partial | All 72 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
 | AC-05: discoverability | Met for current scope | Keep canonical links/status synchronized through the remaining deliveries. |
 
 A current immutable review pin can describe today's comparison, but cannot reconstruct a historically adopted revision. Retain those 28 gaps unless actual historical evidence is recovered.
 
 ## Documentation delivery queue
 
-The equality/collation, switch/array/select, type/structured-pattern and compound-pattern reviews are supplied. The union-minimum and EQName corrections have landed. [The current reconciliation](COVERAGE-RECONCILIATION.md) replaces the obsolete correction-review queue with bounded remaining grammar work: focus-function syntax and pipeline focus first, record casts/coercion/updates next, then lexical and host/declaration boundaries. D2 defaults/options and D4 historical pins/acceptance policy remain separate.
+The equality/collation, switch/array/select, type/structured-pattern and compound-pattern reviews are supplied. The union-minimum and EQName corrections have landed. [The current reconciliation](COVERAGE-RECONCILIATION.md) replaces the obsolete correction-review queue with bounded remaining grammar work: focus-function syntax and pipeline focus are now supplied; record casts/coercion/updates are next, followed by lexical and host/declaration boundaries. D2 defaults/options and D4 historical pins/acceptance policy remain separate.
 
 
 
