@@ -4,6 +4,8 @@
   <p>23 October 2026</p>
 </div>
 
+**Current upstream gate audit - 23 October 2026:** [Audit](CURRENT-GATE-AUDIT.md) corrects the documentation inventory:224 configured names,223 executed sets,one dormant `map-to-element` name. Frozen8,278/0/1,894 remains unchanged; current8,297/45/1,894 fails across8 sets. Supplemental `fn-map-to-element`: frozen156/0/2,current173/53/7; current exit0 is exploratory, not green. Documentation extraction now includes six dotted names; no engine, runtime gate, fixture pin or release change. REQ-126 remains partial; REQ-136 remains accepted. Next: repair the dormant gate against frozen fixtures before upstream adoption. Earlier218-count statements are historical.
+
 **CSV index revision audit - 23 October 2026:** [Contract resolution](CSV-INDEX-CONTRACT.md) confirms upstream issue2849 already changed seven CSV assertions. Unchanged Bosak 1.24.0 passes124 frozen cases; a separate current-upstream diagnostic passes117 and fails7 (exit2), including selection and `get` indexes. No frozen fixture/assertion/gate or engine change. Next: compare all218 gated sets against a complete current snapshot before adopting the new CSV contract. REQ-126 remains partial; REQ-136 remains consumer-accepted. Earlier requests for upstream clarification are historical.
 
 **PR420 refresh - 23 October 2026:** Reconciled against published, consumer-accepted Bosak 1.24.0 at main `06a76549bfed8200c7bb2580275b46bb46975d31`. The CSV fixtures, assertions and original evidence below are unchanged. The 1.23.8 preparation receipts remain historical; refreshed full-suite results are recorded separately in the machine audit. No new specification comparison or independent processor confirmation is claimed. REQ-126 remains partial.
