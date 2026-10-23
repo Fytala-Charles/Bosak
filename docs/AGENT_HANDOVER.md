@@ -1,3 +1,9 @@
+# Bosak1.23.8 release preparation - 23 October2026
+
+**1.23.8 release preparation - 23 October 2026:** [Readiness](RELEASE-1.23.8-READINESS.md) and [release notes](RELEASE-NOTES-1.23.8.md) pin the default-mode fix and module/profile coverage to immutable source `6d12bed35dac56a635acc7702645ef9085103c83`. Ten unsigned candidates pass153 broad/430 focused package checks;10,936 solution tests pass. Public1.23.7, Braid smoke/acceptance and REQ-126 In Progress remain unchanged. No publication started. Earlier checkpoints below are historical.
+
+Base/immutable source: `6d12bed35dac56a635acc7702645ef9085103c83`. What was built: exact-source notes/readiness, ten unsigned packages,153 broad/430 focused package consumers and source/cache/output provenance with clear audits. Source10,936/0/0;84 additional language-server CI passes; engine gate receipts unchanged. No tag, workflow dispatch, upload or release. Next: preparation PR review/CI and publication approval, then repeated live preflight. Preserve proposed tag source after documentation merges. Root notes/sweep data/stashes/worktrees and PR132 retained; README current for public1.23.7. Earlier headers are historical.
+
 # REQ-126 direct module/profile boundaries - 23 October2026
 
 Main base ce9604fa85d30ff941b5edb863b5a762e00742a2; stacked fix base c172747b13e5bbfe2b342b04d295720299b4387e ([draft PR416](https://github.com/Fytala-Charles/Bosak/pull/416), green CI). Branch docs/req126-module-profiles in .guard-tmp/req126-module-profile-source. [Module delivery](xpath40-catalog/MODULE-PROFILE-BOUNDARIES.md):76th16-field entry,114 new cases (66 focused/48 full report runs), scoped optional package registrations/finally cleanup and registry test-collection serialization. Initial70/44:38 registration failures plus six default-mode failures; after setup105/9; after isolated engine fix114/0. Original expectations preserved.
