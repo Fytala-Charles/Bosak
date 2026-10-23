@@ -54,4 +54,4 @@
 /docs/xpath40-catalog/evidence/csv-index-contract/*-native.txt -text whitespace=cr-at-eol
 
 # Preserve frozen/current full gate and supplemental native execution receipts.
-/docs/xpath40-catalog/evidence/current-gate-audit/*.txt -text whitespace=cr-at-eol
+/docs/xpath40-catalog/evidence/current-gate-audit/*.txt -text whitespace=cr-at-eol,-blank-at-eof

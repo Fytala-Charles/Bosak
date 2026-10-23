@@ -15,7 +15,7 @@ The comparison pins frozen [`68910080`](https://github.com/qt4cg/qt4tests/tree/6
 | Frozen | 8,278 | 0 | 1,894 | 0 |
 | Current | 8,297 | 45 | 1,894 | 2 |
 
-The two [skip receipts](evidence/current-gate-audit/frozen-skips.txt) are byte-identical: 1,892 unsupported-dependency skips and two existing overflow-error skips. Both runs include 11 successes reached through the runner's experimental compatibility fallback. Neither skipping nor fallback is evidence of complete frozen-profile conformance. The [current log](evidence/current-gate-audit/current-gate.txt) preserves exit-2 failures. Test totals grow by 64, from 10,172 to 10,236; the higher pass count does not make the new baseline green.
+The two [skip receipts](evidence/current-gate-audit/frozen-skips.txt) are byte-identical: 1,892 unsupported-dependency skips and two existing overflow-error skips. Their original final blank separator is retained; the receipt-specific whitespace attributes preserve that output format. Both runs include 11 successes reached through the runner's experimental compatibility fallback. Neither skipping nor fallback is evidence of complete frozen-profile conformance. The [current log](evidence/current-gate-audit/current-gate.txt) preserves exit-2 failures. Test totals grow by 64, from 10,172 to 10,236; the higher pass count does not make the new baseline green.
 
 ## Configured names versus executed sets
 
