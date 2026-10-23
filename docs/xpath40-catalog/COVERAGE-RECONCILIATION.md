@@ -4,6 +4,8 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**CSV index revision audit - 23 October 2026:** [Contract resolution](CSV-INDEX-CONTRACT.md) confirms upstream issue2849 already changed seven CSV assertions. Unchanged Bosak 1.24.0 passes124 frozen cases; a separate current-upstream diagnostic passes117 and fails7 (exit2), including selection and `get` indexes. No frozen fixture/assertion/gate or engine change. Next: compare all218 gated sets against a complete current snapshot before adopting the new CSV contract. REQ-126 remains partial; REQ-136 remains consumer-accepted. Earlier requests for upstream clarification are historical.
+
 **Public1.23.7 - 23 October2026:** [Signed public packages and consumers are verified](../RELEASE-1.23.7-PUBLICATION.md). Current inventory records source/public1.23.7; Braid dependency1.23.4 is unchanged. Earlier checkpoint versions/counts below remain historical. REQ-126/AC-03 and D2/D3/D4 remain partial.
 
 

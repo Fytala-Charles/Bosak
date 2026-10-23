@@ -49,3 +49,6 @@
 
 # Preserve the original PR425 acceptance receipt Git bytes.
 /docs/REQ-136-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol
+
+# Preserve native CSV revision-comparison execution receipts byte-for-byte.
+/docs/xpath40-catalog/evidence/csv-index-contract/*-native.txt -text whitespace=cr-at-eol

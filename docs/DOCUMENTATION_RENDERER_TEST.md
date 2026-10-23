@@ -338,3 +338,7 @@ README install/package/release-note links, canonical status, notes/readiness and
 ## CSV PR420 refreshed against accepted 1.24.0 - 23 October 2026
 
 The twelve CSV review/canonical pages are re-rendered under `.guard-tmp/req126-csv-refresh-render` with unchanged Fytala CSS. Original renderer and execution receipts remain preserved. HTML only; no screenshot/PDF acceptance.
+
+## CSV index revision audit - 23 October 2026
+
+Contract/receipt links, seven native failure IDs, immutable revisions and canonical notices are checked. Ten Markdown pages render with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-csv-index-render`. HTML only; no screenshot/PDF acceptance. Imported native output is preserved byte-for-byte by `.gitattributes`. Kit assets unchanged.

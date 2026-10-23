@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**CSV index revision audit - 23 October 2026:** [Contract resolution](CSV-INDEX-CONTRACT.md) confirms upstream issue2849 already changed seven CSV assertions. Unchanged Bosak 1.24.0 passes124 frozen cases; a separate current-upstream diagnostic passes117 and fails7 (exit2), including selection and `get` indexes. No frozen fixture/assertion/gate or engine change. Next: compare all218 gated sets against a complete current snapshot before adopting the new CSV contract. REQ-126 remains partial; REQ-136 remains consumer-accepted. Earlier requests for upstream clarification are historical.
+
 **CSV options/defaults review - 23 October 2026:** [Contract review](CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.
 
 

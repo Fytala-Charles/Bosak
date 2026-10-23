@@ -4,6 +4,8 @@
   <p>23 October 2026</p>
 </div>
 
+**CSV index revision audit - 23 October 2026:** [Contract resolution](CSV-INDEX-CONTRACT.md) confirms upstream issue2849 already changed seven CSV assertions. Unchanged Bosak 1.24.0 passes124 frozen cases; a separate current-upstream diagnostic passes117 and fails7 (exit2), including selection and `get` indexes. No frozen fixture/assertion/gate or engine change. Next: compare all218 gated sets against a complete current snapshot before adopting the new CSV contract. REQ-126 remains partial; REQ-136 remains consumer-accepted. Earlier requests for upstream clarification are historical.
+
 **PR420 refresh - 23 October 2026:** Reconciled against published, consumer-accepted Bosak 1.24.0 at main `06a76549bfed8200c7bb2580275b46bb46975d31`. The CSV fixtures, assertions and original evidence below are unchanged. The 1.23.8 preparation receipts remain historical; refreshed full-suite results are recorded separately in the machine audit. No new specification comparison or independent processor confirmation is claimed. REQ-126 remains partial.
 
 
@@ -41,7 +43,7 @@ Unknown unqualified options and tested nonboolean values/nonmap options raise XP
 
 | Boundary | Published1.23.8 / executable observation | Current pinned draft | Disposition |
 |---|---|---|---|
-| Non-positive select-columns | `observed-nonpositive-select` and `observed-negative-select` raise XPTY0004 | Integers below one insert empty fields | Current frozen qt4tests `parse-csv-912` explicitly expects XPTY0004 for a negative index. Resolve the draft/test contradiction before changing the shipped contract. |
+| Non-positive select-columns | `observed-nonpositive-select` and `observed-negative-select` raise XPTY0004 | Integers below one insert empty fields | Frozen `parse-csv-912`/`913` predate the issue2849 correction. Current upstream agrees with the draft; the [revision audit](CSV-INDEX-CONTRACT.md) also identifies five `get` changes. Engine/baseline adoption remains separate. |
 | Unknown namespaced QName extension option | `observed-qname-extension` raises XPTY0004 | Shared conventions exempt unknown QName keys with a non-absent namespace from the unknown-key error | Record a separate option-key policy/coercion review; this slice claims no extension-key support. |
 
 These three `observed-*` cases are versioned behavior records, **not normative conformance assertions**. No expectation was weakened to hide an engine failure and no frozen test was edited. Complete coercion (numeric/untyped/node values), supplementary Unicode delimiters, every `get`/record function type, transport/media-type encoding, network policy, resource cancellation and every header/selection interaction remain separate. Any engine correction needs its own bounded review and PR; this documentation/test PR changes no engine code. No upstream patch is submitted here; any later contribution must start from a refreshed upstream default branch.
