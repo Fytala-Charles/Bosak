@@ -4,6 +4,11 @@
   <p>23 October 2026</p>
 </div>
 
+**1.24.0 published and verified — 23 October2026:** [Public delivery proof](RELEASE-1.24.0-PUBLICATION.md) records immutable source `ff9f5094`, one Release run with11,009 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only153 broad/503 focused checks with matching provenance and clear audits. Rename and populated-subtree Delete are delivered together. REQ-136 consumer integration/acceptance remains pending; Braid adoption/native acceptance and REQ-126 stay separate. Earlier preparation/unpublished checkpoints below are historical.
+
+**Historical preparation record:** The checklist below predates completed publication.
+
+
 **Prepared; publication not started.** Proposed annotated tag `v1.24.0` must point to **`ff9f509461ce7f8e639d64d4b83024dcffe32d80`**, the consumer-reviewed REQ-136 merge. Later documentation commits must not change the proposed package source. Public version remains1.23.8. [Release notes](RELEASE-NOTES-1.24.0.md), [machine readiness](RELEASE-1.24.0-READINESS.json).
 
 | Gate | Evidence |
