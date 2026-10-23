@@ -5,6 +5,10 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**REQ-136 intake and1.23.8 smoke - 23 October 2026:** Braid reports1.23.8 smoke passed (1,405 Release /710 public /36 release-regression checks); the nine consumed assembly hashes match Bosak public proof. Braid reports its adopted pin remains1.23.7; no new native acceptance is inferred. [Request](REQ-136-literal-result-element-lifecycle.md), [maintainer scope/API proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md), [receipt review](REQ-136-INTAKE-REVIEW.json). REQ-136 remains Pending, owner Unassigned, target TBD; no implementation or release approval. Earlier checkpoints below are historical.
+
+
+
 **1.23.8 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.8-PUBLICATION.md) records immutable v1.23.8 at `6d12bed3`, one successful Release run (10,936 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/430 focused checks with matching provenance and clear audits. Includes the function default-mode fix and host/module profile coverage. REQ-126 remains In Progress; Braid smoke/acceptance remains separate. Earlier preparation/unpublished statements below are historical.
 
 **Function default-mode correction - 23 October2026:** [Source1.23.8](XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates mode inside functions use the default mode, avoiding empty-QName XTSE0020 and retaining named defaults.36 regressions preserve explicit modes, empty selections and invalid-empty static errors. Source1.23.8 is unpublished; public1.23.7 and Braid smoke/acceptance remain independent. No public API or gate change.
@@ -1673,3 +1677,8 @@ The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-
 
 
 23 October2026: [REQ-126 module/include/import/used-package profiles](xpath40-catalog/MODULE-PROFILE-BOUNDARIES.md) supplies one16-field entry and114 cases. It is stacked on independent function-mode fix PR416; source1.23.8 remains unpublished and public1.23.7/Braid smoke unchanged. The module diff changes only documentation, case data and scoped runner package setup. Current76 entries /3,073 documentation checks; D2/D3/D4/AC03 remain partial.
+
+
+## Proposed REQ-136 element lifecycle
+
+[The pending proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md) adds operation-specific opaque rename/delete authority, coherent one/two-name edit replay and complete removed/surviving/merged graph and per-owner attribute evidence. It reuses accepted creation and requests one coordinated implementation after consumer design review. These are planned surfaces; current1.23.8 capabilities do not expose them. The proposal explicitly separates strict source preservation from Braid atomic Apply/history and limits populated deletion to an engine-proven closed profile.

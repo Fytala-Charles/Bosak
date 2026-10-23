@@ -311,3 +311,8 @@ README install/package links, canonical status, release notes/readiness, catalog
 ## Release1.23.8 publication - 23 October2026
 
 README install/package/release-note links, canonical status, release notes/readiness, catalog notices and public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1238-publication-render`; new relative links and package receipts checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
+
+
+## REQ-136 intake and scope proposal - 23 October2026
+
+Original consumer request, maintainer scope/API proposal and canonical planning counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req136-scope-render`; new links, intake JSON and source/API references checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
