@@ -21210,5 +21210,599 @@
     "expected": "255",
     "baselineError": "XPST0003",
     "frozenExpected": "255"
+  },
+  {
+    "id": "host-profile-select-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/select-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-select-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/select-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-select-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/select-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-select-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/select-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-select-root3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/select-root3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-select-root3-local4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/select-root3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-select-root4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/select-root4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-select-root4-local3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/select-root4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root3-wrapper4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/ancestor-root3-wrapper4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root3-wrapper4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/ancestor-root3-wrapper4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root4-wrapper3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/ancestor-root4-wrapper3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-ancestor-root4-wrapper3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/ancestor-root4-wrapper3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root3-wrapper4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/ancestor-root3-wrapper4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-ancestor-root3-wrapper4-local3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/ancestor-root3-wrapper4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root4-wrapper3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/ancestor-root4-wrapper3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-ancestor-root4-wrapper3-local4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/ancestor-root4-wrapper3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/avt-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-avt-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/avt-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/avt-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/avt-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/avt-root3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root3-local4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/avt-root3-local4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-avt-root4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/avt-root4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-avt-root4-local3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/avt-root4-local3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-use-when-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/use-when-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-use-when-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/use-when-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-use-when-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/use-when-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-use-when-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/use-when-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-shadow-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/shadow-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-shadow-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/shadow-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-shadow-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/shadow-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-shadow-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/shadow-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-future-attribute-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/future-attribute-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "host-profile-future-attribute-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/future-attribute-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "host-profile-future-attribute-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/future-attribute-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "ok"
+  },
+  {
+    "id": "host-profile-future-attribute-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/future-attribute-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "host-profile-future-attribute-root5-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/future-attribute-root5.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "ok"
+  },
+  {
+    "id": "host-profile-future-attribute-root5-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/future-attribute-root5.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "ok"
+  },
+  {
+    "id": "host-profile-future-attribute-root5-local3_0-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/future-attribute-root5-local3_0.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "host-profile-future-attribute-root5-local3_0-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/future-attribute-root5-local3_0.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "host-profile-future-attribute-root3-local4_1-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/future-attribute-root3-local4_1.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "ok"
+  },
+  {
+    "id": "host-profile-future-attribute-root3-local4_1-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/future-attribute-root3-local4_1.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "ok"
+  },
+  {
+    "id": "host-profile-scan-root3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/scan-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "host-profile-scan-root3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/scan-root3.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "host-profile-scan-root4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/scan-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "host-profile-scan-root4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/scan-root4.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "host-profile-output-version-root3-output4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/output-version-root3-output4.xsl",
+    "input": "host-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "host-profile-output-version-root3-output4-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/output-version-root3-output4.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-output-version-root4-output3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/output-version-root4-output3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-output-version-root4-output3-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/output-version-root4-output3.xsl",
+    "input": "host-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "host-profile-report-baseline-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-baseline-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-baseline-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "host-profile-report-baseline-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "host-profile-report-baseline-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-baseline-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-baseline-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "host-profile-report-baseline-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-baseline.xsl",
+    "input": "host-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "host-profile-report-local40-normal-legacy",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-local40-normal-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-local40-empty-legacy",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "host-profile-report-local40-empty-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "host-profile-report-local40-reordered-legacy",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-local40-reordered-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "host-profile-report-local40-invalid-legacy",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "legacy",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "host-profile-report-local40-invalid-draft40",
+    "kind": "xslt",
+    "mode": "40",
+    "processorProfile": "draft40",
+    "file": "host-profiles/report-local40.xsl",
+    "input": "host-profiles/invalid.xml",
+    "error": "FORG0001"
   }
 ]

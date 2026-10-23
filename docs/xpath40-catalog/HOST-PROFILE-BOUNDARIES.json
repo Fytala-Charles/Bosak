@@ -1,0 +1,724 @@
+{
+  "date": "2026-10-23",
+  "base": "11343adce014c655a1599fd36d61adf61b627316",
+  "sourceVersion": "1.23.7",
+  "publishedVersion": "1.23.7",
+  "profileDelivery": "cc07d50f8a55bdca907d398d4916d95cbed36734",
+  "comparisonDraftRevision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "comparisonDraftPath": "specifications/xslt-40/src/xslt.xml",
+  "draftSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+  "draftPinMeaning": "Current comparison; not historical adoption recovery",
+  "caseCount": 66,
+  "focusedCases": 50,
+  "reportCases": 16,
+  "baseline": {
+    "passed": 56,
+    "failed": 10,
+    "meaning": "Existing runner forced Legacy; draft-profile requests ignored, not an engine defect"
+  },
+  "profileSelectedFocused": {
+    "passed": 66,
+    "failed": 0,
+    "skipped": 0
+  },
+  "runnerField": "processorProfile",
+  "allowedValues": [
+    "legacy",
+    "draft40"
+  ],
+  "defaultWhenOmitted": "legacy",
+  "unknownValue": "Runner rejects unknown profile spelling rather than silently selecting a host",
+  "existingRowsAndOutcomesUnchanged": true,
+  "engineChanged": false,
+  "publicApiChanged": false,
+  "sourceVersionChanged": false,
+  "gateChanged": false,
+  "releasePerformed": false,
+  "scope": "Ordinary stylesheet root/local/ancestor versions, select/AVT/static paths, output-version control, bounded future-attribute validation and frozen scan refusal; package/import propagation excluded",
+  "cases": [
+    {
+      "id": "host-profile-select-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/select-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-select-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/select-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-select-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/select-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-select-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/select-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-select-root3-local4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/select-root3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-select-root3-local4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/select-root3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-select-root4-local3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/select-root4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-select-root4-local3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/select-root4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root3-wrapper4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/ancestor-root3-wrapper4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root3-wrapper4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/ancestor-root3-wrapper4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root4-wrapper3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/ancestor-root4-wrapper3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-ancestor-root4-wrapper3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/ancestor-root4-wrapper3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root3-wrapper4-local3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/ancestor-root3-wrapper4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-ancestor-root3-wrapper4-local3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/ancestor-root3-wrapper4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root4-wrapper3-local4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/ancestor-root4-wrapper3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-ancestor-root4-wrapper3-local4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/ancestor-root4-wrapper3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/avt-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-avt-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/avt-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/avt-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/avt-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root3-local4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/avt-root3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root3-local4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/avt-root3-local4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-avt-root4-local3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/avt-root4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-avt-root4-local3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/avt-root4-local3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-use-when-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/use-when-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-use-when-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/use-when-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-use-when-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/use-when-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-use-when-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/use-when-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-shadow-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/shadow-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-shadow-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/shadow-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-shadow-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/shadow-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-shadow-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/shadow-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-future-attribute-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/future-attribute-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XTSE0090"
+    },
+    {
+      "id": "host-profile-future-attribute-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/future-attribute-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XTSE0090"
+    },
+    {
+      "id": "host-profile-future-attribute-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/future-attribute-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "ok"
+    },
+    {
+      "id": "host-profile-future-attribute-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/future-attribute-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XTSE0090"
+    },
+    {
+      "id": "host-profile-future-attribute-root5-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/future-attribute-root5.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "ok"
+    },
+    {
+      "id": "host-profile-future-attribute-root5-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/future-attribute-root5.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "ok"
+    },
+    {
+      "id": "host-profile-future-attribute-root5-local3_0-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/future-attribute-root5-local3_0.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XTSE0090"
+    },
+    {
+      "id": "host-profile-future-attribute-root5-local3_0-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/future-attribute-root5-local3_0.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XTSE0090"
+    },
+    {
+      "id": "host-profile-future-attribute-root3-local4_1-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/future-attribute-root3-local4_1.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "ok"
+    },
+    {
+      "id": "host-profile-future-attribute-root3-local4_1-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/future-attribute-root3-local4_1.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "ok"
+    },
+    {
+      "id": "host-profile-scan-root3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/scan-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0017"
+    },
+    {
+      "id": "host-profile-scan-root3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/scan-root3.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0017"
+    },
+    {
+      "id": "host-profile-scan-root4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/scan-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0017"
+    },
+    {
+      "id": "host-profile-scan-root4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/scan-root4.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0017"
+    },
+    {
+      "id": "host-profile-output-version-root3-output4-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/output-version-root3-output4.xsl",
+      "input": "host-profiles/probe.xml",
+      "error": "XPST0003"
+    },
+    {
+      "id": "host-profile-output-version-root3-output4-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/output-version-root3-output4.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-output-version-root4-output3-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/output-version-root4-output3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-output-version-root4-output3-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/output-version-root4-output3.xsl",
+      "input": "host-profiles/probe.xml",
+      "expected": "16"
+    },
+    {
+      "id": "host-profile-report-baseline-normal-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/normal.xml",
+      "expected": "A=2|B=1|C=0|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-baseline-normal-draft40",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/normal.xml",
+      "expected": "A=2|B=1|C=0|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-baseline-empty-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/empty.xml",
+      "expected": "lines=0;total=0"
+    },
+    {
+      "id": "host-profile-report-baseline-empty-draft40",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/empty.xml",
+      "expected": "lines=0;total=0"
+    },
+    {
+      "id": "host-profile-report-baseline-reordered-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/reordered.xml",
+      "expected": "C=0|B=1|A=2|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-baseline-reordered-draft40",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/reordered.xml",
+      "expected": "C=0|B=1|A=2|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-baseline-invalid-legacy",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/invalid.xml",
+      "error": "FORG0001"
+    },
+    {
+      "id": "host-profile-report-baseline-invalid-draft40",
+      "kind": "xslt",
+      "mode": "31",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-baseline.xsl",
+      "input": "host-profiles/invalid.xml",
+      "error": "FORG0001"
+    },
+    {
+      "id": "host-profile-report-local40-normal-legacy",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/normal.xml",
+      "expected": "A=2|B=1|C=0|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-local40-normal-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/normal.xml",
+      "expected": "A=2|B=1|C=0|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-local40-empty-legacy",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/empty.xml",
+      "expected": "lines=0;total=0"
+    },
+    {
+      "id": "host-profile-report-local40-empty-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/empty.xml",
+      "expected": "lines=0;total=0"
+    },
+    {
+      "id": "host-profile-report-local40-reordered-legacy",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/reordered.xml",
+      "expected": "C=0|B=1|A=2|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-local40-reordered-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/reordered.xml",
+      "expected": "C=0|B=1|A=2|lines=3;total=3"
+    },
+    {
+      "id": "host-profile-report-local40-invalid-legacy",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "legacy",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/invalid.xml",
+      "error": "FORG0001"
+    },
+    {
+      "id": "host-profile-report-local40-invalid-draft40",
+      "kind": "xslt",
+      "mode": "40",
+      "processorProfile": "draft40",
+      "file": "host-profiles/report-local40.xsl",
+      "input": "host-profiles/invalid.xml",
+      "error": "FORG0001"
+    }
+  ],
+  "status": "Implemented and locally verified; PR preparation",
+  "validation": {
+    "solutionPassed": 10786,
+    "failed": 0,
+    "skipped": 0,
+    "languageServerPassed": 84,
+    "featureCases": 2935,
+    "chapterCases": 24,
+    "chapterClasses": {
+      "InvoiceReferenceGuideTests": 7,
+      "OrderRoutingReferenceGuideTests": 11,
+      "WorkedExampleTests": 6
+    },
+    "newCasesPassed": 66,
+    "fullRuns": [
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0.trx",
+        "passed": 202,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "bd68dd71adbdc312d66a68f25f26695fd4686abe5c895c7eb05d7385cc07ac70"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[1].trx",
+        "passed": 66,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "233c49cfd968fc3cb422d74cce88562f8548aa9ab18fc3bac77bb79c3c9cf1c8"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[2].trx",
+        "passed": 269,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "33fb8896cbb4c839d32a1e9f5185b7371bed44048676c0728f4e3b6a4c92869f"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[3].trx",
+        "passed": 132,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "7dc9850cc2bb9a40c772437bfe753cea6c4ea66f81a6552f8fe2d6fa33d81627"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[4].trx",
+        "passed": 489,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "8dd6eeaf196fbb837d03fdadfc67e6df6b670f0af8e08b19a3a0e1332d5d0abc"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[5].trx",
+        "passed": 1385,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "97b3c53d66df59217f32e63e98c72dbb3c1add72d92029eab4ab75fdb049ef07"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[6].trx",
+        "passed": 47,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "ccbbe12b8001da21e3dc1be0b38113e4702678d41ed08e0d2c88a7afb84d26d7"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[7].trx",
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "6811a677f58200315b780cbc93c483be41d7c7d2db514cfb0802781a72ea0bb0"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_09_net10.0[8].trx",
+        "passed": 7740,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "a99cd831827c013d94177abaf809dd3c92f3f0bce180c4bfa0bc3f0ce7a1ad7a"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_08_19_10_net10.0.trx",
+        "passed": 303,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "27cfeab25b3d5900d5b25f05ed269c09d8df9138fd3421be9cdaa9a28081a488"
+      }
+    ],
+    "engineGates": "Not rerun: no engine change. Latest published implementation receipts QT3 31142/0/679; qt4 gated8278/0/1894 retained.",
+    "temporaryFixtureJunctionsRemoved": true,
+    "build": "Initial build zero errors/existing CS8604; intermediate sandbox output-write failure retained; authorized retry zero errors/warnings"
+  }
+}

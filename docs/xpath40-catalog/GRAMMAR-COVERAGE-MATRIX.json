@@ -1,14 +1,15 @@
 {
   "date": "2026-10-23",
-  "base": "df27eeb01d6489edd2a22c937eda280135ef5725",
+  "base": "11343adce014c655a1599fd36d61adf61b627316",
   "scope": "Bounded source/test/catalog mapping; no exhaustive production or conformance claim",
   "rows": [
     {
       "key": "S0",
-      "area": "Compatibility and arity-sensitive visibility",
+      "area": "Compatibility, host/local versions and arity-sensitive visibility",
       "entries": [
         "README.md",
-        "experimental/fn-scan.md"
+        "experimental/fn-scan.md",
+        "xslt-instructions/processor-profiles.md"
       ],
       "testEvidence": [
         {
@@ -18,12 +19,22 @@
         {
           "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
           "method": "FunctionLookup_ScanInXPath40Experimental_ReturnsFunction"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "method": "DraftXPathIndependentOfVersion"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "method": "PublishedExample_MatchesDeclaredOutcome"
         }
       ],
-      "remaining": "Reconcile every family and host/local-profile boundary; promotion of a test set does not freeze fn:scan.",
+      "remaining": "66 ordinary stylesheet/profile cases supplied; package/include/import propagation, instruction recognition/fallback completeness and other hosts remain separate. Gate membership does not promote experimental XPath.",
       "source": [
         "src/Bosak.XPath.Api/CompileOptions.cs",
-        "src/Bosak.XPath.Api/XPathCompatibility.cs"
+        "src/Bosak.XPath.Api/XPathCompatibility.cs",
+        "src/Bosak.Xslt/Api/XsltProcessorProfile.cs",
+        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
       "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
     },

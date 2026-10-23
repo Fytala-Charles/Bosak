@@ -19,7 +19,7 @@
 
 ## Current reconciliation - 22 October 2026
 
-[The consolidated review](COVERAGE-RECONCILIATION.md) supplies 18 bounded source/test/catalog grammar rows, a current decision lifecycle table, a reproducible 71-entry evidence inventory and the owner-approved applicable-evidence AC-03 amendment. The [focus-function syntax delivery](FOCUS-FUNCTION-SYNTAX.md) adds a dedicated entry and30 checks: the subsequent [record-contract delivery](RECORD-CONTRACTS.md) adds46 cases and a record-update entry; current totals are74 entries /2,893 documentation checks. Source1.23.6 also fixes the inline-record signature gate it exposes. PR #409 is merged; union-minimum and URI-priority corrections are published in 1.23.4, while bracket parsing is in unpublished source 1.23.5. The policy was owner-approved on 22 October 2026 and the registry criterion amended; AC-03 remains partial pending entry validation.
+[The consolidated review](COVERAGE-RECONCILIATION.md) supplies 18 bounded source/test/catalog grammar rows, a current decision lifecycle table, a reproducible 71-entry evidence inventory and the owner-approved applicable-evidence AC-03 amendment. The [focus-function syntax delivery](FOCUS-FUNCTION-SYNTAX.md) adds a dedicated entry and30 checks: the subsequent [record-contract delivery](RECORD-CONTRACTS.md) adds46 cases and a record-update entry; current totals are75 entries /2,959 documentation checks. Source1.23.6 also fixes the inline-record signature gate it exposes. PR #409 is merged; union-minimum and URI-priority corrections are published in 1.23.4, while bracket parsing is in unpublished source 1.23.5. The policy was owner-approved on 22 October 2026 and the registry criterion amended; AC-03 remains partial pending entry validation.
 
 ## Historical decision and evidence
 
@@ -34,7 +34,7 @@ The [completeness audit](COMPLETENESS-AUDIT.md) and [supplementary audit](SUPPLE
 | AC-01: landed slices and traceability | Partial | Full slice/grammar/signature mapping, exact tiers, per-contract source/tests. The 28 baseline provenance rows have delivery evidence but no historical adopted-specification pins. |
 | AC-02: deferred/rejected decisions | Partial | Validate the dossier-to-record matrix and superseded decisions against source/history; supplied records alone do not certify exhaustive lifecycle coverage. |
 | AC-03: applicable evidence and verified examples | Partial | Current fixtures establish their stated outcomes. The owner-amended criterion accepts applicable XPath, XSLT and disposition/refusal evidence, with absent-gate status explicit. Validate each entry under the approved policy; no conformance or closure is inferred. |
-| AC-04: structure and drift | Partial | All 74 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
+| AC-04: structure and drift | Partial | All 75 entries have numbered fields/index links. Complete feature-specific drift and historical lifecycle review; generic prior-art disclaimers are insufficient. |
 | AC-05: discoverability | Met for current scope | Keep canonical links/status synchronized through the remaining deliveries. |
 
 A current immutable review pin can describe today's comparison, but cannot reconstruct a historically adopted revision. Retain those 28 gaps unless actual historical evidence is recovered.
@@ -362,3 +362,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 
 
 23 October2026: [Numeric literal delivery](NUMERIC-LITERALS.md) adds the74th entry and50 checks, correcting eight malformed fraction/exponent separator cases in source1.23.7. Current totals2,869 feature +24 chapter =2,893. Broader D2/D3/D4 and AC-03 remain partial;28 historical adoption pins remain missing. Public1.23.4 and gate membership unchanged.
+
+
+## Ordinary stylesheet host/version follow-up - 23 October2026
+
+[Host-profile delivery](HOST-PROFILE-BOUNDARIES.md) supplies the75th16-field entry and66 cases (50 focused,16 report runs). Current2,935 feature +24 chapter =2,959 documentation checks. Legacy uses effective-version-selected XPath; Draft supplies frozen4.0 independently. Root/local/ancestor declarations, AVTs, select/static paths and bounded forwards validation are covered. Package/import propagation and broader D2/D3/D4/AC03 remain partial;28 historical adoption pins unchanged. Public/source1.23.7 unchanged; no engine/version/release/gate change. Earlier counts/statuses remain historical.

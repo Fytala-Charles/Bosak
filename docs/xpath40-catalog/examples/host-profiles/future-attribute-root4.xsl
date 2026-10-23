@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="4.0"><xsl:output method="text"/><xsl:template match="/"><xsl:apply-templates select="/*" bogus="ignored"/></xsl:template><xsl:template match="root">ok</xsl:template></xsl:stylesheet>

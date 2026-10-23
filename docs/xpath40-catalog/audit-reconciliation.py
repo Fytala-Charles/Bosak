@@ -80,7 +80,7 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-23", sourceBase="ff2a9cd7228282acf5d6dbff00bd9d097c891aeb",
+receipt = dict(date="2026-10-23", sourceBase="11343adce014c655a1599fd36d61adf61b627316",
     sourceVersion="1.23.7", publishedVersion="1.23.7", scope="Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record and numeric lexer corrections are audited separately; no tier/gate promotion; publication tracked separately",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},

@@ -15,6 +15,7 @@
 //                      | Charles Korthout | 0.2   | 12-10-2026     | Verify declared 3.1 outcomes for changed existing-function contracts.                    |
 //                      | Charles Korthout | 0.3   | 12-10-2026     | Verify declared XSLT compile/capture errors for deferred declaration examples.           |
 //                      | Charles Korthout | 0.4   | 12-10-2026     | Execute XQuery and actual streaming catalog paths with exact results or errors.         |
+//                      | Charles Korthout | 0.5   | 23-10-2026     | Honor explicit Legacy/draft host profiles for runnable XSLT catalog cases.              |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -71,14 +72,23 @@ public class CatalogExampleTests
         if (row.GetProperty("kind").GetString() == "xslt")
         {
             var source = XDocument.Load(Path.Combine(Folder, row.GetProperty("input").GetString()!));
+            var profile = row.TryGetProperty("processorProfile", out var requestedProfile)
+                ? requestedProfile.GetString() switch
+                {
+                    "legacy" => XsltProcessorProfile.Legacy,
+                    "draft40" => XsltProcessorProfile.Xslt40Draft,
+                    _ => throw new InvalidOperationException("Unknown catalog processorProfile: " + requestedProfile.GetString()),
+                }
+                : XsltProcessorProfile.Legacy;
+            var compiler = new XsltCompiler { ProcessorProfile = profile };
             string Transform()
             {
                 if (row.GetProperty("mode").GetString() is "stream31" or "stream40")
                 {
                     using var stream = File.OpenRead(Path.Combine(Folder, row.GetProperty("input").GetString()!));
-                    return new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
+                    return compiler.Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
                 }
-                var result = new XsltCompiler().Compile(code, new Uri(file).AbsoluteUri)
+                var result = compiler.Compile(code, new Uri(file).AbsoluteUri)
                     .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
                 if (!result.IsSuccess)
                     throw new InvalidOperationException(string.Join("; ", result.Failures.Select(f => f.Message)));
