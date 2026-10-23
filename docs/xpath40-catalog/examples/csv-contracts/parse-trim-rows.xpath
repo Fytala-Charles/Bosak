@@ -1,0 +1,3 @@
+let $rows := ((fn:parse-csv('A,2
+B
+C,3,x', map {'trim-rows':true()}))?rows) return string-join(for $row in $rows return string(array:size($row)) || ':[' || string-join($row?*, '|') || ']', ';')

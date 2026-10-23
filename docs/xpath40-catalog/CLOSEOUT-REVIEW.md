@@ -372,3 +372,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 ## Direct module/profile follow-up - 23 October2026
 
 [Module delivery](MODULE-PROFILE-BOUNDARIES.md) supplies the76th entry and114 cases, stacked on separate runtime-fix PR416. Current3,049 feature +24 chapter =3,073 checks. Host inheritance and dependency-owned effective versions are covered for one include/import/used-package edge. Transitive graphs, package lifecycle/override/default-mode/static/authoring/resource contexts remain separate. Source1.23.8 unpublished/public1.23.7; no further engine change or release in the module diff. D2/D3/D4/AC03 and28 missing historical pins remain partial. Earlier checkpoint counts/versions are historical.
+
+
+## CSV options/defaults follow-up - 23 October2026
+
+**CSV options/defaults review - 23 October 2026:** [Contract review](CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.

@@ -1,0 +1,2 @@
+let $rows := ((fn:parse-csv('sku,qty
+A,2', map {'header': true()}))?rows) return string-join(for $row in $rows return string(array:size($row)) || ':[' || string-join($row?*, '|') || ']', ';')

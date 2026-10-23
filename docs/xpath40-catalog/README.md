@@ -5,6 +5,10 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**CSV options/defaults review - 23 October 2026:** [Contract review](CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.
+
+
+
 **Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
 
 **Function default-mode correction - 23 October2026:** [Isolated source1.23.8 fix](../XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates modes in functions use the default mode.36 regressions pass; public1.23.7 unchanged. Module/profile examples are a separate follow-up. Catalog75 entries/2,959 documentation checks unchanged; REQ-126/AC03 remain partial. Earlier delivery checkpoints below are historical.
@@ -41,17 +45,13 @@
 
 ## Current coverage and acceptance
 
-[Numeric literals and digit separators](operators-and-syntax/numeric-literals.md): the [bounded lexical delivery](NUMERIC-LITERALS.md) supplies50 checks and corrects malformed fraction/exponent groups in published 1.23.7. Public1.23.7 is verified; Braid dependency remains1.23.4.
+Current totals: **76 entries; 3,148 feature +24 chapter checks =3,172**, four worked chapters and117 assigned function names. Published engine1.23.8 includes the [function default-mode correction](../XSLT-FUNCTION-DEFAULT-MODE.md) and the [ordinary host/profile](HOST-PROFILE-BOUNDARIES.md) and [direct module/profile](MODULE-PROFILE-BOUNDARIES.md) coverage. Braid's1.23.8 smoke remains separate.
 
-Current totals: **76 entries; 3,049 feature +24 chapter checks =3,073**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; the subsequent [record-contract slice](RECORD-CONTRACTS.md) adds46 checks and a separate update entry, and fixes an inline-record signature gate in source1.23.6. Public1.23.7 is verified; REQ-126 remains In Progress.
+Reference entries: [numeric literals](operators-and-syntax/numeric-literals.md), [stylesheet versions and profiles](xslt-instructions/processor-profiles.md), and [module/profile propagation](xslt-instructions/module-profiles.md).
 
-[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 76 entries. The [focus-function syntax slice](FOCUS-FUNCTION-SYNTAX.md) supplies the dedicated syntax entry and 30 checks; [record casts/coercion/updates](RECORD-CONTRACTS.md) are now supplied in a bounded slice; numeric lexical coverage is now supplied in a bounded slice; the [ordinary version/profile slice](HOST-PROFILE-BOUNDARIES.md) is supplied; broader module/package host coverage remains open. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
+[The CSV options/defaults review](CSV-CONTRACT-REVIEW.md) adds99 runnable catalog checks and25 local-resource public API tests, including complete supplier-import reports. It enriches the existing CSV entry; it adds no engine/API/version/release change. The non-positive selection draft/test conflict and namespaced QName option policy are explicit follow-ups.
 
-
-[Stylesheet versions and processor profiles](xslt-instructions/processor-profiles.md) adds a dedicated host-policy entry and66 executable checks. Explicit runner profile selection retains Legacy for all existing rows; no engine/version/API/release change.
-
-
-[Module and used-package profile propagation](xslt-instructions/module-profiles.md) supplies the [114-case direct-dependency slice](MODULE-PROFILE-BOUNDARIES.md), stacked on the isolated source1.23.8 function-mode fix. Public1.23.7 remains unchanged; no release or additional engine change in the module diff.
+[The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps18 bounded grammar/cluster families and inventories applicable evidence. [Focus syntax](FOCUS-FUNCTION-SYNTAX.md), [record contracts](RECORD-CONTRACTS.md) and [numeric literals](NUMERIC-LITERALS.md) have bounded deliveries; broader grammar, transitive graphs and option/coercion contracts remain open. D2/D3/D4 and AC-03 stay partial under the owner-approved applicable-evidence policy;28 historical adoption pins remain unavailable. Run `python docs/xpath40-catalog/audit-reconciliation.py` to regenerate the bounded inventory.
 
 ## Direction: a book and a working reference
 

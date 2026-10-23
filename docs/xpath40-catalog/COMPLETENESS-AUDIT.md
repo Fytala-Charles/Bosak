@@ -699,3 +699,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 ## Direct dependency host/profile coverage - 23 October2026
 
 [Module boundary delivery](MODULE-PROFILE-BOUNDARIES.md) adds114 checks and one16-field entry: current76 entries/3,073 documentation checks. The isolated engine prerequisite is PR416; module documentation/runner setup is separate. Single-edge include/import/package propagation is supplied, not full package/override/graph/static context coverage. REQ-126 and D2/D3/D4/AC03 remain partial.
+
+
+## CSV options/defaults follow-up - 23 October2026
+
+**CSV options/defaults review - 23 October 2026:** [Contract review](CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.

@@ -23096,5 +23096,721 @@
       }
     ],
     "error": "FORG0001"
+  },
+  {
+    "id": "csv-contract-parse-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-default.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-parse-empty-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-map.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-parse-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-options.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-parse-empty-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-string.xpath",
+    "expected": ""
+  },
+  {
+    "id": "csv-contract-parse-blank-row",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-blank-row.xpath",
+    "expected": "0:[]"
+  },
+  {
+    "id": "csv-contract-parse-empty-fields",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-fields.xpath",
+    "expected": "3:[||]"
+  },
+  {
+    "id": "csv-contract-parse-header-false",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-header-false.xpath",
+    "expected": "2:[sku|qty];2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-header-true",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-header-true.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-supplied-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-supplied-header.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-empty-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-header.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-separator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-separator.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-custom-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-custom-quote.xpath",
+    "expected": "2:[A;B|2]"
+  },
+  {
+    "id": "csv-contract-parse-escaped-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-escaped-quote.xpath",
+    "expected": "2:[A,\"B\"|2]"
+  },
+  {
+    "id": "csv-contract-parse-quoted-newline",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-quoted-newline.xpath",
+    "expected": "2:[A\nB|2]"
+  },
+  {
+    "id": "csv-contract-parse-comment",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-comment.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-comment-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-comment-default.xpath",
+    "expected": "1:[#supplier];2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-whitespace-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-whitespace-default.xpath",
+    "expected": "2:[ A | 2 ]"
+  },
+  {
+    "id": "csv-contract-parse-trim-unquoted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-trim-unquoted.xpath",
+    "expected": "2:[A| 2 ]"
+  },
+  {
+    "id": "csv-contract-parse-ragged-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-ragged-default.xpath",
+    "expected": "2:[A|2];1:[B];3:[C|3|x]"
+  },
+  {
+    "id": "csv-contract-parse-trim-rows",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-trim-rows.xpath",
+    "expected": "2:[A|2];2:[B|];2:[C|3]"
+  },
+  {
+    "id": "csv-contract-parse-select-order-duplicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-select-order-duplicate.xpath",
+    "expected": "4:[2|A|2|]"
+  },
+  {
+    "id": "csv-contract-parse-empty-select",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-select.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-parse-select-precedes-trim",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-select-precedes-trim.xpath",
+    "expected": "3:[2|A|2];3:[|B|]"
+  },
+  {
+    "id": "csv-contract-parse-unterminated",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-unterminated.xpath",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-parse-after-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-after-quote.xpath",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-parse-collision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-collision.xpath",
+    "error": "FOCV0002"
+  },
+  {
+    "id": "csv-contract-parse-long-delimiter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-long-delimiter.xpath",
+    "error": "FOCV0002"
+  },
+  {
+    "id": "csv-contract-parse-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-unknown-option.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-parse-wrong-boolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-wrong-boolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-parse-nonmap-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-nonmap-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-parse-empty-text-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-text-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-parse-crlf",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-crlf.xpath",
+    "expected": "2:[A|2];2:[B|3]"
+  },
+  {
+    "id": "csv-contract-parse-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-input.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "csv-contract-parse-empty-input-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-empty-input-invalid-options.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "csv-contract-parse-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/parse-keyword.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-default.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-xml-empty-map",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-map.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-xml-empty-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-options.xpath",
+    "expected": "2:[a|b]"
+  },
+  {
+    "id": "csv-contract-xml-empty-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-string.xpath",
+    "expected": ""
+  },
+  {
+    "id": "csv-contract-xml-blank-row",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-blank-row.xpath",
+    "expected": "0:[]"
+  },
+  {
+    "id": "csv-contract-xml-empty-fields",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-fields.xpath",
+    "expected": "3:[||]"
+  },
+  {
+    "id": "csv-contract-xml-header-false",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-header-false.xpath",
+    "expected": "2:[sku|qty];2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-header-true",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-header-true.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-supplied-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-supplied-header.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-empty-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-header.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-separator",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-separator.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-custom-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-custom-quote.xpath",
+    "expected": "2:[A;B|2]"
+  },
+  {
+    "id": "csv-contract-xml-escaped-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-escaped-quote.xpath",
+    "expected": "2:[A,\"B\"|2]"
+  },
+  {
+    "id": "csv-contract-xml-quoted-newline",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-quoted-newline.xpath",
+    "expected": "2:[A\nB|2]"
+  },
+  {
+    "id": "csv-contract-xml-comment",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-comment.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-comment-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-comment-default.xpath",
+    "expected": "1:[#supplier];2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-whitespace-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-whitespace-default.xpath",
+    "expected": "2:[ A | 2 ]"
+  },
+  {
+    "id": "csv-contract-xml-trim-unquoted",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-trim-unquoted.xpath",
+    "expected": "2:[A| 2 ]"
+  },
+  {
+    "id": "csv-contract-xml-ragged-default",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-ragged-default.xpath",
+    "expected": "2:[A|2];1:[B];3:[C|3|x]"
+  },
+  {
+    "id": "csv-contract-xml-trim-rows",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-trim-rows.xpath",
+    "expected": "2:[A|2];2:[B|];2:[C|3]"
+  },
+  {
+    "id": "csv-contract-xml-select-order-duplicate",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-select-order-duplicate.xpath",
+    "expected": "4:[2|A|2|]"
+  },
+  {
+    "id": "csv-contract-xml-empty-select",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-select.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-xml-select-precedes-trim",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-select-precedes-trim.xpath",
+    "expected": "3:[2|A|2];3:[|B|]"
+  },
+  {
+    "id": "csv-contract-xml-unterminated",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-unterminated.xpath",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-xml-after-quote",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-after-quote.xpath",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-xml-collision",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-collision.xpath",
+    "error": "FOCV0002"
+  },
+  {
+    "id": "csv-contract-xml-long-delimiter",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-long-delimiter.xpath",
+    "error": "FOCV0002"
+  },
+  {
+    "id": "csv-contract-xml-unknown-option",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-unknown-option.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-xml-wrong-boolean",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-wrong-boolean.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-xml-nonmap-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-nonmap-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-xml-empty-text-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-text-invalid-options.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-xml-crlf",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-crlf.xpath",
+    "expected": "2:[A|2];2:[B|3]"
+  },
+  {
+    "id": "csv-contract-xml-empty-input",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-input.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "csv-contract-xml-empty-input-invalid-options",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-empty-input-invalid-options.xpath",
+    "expected": "true"
+  },
+  {
+    "id": "csv-contract-xml-keyword",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/xml-keyword.xpath",
+    "expected": "2:[A|2]"
+  },
+  {
+    "id": "csv-contract-observed-nonpositive-select",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/observed-nonpositive-select.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-observed-negative-select",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/observed-negative-select.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-observed-qname-extension",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/observed-qname-extension.xpath",
+    "error": "XPTY0004"
+  },
+  {
+    "id": "csv-contract-columns",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/columns.xpath",
+    "expected": "A|B"
+  },
+  {
+    "id": "csv-contract-duplicate-header",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/duplicate-header.xpath",
+    "expected": "1:A"
+  },
+  {
+    "id": "csv-contract-supplied-names-after-select",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "csv-contracts/supplied-names-after-select.xpath",
+    "expected": "qty|sku:A"
+  },
+  {
+    "id": "csv-contract-report-before-normal",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "csv-contracts/report-before-normal.xsl",
+    "input": "csv-contracts/normal.xml",
+    "expected": "A,BLUE=2|B=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-parse-normal",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-normal.xsl",
+    "input": "csv-contracts/normal.xml",
+    "expected": "A,BLUE=2|B=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-xml-normal",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-normal.xsl",
+    "input": "csv-contracts/normal.xml",
+    "expected": "A,BLUE=2|B=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-doc-normal",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-normal.xsl",
+    "input": "csv-contracts/normal.xml",
+    "expected": "A,BLUE=2|B=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-before-empty",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "csv-contracts/report-before-empty.xsl",
+    "input": "csv-contracts/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "csv-contract-report-parse-empty",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-empty.xsl",
+    "input": "csv-contracts/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "csv-contract-report-xml-empty",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-empty.xsl",
+    "input": "csv-contracts/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "csv-contract-report-doc-empty",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-empty.xsl",
+    "input": "csv-contracts/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "csv-contract-report-before-reordered",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "csv-contracts/report-before-reordered.xsl",
+    "input": "csv-contracts/reordered.xml",
+    "expected": "B=3|A,BLUE=2|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-parse-reordered",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-reordered.xsl",
+    "input": "csv-contracts/reordered.xml",
+    "expected": "B=3|A,BLUE=2|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-xml-reordered",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-reordered.xsl",
+    "input": "csv-contracts/reordered.xml",
+    "expected": "B=3|A,BLUE=2|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-doc-reordered",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-reordered.xsl",
+    "input": "csv-contracts/reordered.xml",
+    "expected": "B=3|A,BLUE=2|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-before-duplicate",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "csv-contracts/report-before-duplicate.xsl",
+    "input": "csv-contracts/duplicate.xml",
+    "expected": "A=2|A=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-parse-duplicate",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-duplicate.xsl",
+    "input": "csv-contracts/duplicate.xml",
+    "expected": "A=2|A=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-xml-duplicate",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-duplicate.xsl",
+    "input": "csv-contracts/duplicate.xml",
+    "expected": "A=2|A=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-doc-duplicate",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-duplicate.xsl",
+    "input": "csv-contracts/duplicate.xml",
+    "expected": "A=2|A=3|lines=2;total=5"
+  },
+  {
+    "id": "csv-contract-report-before-invalid",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "csv-contracts/report-before-invalid.xsl",
+    "input": "csv-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "csv-contract-report-parse-invalid",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-invalid.xsl",
+    "input": "csv-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "csv-contract-report-xml-invalid",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-invalid.xsl",
+    "input": "csv-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "csv-contract-report-doc-invalid",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-invalid.xsl",
+    "input": "csv-contracts/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "csv-contract-report-parse-malformed",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-parse-malformed.xsl",
+    "input": "csv-contracts/normal.xml",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-report-xml-malformed",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-xml-malformed.xsl",
+    "input": "csv-contracts/normal.xml",
+    "error": "FOCV0001"
+  },
+  {
+    "id": "csv-contract-report-doc-malformed",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "csv-contracts/report-doc-malformed.xsl",
+    "input": "csv-contracts/normal.xml",
+    "error": "FOCV0001"
   }
 ]

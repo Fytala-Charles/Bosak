@@ -38,6 +38,8 @@ Read the behavior as XPath/XSLT semantics. Similar vocabulary in another program
 
 Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. This reduced example has one data row and no header. Validate numeric quantities separately; parsing CSV is not business validation.
 
+**Options/defaults follow-up - 23 October 2026:** [Bounded review](../CSV-CONTRACT-REVIEW.md) and [complete supplier import](../examples/csv-contracts/README.md) add99 catalog cases plus25 local-resource tests for published1.23.8. Omitted/empty options, headers, delimiters, ragged rows, validation and resource paths are covered. Non-positive selection conflicts with the current draft and frozen upstream test; unknown namespaced QName options also differ. These are explicit observations, not new support or full conformance. Historical adoption remains unassigned.
+
 ## 8. Structure
 
 ```xquery
@@ -72,6 +74,9 @@ Input is synthetic and declared directly in the complete expression. The [comple
 Expected class: input-size dependent. Parsing constructs row/cell values; the quantity cast and downstream business checks are separate costs. These are implementation expectations, not measured deltas. No benchmark is claimed; use the repository benchmark harness before making workload-specific speed or memory claims.
 
 ## 15. Known Uses
+
+Current applicable evidence: all `csv-contract-*` IDs in the [manifest](../examples/cases.json), the25 public API tests in [CsvResourceContractTests](../../../tests/Bosak.XPath.Standard.Tests/CsvResourceContractTests.cs) (`LocalResource_UsesOptions`, `LocalResource_EncodingAndEmptyRows`, `LocalResource_PreservesErrors`, `MissingResource_RaisesFout1170`, `Keywords_ReadLocalResource`, `EmptySource_BypassesOptionInspection`) and existing [CsvTests](../../../tests/Bosak.XPath.Standard.Tests/CsvTests.cs). All99 exact IDs are recorded in [the machine review](../CSV-CONTRACT-REVIEW.json). The existing `fn-parse-csv`, `fn-csv-to-xml`, `fn-csv-doc` gated sets apply within their frozen scope; `parse-csv-912` does not establish the opposite current-draft rule. No gate promotion or full current-draft certification follows.
+
 
 Executable example IDs: `csv-parsing-main`, `csv-parsing-edge`, `csv-parsing-before` in `CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome`. Existing unit evidence: [primary tests](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs). Chapter-level evidence does not promote a qt4tests set into GatedSets; conformance status remains owned by the harness and delivery records.
 
