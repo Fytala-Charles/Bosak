@@ -1,0 +1,1 @@
+let $r := fn:parse-csv('sku,sku' || char(10) || 'A,B', map {'header':true()}) return string($r?column-index?sku) || ':' || $r?get(1,'sku')

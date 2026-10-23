@@ -1,0 +1,1 @@
+let $r := fn:parse-csv('A,2',map {'select-columns':(2,1), 'header':('qty','sku')}) return string-join($r?columns,'|') || ':' || $r?get(1,'sku')

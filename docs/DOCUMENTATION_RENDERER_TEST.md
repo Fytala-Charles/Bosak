@@ -322,6 +322,10 @@ README install/package links, canonical status, release notes/readiness, catalog
 README install/package/release-note links, canonical status, release notes/readiness, catalog notices and public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1238-publication-render`; new relative links and package receipts checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
 
 
+## CSV options/defaults review - 23 October 2026
+
+CSV contract review, supplier-import task, existing entry/index and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-csv-render`. New links/JSON, CSV/XML fixture parity,16 fields, preserved manifest rows and source header checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
+
 ## REQ-136 intake and scope proposal - 23 October2026
 
 Original consumer request, maintainer scope/API proposal and canonical planning counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req136-scope-render`; new links, intake JSON and source/API references checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
@@ -330,3 +334,7 @@ Original consumer request, maintainer scope/API proposal and canonical planning 
 ## Release1.24.0 publication — 23 October2026
 
 README install/package/release-note links, canonical status, notes/readiness and signed-public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1240-publication-render`; new links/JSON/README versions and package receipts checked. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
+
+## CSV PR420 refreshed against accepted 1.24.0 - 23 October 2026
+
+The twelve CSV review/canonical pages are re-rendered under `.guard-tmp/req126-csv-refresh-render` with unchanged Fytala CSS. Original renderer and execution receipts remain preserved. HTML only; no screenshot/PDF acceptance.

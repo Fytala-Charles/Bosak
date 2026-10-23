@@ -1,0 +1,3 @@
+let $rows := (for $row in (fn:csv-to-xml('A,2
+B
+C,3,x', map {'trim-rows':true()}))/*:csv/*:rows/*:row return array { $row/*:field/string() }) return string-join(for $row in $rows return string(array:size($row)) || ':[' || string-join($row?*, '|') || ']', ';')

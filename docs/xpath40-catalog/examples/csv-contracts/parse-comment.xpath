@@ -1,0 +1,2 @@
+let $rows := ((fn:parse-csv('#supplier
+A,2', map {'comment-marker':'#'}))?rows) return string-join(for $row in $rows return string(array:size($row)) || ':[' || string-join($row?*, '|') || ']', ';')

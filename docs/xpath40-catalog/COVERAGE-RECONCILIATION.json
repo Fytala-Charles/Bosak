@@ -1,15 +1,15 @@
 {
   "date": "2026-10-23",
-  "sourceBase": "c172747b13e5bbfe2b342b04d295720299b4387e",
-  "sourceVersion": "1.23.8",
-  "publishedVersion": "1.23.7",
-  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record, numeric lexer and function default-mode corrections are audited separately; no tier/gate promotion; publication tracked separately",
+  "sourceBase": "06a76549bfed8200c7bb2580275b46bb46975d31",
+  "sourceVersion": "1.24.0",
+  "publishedVersion": "1.24.0",
+  "scope": "Repository evidence reconciliation refreshed for CSV PR420 against accepted published1.24.0; owner-approved AC-03 evidence-policy amendment; engine corrections audited separately; no tier/gate promotion; original preparation receipts retained separately",
   "summary": {
     "entries": 76,
-    "featureChecks": 3049,
+    "featureChecks": 3148,
     "chapterChecks": 24,
     "workedChapters": 4,
-    "totalDocumentationChecks": 3073,
+    "totalDocumentationChecks": 3172,
     "currentGatedSetCount": 218,
     "entriesMentioningCurrentGatedSet": 25,
     "entriesWithoutLiteralCurrentGatedSet": 51,
@@ -686,7 +686,7 @@
       "classification": "**CSV parsing** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 CSV cluster; local FunctionLibrary CSV implementation. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
       "numberedFields": 16,
       "indexed": true,
-      "knownUsesSha256": "aacde77e7f44b615c294e4a395b83ab18bfb9d72e0d970ef358f627bb892871d",
+      "knownUsesSha256": "eff71e2838a0b846ab7179cd6bb219cd69a3ebf8439d122f089aec2d8d8a2530",
       "exactManifestIdsInKnownUses": [
         "csv-parsing-before",
         "csv-parsing-edge",
@@ -698,7 +698,11 @@
         "fn-parse-csv"
       ],
       "knownUseLocalFiles": [
-        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+        "docs/xpath40-catalog/CSV-CONTRACT-REVIEW.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/CsvResourceContractTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/CsvTests.cs"
       ],
       "sampleLocalFiles": [
         "docs/xpath40-catalog/examples/README.md",
@@ -2585,7 +2589,7 @@
     "rejected/mapping-arrow-gtgt.md"
   ],
   "inputHashes": {
-    "docs\\xpath40-catalog\\examples\\cases.json": "3d8e82d34dfc646118326d2f8f018e8cf4b2776cffd11d32a63fbfed4a536ec9",
+    "docs\\xpath40-catalog\\examples\\cases.json": "f3dff996b11691c80ac50f564cba7c865200e61a7854395380c1eba081d95df9",
     "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
     "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
   },
