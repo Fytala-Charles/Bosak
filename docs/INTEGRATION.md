@@ -1,3 +1,5 @@
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak integration guide">
   <br><br>

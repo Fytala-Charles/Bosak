@@ -1,3 +1,5 @@
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak feature requests">
   <br><br>
@@ -581,7 +583,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented, published and consumer-accepted | 1.23.0 | Bosak | 2026-10-21 |
-| REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented and published; consumer acceptance pending | 1.24.0 | Charles Korthout | 2026-10-23 |
+| REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented, published and consumer-accepted | 1.24.0 | Charles Korthout | 2026-10-23 |
 
 
 > **Legend:
@@ -1901,6 +1903,9 @@ Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Cand
 The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Published 1.22.0 is independently verified; Braid final implementation review is complete. Consumer-only acceptance groups, Braid adoption and native observations remain pending. REQ-133 consumer acceptance remains unchanged.
 
 ### REQ-136: Complete Literal Result Element Lifecycle for Bosak.Braid
+
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
 
 Requester: **Bosak.Braid**. Registered: **2026-10-23**. Status: **Implemented and published; consumer acceptance pending**. Owner: **Charles Korthout**. Target version: **1.24.0**.
 
