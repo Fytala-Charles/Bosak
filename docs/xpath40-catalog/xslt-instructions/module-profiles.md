@@ -4,6 +4,8 @@
   <p>Bosak host policy - bounded executable reference</p>
 </div>
 
+**Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
+
 ## 1. Name and Classification
 
 **Module/profile propagation** - implemented Bosak host composition, with an opt-in experimental XSLT draft profile and frozen embedded XPath 4.0. The same compilation host applies to a directly included, imported or used-package module, while expression selection and forwards-compatible validation retain the dependency's own effective version. This is not a new grammar feature or an experimental XPath promotion.

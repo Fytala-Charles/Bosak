@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
+
 **Function default-mode correction - 23 October2026:** [Isolated source1.23.8 fix](../XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates modes in functions use the default mode.36 regressions pass; public1.23.7 unchanged. Module/profile examples are a separate follow-up. Catalog75 entries/2,959 documentation checks unchanged; REQ-126/AC03 remain partial. Earlier delivery checkpoints below are historical.
 
 

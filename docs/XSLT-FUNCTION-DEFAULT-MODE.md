@@ -4,6 +4,8 @@
   <p>23 October 2026 - source 1.23.8 unpublished; public 1.23.7</p>
 </div>
 
+**Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
+
 ## Contract and reproduction
 
 An xsl:apply-templates instruction with no mode attribute uses the default mode; it does not name an empty QName. The module/profile follow-up exposed XTSE0020 from otherwise legal function-body instructions, including an empty selection. The independent [FunctionApplyTemplatesModeTests](../tests/Bosak.Xslt.Tests/FunctionApplyTemplatesModeTests.cs) reproduce this through the public compiler/executable APIs.

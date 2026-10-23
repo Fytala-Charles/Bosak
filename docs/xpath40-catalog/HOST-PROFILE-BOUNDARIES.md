@@ -4,6 +4,8 @@
   <p>23 October 2026 - source/public 1.23.7 unchanged</p>
 </div>
 
+**Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
+
 ## Supplied contract
 
 [Dedicated16-field entry](xslt-instructions/processor-profiles.md) separates Bosak's default Legacy host, opt-in Xslt40Draft capability, nearest effective [xsl:]version, embedded XPath and forwards-compatible ceiling. It does not call the draft XSLT host XPath40Experimental or a complete XSLT 4.0 implementation. The [complete order task](examples/host-profiles/README.md) compares a plain3.0 report with a root 3.0/local 4.0 report under both hosts, with exact normal/empty/reordered/error outcomes.

@@ -1,3 +1,11 @@
+# Bosak1.23.8 published and verified - 23 October2026
+
+**1.23.8 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.8-PUBLICATION.md) records immutable v1.23.8 at `6d12bed3`, one successful Release run (10,936 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/430 focused checks with matching provenance and clear audits. Includes the function default-mode fix and host/module profile coverage. REQ-126 remains In Progress; Braid smoke/acceptance remains separate. Earlier preparation/unpublished statements below are historical.
+
+What was built: signed public1.23.8 at `6d12bed35dac56a635acc7702645ef9085103c83`; tag object `0bc4bf9260a4a9dc5fae88baec5678a691570102`; Release run39932304238,10,936 solution tests/ten uploads, ten signatures,153 broad/430 focused public checks and exact archive/cache/output/contentHash provenance verified. Documentation base `2028dca44a3f52ad530ae992366909f638969fce`; publication record commit follows. Publication explicitly approved; no duplicate dispatch. Next: normal Braid1.23.8 upgrade smoke as separate work; continue REQ-126 defaults/options and broader grammar/host/history evidence after choosing the next bounded slice. Preserve pending upstream notes, original receipts, stashes/worktrees, sweep baselines and PR132.
+
+## Historical preparation checkpoints
+
 # Bosak1.23.8 release preparation - 23 October2026
 
 **1.23.8 release preparation - 23 October 2026:** [Readiness](RELEASE-1.23.8-READINESS.md) and [release notes](RELEASE-NOTES-1.23.8.md) pin the default-mode fix and module/profile coverage to immutable source `6d12bed35dac56a635acc7702645ef9085103c83`. Ten unsigned candidates pass153 broad/430 focused package checks;10,936 solution tests pass. Public1.23.7, Braid smoke/acceptance and REQ-126 In Progress remain unchanged. No publication started. Earlier checkpoints below are historical.
