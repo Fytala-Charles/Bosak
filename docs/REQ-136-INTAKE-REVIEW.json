@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-23",
+  "status": "CONSUMER_SMOKE_REPORTED_AND_RECEIPT_IDENTITIES_CHECKED",
+  "source": "6d12bed35dac56a635acc7702645ef9085103c83",
+  "publicVersion": "1.23.8",
+  "consumerReportedAdoptedVersion": "1.23.7",
+  "adoptionPerformedHere": false,
+  "newNativeAcceptanceClaimed": false,
+  "counts": [
+    {
+      "suite": "full-results",
+      "passed": 1405,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "public-results",
+      "passed": 710,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "focused-results",
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "consumedPackages": 9,
+  "consumerReceiptPath": "D:\\Development\\Bosak.Braid\\.acceptance\\bosak-1.23.8-smoke\\verification.json",
+  "consumerReceiptSha256": "c1509e59b08f0387cf5334d28a9288604397c1fb7f5520c90166e23d9b48538b",
+  "allNineConsumerAssemblyIdentitiesMatchBosakPublicProof": true,
+  "consumerSignaturesReportedVerified": true,
+  "braidTestsRerunHere": false,
+  "independentBosakPublicProof": "RELEASE-1.23.8-PUBLICATION.json",
+  "req136Status": "Pending scope/API review",
+  "implementationAuthorized": false,
+  "targetVersion": "TBD",
+  "owner": "Unassigned"
+}

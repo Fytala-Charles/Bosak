@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.2   | 23-10-2026     | Share unchanged restricted scope and validation with REQ-136. |
+
 using System.Buffers;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -276,7 +278,7 @@ internal static class LiteralAttributeLifecyclePipeline
             Array.AsReadOnly(attributes.ToArray()), Array.AsReadOnly(new[] { new AuthoringInsertionSourceEdit(oldRange, newRange) }));
     }
 
-    private static AuthoringLiteralAttributeFailure? Scope(AuthoringSnapshot snapshot, AuthoringNodeDescriptor? owner, CancellationToken token, out XDocument? document)
+    internal static AuthoringLiteralAttributeFailure? Scope(AuthoringSnapshot snapshot, AuthoringNodeDescriptor? owner, CancellationToken token, out XDocument? document)
     {
         document = null;
         AuthoringLiteralAttributeFailure Refuse(AuthoringLiteralAttributeFailureKind kind, string message) => Fail(snapshot, kind, message);
@@ -352,7 +354,7 @@ internal static class LiteralAttributeLifecyclePipeline
     { var info = (IXmlLineInfo)e; var p = s.CoordinateMap.CharOffsetFromLineColumn(info.LineNumber, info.LinePosition); return p > 0 && s.Text[p - 1] == '<' ? p - 1 : p; }
     private static void Copy(ReadOnlySpan<byte> source, Span<byte> destination, CancellationToken token)
     { for (var i = 0; i < source.Length; i += Math.Min(65536, source.Length - i)) { token.ThrowIfCancellationRequested(); var n = Math.Min(65536, source.Length - i); source.Slice(i, n).CopyTo(destination.Slice(i, n)); } }
-    private static AuthoringLiteralAttributeFailure? Validate(AuthoringSnapshot snapshot, bool candidate, CancellationToken token)
+    internal static AuthoringLiteralAttributeFailure? Validate(AuthoringSnapshot snapshot, bool candidate, CancellationToken token)
     {
         var f = ValueOfInsertionPipeline.Validate(snapshot, candidate, token, refusalFilter: ExpectedFailure);
         return f is null ? null : Fail(snapshot, f.Kind switch

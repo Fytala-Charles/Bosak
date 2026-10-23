@@ -40,3 +40,6 @@
 
 # Keep native switch fixtures identical to the executed portable contribution.
 /tests/Bosak.Xslt.Conformance/Fixtures/SwitchBoundaries/** text eol=lf
+
+# Preserve the exact REQ-136 consumer design review receipt, including original line endings.
+/docs/req136-evidence/BOSAK_REQ136_CONSUMER_DESIGN_REVIEW.txt -text whitespace=cr-at-eol

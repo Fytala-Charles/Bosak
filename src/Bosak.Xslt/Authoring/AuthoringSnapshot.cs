@@ -26,6 +26,8 @@
 
 //                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: operation-bound literal attribute lifecycle.                                    |
 
+//                      | Charles Korthout | 1.1   | 23-10-2026     | REQ-136: element rename and subtree deletion. |
+
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Authoring;
@@ -41,6 +43,49 @@ namespace Bosak.Xslt.Authoring;
 /// </summary>
 public sealed class AuthoringSnapshot
 {
+    /// <summary>Discovers opaque literal element rename authority.</summary>
+    /// <param name="node">The actual snapshot-owned element.</param>
+    /// <param name="cancellationToken">Cancellation observed before authority is published.</param>
+    /// <returns>An owned target or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    public AuthoringLiteralElementRenameTargetResult GetLiteralElementRenameTarget(AuthoringNodeDescriptor node, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        var r = LiteralElementLifecyclePipeline.Discover(this, node, cancellationToken);
+        return new(r.Data is null ? null : new(r.Data), r.Failure);
+    }
+    /// <summary>Proposes a pure source-preserving literal element rename.</summary>
+    /// <param name="proposal">The owned target and explicit operation intent.</param>
+    /// <param name="cancellationToken">Cancellation observed before success.</param>
+    /// <returns>An exclusive result without partial authority.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralElementRenameResult ProposeLiteralElementRename(AuthoringLiteralElementRenameProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralElementLifecyclePipeline.Rename(this, proposal, cancellationToken);
+    }
+    /// <summary>Discovers opaque literal element deletion authority.</summary>
+    /// <param name="node">The actual snapshot-owned element.</param>
+    /// <param name="cancellationToken">Cancellation observed before authority is published.</param>
+    /// <returns>An owned target or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    public AuthoringLiteralElementDeletionTargetResult GetLiteralElementDeletionTarget(AuthoringNodeDescriptor node, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        var r = LiteralElementLifecyclePipeline.Discover(this, node, cancellationToken);
+        return new(r.Data is null ? null : new(r.Data), r.Failure);
+    }
+    /// <summary>Proposes a pure source-preserving literal element deletion.</summary>
+    /// <param name="proposal">The owned target and explicit operation intent.</param>
+    /// <param name="cancellationToken">Cancellation observed before success.</param>
+    /// <returns>An exclusive result without partial authority.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralElementDeletionResult ProposeLiteralElementDeletion(AuthoringLiteralElementDeletionProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralElementLifecyclePipeline.Deletion(this, proposal, cancellationToken);
+    }
+
     /// <summary>Discovers owned literal attribute Creation authority.</summary>
     /// <param name="owner">The actual owned literal element.</param>
     /// <param name="cancellationToken">Cooperative cancellation.</param>
