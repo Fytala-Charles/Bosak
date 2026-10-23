@@ -8,6 +8,8 @@ The owner approved the consumer-reviewed design on 23 October 2026 (`Approve`). 
 
 The [maintainer proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md) is retained unchanged (SHA-256 `8b27d99dbf0f7281b9a8eec3a5e52d8ca1b634b67396388a800883d34628f0ac`). Braid found no blocking consumer-design findings within that bounded profile. The [exact consumer review](req136-evidence/BOSAK_REQ136_CONSUMER_DESIGN_REVIEW.txt) is retained without rewriting its historical status or original links.
 
+The consumer receipt uses the repository's `-text whitespace=cr-at-eol` Git convention. Its committed bytes, including original line endings, match the recorded SHA-256; this prevents checkout/normalization from changing review provenance.
+
 ## Public contract
 
 `AuthoringCapabilities.SupportsLiteralElementRename` and `SupportsLiteralElementDeletion` discover the separate source capabilities. On an owned snapshot:
