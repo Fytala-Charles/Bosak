@@ -1,0 +1,1 @@
+string-join((0xFF instance of xs:integer, 0b1 instance of xs:integer, 1_0.5 instance of xs:decimal, 1e0_1 instance of xs:double)!string(.),":")

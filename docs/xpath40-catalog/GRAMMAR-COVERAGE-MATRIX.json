@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-22",
-  "base": "47b4f3a9c1ec624f53407101f261d0c2ae55ca65",
+  "date": "2026-10-23",
+  "base": "df27eeb01d6489edd2a22c937eda280135ef5725",
   "scope": "Bounded source/test/catalog mapping; no exhaustive production or conformance claim",
   "rows": [
     {
@@ -98,7 +98,8 @@
       "key": "S3-lexical",
       "area": "Binary literals, separators and string templates",
       "entries": [
-        "operators-and-syntax/string-templates.md"
+        "operators-and-syntax/string-templates.md",
+        "operators-and-syntax/numeric-literals.md"
       ],
       "testEvidence": [
         {
@@ -108,9 +109,13 @@
         {
           "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
           "method": "Compile_StringTemplate_31Mode_ThrowsXpst0003"
+        },
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs",
+          "method": "Compile_InvalidDigitGroup_ThrowsXpst0003"
         }
       ],
-      "remaining": "No dedicated binary/hex/underscore literal entry; function counts do not cover this lexical family.",
+      "remaining": "Dedicated numeric entry and50 bounded cases supplied; broader numeric adjacency/range and host contexts remain separate. No feature-specific gate assignment or promotion.",
       "source": [
         "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs"

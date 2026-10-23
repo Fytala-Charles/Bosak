@@ -1,19 +1,19 @@
 {
-  "date": "2026-10-22",
-  "sourceBase": "7f84f7156639f6c42b82073b03cbadd69ba10864",
-  "sourceVersion": "1.23.6",
+  "date": "2026-10-23",
+  "sourceBase": "df27eeb01d6489edd2a22c937eda280135ef5725",
+  "sourceVersion": "1.23.7",
   "publishedVersion": "1.23.4",
-  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record-slice parser correction is audited separately; no tier/gate promotion or release",
+  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record and numeric lexer corrections are audited separately; no tier/gate promotion or release",
   "summary": {
-    "entries": 73,
-    "featureChecks": 2819,
+    "entries": 74,
+    "featureChecks": 2869,
     "chapterChecks": 24,
     "workedChapters": 4,
-    "totalDocumentationChecks": 2843,
+    "totalDocumentationChecks": 2893,
     "currentGatedSetCount": 218,
     "entriesMentioningCurrentGatedSet": 25,
-    "entriesWithoutLiteralCurrentGatedSet": 48,
-    "entriesWithExactManifestIdsInKnownUses": 38,
+    "entriesWithoutLiteralCurrentGatedSet": 49,
+    "entriesWithExactManifestIdsInKnownUses": 39,
     "historicalAdoptedSpecPinsMissing": 28,
     "countPolicy": "Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.",
     "mappedGrammarClusterRows": 18
@@ -1693,6 +1693,36 @@
       "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
     },
     {
+      "entry": "operators-and-syntax/numeric-literals.md",
+      "classification": "**Hexadecimal/binary integer literals and underscore separators** - **Frozen 4.0**, REQ-118 S3. Lowercase `0x` and `0b` introduce integer literals. Separators are permitted inside decimal, hexadecimal and binary digit groups, including the fraction and exponent groups of decimal/double literals. Ordinary XPath 3.0/3.1 syntax remains available; these extensions require 4.0.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "228532162cb33a3147dbddf9d41f9c395e0ec2f99e0d3d75df471992031c16b0",
+      "exactManifestIdsInKnownUses": [
+        "numeric-literals-beyond-long",
+        "numeric-literals-binary",
+        "numeric-literals-exponent",
+        "numeric-literals-fraction",
+        "numeric-literals-hex",
+        "numeric-literals-invalid-13",
+        "numeric-literals-report-4-normal"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/NUMERIC-LITERALS.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.XPath.Api.Tests/NumericLiteralBoundaryTests.cs",
+        "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/numeric-literals/README.md",
+        "docs/xpath40-catalog/examples/numeric-literals/normal.xml",
+        "docs/xpath40-catalog/examples/numeric-literals/report-4.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
       "entry": "operators-and-syntax/otherwise-operator.md",
       "classification": "**Otherwise operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.",
       "numberedFields": 16,
@@ -2497,7 +2527,7 @@
     "rejected/mapping-arrow-gtgt.md"
   ],
   "inputHashes": {
-    "docs\\xpath40-catalog\\examples\\cases.json": "4b835d14dd77769e6b1d122e7711f49330c2668782669b05973e6a360f1a3ca6",
+    "docs\\xpath40-catalog\\examples\\cases.json": "a089c20480d0c1081015105d568cf1cea4a3092d287c2d0f8e8487ce9c5f0e28",
     "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
     "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
   },
