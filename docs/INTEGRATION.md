@@ -5,6 +5,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**1.23.7 release preparation - 23 October2026:** [Readiness](RELEASE-1.23.7-READINESS.md) and [notes](RELEASE-NOTES-1.23.7.md) pin proposed v1.23.7 to implementation merge `9dd50961`, covering EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. Ten unsigned candidate packages pass153 broad +394 focused package-only checks with matching provenance and clear transitive audits. Publication has not started; public/Braid dependency1.23.4 and REQ-126 In Progress remain unchanged.
+
+
 **22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](xpath40-catalog/EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.
 
 **1.23.4 published and verified — 22 October 2026:** [Public delivery proof](RELEASE-1.23.4-PUBLICATION.md) records immutable `v1.23.4` at `2b5ffc50`, one successful Release run (10,470 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad /270 focused checks with matching provenance and clear audits. Includes the union-minimum and EQName-priority corrections; opening-bracket URI parsing remains separately limited. REQ-126 stays In Progress; completed Braid acceptance on1.23.0 is unchanged. Braid1.23.4 adoption remains a separate upgrade smoke check. Earlier preparation/unpublished checkpoints are historical.

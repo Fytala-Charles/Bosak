@@ -1,3 +1,9 @@
+# Bosak1.23.7 release preparation - 23 October2026
+
+**1.23.7 release preparation - 23 October2026:** [Readiness](RELEASE-1.23.7-READINESS.md) and [notes](RELEASE-NOTES-1.23.7.md) pin proposed v1.23.7 to implementation merge `9dd50961`, covering EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. Ten unsigned candidate packages pass153 broad +394 focused package-only checks with matching provenance and clear transitive audits. Publication has not started; public/Braid dependency1.23.4 and REQ-126 In Progress remain unchanged.
+
+Immutable implementation/source: `9dd5096104b9d08bfad2dd88130f04ed0c3807f8`; preparation branch docs/release-1.23.7-preparation in .guard-tmp/release1237-preparation-docs. What was built: exact-source release notes/readiness, ten unsigned packages, fresh153/394 package-only consumers, archive/cache/output/assets/source audits and read-only availability preflight. Exact-head and merge CI are green. No tag, workflow dispatch, upload or GitHub release. Next: preparation PR review/CI, then publication approval and repeated live preflight. Preserve proposed tag source after documentation merges; source1.23.7 remains unpublished. README install/build instructions remain current. Root pending upstream notes, sweep baselines, stashes/worktrees and protected PR132 remain preserved.
+
 # REQ-126 numeric literals - 23 October2026
 
 Base main: `df27eeb01d6489edd2a22c937eda280135ef5725` (PR411 merged). Worktree `.guard-tmp/req126-numeric-literals-source`, branch `docs/req126-numeric-literals`. [Numeric literal delivery](xpath40-catalog/NUMERIC-LITERALS.md) adds50 catalog checks, one16-field entry and paired complete telemetry reports. Initial38 probes30/8 exposed malformed fraction/exponent underscore groups; source1.23.7 fixes those boundaries with34 API regressions. All expected outcomes retained; original failing receipts preserved.

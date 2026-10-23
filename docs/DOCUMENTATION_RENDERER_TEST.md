@@ -4,6 +4,8 @@
 
 # Documentation Renderer Test
 
+23 October2026: release1.23.7 notes/readiness and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1237-render`; new relative links checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
+
 23 October2026: numeric-literal entry, complete telemetry task, lexical finding and canonical coverage/counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-numeric-literals-render`. JSON/XML, local-link,16-field/index and source header checks pass. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
 
 
