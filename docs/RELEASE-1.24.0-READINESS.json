@@ -6,9 +6,9 @@
   "completeTreeMatchesReviewedHead": true,
   "implementationPR": 422,
   "exactHeadCI": 39967993478,
-  "publicationPerformed": false,
+  "publicationPerformed": true,
   "date": "2026-10-23",
-  "status": "PREPARED_NOT_PUBLISHED",
+  "status": "HISTORICAL_PREPARATION_COMPLETED_PUBLICATION_VERIFIED",
   "proposedTag": "v1.24.0",
   "sourceTests": 11009,
   "sourceVerification": [
@@ -454,7 +454,7 @@
     "newNativeAcceptanceClaimed": false,
     "integrationObligations": "LE14-LE15 and public/worker/export/reopen/native LE17-LE18 remain separate"
   },
-  "publicationAuthorized": false,
+  "publicationAuthorized": true,
   "frozenGates": {
     "qt3": "31142/0/679",
     "qt4Gated": "8278/0/1894",
@@ -463,5 +463,7 @@
   },
   "braidAdoptedVersion": "1.23.7",
   "braid1238Smoke": "Previously reported passed; no adoption inferred",
-  "braid1240": "839 unsigned-candidate consumer checks at reviewed head; no signed publication, adoption or native acceptance"
+  "braid1240": "839 unsigned-candidate consumer checks at reviewed head; no signed publication, adoption or native acceptance",
+  "publicationRecord": "RELEASE-1.24.0-PUBLICATION.json",
+  "publicVersionCurrently": "1.24.0"
 }
