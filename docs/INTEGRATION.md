@@ -5,6 +5,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Function default-mode correction - 23 October2026:** [Source1.23.8](XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates mode inside functions use the default mode, avoiding empty-QName XTSE0020 and retaining named defaults.36 regressions preserve explicit modes, empty selections and invalid-empty static errors. Source1.23.8 is unpublished; public1.23.7 and Braid smoke/acceptance remain independent. No public API or gate change.
+
+
 **1.23.7 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.7-PUBLICATION.md) records immutable v1.23.7 at `9dd50961`, one successful Release run (10,720 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/394 focused checks with matching provenance and clear audits. Includes EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. REQ-126 remains In Progress. Braid dependency1.23.4 and existing acceptance remain unchanged; a1.23.7 upgrade smoke is separate. Earlier preparation/unpublished statements below are historical.
 
 

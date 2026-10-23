@@ -575,6 +575,7 @@
 //                      | Charles Korthout | 7.59  | 21-10-2026     | Preserve switch branch select node identity in raw sequence constructors.                |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 7.60  | 23-10-2026     | Use the default mode for omitted apply-templates mode in function sequences.              |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -5823,8 +5824,12 @@ internal sealed class TransformEngine
                     }
                 case "apply-templates":
                     {
-                        var modeRaw = instruction.Attribute("mode")?.Value?.Trim() ?? "";
-                        var mode = ExpandModeName(modeRaw, instruction);
+                        var modeRaw = instruction.Attribute("mode")?.Value?.Trim();
+                        // An omitted mode uses the current default, as in ordinary instruction dispatch.
+                        // Do not expand the unnamed-mode sentinel as an empty lexical QName.
+                        var mode = string.IsNullOrEmpty(modeRaw)
+                            ? CurrentDefaultMode
+                            : ExpandModeName(modeRaw, instruction);
                         var select = instruction.Attribute("select")?.Value;
                         var sortElements = instruction.Elements(XName.Get("sort", Stylesheet.Stylesheet.XslNamespace)).ToList();
 

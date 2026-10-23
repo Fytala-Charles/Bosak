@@ -5,6 +5,9 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Function default-mode correction - 23 October2026:** [Isolated source1.23.8 fix](../XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates modes in functions use the default mode.36 regressions pass; public1.23.7 unchanged. Module/profile examples are a separate follow-up. Catalog75 entries/2,959 documentation checks unchanged; REQ-126/AC03 remain partial. Earlier delivery checkpoints below are historical.
+
+
 **Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
 
 **22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.
