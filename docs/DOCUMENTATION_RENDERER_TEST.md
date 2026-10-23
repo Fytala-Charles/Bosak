@@ -4,6 +4,8 @@
 
 # Documentation Renderer Test
 
+23 October 2026: release 1.23.8 notes/readiness and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1238-render`; new relative links and JSON checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
+
 23 October2026: direct module/profile entry, complete library reports, prerequisite separation and canonical evidence counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-module-profile-render`; JSON/XML, new links,76-entry/16-field index, source headers and diff checked. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
 
 23 October2026: function default-mode finding and canonical status counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-function-mode-render`; JSON, new links, source headers and diff checked. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
