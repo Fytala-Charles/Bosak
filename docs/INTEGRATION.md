@@ -5,6 +5,8 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**REQ-136 implementation — 23 October 2026:** Owner approved the Braid-reviewed design. Source **1.24.0 (unpublished)** now implements Rename and populated-subtree Delete together, preserving existing Create. [Implementation contract and verification](REQ-136-IMPLEMENTATION.md) documents opaque authority, exact replay, exhaustive graph/attribute partitions and closed resource-safe coverage. REQ-136 is In Progress; implementation review, publication and Braid integration/acceptance remain pending. Published Bosak is 1.23.8; no consumer adoption is inferred. Earlier checkpoints below are historical.
+
 **REQ-136 intake and1.23.8 smoke - 23 October 2026:** Braid reports1.23.8 smoke passed (1,405 Release /710 public /36 release-regression checks); the nine consumed assembly hashes match Bosak public proof. Braid reports its adopted pin remains1.23.7; no new native acceptance is inferred. [Request](REQ-136-literal-result-element-lifecycle.md), [maintainer scope/API proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md), [receipt review](REQ-136-INTAKE-REVIEW.json). REQ-136 remains Pending, owner Unassigned, target TBD; no implementation or release approval. Earlier checkpoints below are historical.
 
 
@@ -3784,3 +3786,7 @@ When an explicit element layout fails and the wildcard conversion-plan entry sup
 ## REQ-136 planning boundary
 
 Literal element creation remains available through the accepted REQ-132 API. Rename and whole-subtree Delete are **proposed, unavailable** in current1.23.8. [Scope/API review](REQ-136-MAINTAINER-SCOPE-REVIEW.md) proposes separate capability/target discovery, exact multi-edit Rename with exclusive NoChange, complete populated-subtree removal evidence and owned surviving-parent navigation. Braid must review the proposed constant-attribute/constructor/whitespace-merge coverage before implementation approval; ordinary instruction/text/attribute permission grants no element-mutation authority. The successful isolated1.23.8 smoke does not change Braid?s adopted1.23.7 pin or native acceptance.
+
+## REQ-136 source-only integration contract
+
+Source 1.24.0 adds `GetLiteralElementRenameTarget` / `ProposeLiteralElementRename` and `GetLiteralElementDeletionTarget` / `ProposeLiteralElementDeletion`, with separate capability flags. Use actual fresh descriptors after each candidate; inspect exclusive outcomes and all graph/attribute/merge evidence before a consumer decides Apply. [API example and exact supported profile](REQ-136-IMPLEMENTATION.md). Neither public 1.23.8 nor Braid currently adopts these new APIs. One later Braid integration PR must deliver Rename and Delete together, preserving Create, session/license/revision checks, atomic Apply and history.

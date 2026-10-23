@@ -1,0 +1,55 @@
+# Bosak REQ-136 consumer scope and design review
+
+Date: 2026-10-23. Disposition: **No blocking consumer-design findings within the explicitly bounded first profile.** This is scope/API-proposal feedback, not implementation authorization or runtime acceptance.
+
+## Reviewed evidence
+
+- Bosak checkout: `D:/Development/Bosak/.guard-tmp/req136-scope-source`, clean tracked/untracked status when reviewed; HEAD `3f099b5eca2e40d18358581924a373f2a8c9c6d3`.
+- Document: `REQ-136-MAINTAINER-SCOPE-REVIEW.md` in that checkout's docs directory, SHA-256 `8b27d99dbf0f7281b9a8eec3a5e52d8ca1b634b67396388a800883d34628f0ac`.
+- Companion intake receipt: `REQ-136-INTAKE-REVIEW.json` in the same directory; retained consumer smoke receipt SHA-256 is `c1509e59b08f0387cf5334d28a9288604397c1fb7f5520c90166e23d9b48538b`.
+- Compared with the [Braid request and LE01-LE18](LITERAL_ELEMENT_LIFECYCLE_REQUEST.md), [proposed ADR-023](ADR-023-literal-result-element-lifecycle.md), and delivered [creation contract](LITERAL_ELEMENT_INSERTION.md).
+
+The proposal distinguishes reviewed repository base `2aa77d0c906edb790d686aeb989771f6031152da` from published package source `6d12bed35dac56a635acc7702645ef9085103c83`. It does not claim that the new APIs already exist. No new-operation implementation, public-package test or native scenario was executed during this documentation review.
+
+## Consumer scope decisions
+
+The proposed first profile is sufficient for the requested bounded delivery:
+
+| Decision | Consumer disposition |
+|---|---|
+| One coordinated feature | Accept Rename and Delete together in one implementation PR, preserving existing Create; one subsequent Braid integration PR |
+| Targets | Accept imported/engine-created paired/self-closing ordinary no-namespace elements beneath a template through a literal-result-only ancestor chain |
+| Attributes/context | Accept the declared constant-result-attribute profile and whole-module restricted coverage; computed AVTs, targets beneath control instructions, preserve-space and other excluded contexts remain unsupported |
+| Populated Delete | Required and included: remove the entire selected element plus owned attributes, instructions, text, comments/PIs and descendants; no unwrap or child retention |
+| Boundary merge | Accept at most one direct-parent merge of immediate whitespace-only text siblings; other unproved/non-whitespace merges explicitly refuse |
+| Version/host | Accept declared effective 3.0/4.0 in the existing Legacy authoring host; no selectable Draft-host support is inferred |
+| Existing Create compatibility | Preserve its existing eligibility/formatting. Advertise the complete lifecycle only within the intersection of operation profiles |
+
+These limits are consistent with the request's supported-profile/refusal boundary; they do not replace populated deletion with empty-only deletion. Braid must disclose unsupported targets and the destructive whole-subtree intent rather than advertise unrestricted element editing.
+
+## API and evidence assessment
+
+Separate additive capabilities, operation-specific opaque targets/results and internal evidence construction meet LE01. Equal-byte foreign snapshots and numeric IDs do not grant authority. The Changed/NoChange/Failure distinction is appropriate; equal-name Rename still requires valid original authority and coverage, and produces no candidate or Apply permission.
+
+Rename's one/two exact name-token edits and explicit same-original coordinate convention meet the paired/self-closing source-preservation requirement. Candidate offsets include checked prior deltas; complete replay must equal candidate bytes. All attributes, descendants and namespace declarations remain unchanged outside the allowed tokens. Delete's one full-element removal, zero-length candidate anchor and actual direct-parent selection match the requested history/navigation contract.
+
+Disjoint exhaustive original/candidate node partitions and per-owner attribute accounting cover the larger subtree proof that existing instruction deletion cannot supply automatically. The limited merge policy requires actual inspected candidate identity/value and unchanged source fragments; it avoids inventing descriptors or concatenating normalized logical strings as proof. Namespace declarations remain accounted for wherever inspection represents them.
+
+Independent physical source, name, descriptor/depth, edit and copied-evidence budgets are concrete and suitable for the consumer boundary. The 16 MiB evidence budget is a ceiling with explicit refusal, not a guarantee that every source below 8 MiB can produce reviewable evidence. Braid's smaller projection/review limits remain independently enforceable. Cheap preflight bounds, iterative depth checks before recursive work, immutable copied evidence and cancellation immediately before success/NoChange remain mandatory implementation obligations.
+
+The LE01-LE18 ownership mapping correctly separates engine source/identity/coverage proof from Braid current-session/license/atomic Apply/history authority and later worker/export/reopen/native acceptance. Existing creation/attribute/text/expression contracts must retain their accepted behavior.
+
+## Items to verify at implementation review
+
+These are declared design obligations, not findings that the proposed scope omits:
+
+1. Publish and enforce the exact instruction/attribute/expression allow-list and whole-module denial rules before any resource-capable compilation; prove no ambient acquisition with instrumented callbacks.
+2. Exercise populated nested deletion, all removed attributes/descriptors, parent/sibling survival, namespace resets/rebinding and both supported/refused boundary merges across supported encodings.
+3. Prove strict replay/range translation for both paired-name edits, complete survivor correspondence, evidence-size/depth preflight, immutable export copies, concurrency and cancellation, including NoChange after eligibility checks.
+4. Deliver both operations in the same implementation PR, with public XML documentation and full required engine/regression gates. Later verify public package provenance and the complete Braid lifecycle, including source changes that leave sample output unchanged.
+
+## Status and next action
+
+REQ-136 remains Pending; owner Unassigned and target version TBD until Bosak/owner scheduling decisions. This review finds the bounded scope suitable from the Braid consumer perspective. The maintainer document explicitly requires **owner approval of the reviewed design before implementation**; the user's request to check the document is not that approval. No upstream edit/message, engine code, dependency adoption, commit, push or implementation authorization is performed here.
+
+Braid remains on accepted published 1.23.7. Prior isolated 1.23.8 smoke remains 1,405 Release /710 public /36 release-regression passes; those are historical smoke results, not tests of rename/delete and not rerun by this review.

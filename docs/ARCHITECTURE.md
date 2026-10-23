@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**REQ-136 implementation — 23 October 2026:** Owner approved the Braid-reviewed design. Source **1.24.0 (unpublished)** now implements Rename and populated-subtree Delete together, preserving existing Create. [Implementation contract and verification](REQ-136-IMPLEMENTATION.md) documents opaque authority, exact replay, exhaustive graph/attribute partitions and closed resource-safe coverage. REQ-136 is In Progress; implementation review, publication and Braid integration/acceptance remain pending. Published Bosak is 1.23.8; no consumer adoption is inferred. Earlier checkpoints below are historical.
+
 **REQ-136 intake and1.23.8 smoke - 23 October 2026:** Braid reports1.23.8 smoke passed (1,405 Release /710 public /36 release-regression checks); the nine consumed assembly hashes match Bosak public proof. Braid reports its adopted pin remains1.23.7; no new native acceptance is inferred. [Request](REQ-136-literal-result-element-lifecycle.md), [maintainer scope/API proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md), [receipt review](REQ-136-INTAKE-REVIEW.json). REQ-136 remains Pending, owner Unassigned, target TBD; no implementation or release approval. Earlier checkpoints below are historical.
 
 
@@ -1682,3 +1684,7 @@ The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-
 ## Proposed REQ-136 element lifecycle
 
 [The pending proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md) adds operation-specific opaque rename/delete authority, coherent one/two-name edit replay and complete removed/surviving/merged graph and per-owner attribute evidence. It reuses accepted creation and requests one coordinated implementation after consumer design review. These are planned surfaces; current1.23.8 capabilities do not expose them. The proposal explicitly separates strict source preservation from Braid atomic Apply/history and limits populated deletion to an engine-proven closed profile.
+
+## REQ-136 source implementation
+
+[LiteralElementLifecyclePipeline](../src/Bosak.Xslt/Authoring/LiteralElementLifecyclePipeline.cs) provides independent target discovery, same-original one/two-token rename and full-subtree deletion. Streaming XML and iterative graph preflight precede restricted scope/compilation; candidate proof checks exhaustive removed/surviving/merged partitions and per-owner attributes. Shared attribute scope/validation helpers retain existing behavior. [Contract, allow-list, bounds and verification](REQ-136-IMPLEMENTATION.md). The source minor version is 1.24.0, unpublished.

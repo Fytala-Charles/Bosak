@@ -4,6 +4,9 @@
 
 # Documentation Renderer Test
 
+23 October 2026: REQ-136 implementation, exact supported vocabulary, verification receipts and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req136-implementation-render`; new links, JSON and source headers/XML documentation checked. HTML only; no screenshot/PDF acceptance. The reviewed scope proposal and original request remain byte-unchanged.
+
+
 23 October 2026: release 1.23.8 notes/readiness and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1238-render`; new relative links and JSON checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
 
 23 October2026: direct module/profile entry, complete library reports, prerequisite separation and canonical evidence counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-module-profile-render`; JSON/XML, new links,76-entry/16-field index, source headers and diff checked. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.

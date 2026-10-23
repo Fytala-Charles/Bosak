@@ -1,0 +1,173 @@
+{
+  "date": "2026-10-23",
+  "ownerApproval": "Approve",
+  "reviewedHead": "3f099b5eca2e40d18358581924a373f2a8c9c6d3",
+  "proposalSha256": "8b27d99dbf0f7281b9a8eec3a5e52d8ca1b634b67396388a800883d34628f0ac",
+  "consumerReviewPath": "D:\\Development\\Bosak.Braid\\docs\\BOSAK_REQ136_CONSUMER_DESIGN_REVIEW.md",
+  "consumerReviewSha256": "ddb7755f0836dc0949a7b72197a38191f111a8a59652bdf23c514130dc03ed20",
+  "disposition": "No blocking consumer-design findings within the explicitly bounded first profile",
+  "implementationAuthorized": true,
+  "mergeAuthorized": false,
+  "publicationAuthorized": false,
+  "status": "IMPLEMENTED_VERIFIED_CONSUMER_IMPLEMENTATION_REVIEW_PENDING",
+  "sourceVersion": "1.24.0",
+  "publishedVersion": "1.23.8",
+  "focusedExpanded": {
+    "passed": 71,
+    "failed": 0,
+    "skipped": 0
+  },
+  "consumerImplementationReview": "pending",
+  "fullSolution": {
+    "passed": 11009,
+    "failed": 0,
+    "skipped": 0,
+    "projects": 10
+  },
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679,
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\verified\\qt3.log",
+    "sha256": "ed544163b041ea768b64007e51f51ec549dbf62223bc0286d593f3ed685a38a1"
+  },
+  "qt4": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894,
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\verified\\qt4.log",
+    "sha256": "0408570b94122a919ddd124bbe9b454680f2d2a3ac3d5627e65fc602c72191f6"
+  },
+  "braidFilesModified": false,
+  "focusedFinal": {
+    "passed": 73,
+    "failed": 0,
+    "skipped": 0
+  },
+  "languageServer": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0
+  },
+  "initialFocused": {
+    "passed": 62,
+    "failed": 2,
+    "skipped": 0
+  },
+  "expandedFocused": {
+    "passed": 71,
+    "failed": 0,
+    "skipped": 0
+  },
+  "environmentDiagnostics": [
+    "Restricted-token HttpListener startup failure retained; loopback-capable full verification passed.",
+    "One final rerun omitted fixture junctions after normal gate cleanup; failure receipts retained; corrected final run uses exact frozen fixtures.",
+    "Restricted restore NU1900 warnings retained; fresh network-enabled restore completes without warnings."
+  ],
+  "fullReceipts": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0.trx",
+      "sha256": "537a3908bebd3844524204db214e969ab550c14ddfd9a1e8aae44ca727991b57",
+      "passed": 66,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 66
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[1].trx",
+      "sha256": "e4ae7ff7d240039c1e3e0db2030db0550ba42db8586f59724ff297b210a652a9",
+      "passed": 202,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 202
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[2].trx",
+      "sha256": "9872fba6310dc68868f479c7b9e6e13e4fcaea48b79a8ad90300f28d60cdcac7",
+      "passed": 269,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 269
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[3].trx",
+      "sha256": "922b5e4dcbe30db7e565540f1311f6f054c7432a273d677d3705a8b9f5fcb06c",
+      "passed": 132,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 132
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[4].trx",
+      "sha256": "9c2a35e89d5f107aafbb94b1903e0c9a849ee94177ed32b5ccaf44bb40f1a3a2",
+      "passed": 489,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 489
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[5].trx",
+      "sha256": "4df0dec425fc9a65c69f303c52c98d1f3348c60028869b007f1c07faaf6b461a",
+      "passed": 303,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 303
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[6].trx",
+      "sha256": "2ebd903387e172d7e1e91408261fbb4ac2d3fa1206b8324f28ba447c9ce2eb3c",
+      "passed": 1385,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 1385
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[7].trx",
+      "sha256": "982c6c9a865c39dfeb13f04f435df270981d24e5decf0e5bf9bb2ac6616865e5",
+      "passed": 47,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 47
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_15_net10.0[8].trx",
+      "sha256": "9e7822856940d30c47c9e5dfe0e991b277b71c8049e093b3fcf58bb5ced7fd50",
+      "passed": 153,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 153
+    },
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\final\\full\\charl_CHARLES_2026-10-23_16_08_17_net10.0.trx",
+      "sha256": "f2254481c970f70ef3694f753cff501e8923c8680fe690e2780fe239a1d4e525",
+      "passed": 7963,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 7963
+    }
+  ],
+  "focusedReceipts": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\focused-final\\charl_CHARLES_2026-10-23_16_07_01_net10.0.trx",
+      "sha256": "8f416c7ce4b8a76896b2a5d3de785a5fcc8674bab51bcf79f96109c68a729f9b",
+      "passed": 73,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 73
+    }
+  ],
+  "languageServerReceipts": [
+    {
+      "path": "D:\\Development\\Bosak\\.guard-tmp\\req136-implementation-evidence\\language-server\\charl_CHARLES_2026-10-23_16_02_38_net10.0.trx",
+      "sha256": "e64e87f16e4a35d66e6cd0b5f517a0ee733ba3a36e2db60f7430e11204700351",
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0,
+      "total": 84
+    }
+  ],
+  "manualGatesAfterFinalEngineChanges": true,
+  "ci": "pending",
+  "mergePerformed": false,
+  "publicationPerformed": false
+}
