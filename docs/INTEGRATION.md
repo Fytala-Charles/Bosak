@@ -5,7 +5,7 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
-**1.23.8 release preparation - 23 October 2026:** [Readiness](RELEASE-1.23.8-READINESS.md) and [release notes](RELEASE-NOTES-1.23.8.md) pin the default-mode fix and module/profile coverage to immutable source `6d12bed35dac56a635acc7702645ef9085103c83`. Ten unsigned candidates pass153 broad/430 focused package checks;10,936 solution tests pass. Public1.23.7, Braid smoke/acceptance and REQ-126 In Progress remain unchanged. No publication started. Earlier checkpoints below are historical.
+**1.23.8 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.8-PUBLICATION.md) records immutable v1.23.8 at `6d12bed3`, one successful Release run (10,936 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/430 focused checks with matching provenance and clear audits. Includes the function default-mode fix and host/module profile coverage. REQ-126 remains In Progress; Braid smoke/acceptance remains separate. Earlier preparation/unpublished statements below are historical.
 
 **Function default-mode correction - 23 October2026:** [Source1.23.8](XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates mode inside functions use the default mode, avoiding empty-QName XTSE0020 and retaining named defaults.36 regressions preserve explicit modes, empty selections and invalid-empty static errors. Source1.23.8 is unpublished; public1.23.7 and Braid smoke/acceptance remain independent. No public API or gate change.
 

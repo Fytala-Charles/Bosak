@@ -4,6 +4,8 @@
   <p>23 October2026 - source 1.23.8 unpublished; public 1.23.7</p>
 </div>
 
+**Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.
+
 ## Contract and separate dependency
 
 [The76th catalog entry](xslt-instructions/module-profiles.md) covers one direct include/import/registered-package dependency under Legacy and Xslt40Draft. The selected host propagates; the dependency retains its own effective version and local function overrides. [Six complete report/library pairs](examples/module-profiles/README.md) provide normal, empty, reordered and malformed-data outcomes under both hosts.

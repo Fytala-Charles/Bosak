@@ -7,9 +7,9 @@
   "implementationPR": 416,
   "coveragePR": 417,
   "exactHeadCI": 39929015269,
-  "publicationPerformed": false,
+  "publicationPerformed": true,
   "date": "2026-10-23",
-  "status": "PREPARED_NOT_PUBLISHED",
+  "status": "HISTORICAL_PREPARATION_COMPLETED_PUBLICATION_VERIFIED",
   "proposedTag": "v1.23.8",
   "sourceTests": 10936,
   "languageServerTests": 84,
@@ -422,7 +422,7 @@
     "publicationAuthorized": false,
     "repeatImmediatelyBeforePublication": true
   },
-  "publicationAuthorized": false,
+  "publicationAuthorized": true,
   "frozenGates": {
     "qt3": "31142/0/679",
     "qt4Gated": "8278/0/1894",
@@ -432,5 +432,9 @@
   "braid": "Public1.23.7 smoke result not received; no dependency changes or new acceptance claim",
   "mergedMainCI": 39929985143,
   "mergedMainCIConclusion": "success",
-  "temporaryFixtureJunctionsRemoved": true
+  "temporaryFixtureJunctionsRemoved": true,
+  "tagCreated": true,
+  "githubReleaseCreated": true,
+  "publicationRecord": "RELEASE-1.23.8-PUBLICATION.json",
+  "publicVersionCurrently": "1.23.8"
 }

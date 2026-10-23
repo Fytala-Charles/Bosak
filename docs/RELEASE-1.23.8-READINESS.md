@@ -4,6 +4,11 @@
   <p>23 October 2026</p>
 </div>
 
+**1.23.8 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.8-PUBLICATION.md) records immutable v1.23.8 at `6d12bed3`, one successful Release run (10,936 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/430 focused checks with matching provenance and clear audits. Includes the function default-mode fix and host/module profile coverage. REQ-126 remains In Progress; Braid smoke/acceptance remains separate. Earlier preparation/unpublished statements below are historical.
+
+**Historical preparation record:** The checklist below predates completed publication.
+
+
 **Prepared; publication not started.** Proposed annotated tag `v1.23.8` must point to **`6d12bed35dac56a635acc7702645ef9085103c83`**, the PR417 implementation/coverage merge. Later preparation documentation must not change this package source. Public version remains 1.23.7. [Release notes](RELEASE-NOTES-1.23.8.md), [machine readiness](RELEASE-1.23.8-READINESS.json).
 
 | Gate | Evidence |

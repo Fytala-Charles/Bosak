@@ -306,3 +306,8 @@ README package links, canonical status, release notes/readiness, catalog notices
 ## Release1.23.7 publication - 23 October2026
 
 README install/package links, canonical status, release notes/readiness, catalog notices and public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1237-publication-render`; new relative links and package receipts checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
+
+
+## Release1.23.8 publication - 23 October2026
+
+README install/package/release-note links, canonical status, release notes/readiness, catalog notices and public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1238-publication-render`; new relative links and package receipts checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
