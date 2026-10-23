@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-23",
+  "base": "ce9604fa85d30ff941b5edb863b5a762e00742a2",
+  "sourceVersion": "1.23.8",
+  "publicVersion": "1.23.7",
+  "scope": "Omitted apply-templates mode in EvaluateFunctionBodyInstruction only; explicit mode handling and validation preserved",
+  "specComparison": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "specPath": "specifications/xslt-40/src/xslt.xml",
+  "specSha256": "6d3038e21291abf761d883dd371cb9885972e0dd1c85b41844df70ca1ede45b8",
+  "specPinMeaning": "Current comparison, not historical adoption recovery",
+  "baseline": {
+    "total": 36,
+    "passed": 26,
+    "failed": 10,
+    "emptyQNameErrors": 8,
+    "namedDefaultWrongResults": 2
+  },
+  "focused": {
+    "passed": 36,
+    "failed": 0,
+    "skipped": 0
+  },
+  "expectedOutcomesWeakened": false,
+  "releasePerformed": false,
+  "status": "Implemented and locally verified; independent PR preparation",
+  "solution": {
+    "passed": 10822,
+    "failed": 0,
+    "skipped": 0,
+    "results": [
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_00_net10.0.trx",
+        "passed": 202,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "7ce536e0b295f7f408603c99d1a2017832e33b5e0cc0164b5c72f6cff0da5d2c"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_00_net10.0[1].trx",
+        "passed": 66,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "106738404e8d39a686f508a394a91e2d6d4f0e3181ed2f935f175678f82f635d"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_00_net10.0[2].trx",
+        "passed": 132,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "10de889d7bde0ca99d03137739e30f3a92178ac4151eb8d819f1ec814502095c"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_00_net10.0[3].trx",
+        "passed": 47,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "67d8511e3ce2524f3c32310edeb9fb279f844cb587fb1d7be3a2154c4d3d52c2"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_01_net10.0.trx",
+        "passed": 269,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "37f24bfd2c802958398037fd368ef67ba23b3f17c34b10e699f232c0b36fff64"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_01_net10.0[1].trx",
+        "passed": 489,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "b499a1cfdac7d6a511385dc6a58298efa9cdaaea4f4dce16ab5a58953203a7cd"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_01_net10.0[2].trx",
+        "passed": 1385,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "9bca6ec460299e16bfdcf96ab8f33e48b92058e334a631fb70ae235daa3d79af"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_01_net10.0[3].trx",
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "9bde6c84c5cfc71c4d5fadb8c1df96783962f2480f2df336b642fdef48d414a6"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_01_net10.0[4].trx",
+        "passed": 7776,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "2da2b2ca020cd2b21074d152baf9f12a6f35671ae6bb1345db3e048213986fda"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-23_09_38_02_net10.0.trx",
+        "passed": 303,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "21d9cee6767a46f2c5f5f7ec9d88eb0627283f697e7754d732e6cc61851e0342"
+      }
+    ]
+  },
+  "languageServerPassed": 84,
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "qt4Gated": {
+    "passed": 8278,
+    "failed": 0,
+    "skipped": 1894
+  },
+  "build": "Zero errors; existing CS8604 conformance-runner warning",
+  "temporaryFixtureJunctionsRemoved": true
+}
