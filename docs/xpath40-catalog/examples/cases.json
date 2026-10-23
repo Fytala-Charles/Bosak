@@ -20834,5 +20834,381 @@
     "mode": "31",
     "file": "record-contracts/probes/update-value.xpath",
     "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-hex",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/hex.xpath",
+    "expected": "255",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-hex-case",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/hex-case.xpath",
+    "expected": "43981",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-binary",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/binary.xpath",
+    "expected": "10",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-zero",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/zero.xpath",
+    "expected": "0",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-hex-separated",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/hex-separated.xpath",
+    "expected": "65535",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-binary-separated",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/binary-separated.xpath",
+    "expected": "9",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-integer-separated",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/integer-separated.xpath",
+    "expected": "1000000",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-fraction",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/fraction.xpath",
+    "expected": "12.34",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-leading-dot",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/leading-dot.xpath",
+    "expected": "0.12",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-trailing-dot",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/trailing-dot.xpath",
+    "expected": "12",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-exponent",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/exponent.xpath",
+    "expected": "1250",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-negative",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/negative.xpath",
+    "expected": "-255",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-types",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/types.xpath",
+    "expected": "true:true:true:true",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-map-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/map-key.xpath",
+    "expected": "ok",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-array-key",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/array-key.xpath",
+    "expected": "20",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-beyond-long",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/beyond-long.xpath",
+    "expected": "9223372036854775808",
+    "baselineError": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-cast-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/cast-string.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "numeric-literals-cast-hex-string",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/cast-hex-string.xpath",
+    "error": "FORG0001"
+  },
+  {
+    "id": "numeric-literals-invalid-01",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-01.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-02",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-02.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-03",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-03.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-04",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-04.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-05",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-05.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-06",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-06.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-07",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-07.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-08",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-08.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-09",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-09.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-10",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-10.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-11",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-11.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-12",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-12.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-13",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-13.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-14",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-14.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-15",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-15.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-16",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-16.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-17",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-17.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-18",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-18.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-19",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-19.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-invalid-20",
+    "kind": "xpath",
+    "mode": "40",
+    "file": "numeric-literals/invalid-20.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-report-3-normal",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "numeric-literals/report-3.xsl",
+    "input": "numeric-literals/normal.xml",
+    "expected": "A:ready|B:hold|ready=1;total=2400"
+  },
+  {
+    "id": "numeric-literals-report-4-normal",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "numeric-literals/report-4.xsl",
+    "input": "numeric-literals/normal.xml",
+    "expected": "A:ready|B:hold|ready=1;total=2400"
+  },
+  {
+    "id": "numeric-literals-report-3-empty",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "numeric-literals/report-3.xsl",
+    "input": "numeric-literals/empty.xml",
+    "expected": "ready=0;total=0"
+  },
+  {
+    "id": "numeric-literals-report-4-empty",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "numeric-literals/report-4.xsl",
+    "input": "numeric-literals/empty.xml",
+    "expected": "ready=0;total=0"
+  },
+  {
+    "id": "numeric-literals-report-3-reordered",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "numeric-literals/report-3.xsl",
+    "input": "numeric-literals/reordered.xml",
+    "expected": "B:hold|A:ready|ready=1;total=2400"
+  },
+  {
+    "id": "numeric-literals-report-4-reordered",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "numeric-literals/report-4.xsl",
+    "input": "numeric-literals/reordered.xml",
+    "expected": "B:hold|A:ready|ready=1;total=2400"
+  },
+  {
+    "id": "numeric-literals-report-3-invalid",
+    "kind": "xslt",
+    "mode": "31",
+    "file": "numeric-literals/report-3.xsl",
+    "input": "numeric-literals/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "numeric-literals-report-4-invalid",
+    "kind": "xslt",
+    "mode": "40",
+    "file": "numeric-literals/report-4.xsl",
+    "input": "numeric-literals/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "numeric-literals-refuse31-hex",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "numeric-literals/hex.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-refuse31-binary",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "numeric-literals/binary.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-refuse31-integer-separated",
+    "kind": "xpath",
+    "mode": "31",
+    "file": "numeric-literals/integer-separated.xpath",
+    "error": "XPST0003"
+  },
+  {
+    "id": "numeric-literals-experimental-hex",
+    "kind": "xpath",
+    "mode": "experimental",
+    "file": "numeric-literals/hex.xpath",
+    "expected": "255",
+    "baselineError": "XPST0003",
+    "frozenExpected": "255"
   }
 ]

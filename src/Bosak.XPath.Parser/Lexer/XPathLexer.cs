@@ -2,7 +2,7 @@
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
 // PURPOSE              : A zero-allocation XPath 3.1 lexer operating over <see cref="ReadOnlySpan{char}"/>
-// SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
+// SPECIAL NOTES        : Part of the hand-written recursive-descent parser pipeline.
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
@@ -47,7 +47,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.11  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      |==================|=======|================|=========================================================================================
-
+//                      | Charles Korthout | 1.12  | 23-10-2026     | Reject leading/trailing separators in fractional and exponent digit groups.              |
 // ===========================================================================================================================================================
 using System.Runtime.CompilerServices;
 using Bosak.XPath.Parser;
@@ -365,11 +365,18 @@ internal ref struct XPathLexer
         if (_position < _source.Length && _source[_position] == '.')
         {
             _position++;
+            int fractionStart = _position;
 
             while (_position < _source.Length && (char.IsDigit(_source[_position]) || (_xpath40 && _source[_position] == '_')))
             {
                 _position++;
             }
+
+            // A nonempty 4.0 Digits group must begin and end with a digit.
+            // Repeated separators between digits remain valid.
+            if (_xpath40 && _position > fractionStart &&
+                (_source[fractionStart] == '_' || _source[_position - 1] == '_'))
+                return new Token(TokenKind.Invalid, start, _position - start);
 
             // A trailing dot is part of a decimal literal per XPath 3.1:
             // DecimalLiteral ::= Digits '.' Digits?
@@ -386,12 +393,17 @@ internal ref struct XPathLexer
             if (_position < _source.Length && (_source[_position] == '+' || _source[_position] == '-'))
                 _position++;
 
+            int exponentStart = _position;
             bool hasExpDigits = false;
             while (_position < _source.Length && (char.IsDigit(_source[_position]) || (_xpath40 && _source[_position] == '_')))
             {
                 hasExpDigits = true;
                 _position++;
             }
+
+            if (_xpath40 && _position > exponentStart &&
+                (_source[exponentStart] == '_' || _source[_position - 1] == '_'))
+                return new Token(TokenKind.Invalid, start, _position - start);
 
             if (hasExpDigits)
             {
