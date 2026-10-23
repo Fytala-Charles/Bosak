@@ -4,6 +4,8 @@
   <p>23 October2026 - source1.23.7 unpublished; public1.23.4</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 ## Contract and correction
 
 [Dedicated16-field entry](operators-and-syntax/numeric-literals.md) and [complete telemetry task](examples/numeric-literals/README.md) cover lowercase0x/0b prefixes, numeric types and keys, internal repeated separators, decimal/exponent groups, old-profile refusals and string-cast differences. The [machine audit](NUMERIC-LITERALS.json) lists all50 new cases and their exact outcomes. Existing2,819 manifest rows and their serialized text are preserved.

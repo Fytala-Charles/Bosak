@@ -4,6 +4,8 @@
  <p>Frozen XPath4.0 - structural record contract</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 ## 1. Name and Classification
 
 **Record updates (`but with`)** - **Frozen 4.0**, REQ-118 S6b. The result is a new record with the original record's type annotation; merged values must satisfy that annotation through coercion. This entry maps existing structural behavior, not a new nominal declaration facility.

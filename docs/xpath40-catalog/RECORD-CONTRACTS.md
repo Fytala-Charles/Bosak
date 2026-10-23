@@ -4,6 +4,8 @@
  <p>22 October 2026 - source 1.23.6, unpublished</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 The [new record-update entry](type-system/record-updates.md), expanded [structural-record comparisons](type-system/structural-records.md) and [complete stock-adjustment task](examples/record-contracts/README.md) supply46 public executable checks. These separate cast filtering/value conversion from coercion's surplus-field rejection, present empty fields from absent keys, and reconstruction from mutation. Typed-let/nested promotion, field order, annotation preservation and undeclared lookup/map:get behavior have bounded probes.
 
 ## Contract and version boundary

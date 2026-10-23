@@ -4,6 +4,8 @@
   <p>22 October 2026 - source 1.23.5, unpublished</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 ## Contract and finding
 
 The [XPath 3.1 BracedURILiteral grammar](https://www.w3.org/TR/xpath-31/#doc-xpath31-BracedURILiteral) excludes curly braces from the literal content, not square brackets. Namespace validation may optionally reject invalid URI values; this correction retains Bosak's permissive namespace-literal policy. The [current draft grammar](https://raw.githubusercontent.com/qt4cg/qtspecs/b4723ff52fd9d4fabf2b4cd33bd44f21939c512c/specifications/grammar-40/xpath-grammar.xml), production `BracedURILiteral` for `xslt40-patterns`, has the same square-bracket boundary. Upstream master was refreshed on 22 October 2026 to `b4723ff52fd9d4fabf2b4cd33bd44f21939c512c`; this is a current review pin, not recovered historical adoption. Immutable grammar and XSLT XML copies are retained with validation receipts.

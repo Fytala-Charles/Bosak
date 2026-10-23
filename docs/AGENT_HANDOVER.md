@@ -1,3 +1,11 @@
+# Bosak1.23.7 published and verified - 23 October2026
+
+**1.23.7 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.7-PUBLICATION.md) records immutable v1.23.7 at `9dd50961`, one successful Release run (10,720 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/394 focused checks with matching provenance and clear audits. Includes EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. REQ-126 remains In Progress. Braid dependency1.23.4 and existing acceptance remain unchanged; a1.23.7 upgrade smoke is separate. Earlier preparation/unpublished statements below are historical.
+
+What was built: signed public1.23.7 at `9dd5096104b9d08bfad2dd88130f04ed0c3807f8`; tag object `6110c0c7c61a9a8d1a4ca6f2ee608db99ae81b86`; Release run39900443754,10,720 solution tests/ten uploads, ten signatures,153 broad/394 focused public checks and exact archive/cache/output/contentHash provenance verified. Documentation base `ff2a9cd7228282acf5d6dbff00bd9d097c891aeb`; publication record commit follows. Publication explicitly approved; no duplicate dispatch. Next: normal Braid public1.23.7 upgrade smoke as separate work, then independent REQ-126 host/declaration/profile coverage. Keep root upstream notes, original receipts, stashes/worktrees, sweep baselines and PR132 intact.
+
+## Historical preparation checkpoints
+
 # Bosak1.23.7 release preparation - 23 October2026
 
 **1.23.7 release preparation - 23 October2026:** [Readiness](RELEASE-1.23.7-READINESS.md) and [notes](RELEASE-NOTES-1.23.7.md) pin proposed v1.23.7 to implementation merge `9dd50961`, covering EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. Ten unsigned candidate packages pass153 broad +394 focused package-only checks with matching provenance and clear transitive audits. Publication has not started; public/Braid dependency1.23.4 and REQ-126 In Progress remain unchanged.

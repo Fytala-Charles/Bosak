@@ -4,6 +4,8 @@
  <p>22 October 2026 - source 1.23.6, unpublished</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 `function($r as record(a)) { $r }` was accepted in 3.0/3.1 because inline signatures retain type text through XPathParser.SkipSequenceType, bypassing the record gate in ParseSequenceType. Record syntax is a4.0 addition; [XPath3.1 InlineFunctionExpr](https://www.w3.org/TR/xpath-31/#doc-xpath31-InlineFunctionExpr) uses the [3.1 SequenceType/ItemType grammar](https://www.w3.org/TR/xpath-31/#doc-xpath31-ItemType), which does not admit record types. Current4.0 review sources and sections are pinned in [the record delivery](RECORD-CONTRACTS.md).
 
 The new catalog run had41 passes and5 failures: four successful parameter-coercion examples failed their asserted3.1 refusal, and the explicit 3.1 parameter control also failed. The4.0 results and paired business reports passed. These expected refusals are retained unchanged.

@@ -4,6 +4,11 @@
   <p>23 October 2026</p>
 </div>
 
+**1.23.7 published and verified - 23 October 2026:** [Public delivery proof](RELEASE-1.23.7-PUBLICATION.md) records immutable v1.23.7 at `9dd50961`, one successful Release run (10,720 solution tests; ten uploads), ten verified signed packages and fresh nuget.org-only153 broad/394 focused checks with matching provenance and clear audits. Includes EQName bracket parsing, inline-record old-profile refusal and numeric separator boundaries. REQ-126 remains In Progress. Braid dependency1.23.4 and existing acceptance remain unchanged; a1.23.7 upgrade smoke is separate. Earlier preparation/unpublished statements below are historical.
+
+**Historical preparation record:** The checklist below predates completed publication.
+
+
 **Prepared; publication not started.** Proposed annotated tag `v1.23.7` must point to **`9dd5096104b9d08bfad2dd88130f04ed0c3807f8`**, the immutable implementation merge. Later documentation commits must not move this package source. Public/Braid dependency remains 1.23.4. [Release notes](RELEASE-NOTES-1.23.7.md), [machine readiness](RELEASE-1.23.7-READINESS.json).
 
 | Gate | Evidence |

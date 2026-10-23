@@ -293,3 +293,8 @@ Grammar/priority finding, compound entry, manual examples and canonical/catalog 
 ## Release1.23.4 publication — 2026-10-22
 
 README package links, canonical status, release notes/readiness, catalog notices and publication proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1234-publication-render`; added relative links and public package receipts checked. HTML render check only; no screenshot/PDF review. Kit-managed assets unchanged.
+
+
+## Release1.23.7 publication - 23 October2026
+
+README install/package links, canonical status, release notes/readiness, catalog notices and public proof rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1237-publication-render`; new relative links and package receipts checked. HTML only; no screenshot/PDF approval. Kit assets unchanged.
