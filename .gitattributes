@@ -43,3 +43,6 @@
 
 # Preserve the exact REQ-136 consumer design review receipt, including original line endings.
 /docs/req136-evidence/BOSAK_REQ136_CONSUMER_DESIGN_REVIEW.txt -text whitespace=cr-at-eol
+
+# Preserve the exact REQ-136 implementation review receipt.
+/docs/req136-evidence/BOSAK_REQ136_CONSUMER_IMPLEMENTATION_REVIEW.txt -text whitespace=cr-at-eol
