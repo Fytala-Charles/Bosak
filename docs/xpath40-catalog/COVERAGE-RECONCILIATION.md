@@ -86,7 +86,7 @@ The owner selected the applicable-evidence policy. The alternative of retaining 
 | AC-01 | Partial: 18 bounded grammar/cluster rows, existing signature inventories and exact delivery records | Dedicated missing grammar entries, complete per-contract mapping and historical pins. |
 | AC-02 | Partial: current lifecycle table covers original moving/rejected groups plus wider records | Exhaustive source/history validation, including superseded and partially implemented contracts. |
 | AC-03 | Partial: applicable-evidence policy owner-approved; reproducible citation inventory supplied | Validate applicable evidence for every entry; absence of a gate stays explicit. |
-| AC-04 | Structure verified for 73 entries; semantic acceptance partial | Feature-specific drift and complete lifecycle/history review; generic headings do not suffice. |
+| AC-04 | Structure verified for 74 entries; semantic acceptance partial | Feature-specific drift and complete lifecycle/history review; generic headings do not suffice. |
 | AC-05 | Met for current scope | Keep actual registry counts, canonical links and index date synchronized. |
 
 1. **Supplied: focus-function syntax and pipeline focus.** [The focused delivery](FOCUS-FUNCTION-SYNTAX.md) adds a dedicated 16-field entry and 30 checks with a complete paired order-line report. The constructor-only page retains its stable URL and separate scope. Whole/per-item and caller/callback focus, empty input and 3.1 refusals have bounded examples; exhaustive callbacks/coercion are not claimed.

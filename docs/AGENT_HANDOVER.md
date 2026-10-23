@@ -4,7 +4,7 @@ Base main: `df27eeb01d6489edd2a22c937eda280135ef5725` (PR411 merged). Worktree `
 
 All10,720 solution tests pass, including7,674 XSLT and2,893 documentation checks;84 additional language-server tests pass. QT3 31,142/0/679; qt4 gate8,278/0/1,894 unchanged. Build zero errors; existing CS8604 in rebuilt logs, final incremental build zero warnings. Initial fixture-path and loopback-listener setup failures are retained; corrected runs pass. Catalog74 entries, four chapters and117 assigned names. Current specification comparison pin b4723ff52fd9d4fabf2b4cd33bd44f21939c512c, not recovery of historical adoption. Public/Braid dependency1.23.4 unchanged; source1.23.7 unpublished.
 
-Next: review/publish the bounded lexical PR and verify exact-head CI; declaration/package/profile evidence is a subsequent slice. D2/D3/D4 and AC03 remain partial under the approved applicable-evidence policy. Retain pending upstream notes, sweep baselines, receipts, stashes and worktrees; protected PR132 untouched. README install/build commands remain current; no structural/CLI/public API change. Earlier headers below are historical.
+Implementation commit: `c2972c1c9d1138ef30fc346b2e55ebd1730f849d`; [draft PR412](https://github.com/Fytala-Charles/Bosak/pull/412) is open. Next: verify exact-head CI and review the bounded lexical PR; declaration/package/profile evidence is a subsequent slice. D2/D3/D4 and AC03 remain partial under the approved applicable-evidence policy. Retain pending upstream notes, sweep baselines, receipts, stashes and worktrees; protected PR132 untouched. README install/build commands remain current; no structural/CLI/public API change. Earlier headers below are historical.
 
 # REQ-126 record contracts and inline signature gate - 22 October2026
 

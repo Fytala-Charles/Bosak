@@ -392,7 +392,7 @@
   ],
   "expectedOutcomesWeakened": false,
   "scope": "Fraction/exponent underscore group boundaries only; no numeric range, host matrix, gate or release expansion",
-  "status": "Implemented and locally verified; publication pending",
+  "status": "Implemented and locally verified; draft PR412 open; exact-head CI pending",
   "validation": {
     "date": "2026-10-23",
     "solutionPassed": 10720,
@@ -414,5 +414,7 @@
     "initialFullRun": "Retained: two projects failed due to missing fixture junctions and restricted loopback HttpListener; corrected reruns pass; XSLT rerun also passes.",
     "build": "Initial/fixed builds zero errors with existing CS8604; final incremental build zero warnings/errors",
     "releasePerformed": false
-  }
+  },
+  "implementationCommit": "c2972c1c9d1138ef30fc346b2e55ebd1730f849d",
+  "pullRequest": "https://github.com/Fytala-Charles/Bosak/pull/412"
 }
