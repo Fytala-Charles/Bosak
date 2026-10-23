@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**CSV index revision audit - 23 October 2026:** [Contract resolution](xpath40-catalog/CSV-INDEX-CONTRACT.md) confirms upstream issue2849 already changed seven CSV assertions. Unchanged Bosak 1.24.0 passes124 frozen cases; a separate current-upstream diagnostic passes117 and fails7 (exit2), including selection and `get` indexes. No frozen fixture/assertion/gate or engine change. Next: compare all218 gated sets against a complete current snapshot before adopting the new CSV contract. REQ-126 remains partial; REQ-136 remains consumer-accepted. Earlier requests for upstream clarification are historical.
+
 **CSV PR420 refreshed - 23 October 2026:** The 99 catalog cases and 25 public local-resource tests now build on accepted, published Bosak 1.24.0, main `06a76549bfed8200c7bb2580275b46bb46975d31`. REQ-136 remains implemented, published and consumer-accepted. CSV draft-comparison differences remain explicit; REQ-126/D2/D3/D4/AC-03 stay partial. No engine/API/version/release/gate changes. Earlier CSV 1.23.8 checkpoints describe the original preparation. Refreshed verification is recorded in [the CSV contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md).
 
 **CSV options/defaults review - 23 October 2026:** [Contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.

@@ -1,0 +1,30 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.guard-tmp\req126-csv-index-evidence\suites\current\catalog.xml
+Test-set filter:  fn-parse-csv
+
+Discovered 741 test sets.
+  Starting: fn-parse-csv ...
+  Done: fn-parse-csv (124 tests total) [P+=117 F+=7 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   124
+Passed:  117
+Failed:  7
+Skipped: 0
+
+Pass rate: 94.35%
+
+First 20 failures:
+  FAIL parse-csv-912: Unexpected error: XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.
+  FAIL parse-csv-913: Unexpected error: XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.
+  FAIL parse-csv-914: Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (row number in CSV get function).
+  FAIL parse-csv-915: Unexpected error: FORG0001: Cannot convert 0 to xs:positiveInteger (row number in CSV get function).
+  FAIL parse-csv-916: Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (column number in CSV get function).
+  FAIL parse-csv-917: Unexpected error: FORG0001: Cannot convert 0 to xs:positiveInteger (column number in CSV get function).
+  FAIL parse-csv-919: Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (row number in CSV get function).
+
+Gated failures (fail the run): 7   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.30s

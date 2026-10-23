@@ -75,6 +75,8 @@ Expected class: input-size dependent. Parsing constructs row/cell values; the qu
 
 ## 15. Known Uses
 
+**Revision-specific index evidence:** [Audit](../CSV-INDEX-CONTRACT.md) reproduces124/0 frozen and117/7 current-upstream native cases. Upstream already changed selection and `get` expectations; adopting that contract is separate from this evidence-only audit. The original `observed-*` cases remain unchanged.
+
 Current applicable evidence: all `csv-contract-*` IDs in the [manifest](../examples/cases.json), the25 public API tests in [CsvResourceContractTests](../../../tests/Bosak.XPath.Standard.Tests/CsvResourceContractTests.cs) (`LocalResource_UsesOptions`, `LocalResource_EncodingAndEmptyRows`, `LocalResource_PreservesErrors`, `MissingResource_RaisesFout1170`, `Keywords_ReadLocalResource`, `EmptySource_BypassesOptionInspection`) and existing [CsvTests](../../../tests/Bosak.XPath.Standard.Tests/CsvTests.cs). All99 exact IDs are recorded in [the machine review](../CSV-CONTRACT-REVIEW.json). The existing `fn-parse-csv`, `fn-csv-to-xml`, `fn-csv-doc` gated sets apply within their frozen scope; `parse-csv-912` does not establish the opposite current-draft rule. No gate promotion or full current-draft certification follows.
 
 

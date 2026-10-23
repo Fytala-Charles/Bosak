@@ -1,0 +1,222 @@
+{
+  "recordedAtUtc": "2026-10-23T19:07:48.220387+00:00",
+  "pins": {
+    "qtspecs": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+    "qt4tests": "b3a26509c9d9a7fe535ec3d9b8b78d2560de5009"
+  },
+  "frozenQt4Revision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+  "files": {
+    "qtspecs/specifications/xpath-functions-40/src/function-catalog.xml": {
+      "revision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+      "gitBlob": "be337810df22269ea814c218de01a03596a09cac",
+      "bytes": 1801007,
+      "sha256": "feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010"
+    },
+    "qt4tests/catalog.xml": {
+      "revision": "b3a26509c9d9a7fe535ec3d9b8b78d2560de5009",
+      "gitBlob": "48a0ff7634b8f20518a4eb897908920c7ad6fbf2",
+      "bytes": 70491,
+      "sha256": "fd1e024c976f3c92b742573e53485d20b5e04373ea001dea6efff57fd73281f0"
+    },
+    "qt4tests/fn/parse-csv.xml": {
+      "revision": "b3a26509c9d9a7fe535ec3d9b8b78d2560de5009",
+      "gitBlob": "3077095d6532644579de733b3612ed3cceb8ca43",
+      "bytes": 64811,
+      "sha256": "0762c4771f6ab0aee116e306db9453c5fc676374362f08a2234d2c8ba9b75a84"
+    },
+    "qt4tests/fn/csv-to-xml.xml": {
+      "revision": "b3a26509c9d9a7fe535ec3d9b8b78d2560de5009",
+      "gitBlob": "61c955168d167c41a87eebe85036dda497871919",
+      "bytes": 43627,
+      "sha256": "6a6d448a699d6172d875f311018375fa7a4db8de86b2fc3253b62cd76396909a"
+    }
+  },
+  "issue2849": {
+    "url": "https://github.com/qt4cg/qtspecs/issues/2849",
+    "state": "closed",
+    "closedAt": "2026-10-20T16:20:49Z"
+  },
+  "upstreamCorrection": {
+    "revision": "1d149118d85df69aa7bee1b2b3ee67cdb3624533",
+    "committedAt": "2026-10-19T14:23:04Z",
+    "message": "xs:integer vs. restricted subtypes. qt4cg/qtspecs#2849"
+  },
+  "comparison": [
+    {
+      "lane": "frozen",
+      "name": "parse-csv-912",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,-1)})?rows \n       => array:join()",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:error code=\"XPTY0004\" />\n     </ns0:result>\n  "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-913",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,0)})?rows \n       => array:join()",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:error code=\"XPTY0004\" />\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-914",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(-1, 2)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-915",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(0, 2)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-916",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, -1)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-917",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\" => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, 0)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "frozen",
+      "name": "parse-csv-919",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n      map{'select-columns':(4,3,1)})?get(-1, 3)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n    </ns0:result>\n  "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-912",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')),\n       map{'select-columns':(4,3,-1)})?rows\n       => array:join()",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-deep-eq>[\"d\",\"c\",\"\",\"s\",\"r\",\"\"]</ns0:assert-deep-eq>\n     </ns0:result>\n  "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-913",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')),\n       map{'select-columns':(4,3,0)})?rows\n       => array:join()",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-deep-eq>[\"d\",\"c\",\"\",\"s\",\"r\",\"\"]</ns0:assert-deep-eq>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-914",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(-1, 2)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-915",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(0, 2)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-916",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, -1)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-917",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\" => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, 0)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   "
+    },
+    {
+      "lane": "current",
+      "name": "parse-csv-919",
+      "test": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n      map{'select-columns':(4,3,1)})?get(-1, 3)",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>\"\"</ns0:assert-eq>\n    </ns0:result>\n  "
+    }
+  ],
+  "nativeCatalogAndTestSetBytesUnchanged": true,
+  "newUpstreamContributionNeeded": false,
+  "transportVerification": "Base64 Git blob bytes verified against Git SHA-1 and size; initial gh raw-output snapshots are retained but superseded because gh sanitizes escape sequences",
+  "originalSpecSnapshotMatchesVerifiedBlob": true,
+  "date": "2026-10-23",
+  "bosakMainBase": "3641002312ef28299913ed8efb66f14d7c75834a",
+  "runnerBuildHead": "75ca7542506a92265b13c456a96891423555ae75",
+  "runnerBuildTreeIdenticalToMainBase": true,
+  "sourceVersion": "1.24.0",
+  "publicVersion": "1.24.0",
+  "runs": [
+    {
+      "lane": "frozen",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-csv-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-csv-index-evidence\\suites\\frozen",
+        "fn-parse-csv"
+      ],
+      "exitCode": 0,
+      "logSha256": "41d173af79dde5e8dad35f3a7854771cae917ec6da82b5d3902122ce48552cbc",
+      "results": {
+        "Total": 124,
+        "Passed": 124,
+        "Failed": 0,
+        "Skipped": 0
+      },
+      "retainedReceipt": "evidence/csv-index-contract/frozen-native.txt"
+    },
+    {
+      "lane": "current",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-csv-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-csv-index-evidence\\suites\\current",
+        "fn-parse-csv"
+      ],
+      "exitCode": 2,
+      "logSha256": "68c2fce7ced816544f0b830b623dbc23c4fd742e51e279b1208d4503db8b5f82",
+      "results": {
+        "Total": 124,
+        "Passed": 117,
+        "Failed": 7,
+        "Skipped": 0
+      },
+      "retainedReceipt": "evidence/csv-index-contract/current-native.txt"
+    }
+  ],
+  "currentFailureIds": [
+    "parse-csv-912",
+    "parse-csv-913",
+    "parse-csv-914",
+    "parse-csv-915",
+    "parse-csv-916",
+    "parse-csv-917",
+    "parse-csv-919"
+  ],
+  "loadedBosakAssemblySha256": {
+    "Bosak.XPath.Api.dll": "08b6b0a73de45aef051afc90a32f52919c553666a59c9c919275e169c3b6f50a",
+    "Bosak.XPath.Compiler.dll": "adb968f4911d6cf4e0feeb040f734832cc15aec1a3c265fd2d2e0ac7240f6875",
+    "Bosak.XPath.Conformance40.dll": "7e1cc407bfaa377ce0c69d4fb250d032b3d8b2985ef247ebf4396651213c8f5f",
+    "Bosak.XPath.Core.dll": "b4e3ffcdffb16d8da1e37c3252ef624d2eb440a169bf82a5967caf59bd038693",
+    "Bosak.XPath.Parser.dll": "6f9e0d2480ba80e609d4408239002f65e053eba3d7bc9ab8d9c39e5e2ff1c8de",
+    "Bosak.XPath.Providers.dll": "cfb84e9a0e6252298f8f85df27d85b14c1d272a14e8ecef13c54e3d4c730f114",
+    "Bosak.XPath.Runtime.dll": "4a2f88c22480172f0a281d73370db2a8f7a0e60bf58c661189ce80a914e163e9",
+    "Bosak.XPath.Standard.dll": "cb76bfd7647c628e326c747ef8da1e3d37bc427e2c382762d0f7c38588d66f5a",
+    "Bosak.XQuery.dll": "1a114ee0d16b1d1e6eeeb9eb71e83b06d6ed460e661e254892901e527526ad6f",
+    "Bosak.Xslt.dll": "cb7780d18bf0b2078498582b572c2c12a22e71ab2f9030f49d4561f40160b0cc"
+  },
+  "diagnosticCurrentRunIsExpectedFailureEvidence": true,
+  "engineChanged": false,
+  "gateMembershipChanged": false,
+  "frozenFixtureChanged": false,
+  "unitTestAssertionsChanged": false,
+  "newUpstreamContributionSubmitted": false,
+  "independentProcessorConfirmed": false,
+  "req126": "In Progress; D2/D3/D4/AC-03 partial",
+  "req136": "Implemented, published and consumer-accepted",
+  "next": "Audit the218 current gated sets against complete separately pinned upstream before CSV engine/baseline adoption",
+  "fullSuiteEvidence": {
+    "ci": 39993672686,
+    "head": "75ca7542506a92265b13c456a96891423555ae75",
+    "solutionPassed": 11133,
+    "languageServerPassed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Unchanged engine/tests at PR420; documentation-only clarification CI follows"
+  },
+  "frozenInputSha256": {
+    "catalog.xml": "eb5978513539ec0c5416994c0de2cd5239734cd13018508a6d2d463f4aeca7e8",
+    "fn/parse-csv.xml": "59558efa15d87e394c46f81358f39d2a0e9cf2495ef563e81453cb16ac65dd53"
+  }
+}
