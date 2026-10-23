@@ -689,3 +689,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 ## Numeric lexical follow-up - 23 October2026
 
 [Numeric literals](NUMERIC-LITERALS.md) supplies the missing16-field entry and50 executable checks; source1.23.7 corrects malformed fractional/exponent separator groups. Current74 entries /2,869 feature +24 chapter checks. The S3 lexical missing-entry task is supplied for this bounded contract; broader host/range/adjacency checks and D2/D3/D4/AC03 remain partial. Historical checklist/count snapshots above are retained.
+
+
+## Ordinary stylesheet version/profile coverage - 23 October2026
+
+[Bounded host reference](HOST-PROFILE-BOUNDARIES.md) adds one entry and66 cases: current75 entries /2,935 feature +24 chapter =2,959 checks. The distinction between processor capability, effective version and frozen XPath is explicit; module/package propagation is a follow-up. D2/D3/D4 and AC03 remain partial. Historical checklist/count snapshots above are retained.

@@ -1,19 +1,19 @@
 {
   "date": "2026-10-23",
-  "sourceBase": "ff2a9cd7228282acf5d6dbff00bd9d097c891aeb",
+  "sourceBase": "11343adce014c655a1599fd36d61adf61b627316",
   "sourceVersion": "1.23.7",
   "publishedVersion": "1.23.7",
   "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record and numeric lexer corrections are audited separately; no tier/gate promotion; publication tracked separately",
   "summary": {
-    "entries": 74,
-    "featureChecks": 2869,
+    "entries": 75,
+    "featureChecks": 2935,
     "chapterChecks": 24,
     "workedChapters": 4,
-    "totalDocumentationChecks": 2893,
+    "totalDocumentationChecks": 2959,
     "currentGatedSetCount": 218,
     "entriesMentioningCurrentGatedSet": 25,
-    "entriesWithoutLiteralCurrentGatedSet": 49,
-    "entriesWithExactManifestIdsInKnownUses": 39,
+    "entriesWithoutLiteralCurrentGatedSet": 50,
+    "entriesWithExactManifestIdsInKnownUses": 40,
     "historicalAdoptedSpecPinsMissing": 28,
     "countPolicy": "Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.",
     "mappedGrammarClusterRows": 18
@@ -2108,6 +2108,36 @@
       "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
     },
     {
+      "entry": "xslt-instructions/processor-profiles.md",
+      "classification": "**Version/profile boundary** - implemented Bosak host policy. Legacy is the default compatibility profile; Xslt40Draft is an opt-in experimental XSLT processor profile whose embedded XPath is frozen 4.0. This is not a new language feature or a promotion to XPath40Experimental. Public/source 1.23.7 already provides this API.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "00bf582d35289059871047826929380bf988fd82616633501d19626e38822415",
+      "exactManifestIdsInKnownUses": [
+        "host-profile-ancestor-root3-wrapper4-local3-legacy",
+        "host-profile-avt-root3-draft40",
+        "host-profile-future-attribute-root4-draft40",
+        "host-profile-report-local40-normal-legacy",
+        "host-profile-select-root3-draft40",
+        "host-profile-select-root3-legacy",
+        "host-profile-select-root4-local3-draft40",
+        "host-profile-use-when-root3-draft40"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/HOST-PROFILE-BOUNDARIES.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/host-profiles/README.md",
+        "docs/xpath40-catalog/examples/host-profiles/normal.xml",
+        "docs/xpath40-catalog/examples/host-profiles/report-local40.xsl"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
       "entry": "xslt-instructions/structured-value-patterns.md",
       "classification": "**Implemented bounded XSLT4.0 surface in public1.23.2.** This entry maps tested type, record, map-entry and array-member patterns; it is not the complete pattern grammar. [Pinned source/deliveries](../TYPE-PATTERN-GRAMMAR.md).",
       "numberedFields": 16,
@@ -2527,7 +2557,7 @@
     "rejected/mapping-arrow-gtgt.md"
   ],
   "inputHashes": {
-    "docs\\xpath40-catalog\\examples\\cases.json": "a089c20480d0c1081015105d568cf1cea4a3092d287c2d0f8e8487ce9c5f0e28",
+    "docs\\xpath40-catalog\\examples\\cases.json": "43275c5bac33693c7ec617aee96d8089d97867071a3528ce4afdd8dfb9752e6c",
     "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
     "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
   },
