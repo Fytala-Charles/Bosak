@@ -46,3 +46,6 @@
 
 # Preserve the exact REQ-136 implementation review receipt.
 /docs/req136-evidence/BOSAK_REQ136_CONSUMER_IMPLEMENTATION_REVIEW.txt -text whitespace=cr-at-eol
+
+# Preserve the original PR425 acceptance receipt Git bytes.
+/docs/REQ-136-BRAID-ACCEPTANCE.md -text whitespace=cr-at-eol

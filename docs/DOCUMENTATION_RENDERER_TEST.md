@@ -4,6 +4,9 @@
 
 # Documentation Renderer Test
 
+23 October2026: PR425 REQ-136 formal consumer acceptance and canonical status counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req136-acceptance-render`; original acceptance Git bytes, four1444-pass TRX hashes/counters, nine signed public assembly identities, reported native limits, registry/detail consistency and new links checked. Evidence was inspected, not rerun. HTML only; no screenshot/PDF acceptance; kit assets unchanged.
+
+
 23 October2026: REQ-136 consumer implementation receipt, 1.24.0 release notes/readiness and canonical counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1240-render`; new links/JSON, exact retained review bytes and package verification checked. HTML only; no screenshot/PDF acceptance. Managed kit assets unchanged.
 
 
