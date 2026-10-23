@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:fytala:module-profile" xmlns:o="urn:fytala:dispatch" exclude-result-prefixes="xs p o" version="5.0"><xsl:import href="../library/module.xsl"/><xsl:output method="text"/><xsl:template match="/"><xsl:value-of select="p:probe()"/></xsl:template></xsl:stylesheet>

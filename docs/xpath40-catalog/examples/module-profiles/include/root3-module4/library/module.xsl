@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:fytala:module-profile" version="4.0"><xsl:function name="p:probe"><xsl:sequence select="() ?? 16"/></xsl:function></xsl:stylesheet>

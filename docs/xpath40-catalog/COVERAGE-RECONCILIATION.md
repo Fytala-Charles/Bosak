@@ -11,9 +11,9 @@
 
 REQ-126 remains **In Progress**. The initial reconciliation against main `47b4f3a9c1ec624f53407101f261d0c2ae55ca65` changed only documentation and the owner-approved AC-03 evidence policy. The subsequent [record-contract slice](RECORD-CONTRACTS.md) includes a bounded inline-record signature gate correction in unpublished source1.23.6. Public and Braid dependency remain1.23.4; no tier/gate promotion or release is implied. Initial delivery/hash receipts remain historical evidence.
 
-At the initial reconciliation checkpoint the catalog had **71 entries /2,767 documentation checks**. The [focus-function syntax delivery](FOCUS-FUNCTION-SYNTAX.md) adds one entry and 30 checks: the subsequent [record-contract delivery](RECORD-CONTRACTS.md) adds another entry and46 checks; the numeric literal delivery adds one entry and50 checks, so current **75 entries, 2,935 feature +24 chapter checks =2,959**, four worked chapters and 117 assigned function names. All 75 entries have the 16 numbered fields and an index link. Those structural checks do not establish complete grammar, signatures, semantic drift or conformance.
+At the initial reconciliation checkpoint the catalog had **71 entries /2,767 documentation checks**. The [focus-function syntax delivery](FOCUS-FUNCTION-SYNTAX.md) adds one entry and 30 checks: the subsequent [record-contract delivery](RECORD-CONTRACTS.md) adds another entry and46 checks; the numeric literal delivery adds one entry and50 checks, so current **76 entries, 3,049 feature +24 chapter checks =3,073**, four worked chapters and 117 assigned function names. All 76 entries have the 16 numbered fields and an index link. Those structural checks do not establish complete grammar, signatures, semantic drift or conformance.
 
-The reproducible [inventory script](audit-reconciliation.py) reads all 75 entries, the fixture manifest, existing provenance ledger and current `GatedSets`; it validates the named methods and files in the [18-row grammar matrix](GRAMMAR-COVERAGE-MATRIX.json). Run `python docs/xpath40-catalog/audit-reconciliation.py` from any directory. [Inventory output](COVERAGE-RECONCILIATION.json) records literal citations, counts and input hashes. It does not infer a test-set promotion or semantic pass from a file link.
+The reproducible [inventory script](audit-reconciliation.py) reads all 76 entries, the fixture manifest, existing provenance ledger and current `GatedSets`; it validates the named methods and files in the [18-row grammar matrix](GRAMMAR-COVERAGE-MATRIX.json). Run `python docs/xpath40-catalog/audit-reconciliation.py` from any directory. [Inventory output](COVERAGE-RECONCILIATION.json) records literal citations, counts and input hashes. It does not infer a test-set promotion or semantic pass from a file link.
 
 ## D3 - source, tests and catalog coverage
 
@@ -89,7 +89,7 @@ The owner selected the applicable-evidence policy. The alternative of retaining 
 | AC-01 | Partial: 18 bounded grammar/cluster rows, existing signature inventories and exact delivery records | Dedicated missing grammar entries, complete per-contract mapping and historical pins. |
 | AC-02 | Partial: current lifecycle table covers original moving/rejected groups plus wider records | Exhaustive source/history validation, including superseded and partially implemented contracts. |
 | AC-03 | Partial: applicable-evidence policy owner-approved; reproducible citation inventory supplied | Validate applicable evidence for every entry; absence of a gate stays explicit. |
-| AC-04 | Structure verified for 75 entries; semantic acceptance partial | Feature-specific drift and complete lifecycle/history review; generic headings do not suffice. |
+| AC-04 | Structure verified for 76 entries; semantic acceptance partial | Feature-specific drift and complete lifecycle/history review; generic headings do not suffice. |
 | AC-05 | Met for current scope | Keep actual registry counts, canonical links and index date synchronized. |
 
 1. **Supplied: focus-function syntax and pipeline focus.** [The focused delivery](FOCUS-FUNCTION-SYNTAX.md) adds a dedicated 16-field entry and 30 checks with a complete paired order-line report. The constructor-only page retains its stable URL and separate scope. Whole/per-item and caller/callback focus, empty input and 3.1 refusals have bounded examples; exhaustive callbacks/coercion are not claimed.
@@ -110,3 +110,8 @@ At the initial reconciliation checkpoint, **10,516 solution tests passed**, incl
 ## Ordinary stylesheet host/version follow-up - 23 October2026
 
 [Host-profile delivery](HOST-PROFILE-BOUNDARIES.md) supplies the75th16-field entry and66 cases (50 focused,16 report runs). Current2,935 feature +24 chapter =2,959 documentation checks. Legacy uses effective-version-selected XPath; Draft supplies frozen4.0 independently. Root/local/ancestor declarations, AVTs, select/static paths and bounded forwards validation are covered. Package/import propagation and broader D2/D3/D4/AC03 remain partial;28 historical adoption pins unchanged. Public/source1.23.7 unchanged; no engine/version/release/gate change. Earlier counts/statuses remain historical.
+
+
+## Direct module/profile follow-up - 23 October2026
+
+[Module delivery](MODULE-PROFILE-BOUNDARIES.md) supplies the76th entry and114 cases, stacked on separate runtime-fix PR416. Current3,049 feature +24 chapter =3,073 checks. Host inheritance and dependency-owned effective versions are covered for one include/import/used-package edge. Transitive graphs, package lifecycle/override/default-mode/static/authoring/resource contexts remain separate. Source1.23.8 unpublished/public1.23.7; no further engine change or release in the module diff. D2/D3/D4/AC03 and28 missing historical pins remain partial. Earlier checkpoint counts/versions are historical.

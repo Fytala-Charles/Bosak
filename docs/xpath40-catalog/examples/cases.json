@@ -21804,5 +21804,1297 @@
     "file": "host-profiles/report-local40.xsl",
     "input": "host-profiles/invalid.xml",
     "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-include-root3-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-include-root3-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-include-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root3-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root3-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root3-module3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root3-module3-local4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-root4-module4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-include-root4-module4-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-validation-root5-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-validation-root5-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-include-validation-root3-module5-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-validation-root3-module5-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-validation-root5-module5-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-include-validation-root5-module5-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-include-static-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-include-static-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-include-scan-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-include-scan-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-include-report-baseline-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-baseline-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-baseline-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-include-report-baseline-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-include-report-baseline-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-baseline-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-baseline-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-include-report-baseline-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-include-report-module40-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-module40-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-module40-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-include-report-module40-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-include-report-module40-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-module40-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-include-report-module40-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-include-report-module40-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/include/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-import-root3-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-import-root3-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-import-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root3-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root3-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root3-module3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root3-module3-local4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-root4-module4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-import-root4-module4-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-validation-root5-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-validation-root5-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-import-validation-root3-module5-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-validation-root3-module5-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-validation-root5-module5-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-import-validation-root5-module5-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-import-static-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-import-static-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-import-scan-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-import-scan-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-import-report-baseline-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-baseline-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-baseline-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-import-report-baseline-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-import-report-baseline-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-baseline-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-baseline-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-import-report-baseline-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-import-report-module40-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-module40-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-module40-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-import-report-module40-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-import-report-module40-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-module40-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-import-report-module40-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-import-report-module40-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/import/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-package-root3-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module3/library/module.xsl"
+      }
+    ],
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-package-root3-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root3-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module3/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module3/library/module.xsl"
+      }
+    ],
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-package-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module3/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root3-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root3-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root3-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root3-module3-local4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module3-local4",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module3-local4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root3-module3-local4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root3-module3-local4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root3-module3-local4",
+        "version": "1.0",
+        "file": "module-profiles/package/root3-module3-local4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-root4-module4-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module4-local3",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module4-local3/library/module.xsl"
+      }
+    ],
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-package-root4-module4-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/root4-module4-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:root4-module4-local3",
+        "version": "1.0",
+        "file": "module-profiles/package/root4-module4-local3/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-validation-root5-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root5-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root5-module4/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-validation-root5-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/validation-root5-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root5-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root5-module4/library/module.xsl"
+      }
+    ],
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-package-validation-root3-module5-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root3-module5",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root3-module5/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-validation-root3-module5-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/validation-root3-module5/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root3-module5",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root3-module5/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-validation-root5-module5-local3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root5-module5-local3",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root5-module5-local3/library/module.xsl"
+      }
+    ],
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-package-validation-root5-module5-local3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/validation-root5-module5-local3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:validation-root5-module5-local3",
+        "version": "1.0",
+        "file": "module-profiles/package/validation-root5-module5-local3/library/module.xsl"
+      }
+    ],
+    "error": "XTSE0090"
+  },
+  {
+    "id": "module-profile-package-static-root4-module3-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:static-root4-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/static-root4-module3/library/module.xsl"
+      }
+    ],
+    "error": "XPST0003"
+  },
+  {
+    "id": "module-profile-package-static-root4-module3-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/static-root4-module3/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:static-root4-module3",
+        "version": "1.0",
+        "file": "module-profiles/package/static-root4-module3/library/module.xsl"
+      }
+    ],
+    "expected": "16"
+  },
+  {
+    "id": "module-profile-package-scan-root4-module4-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:scan-root4-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/scan-root4-module4/library/module.xsl"
+      }
+    ],
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-package-scan-root4-module4-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/scan-root4-module4/app/main.xsl",
+    "input": "module-profiles/probe.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:scan-root4-module4",
+        "version": "1.0",
+        "file": "module-profiles/package/scan-root4-module4/library/module.xsl"
+      }
+    ],
+    "error": "XPST0017"
+  },
+  {
+    "id": "module-profile-package-report-baseline-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-baseline-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-baseline-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-package-report-baseline-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-package-report-baseline-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-baseline-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-baseline-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-package-report-baseline-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-baseline/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-baseline",
+        "version": "1.0",
+        "file": "module-profiles/package/report-baseline/library/module.xsl"
+      }
+    ],
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-package-report-module40-normal-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-module40-normal-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/normal.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "A=2|B=1|C=0|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-module40-empty-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-package-report-module40-empty-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/empty.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "lines=0;total=0"
+  },
+  {
+    "id": "module-profile-package-report-module40-reordered-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-module40-reordered-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/reordered.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "expected": "C=0|B=1|A=2|lines=3;total=3"
+  },
+  {
+    "id": "module-profile-package-report-module40-invalid-legacy",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "legacy",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "error": "FORG0001"
+  },
+  {
+    "id": "module-profile-package-report-module40-invalid-draft40",
+    "kind": "xslt",
+    "mode": "31",
+    "processorProfile": "draft40",
+    "file": "module-profiles/package/report-module40/app/main.xsl",
+    "input": "module-profiles/invalid.xml",
+    "packages": [
+      {
+        "name": "urn:fytala:module-profile:package:report-module40",
+        "version": "1.0",
+        "file": "module-profiles/package/report-module40/library/module.xsl"
+      }
+    ],
+    "error": "FORG0001"
   }
 ]

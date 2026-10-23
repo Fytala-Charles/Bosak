@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "base": "11343adce014c655a1599fd36d61adf61b627316",
+  "base": "c172747b13e5bbfe2b342b04d295720299b4387e",
   "scope": "Bounded source/test/catalog mapping; no exhaustive production or conformance claim",
   "rows": [
     {
@@ -9,7 +9,8 @@
       "entries": [
         "README.md",
         "experimental/fn-scan.md",
-        "xslt-instructions/processor-profiles.md"
+        "xslt-instructions/processor-profiles.md",
+        "xslt-instructions/module-profiles.md"
       ],
       "testEvidence": [
         {
@@ -27,14 +28,27 @@
         {
           "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
           "method": "PublishedExample_MatchesDeclaredOutcome"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "method": "ModulesInheritProfile"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "method": "ModuleValidationInheritsProfile"
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs",
+          "method": "UsedPackageInheritsProfile"
         }
       ],
-      "remaining": "66 ordinary stylesheet/profile cases supplied; package/include/import propagation, instruction recognition/fallback completeness and other hosts remain separate. Gate membership does not promote experimental XPath.",
+      "remaining": "66 ordinary +114 direct module/include/import/used-package cases supplied; transitive graphs, override/visibility/version resolution, schema/static/authoring/resource and full lexical default-mode contexts remain separate. No experimental XPath promotion.",
       "source": [
         "src/Bosak.XPath.Api/CompileOptions.cs",
         "src/Bosak.XPath.Api/XPathCompatibility.cs",
         "src/Bosak.Xslt/Api/XsltProcessorProfile.cs",
-        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
+        "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
+        "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs"
       ],
       "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
     },

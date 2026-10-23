@@ -1,3 +1,11 @@
+# REQ-126 direct module/profile boundaries - 23 October2026
+
+Main base ce9604fa85d30ff941b5edb863b5a762e00742a2; stacked fix base c172747b13e5bbfe2b342b04d295720299b4387e ([draft PR416](https://github.com/Fytala-Charles/Bosak/pull/416), green CI). Branch docs/req126-module-profiles in .guard-tmp/req126-module-profile-source. [Module delivery](xpath40-catalog/MODULE-PROFILE-BOUNDARIES.md):76th16-field entry,114 new cases (66 focused/48 full report runs), scoped optional package registrations/finally cleanup and registry test-collection serialization. Initial70/44:38 registration failures plus six default-mode failures; after setup105/9; after isolated engine fix114/0. Original expectations preserved.
+
+All10,936 solution tests pass, including7,890 XSLT and3,073 documentation checks;84 additional language-server tests pass. This includes36 prerequisite API regressions. Build zero errors/existing CS8604. Temporary fixture junctions removed, original fixture data unchanged. Fresh gates are retained from the prerequisite: QT3 31,142/0/679; qt4 gated8,278/0/1,894. No new engine change or gate promotion in the module diff. Catalog76 entries, four chapters,117 assigned names;18-row matrix and inventory updated. Source1.23.8 unpublished/public1.23.7. Braid smoke/acceptance independent.
+
+Next: review/merge PR416 first; retarget the separate stacked module PR to refreshed main and verify exact-head CI/diff before merging it. No release in this step. Transitive graphs, package lifecycle/default-mode/static/authoring/resource contexts and D2/D4 remain follow-ups; REQ-126 and D2/D3/D4/AC03 stay partial. Retain stack stash9e4a6e419c3fc37b9085fb954aa5ce404129f755, all failed/intermediate receipts, root upstream notes, sweep baselines, worktrees/stashes and protected PR132. README public commands remain current. Earlier headers below are historical.
+
 # REQ-126 function default-mode correction - 23 October2026
 
 **Function default-mode correction - 23 October2026:** [Source1.23.8](XSLT-FUNCTION-DEFAULT-MODE.md) makes omitted apply-templates mode inside functions use the default mode, avoiding empty-QName XTSE0020 and retaining named defaults.36 regressions preserve explicit modes, empty selections and invalid-empty static errors. Source1.23.8 is unpublished; public1.23.7 and Braid smoke/acceptance remain independent. No public API or gate change.
