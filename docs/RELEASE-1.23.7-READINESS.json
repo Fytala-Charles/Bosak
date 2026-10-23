@@ -1,6 +1,6 @@
 {
   "date": "2026-10-23",
-  "status": "PREPARED_LOCALLY_VERIFIED_PUBLICATION_NOT_STARTED",
+  "status": "HISTORICAL_PREPARATION_COMPLETED_PUBLICATION_VERIFIED",
   "version": "1.23.7",
   "proposedTag": "v1.23.7",
   "immutableSource": "9dd5096104b9d08bfad2dd88130f04ed0c3807f8",
@@ -19,11 +19,11 @@
   "mergedMainCI": 39897457866,
   "mergedMainCIConclusion": "success",
   "completeTreeMatchesReviewedHead": true,
-  "publicationPerformed": false,
-  "publicationAuthorized": false,
-  "tagCreated": false,
-  "githubReleaseCreated": false,
-  "publicVersionCurrently": "1.23.4",
+  "publicationPerformed": true,
+  "publicationAuthorized": true,
+  "tagCreated": true,
+  "githubReleaseCreated": true,
+  "publicVersionCurrently": "1.23.7",
   "packageVerification": {
     "date": "2026-10-23",
     "version": "1.23.7",
@@ -494,5 +494,6 @@
     "temporaryFixtureJunctionsRemoved": true,
     "completeTreeMatchesReviewedHead": true
   },
-  "publicationSequence": "Review/merge preparation with green CI, obtain publication approval, repeat live preflight, push one annotated tag at immutable source; no manual duplicate dispatch; verify signed public packages/fresh consumers."
+  "publicationSequence": "Review/merge preparation with green CI, obtain publication approval, repeat live preflight, push one annotated tag at immutable source; no manual duplicate dispatch; verify signed public packages/fresh consumers.",
+  "publicationRecord": "RELEASE-1.23.7-PUBLICATION.json"
 }

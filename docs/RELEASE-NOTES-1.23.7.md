@@ -4,7 +4,7 @@
   <p>23 October 2026</p>
 </div>
 
-**Prepared; not published.** Proposed `v1.23.7` source: `9dd5096104b9d08bfad2dd88130f04ed0c3807f8`, the [PR #412 merge](https://github.com/Fytala-Charles/Bosak/pull/412). Public packages and Braid dependency remain **1.23.4**. This candidate includes the unpublished 1.23.5 and 1.23.6 fixes; no separate releases of those versions are planned.
+**Published and verified.** Immutable v1.23.7 source: `9dd5096104b9d08bfad2dd88130f04ed0c3807f8`. [Public delivery proof](RELEASE-1.23.7-PUBLICATION.md). No separate1.23.5/1.23.6 release was made.
 
 Bosak 1.23.7 contains three bounded corrections since 1.23.4:
 
@@ -18,4 +18,4 @@ The catalog also gains focus-function syntax, record contracts and numeric liter
 
 Verification: exact-merge build,10,720 solution tests,84 additional language-server CI tests, and fresh unsigned-package consumers with 153 broad +394 focused checks. Focused checks overlap source coverage. QT3 stays31,142/0/679 and qt4 gated stays8,278/0/1,894; no fixtures or gate membership change. Ten candidate packages have matching version/source/dependencies, assembly/archive/cache/output identities, XML docs and README/license/icon/branding. Both consumer transitive audits report no vulnerable packages. [Readiness and publication plan](RELEASE-1.23.7-READINESS.md).
 
-These are local unsigned candidate proofs. Signed public packages, public restore identity and public consumer checks remain post-publication verification. Braid's latest recorded native acceptance is 1.23.0; its 1.23.4 upgrade smoke is separate. This preparation neither upgrades Braid nor claims new native acceptance. The VS Code extension has its own release cycle.
+The local unsigned candidate proofs are supplemented by ten verified signed public packages and fresh nuget.org-only153 broad/394 focused checks with matching archive/cache/output/contentHash provenance and clear audits. Braid's latest recorded native acceptance is 1.23.0; its 1.23.4 upgrade smoke is separate. This preparation neither upgrades Braid nor claims new native acceptance. The VS Code extension has its own release cycle.

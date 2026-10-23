@@ -4,6 +4,9 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** [Signed public packages and consumers are verified](../RELEASE-1.23.7-PUBLICATION.md). Current inventory records source/public1.23.7; Braid dependency1.23.4 is unchanged. Earlier checkpoint versions/counts below remain historical. REQ-126/AC-03 and D2/D3/D4 remain partial.
+
+
 ## Decision and evidence boundary
 
 REQ-126 remains **In Progress**. The initial reconciliation against main `47b4f3a9c1ec624f53407101f261d0c2ae55ca65` changed only documentation and the owner-approved AC-03 evidence policy. The subsequent [record-contract slice](RECORD-CONTRACTS.md) includes a bounded inline-record signature gate correction in unpublished source1.23.6. Public and Braid dependency remain1.23.4; no tier/gate promotion or release is implied. Initial delivery/hash receipts remain historical evidence.

@@ -4,6 +4,8 @@
   <p>Frozen XPath 4.0 - bounded executable reference</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 ## 1. Name and Classification
 
 **Hexadecimal/binary integer literals and underscore separators** - **Frozen 4.0**, REQ-118 S3. Lowercase `0x` and `0b` introduce integer literals. Separators are permitted inside decimal, hexadecimal and binary digit groups, including the fraction and exponent groups of decimal/double literals. Ordinary XPath 3.0/3.1 syntax remains available; these extensions require 4.0.

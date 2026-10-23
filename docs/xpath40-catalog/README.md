@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
+
 **22 October 2026 - EQName bracket parsing, source 1.23.5 (unpublished):** [Parser correction and evidence](EQNAME-BRACKET-PARSING.md) distinguish brackets inside namespace literals from real predicates in effective 3.0 and 4.0 patterns. Public release remains 1.23.4; REQ-126 remains In Progress, with D2/D3/D4 and AC-03 partial. Earlier limitation statements below are historical.
 
 **Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.
@@ -34,9 +36,9 @@
 
 ## Current coverage and acceptance
 
-[Numeric literals and digit separators](operators-and-syntax/numeric-literals.md): the [bounded lexical delivery](NUMERIC-LITERALS.md) supplies50 checks and corrects malformed fraction/exponent groups in unpublished source1.23.7. Public1.23.4 and Braid dependency unchanged.
+[Numeric literals and digit separators](operators-and-syntax/numeric-literals.md): the [bounded lexical delivery](NUMERIC-LITERALS.md) supplies50 checks and corrects malformed fraction/exponent groups in published 1.23.7. Public1.23.7 is verified; Braid dependency remains1.23.4.
 
-Current totals: **74 entries; 2,869 feature +24 chapter checks =2,893**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; the subsequent [record-contract slice](RECORD-CONTRACTS.md) adds46 checks and a separate update entry, and fixes an inline-record signature gate in source1.23.6. Public1.23.4 and REQ-126 In Progress remain unchanged.
+Current totals: **74 entries; 2,869 feature +24 chapter checks =2,893**, four worked chapters and 117 assigned function names. [Focus syntax and pipeline focus](FOCUS-FUNCTION-SYNTAX.md) add a dedicated entry and paired business reports; the subsequent [record-contract slice](RECORD-CONTRACTS.md) adds46 checks and a separate update entry, and fixes an inline-record signature gate in source1.23.6. Public1.23.7 is verified; REQ-126 remains In Progress.
 
 [The coverage reconciliation](COVERAGE-RECONCILIATION.md) maps 18 grammar/cluster families to current source, tests and entries, distinguishes current dispositions from historical directory names, and inventories gate citations for all 74 entries. The [focus-function syntax slice](FOCUS-FUNCTION-SYNTAX.md) supplies the dedicated syntax entry and 30 checks; [record casts/coercion/updates](RECORD-CONTRACTS.md) are now supplied in a bounded slice; numeric lexical coverage is now supplied in a bounded slice; broader host coverage remains open. D2/D3/D4 and AC-03 remain partial; the applicable-evidence policy was owner-approved on 22 October 2026; entry validation remains open. Run `python docs/xpath40-catalog/audit-reconciliation.py` from the repository, or execute the script by its path from another directory, to rebuild the bounded inventory.
 
