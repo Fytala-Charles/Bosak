@@ -5,7 +5,19 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**CSV PR420 refreshed - 23 October 2026:** The 99 catalog cases and 25 public local-resource tests now build on accepted, published Bosak 1.24.0, main `06a76549bfed8200c7bb2580275b46bb46975d31`. REQ-136 remains implemented, published and consumer-accepted. CSV draft-comparison differences remain explicit; REQ-126/D2/D3/D4/AC-03 stay partial. No engine/API/version/release/gate changes. Earlier CSV 1.23.8 checkpoints describe the original preparation. Refreshed verification is recorded in [the CSV contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md).
+
 **CSV options/defaults review - 23 October 2026:** [Contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.
+
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
+**1.24.0 published and verified — 23 October2026:** [Public delivery proof](RELEASE-1.24.0-PUBLICATION.md) records immutable source `ff9f5094`, one Release run with11,009 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only153 broad/503 focused checks with matching provenance and clear audits. Rename and populated-subtree Delete are delivered together. REQ-136 consumer integration/acceptance remains pending; Braid adoption/native acceptance and REQ-126 stay separate. Earlier preparation/unpublished checkpoints below are historical.
+
+**REQ-136 merged; 1.24.0 prepared — 23 October 2026:** Braid implementation review found no blockers; [receipt](REQ-136-CONSUMER-IMPLEMENTATION-RECEIPT.json) retains839 passing unsigned-candidate consumer checks. PR422 merged at `ff9f5094` with the reviewed tree unchanged. [Release readiness](RELEASE-1.24.0-READINESS.md) pins that source: 11,009 exact-merge solution tests,153 broad/503 focused candidate checks, ten package identities and clear audits. Public1.23.8 and Braid adoption/native acceptance remain separate. REQ-136 is In Progress pending publication/integration. Earlier checkpoints below are historical.
+
+**REQ-136 implementation — 23 October 2026:** Owner approved the Braid-reviewed design. Source **1.24.0 (unpublished)** now implements Rename and populated-subtree Delete together, preserving existing Create. [Implementation contract and verification](REQ-136-IMPLEMENTATION.md) documents opaque authority, exact replay, exhaustive graph/attribute partitions and closed resource-safe coverage. REQ-136 is In Progress; implementation review, publication and Braid integration/acceptance remain pending. Published Bosak is 1.23.8; no consumer adoption is inferred. Earlier checkpoints below are historical.
+
+**REQ-136 intake and1.23.8 smoke - 23 October 2026:** Braid reports1.23.8 smoke passed (1,405 Release /710 public /36 release-regression checks); the nine consumed assembly hashes match Bosak public proof. Braid reports its adopted pin remains1.23.7; no new native acceptance is inferred. [Request](REQ-136-literal-result-element-lifecycle.md), [maintainer scope/API proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md), [receipt review](REQ-136-INTAKE-REVIEW.json). REQ-136 remains Pending, owner Unassigned, target TBD; no implementation or release approval. Earlier checkpoints below are historical.
 
 
 
@@ -1677,3 +1689,12 @@ The [1.19.1 source maintenance record](MAINTENANCE-1.19.1.md) documents warning-
 
 
 23 October2026: [REQ-126 module/include/import/used-package profiles](xpath40-catalog/MODULE-PROFILE-BOUNDARIES.md) supplies one16-field entry and114 cases. It is stacked on independent function-mode fix PR416; source1.23.8 remains unpublished and public1.23.7/Braid smoke unchanged. The module diff changes only documentation, case data and scoped runner package setup. Current76 entries /3,073 documentation checks; D2/D3/D4/AC03 remain partial.
+
+
+## Proposed REQ-136 element lifecycle
+
+[The pending proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md) adds operation-specific opaque rename/delete authority, coherent one/two-name edit replay and complete removed/surviving/merged graph and per-owner attribute evidence. It reuses accepted creation and requests one coordinated implementation after consumer design review. These are planned surfaces; current1.23.8 capabilities do not expose them. The proposal explicitly separates strict source preservation from Braid atomic Apply/history and limits populated deletion to an engine-proven closed profile.
+
+## REQ-136 source implementation
+
+[LiteralElementLifecyclePipeline](../src/Bosak.Xslt/Authoring/LiteralElementLifecyclePipeline.cs) provides independent target discovery, same-original one/two-token rename and full-subtree deletion. Streaming XML and iterative graph preflight precede restricted scope/compilation; candidate proof checks exhaustive removed/surviving/merged partitions and per-owner attributes. Shared attribute scope/validation helpers retain existing behavior. [Contract, allow-list, bounds and verification](REQ-136-IMPLEMENTATION.md). The source minor version is 1.24.0, unpublished.

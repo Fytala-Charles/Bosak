@@ -1,0 +1,17 @@
+<div align="center">
+  <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak 1.24.0 release notes">
+  <h1>Bosak 1.24.0 release notes</h1>
+  <p>23 October 2026</p>
+</div>
+
+**Published and verified.** Immutable v1.24.0 source: `ff9f509461ce7f8e639d64d4b83024dcffe32d80`. [Public delivery proof](RELEASE-1.24.0-PUBLICATION.md).
+
+Bosak 1.24.0 adds source-preserving literal result element **Rename and populated whole-subtree Delete together**, completing the bounded engine lifecycle alongside existing Create. Separate capability flags and snapshot-owned targets expose these operations. Paired Rename changes both actual name tokens; self-closing Rename changes one. Exact ordinal equal names return eligibility-checked NoChange without a candidate. Delete removes the full selected subtree, owned attributes, instructions, text, comments/PIs and descendants; it selects the actual surviving parent and preserves outside bytes and paired parent form. [Merged PR #422](https://github.com/Fytala-Charles/Bosak/pull/422), [API and exact profile](REQ-136-IMPLEMENTATION.md).
+
+Candidates provide same-original edit replay, complete survivor/removal node and attribute partitions, and at most one proved adjacent whitespace-text merge with exact raw fragments. Independent byte/name/graph/depth/evidence limits, strict retained encodings, whole-module restricted validation, cancellation and defensive exports bound proposal authority. New public APIs require this minor-version increment; existing creation and other authoring operations retain their behavior.
+
+The first profile requires no-namespace targets under a template through literal-result ancestry, constant result attributes, explicit effective 3.0/4.0 in the Legacy authoring host, and strict UTF-8 or BOM-marked matching UTF-16. Computed AVTs, control-instruction target ancestry, preserved space, CDATA, namespace editing, non-whitespace boundary merges, static/dependency/resource/extension contexts and other unproved constructs refuse. Full lifecycle eligibility is the intersection of operation profiles. This does not add a selectable Draft authoring host or unrestricted element editing.
+
+Verification: **11,009** exact-merge solution tests; **84** additional language-server tests in green exact-head and merge CI; **153 broad +503 focused** fresh package-only checks, including all **73** new lifecycle cases. Ten signed public packages have verified aligned source/version/dependencies, archive/cache/output identities, XML docs and source README/license/icon/brand assets. Both transitive dependency audits report no vulnerable packages. Reviewed engine gates remain QT3 **31,142/0/679**, qt4 gated **8,278/0/1,894**, with no subsequent engine or gate changes.
+
+Braid's [implementation review receipt](REQ-136-CONSUMER-IMPLEMENTATION-RECEIPT.json) clears reviewed head `b535a56b`; its independently executed **839/0/0** public-consumer checks used nine local unsigned candidates. The merged tree is identical. These counts overlap source coverage. They do not verify signed publication or consumer integration, session/license/revision/atomic Apply/history, worker/export/reopen or native acceptance. Braid adoption remains 1.23.7; prior 1.23.8 smoke remains separate. REQ-136 remains In Progress through delivery; REQ-126 and upstream work remain independent. The VS Code extension retains its separate release cycle.

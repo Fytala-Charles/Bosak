@@ -1,0 +1,64 @@
+# Bosak REQ-136 consumer implementation review
+
+Date: 2026-10-23. Disposition: **No blocking findings at the reviewed head within the accepted bounded profile.** Source delivery is suitable for maintainer merge review; publication and Braid adoption remain separate.
+
+## Exact reviewed delivery
+
+| Evidence | Identity |
+|---|---|
+| Implementation | [Bosak PR #422](https://github.com/Fytala-Charles/Bosak/pull/422), open when checked |
+| Exact head | `b535a56b205e48c6fdd8be9c6080eef52037c15d` |
+| Design base | `3f099b5eca2e40d18358581924a373f2a8c9c6d3` |
+| Handoff | `REQ-136-IMPLEMENTATION.md` in the supplied checkout's docs directory; SHA-256 `045eb1e69271d9dfb2e39523e1dbec219b193ccb0848fa99a6b2945149dbecb7` |
+| Retained scope proposal | SHA-256 `8b27d99dbf0f7281b9a8eec3a5e52d8ca1b634b67396388a800883d34628f0ac` |
+| Source version | 1.24.0, unpublished; public 1.23.8 does not contain these APIs |
+| Live CI | [Run 39967993478](https://github.com/Fytala-Charles/Bosak/actions/runs/39967993478): build/test, Windows wrapper controls and highlighting checks successful on this exact head |
+
+The supplied checkout `D:/Development/Bosak/.guard-tmp/req136-scope-source` was clean and remained at the same head on final inspection. An isolated sparse clone inside Braid was used for build/pack/testing. No engine source was changed. The handoff records owner design approval; the earlier [consumer scope review](BOSAK_REQ136_CONSUMER_DESIGN_REVIEW.md) remains historical evidence.
+
+## Findings and contract assessment
+
+No blocking defect was found in the reviewed changes or executed consumer cases. Both Rename and whole-subtree Delete are delivered together. Existing creation APIs and formatting retain their contracts; the shared attribute pipeline change exposes existing scope/validation helpers internally without rewriting their behavior.
+
+- Separate capabilities, operation-specific internally constructed targets, snapshot/reference membership and exclusive outcomes preserve authority. Equal-name Rename re-proves eligibility and returns NoChange without a candidate. Foreign/equal-byte identities refuse.
+- Paired Rename changes the two actual name tokens, self-closing Rename changes one, and same-original edit replay is independently checked. Strict encoding coordinates and candidate offsets account for preceding length changes. Outside bytes, namespace declarations, attributes, descendants and lexical forms remain unchanged.
+- Delete removes the full selected element and all descendants/attributes. Ordinary survivors, removed nodes and optional adjacent-whitespace contributors form exhaustive partitions; candidate nodes consist only of ordinary survivor images and actual inspected merged text. Selection is the mapped direct parent, and an emptied paired parent remains paired.
+- Correspondence checks cover kinds, names, logical text, parent/child order, attribute metadata/order and translated extents. The merge proof preserves exact raw fragments while inspection supplies normalized candidate text, including entity/CRLF cases. Significant-text boundary merges explicitly refuse.
+- Streaming XML preflight enforces the closed vocabulary and physical/depth/token/attribute bounds before candidate inspection and resource-capable validation. Shared restricted validation and denying candidate resolution retain the declared resource/static boundary. Iterative graph preflight precedes recursive proof. Source, caller-name and conservative complete-evidence budgets remain independent.
+- Candidate exports are independent arrays; public collections and nested attribute-survivor dictionaries reject mutation. Concurrent proposals remain isolated. Cancellation is checked during bounded work and immediately before success/NoChange; unexpected faults are not broadly swallowed by the new pipeline.
+
+The first profile remains no-namespace targets under creation-compatible literal ancestry, constant result attributes, the Legacy authoring host with explicit supported versions, strict supported encodings, and at most one whitespace-only boundary merge. Computed AVTs, targets beneath control instructions, preserved-space/CDATA and other excluded contexts remain unsupported. Complete lifecycle availability is the intersection of operation profiles, not every previously creatable element.
+
+## Independently executed public-consumer verification
+
+Built the exact head and packed all nine consumed libraries as local **unsigned 1.24.0 candidates**. The build completed with zero warnings/errors. A fresh cache restored Bosak packages only from the isolated candidate feed using source mapping; other dependencies came from nuget.org. No project references, engine internals, reflection or friend assembly access were used by the consumer.
+
+**839 passed / 0 failed / 0 skipped**, comprising:
+
+| Checks | Passed | Origin |
+|---|---:|---|
+| Prior public authoring/provenance suite | 700 | Existing consumer compatibility checks, updated only for exact version/revision |
+| Retained language boundaries | 10 | Prior consumer release probes |
+| Function default-mode regressions | 36 | Unchanged public tests imported from the prior release |
+| New REQ-136 lifecycle regressions | 73 | Exact-head public tests imported unchanged |
+| Independent Braid lifecycle probes | 20 | Separately authored for this review |
+
+The 20 independent probes exercise short/long name changes across four encodings, exact expected source bytes, actual execution output and unchanged attributes/children, immediate Rename-to-Delete using fresh selection, populated deletion with surviving comments/PIs/siblings, complete removed attributes, significant-text boundary refusal, writable-interface attacks on evidence collections/attribute maps, independent original-range export copies, whole-module coverage denial and original-versus-candidate authority.
+
+All nine nuspec source revisions and assembly informational versions match `b535a56b`. Candidate archives, restored cache archives, archive/cache/output DLLs and exact-head built DLLs match. Raw archive SHA-512 matches its sidecar; NuGet contentHash separately matches restore assets. The consumer dependency audit reports no vulnerable packages. These packages are local unsigned candidates, not signed/public publication evidence.
+
+Reproduction/evidence: `.acceptance/req136-implementation-b535a56` contains build/pack logs, the public-only consumer and 20 probes, TRX, assembly metadata, `public-provenance.json`, dependency audit and verified upstream receipt inventory. The exact-head clone is `.dependencies/req136-implementation-b535a56`. Counts overlap engine/source coverage and are not additive conformance totals.
+
+## Upstream evidence independently checked, not rerun
+
+Verified file SHA-256 and TRX counters for the handoff's ten final full-suite receipts: **11,009 passes**, no failed/skipped cases. Also verified the **73** focused and **84** language-server receipt hashes/counters. Checked the supplied QT3/qt4 log hashes and summaries: **31,142/0/679** and **8,278/0/1,894**, zero gated failures. These are authenticated local receipts from Bosak's run; this review did not rerun the full engine/language-server/conformance suites. Live exact-head CI was checked separately as above.
+
+The handoff retains initial failing tests and corrected verification-environment runs. Those earlier failures are not counted as successful final coverage. The independent source build/public consumer in this review passed without setup corrections or expectation changes.
+
+## Delivery boundaries and next steps
+
+REQ-136 is source-implemented/In Progress pending maintainer merge/delivery. This review is a consumer implementation recommendation, not authorization to merge, publish or alter another repository. No new upstream message/edit, Braid dependency change, commit, push or GUI launch was performed.
+
+Before Braid implementation: verify the final merge identity and any subsequent code changes, obtain a separately published release and verify its signed public packages. Integrate Rename/Delete together in one Braid PR, retaining existing Create. LE14-LE15 session/license/revision/atomic Apply/history and LE17-LE18 real worker/export/hash/reopen/native evidence remain consumer integration obligations. The independent ordinary-execution probes and engine lifecycle tests do not satisfy those UI/session gates.
+
+Braid's adopted runtime remains published 1.23.7; 1.23.8 has isolated smoke evidence only. Neither this review nor local candidate packages imply adoption, native acceptance or publication of 1.24.0.

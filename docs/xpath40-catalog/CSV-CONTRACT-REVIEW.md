@@ -4,6 +4,11 @@
   <p>23 October 2026</p>
 </div>
 
+**PR420 refresh - 23 October 2026:** Reconciled against published, consumer-accepted Bosak 1.24.0 at main `06a76549bfed8200c7bb2580275b46bb46975d31`. The CSV fixtures, assertions and original evidence below are unchanged. The 1.23.8 preparation receipts remain historical; refreshed full-suite results are recorded separately in the machine audit. No new specification comparison or independent processor confirmation is claimed. REQ-126 remains partial.
+
+
+Refreshed verification: **11,133 solution +84 language-server tests pass**, with zero failures/skips, including all 99 new catalog and 25 resource cases. Release build succeeds with the existing CS8604 warning at conformance Program.cs:1868. Temporary fixture junctions are removed. Original fixtures/assertions, prior TRX receipts and the original preparation audit remain unchanged; `refreshedValidation` records new TRX hashes. No engine, runner, gate, kit, README install or release change.
+
 ## Scope and sources
 
 This bounded REQ-126 D2 review compares published Bosak **1.23.8** (package source `6d12bed35dac56a635acc7702645ef9085103c83`), reviewed repository base `2aa77d0c906edb790d686aeb989771f6031152da`, with the immutable [F&O function catalog](https://github.com/qt4cg/qtspecs/blob/b4723ff52fd9d4fabf2b4cd33bd44f21939c512c/specifications/xpath-functions-40/src/function-catalog.xml) and [shared option conventions](https://github.com/qt4cg/qtspecs/blob/b4723ff52fd9d4fabf2b4cd33bd44f21939c512c/specifications/xpath-functions-40/src/xpath-functions.xml). The current comparison pin `b4723ff52fd9d4fabf2b4cd33bd44f21939c512c` does not recover the missing historical adoption revision. The engine delivery remains PR104 at `e0024f5d`; the catalog's historical adoption gap stays explicit.

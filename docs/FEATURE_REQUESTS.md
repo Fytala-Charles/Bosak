@@ -5,7 +5,19 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**CSV PR420 refreshed - 23 October 2026:** The 99 catalog cases and 25 public local-resource tests now build on accepted, published Bosak 1.24.0, main `06a76549bfed8200c7bb2580275b46bb46975d31`. REQ-136 remains implemented, published and consumer-accepted. CSV draft-comparison differences remain explicit; REQ-126/D2/D3/D4/AC-03 stay partial. No engine/API/version/release/gate changes. Earlier CSV 1.23.8 checkpoints describe the original preparation. Refreshed verification is recorded in [the CSV contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md).
+
 **CSV options/defaults review - 23 October 2026:** [Contract review](xpath40-catalog/CSV-CONTRACT-REVIEW.md) supplies99 catalog checks and25 local-resource API tests, including complete supplier reports. Current76 entries,3,148 feature +24 chapter =3,172 checks. Source/public1.23.8 and Braid smoke remain unchanged; no engine/version/release/gate change. D2/D3/D4 and AC-03 stay partial. Earlier checkpoints below are historical.
+
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
+**1.24.0 published and verified — 23 October2026:** [Public delivery proof](RELEASE-1.24.0-PUBLICATION.md) records immutable source `ff9f5094`, one Release run with11,009 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only153 broad/503 focused checks with matching provenance and clear audits. Rename and populated-subtree Delete are delivered together. REQ-136 consumer integration/acceptance remains pending; Braid adoption/native acceptance and REQ-126 stay separate. Earlier preparation/unpublished checkpoints below are historical.
+
+**REQ-136 merged; 1.24.0 prepared — 23 October 2026:** Braid implementation review found no blockers; [receipt](REQ-136-CONSUMER-IMPLEMENTATION-RECEIPT.json) retains839 passing unsigned-candidate consumer checks. PR422 merged at `ff9f5094` with the reviewed tree unchanged. [Release readiness](RELEASE-1.24.0-READINESS.md) pins that source: 11,009 exact-merge solution tests,153 broad/503 focused candidate checks, ten package identities and clear audits. Public1.23.8 and Braid adoption/native acceptance remain separate. REQ-136 is In Progress pending publication/integration. Earlier checkpoints below are historical.
+
+**REQ-136 implementation — 23 October 2026:** Owner approved the Braid-reviewed design. Source **1.24.0 (unpublished)** now implements Rename and populated-subtree Delete together, preserving existing Create. [Implementation contract and verification](REQ-136-IMPLEMENTATION.md) documents opaque authority, exact replay, exhaustive graph/attribute partitions and closed resource-safe coverage. REQ-136 is In Progress; implementation review, publication and Braid integration/acceptance remain pending. Published Bosak is 1.23.8; no consumer adoption is inferred. Earlier checkpoints below are historical.
+
+**REQ-136 intake and1.23.8 smoke - 23 October 2026:** Braid reports1.23.8 smoke passed (1,405 Release /710 public /36 release-regression checks); the nine consumed assembly hashes match Bosak public proof. Braid reports its adopted pin remains1.23.7; no new native acceptance is inferred. [Request](REQ-136-literal-result-element-lifecycle.md), [maintainer scope/API proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md), [receipt review](REQ-136-INTAKE-REVIEW.json). REQ-136 remains Pending, owner Unassigned, target TBD; no implementation or release approval. Earlier checkpoints below are historical.
 
 
 
@@ -575,6 +587,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-133 | Bosak.Braid | Replace one existing paired ordinary literal xsl:text body with exact logical Unicode and complete payload provenance | Edit labels/separators without adding another instruction, with explicit review/Apply and exact history | Implemented, published and consumer-accepted | 1.21.0 | Charles Korthout | 2026-10-19 |
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented, published and consumer-accepted | 1.23.0 | Bosak | 2026-10-21 |
+| REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented, published and consumer-accepted | 1.24.0 | Charles Korthout | 2026-10-23 |
 
 
 > **Legend:
@@ -1893,6 +1906,15 @@ Separate `SupportsTextDeletion`, opaque owned target/proposal and exclusive Cand
 
 The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md), [issue provenance](REQ-134-ISSUE-381.json), design baseline and original review remain historical evidence. Published 1.22.0 is independently verified; Braid final implementation review is complete. Consumer-only acceptance groups, Braid adoption and native observations remain pending. REQ-133 consumer acceptance remains unchanged.
 
+### REQ-136: Complete Literal Result Element Lifecycle for Bosak.Braid
+
+**REQ-136 formal Braid acceptance - 23 October 2026:** [Consumer acceptance receipt](REQ-136-BRAID-ACCEPTANCE.md) records pushed Braid checkpoint f2e4f2b, published 1.24.0/ff9f5094, complete coordinated Rename/Delete integration, 1,444 Release /839 signed public-package passes and the owner's correct-results / Passed - accepted focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated encoding/export/hash/reopen coverage is distinct from the focused native observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending notes are historical.
+
+
+Requester: **Bosak.Braid**. Registered: **2026-10-23**. Status: **Implemented, published and consumer-accepted**. Owner: **Charles Korthout**. Target version: **1.24.0**.
+
+The owner requests one cohesive Create/Rename/Delete lifecycle in one implementation PR, reusing delivered REQ-132 creation. [Consumer request and 18 planned acceptance groups](REQ-136-literal-result-element-lifecycle.md) specify unqualified no-namespace Rename preserving attributes/children, and explicit whole-element/subtree Delete with complete removed/survivor/merge provenance. Equal-name Rename is NoChange; exact edits, immutable opaque authority, declared static/resource/encoding coverage and complete correspondence support separate Braid review/Apply/history/navigation. Unsupported contexts refuse; no unwrap or namespace editing. Published 1.23.8 adds no rename/delete APIs. Isolated Braid 1.23.8 smoke passes 1,405 Release /710 public /36 release-regression checks; Braid reports its adopted pin remains 1.23.7; this smoke establishes neither 1.23.8 adoption nor new native acceptance. Bosak owns design, implementation, tests and publication; this documentation-only registration approves no engine change or release. [Maintainer proposal](REQ-136-MAINTAINER-SCOPE-REVIEW.md) is ready for consumer scope/API review; it preserves coordinated Rename/populated-Delete delivery and explicitly proposes the initial coverage, bounds and refusal policy.
+
 ### REQ-135: Literal Result Attribute Lifecycle for Bosak.Braid
 
 **Formal Braid REQ-135 acceptance - 21 October 2026:** [Consumer acceptance receipt](REQ-135-BRAID-ACCEPTANCE.md) records published1.23.0 at9218a2b6, pushed Braid checkpoint3caa613, complete Create/Update/Delete integration, **1,373 Release /700 signed public-package passes**, and the product owner's completed native procedure with all hashes reported correct. Disposition: implemented, published and consumer-accepted within the delivered bounded profile; exact native hash values, destinations, variants and accessibility observations remain unspecified. LA17-LA22 consumer evidence is recorded separately from engine/source gates. Earlier pending-adoption/native entries are historical. Documentation only; no engine/release change or acceptance of unrelated unpublished1.23.1 work.
@@ -2067,7 +2089,7 @@ Additionally, many other XSLT 3.0 conformance tests depend on attribute sets for
 
 **Requesting Application:** Customer B
 **Submitted:** 2026-06-07
-**Status:** Pending
+**Status:** In Progress
 
 #### Problem Statement
 
@@ -5859,3 +5881,9 @@ Patch scope is frozen at cf8aae64 through PR #273: namespace identities/static c
 
 
 23 October2026: [REQ-126 module/include/import/used-package profiles](xpath40-catalog/MODULE-PROFILE-BOUNDARIES.md) supplies one16-field entry and114 cases. It is stacked on independent function-mode fix PR416; source1.23.8 remains unpublished and public1.23.7/Braid smoke unchanged. The module diff changes only documentation, case data and scoped runner package setup. Current76 entries /3,073 documentation checks; D2/D3/D4/AC03 remain partial.
+
+REQ-136 implementation checkpoint (23 October 2026): consumer design review found no blockers and owner approved implementation. Both operations and 73 new focused cases are present in source 1.24.0. Full solution 11,009 and language-server 84 pass; fresh QT3/qt4 gates stay 31,142/0/679 and 8,278/0/1,894. Consumer implementation review, CI and delivery remain pending. See [implementation](REQ-136-IMPLEMENTATION.md). The original request, reviewed proposal and intake receipt remain historical artifacts.
+
+REQ-136 merge checkpoint (23 October 2026): consumer implementation review cleared exact head b535a56b; PR422 merged as ff9f5094 with identical tree. Source1.24.0 is prepared but unpublished. [Review receipt](REQ-136-CONSUMER-IMPLEMENTATION-RECEIPT.json), [readiness](RELEASE-1.24.0-READINESS.md). Status remains In Progress until publication/delivery; consumer integration and native acceptance remain separate.
+
+REQ-136 publication checkpoint (23 October2026): source lifecycle implementation is published as1.24.0 with verified signed packages and public consumers. Consumer integration/acceptance is pending; LE14-LE15 and remaining LE17-LE18 Braid gates are not inferred from engine/public tests. [Publication proof](RELEASE-1.24.0-PUBLICATION.md).

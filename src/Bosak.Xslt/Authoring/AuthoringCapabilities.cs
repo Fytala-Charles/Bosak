@@ -29,6 +29,8 @@
 
 using System.Reflection;
 
+//                      | Charles Korthout | 1.1   | 23-10-2026     | REQ-136: independent lifecycle capabilities and bounds. |
+
 namespace Bosak.Xslt.Authoring;
 
 /// <summary>
@@ -51,6 +53,25 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets the independent REQ-136 SupportsLiteralElementRename capability or bound.</summary>
+    public static bool SupportsLiteralElementRename => true;
+    /// <summary>Gets the independent REQ-136 SupportsLiteralElementDeletion capability or bound.</summary>
+    public static bool SupportsLiteralElementDeletion => true;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLifecycleSourceBytes capability or bound.</summary>
+    public static int MaxLiteralElementLifecycleSourceBytes => 8_388_608;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLocalNameUnits capability or bound.</summary>
+    public static int MaxLiteralElementLocalNameUnits => 1_024;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLocalNameBytes capability or bound.</summary>
+    public static int MaxLiteralElementLocalNameBytes => 1_024;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLifecycleNodes capability or bound.</summary>
+    public static int MaxLiteralElementLifecycleNodes => 65_536;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLifecycleAttributes capability or bound.</summary>
+    public static int MaxLiteralElementLifecycleAttributes => 65_536;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLifecycleDepth capability or bound.</summary>
+    public static int MaxLiteralElementLifecycleDepth => 256;
+    /// <summary>Gets the independent REQ-136 MaxLiteralElementLifecycleEvidenceBytes capability or bound.</summary>
+    public static int MaxLiteralElementLifecycleEvidenceBytes => 16_777_216;
+
     /// <summary>Gets whether the complete literal attribute lifecycle is available.</summary>
     public static bool SupportsLiteralAttributeLifecycle => true;
     /// <summary>Gets the independent original and final physical source byte limit.</summary>
