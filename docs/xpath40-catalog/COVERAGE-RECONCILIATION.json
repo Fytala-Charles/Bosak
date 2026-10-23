@@ -1,19 +1,19 @@
 {
   "date": "2026-10-23",
-  "sourceBase": "11343adce014c655a1599fd36d61adf61b627316",
-  "sourceVersion": "1.23.7",
+  "sourceBase": "c172747b13e5bbfe2b342b04d295720299b4387e",
+  "sourceVersion": "1.23.8",
   "publishedVersion": "1.23.7",
-  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record and numeric lexer corrections are audited separately; no tier/gate promotion; publication tracked separately",
+  "scope": "Repository evidence reconciliation; owner-approved AC-03 evidence-policy amendment; record, numeric lexer and function default-mode corrections are audited separately; no tier/gate promotion; publication tracked separately",
   "summary": {
-    "entries": 75,
-    "featureChecks": 2935,
+    "entries": 76,
+    "featureChecks": 3049,
     "chapterChecks": 24,
     "workedChapters": 4,
-    "totalDocumentationChecks": 2959,
+    "totalDocumentationChecks": 3073,
     "currentGatedSetCount": 218,
     "entriesMentioningCurrentGatedSet": 25,
-    "entriesWithoutLiteralCurrentGatedSet": 50,
-    "entriesWithExactManifestIdsInKnownUses": 40,
+    "entriesWithoutLiteralCurrentGatedSet": 51,
+    "entriesWithExactManifestIdsInKnownUses": 41,
     "historicalAdoptedSpecPinsMissing": 28,
     "countPolicy": "Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.",
     "mappedGrammarClusterRows": 18
@@ -2108,6 +2108,34 @@
       "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
     },
     {
+      "entry": "xslt-instructions/module-profiles.md",
+      "classification": "**Module/profile propagation** - implemented Bosak host composition, with an opt-in experimental XSLT draft profile and frozen embedded XPath 4.0. The same compilation host applies to a directly included, imported or used-package module, while expression selection and forwards-compatible validation retain the dependency's own effective version. This is not a new grammar feature or an experimental XPath promotion.",
+      "numberedFields": 16,
+      "indexed": true,
+      "knownUsesSha256": "c843ed628804cacff2dfbcc86d180f6b3954fd7c378c089bf4f7015264fc80f3",
+      "exactManifestIdsInKnownUses": [
+        "module-profile-import-root3-module4-legacy",
+        "module-profile-import-validation-root5-module4-draft40",
+        "module-profile-include-root4-module3-legacy",
+        "module-profile-package-report-module40-normal-legacy",
+        "module-profile-package-root4-module3-draft40",
+        "module-profile-package-root4-module4-local3-legacy",
+        "module-profile-package-static-root4-module3-draft40"
+      ],
+      "mentionedCurrentGatedSets": [],
+      "knownUseLocalFiles": [
+        "docs/xpath40-catalog/MODULE-PROFILE-BOUNDARIES.json",
+        "docs/xpath40-catalog/examples/cases.json",
+        "tests/Bosak.Xslt.Tests/ProcessorProfileTests.cs"
+      ],
+      "sampleLocalFiles": [
+        "docs/xpath40-catalog/examples/module-profiles/README.md",
+        "docs/xpath40-catalog/examples/module-profiles/normal.xml"
+      ],
+      "hasLanguageAlignment": true,
+      "evidenceInterpretation": "Literal citations only; set membership and matching IDs do not certify per-contract coverage, drift correctness or lifecycle completeness."
+    },
+    {
       "entry": "xslt-instructions/processor-profiles.md",
       "classification": "**Version/profile boundary** - implemented Bosak host policy. Legacy is the default compatibility profile; Xslt40Draft is an opt-in experimental XSLT processor profile whose embedded XPath is frozen 4.0. This is not a new language feature or a promotion to XPath40Experimental. Public/source 1.23.7 already provides this API.",
       "numberedFields": 16,
@@ -2557,7 +2585,7 @@
     "rejected/mapping-arrow-gtgt.md"
   ],
   "inputHashes": {
-    "docs\\xpath40-catalog\\examples\\cases.json": "43275c5bac33693c7ec617aee96d8089d97867071a3528ce4afdd8dfb9752e6c",
+    "docs\\xpath40-catalog\\examples\\cases.json": "3d8e82d34dfc646118326d2f8f018e8cf4b2776cffd11d32a63fbfed4a536ec9",
     "docs\\xpath40-catalog\\provenance.json": "99b7559a724c049765f0f5da043e6bfac22728e63189a1d1cf1ef43aa1008c41",
     "tests\\Bosak.XPath.Conformance40\\ConformanceRunner40.cs": "02c8206875ba7332750d0a35095f535405a237ef2bac541956d5d4c504e57f2e"
   },

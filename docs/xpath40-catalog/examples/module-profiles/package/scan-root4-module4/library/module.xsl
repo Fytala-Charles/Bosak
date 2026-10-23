@@ -1,0 +1,1 @@
+<xsl:package xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:fytala:module-profile" version="4.0" name="urn:fytala:module-profile:package:scan-root4-module4" package-version="1.0"><xsl:function name="p:probe" visibility="public"><xsl:sequence select="scan((1,2),0,function($a,$b){$a+$b})"/></xsl:function></xsl:package>

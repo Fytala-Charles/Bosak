@@ -694,3 +694,8 @@ Candidate 1.2.0 reports XPST0081 during compilation of effective XSLT 4.0 templa
 ## Ordinary stylesheet version/profile coverage - 23 October2026
 
 [Bounded host reference](HOST-PROFILE-BOUNDARIES.md) adds one entry and66 cases: current75 entries /2,935 feature +24 chapter =2,959 checks. The distinction between processor capability, effective version and frozen XPath is explicit; module/package propagation is a follow-up. D2/D3/D4 and AC03 remain partial. Historical checklist/count snapshots above are retained.
+
+
+## Direct dependency host/profile coverage - 23 October2026
+
+[Module boundary delivery](MODULE-PROFILE-BOUNDARIES.md) adds114 checks and one16-field entry: current76 entries/3,073 documentation checks. The isolated engine prerequisite is PR416; module documentation/runner setup is separate. Single-edge include/import/package propagation is supplied, not full package/override/graph/static context coverage. REQ-126 and D2/D3/D4/AC03 remain partial.

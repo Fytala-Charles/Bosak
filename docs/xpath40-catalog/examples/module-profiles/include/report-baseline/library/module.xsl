@@ -1,0 +1,1 @@
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:p="urn:fytala:module-profile" version="3.0"><xsl:function name="p:quantity"><xsl:param name="line" as="element()"/><xsl:sequence select="if ($line/@qty) then xs:integer($line/@qty) else 1"/></xsl:function></xsl:stylesheet>

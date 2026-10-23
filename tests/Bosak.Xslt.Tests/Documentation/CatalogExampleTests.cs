@@ -16,6 +16,7 @@
 //                      | Charles Korthout | 0.3   | 12-10-2026     | Verify declared XSLT compile/capture errors for deferred declaration examples.           |
 //                      | Charles Korthout | 0.4   | 12-10-2026     | Execute XQuery and actual streaming catalog paths with exact results or errors.         |
 //                      | Charles Korthout | 0.5   | 23-10-2026     | Honor explicit Legacy/draft host profiles for runnable XSLT catalog cases.              |
+//                      | Charles Korthout | 0.6   | 23-10-2026     | Scope catalog package registrations and cleanup within the shared registry collection. |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -33,6 +34,7 @@ using Xunit;
 namespace Bosak.Xslt.Tests.Documentation;
 
 /// <summary>Verifies catalog examples and their declared compatibility outcomes.</summary>
+[Collection("XSLT package registry")]
 public class CatalogExampleTests
 {
     private static readonly string Folder = Path.Combine(AppContext.BaseDirectory,
@@ -83,17 +85,36 @@ public class CatalogExampleTests
             var compiler = new XsltCompiler { ProcessorProfile = profile };
             string Transform()
             {
-                if (row.GetProperty("mode").GetString() is "stream31" or "stream40")
+                bool hasPackages = row.TryGetProperty("packages", out var packages);
+                try
                 {
-                    using var stream = File.OpenRead(Path.Combine(Folder, row.GetProperty("input").GetString()!));
-                    return compiler.Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
+                    if (hasPackages)
+                    {
+                        foreach (var package in packages.EnumerateArray())
+                        {
+                            var location = new Uri(Path.GetFullPath(Path.Combine(Folder,
+                                package.GetProperty("file").GetString()!))).AbsoluteUri;
+                            XsltFunctionLibrary.RegisterPackage(package.GetProperty("name").GetString()!,
+                                package.GetProperty("version").GetString()!, location);
+                        }
+                    }
+                    if (row.GetProperty("mode").GetString() is "stream31" or "stream40")
+                    {
+                        using var stream = File.OpenRead(Path.Combine(Folder, row.GetProperty("input").GetString()!));
+                        return compiler.Compile(code, new Uri(file).AbsoluteUri).TransformStreamingToString(stream);
+                    }
+                    var result = compiler.Compile(code, new Uri(file).AbsoluteUri)
+                        .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
+                    if (!result.IsSuccess)
+                        throw new InvalidOperationException(string.Join("; ", result.Failures.Select(f => f.Message)));
+                    Assert.Empty(result.SecondaryOutputs);
+                    return Encoding.UTF8.GetString(result.Principal!.Bytes.ToArray());
                 }
-                var result = compiler.Compile(code, new Uri(file).AbsoluteUri)
-                    .CaptureTransform(new XDocumentNode(source), new XsltCaptureOptions());
-                if (!result.IsSuccess)
-                    throw new InvalidOperationException(string.Join("; ", result.Failures.Select(f => f.Message)));
-                Assert.Empty(result.SecondaryOutputs);
-                return Encoding.UTF8.GetString(result.Principal!.Bytes.ToArray());
+                finally
+                {
+                    if (hasPackages)
+                        XsltFunctionLibrary.ClearPackages();
+                }
             }
 
             if (row.TryGetProperty("error", out var xsltError))
