@@ -1,0 +1,81 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.upstream\qt4tests\catalog.xml
+Test-set filter:  fn-map-to-element
+
+Discovered 741 test sets.
+  Starting: fn-map-to-element ...
+  Done: fn-map-to-element (233 tests total) [P+=173 F+=53 S+=7]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   233
+Passed:  173
+Failed:  53
+Skipped: 7
+
+Pass rate: 74.25%
+
+First 20 failures:
+  FAIL map-to-element-066: Unexpected error: FOJS0009: map key '@x' is not a valid XML name
+  FAIL map-to-element-156: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-160: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-161: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-162: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-163: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-164: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-166: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-167: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-168: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-169: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-170: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-171: Expected error FOJS0009, got: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-180: Unexpected error: FOJS0009: map key '#v' is not a valid XML name
+  FAIL map-to-element-181: Unexpected error: FOJS0009: map key '#v' is not a valid XML name
+  FAIL map-to-element-182: Unexpected error: FOJS0009: map key '##content' is not a valid XML name
+  FAIL map-to-element-184: Unexpected error: FOJS0009: map key '@x' is not a valid XML name
+  FAIL map-to-element-186: Unexpected error: FOJS0009: map key '@x' is not a valid XML name
+  FAIL map-to-element-191: Unexpected error: FOJS0009: list layout requires an array value
+  FAIL map-to-element-193: Unexpected error: FOJS0009: array members must be singletons
+  FAIL map-to-element-194: assert-xml failed. Expected: <a><b/></a>, Got: <a/>
+  FAIL map-to-element-195: assert-xml failed. Expected: <a><b>x<c>1</c></b></a>, Got: <a><b>x</b><b><c>1</c></b></a>
+  FAIL map-to-element-197: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-201: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-203: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-205: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-206: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-210: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-212: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-214: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-216: Unexpected error: FOJS0009: xml layout value must be a single string
+  FAIL map-to-element-217: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-218: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-220: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-221: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-222: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-223: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-225: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-231: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-232: Expected error FOJS0009 but succeeded
+  FAIL map-to-element-236: assert-xml failed. Expected: <a x=""/>, Got: <a/>
+  FAIL map-to-element-250: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-251: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-252: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-253: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-254: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-256: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-257: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-258: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-259: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-260: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-261: Unexpected error: XPTY0004: unknown option 'escape-names'.
+  FAIL map-to-element-262: Unexpected error: XPTY0004: unknown option 'escape-names'.
+
+Skip reasons (grouped):
+      5  Unsupported dependency
+      1  Unexpected error: XmlException: Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.
+      1  Unexpected error: ArgumentException: The prefix 'xmlns' is bound to the namespace name 'http://www.w3.org/2000/xmlns/'. It must not be declared. Other prefixes must not be bound to this namespace name, and it must not be declared as the default namespace.
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 53
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.38s

@@ -37,7 +37,7 @@ assert args.expected_cases is None or len(cases) == args.expected_cases
 case_pattern = re.compile(r"(?<![A-Za-z0-9_-])(?:" + "|".join(re.escape(x) for x in sorted(case_ids, key=len, reverse=True)) + r")(?![A-Za-z0-9_-])")
 runner = read(ROOT / "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs")
 gate_block = runner.split("GatedSets =", 1)[1].split("};", 1)[0]
-gates = sorted(set(re.findall(r'"([A-Za-z0-9_-]+)"', gate_block)))
+gates = sorted(set(re.findall(r'"([A-Za-z0-9_.-]+)"', gate_block)))
 index = read(CATALOG / "README.md")
 entries = []
 for path in sorted(CATALOG.glob("*/*.md")):
@@ -68,7 +68,7 @@ summary = dict(entries=len(entries), featureChecks=len(cases), chapterChecks=24,
     entriesWithoutLiteralCurrentGatedSet=sum(not row["mentionedCurrentGatedSets"] for row in entries),
     entriesWithExactManifestIdsInKnownUses=sum(bool(row["exactManifestIdsInKnownUses"]) for row in entries),
     historicalAdoptedSpecPinsMissing=len(missing_pins),
-    countPolicy="Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate mentions are not proof of full coverage.")
+    countPolicy="Chapter counts are the retained delivery totals; final TRX reconciliation separately verifies documentation test execution. Gate count is configured source membership, not catalog presence or executed sets; CURRENT-GATE-AUDIT records those separately. Gate mentions are not proof of full coverage.")
 matrix = json.loads(read(CATALOG / "GRAMMAR-COVERAGE-MATRIX.json"))
 for item in matrix["rows"]:
     for entry in item["entries"]:
@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-23", sourceBase="3641002312ef28299913ed8efb66f14d7c75834a",
-    sourceVersion="1.24.0", publishedVersion="1.24.0", scope="Repository evidence reconciliation after CSV PR420; seven current-upstream CSV index differences documented separately; owner-approved AC-03 evidence-policy amendment; no engine or tier/gate promotion; original preparation receipts retained separately",
+receipt = dict(date="2026-10-23", sourceBase="d014365a9782811311fcca7f07130535b051d492",
+    sourceVersion="1.24.0", publishedVersion="1.24.0", scope="Current-upstream gate audit corrects documentation extraction of six dotted set names:224 configured,223 executed,one dormant map-to-element name. CSV and other current-contract differences recorded separately; owner-approved AC-03 policy; no engine or gate membership change; prior receipts retained.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

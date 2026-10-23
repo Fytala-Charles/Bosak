@@ -1,0 +1,5968 @@
+{
+  "recordedAtUtc": "2026-10-23T20:19:21.191098+00:00",
+  "bosakBase": "d014365a9782811311fcca7f07130535b051d492",
+  "runnerBuildHead": "75ca7542506a92265b13c456a96891423555ae75",
+  "runnerEngineAndTestsIdenticalToBase": true,
+  "runnerSha256": "7e1cc407bfaa377ce0c69d4fb250d032b3d8b2985ef247ebf4396651213c8f5f",
+  "upstreamDefault": "master",
+  "currentQt4Revision": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+  "frozenQt4Revision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+  "gatedSets": [
+    "fn-abs",
+    "fn-adjust-date-to-timezone",
+    "fn-adjust-dateTime-to-timezone",
+    "fn-adjust-time-to-timezone",
+    "fn-atomic-equal",
+    "fn-available-environment-variables",
+    "fn-boolean",
+    "fn-ceiling",
+    "fn-characters",
+    "fn-codepoint-equal",
+    "fn-collation-available",
+    "fn-collation-key",
+    "fn-compare",
+    "fn-collection",
+    "fn-count",
+    "fn-contains-subsequence",
+    "fn-contains-token",
+    "fn-csv-doc",
+    "fn-csv-to-xml",
+    "fn-current-date",
+    "fn-current-dateTime",
+    "fn-current-time",
+    "fn-data",
+    "fn-dateTime",
+    "fn-day-from-date",
+    "fn-do-until",
+    "fn-default-collation",
+    "fn-default-language",
+    "fn-element-to-map",
+    "fn-element-to-map-plan",
+    "fn-element-with-id",
+    "fn-empty",
+    "fn-encode-for-uri",
+    "fn-ends-with",
+    "fn-environment-variable",
+    "fn-escape-html-uri",
+    "fn-exactly-one",
+    "fn-exists",
+    "fn-false",
+    "fn-floor",
+    "fn-foot",
+    "fn-function-arity",
+    "fn-head",
+    "fn-hours-from-time",
+    "fn-id",
+    "fn-identity",
+    "fn-idref",
+    "fn-implicit-timezone",
+    "fn-index-of-substring",
+    "fn-insert-separator",
+    "fn-in-scope-prefixes",
+    "fn-iri-to-uri",
+    "fn-items-at",
+    "fn-jkey",
+    "fn-jtree",
+    "fn-jvalue",
+    "fn-lang",
+    "fn-last",
+    "fn-local-name-from-QName",
+    "fn-lower-case",
+    "fn-minutes-from-time",
+    "fn-month-from-date",
+    "fn-namespace-uri-for-prefix",
+    "fn-namespace-uri-from-QName",
+    "fn-not",
+    "fn-one-or-more",
+    "fn-op",
+    "fn-parse-csv",
+    "fn-parse-ietf-date",
+    "fn-partition",
+    "fn-position",
+    "fn-prefix-from-QName",
+    "fn-QName",
+    "fn-replicate",
+    "fn-resolve-QName",
+    "fn-reverse",
+    "fn-scan",
+    "fn-seconds-from-duration",
+    "fn-seconds-from-time",
+    "fn-sort",
+    "fn-sort-with",
+    "fn-starts-with",
+    "fn-static-base-uri",
+    "fn-string-to-codepoints",
+    "fn-take-while",
+    "fn-tail",
+    "fn-timezone-from-date",
+    "fn-timezone-from-time",
+    "fn-trace",
+    "fn-translate",
+    "fn-true",
+    "fn-trunk",
+    "fn-unix-dateTime",
+    "fn-unordered",
+    "fn-upper-case",
+    "fn-uri-collection",
+    "fn-while-do",
+    "fn-year-from-date",
+    "fn-zero-or-one",
+    "math-acos",
+    "math-asin",
+    "math-atan",
+    "math-atan2",
+    "math-cos",
+    "math-exp",
+    "math-exp10",
+    "math-log",
+    "math-log10",
+    "math-pi",
+    "math-pow",
+    "math-sin",
+    "math-sqrt",
+    "math-tan",
+    "map-contains",
+    "map-entry",
+    "map-find",
+    "map-remove",
+    "map-size",
+    "map-to-element",
+    "array-append",
+    "array-build",
+    "array-flatten",
+    "array-head",
+    "array-insert-before",
+    "array-items",
+    "array-join",
+    "array-put",
+    "array-remove",
+    "array-reverse",
+    "array-size",
+    "array-slice",
+    "array-sort",
+    "array-sort-with",
+    "array-tail",
+    "xs-anyAtomicType",
+    "xs-anySimpleType",
+    "xs-normalizedString",
+    "xs-notation",
+    "xs-numeric",
+    "xs-token",
+    "op-add-dayTimeDuration-to-date",
+    "op-add-dayTimeDuration-to-time",
+    "op-add-yearMonthDurations",
+    "op-add-yearMonthDuration-to-date",
+    "op-add-yearMonthDuration-to-dateTime",
+    "op-anyURI-equal",
+    "op-anyURI-greater-than",
+    "op-anyURI-less-than",
+    "op-boolean-equal",
+    "op-boolean-greater-than",
+    "op-boolean-less-than",
+    "op-concatenate",
+    "op-date-equal",
+    "op-date-greater-than",
+    "op-date-less-than",
+    "op-dateTime-equal",
+    "op-dateTime-greater-than",
+    "op-dateTime-less-than",
+    "op-dayTimeDuration-greater-than",
+    "op-dayTimeDuration-less-than",
+    "op-gDay-equal",
+    "op-gMonth-equal",
+    "op-gMonthDay-equal",
+    "op-gYear-equal",
+    "op-gYearMonth-equal",
+    "op-hexBinary-greater-than",
+    "op-hexBinary-less-than",
+    "op-numeric-equal",
+    "op-numeric-greater-than",
+    "op-numeric-integer-divide",
+    "op-numeric-less-than",
+    "op-numeric-mod",
+    "op-numeric-unary-plus",
+    "op-pipeline",
+    "op-string-equal",
+    "op-string-greater-than",
+    "op-string-less-than",
+    "op-subtract-dates",
+    "op-subtract-dateTimes",
+    "op-subtract-dayTimeDuration-from-date",
+    "op-subtract-dayTimeDuration-from-dateTime",
+    "op-subtract-dayTimeDuration-from-time",
+    "op-subtract-dayTimeDurations",
+    "op-subtract-times",
+    "op-subtract-yearMonthDuration-from-date",
+    "op-subtract-yearMonthDuration-from-dateTime",
+    "op-subtract-yearMonthDurations",
+    "op-time-equal",
+    "op-time-greater-than",
+    "op-time-less-than",
+    "op-yearMonthDuration-greater-than",
+    "op-yearMonthDuration-less-than",
+    "prod-AxisStep.abbr",
+    "prod-AxisStep.unabbr",
+    "prod-Comment",
+    "prod-ContextItemExpr",
+    "prod-CurlyArrayConstructor",
+    "prod-DirectConstructor",
+    "prod-DirElemContent",
+    "prod-GeneralComp.ge",
+    "prod-GeneralComp.le",
+    "prod-GeneralComp.lt",
+    "prod-GeneralComp.ne",
+    "prod-IfExpr",
+    "prod-KeywordArguments",
+    "prod-LambdaExpr",
+    "prod-LetClause",
+    "prod-NameTest",
+    "prod-OrExpr",
+    "prod-ParenthesizedExpr",
+    "prod-ReturnClause",
+    "prod-SquareArrayConstructor",
+    "prod-StringTemplate",
+    "prod-TreatExpr",
+    "misc-AppendixA4",
+    "misc-FocusConstructors",
+    "misc-Surrogates",
+    "misc-UCACollation",
+    "misc-XMLEdition",
+    "app-FunctxFn",
+    "app-UseCaseJSON",
+    "app-UseCaseNLP",
+    "app-UseCaseSEQ",
+    "app-UseCaseSTRING"
+  ],
+  "watchdogSeconds": 120,
+  "gateMembershipChanged": false,
+  "frozenGitlinkChanged": false,
+  "lanes": [
+    {
+      "lane": "frozen",
+      "suite": "D:\\Development\\Bosak\\tests\\qt4tests",
+      "startedAtUtc": "2026-10-23T20:19:21.272857+00:00",
+      "completedAtUtc": "2026-10-23T20:19:39.976192+00:00",
+      "exitCode": 0,
+      "logSha256": "ab1bb4733b7c88ab3881b86a6cbb6e181918b11ab3f73a5cdfe34515b47f56b4"
+    },
+    {
+      "lane": "current",
+      "suite": "D:\\Development\\Bosak\\.upstream\\qt4tests",
+      "startedAtUtc": "2026-10-23T20:19:21.273093+00:00",
+      "completedAtUtc": "2026-10-23T20:19:39.669839+00:00",
+      "exitCode": 2,
+      "logSha256": "0e0bfada8074638e98409bb2d1e334479fe25ca90629ffea7b8658a6708c588e"
+    }
+  ],
+  "summary": {
+    "configuredGatedSetCount": 224,
+    "executedGatedSetCount": 223,
+    "configuredNamesAbsentFromBothCatalogs": [
+      "map-to-element"
+    ],
+    "actualUngatedCatalogName": "fn-map-to-element",
+    "priorDocumentationCount": 218,
+    "omittedDottedSetNames": [
+      "prod-AxisStep.abbr",
+      "prod-AxisStep.unabbr",
+      "prod-GeneralComp.ge",
+      "prod-GeneralComp.le",
+      "prod-GeneralComp.lt",
+      "prod-GeneralComp.ne"
+    ],
+    "allResolvableGatedSetsExecutedInBothLanes": true,
+    "frozen": {
+      "Total": 10172,
+      "Passed": 8278,
+      "Failed": 0,
+      "Skipped": 1894
+    },
+    "current": {
+      "Total": 10236,
+      "Passed": 8297,
+      "Failed": 45,
+      "Skipped": 1894
+    },
+    "failedSetCount": 8,
+    "zeroFailureSetCount": 215,
+    "addedCases": 64,
+    "removedCases": 0,
+    "changedExecutionNodeCases": 15,
+    "changedSetFiles": 14,
+    "skipReceiptsByteIdentical": true,
+    "experimentalLevelPassesEachLane": 11,
+    "scope": "Existing resolvable runtime gated-set membership only; other current sets are not executed; XML execution-node comparison excludes metadata-only edits and does not model inherited context changes"
+  },
+  "setInventory": [
+    {
+      "set": "app-FunctxFn",
+      "file": "app/FunctxFn.xml",
+      "frozenBlob": "882ac1c233ca114188e8c879ddea56dce1f70bc6",
+      "currentBlob": "882ac1c233ca114188e8c879ddea56dce1f70bc6",
+      "fileChanged": false,
+      "frozenCases": 502,
+      "currentCases": 502,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 407,
+        "failed": 0,
+        "skipped": 95
+      },
+      "current": {
+        "passed": 407,
+        "failed": 0,
+        "skipped": 95
+      }
+    },
+    {
+      "set": "app-UseCaseJSON",
+      "file": "app/UseCaseJSON.xml",
+      "frozenBlob": "f866a0f601fa0d33b51bcd5923541e6d4d9e6865",
+      "currentBlob": "f866a0f601fa0d33b51bcd5923541e6d4d9e6865",
+      "fileChanged": false,
+      "frozenCases": 13,
+      "currentCases": 13,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 9
+      },
+      "current": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 9
+      }
+    },
+    {
+      "set": "app-UseCaseNLP",
+      "file": "app/UseCaseNLP.xml",
+      "frozenBlob": "4bf1a4e5e67e3117e00dca22edc72288e5ba2c25",
+      "currentBlob": "4bf1a4e5e67e3117e00dca22edc72288e5ba2c25",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "app-UseCaseSEQ",
+      "file": "app/UseCaseSEQ.xml",
+      "frozenBlob": "cd01c4c07fef70fc2baaaa7eb479687762e43b6b",
+      "currentBlob": "cd01c4c07fef70fc2baaaa7eb479687762e43b6b",
+      "fileChanged": false,
+      "frozenCases": 5,
+      "currentCases": 5,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "app-UseCaseSTRING",
+      "file": "app/UseCaseSTRING.xml",
+      "frozenBlob": "6ceebc14133cbfa0b5fc84e39644fc5a1d96e077",
+      "currentBlob": "6ceebc14133cbfa0b5fc84e39644fc5a1d96e077",
+      "fileChanged": false,
+      "frozenCases": 4,
+      "currentCases": 4,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "array-append",
+      "file": "array/append.xml",
+      "frozenBlob": "4f5840799ff2c3ae94046c6a1315f325c935c74e",
+      "currentBlob": "4f5840799ff2c3ae94046c6a1315f325c935c74e",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-build",
+      "file": "array/build.xml",
+      "frozenBlob": "db4299adaadcf9c7d9a592032c641a827d41e2ec",
+      "currentBlob": "db4299adaadcf9c7d9a592032c641a827d41e2ec",
+      "fileChanged": false,
+      "frozenCases": 6,
+      "currentCases": 6,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-flatten",
+      "file": "array/flatten.xml",
+      "frozenBlob": "222d04b0c5005207b554eb0c497358aaecfcb51c",
+      "currentBlob": "222d04b0c5005207b554eb0c497358aaecfcb51c",
+      "fileChanged": false,
+      "frozenCases": 10,
+      "currentCases": 10,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "array-head",
+      "file": "array/head.xml",
+      "frozenBlob": "3efdc2a94d6268754d1f543ade7d028f129d3c00",
+      "currentBlob": "3efdc2a94d6268754d1f543ade7d028f129d3c00",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "array-insert-before",
+      "file": "array/insert-before.xml",
+      "frozenBlob": "4af200468714f5f7b51cae522d353fc47ff57a2b",
+      "currentBlob": "4af200468714f5f7b51cae522d353fc47ff57a2b",
+      "fileChanged": false,
+      "frozenCases": 13,
+      "currentCases": 13,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "array-items",
+      "file": "array/items.xml",
+      "frozenBlob": "5138f9c0b98fc5d27a592223f1a05ef45d23f850",
+      "currentBlob": "5138f9c0b98fc5d27a592223f1a05ef45d23f850",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-join",
+      "file": "array/join.xml",
+      "frozenBlob": "3828f0182495ae26119ef434960f6489d73e72c8",
+      "currentBlob": "3828f0182495ae26119ef434960f6489d73e72c8",
+      "fileChanged": false,
+      "frozenCases": 11,
+      "currentCases": 11,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "array-put",
+      "file": "array/put.xml",
+      "frozenBlob": "9c3494c6f2b766cc0e471fe29c6a6e554614a7e3",
+      "currentBlob": "9c3494c6f2b766cc0e471fe29c6a6e554614a7e3",
+      "fileChanged": false,
+      "frozenCases": 15,
+      "currentCases": 15,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "array-remove",
+      "file": "array/remove.xml",
+      "frozenBlob": "0be909f964f66294a97ad4cb75aea2d5278cf352",
+      "currentBlob": "0be909f964f66294a97ad4cb75aea2d5278cf352",
+      "fileChanged": false,
+      "frozenCases": 17,
+      "currentCases": 17,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 16,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 16,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "array-reverse",
+      "file": "array/reverse.xml",
+      "frozenBlob": "8c3b53a737a537b82a2ae6fa9cc79d872158fe85",
+      "currentBlob": "8c3b53a737a537b82a2ae6fa9cc79d872158fe85",
+      "fileChanged": false,
+      "frozenCases": 19,
+      "currentCases": 19,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-size",
+      "file": "array/size.xml",
+      "frozenBlob": "9d9cc2d955a07777c49074f145f6b477f47c2704",
+      "currentBlob": "9d9cc2d955a07777c49074f145f6b477f47c2704",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-slice",
+      "file": "array/slice.xml",
+      "frozenBlob": "74434ed0baac3db404b4212531f2058aa51dd20e",
+      "currentBlob": "6b62674c069c51d7f0ceb7d2491977ee59063aa3",
+      "fileChanged": true,
+      "frozenCases": 88,
+      "currentCases": 91,
+      "addedIds": [
+        "array-slice-190",
+        "array-slice-191",
+        "array-slice-192"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [
+        "array-slice-183",
+        "array-slice-184",
+        "array-slice-185",
+        "array-slice-186"
+      ],
+      "frozen": {
+        "passed": 85,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 88,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "array-sort",
+      "file": "array/sort.xml",
+      "frozenBlob": "31af7ea6d568328b9d1050ca29737d8334a3134a",
+      "currentBlob": "31af7ea6d568328b9d1050ca29737d8334a3134a",
+      "fileChanged": false,
+      "frozenCases": 37,
+      "currentCases": 37,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "array-sort-with",
+      "file": "array/sort-with.xml",
+      "frozenBlob": "db3b2efc92902af9bddd3e4c739ace2ff3867253",
+      "currentBlob": "db3b2efc92902af9bddd3e4c739ace2ff3867253",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "array-tail",
+      "file": "array/tail.xml",
+      "frozenBlob": "1ccb9c1f54fe8b4a4b253f9e980d3088d7d2eb32",
+      "currentBlob": "1ccb9c1f54fe8b4a4b253f9e980d3088d7d2eb32",
+      "fileChanged": false,
+      "frozenCases": 6,
+      "currentCases": 6,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-QName",
+      "file": "fn/QName.xml",
+      "frozenBlob": "df77031743041bc9765791d435732259816ec083",
+      "currentBlob": "df77031743041bc9765791d435732259816ec083",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 9
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 9
+      }
+    },
+    {
+      "set": "fn-abs",
+      "file": "fn/abs.xml",
+      "frozenBlob": "d82508d5705d2412497880dce0e9adf96c92d7be",
+      "currentBlob": "d82508d5705d2412497880dce0e9adf96c92d7be",
+      "fileChanged": false,
+      "frozenCases": 192,
+      "currentCases": 192,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 186,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 186,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "fn-adjust-date-to-timezone",
+      "file": "fn/adjust-date-to-timezone.xml",
+      "frozenBlob": "1cd08ae67c92d6bb7a8c6eecfe47313442eedf74",
+      "currentBlob": "1cd08ae67c92d6bb7a8c6eecfe47313442eedf74",
+      "fileChanged": false,
+      "frozenCases": 41,
+      "currentCases": 41,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 41,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 41,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-adjust-dateTime-to-timezone",
+      "file": "fn/adjust-dateTime-to-timezone.xml",
+      "frozenBlob": "e2569fa39d5042f72165da2c2c73978f493f4244",
+      "currentBlob": "e2569fa39d5042f72165da2c2c73978f493f4244",
+      "fileChanged": false,
+      "frozenCases": 50,
+      "currentCases": 50,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 50,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 50,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-adjust-time-to-timezone",
+      "file": "fn/adjust-time-to-timezone.xml",
+      "frozenBlob": "4318e1fdd2745e7cf8704cfbfaeeaa53913b4248",
+      "currentBlob": "4318e1fdd2745e7cf8704cfbfaeeaa53913b4248",
+      "fileChanged": false,
+      "frozenCases": 42,
+      "currentCases": 42,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 42,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 42,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-atomic-equal",
+      "file": "fn/atomic-equal.xml",
+      "frozenBlob": "78545dd9a41973ea63e3c35d54ad70fa0ca5de67",
+      "currentBlob": "69ba31307b093e86eb5beff20cce77bf90172937",
+      "fileChanged": true,
+      "frozenCases": 30,
+      "currentCases": 30,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-available-environment-variables",
+      "file": "fn/available-environment-variables.xml",
+      "frozenBlob": "887dbba779996d5aa3747dc4d06a2a7a1bc33f3e",
+      "currentBlob": "887dbba779996d5aa3747dc4d06a2a7a1bc33f3e",
+      "fileChanged": false,
+      "frozenCases": 11,
+      "currentCases": 11,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-boolean",
+      "file": "fn/boolean.xml",
+      "frozenBlob": "78bce7732d69520dd9d5a3ff5d5cfbb96f98c41b",
+      "currentBlob": "194e73b4ae83de6e00cd33d474fdcf28c93c718e",
+      "fileChanged": true,
+      "frozenCases": 143,
+      "currentCases": 147,
+      "addedIds": [
+        "boolean-020",
+        "boolean-021",
+        "boolean-022",
+        "boolean-023"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 138,
+        "failed": 0,
+        "skipped": 5
+      },
+      "current": {
+        "passed": 140,
+        "failed": 2,
+        "skipped": 5
+      }
+    },
+    {
+      "set": "fn-ceiling",
+      "file": "fn/ceiling.xml",
+      "frozenBlob": "e565d990542698200f4c1b08f3b3e63f015ce23b",
+      "currentBlob": "e565d990542698200f4c1b08f3b3e63f015ce23b",
+      "fileChanged": false,
+      "frozenCases": 94,
+      "currentCases": 94,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 87,
+        "failed": 0,
+        "skipped": 7
+      },
+      "current": {
+        "passed": 87,
+        "failed": 0,
+        "skipped": 7
+      }
+    },
+    {
+      "set": "fn-characters",
+      "file": "fn/characters.xml",
+      "frozenBlob": "60406bdc7f33cc23c8490ce1bb40ca65677d90f2",
+      "currentBlob": "60406bdc7f33cc23c8490ce1bb40ca65677d90f2",
+      "fileChanged": false,
+      "frozenCases": 12,
+      "currentCases": 12,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-codepoint-equal",
+      "file": "fn/codepoint-equal.xml",
+      "frozenBlob": "42de20f8676da85ea6ba0be5d8b12225b1dfd06e",
+      "currentBlob": "42de20f8676da85ea6ba0be5d8b12225b1dfd06e",
+      "fileChanged": false,
+      "frozenCases": 36,
+      "currentCases": 36,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "fn-collation-available",
+      "file": "fn/collation-available.xml",
+      "frozenBlob": "aae17b715d112471ad1e9ce3d8d3fc9cdf7d4c0d",
+      "currentBlob": "aae17b715d112471ad1e9ce3d8d3fc9cdf7d4c0d",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-collation-key",
+      "file": "fn/collation-key.xml",
+      "frozenBlob": "83f619a95d322195fa07e09b5d38182c90026664",
+      "currentBlob": "83f619a95d322195fa07e09b5d38182c90026664",
+      "fileChanged": false,
+      "frozenCases": 37,
+      "currentCases": 37,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 37,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-collection",
+      "file": "fn/collection.xml",
+      "frozenBlob": "6f3735b457f2c36b560ba313b72addf00e66c9fd",
+      "currentBlob": "6f3735b457f2c36b560ba313b72addf00e66c9fd",
+      "fileChanged": false,
+      "frozenCases": 33,
+      "currentCases": 33,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 9
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 9
+      }
+    },
+    {
+      "set": "fn-compare",
+      "file": "fn/compare.xml",
+      "frozenBlob": "82485550d57d622bd2afb6c2ad770d42e53b8b8d",
+      "currentBlob": "82485550d57d622bd2afb6c2ad770d42e53b8b8d",
+      "fileChanged": false,
+      "frozenCases": 235,
+      "currentCases": 235,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 233,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 233,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "fn-contains-subsequence",
+      "file": "fn/contains-subsequence.xml",
+      "frozenBlob": "4db11ffb6e07ec435987b5749cf034e3f601646f",
+      "currentBlob": "4db11ffb6e07ec435987b5749cf034e3f601646f",
+      "fileChanged": false,
+      "frozenCases": 32,
+      "currentCases": 32,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-contains-token",
+      "file": "fn/contains-token.xml",
+      "frozenBlob": "924fb01f1170291f6e989442e093f3afead2405c",
+      "currentBlob": "924fb01f1170291f6e989442e093f3afead2405c",
+      "fileChanged": false,
+      "frozenCases": 48,
+      "currentCases": 48,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 41,
+        "failed": 0,
+        "skipped": 7
+      },
+      "current": {
+        "passed": 41,
+        "failed": 0,
+        "skipped": 7
+      }
+    },
+    {
+      "set": "fn-count",
+      "file": "fn/count.xml",
+      "frozenBlob": "d3ce86a80978b14731d70aa4c1ad1c0688d583be",
+      "currentBlob": "d3ce86a80978b14731d70aa4c1ad1c0688d583be",
+      "fileChanged": false,
+      "frozenCases": 316,
+      "currentCases": 316,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 75,
+        "failed": 0,
+        "skipped": 241
+      },
+      "current": {
+        "passed": 75,
+        "failed": 0,
+        "skipped": 241
+      }
+    },
+    {
+      "set": "fn-csv-doc",
+      "file": "fn/csv-doc.xml",
+      "frozenBlob": "38be27ee6b9b0073ab19221e1269d57fc62c2e59",
+      "currentBlob": "38be27ee6b9b0073ab19221e1269d57fc62c2e59",
+      "fileChanged": false,
+      "frozenCases": 20,
+      "currentCases": 20,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-csv-to-xml",
+      "file": "fn/csv-to-xml.xml",
+      "frozenBlob": "61c955168d167c41a87eebe85036dda497871919",
+      "currentBlob": "61c955168d167c41a87eebe85036dda497871919",
+      "fileChanged": false,
+      "frozenCases": 70,
+      "currentCases": 70,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 68,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 68,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "fn-current-date",
+      "file": "fn/current-date.xml",
+      "frozenBlob": "b778aa7fa3cd340c8cd42c012056d436f2dd8570",
+      "currentBlob": "b778aa7fa3cd340c8cd42c012056d436f2dd8570",
+      "fileChanged": false,
+      "frozenCases": 26,
+      "currentCases": 26,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-current-dateTime",
+      "file": "fn/current-dateTime.xml",
+      "frozenBlob": "8fe15bc8d104370f82bb4a89a95df277fa078ee7",
+      "currentBlob": "8fe15bc8d104370f82bb4a89a95df277fa078ee7",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-current-time",
+      "file": "fn/current-time.xml",
+      "frozenBlob": "352f70cd52d4f95ad1e3a9457edaa2071ebf045f",
+      "currentBlob": "352f70cd52d4f95ad1e3a9457edaa2071ebf045f",
+      "fileChanged": false,
+      "frozenCases": 24,
+      "currentCases": 24,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-data",
+      "file": "fn/data.xml",
+      "frozenBlob": "1b41fdfdd65867cceb2248ad942af986d4063288",
+      "currentBlob": "cb8488c49ac1fa6d8e514e38e26fc5caae2a4052",
+      "fileChanged": true,
+      "frozenCases": 65,
+      "currentCases": 73,
+      "addedIds": [
+        "fn-data-10",
+        "fn-data-11",
+        "fn-data-12",
+        "fn-data-13",
+        "fn-data-14",
+        "fn-data-15",
+        "fn-data-16",
+        "fn-data-17"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 53,
+        "failed": 0,
+        "skipped": 12
+      },
+      "current": {
+        "passed": 60,
+        "failed": 1,
+        "skipped": 12
+      }
+    },
+    {
+      "set": "fn-dateTime",
+      "file": "fn/dateTime.xml",
+      "frozenBlob": "523db6d8fd9acd4ce8c2e3f6626cfbe81c25fc93",
+      "currentBlob": "523db6d8fd9acd4ce8c2e3f6626cfbe81c25fc93",
+      "fileChanged": false,
+      "frozenCases": 52,
+      "currentCases": 52,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-day-from-date",
+      "file": "fn/day-from-date.xml",
+      "frozenBlob": "f451495d3902a73238fa8519fad3e8295cabcfad",
+      "currentBlob": "f451495d3902a73238fa8519fad3e8295cabcfad",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-default-collation",
+      "file": "fn/default-collation.xml",
+      "frozenBlob": "e8d48f3b318669ba1685e8553f6433c9987ba3ec",
+      "currentBlob": "e8d48f3b318669ba1685e8553f6433c9987ba3ec",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-default-language",
+      "file": "fn/default-language.xml",
+      "frozenBlob": "1ed0c8494cf674a9e9da7ca54f8f1f21bc0f4fc1",
+      "currentBlob": "1ed0c8494cf674a9e9da7ca54f8f1f21bc0f4fc1",
+      "fileChanged": false,
+      "frozenCases": 6,
+      "currentCases": 6,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-do-until",
+      "file": "fn/do-until.xml",
+      "frozenBlob": "6e9135b77a26efc0aff9b5460a4e7af87e527e92",
+      "currentBlob": "6e9135b77a26efc0aff9b5460a4e7af87e527e92",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-element-to-map",
+      "file": "fn/element-to-map.xml",
+      "frozenBlob": "639278cbe9ebe2cbbba9fadbf81be257e4fa8b68",
+      "currentBlob": "dceb9535fd20ed3b1632f60e7e58306397204750",
+      "fileChanged": true,
+      "frozenCases": 193,
+      "currentCases": 221,
+      "addedIds": [
+        "element-to-map-600",
+        "element-to-map-700",
+        "element-to-map-701",
+        "element-to-map-702",
+        "element-to-map-703",
+        "element-to-map-704",
+        "element-to-map-705",
+        "element-to-map-706",
+        "element-to-map-707",
+        "element-to-map-708",
+        "element-to-map-709",
+        "element-to-map-710",
+        "element-to-map-711",
+        "element-to-map-712",
+        "element-to-map-713",
+        "element-to-map-714",
+        "element-to-map-715",
+        "element-to-map-716",
+        "element-to-map-717",
+        "element-to-map-718",
+        "element-to-map-719",
+        "element-to-map-720",
+        "element-to-map-721",
+        "element-to-map-722",
+        "element-to-map-723",
+        "element-to-map-724",
+        "element-to-map-725",
+        "element-to-map-726"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [
+        "element-to-map-597"
+      ],
+      "frozen": {
+        "passed": 154,
+        "failed": 0,
+        "skipped": 39
+      },
+      "current": {
+        "passed": 156,
+        "failed": 26,
+        "skipped": 39
+      }
+    },
+    {
+      "set": "fn-element-to-map-plan",
+      "file": "fn/element-to-map-plan.xml",
+      "frozenBlob": "81ee6a2cce5497e9dd7aba49a500c09c1de21f73",
+      "currentBlob": "81ee6a2cce5497e9dd7aba49a500c09c1de21f73",
+      "fileChanged": false,
+      "frozenCases": 21,
+      "currentCases": 21,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-element-with-id",
+      "file": "fn/element-with-id.xml",
+      "frozenBlob": "d7a781efeabcd34e4a3056f016dc0ec2c3445bd9",
+      "currentBlob": "d7a781efeabcd34e4a3056f016dc0ec2c3445bd9",
+      "fileChanged": false,
+      "frozenCases": 5,
+      "currentCases": 5,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-empty",
+      "file": "fn/empty.xml",
+      "frozenBlob": "d0ae2c80d37697e480126251a47abddc2d7c612a",
+      "currentBlob": "d0ae2c80d37697e480126251a47abddc2d7c612a",
+      "fileChanged": false,
+      "frozenCases": 54,
+      "currentCases": 54,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "fn-encode-for-uri",
+      "file": "fn/encode-for-uri.xml",
+      "frozenBlob": "a3a6f092f60d938000a920614cc9582ac5d03e12",
+      "currentBlob": "a3a6f092f60d938000a920614cc9582ac5d03e12",
+      "fileChanged": false,
+      "frozenCases": 29,
+      "currentCases": 29,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-ends-with",
+      "file": "fn/ends-with.xml",
+      "frozenBlob": "d3c6b1d9df5b61a0b7ad995e6f4e5e3bc990e7fe",
+      "currentBlob": "dbafc70089b32ce4f8f5b3b5d21e55921d3cf9c0",
+      "fileChanged": true,
+      "frozenCases": 68,
+      "currentCases": 70,
+      "addedIds": [
+        "fn-ends-with-50",
+        "fn-ends-with-51"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 58,
+        "failed": 0,
+        "skipped": 10
+      },
+      "current": {
+        "passed": 60,
+        "failed": 0,
+        "skipped": 10
+      }
+    },
+    {
+      "set": "fn-environment-variable",
+      "file": "fn/environment-variable.xml",
+      "frozenBlob": "6e2ac7657cd50e7b1da79220cf7d02b20095d52e",
+      "currentBlob": "6e2ac7657cd50e7b1da79220cf7d02b20095d52e",
+      "fileChanged": false,
+      "frozenCases": 12,
+      "currentCases": 12,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-escape-html-uri",
+      "file": "fn/escape-html-uri.xml",
+      "frozenBlob": "cd296592fddc9660be66a4126267a01f53c38b54",
+      "currentBlob": "cd296592fddc9660be66a4126267a01f53c38b54",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-exactly-one",
+      "file": "fn/exactly-one.xml",
+      "frozenBlob": "aa5c58f371c6f71670758dc3704866fb2e88b100",
+      "currentBlob": "aa5c58f371c6f71670758dc3704866fb2e88b100",
+      "fileChanged": false,
+      "frozenCases": 54,
+      "currentCases": 54,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 50,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 50,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-exists",
+      "file": "fn/exists.xml",
+      "frozenBlob": "554cd9e71457dae7056a046089f8188637530b27",
+      "currentBlob": "554cd9e71457dae7056a046089f8188637530b27",
+      "fileChanged": false,
+      "frozenCases": 59,
+      "currentCases": 59,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 57,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 57,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "fn-false",
+      "file": "fn/false.xml",
+      "frozenBlob": "afd9f76ab243f72fe25837b040c35b07c27bce77",
+      "currentBlob": "afd9f76ab243f72fe25837b040c35b07c27bce77",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-floor",
+      "file": "fn/floor.xml",
+      "frozenBlob": "403f71897388ebbfa29aa19253d618c7666e6e97",
+      "currentBlob": "403f71897388ebbfa29aa19253d618c7666e6e97",
+      "fileChanged": false,
+      "frozenCases": 88,
+      "currentCases": 88,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 88,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 88,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-foot",
+      "file": "fn/foot.xml",
+      "frozenBlob": "cfaa8ba548e94d271a81d46c042e1e32b64b48d9",
+      "currentBlob": "cfaa8ba548e94d271a81d46c042e1e32b64b48d9",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-function-arity",
+      "file": "fn/function-arity.xml",
+      "frozenBlob": "38d8aa4c6aced388ed8d50f2a89b9b728e8f3533",
+      "currentBlob": "38d8aa4c6aced388ed8d50f2a89b9b728e8f3533",
+      "fileChanged": false,
+      "frozenCases": 23,
+      "currentCases": 23,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 19,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-head",
+      "file": "fn/head.xml",
+      "frozenBlob": "5780d04c4e62ee82b0b3c0a8b11cd456c40ee95c",
+      "currentBlob": "5780d04c4e62ee82b0b3c0a8b11cd456c40ee95c",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-hours-from-time",
+      "file": "fn/hours-from-time.xml",
+      "frozenBlob": "5c2d47b44c13ea1a2676ab82c0084b548cecab2f",
+      "currentBlob": "5c2d47b44c13ea1a2676ab82c0084b548cecab2f",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-id",
+      "file": "fn/id.xml",
+      "frozenBlob": "e721d45d08d3b44a661ba4c0747a63e4e4554844",
+      "currentBlob": "e721d45d08d3b44a661ba4c0747a63e4e4554844",
+      "fileChanged": false,
+      "frozenCases": 61,
+      "currentCases": 61,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 31
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 31
+      }
+    },
+    {
+      "set": "fn-identity",
+      "file": "fn/identity.xml",
+      "frozenBlob": "83892fd4278ab4db08de8025a63a3e2a80bd114e",
+      "currentBlob": "83892fd4278ab4db08de8025a63a3e2a80bd114e",
+      "fileChanged": false,
+      "frozenCases": 5,
+      "currentCases": 5,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-idref",
+      "file": "fn/idref.xml",
+      "frozenBlob": "d61a9aa766f595db743d047f4e1545f6a9850833",
+      "currentBlob": "d61a9aa766f595db743d047f4e1545f6a9850833",
+      "fileChanged": false,
+      "frozenCases": 54,
+      "currentCases": 54,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 30
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 30
+      }
+    },
+    {
+      "set": "fn-implicit-timezone",
+      "file": "fn/implicit-timezone.xml",
+      "frozenBlob": "fcb1add40c66ab33706d2b3f738ea75c49af2678",
+      "currentBlob": "fcb1add40c66ab33706d2b3f738ea75c49af2678",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-in-scope-prefixes",
+      "file": "fn/in-scope-prefixes.xml",
+      "frozenBlob": "63824caa039bd7ad0bd71fcb29132f3f9b778306",
+      "currentBlob": "63824caa039bd7ad0bd71fcb29132f3f9b778306",
+      "fileChanged": false,
+      "frozenCases": 62,
+      "currentCases": 62,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 13,
+        "failed": 0,
+        "skipped": 49
+      },
+      "current": {
+        "passed": 13,
+        "failed": 0,
+        "skipped": 49
+      }
+    },
+    {
+      "set": "fn-index-of-substring",
+      "file": "fn/index-of-substring.xml",
+      "frozenBlob": "e8683806b4b8152a83c8cfbd36a6e31789426e12",
+      "currentBlob": "8ac134178c6153b9d70dd336fe5dd27e64a888d3",
+      "fileChanged": true,
+      "frozenCases": 22,
+      "currentCases": 22,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [
+        "index-of-substring-021"
+      ],
+      "frozen": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 20,
+        "failed": 1,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-insert-separator",
+      "file": "fn/insert-separator.xml",
+      "frozenBlob": "99f33d55b9bc639ff17abbfc964ebb864d963427",
+      "currentBlob": "99f33d55b9bc639ff17abbfc964ebb864d963427",
+      "fileChanged": false,
+      "frozenCases": 13,
+      "currentCases": 13,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-iri-to-uri",
+      "file": "fn/iri-to-uri.xml",
+      "frozenBlob": "dc438d92b99993bd6c27fb8131fcfb326286be06",
+      "currentBlob": "dc438d92b99993bd6c27fb8131fcfb326286be06",
+      "fileChanged": false,
+      "frozenCases": 47,
+      "currentCases": 47,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 46,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 46,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-items-at",
+      "file": "fn/items-at.xml",
+      "frozenBlob": "7f8fcb1c25befe9204ed33c7841c9d403d04b7d4",
+      "currentBlob": "7f8fcb1c25befe9204ed33c7841c9d403d04b7d4",
+      "fileChanged": false,
+      "frozenCases": 30,
+      "currentCases": 30,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-jkey",
+      "file": "fn/jkey.xml",
+      "frozenBlob": "d909f329fd360f1a28fede924baf98dc5f74d69e",
+      "currentBlob": "6b94fd1618531d21d0fab4fc9a2cc96465f9ca1d",
+      "fileChanged": true,
+      "frozenCases": 14,
+      "currentCases": 17,
+      "addedIds": [
+        "fn-jkey-020",
+        "fn-jkey-021",
+        "fn-jkey-022"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 14,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 14,
+        "failed": 3,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-jtree",
+      "file": "fn/jtree.xml",
+      "frozenBlob": "d1aab895ccdee7e8b27437bd7db0d3b56e025f7f",
+      "currentBlob": "d1aab895ccdee7e8b27437bd7db0d3b56e025f7f",
+      "fileChanged": false,
+      "frozenCases": 30,
+      "currentCases": 30,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-jvalue",
+      "file": "fn/jvalue.xml",
+      "frozenBlob": "6b7520874926c5f1b8be0edb144bef079553b20d",
+      "currentBlob": "a6f0d97bec724bde188f2d4057f5f40535801702",
+      "fileChanged": true,
+      "frozenCases": 14,
+      "currentCases": 16,
+      "addedIds": [
+        "fn-jvalue-060",
+        "fn-jvalue-061"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 14,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 15,
+        "failed": 1,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-lang",
+      "file": "fn/lang.xml",
+      "frozenBlob": "7cddb3b7ea43aa3919f42fd8d96214c6cfdf9a9a",
+      "currentBlob": "7cddb3b7ea43aa3919f42fd8d96214c6cfdf9a9a",
+      "fileChanged": false,
+      "frozenCases": 46,
+      "currentCases": 46,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "fn-last",
+      "file": "fn/last.xml",
+      "frozenBlob": "f41f0d3551c4af32704db229c04f7820333b9df8",
+      "currentBlob": "f41f0d3551c4af32704db229c04f7820333b9df8",
+      "fileChanged": false,
+      "frozenCases": 69,
+      "currentCases": 69,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 54,
+        "failed": 0,
+        "skipped": 15
+      },
+      "current": {
+        "passed": 54,
+        "failed": 0,
+        "skipped": 15
+      }
+    },
+    {
+      "set": "fn-local-name-from-QName",
+      "file": "fn/local-name-from-QName.xml",
+      "frozenBlob": "bc68ca79202b935ce21fe6ad6b6692143bf458a1",
+      "currentBlob": "bc68ca79202b935ce21fe6ad6b6692143bf458a1",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-lower-case",
+      "file": "fn/lower-case.xml",
+      "frozenBlob": "39b46b928a6f3f8a5c71847788e5f5480f270d07",
+      "currentBlob": "39b46b928a6f3f8a5c71847788e5f5480f270d07",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-minutes-from-time",
+      "file": "fn/minutes-from-time.xml",
+      "frozenBlob": "95ea91ddf4083977065e438f5de9d50f7b1cd34e",
+      "currentBlob": "95ea91ddf4083977065e438f5de9d50f7b1cd34e",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-month-from-date",
+      "file": "fn/month-from-date.xml",
+      "frozenBlob": "d388adf161798d6fc3705a96ee996a5b20f4fb0a",
+      "currentBlob": "d388adf161798d6fc3705a96ee996a5b20f4fb0a",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-namespace-uri-for-prefix",
+      "file": "fn/namespace-uri-for-prefix.xml",
+      "frozenBlob": "b33b7ae53ad9f787e779520e7730e79183b1900b",
+      "currentBlob": "b33b7ae53ad9f787e779520e7730e79183b1900b",
+      "fileChanged": false,
+      "frozenCases": 31,
+      "currentCases": 31,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 29
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 29
+      }
+    },
+    {
+      "set": "fn-namespace-uri-from-QName",
+      "file": "fn/namespace-uri-from-QName.xml",
+      "frozenBlob": "e94634534c9932e59f5dd39d12f8766f54b3bbcc",
+      "currentBlob": "e94634534c9932e59f5dd39d12f8766f54b3bbcc",
+      "fileChanged": false,
+      "frozenCases": 30,
+      "currentCases": 30,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "fn-not",
+      "file": "fn/not.xml",
+      "frozenBlob": "65a843620bc0349d51435a870471759f8329328f",
+      "currentBlob": "65a843620bc0349d51435a870471759f8329328f",
+      "fileChanged": false,
+      "frozenCases": 83,
+      "currentCases": 83,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 80,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 80,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "fn-one-or-more",
+      "file": "fn/one-or-more.xml",
+      "frozenBlob": "168f40a248404ad3e82f13a6b80bf123f01240e5",
+      "currentBlob": "168f40a248404ad3e82f13a6b80bf123f01240e5",
+      "fileChanged": false,
+      "frozenCases": 56,
+      "currentCases": 56,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 53,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 53,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "fn-op",
+      "file": "fn/op.xml",
+      "frozenBlob": "609b7fcd9cdfce6dd85a0628a7ae045a947a9cb0",
+      "currentBlob": "609b7fcd9cdfce6dd85a0628a7ae045a947a9cb0",
+      "fileChanged": false,
+      "frozenCases": 35,
+      "currentCases": 35,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-parse-csv",
+      "file": "fn/parse-csv.xml",
+      "frozenBlob": "ed7c2cc0a91d2ab6998be1d0c56d2a195149dc37",
+      "currentBlob": "3077095d6532644579de733b3612ed3cceb8ca43",
+      "fileChanged": true,
+      "frozenCases": 124,
+      "currentCases": 124,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [
+        "parse-csv-912",
+        "parse-csv-913",
+        "parse-csv-914",
+        "parse-csv-915",
+        "parse-csv-916",
+        "parse-csv-917",
+        "parse-csv-919"
+      ],
+      "frozen": {
+        "passed": 124,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 117,
+        "failed": 7,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-parse-ietf-date",
+      "file": "fn/parse-ietf-date.xml",
+      "frozenBlob": "dacd4077a7d6fd8d3c54551177a5abe2aa483f9a",
+      "currentBlob": "dacd4077a7d6fd8d3c54551177a5abe2aa483f9a",
+      "fileChanged": false,
+      "frozenCases": 105,
+      "currentCases": 105,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 105,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 105,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-partition",
+      "file": "fn/partition.xml",
+      "frozenBlob": "d746b25d20171e316fb28245c02aefbfba26061a",
+      "currentBlob": "d746b25d20171e316fb28245c02aefbfba26061a",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "fn-position",
+      "file": "fn/position.xml",
+      "frozenBlob": "83654cbc603821982084d165435416a733dcd07f",
+      "currentBlob": "83654cbc603821982084d165435416a733dcd07f",
+      "fileChanged": false,
+      "frozenCases": 67,
+      "currentCases": 67,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 67,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 67,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-prefix-from-QName",
+      "file": "fn/prefix-from-QName.xml",
+      "frozenBlob": "dcc2e92acd8ef6abc4ae5a30fe7f64725219c4b7",
+      "currentBlob": "dcc2e92acd8ef6abc4ae5a30fe7f64725219c4b7",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-replicate",
+      "file": "fn/replicate.xml",
+      "frozenBlob": "e11503513a398e1cacdcfbb66b92b15a6ad22526",
+      "currentBlob": "e11503513a398e1cacdcfbb66b92b15a6ad22526",
+      "fileChanged": false,
+      "frozenCases": 21,
+      "currentCases": 21,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-resolve-QName",
+      "file": "fn/resolve-QName.xml",
+      "frozenBlob": "e84d068612e46f7a3ad5cd72a1f34c0e88db4919",
+      "currentBlob": "e84d068612e46f7a3ad5cd72a1f34c0e88db4919",
+      "fileChanged": false,
+      "frozenCases": 31,
+      "currentCases": 31,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 23
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 23
+      }
+    },
+    {
+      "set": "fn-reverse",
+      "file": "fn/reverse.xml",
+      "frozenBlob": "26f28d67c037ff1aedca8eff6a388517673f6d6e",
+      "currentBlob": "26f28d67c037ff1aedca8eff6a388517673f6d6e",
+      "fileChanged": false,
+      "frozenCases": 70,
+      "currentCases": 70,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 66,
+        "failed": 0,
+        "skipped": 4
+      },
+      "current": {
+        "passed": 66,
+        "failed": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "set": "fn-scan",
+      "file": "fn/scan.xml",
+      "frozenBlob": "80ac6bcf15f8e98d14de50a75848a9aefbbd1aff",
+      "currentBlob": "80ac6bcf15f8e98d14de50a75848a9aefbbd1aff",
+      "fileChanged": false,
+      "frozenCases": 11,
+      "currentCases": 11,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-seconds-from-duration",
+      "file": "fn/seconds-from-duration.xml",
+      "frozenBlob": "e057ec0ba8fe1f371775337d57e58c4f0c85025f",
+      "currentBlob": "e057ec0ba8fe1f371775337d57e58c4f0c85025f",
+      "fileChanged": false,
+      "frozenCases": 33,
+      "currentCases": 33,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-seconds-from-time",
+      "file": "fn/seconds-from-time.xml",
+      "frozenBlob": "859449e60534fc5ee1b7a9c2d66a54456293cc29",
+      "currentBlob": "859449e60534fc5ee1b7a9c2d66a54456293cc29",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-sort",
+      "file": "fn/sort.xml",
+      "frozenBlob": "00392dcec9d5d4ca3a080b535eb73cef9feac11a",
+      "currentBlob": "00392dcec9d5d4ca3a080b535eb73cef9feac11a",
+      "fileChanged": false,
+      "frozenCases": 50,
+      "currentCases": 50,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 10
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 10
+      }
+    },
+    {
+      "set": "fn-sort-with",
+      "file": "fn/sort-with.xml",
+      "frozenBlob": "02ebf679a859404d8c1c38986b19926ff175696f",
+      "currentBlob": "02ebf679a859404d8c1c38986b19926ff175696f",
+      "fileChanged": false,
+      "frozenCases": 24,
+      "currentCases": 24,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-starts-with",
+      "file": "fn/starts-with.xml",
+      "frozenBlob": "5d35cfe0dadf5feacf0e556a0548b6dc8586df07",
+      "currentBlob": "2a60b78b8f40b2fad86c56ae6563457d976a0121",
+      "fileChanged": true,
+      "frozenCases": 67,
+      "currentCases": 69,
+      "addedIds": [
+        "fn-starts-with-50",
+        "fn-starts-with-51"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 67,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 69,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-static-base-uri",
+      "file": "fn/static-base-uri.xml",
+      "frozenBlob": "efe89b5b4b9ad5c8ea90c54dba30ee25e664c00a",
+      "currentBlob": "efe89b5b4b9ad5c8ea90c54dba30ee25e664c00a",
+      "fileChanged": false,
+      "frozenCases": 18,
+      "currentCases": 18,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 13
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 13
+      }
+    },
+    {
+      "set": "fn-string-to-codepoints",
+      "file": "fn/string-to-codepoints.xml",
+      "frozenBlob": "04f17744413213331429442a4e6026bbf5eb034f",
+      "currentBlob": "04f17744413213331429442a4e6026bbf5eb034f",
+      "fileChanged": false,
+      "frozenCases": 44,
+      "currentCases": 44,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 44,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 44,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-tail",
+      "file": "fn/tail.xml",
+      "frozenBlob": "ce3a0c1cb530621ab08b64449fc6525501c4714d",
+      "currentBlob": "ce3a0c1cb530621ab08b64449fc6525501c4714d",
+      "fileChanged": false,
+      "frozenCases": 6,
+      "currentCases": 6,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-take-while",
+      "file": "fn/take-while.xml",
+      "frozenBlob": "26595a4dd4d7da2e3812e38c969f34a42461e5cf",
+      "currentBlob": "26595a4dd4d7da2e3812e38c969f34a42461e5cf",
+      "fileChanged": false,
+      "frozenCases": 18,
+      "currentCases": 18,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-timezone-from-date",
+      "file": "fn/timezone-from-date.xml",
+      "frozenBlob": "f780c7e3638191c2c1dcd06ddfa793e13cca07fe",
+      "currentBlob": "f780c7e3638191c2c1dcd06ddfa793e13cca07fe",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "fn-timezone-from-time",
+      "file": "fn/timezone-from-time.xml",
+      "frozenBlob": "c71f1b9077bbc4e076ec60702ba4cf9861c12e3a",
+      "currentBlob": "c71f1b9077bbc4e076ec60702ba4cf9861c12e3a",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-trace",
+      "file": "fn/trace.xml",
+      "frozenBlob": "647e88c1e6a63a61b1610f9c1442a7012fcb0bae",
+      "currentBlob": "647e88c1e6a63a61b1610f9c1442a7012fcb0bae",
+      "fileChanged": false,
+      "frozenCases": 32,
+      "currentCases": 32,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-translate",
+      "file": "fn/translate.xml",
+      "frozenBlob": "4cb7a1de97d5ab8e7384d0022ce8b14c923b49b8",
+      "currentBlob": "4cb7a1de97d5ab8e7384d0022ce8b14c923b49b8",
+      "fileChanged": false,
+      "frozenCases": 44,
+      "currentCases": 44,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 44,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 44,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-true",
+      "file": "fn/true.xml",
+      "frozenBlob": "1b9db44bdae7ae9e77440b9571c68421609c72b6",
+      "currentBlob": "1b9db44bdae7ae9e77440b9571c68421609c72b6",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-trunk",
+      "file": "fn/trunk.xml",
+      "frozenBlob": "4977393a45f8cb8d82a2549bbad4da90a92db124",
+      "currentBlob": "4977393a45f8cb8d82a2549bbad4da90a92db124",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "fn-unix-dateTime",
+      "file": "fn/unix-dateTime.xml",
+      "frozenBlob": "fccc08d18fe98e9ec2bb57eee5906794c69f7577",
+      "currentBlob": "43b40eeff45265f8f68a8626f068812293bbf60d",
+      "fileChanged": true,
+      "frozenCases": 16,
+      "currentCases": 24,
+      "addedIds": [
+        "unix-DateTime-110",
+        "unix-DateTime-111",
+        "unix-DateTime-112",
+        "unix-DateTime-113",
+        "unix-DateTime-114",
+        "unix-DateTime-115",
+        "unix-DateTime-120",
+        "unix-DateTime-121"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [
+        "unix-DateTime-101",
+        "unix-DateTime-102"
+      ],
+      "frozen": {
+        "passed": 16,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 20,
+        "failed": 4,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-unordered",
+      "file": "fn/unordered.xml",
+      "frozenBlob": "53327c2d1747a031818cd4297966a93990bf86a8",
+      "currentBlob": "53327c2d1747a031818cd4297966a93990bf86a8",
+      "fileChanged": false,
+      "frozenCases": 43,
+      "currentCases": 43,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "fn-upper-case",
+      "file": "fn/upper-case.xml",
+      "frozenBlob": "0af499d450d78933ac533081674ab8ee61817abb",
+      "currentBlob": "0af499d450d78933ac533081674ab8ee61817abb",
+      "fileChanged": false,
+      "frozenCases": 29,
+      "currentCases": 29,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "fn-uri-collection",
+      "file": "fn/uri-collection.xml",
+      "frozenBlob": "8ffe5fbd83622cbc241082774bcf15a065563a89",
+      "currentBlob": "8ffe5fbd83622cbc241082774bcf15a065563a89",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 7,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-while-do",
+      "file": "fn/while-do.xml",
+      "frozenBlob": "9ba62ec6357a6f5801eb75022a9afc223252e4b0",
+      "currentBlob": "9ba62ec6357a6f5801eb75022a9afc223252e4b0",
+      "fileChanged": false,
+      "frozenCases": 30,
+      "currentCases": 30,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-year-from-date",
+      "file": "fn/year-from-date.xml",
+      "frozenBlob": "ffe089fa7ad4c47aa802854be9ce806cb927e3de",
+      "currentBlob": "ffe089fa7ad4c47aa802854be9ce806cb927e3de",
+      "fileChanged": false,
+      "frozenCases": 29,
+      "currentCases": 29,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "fn-zero-or-one",
+      "file": "fn/zero-or-one.xml",
+      "frozenBlob": "f22032511c9f2b156e1e045fe8a8eac0a8e1dcd1",
+      "currentBlob": "f22032511c9f2b156e1e045fe8a8eac0a8e1dcd1",
+      "fileChanged": false,
+      "frozenCases": 51,
+      "currentCases": 51,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 49,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 49,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "map-contains",
+      "file": "map/contains.xml",
+      "frozenBlob": "759124883b9b1ef6b6ceab4b7f9dc3864845bd23",
+      "currentBlob": "759124883b9b1ef6b6ceab4b7f9dc3864845bd23",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "map-entry",
+      "file": "map/entry.xml",
+      "frozenBlob": "514576ef13f937196a993f37608c9476c9a7f7d3",
+      "currentBlob": "514576ef13f937196a993f37608c9476c9a7f7d3",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "map-find",
+      "file": "map/find.xml",
+      "frozenBlob": "b77ae2b7dbca114864e52416071a511d879ccfee",
+      "currentBlob": "b77ae2b7dbca114864e52416071a511d879ccfee",
+      "fileChanged": false,
+      "frozenCases": 12,
+      "currentCases": 12,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 12,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "map-remove",
+      "file": "map/remove.xml",
+      "frozenBlob": "2f872da8d641d156846310e63aa22bacc89b8824",
+      "currentBlob": "2f872da8d641d156846310e63aa22bacc89b8824",
+      "fileChanged": false,
+      "frozenCases": 20,
+      "currentCases": 20,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 20,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "map-size",
+      "file": "map/size.xml",
+      "frozenBlob": "59552a5dbd0cd217067009487cd87159348a3ed2",
+      "currentBlob": "59552a5dbd0cd217067009487cd87159348a3ed2",
+      "fileChanged": false,
+      "frozenCases": 18,
+      "currentCases": 18,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-acos",
+      "file": "math/math-acos.xml",
+      "frozenBlob": "b881aa806ed7684cd4943d6cd1f002f7eb9d1a2e",
+      "currentBlob": "b881aa806ed7684cd4943d6cd1f002f7eb9d1a2e",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-asin",
+      "file": "math/math-asin.xml",
+      "frozenBlob": "5687e2fbe3561cb063429f95d903abd530f11f7e",
+      "currentBlob": "5687e2fbe3561cb063429f95d903abd530f11f7e",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-atan",
+      "file": "math/math-atan.xml",
+      "frozenBlob": "783c4291d600e040232d63f04c011f1fdf951f10",
+      "currentBlob": "783c4291d600e040232d63f04c011f1fdf951f10",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-atan2",
+      "file": "math/math-atan2.xml",
+      "frozenBlob": "c4c9316e1f5adc35bb12350635038b104d2b9c1d",
+      "currentBlob": "c4c9316e1f5adc35bb12350635038b104d2b9c1d",
+      "fileChanged": false,
+      "frozenCases": 10,
+      "currentCases": 10,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-cos",
+      "file": "math/math-cos.xml",
+      "frozenBlob": "dd2947d8f26a750193c1801b4bb47160ee2f4b88",
+      "currentBlob": "dd2947d8f26a750193c1801b4bb47160ee2f4b88",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-exp",
+      "file": "math/math-exp.xml",
+      "frozenBlob": "ec02178c5ceaab8ff4933216a9d4fb65c4f11a11",
+      "currentBlob": "ec02178c5ceaab8ff4933216a9d4fb65c4f11a11",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-exp10",
+      "file": "math/math-exp10.xml",
+      "frozenBlob": "186cc396196bb4d4b18e6cfbd4d1c5f8ea468e38",
+      "currentBlob": "186cc396196bb4d4b18e6cfbd4d1c5f8ea468e38",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-log",
+      "file": "math/math-log.xml",
+      "frozenBlob": "6e824120800054342275ea72bb3604f877f49a1d",
+      "currentBlob": "6e824120800054342275ea72bb3604f877f49a1d",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-log10",
+      "file": "math/math-log10.xml",
+      "frozenBlob": "33d4a0eebd7c903bd17955a1571f7b2186200fc5",
+      "currentBlob": "33d4a0eebd7c903bd17955a1571f7b2186200fc5",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-pi",
+      "file": "math/math-pi.xml",
+      "frozenBlob": "4c204c5aebb2a4e334943e1f5c6479ee462f7ea5",
+      "currentBlob": "4c204c5aebb2a4e334943e1f5c6479ee462f7ea5",
+      "fileChanged": false,
+      "frozenCases": 5,
+      "currentCases": 5,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-pow",
+      "file": "math/math-pow.xml",
+      "frozenBlob": "1c71213a957195c123c38c46aae3a7c8f9bacaad",
+      "currentBlob": "1c71213a957195c123c38c46aae3a7c8f9bacaad",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 34,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-sin",
+      "file": "math/math-sin.xml",
+      "frozenBlob": "932fd3d97b794dc4976add90ca8769ee31ddbe6c",
+      "currentBlob": "932fd3d97b794dc4976add90ca8769ee31ddbe6c",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-sqrt",
+      "file": "math/math-sqrt.xml",
+      "frozenBlob": "3d7b931811b50de42142d4629fe4adc8d20aaf3c",
+      "currentBlob": "3d7b931811b50de42142d4629fe4adc8d20aaf3c",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "math-tan",
+      "file": "math/math-tan.xml",
+      "frozenBlob": "3fe613e0cc2da5eb953267cb10fe03c07c649f90",
+      "currentBlob": "3fe613e0cc2da5eb953267cb10fe03c07c649f90",
+      "fileChanged": false,
+      "frozenCases": 11,
+      "currentCases": 11,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 11,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "misc-AppendixA4",
+      "file": "misc/AppendixA4.xml",
+      "frozenBlob": "b371f401744d959d7a2d7f2a5716b2d5f2bfa29f",
+      "currentBlob": "b371f401744d959d7a2d7f2a5716b2d5f2bfa29f",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "misc-FocusConstructors",
+      "file": "misc/FocusConstructors.xml",
+      "frozenBlob": "30314146123ebbb0bdb1a2eda4919594ebe478f1",
+      "currentBlob": "30314146123ebbb0bdb1a2eda4919594ebe478f1",
+      "fileChanged": false,
+      "frozenCases": 153,
+      "currentCases": 153,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "misc-Surrogates",
+      "file": "misc/Surrogates.xml",
+      "frozenBlob": "eb1e2f37def63d12637a624de739c36af27a4942",
+      "currentBlob": "eb1e2f37def63d12637a624de739c36af27a4942",
+      "fileChanged": false,
+      "frozenCases": 32,
+      "currentCases": 32,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 15
+      },
+      "current": {
+        "passed": 17,
+        "failed": 0,
+        "skipped": 15
+      }
+    },
+    {
+      "set": "misc-UCACollation",
+      "file": "misc/UCACollation.xml",
+      "frozenBlob": "a126dc2cf010f3ef67553316982c430e4776891c",
+      "currentBlob": "a126dc2cf010f3ef67553316982c430e4776891c",
+      "fileChanged": false,
+      "frozenCases": 87,
+      "currentCases": 87,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "misc-XMLEdition",
+      "file": "misc/XMLEdition.xml",
+      "frozenBlob": "40c29454f64e34fdab8bb1b277cac8cf6453045a",
+      "currentBlob": "40c29454f64e34fdab8bb1b277cac8cf6453045a",
+      "fileChanged": false,
+      "frozenCases": 19,
+      "currentCases": 19,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 18
+      },
+      "current": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 18
+      }
+    },
+    {
+      "set": "op-add-dayTimeDuration-to-date",
+      "file": "op/add-dayTimeDuration-to-date.xml",
+      "frozenBlob": "c0fd9eb70cf287baf0600f3ef1bd849b7cf740da",
+      "currentBlob": "c0fd9eb70cf287baf0600f3ef1bd849b7cf740da",
+      "fileChanged": false,
+      "frozenCases": 29,
+      "currentCases": 29,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 5
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 5
+      }
+    },
+    {
+      "set": "op-add-dayTimeDuration-to-time",
+      "file": "op/add-dayTimeDuration-to-time.xml",
+      "frozenBlob": "3610dd1471188072e5f30eaeb05887136fd154a5",
+      "currentBlob": "3610dd1471188072e5f30eaeb05887136fd154a5",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "op-add-yearMonthDuration-to-date",
+      "file": "op/add-yearMonthDuration-to-date.xml",
+      "frozenBlob": "3550a6ca7c68961e6d3bb63bff889c01148cf9ae",
+      "currentBlob": "3550a6ca7c68961e6d3bb63bff889c01148cf9ae",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "op-add-yearMonthDuration-to-dateTime",
+      "file": "op/add-yearMonthDuration-to-dateTime.xml",
+      "frozenBlob": "dc8137be5f0ad8d0cf7c4e1588df2da524ce0805",
+      "currentBlob": "dc8137be5f0ad8d0cf7c4e1588df2da524ce0805",
+      "fileChanged": false,
+      "frozenCases": 29,
+      "currentCases": 29,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "op-add-yearMonthDurations",
+      "file": "op/add-yearMonthDurations.xml",
+      "frozenBlob": "dac46c9a6157ba7d10b6a4af40392c8a1467fe06",
+      "currentBlob": "dac46c9a6157ba7d10b6a4af40392c8a1467fe06",
+      "fileChanged": false,
+      "frozenCases": 27,
+      "currentCases": 27,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "op-anyURI-equal",
+      "file": "op/anyURI-equal.xml",
+      "frozenBlob": "0263e6e998f721b916e642366283e053b614d4d1",
+      "currentBlob": "0263e6e998f721b916e642366283e053b614d4d1",
+      "fileChanged": false,
+      "frozenCases": 22,
+      "currentCases": 22,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-anyURI-greater-than",
+      "file": "op/anyURI-greater-than.xml",
+      "frozenBlob": "5eb37a449cfa8f7b729ae62ea2c3d8faf0186383",
+      "currentBlob": "5eb37a449cfa8f7b729ae62ea2c3d8faf0186383",
+      "fileChanged": false,
+      "frozenCases": 10,
+      "currentCases": 10,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-anyURI-less-than",
+      "file": "op/anyURI-less-than.xml",
+      "frozenBlob": "9a2b3a79ccd53d618a36cd4986c76baac746ab89",
+      "currentBlob": "9a2b3a79ccd53d618a36cd4986c76baac746ab89",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-boolean-equal",
+      "file": "op/boolean-equal.xml",
+      "frozenBlob": "8c6a7e41b396aaea6fa11a37a8b9a5d6cfde8b90",
+      "currentBlob": "8c6a7e41b396aaea6fa11a37a8b9a5d6cfde8b90",
+      "fileChanged": false,
+      "frozenCases": 57,
+      "currentCases": 57,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 49,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 49,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "op-boolean-greater-than",
+      "file": "op/boolean-greater-than.xml",
+      "frozenBlob": "34dd5e778490029862accaff19dfe93be547a187",
+      "currentBlob": "34dd5e778490029862accaff19dfe93be547a187",
+      "fileChanged": false,
+      "frozenCases": 49,
+      "currentCases": 49,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 10
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 10
+      }
+    },
+    {
+      "set": "op-boolean-less-than",
+      "file": "op/boolean-less-than.xml",
+      "frozenBlob": "b5028c545b42f966e91b7efe337653ea3627ece7",
+      "currentBlob": "b5028c545b42f966e91b7efe337653ea3627ece7",
+      "fileChanged": false,
+      "frozenCases": 49,
+      "currentCases": 49,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 10
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 10
+      }
+    },
+    {
+      "set": "op-concatenate",
+      "file": "op/concatenate.xml",
+      "frozenBlob": "d7c1e8817ad93a91220c891022e8e64fb1ba236f",
+      "currentBlob": "d7c1e8817ad93a91220c891022e8e64fb1ba236f",
+      "fileChanged": false,
+      "frozenCases": 54,
+      "currentCases": 54,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 54,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 54,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-date-equal",
+      "file": "op/date-equal.xml",
+      "frozenBlob": "e72339d98143dd3d44ea8132500e0f15417e1a6e",
+      "currentBlob": "e72339d98143dd3d44ea8132500e0f15417e1a6e",
+      "fileChanged": false,
+      "frozenCases": 47,
+      "currentCases": 47,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "op-date-greater-than",
+      "file": "op/date-greater-than.xml",
+      "frozenBlob": "032394c7ce3cadb4de3988a1f7b44475f18a5432",
+      "currentBlob": "032394c7ce3cadb4de3988a1f7b44475f18a5432",
+      "fileChanged": false,
+      "frozenCases": 49,
+      "currentCases": 49,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 9
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 9
+      }
+    },
+    {
+      "set": "op-date-less-than",
+      "file": "op/date-less-than.xml",
+      "frozenBlob": "397923400f2929db6631c790f9658d9f450b1e3d",
+      "currentBlob": "397923400f2929db6631c790f9658d9f450b1e3d",
+      "fileChanged": false,
+      "frozenCases": 48,
+      "currentCases": 48,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 9
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 9
+      }
+    },
+    {
+      "set": "op-dateTime-equal",
+      "file": "op/dateTime-equal.xml",
+      "frozenBlob": "5e6bda72d918c8eb63174aea305723a6b2f891a3",
+      "currentBlob": "5e6bda72d918c8eb63174aea305723a6b2f891a3",
+      "fileChanged": false,
+      "frozenCases": 74,
+      "currentCases": 74,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 64,
+        "failed": 0,
+        "skipped": 10
+      },
+      "current": {
+        "passed": 64,
+        "failed": 0,
+        "skipped": 10
+      }
+    },
+    {
+      "set": "op-dateTime-greater-than",
+      "file": "op/dateTime-greater-than.xml",
+      "frozenBlob": "b2aa9605e5b7f1b9fcc07b604dbab808a828509b",
+      "currentBlob": "b2aa9605e5b7f1b9fcc07b604dbab808a828509b",
+      "fileChanged": false,
+      "frozenCases": 44,
+      "currentCases": 44,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 36,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 36,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "op-dateTime-less-than",
+      "file": "op/dateTime-less-than.xml",
+      "frozenBlob": "a4ebe1e2d003dc0a6bdc3d5b28afe3baadd93fb5",
+      "currentBlob": "a4ebe1e2d003dc0a6bdc3d5b28afe3baadd93fb5",
+      "fileChanged": false,
+      "frozenCases": 44,
+      "currentCases": 44,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 36,
+        "failed": 0,
+        "skipped": 8
+      },
+      "current": {
+        "passed": 36,
+        "failed": 0,
+        "skipped": 8
+      }
+    },
+    {
+      "set": "op-dayTimeDuration-greater-than",
+      "file": "op/dayTimeDuration-greater-than.xml",
+      "frozenBlob": "7cbeed2bfb695815eed55774f7fa8103099a79e2",
+      "currentBlob": "7cbeed2bfb695815eed55774f7fa8103099a79e2",
+      "fileChanged": false,
+      "frozenCases": 71,
+      "currentCases": 71,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 42
+      },
+      "current": {
+        "passed": 29,
+        "failed": 0,
+        "skipped": 42
+      }
+    },
+    {
+      "set": "op-dayTimeDuration-less-than",
+      "file": "op/dayTimeDuration-less-than.xml",
+      "frozenBlob": "b92fd5ffe8b0fa14a0b64c256d9af96892267e7a",
+      "currentBlob": "b92fd5ffe8b0fa14a0b64c256d9af96892267e7a",
+      "fileChanged": false,
+      "frozenCases": 52,
+      "currentCases": 52,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 24
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 24
+      }
+    },
+    {
+      "set": "op-gDay-equal",
+      "file": "op/gDay-equal.xml",
+      "frozenBlob": "6b45ba330ee56c29a0405ff0568ea0c38d636468",
+      "currentBlob": "6b45ba330ee56c29a0405ff0568ea0c38d636468",
+      "fileChanged": false,
+      "frozenCases": 51,
+      "currentCases": 51,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 45,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 45,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-gMonth-equal",
+      "file": "op/gMonth-equal.xml",
+      "frozenBlob": "f95b87ce7f6c76bf1842856d7e8f14a6bc580fad",
+      "currentBlob": "f95b87ce7f6c76bf1842856d7e8f14a6bc580fad",
+      "fileChanged": false,
+      "frozenCases": 45,
+      "currentCases": 45,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-gMonthDay-equal",
+      "file": "op/gMonthDay-equal.xml",
+      "frozenBlob": "c6055a8620f0cbdc52988a6aca855a7cdcbfdddf",
+      "currentBlob": "c6055a8620f0cbdc52988a6aca855a7cdcbfdddf",
+      "fileChanged": false,
+      "frozenCases": 51,
+      "currentCases": 51,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 45,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 45,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-gYear-equal",
+      "file": "op/gYear-equal.xml",
+      "frozenBlob": "17d823ef22ed85ededc0af186f2208c6ba2be4e2",
+      "currentBlob": "17d823ef22ed85ededc0af186f2208c6ba2be4e2",
+      "fileChanged": false,
+      "frozenCases": 46,
+      "currentCases": 46,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-gYearMonth-equal",
+      "file": "op/gYearMonth-equal.xml",
+      "frozenBlob": "9c60ace86d544b87c2d9f5c9815bdced6e7a8490",
+      "currentBlob": "9c60ace86d544b87c2d9f5c9815bdced6e7a8490",
+      "fileChanged": false,
+      "frozenCases": 46,
+      "currentCases": 46,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-hexBinary-greater-than",
+      "file": "op/hexBinary-greater-than.xml",
+      "frozenBlob": "82758c399c76a464d6f4a045d1c9f03748df3a34",
+      "currentBlob": "82758c399c76a464d6f4a045d1c9f03748df3a34",
+      "fileChanged": false,
+      "frozenCases": 32,
+      "currentCases": 32,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 5
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 5
+      }
+    },
+    {
+      "set": "op-hexBinary-less-than",
+      "file": "op/hexBinary-less-than.xml",
+      "frozenBlob": "808d92be96a33109d3802ff4a5f45d5d1777efe1",
+      "currentBlob": "808d92be96a33109d3802ff4a5f45d5d1777efe1",
+      "fileChanged": false,
+      "frozenCases": 32,
+      "currentCases": 32,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 5
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 5
+      }
+    },
+    {
+      "set": "op-numeric-equal",
+      "file": "op/numeric-equal.xml",
+      "frozenBlob": "8d4a7275b7814550e6924ce6492f627aa2bca2ee",
+      "currentBlob": "8d4a7275b7814550e6924ce6492f627aa2bca2ee",
+      "fileChanged": false,
+      "frozenCases": 209,
+      "currentCases": 209,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 185,
+        "failed": 0,
+        "skipped": 24
+      },
+      "current": {
+        "passed": 185,
+        "failed": 0,
+        "skipped": 24
+      }
+    },
+    {
+      "set": "op-numeric-greater-than",
+      "file": "op/numeric-greater-than.xml",
+      "frozenBlob": "d2bb737147525061d1754040568b9114373e0bcc",
+      "currentBlob": "d2bb737147525061d1754040568b9114373e0bcc",
+      "fileChanged": false,
+      "frozenCases": 122,
+      "currentCases": 122,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 96,
+        "failed": 0,
+        "skipped": 26
+      },
+      "current": {
+        "passed": 96,
+        "failed": 0,
+        "skipped": 26
+      }
+    },
+    {
+      "set": "op-numeric-integer-divide",
+      "file": "op/numeric-integer-divide.xml",
+      "frozenBlob": "6ca14aed63229e546d4067068089259e4302d866",
+      "currentBlob": "dab20a545cf8e389c4476b5dab9788f6781ae474",
+      "fileChanged": true,
+      "frozenCases": 140,
+      "currentCases": 143,
+      "addedIds": [
+        "op-numeric-integer-divide-10",
+        "op-numeric-integer-divide-11",
+        "op-numeric-integer-divide-12"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 128,
+        "failed": 0,
+        "skipped": 12
+      },
+      "current": {
+        "passed": 131,
+        "failed": 0,
+        "skipped": 12
+      }
+    },
+    {
+      "set": "op-numeric-less-than",
+      "file": "op/numeric-less-than.xml",
+      "frozenBlob": "247d2f5d164f132816412a2949ba1c5739df397b",
+      "currentBlob": "247d2f5d164f132816412a2949ba1c5739df397b",
+      "fileChanged": false,
+      "frozenCases": 187,
+      "currentCases": 187,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 158,
+        "failed": 0,
+        "skipped": 29
+      },
+      "current": {
+        "passed": 158,
+        "failed": 0,
+        "skipped": 29
+      }
+    },
+    {
+      "set": "op-numeric-mod",
+      "file": "op/numeric-mod.xml",
+      "frozenBlob": "5a9da1a59fb096117a0cba40c494b567a180ed6e",
+      "currentBlob": "5a9da1a59fb096117a0cba40c494b567a180ed6e",
+      "fileChanged": false,
+      "frozenCases": 131,
+      "currentCases": 131,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 119,
+        "failed": 0,
+        "skipped": 12
+      },
+      "current": {
+        "passed": 119,
+        "failed": 0,
+        "skipped": 12
+      }
+    },
+    {
+      "set": "op-numeric-unary-plus",
+      "file": "op/numeric-unary-plus.xml",
+      "frozenBlob": "72fd21bcd01cedbc1232b550bfc24cb8b1773f0b",
+      "currentBlob": "72fd21bcd01cedbc1232b550bfc24cb8b1773f0b",
+      "fileChanged": false,
+      "frozenCases": 55,
+      "currentCases": 55,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "op-pipeline",
+      "file": "op/pipeline.xml",
+      "frozenBlob": "d2c7e071b90d7771c0e6e5f89bbb344a193d86ba",
+      "currentBlob": "d2c7e071b90d7771c0e6e5f89bbb344a193d86ba",
+      "fileChanged": false,
+      "frozenCases": 25,
+      "currentCases": 25,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 25,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-string-equal",
+      "file": "op/string-equal.xml",
+      "frozenBlob": "13290f29cf3e97c2301a8e1c9aad90d63e6f7dbe",
+      "currentBlob": "13290f29cf3e97c2301a8e1c9aad90d63e6f7dbe",
+      "fileChanged": false,
+      "frozenCases": 15,
+      "currentCases": 15,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-string-greater-than",
+      "file": "op/string-greater-than.xml",
+      "frozenBlob": "745eaf0c0938979a80ebe08d45e57830d243d06a",
+      "currentBlob": "745eaf0c0938979a80ebe08d45e57830d243d06a",
+      "fileChanged": false,
+      "frozenCases": 9,
+      "currentCases": 9,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-string-less-than",
+      "file": "op/string-less-than.xml",
+      "frozenBlob": "03900e08f1b6f454d0622e52e64f61fe0982de02",
+      "currentBlob": "03900e08f1b6f454d0622e52e64f61fe0982de02",
+      "fileChanged": false,
+      "frozenCases": 10,
+      "currentCases": 10,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-subtract-dateTimes",
+      "file": "op/subtract-dateTimes.xml",
+      "frozenBlob": "c5ba4420d6e1ad5343ab06c4cb4342a396e2481b",
+      "currentBlob": "c5ba4420d6e1ad5343ab06c4cb4342a396e2481b",
+      "fileChanged": false,
+      "frozenCases": 33,
+      "currentCases": 33,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-subtract-dates",
+      "file": "op/subtract-dates.xml",
+      "frozenBlob": "17a56b22d4a5c3fa0b6d3e4e2bbc9ae58ae68b7d",
+      "currentBlob": "17a56b22d4a5c3fa0b6d3e4e2bbc9ae58ae68b7d",
+      "fileChanged": false,
+      "frozenCases": 31,
+      "currentCases": 31,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 31,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-subtract-dayTimeDuration-from-date",
+      "file": "op/subtract-dayTimeDuration-from-date.xml",
+      "frozenBlob": "7a0915daec03c6cfe480d12e686a3e8c227d2c09",
+      "currentBlob": "7a0915daec03c6cfe480d12e686a3e8c227d2c09",
+      "fileChanged": false,
+      "frozenCases": 24,
+      "currentCases": 24,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "op-subtract-dayTimeDuration-from-dateTime",
+      "file": "op/subtract-dayTimeDuration-from-dateTime.xml",
+      "frozenBlob": "197a410f39660d4deefa90b05c43c3537760c934",
+      "currentBlob": "197a410f39660d4deefa90b05c43c3537760c934",
+      "fileChanged": false,
+      "frozenCases": 24,
+      "currentCases": 24,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 22,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "op-subtract-dayTimeDuration-from-time",
+      "file": "op/subtract-dayTimeDuration-from-time.xml",
+      "frozenBlob": "aa38278fd07a8c04035e7ce7a84e98cc637cc571",
+      "currentBlob": "aa38278fd07a8c04035e7ce7a84e98cc637cc571",
+      "fileChanged": false,
+      "frozenCases": 28,
+      "currentCases": 28,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "op-subtract-dayTimeDurations",
+      "file": "op/subtract-dayTimeDurations.xml",
+      "frozenBlob": "aa54ad9a51163108c0c6194f9b05025af333938e",
+      "currentBlob": "aa54ad9a51163108c0c6194f9b05025af333938e",
+      "fileChanged": false,
+      "frozenCases": 69,
+      "currentCases": 69,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 32,
+        "failed": 0,
+        "skipped": 37
+      },
+      "current": {
+        "passed": 32,
+        "failed": 0,
+        "skipped": 37
+      }
+    },
+    {
+      "set": "op-subtract-times",
+      "file": "op/subtract-times.xml",
+      "frozenBlob": "b1eaf51499b6e09aa0a313c383511f39c4a0a9b1",
+      "currentBlob": "b1eaf51499b6e09aa0a313c383511f39c4a0a9b1",
+      "fileChanged": false,
+      "frozenCases": 33,
+      "currentCases": 33,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "op-subtract-yearMonthDuration-from-date",
+      "file": "op/subtract-yearMonthDuration-from-date.xml",
+      "frozenBlob": "779c59c1e178254225d0143fe3d8328ea223f9a0",
+      "currentBlob": "779c59c1e178254225d0143fe3d8328ea223f9a0",
+      "fileChanged": false,
+      "frozenCases": 26,
+      "currentCases": 26,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 24,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "op-subtract-yearMonthDuration-from-dateTime",
+      "file": "op/subtract-yearMonthDuration-from-dateTime.xml",
+      "frozenBlob": "e31d9c8333859187e853b6b0fe9792eabafba9ae",
+      "currentBlob": "e31d9c8333859187e853b6b0fe9792eabafba9ae",
+      "fileChanged": false,
+      "frozenCases": 23,
+      "currentCases": 23,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "op-subtract-yearMonthDurations",
+      "file": "op/subtract-yearMonthDurations.xml",
+      "frozenBlob": "9cf46d0add1267e8dd3053d0749138580b0f5b81",
+      "currentBlob": "9cf46d0add1267e8dd3053d0749138580b0f5b81",
+      "fileChanged": false,
+      "frozenCases": 33,
+      "currentCases": 33,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "op-time-equal",
+      "file": "op/time-equal.xml",
+      "frozenBlob": "85ded2d45de473c0860e8662ba190f4d167631de",
+      "currentBlob": "85ded2d45de473c0860e8662ba190f4d167631de",
+      "fileChanged": false,
+      "frozenCases": 58,
+      "currentCases": 58,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 52,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-time-greater-than",
+      "file": "op/time-greater-than.xml",
+      "frozenBlob": "1893989a8430bc049254cbbc9aff34c487b6c049",
+      "currentBlob": "1893989a8430bc049254cbbc9aff34c487b6c049",
+      "fileChanged": false,
+      "frozenCases": 45,
+      "currentCases": 45,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 39,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-time-less-than",
+      "file": "op/time-less-than.xml",
+      "frozenBlob": "f0efa5cd39d8022f49b6247127509798fb1381d3",
+      "currentBlob": "f0efa5cd39d8022f49b6247127509798fb1381d3",
+      "fileChanged": false,
+      "frozenCases": 44,
+      "currentCases": 44,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 38,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-yearMonthDuration-greater-than",
+      "file": "op/yearMonthDuration-greater-than.xml",
+      "frozenBlob": "c1bf2f2229c43b338a24226e6503fd7169da0557",
+      "currentBlob": "c1bf2f2229c43b338a24226e6503fd7169da0557",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "op-yearMonthDuration-less-than",
+      "file": "op/yearMonthDuration-less-than.xml",
+      "frozenBlob": "be076616d7eea55625683945e29c392d1ed12743",
+      "currentBlob": "be076616d7eea55625683945e29c392d1ed12743",
+      "fileChanged": false,
+      "frozenCases": 34,
+      "currentCases": 34,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 28,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "prod-AxisStep.abbr",
+      "file": "prod/AxisStep.abbr.xml",
+      "frozenBlob": "4fec638927ca6952a4e074dfc244195163e05977",
+      "currentBlob": "4fec638927ca6952a4e074dfc244195163e05977",
+      "fileChanged": false,
+      "frozenCases": 23,
+      "currentCases": 23,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "prod-AxisStep.unabbr",
+      "file": "prod/AxisStep.unabbr.xml",
+      "frozenBlob": "6c3a6431e15cfba75bac3d969865c88297663676",
+      "currentBlob": "6c3a6431e15cfba75bac3d969865c88297663676",
+      "fileChanged": false,
+      "frozenCases": 26,
+      "currentCases": 26,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 26,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "prod-Comment",
+      "file": "prod/Comment.xml",
+      "frozenBlob": "93f3031f23b2f714061a2dfdc6641e2f62598467",
+      "currentBlob": "93f3031f23b2f714061a2dfdc6641e2f62598467",
+      "fileChanged": false,
+      "frozenCases": 45,
+      "currentCases": 45,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 18
+      },
+      "current": {
+        "passed": 27,
+        "failed": 0,
+        "skipped": 18
+      }
+    },
+    {
+      "set": "prod-ContextItemExpr",
+      "file": "prod/ContextItemExpr.xml",
+      "frozenBlob": "d89aa3904bfabdef2baa5e6451ac6e00f8903539",
+      "currentBlob": "d89aa3904bfabdef2baa5e6451ac6e00f8903539",
+      "fileChanged": false,
+      "frozenCases": 45,
+      "currentCases": 45,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 43,
+        "failed": 0,
+        "skipped": 2
+      },
+      "current": {
+        "passed": 43,
+        "failed": 0,
+        "skipped": 2
+      }
+    },
+    {
+      "set": "prod-CurlyArrayConstructor",
+      "file": "prod/CurlyArrayConstructor.xml",
+      "frozenBlob": "3f52c5a0e9ceb6af76d1e2aa35d3903cd5177cc7",
+      "currentBlob": "3f52c5a0e9ceb6af76d1e2aa35d3903cd5177cc7",
+      "fileChanged": false,
+      "frozenCases": 5,
+      "currentCases": 5,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 3
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 3
+      }
+    },
+    {
+      "set": "prod-DirElemContent",
+      "file": "prod/DirElemContent.xml",
+      "frozenBlob": "0a4405dd6710fafdbb74033a197a6f452affb450",
+      "currentBlob": "0a4405dd6710fafdbb74033a197a6f452affb450",
+      "fileChanged": false,
+      "frozenCases": 135,
+      "currentCases": 135,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 131
+      },
+      "current": {
+        "passed": 4,
+        "failed": 0,
+        "skipped": 131
+      }
+    },
+    {
+      "set": "prod-DirectConstructor",
+      "file": "prod/DirectConstructor.xml",
+      "frozenBlob": "5c70e92ddb66c741f4e73e82309e78f01b355814",
+      "currentBlob": "5c70e92ddb66c741f4e73e82309e78f01b355814",
+      "fileChanged": false,
+      "frozenCases": 93,
+      "currentCases": 93,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 91
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 91
+      }
+    },
+    {
+      "set": "prod-GeneralComp.ge",
+      "file": "prod/GeneralComp.ge.xml",
+      "frozenBlob": "7b61ca461843887a76b1f477b514d8dd4919a4ee",
+      "currentBlob": "7b61ca461843887a76b1f477b514d8dd4919a4ee",
+      "fileChanged": false,
+      "frozenCases": 112,
+      "currentCases": 112,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 58,
+        "failed": 0,
+        "skipped": 54
+      },
+      "current": {
+        "passed": 58,
+        "failed": 0,
+        "skipped": 54
+      }
+    },
+    {
+      "set": "prod-GeneralComp.le",
+      "file": "prod/GeneralComp.le.xml",
+      "frozenBlob": "545fd1b3fb37eb6de989ba4009729fc15681a908",
+      "currentBlob": "545fd1b3fb37eb6de989ba4009729fc15681a908",
+      "fileChanged": false,
+      "frozenCases": 108,
+      "currentCases": 108,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 57,
+        "failed": 0,
+        "skipped": 51
+      },
+      "current": {
+        "passed": 57,
+        "failed": 0,
+        "skipped": 51
+      }
+    },
+    {
+      "set": "prod-GeneralComp.lt",
+      "file": "prod/GeneralComp.lt.xml",
+      "frozenBlob": "079519106fcb263454ae15ee25e30ae74a8449f7",
+      "currentBlob": "079519106fcb263454ae15ee25e30ae74a8449f7",
+      "fileChanged": false,
+      "frozenCases": 133,
+      "currentCases": 133,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 74,
+        "failed": 0,
+        "skipped": 59
+      },
+      "current": {
+        "passed": 74,
+        "failed": 0,
+        "skipped": 59
+      }
+    },
+    {
+      "set": "prod-GeneralComp.ne",
+      "file": "prod/GeneralComp.ne.xml",
+      "frozenBlob": "c16462530c0e3431937edefe7124f18645aae7dd",
+      "currentBlob": "c16462530c0e3431937edefe7124f18645aae7dd",
+      "fileChanged": false,
+      "frozenCases": 140,
+      "currentCases": 140,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 89,
+        "failed": 0,
+        "skipped": 51
+      },
+      "current": {
+        "passed": 89,
+        "failed": 0,
+        "skipped": 51
+      }
+    },
+    {
+      "set": "prod-IfExpr",
+      "file": "prod/IfExpr.xml",
+      "frozenBlob": "aeb3da48a27f6cf30b93c2904fd913c6bf46aa94",
+      "currentBlob": "aeb3da48a27f6cf30b93c2904fd913c6bf46aa94",
+      "fileChanged": false,
+      "frozenCases": 43,
+      "currentCases": 43,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 13
+      },
+      "current": {
+        "passed": 30,
+        "failed": 0,
+        "skipped": 13
+      }
+    },
+    {
+      "set": "prod-KeywordArguments",
+      "file": "prod/KeywordArguments.xml",
+      "frozenBlob": "4423f99c4dbf6e04f42cca317a436cb49960f49d",
+      "currentBlob": "4423f99c4dbf6e04f42cca317a436cb49960f49d",
+      "fileChanged": false,
+      "frozenCases": 1,
+      "currentCases": 1,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "prod-LambdaExpr",
+      "file": "prod/LambdaExpr.xml",
+      "frozenBlob": "385bc7a1f328f2849e67104cccb76934d5ec5acd",
+      "currentBlob": "385bc7a1f328f2849e67104cccb76934d5ec5acd",
+      "fileChanged": false,
+      "frozenCases": 8,
+      "currentCases": 8,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 8,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "prod-LetClause",
+      "file": "prod/LetClause.xml",
+      "frozenBlob": "c8798a7cd8cbe4189bb27c164970abbcb08578bb",
+      "currentBlob": "c8798a7cd8cbe4189bb27c164970abbcb08578bb",
+      "fileChanged": false,
+      "frozenCases": 189,
+      "currentCases": 189,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 137,
+        "failed": 0,
+        "skipped": 52
+      },
+      "current": {
+        "passed": 137,
+        "failed": 0,
+        "skipped": 52
+      }
+    },
+    {
+      "set": "prod-NameTest",
+      "file": "prod/NameTest.xml",
+      "frozenBlob": "44dc054a73102e7ef0cd461fa79dfa9d811ed6b9",
+      "currentBlob": "44dc054a73102e7ef0cd461fa79dfa9d811ed6b9",
+      "fileChanged": false,
+      "frozenCases": 127,
+      "currentCases": 127,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 51,
+        "failed": 0,
+        "skipped": 76
+      },
+      "current": {
+        "passed": 51,
+        "failed": 0,
+        "skipped": 76
+      }
+    },
+    {
+      "set": "prod-OrExpr",
+      "file": "prod/OrExpr.xml",
+      "frozenBlob": "aa158f80735c06eb989603eef9c14ea6e15a98aa",
+      "currentBlob": "aa158f80735c06eb989603eef9c14ea6e15a98aa",
+      "fileChanged": false,
+      "frozenCases": 376,
+      "currentCases": 376,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 334,
+        "failed": 0,
+        "skipped": 42
+      },
+      "current": {
+        "passed": 334,
+        "failed": 0,
+        "skipped": 42
+      }
+    },
+    {
+      "set": "prod-ParenthesizedExpr",
+      "file": "prod/ParenthesizedExpr.xml",
+      "frozenBlob": "8996db8c4b5ba892d1dbfc0f2ad5b536dfae47f5",
+      "currentBlob": "8996db8c4b5ba892d1dbfc0f2ad5b536dfae47f5",
+      "fileChanged": false,
+      "frozenCases": 20,
+      "currentCases": 20,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 14,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 14,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "prod-ReturnClause",
+      "file": "prod/ReturnClause.xml",
+      "frozenBlob": "67e3d6462b4e027bbd78879b20690f488a029048",
+      "currentBlob": "67e3d6462b4e027bbd78879b20690f488a029048",
+      "fileChanged": false,
+      "frozenCases": 21,
+      "currentCases": 21,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 15,
+        "failed": 0,
+        "skipped": 6
+      },
+      "current": {
+        "passed": 15,
+        "failed": 0,
+        "skipped": 6
+      }
+    },
+    {
+      "set": "prod-SquareArrayConstructor",
+      "file": "prod/SquareArrayConstructor.xml",
+      "frozenBlob": "2a03206a88ee4a4972e39d2dec0835589303c60f",
+      "currentBlob": "2a03206a88ee4a4972e39d2dec0835589303c60f",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 5
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 5
+      }
+    },
+    {
+      "set": "prod-StringTemplate",
+      "file": "prod/StringTemplate.xml",
+      "frozenBlob": "91ae98853b353130daf9e40670d037c57c91985e",
+      "currentBlob": "91ae98853b353130daf9e40670d037c57c91985e",
+      "fileChanged": false,
+      "frozenCases": 53,
+      "currentCases": 53,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 13
+      },
+      "current": {
+        "passed": 40,
+        "failed": 0,
+        "skipped": 13
+      }
+    },
+    {
+      "set": "prod-TreatExpr",
+      "file": "prod/TreatExpr.xml",
+      "frozenBlob": "5d6bf63b6fa9fc3ebd12852f40f6f49747189fb1",
+      "currentBlob": "fb068f4daf6578bbb2195b7c317a86c24569d055",
+      "fileChanged": true,
+      "frozenCases": 73,
+      "currentCases": 74,
+      "addedIds": [
+        "treat-as-30"
+      ],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 62,
+        "failed": 0,
+        "skipped": 11
+      },
+      "current": {
+        "passed": 63,
+        "failed": 0,
+        "skipped": 11
+      }
+    },
+    {
+      "set": "xs-anyAtomicType",
+      "file": "xs/anyAtomicType.xml",
+      "frozenBlob": "bb6a753e9c1e9aa50bcbb6166ba9080f24151997",
+      "currentBlob": "bb6a753e9c1e9aa50bcbb6166ba9080f24151997",
+      "fileChanged": false,
+      "frozenCases": 2,
+      "currentCases": 2,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "xs-anySimpleType",
+      "file": "xs/anySimpleType.xml",
+      "frozenBlob": "a3e55174958bf4da0fd5c74a45b5783a6dc48d54",
+      "currentBlob": "a3e55174958bf4da0fd5c74a45b5783a6dc48d54",
+      "fileChanged": false,
+      "frozenCases": 6,
+      "currentCases": 6,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "xs-normalizedString",
+      "file": "xs/normalizedString.xml",
+      "frozenBlob": "fdffef2876ab0ebab4bf085e58ba66105dc2a8a5",
+      "currentBlob": "fdffef2876ab0ebab4bf085e58ba66105dc2a8a5",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "xs-notation",
+      "file": "xs/notation.xml",
+      "frozenBlob": "90f66ab6a475d83a8848de2f8d7048f7d0c9eb24",
+      "currentBlob": "90f66ab6a475d83a8848de2f8d7048f7d0c9eb24",
+      "fileChanged": false,
+      "frozenCases": 2,
+      "currentCases": 2,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      },
+      "current": {
+        "passed": 2,
+        "failed": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "set": "xs-numeric",
+      "file": "xs/numeric.xml",
+      "frozenBlob": "5c8a005b695bd1069725bc9d05a737def557120f",
+      "currentBlob": "5c8a005b695bd1069725bc9d05a737def557120f",
+      "fileChanged": false,
+      "frozenCases": 22,
+      "currentCases": 22,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 21,
+        "failed": 0,
+        "skipped": 1
+      }
+    },
+    {
+      "set": "xs-token",
+      "file": "xs/token.xml",
+      "frozenBlob": "a8b179aafbb0a7c3473e39f3ae0bf5ec07d08c23",
+      "currentBlob": "a8b179aafbb0a7c3473e39f3ae0bf5ec07d08c23",
+      "fileChanged": false,
+      "frozenCases": 7,
+      "currentCases": 7,
+      "addedIds": [],
+      "removedIds": [],
+      "executionNodeChangedIds": [],
+      "frozen": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 1
+      },
+      "current": {
+        "passed": 6,
+        "failed": 0,
+        "skipped": 1
+      }
+    }
+  ],
+  "failures": [
+    {
+      "id": "boolean-020",
+      "message": "Unexpected error: FORG0006",
+      "set": "fn-boolean",
+      "status": "added",
+      "currentTest": "\n         boolean([]/.),\n         boolean(jtree(false())),\n         boolean(jtree(0)),\n         boolean({ 'a': () }/a)\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>true(), true(), true(), true()</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "boolean-022",
+      "message": "Unexpected error: FORG0006",
+      "set": "fn-boolean",
+      "status": "added",
+      "currentTest": "boolean(({ 'a': 1 }/a, 1))",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "fn-data-16",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}type-of#1 not found.",
+      "set": "fn-data",
+      "status": "added",
+      "currentTest": "\n         data([ parse-xml('<a>1</a>')/a, xs:untypedAtomic('2') ]/*) ! type-of(.)\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>'xs:untypedAtomic', 'xs:untypedAtomic'</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-700",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<first_x0020_name>Jane</first_x0020_name>')/*,\n             { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'first name': 'Jane' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-701",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<r><_x_>x</_x_></r>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'r': { '': 'x' } }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-702",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x005F_xb/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a_xb': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-703",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0F0000_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a' || codepoints-to-string(983040): '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-704",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<r><a_x12_b/><a_x0020/><a_x00200_/></r>')/*,\n             { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'r': { 'a_x12_b': '', 'a_x0020': '', 'a_x00200_': '' } }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-705",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a x_x0020_y=\"1\"/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a': { '@x y': '1' } }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-707",
+      "message": "Expected error FOCH0001, got: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0000_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0001\" />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-708",
+      "message": "Expected error FOCH0001, got: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_xD800_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0001\" />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-709",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<p:a_x0020_b xmlns:p=\"http://p\"/>')/*,\n             { 'name-format': 'lexical', 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'p:a b': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-710",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0020_b xmlns=\"http://u/\"/>')/*,\n             { 'name-format': 'eqname', 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'Q{http://u/}a b': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-711",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x003A_b/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a:b': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-712",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         let $e := parse-xml('<a_x0020_b c_x003A_d=\"1\"><_x0031_/></a_x0020_b>')/*\n         let $o := { 'escape-names': true() }\n         return deep-equal($e, map-to-element(element-to-map($e, $o), $o))\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-713",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0020_b_x0020_c/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a b c': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-714",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<_x0031__x0032_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ '12': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-715",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x_b/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a_x_b': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-716",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<_x005F_x_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ '_x_': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-717",
+      "message": "Expected error FOCH0001, got: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x110000_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0001\" />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-718",
+      "message": "Expected error FOCH0001, got: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_xFFFE_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FOCH0001\" />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-719",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x01D11E_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a' || codepoints-to-string(119070): '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-720",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_X0020_/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a_X0020_': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-721",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<p:_x_ xmlns:p=\"http://p\"/>')/*,\n             { 'name-format': 'lexical', 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'p:': '' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-722",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a xml:a_x0020_b=\"1\"/>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a': { '@xml:a b': '1' } }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-723",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0020_b xmlns=\"http://u/\"><c_x0020_d/></a_x0020_b>')/*,\n             { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'Q{http://u/}a b': { 'c d': '' } }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-724",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a_x0020_b/>')/*,\n             { 'escape-names': true(), 'plan': { 'a_x0020_b': { 'layout': 'xml' } } })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a b': '&lt;a_x0020_b/&gt;' }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-725",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         element-to-map(parse-xml('<a>t<b_x0020_c/></a>')/*, { 'escape-names': true() })\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>{ 'a': [ 't', { 'b c': '' } ] }</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "element-to-map-726",
+      "message": "Unexpected error: XPTY0004: unknown option 'escape-names'.",
+      "set": "fn-element-to-map",
+      "status": "added",
+      "currentTest": "\n         let $e := parse-xml('<a_x0020_b><c_x0020_d>1</c_x0020_d><c_x0020_d>2</c_x0020_d></a_x0020_b>')/*\n         let $o := { 'escape-names': true(), 'plan': element-to-map-plan($e) }\n         return deep-equal($e, map-to-element(element-to-map($e, $o), $o))\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   "
+    },
+    {
+      "id": "index-of-substring-021",
+      "message": "Unexpected error: XPTY0004",
+      "set": "fn-index-of-substring",
+      "status": "execution-nodes-changed",
+      "currentTest": "fn:index-of-substring(\"abc\", ())",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-deep-eq>1, 2, 3, 4</ns0:assert-deep-eq>\n    </ns0:result>\n  ",
+      "frozenTest": "fn:index-of-substring(\"abc\", ())",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  "
+    },
+    {
+      "id": "fn-jkey-020",
+      "message": "Unexpected error: Parse error at position 57: XPST0003: Unknown axis: item",
+      "set": "fn-jkey",
+      "status": "added",
+      "currentTest": "\n         ({ 1e0: 'a' }/*, { 1.0: 'a' }/*, [ 'a' ]/*, jtree(1)/item::*) ! type-of(jkey())\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>'xs:double', 'xs:decimal', 'xs:integer', 'xs:integer'</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "fn-jkey-021",
+      "message": "Unexpected error: Parse error at position 46: XPST0003: Unknown axis: item",
+      "set": "fn-jkey",
+      "status": "added",
+      "currentTest": "jtree((1, 2))/* =!> jkey(), jkey(jtree(1)/item::*/item::*)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>1, 2, 1</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "fn-jkey-022",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jnode#0 not found.",
+      "set": "fn-jkey",
+      "status": "added",
+      "currentTest": "jtree({ 'x': [ 'y' ] })//jnode() ! jkey()",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>'x', 1</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "fn-jvalue-061",
+      "message": "Unexpected error: Parse error at position 103: XPST0003: Unknown axis: item",
+      "set": "fn-jvalue",
+      "status": "added",
+      "currentTest": "\n         count({ 'a': () }/a => jvalue()),\n         count({ 'a': (1, 2) }/a => jvalue()),\n         jtree(1)/item::* => jvalue()\n      ",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-deep-eq>0, 2, 1</ns0:assert-deep-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-912",
+      "message": "Unexpected error: XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')),\n       map{'select-columns':(4,3,-1)})?rows\n       => array:join()",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-deep-eq>[\"d\",\"c\",\"\",\"s\",\"r\",\"\"]</ns0:assert-deep-eq>\n     </ns0:result>\n  ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,-1)})?rows \n       => array:join()",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:error code=\"XPTY0004\" />\n     </ns0:result>\n  "
+    },
+    {
+      "id": "parse-csv-913",
+      "message": "Unexpected error: XPTY0004: The select-columns option must be a sequence of xs:positiveInteger.",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')),\n       map{'select-columns':(4,3,0)})?rows\n       => array:join()",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-deep-eq>[\"d\",\"c\",\"\",\"s\",\"r\",\"\"]</ns0:assert-deep-eq>\n     </ns0:result>\n   ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,0)})?rows \n       => array:join()",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:error code=\"XPTY0004\" />\n     </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-914",
+      "message": "Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (row number in CSV get function).",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(-1, 2)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(-1, 2)",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-915",
+      "message": "Unexpected error: FORG0001: Cannot convert 0 to xs:positiveInteger (row number in CSV get function).",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(0, 2)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(0, 2)",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-916",
+      "message": "Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (column number in CSV get function).",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, -1)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, -1)",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-917",
+      "message": "Unexpected error: FORG0001: Cannot convert 0 to xs:positiveInteger (column number in CSV get function).",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\" => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, 0)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:assert-eq>\"\"</ns0:assert-eq>\n     </ns0:result>\n   ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\" => translate('|', char('\\n')), \n       map{'select-columns':(4,3,1)})?get(2, 0)",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n     </ns0:result>\n   "
+    },
+    {
+      "id": "parse-csv-919",
+      "message": "Unexpected error: FORG0001: Cannot convert -1 to xs:positiveInteger (row number in CSV get function).",
+      "set": "fn-parse-csv",
+      "status": "execution-nodes-changed",
+      "currentTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n      map{'select-columns':(4,3,1)})?get(-1, 3)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>\"\"</ns0:assert-eq>\n    </ns0:result>\n  ",
+      "frozenTest": "parse-csv(\"a,b,c,d,e,f|p,q,r,s,t,u\"  => translate('|', char('\\n')), \n      map{'select-columns':(4,3,1)})?get(-1, 3)",
+      "frozenAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n         <ns0:error code=\"XPTY0004\" />\n         <ns0:error code=\"FORG0001\" />\n       </ns0:any-of>\n    </ns0:result>\n  "
+    },
+    {
+      "id": "unix-DateTime-114",
+      "message": "any-of: none matched. [Unexpected error: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.; Expected error FODT0001, got: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.; Expected error FOAR0002, got: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.]",
+      "set": "fn-unix-dateTime",
+      "status": "added",
+      "currentTest": "fn:unix-dateTime(9223372036854775808)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.808Z')</ns0:assert-eq>\n            <ns0:error code=\"FODT0001\" />\n            <ns0:error code=\"FOAR0002\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "unix-DateTime-115",
+      "message": "any-of: none matched. [Unexpected error: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.; Expected error FODT0001, got: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.; Expected error FOAR0002, got: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.]",
+      "set": "fn-unix-dateTime",
+      "status": "added",
+      "currentTest": "fn:unix-dateTime(9223372036854775809)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.809Z')</ns0:assert-eq>\n            <ns0:error code=\"FODT0001\" />\n            <ns0:error code=\"FOAR0002\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "unix-DateTime-120",
+      "message": "Unexpected error: FOCA0002: fn:unix-dateTime value -86400000 is out of range for xs:nonNegativeInteger.",
+      "set": "fn-unix-dateTime",
+      "status": "added",
+      "currentTest": "fn:unix-dateTime(-1000 * 60 * 60 * 24)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1969-12-31T00:00:00Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+    },
+    {
+      "id": "unix-DateTime-121",
+      "message": "Unexpected error: FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.",
+      "set": "fn-unix-dateTime",
+      "status": "added",
+      "currentTest": "fn:unix-dateTime(-1)",
+      "currentAssertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1969-12-31T23:59:59.999Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+    }
+  ],
+  "frozenSkipsSha256": "616ee573e1dc2446d2b356be5083f7d585fde32334fdeb1973e097b8a015b6a0",
+  "currentSkipsSha256": "616ee573e1dc2446d2b356be5083f7d585fde32334fdeb1973e097b8a015b6a0",
+  "failedPreflight": {
+    "assumedSetCount": 218,
+    "actualSetCount": 224,
+    "noEngineExecutionOccurredBeforeCorrectingAssumption": true
+  },
+  "receipts": [
+    {
+      "path": "evidence/current-gate-audit/frozen-gate.txt",
+      "sha256": "ab1bb4733b7c88ab3881b86a6cbb6e181918b11ab3f73a5cdfe34515b47f56b4"
+    },
+    {
+      "path": "evidence/current-gate-audit/current-gate.txt",
+      "sha256": "0e0bfada8074638e98409bb2d1e334479fe25ca90629ffea7b8658a6708c588e"
+    },
+    {
+      "path": "evidence/current-gate-audit/frozen-skips.txt",
+      "sha256": "616ee573e1dc2446d2b356be5083f7d585fde32334fdeb1973e097b8a015b6a0"
+    },
+    {
+      "path": "evidence/current-gate-audit/current-skips.txt",
+      "sha256": "616ee573e1dc2446d2b356be5083f7d585fde32334fdeb1973e097b8a015b6a0"
+    },
+    {
+      "path": "evidence/current-gate-audit/frozen-map-to-element.txt",
+      "sha256": "d0ddf157333841d8f701a49d0ef43139f88f955889b77098370d59506facb4c1"
+    },
+    {
+      "path": "evidence/current-gate-audit/current-map-to-element.txt",
+      "sha256": "ec0d1fc9bfd09de8124aab5773ed686c835aef7598d012ebf17ae734fa865143"
+    }
+  ],
+  "supplementalMapToElement": [
+    {
+      "lane": "frozen",
+      "counts": {
+        "Total": 158,
+        "Passed": 156,
+        "Failed": 0,
+        "Skipped": 2
+      },
+      "exitCode": 0,
+      "gated": false,
+      "failures": [],
+      "failureExitPolicy": "Exploratory failures do not fail the process"
+    },
+    {
+      "lane": "current",
+      "counts": {
+        "Total": 233,
+        "Passed": 173,
+        "Failed": 53,
+        "Skipped": 7
+      },
+      "exitCode": 0,
+      "gated": false,
+      "failures": [
+        {
+          "id": "map-to-element-066",
+          "message": "Unexpected error: FOJS0009: map key '@x' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-156",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-160",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-161",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-162",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-163",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-164",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-166",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-167",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-168",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-169",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-170",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-171",
+          "message": "Expected error FOJS0009, got: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-180",
+          "message": "Unexpected error: FOJS0009: map key '#v' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-181",
+          "message": "Unexpected error: FOJS0009: map key '#v' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-182",
+          "message": "Unexpected error: FOJS0009: map key '##content' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-184",
+          "message": "Unexpected error: FOJS0009: map key '@x' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-186",
+          "message": "Unexpected error: FOJS0009: map key '@x' is not a valid XML name"
+        },
+        {
+          "id": "map-to-element-191",
+          "message": "Unexpected error: FOJS0009: list layout requires an array value"
+        },
+        {
+          "id": "map-to-element-193",
+          "message": "Unexpected error: FOJS0009: array members must be singletons"
+        },
+        {
+          "id": "map-to-element-194",
+          "message": "assert-xml failed. Expected: <a><b/></a>, Got: <a/>"
+        },
+        {
+          "id": "map-to-element-195",
+          "message": "assert-xml failed. Expected: <a><b>x<c>1</c></b></a>, Got: <a><b>x</b><b><c>1</c></b></a>"
+        },
+        {
+          "id": "map-to-element-197",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-201",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-203",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-205",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-206",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-210",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-212",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-214",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-216",
+          "message": "Unexpected error: FOJS0009: xml layout value must be a single string"
+        },
+        {
+          "id": "map-to-element-217",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-218",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-220",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-221",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-222",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-223",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-225",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-231",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-232",
+          "message": "Expected error FOJS0009 but succeeded"
+        },
+        {
+          "id": "map-to-element-236",
+          "message": "assert-xml failed. Expected: <a x=\"\"/>, Got: <a/>"
+        },
+        {
+          "id": "map-to-element-250",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-251",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-252",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-253",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-254",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-256",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-257",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-258",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-259",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-260",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-261",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        },
+        {
+          "id": "map-to-element-262",
+          "message": "Unexpected error: XPTY0004: unknown option 'escape-names'."
+        }
+      ],
+      "failureExitPolicy": "Exploratory failures do not fail the process"
+    }
+  ],
+  "engineChanged": false,
+  "runtimeGateMembershipChanged": false,
+  "documentationInventoryExtractorCorrected": true,
+  "releasePerformed": false,
+  "independentProcessorConfirmed": false,
+  "req126": "In Progress; D2/D3/D4/AC-03 partial",
+  "req136": "Implemented, published and consumer-accepted",
+  "fullSuiteBaseline": {
+    "ciRun": 40009624090,
+    "head": "9fb6cb885774193e30ec3554a2a004f3c51fe237",
+    "solutionPassed": 11133,
+    "languageServerPassed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "scope": "Unchanged engine/tests from prior accepted exact-head CI; separate clarification CI follows"
+  },
+  "nextRecommendation": "Dedicated frozen-suite repair of dormant map-to-element gate name; then bounded current-contract/adoption work"
+}

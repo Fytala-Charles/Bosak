@@ -4,6 +4,8 @@
   <p>23 October 2026</p>
 </div>
 
+**Current upstream gate audit - 23 October 2026:** [Audit](CURRENT-GATE-AUDIT.md) corrects the documentation inventory:224 configured names,223 executed sets,one dormant `map-to-element` name. Frozen8,278/0/1,894 remains unchanged; current8,297/45/1,894 fails across8 sets. Supplemental `fn-map-to-element`: frozen156/0/2,current173/53/7; current exit0 is exploratory, not green. Documentation extraction now includes six dotted names; no engine, runtime gate, fixture pin or release change. REQ-126 remains partial; REQ-136 remains accepted. Next: repair the dormant gate against frozen fixtures before upstream adoption. Earlier218-count statements are historical.
+
 ## Finding
 
 The CSV index discrepancy identified in [the original contract review](CSV-CONTRACT-REVIEW.md) is resolved upstream. It is a difference between Bosak's frozen qt4tests revision and the current upstream contract, rather than an outstanding request for upstream clarification. No duplicate upstream issue or test correction is needed.

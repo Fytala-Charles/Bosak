@@ -1,0 +1,25 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-map-to-element
+
+Discovered 738 test sets.
+  Starting: fn-map-to-element ...
+  Done: fn-map-to-element (158 tests total) [P+=156 F+=0 S+=2]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   158
+Passed:  156
+Failed:  0
+Skipped: 2
+
+Pass rate: 98.73%
+
+Skip reasons (grouped):
+      1  Unsupported dependency
+      1  Unexpected error: XmlException: Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.37s
