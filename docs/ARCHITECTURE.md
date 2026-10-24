@@ -7,6 +7,10 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Unsigned Decimal truncation — 24 October 2026:** [Correction and limits](xpath40-catalog/UNSIGNED-DECIMAL-TRUNCATION.md) discard numeric fractions before unsignedLong range facets/backing selection, with48 constructor/cast/reference/castable cases. Fractional lexical forms still refuse; floating near-zero consistency remains separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 **Exact floating integer boundaries — 24 October 2026:** [Correction and limits](xpath40-catalog/FLOATING-INTEGER-BOUNDARIES.md) reject the signed2⁶³/unsigned2⁶⁴ overflow thresholds and preserve accepted large unsigned magnitudes, with72 constructor/cast/reference/castable cases. Unsigned Decimal truncation and generic storage remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
 
 

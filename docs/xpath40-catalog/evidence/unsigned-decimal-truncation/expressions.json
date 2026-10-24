@@ -1,0 +1,14 @@
+[
+  "xs:unsignedLong(xs:decimal('-0.5'))",
+  "xs:unsignedLong(xs:double('-0.5'))",
+  "xs:unsignedLong(xs:float('-0.5'))",
+  "xs:unsignedLong(xs:decimal('-1.1'))",
+  "xs:unsignedLong(xs:double('-1.1'))",
+  "xs:unsignedLong(xs:decimal('9223372036854775807.9'))",
+  "xs:unsignedLong(xs:decimal('9223372036854775808.9'))",
+  "xs:unsignedLong(xs:decimal('18446744073709551614.5'))",
+  "xs:unsignedLong(xs:decimal('18446744073709551615.5'))",
+  "xs:unsignedLong('1.9')",
+  "xs:unsignedLong(xs:double('18446744073709551616'))",
+  "xs:unsignedLong(xs:double('9223372036854775808'))"
+]
