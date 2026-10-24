@@ -420,6 +420,7 @@
 //                      | Charles Korthout | 2.193 | 16-10-2026     | Compare record fields against map value types and generic function supertypes.               |
 //                      | Charles Korthout | 2.194 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 2.195 | 24-10-2026     | Preserve promoted integer arithmetic and check subtraction without negating Int64.MinValue. |
+//                      | Charles Korthout | 2.196 | 24-10-2026     | Check exact floating integer thresholds and preserve accepted unsigned magnitudes.          |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -9459,11 +9460,14 @@ internal static class VmEngine
                             failureKind = CastFailureKind.OutOfRange;
                             return false;
                         }
-                        if (d < 0 || d > ulong.MaxValue) return false;
-                        if (d <= long.MaxValue)
+                        // MaxValue rounds upward when converted to double; compare exact binary thresholds.
+                        if (d < 0 || d >= 18446744073709551616d) return false; // 2^64, exclusive
+                        if (d < 9223372036854775808d) // 2^63, exclusive for signed backing
                             result = XdmValue.FromInteger((long)d, normalized);
                         else
-                            result = XdmValue.FromDecimal((decimal)d, normalized);
+                            // Above 2^63 every representable floating value is integral. Convert through
+                            // UInt64 so the double-to-decimal rounding policy cannot change its magnitude.
+                            result = XdmValue.FromDecimal((decimal)(ulong)d, normalized);
                         return true;
                     }
                     if (value.Kind == XdmValueKind.Boolean)
@@ -9510,7 +9514,7 @@ internal static class VmEngine
                         failureKind = CastFailureKind.OutOfRange;
                         return false;
                     }
-                    if (d > long.MaxValue || d < long.MinValue)
+                    if (d >= 9223372036854775808d || d < -9223372036854775808d)
                         throw new InvalidOperationException("FOCA0003");
                     long lDbl = (long)d;
                     if (!IsIntegerInRange(lDbl, normalized))

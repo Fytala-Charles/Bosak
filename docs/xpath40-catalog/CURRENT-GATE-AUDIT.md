@@ -4,6 +4,10 @@
   <p>23 October 2026</p>
 </div>
 
+**Exact floating integer boundaries — 24 October 2026:** [Correction and limits](FLOATING-INTEGER-BOUNDARIES.md) reject the signed2⁶³/unsigned2⁶⁴ overflow thresholds and preserve accepted large unsigned magnitudes, with72 constructor/cast/reference/castable cases. Unsigned Decimal truncation and generic storage remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 **Unix-time wide integer calendar correction — 24 October 2026:** [Behavior and limits](UNIX-DATETIME-WIDE-RANGE.md) report FODT0001 for valid decimal-backed integer epochs beyond the supported calendar, preserving frozen negative refusal and Experimental signed behavior. Adds34 source cases; current native Unix improves to22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
 
 
