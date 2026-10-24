@@ -1,3 +1,9 @@
+## REQ-126 Experimental signed epochs — 24 October 2026
+
+Base `07db3b57e5eb2d60ab7f02315bd60efe62284408` (PR433 merged). **Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](xpath40-catalog/UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
+
+What was built: profile-gated signed conversion, 25 API and two host tests, updated existing profile contracts; no general integer or calendar expansion. Full build/tests and both manual gates pass. Current native Unix set remains20/4/0 under frozen execution. No release; Braid acceptance remains pending. Root unrelated notes preserved. Next: review correction PR, then isolate wider-integer error classification. Earlier checkpoints below are historical.
+
 ## REQ-126 Unix timestamp contract slice — 24 October 2026
 
 Base `f69f30fd01922db275be1ac6d0871c712bc3af73`. **Unix timestamp boundary review — 24 October 2026:** [Contract and evidence](xpath40-catalog/UNIX-DATETIME-CONTRACT.md) add52 source regression cases, UTC/default/call-path/calendar/2038 deadline checks and a fresh complete native-set comparison: frozen16/0/0; current20/4/0, exit2. Current negative-epoch semantics and wide-integer errors remain explicit adoption boundaries; a minimum-literal representation diagnostic is retained. All11,296 solution +84 language-server tests pass. Catalog remains76 entries /3,172 documentation checks; no engine/API/version/gate/fixture/release change. Source/public1.25.0 and Braid integration remain separate; REQ-126/D2/D3/D4/AC-03 stay partial.

@@ -4,6 +4,10 @@
   <p>Frozen 4.0 — epoch milliseconds, duration seconds and elapsed budgets</p>
 </div>
 
+**Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](../UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
+
+
+
 ## 1. Name and Classification
 
 **Timestamp deadlines — Frozen 4.0.** [fn:unix-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-unix-dateTime), [fn:seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-seconds), and [fn:duration-to-seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-duration-to-seconds).
