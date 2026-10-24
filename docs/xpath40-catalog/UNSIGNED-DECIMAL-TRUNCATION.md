@@ -4,6 +4,10 @@
   <p>24 October 2026 — source 1.25.1 unpublished; public 1.25.0 accepted</p>
 </div>
 
+**Unsigned floating truncation — 24 October 2026:** [Correction and limits](UNSIGNED-FLOATING-TRUNCATION.md) truncate finite float/double operands before unsigned range checks, allowing(-1,0) to become unsigned zero. Adds60 constructor/cast/reference/castable cases; exact overflow thresholds and nonfinite errors remain intact. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 This bounded REQ-126 fix follows the [floating integer correction](FLOATING-INTEGER-BOUNDARIES.md), reviewed at `d0b8f35b2a8b6cea2ef768b9bbf4e74f76010f9b` (PR440 merged at `acc56ae1a5962f2361825d9b6d0ad470a598163c`). It corrects the unsignedLong Decimal conversion branch across XPath31, XPath40 and Experimental, without expanding storage or changing lexical conversion. Source remains the existing unpublished1.25.1 patch; public/Braid1.25.0 remains accepted within REQ-137's delivered scope.
 
 ## Conversion order

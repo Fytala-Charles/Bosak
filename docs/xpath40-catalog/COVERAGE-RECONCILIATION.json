@@ -1,9 +1,9 @@
 {
   "date": "2026-10-24",
-  "sourceBase": "acc56ae1a5962f2361825d9b6d0ad470a598163c",
+  "sourceBase": "7838c40cafd098983932f149210fdcf22b69c314",
   "sourceVersion": "1.25.1",
   "publishedVersion": "1.25.0",
-  "scope": "Unsigned Decimal truncation before range facets/backing selection;48 new source cases outside catalog. Floating near-zero conversion and generic storage/errors remain separate. Source1.25.1 unpublished/public1.25.0 accepted. No API/version/gate/fixture/retry/release change; REQ-126 partial.",
+  "scope": "Unsigned finite floating truncation before range facets;60 new source cases outside catalog. Exact binary thresholds and nonfinite errors retained; generic storage/errors separate. Source1.25.1 unpublished/public1.25.0 accepted. No API/version/gate/fixture/retry/release change; REQ-126 partial.",
   "summary": {
     "entries": 76,
     "featureChecks": 3148,

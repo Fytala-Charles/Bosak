@@ -1,0 +1,233 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:float(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-5E-324\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027NaN\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027INF\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709549568\u0027))",
+    "value": "18446744073709549568",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:float(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-5E-324\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027NaN\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027INF\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709549568\u0027))",
+    "value": "18446744073709549568",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:float(\u0027-1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-5E-324\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027NaN\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027INF\u0027))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709549568\u0027))",
+    "value": "18446744073709549568",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]

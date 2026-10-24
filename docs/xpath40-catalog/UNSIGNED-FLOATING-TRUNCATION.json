@@ -1,0 +1,106 @@
+{
+  "date": "2026-10-24",
+  "base": "7838c40cafd098983932f149210fdcf22b69c314",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unsigned-floating-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-24T17:13:30.615678+00:00",
+      "completedAtUtc": "2026-10-24T17:13:51.159802+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "logSha256": "11c04b6d3178156df6abdf2a4efa3b460c8ce3af0099f6a62b5ccb6ad6078201"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unsigned-floating-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-24T17:13:30.615876+00:00",
+      "completedAtUtc": "2026-10-24T17:14:44.143690+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "5b589a21b0b66494a37bfaf210c521295b4c96380561d5d848f54d966c892370"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unsigned-floating-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-24T17:13:30.616273+00:00",
+      "completedAtUtc": "2026-10-24T17:13:32.257762+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "logSha256": "9740eb6240ce8236c6b8eb8d5ad892d3ef7b9a159d5f91406369b1f55d3d80b4"
+    }
+  ],
+  "runnerSha256": "c19b3343d90f7d6918de951b229b4950f0ef01052a7e98aa26b87a08a2b6543c",
+  "approvedPolicy": "Truncate finite unsignedLong floating operands before range facets; preserve exact binary thresholds",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeNegativeFailuresRemainExplicit": true,
+  "releasePerformed": false,
+  "unitTests": {
+    "before": {
+      "total": 60,
+      "passed": 42,
+      "failed": 18
+    },
+    "after": {
+      "total": 60,
+      "passed": 60,
+      "failed": 0
+    },
+    "full": {
+      "total": 11675,
+      "passed": 11675,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "newCases": 60,
+  "versionChanged": false,
+  "limits": [
+    "Generic wide integer constructor/storage/error policy unchanged",
+    "Unary/division audit work remains separate",
+    "No arbitrary precision, calendar expansion or full current-draft conformance claim"
+  ],
+  "evidenceHashes": {
+    "current-native-after.txt": "9740eb6240ce8236c6b8eb8d5ad892d3ef7b9a159d5f91406369b1f55d3d80b4",
+    "diagnostics-after.json": "0cd9bc6ea999f6963af04e8dd45cfb04fa4931078ee9ea99394d22a96d925a26",
+    "expressions.json": "c36d9d958c0951377173dc9b1d1727dd16691d6779ec83e5b14aeaedd7106da1",
+    "frozen-gate-skips.txt": "817f2d936eaeefdd75c777eb40b56ec2775e2ab7d2ff8c59ee41ddc96a83787f",
+    "frozen-gate.txt": "11c04b6d3178156df6abdf2a4efa3b460c8ce3af0099f6a62b5ccb6ad6078201",
+    "qt3.txt": "5b589a21b0b66494a37bfaf210c521295b4c96380561d5d848f54d966c892370"
+  }
+}

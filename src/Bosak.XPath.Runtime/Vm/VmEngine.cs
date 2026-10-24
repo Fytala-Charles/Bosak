@@ -422,6 +422,7 @@
 //                      | Charles Korthout | 2.195 | 24-10-2026     | Preserve promoted integer arithmetic and check subtraction without negating Int64.MinValue. |
 //                      | Charles Korthout | 2.196 | 24-10-2026     | Check exact floating integer thresholds and preserve accepted unsigned magnitudes.          |
 //                      | Charles Korthout | 2.197 | 24-10-2026     | Truncate unsignedLong decimal operands before range facets and integer backing selection. |
+//                      | Charles Korthout | 2.198 | 24-10-2026     | Truncate finite unsigned floating operands before lower/upper range facets.                |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -9462,6 +9463,8 @@ internal static class VmEngine
                             failureKind = CastFailureKind.OutOfRange;
                             return false;
                         }
+                        // Discard finite fractions before applying the unsigned range facets.
+                        d = Math.Truncate(d);
                         // MaxValue rounds upward when converted to double; compare exact binary thresholds.
                         if (d < 0 || d >= 18446744073709551616d) return false; // 2^64, exclusive
                         if (d < 9223372036854775808d) // 2^63, exclusive for signed backing
