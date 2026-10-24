@@ -58,3 +58,6 @@
 
 # Preserve frozen gate repair execution receipts and standalone process-control fixtures.
 /docs/xpath40-catalog/evidence/map-to-element-gate/** -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve the original focused native substring-contract comparison receipts.
+/docs/xpath40-catalog/evidence/substring-empty-contract/*.txt -text whitespace=cr-at-eol,-blank-at-eof

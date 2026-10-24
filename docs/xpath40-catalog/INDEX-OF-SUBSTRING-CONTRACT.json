@@ -1,0 +1,279 @@
+{
+  "date": "2026-10-24",
+  "base": "525832a4c12fc2b5d88a829362ee1f91f7e593e3",
+  "sourceVersion": "1.24.1",
+  "publicVersion": "1.24.0",
+  "status": "IMPLEMENTED_EXPERIMENTAL_ONLY_UNPUBLISHED",
+  "ownerDecision": {
+    "date": "2026-10-24",
+    "answer": "Use XPath40Experimental for the newer behavior; preserve frozen XPath40 (recommended)"
+  },
+  "baselineReview": {
+    "date": "2026-10-24",
+    "recordedAtUtc": "2026-10-24T04:01:47.474741+00:00",
+    "pins": {
+      "qtspecs": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+      "qt4tests": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2"
+    },
+    "files": {
+      "qtspecs/specifications/xpath-functions-40/src/function-catalog.xml": {
+        "revision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+        "gitBlob": "be337810df22269ea814c218de01a03596a09cac",
+        "sha256": "feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010"
+      },
+      "qt4tests/catalog.xml": {
+        "revision": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+        "gitBlob": "48a0ff7634b8f20518a4eb897908920c7ad6fbf2",
+        "sha256": "fd1e024c976f3c92b742573e53485d20b5e04373ea001dea6efff57fd73281f0"
+      },
+      "qt4tests/fn/index-of-substring.xml": {
+        "revision": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+        "gitBlob": "8ac134178c6153b9d70dd336fe5dd27e64a888d3",
+        "sha256": "20dc36df7aba4b55bd2505c47bd3c81a052879ee6baa6a06fffebe715e72af98"
+      }
+    },
+    "upstreamCorrection": {
+      "sha": "ea06e342ebe632a8f0d6841ed3e4821982e7f998",
+      "committedAt": "2026-10-11T15:07:16Z",
+      "message": "fn:index-of-substring (empty substring)"
+    },
+    "nativeResults": [
+      {
+        "lane": "frozen",
+        "exitCode": 0,
+        "logSha256": "1d63dfe6ffe053190a9ec2cd1c4c32df20c15171cbcabd0b3c42b7e493284817"
+      },
+      {
+        "lane": "current",
+        "exitCode": 2,
+        "logSha256": "2def17d9accf711fab3ec917e8eadceeaef8c8b37f3f6d52b329f6bc41b4dab4"
+      }
+    ],
+    "policyDecision": "Pending owner choice: experimental-only current contract versus explicit frozen migration",
+    "frozen021": {
+      "expression": "fn:index-of-substring(\"abc\", ())",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:error code=\"XPTY0004\" />\n    </ns0:result>\n  "
+    },
+    "current021": {
+      "expression": "fn:index-of-substring(\"abc\", ())",
+      "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-deep-eq>1, 2, 3, 4</ns0:assert-deep-eq>\n    </ns0:result>\n  "
+    }
+  },
+  "focused": {
+    "before": {
+      "file": "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-evidence\\focused-before\\charl_CHARLES_2026-10-24_06_10_46_net10.0.trx",
+      "passed": 28,
+      "failed": 10,
+      "skipped": 0,
+      "sha256": "eccc337b06479f07a0f7ac305f51e0318533372a77a6ad87b629cdfc388e54a8"
+    },
+    "after": {
+      "file": "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-evidence\\focused-after\\charl_CHARLES_2026-10-24_06_11_39_net10.0.trx",
+      "passed": 38,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "c9513ad9ee4a4666966c0e030963b570f331c8042b0073f00886ca8cc414ed2b"
+    },
+    "host": {
+      "file": "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-evidence\\focused-host\\charl_CHARLES_2026-10-24_06_12_18_net10.0.trx",
+      "passed": 2,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "d2f21e4e918e64c59b5b520c072d1fa585bbc7a37e60c2ed869a004f6c7c239f"
+    }
+  },
+  "freshGates": {
+    "date": "2026-10-24",
+    "base": "525832a4c12fc2b5d88a829362ee1f91f7e593e3",
+    "sourceVersion": "1.24.1",
+    "publicVersion": "1.24.0",
+    "results": [
+      {
+        "label": "frozen-gate",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests"
+        ],
+        "startedAtUtc": "2026-10-24T04:13:49.013218+00:00",
+        "completedAtUtc": "2026-10-24T04:14:06.838083+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 10330,
+          "Passed": 8434,
+          "Failed": 0,
+          "Skipped": 1896
+        },
+        "logSha256": "5a472b937d84720e8f887a11bc765142f5b9eaca49217da0ba94790697683c4c"
+      },
+      {
+        "label": "qt3",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+          "D:\\Development\\Bosak\\tests\\qt3tests"
+        ],
+        "startedAtUtc": "2026-10-24T04:13:49.013654+00:00",
+        "completedAtUtc": "2026-10-24T04:14:57.048750+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 31821,
+          "Passed": 31142,
+          "Failed": 0,
+          "Skipped": 679
+        },
+        "logSha256": "8952ba162757fdeae9d9bee1f0de6a023dff83369a750d148032c96083549580"
+      },
+      {
+        "label": "current-native-after",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-substring-contract-evidence\\upstream\\qt4tests",
+          "fn-index-of-substring"
+        ],
+        "startedAtUtc": "2026-10-24T04:13:49.013931+00:00",
+        "completedAtUtc": "2026-10-24T04:13:50.228487+00:00",
+        "exitCode": 2,
+        "counts": {
+          "Total": 22,
+          "Passed": 20,
+          "Failed": 1,
+          "Skipped": 1
+        },
+        "logSha256": "4707f1f01eeaa27fc6bcaa75ee8899b1ced638db21b15e0ecafee644d0e79444"
+      }
+    ],
+    "runnerSha256": "b795e8e785783e20b9c9375e5541d73594e4115d210d2f44992de02ea2bca192",
+    "approvedPolicy": "Newer absent-substring normalization in XPath40Experimental only; frozen XPath40 unchanged",
+    "frozenFixtureChanged": false,
+    "harnessRetryPolicyChanged": false,
+    "currentNativeFailureRemainsExplicit": true,
+    "releasePerformed": false
+  },
+  "receipts": [
+    {
+      "path": "evidence/substring-empty-contract/frozen-native.txt",
+      "sha256": "1d63dfe6ffe053190a9ec2cd1c4c32df20c15171cbcabd0b3c42b7e493284817"
+    },
+    {
+      "path": "evidence/substring-empty-contract/current-native.txt",
+      "sha256": "2def17d9accf711fab3ec917e8eadceeaef8c8b37f3f6d52b329f6bc41b4dab4"
+    },
+    {
+      "path": "evidence/substring-empty-contract/current-native-after.txt",
+      "sha256": "4707f1f01eeaa27fc6bcaa75ee8899b1ced638db21b15e0ecafee644d0e79444"
+    },
+    {
+      "path": "evidence/substring-empty-contract/frozen-gate.txt",
+      "sha256": "5a472b937d84720e8f887a11bc765142f5b9eaca49217da0ba94790697683c4c"
+    },
+    {
+      "path": "evidence/substring-empty-contract/qt3.txt",
+      "sha256": "8952ba162757fdeae9d9bee1f0de6a023dff83369a750d148032c96083549580"
+    },
+    {
+      "path": "evidence/substring-empty-contract/frozen-gate-skips.txt",
+      "sha256": "2ec12b90ac649399de800d011a37b644b8894c060087073578515cc107e03076"
+    }
+  ],
+  "newPublicApiCases": 38,
+  "newXsltHostCases": 2,
+  "runtimeChange": "Experimental flag selects RequireString for substring; frozen uses RequireStringRequired",
+  "publicProfileDocumented": true,
+  "matchingAlgorithmChanged": false,
+  "nativeAssertionsChanged": false,
+  "fixtureGitlinksChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeStillFrozenDiagnostic": "20/1/1; exit2; case021 is not silently retried in Experimental",
+  "req126": "In Progress; D2/D3/D4/AC-03 partial",
+  "req136": "Implemented, published and consumer-accepted",
+  "independentProcessorConfirmed": false,
+  "releasePerformed": false,
+  "baselineReviewIsHistoricalBeforePolicyApproval": true,
+  "fullValidation": {
+    "solutionPassed": 11173,
+    "languageServerPassed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "newCaseCounts": {
+      "api": 38,
+      "host": 2
+    },
+    "runs": [
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_53_net10.0.trx",
+        "passed": 1448,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "5166790b353ce0e9026f3d9c56e23c3a4bc9898ac84c7cab65bcd2f419310540"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_54_net10.0.trx",
+        "passed": 202,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "d7a4904934179e0f2737b5f0d4e9efb09b40c16eae68bac52e74e7d005fbbd0a"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0.trx",
+        "passed": 66,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "8ed2b2c98ad1edba3bc499a6af9c1cad7ff828f73e6d5ef055dec2b5546677bb"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[1].trx",
+        "passed": 489,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "da4baba556ce28b2f6155ad7e5e5853eaac95b891c4147fa4e266c32b35de874"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[2].trx",
+        "passed": 269,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "4f2a00f570ca2121499f7c12e2065369f2b734b9aa229942684ddb565e089d07"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[3].trx",
+        "passed": 132,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "3c84ab50f43c8574db37e6d230d6cc3d6941477762307801fa6559b7b64a0a89"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[4].trx",
+        "passed": 303,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "8116bb401f102330662bc9c28426562fa325f97e118ca7af1c871caac8a049c5"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[5].trx",
+        "passed": 47,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "d63d84d67e9138139ae52d2b8c0ae64b481239a2b9e637b6d7aa792cbe9cc3b2"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[6].trx",
+        "passed": 153,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "07466fdb58d5166ca7736a53b032f90a6fc70d9742146ed07382280fb3b87e62"
+      },
+      {
+        "file": "charl_CHARLES_2026-10-24_06_12_55_net10.0[7].trx",
+        "passed": 8064,
+        "failed": 0,
+        "skipped": 0,
+        "sha256": "856cdf1ca4f40565b41567a6ab138fff4eb3d23d4ecdc9fe09892bbc040a0caf"
+      }
+    ],
+    "languageServerTrxSha256": "83d68cffb1548b04e9ba73681970884f24beaa136a62e475915c521d6eb5f1ac",
+    "temporaryFixtureJunctionsRemoved": true,
+    "build": "Release succeeded; one existing CS8604 conformance-runner warning"
+  }
+}

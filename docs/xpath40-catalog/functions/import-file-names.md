@@ -133,6 +133,9 @@ Position search materializes match positions and text extraction works on suppli
 
 ## 15. Known Uses
 
+**Experimental empty-argument correction (source1.24.1):** [Contract](../INDEX-OF-SUBSTRING-CONTRACT.md), [38 public API controls](../../../tests/Bosak.XPath.Standard.Tests/SubstringExperimentalContractTests.cs) and [two host controls](../../../tests/Bosak.Xslt.Tests/SubstringExperimentalHostBoundaryTests.cs) verify the newer absent-pattern result only under `XPath40Experimental`. Frozen `fn-index-of-substring` case021 still requires XPTY0004; current upstream case021 remains a diagnostic failure in the frozen runner. No current-gate promotion or historical provenance recovery is claimed.
+
+
 This importer rule is synthetic. Existing evidence includes [`IndexOfSubstring_SpecExamples`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`IndexOfSubstring_EmptySubstring_MatchesEveryPosition`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`IndexOfSubstring_PositionsInCodepoints`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`SubstringBeforeLast_SpecExamples`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), [`SubstringAfterLast_SpecExamples`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs), and [`SubstringAfterLast_WithCollation`](../../../tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs).
 
 The [4.0 runner](../../../tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs) assigns exact fn-index-of-substring to GatedSets. No exact before-last/after-last assignment is claimed. These 13 executable cases provide separate evidence. Gate membership is unchanged.
