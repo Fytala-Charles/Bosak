@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-24", sourceBase="525832a4c12fc2b5d88a829362ee1f91f7e593e3",
-    sourceVersion="1.24.1", publishedVersion="1.24.0", scope="Owner-approved Experimental-only absent index-of-substring normalization;40 API/host controls; frozen XPath40,224 configured/executed gate names and native expectations unchanged. Current native case021 remains a frozen-profile diagnostic failure; prior receipts retained; source unpublished.",
+receipt = dict(date="2026-10-24", sourceBase="f69f30fd01922db275be1ac6d0871c712bc3af73",
+    sourceVersion="1.25.0", publishedVersion="1.25.0", scope="Unix timestamp boundary review:52 new source regressions outside catalog manifest; targeted frozen16/0/0 and current20/4/0 exit2. Native negative/wide-integer and minimum-literal diagnostics retained; no semantic adoption, engine/API/version/gate/fixture/release change. Source/public1.25.0; REQ-126 remains partial.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

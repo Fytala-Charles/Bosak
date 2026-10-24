@@ -13,6 +13,8 @@ Definitions reviewed **2026-10-11** against immutable
 [QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).
 This review pin does not recover the unavailable historical adopted specification snapshot.
 
+**Boundary review — 24 October 2026:** [Unix-time contract and current-draft comparison](../UNIX-DATETIME-CONTRACT.md) add52 source checks without changing the engine or the nonnegative frozen contract. Explicit current negative-epoch and wide-integer diagnostics remain unresolved; source/public1.25.0. Earlier source/public1.1.3 labels below are historical.
+
 ## 2. Intent
 
 Turn a receipt's epoch timestamp and measured processing time into UTC instants,
@@ -211,6 +213,8 @@ assigns exact fn-unix-dateTime to GatedSets. There is no exact fn-seconds or
 fn-duration-to-seconds assignment: fn-seconds-from-duration/from-time are different
 functions. Named tests and these 17 examples provide separate evidence; no gate
 membership changes are included.
+
+The additional [`UnixDateTimeContractTests`](../../../tests/Bosak.XPath.Standard.Tests/UnixDateTimeContractTests.cs) verify `SupportedMilliseconds_AreExact`, `Default_IsEpochRatherThanNow`, `ResultTypeAndUtc_AreIndependentOfImplicitTimezone` and complete `DeadlineReport_MatchesXPath31Baseline` outcomes. Fresh full-set `fn-unix-dateTime` evidence and the four current-native failures are in the linked contract review; no gate promotion or new catalog-manifest cases are implied.
 
 ## 16. Related Features
 
