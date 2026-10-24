@@ -1,3 +1,9 @@
+## Bosak1.25.1 consolidated candidate — 24 October 2026
+
+Immutable source `6081e70daa8a49ef3d522b124a18d8de68e0b4d5` (PR442 merged; full tree equals reviewed d46f9d2f). **1.25.1 release candidate validated — 24 October 2026:** [Consolidated proof](RELEASE-1.25.1-CANDIDATE.md) pins exact source6081e70d,11,759 passing source/language-server tests, unchanged frozen gates, ten verified unsigned local packages and153 broad/1,045 focused package checks. Public1.25.0 remains current; no tag/publication. REQ-126 stays partial; generic wide storage/error and remaining audit limits remain explicit.
+
+What was built: fresh build/full tests,84 LSP, both gates, ten unsigned local packages;153 broad/1045 focused checks,431 new cases counted independently,19 assembly identities and transitive audits verified. Source build zero errors/existing CS8604 only. Original compressed NuGet preflight correction retained. No code/version/tag/release/upload change in candidate docs. Shared-checkout REQ-138 draft/registry and upstream notes preserved outside this branch. Next: review candidate documentation, then obtain explicit publication authorization for the pinned source and verify signed public delivery separately.
+
 ## REQ-126 unsigned floating truncation — 24 October 2026
 
 Base `7838c40cafd098983932f149210fdcf22b69c314` (PR441 merged). **Unsigned floating truncation — 24 October 2026:** [Correction and limits](xpath40-catalog/UNSIGNED-FLOATING-TRUNCATION.md) truncate finite float/double operands before unsigned range checks, allowing(-1,0) to become unsigned zero. Adds60 constructor/cast/reference/castable cases; exact overflow thresholds and nonfinite errors remain intact. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.

@@ -85,3 +85,5 @@ docs/xpath40-catalog/evidence/floating-integer-boundaries/*.txt -text whitespace
 docs/xpath40-catalog/evidence/unsigned-decimal-truncation/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/xpath40-catalog/evidence/unsigned-floating-truncation/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+docs/release-evidence/1.25.1/*.txt -text whitespace=cr-at-eol,-blank-at-eof

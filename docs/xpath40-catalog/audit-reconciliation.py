@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-24", sourceBase="7838c40cafd098983932f149210fdcf22b69c314",
-    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Unsigned finite floating truncation before range facets;60 new source cases outside catalog. Exact binary thresholds and nonfinite errors retained; generic storage/errors separate. Source1.25.1 unpublished/public1.25.0 accepted. No API/version/gate/fixture/retry/release change; REQ-126 partial.",
+receipt = dict(date="2026-10-24", sourceBase="6081e70daa8a49ef3d522b124a18d8de68e0b4d5",
+    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Consolidated1.25.1 candidate validated:431 added source cases outside catalog,11675 solution+84 LSP,153 broad/1045 focused local-package checks,ten unsigned packages. Frozen gates31142/0/679 and8436/0/1894; current Unix22/2/0. No code/API/version/tag/publication change; public1.25.0 accepted; REQ-126 partial.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

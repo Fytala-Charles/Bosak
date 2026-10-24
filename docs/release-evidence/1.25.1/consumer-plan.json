@@ -1,0 +1,22 @@
+{
+  "previous": "1.25.0",
+  "candidate": "1.25.1",
+  "broadChecks": 153,
+  "retainedFocusedChecks": 614,
+  "addedFocusedChecks": 431,
+  "totalFocusedChecks": 1045,
+  "testSourceHashes": {
+    "tests/Bosak.XPath.Standard.Tests/UnixDateTimeContractTests.cs": "53b4d934e748e9e5a582efefbf7ec34d968ae21d04a332fcfa5f57fee260f6cc",
+    "tests/Bosak.XPath.Standard.Tests/UnixDateTimeExperimentalTests.cs": "ef7c3941b111fcbfd04e47fe8b1479c6c95084d30803b84a5574e381fb08a086",
+    "tests/Bosak.XPath.Standard.Tests/UnixDateTimeWideIntegerBoundaryTests.cs": "a0bb89c18ed0654b978cd4c9aab112d51f81f1f1844290c62dcbc75ed2b1a280",
+    "tests/Bosak.XPath.Standard.Tests/IntegerPromotionTests.cs": "6ba06d0919648e9d462560ce783a9377b66c018d40bd001266421aa0a5bd8186",
+    "tests/Bosak.XPath.Standard.Tests/UnixDateTimeWideRangeTests.cs": "59c03cbd4cbd25c8fc7ced746440a914707cb6aae5e21815c332f7aa0c4d84da",
+    "tests/Bosak.XPath.Standard.Tests/IntegerCastContractTests.cs": "44dc5222e3d8c31650515f732ff18b25ed5e5e278b01d1bac73a561017ba9673",
+    "tests/Bosak.XPath.Standard.Tests/FloatingIntegerBoundaryTests.cs": "951166fbfe182e275cf5ac33db40903f027dad7ae2eca8fcfbaf0cc74cc42b2f",
+    "tests/Bosak.XPath.Standard.Tests/UnsignedDecimalCastTests.cs": "38fcc4567d024614e12493013fe38c18cca098f7f3e2d4fe792a9921b1a880a6",
+    "tests/Bosak.XPath.Standard.Tests/UnsignedFloatingCastTests.cs": "b5d386663ad97f42c68204358f1c9caec03291bf33b2d58ffd408ec20ea961ca",
+    "tests/Bosak.Xslt.Tests/UnixDateTimeExperimentalHostBoundaryTests.cs": "fa9b41123f55f116cf799b86119c1d2ab97048119e4dd689168239c4cba23b03"
+  },
+  "packageSourceMapping": "Bosak.* only local candidate; external test dependencies from nuget.org",
+  "freshSeparateCaches": true
+}

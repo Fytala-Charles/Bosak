@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "parameters": "--vulnerable --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "D:/Development/Bosak/.guard-tmp/release1251-candidate/focused/Req135.PublicConsumer.csproj"
+    }
+  ]
+}
