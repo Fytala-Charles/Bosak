@@ -1,3 +1,5 @@
+**REQ-137 formal Braid acceptance - 24 October 2026:** [Consumer acceptance receipt](REQ-137-BRAID-ACCEPTANCE.md) pins verified pushed Braid checkpoint d601c05eaf0b6c201683b0786336356231ca0ea7, published1.25.0/c005054b, coordinated Move up/down,1,485 Release /905 signed public-package passes and the owner's explicit "Passed — accepted" focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated coverage is distinct from human observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending checkpoints are historical.
+
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak feature requests">
   <br><br>
@@ -612,7 +614,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-134 | Bosak.Braid | Delete one existing literal xsl:text instruction with complete payload removal and bounded whitespace-merge provenance | Remove labels/separators through reviewed exact-byte authoring and surviving-parent history/navigation | Implemented, published and consumer-accepted | 1.22.0 | Bosak | 2026-10-20 |
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented, published and consumer-accepted | 1.23.0 | Bosak | 2026-10-21 |
 | REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented, published and consumer-accepted | 1.24.0 | Charles Korthout | 2026-10-23 |
-| REQ-137 | Bosak.Braid | Same-parent child element Move up / Move down together, exchanging adjacent supported literal subtrees with exact source and complete changed-order provenance | Change output order through explicit review/Apply and one-step history without deleting/recreating content | Implemented and published; pending consumer integration/acceptance | 1.25.0 | Bosak | 2026-10-24 |
+| REQ-137 | Bosak.Braid | Same-parent child element Move up / Move down together, exchanging adjacent supported literal subtrees with exact source and complete changed-order provenance | Change output order through explicit review/Apply and one-step history without deleting/recreating content | Implemented, published and consumer-accepted | 1.25.0 | Bosak | 2026-10-24 |
 
 
 > **Legend:
@@ -1933,7 +1935,9 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 ### REQ-137: Same-parent Child Element Move Up / Move Down for Bosak.Braid
 
-Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **Implemented and published; pending consumer integration/acceptance**. Version: **1.25.0**. Owner: **Bosak**.
+**REQ-137 formal Braid acceptance - 24 October 2026:** [Consumer acceptance receipt](REQ-137-BRAID-ACCEPTANCE.md) pins verified pushed Braid checkpoint d601c05eaf0b6c201683b0786336356231ca0ea7, published1.25.0/c005054b, coordinated Move up/down,1,485 Release /905 signed public-package passes and the owner's explicit "Passed — accepted" focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated coverage is distinct from human observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending checkpoints are historical.
+
+Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **Implemented, published and consumer-accepted**. Version: **1.25.0**. Owner: **Bosak**.
 
 **1.25.0 published and verified — 24 October 2026:** [Publication proof](RELEASE-1.25.0-PUBLICATION.md) records exact reviewed source `c005054bb096559368df985359e038e254814d12`, one Release run with 11,244 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only153 broad/614 focused checks (71 reorder/40 substring cases) with matching provenance and clear transitive audits. REQ-137 Move up/down is implemented and published together; Braid integration/acceptance remains pending. Experimental substring behavior is opt-in; frozen gates stay unchanged. Earlier unpublished/review-pending checkpoints are historical. REQ-136 remains accepted and REQ-126 remains partial.
 

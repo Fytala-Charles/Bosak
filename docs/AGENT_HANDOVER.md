@@ -1,3 +1,5 @@
+**REQ-137 formal Braid acceptance - 24 October 2026:** [Consumer acceptance receipt](REQ-137-BRAID-ACCEPTANCE.md) pins verified pushed Braid checkpoint d601c05eaf0b6c201683b0786336356231ca0ea7, published1.25.0/c005054b, coordinated Move up/down,1,485 Release /905 signed public-package passes and the owner's explicit "Passed — accepted" focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated coverage is distinct from human observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending checkpoints are historical.
+
 ## REQ-126 Experimental signed epochs — 24 October 2026
 
 Base `07db3b57e5eb2d60ab7f02315bd60efe62284408` (PR433 merged). **Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](xpath40-catalog/UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.

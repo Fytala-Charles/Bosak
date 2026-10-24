@@ -1,3 +1,5 @@
+**REQ-137 formal Braid acceptance - 24 October 2026:** [Consumer acceptance receipt](REQ-137-BRAID-ACCEPTANCE.md) pins verified pushed Braid checkpoint d601c05eaf0b6c201683b0786336356231ca0ea7, published1.25.0/c005054b, coordinated Move up/down,1,485 Release /905 signed public-package passes and the owner's explicit "Passed — accepted" focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated coverage is distinct from human observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending checkpoints are historical.
+
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak architecture">
   <br><br>
