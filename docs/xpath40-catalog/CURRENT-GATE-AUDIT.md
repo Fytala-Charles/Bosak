@@ -4,6 +4,8 @@
   <p>23 October 2026</p>
 </div>
 
+**Frozen map-to-element gate restored - 24 October 2026:** [Repair and process controls](MAP-TO-ELEMENT-GATE-REPAIR.md) correct the dormant name to `fn-map-to-element`. All224 configured sets execute; expanded frozen gate8,434/0/1,896 includes156 additional passes/two skips. QT3 remains31,142/0/679. A synthetic negative assertion now exits2 instead of exploratory exit0. No engine/API/version/fixture-pin/release change; current upstream remains unadopted. REQ-126 stays partial; REQ-136 remains accepted. Earlier gate counts and dormant-name observations are historical.
+
 ## Result and boundary
 
 The current upstream suite is not ready to replace Bosak's frozen qt4tests pin. The unchanged engine passes its frozen gate; the same configured gate names against a complete current upstream checkout produce **45 failures across eight sets**. This is a diagnostic comparison, not adoption or promotion of the current suite. [Machine inventory and failures](CURRENT-GATE-AUDIT.json), [original execution receipts](evidence/current-gate-audit/frozen-gate.txt).

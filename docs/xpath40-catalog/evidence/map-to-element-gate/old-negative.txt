@@ -1,0 +1,23 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.guard-tmp\req126-map-gate-evidence\controls\negative\catalog.xml
+
+Discovered 1 test sets.
+  Starting: fn-map-to-element ...
+  Done: fn-map-to-element (1 tests total) [P+=0 F+=1 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   1
+Passed:  0
+Failed:  1
+Skipped: 0
+
+Pass rate: 0.00%
+
+First 20 failures:
+  FAIL map-gate-negative: assert-xml failed. Expected: <wrong/>, Got: <a>x</a>
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 1
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.20s
