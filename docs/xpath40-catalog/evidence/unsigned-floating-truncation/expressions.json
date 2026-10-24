@@ -1,0 +1,14 @@
+[
+  "xs:unsignedLong(xs:decimal('-0.5'))",
+  "xs:unsignedLong(xs:double('-0.5'))",
+  "xs:unsignedLong(xs:float('-0.5'))",
+  "xs:unsignedLong(xs:double('-1'))",
+  "xs:unsignedLong(xs:float('-1'))",
+  "xs:unsignedLong(xs:double('-0'))",
+  "xs:unsignedLong(xs:double('-5E-324'))",
+  "xs:unsignedLong(xs:double('NaN'))",
+  "xs:unsignedLong(xs:double('INF'))",
+  "xs:unsignedLong(xs:double('9223372036854775808'))",
+  "xs:unsignedLong(xs:double('18446744073709549568'))",
+  "xs:unsignedLong(xs:double('18446744073709551616'))"
+]

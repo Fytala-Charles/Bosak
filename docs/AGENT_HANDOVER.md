@@ -1,3 +1,9 @@
+## REQ-126 unsigned floating truncation — 24 October 2026
+
+Base `7838c40cafd098983932f149210fdcf22b69c314` (PR441 merged). **Unsigned floating truncation — 24 October 2026:** [Correction and limits](xpath40-catalog/UNSIGNED-FLOATING-TRUNCATION.md) truncate finite float/double operands before unsigned range checks, allowing(-1,0) to become unsigned zero. Adds60 constructor/cast/reference/castable cases; exact overflow thresholds and nonfinite errors remain intact. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+Validation:11,675 solution +84 language-server pass; build zero errors; CS8604/NU1900 metadata-availability warnings recorded. Fresh QT3 31142/0/679; frozen qt4 8436/0/1894; current native Unix22/2/0. Eleven HTML pages rendered. What was built: truncate finite unsignedLong floating operands before range facets;60 new cases. Before18 failed/42 passed; after60/0, same expectations.36 diagnostics compare numeric near-zero behavior and upper-bound controls. No API/version/release change; generic storage/errors remain separate. Next: review/merge correction then consolidate1.25.1 release-candidate validation before broader storage work. Shared-checkout REQ-138 draft/registry and pending upstream notes remain untouched.
+
 ## REQ-126 unsigned Decimal truncation — 24 October 2026
 
 Reviewed base `d0b8f35b2a8b6cea2ef768b9bbf4e74f76010f9b` (PR440 merged at `acc56ae1a5962f2361825d9b6d0ad470a598163c`). **Unsigned Decimal truncation — 24 October 2026:** [Correction and limits](xpath40-catalog/UNSIGNED-DECIMAL-TRUNCATION.md) discard numeric fractions before unsignedLong range facets/backing selection, with48 constructor/cast/reference/castable cases. Fractional lexical forms still refuse; floating near-zero consistency remains separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
