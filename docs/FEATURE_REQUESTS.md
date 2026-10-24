@@ -5,6 +5,10 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](xpath40-catalog/UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
+
+
+
 **Unix timestamp boundary review — 24 October 2026:** [Contract and evidence](xpath40-catalog/UNIX-DATETIME-CONTRACT.md) add52 source regression cases, UTC/default/call-path/calendar/2038 deadline checks and a fresh complete native-set comparison: frozen16/0/0; current20/4/0, exit2. Current negative-epoch semantics and wide-integer errors remain explicit adoption boundaries; a minimum-literal representation diagnostic is retained. All11,296 solution +84 language-server tests pass. Catalog remains76 entries /3,172 documentation checks; no engine/API/version/gate/fixture/release change. Source/public1.25.0 and Braid integration remain separate; REQ-126/D2/D3/D4/AC-03 stay partial.
 
 **1.25.0 published and verified — 24 October 2026:** [Publication proof](RELEASE-1.25.0-PUBLICATION.md) records exact reviewed source `c005054bb096559368df985359e038e254814d12`, one Release run with 11,244 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only153 broad/614 focused checks (71 reorder/40 substring cases) with matching provenance and clear transitive audits. REQ-137 Move up/down is implemented and published together; Braid integration/acceptance remains pending. Experimental substring behavior is opt-in; frozen gates stay unchanged. Earlier unpublished/review-pending checkpoints are historical. REQ-136 remains accepted and REQ-126 remains partial.

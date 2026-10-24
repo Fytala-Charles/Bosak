@@ -464,6 +464,7 @@
 //                      | Charles Korthout | 5.144 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 5.145 | 21-10-2026     | Default empty index-of collation only in explicit XPath 4.0 compatibility modes.           |
 //                      | Charles Korthout | 5.146 | 24-10-2026     | Normalize absent index-of-substring pattern only in XPath40Experimental.                  |
+//                      | Charles Korthout | 5.147 | 24-10-2026     | Opt signed Unix epochs into XPath40Experimental; retain frozen domain.                    |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -16941,9 +16942,9 @@ public static class FunctionLibrary
 
     /// <summary>
     /// F+O 4.0 §9.4.3: fn:unix-dateTime — the UTC xs:dateTimeStamp for the given Unix
-    /// time in milliseconds (default 0). Negative values are out of range for
-    /// xs:nonNegativeInteger (FOCA0002); results beyond the representable calendar
-    /// range raise FODT0001.
+    /// time in milliseconds (default 0). Experimental explicitly accepts signed
+    /// integer epochs; frozen profiles retain the nonnegative domain (FOCA0002).
+    /// Results beyond the bounded DateTimeOffset calendar raise FODT0001.
     /// </summary>
     private static XdmValue UnixDateTime(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
@@ -16954,8 +16955,8 @@ public static class FunctionLibrary
             if (value.Kind == XdmValueKind.Integer)
                 milliseconds = value.IntegerValue;
             else
-                milliseconds = (long)VmEngine.Cast(value, "nonNegativeInteger").IntegerValue;
-            if (milliseconds < 0)
+                milliseconds = (long)VmEngine.Cast(value, ctx.IsXPath40Experimental ? "integer" : "nonNegativeInteger").IntegerValue;
+            if (milliseconds < 0 && !ctx.IsXPath40Experimental)
                 throw new InvalidOperationException($"FOCA0002: fn:unix-dateTime value {milliseconds} is out of range for xs:nonNegativeInteger.");
         }
         try

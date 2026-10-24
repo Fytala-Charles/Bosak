@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.2   | 24-10-2026     | Distinguish owner-approved Experimental signed domain from frozen refusal. |
+
 using Bosak.XPath.Api;
 using Bosak.XPath.Runtime.Vm;
 using Xunit;
@@ -79,28 +81,42 @@ public sealed class UnixDateTimeContractTests
     public void Default_IsEpochRatherThanNow(XPathCompatibility profile, string call) =>
         Assert.Equal("1970-01-01T00:00:00Z", Evaluate(call, profile));
 
-    /// <summary>The Experimental profile has not adopted the newer negative-epoch contract.</summary>
+    /// <summary>Signed epochs are an explicit Experimental opt-in; frozen input remains nonnegative.</summary>
     /// <param name="profile">The explicit compatibility profile.</param>
     [Theory, InlineData(XPathCompatibility.XPath40), InlineData(XPathCompatibility.XPath40Experimental)]
-    public void ExistingNegativeContract_RemainsFoca0002(XPathCompatibility profile)
+    public void NegativeDomain_FollowsExplicitProfile(XPathCompatibility profile)
     {
         // Construct Int64.MinValue inside integer arithmetic; the direct lexical magnitude
         // crosses Bosak's integer-literal representation boundary and is a separate diagnostic.
         foreach (var value in new[] { "-1", "-86400000", "-9223372036854775807 - 1" })
-            Assert.Contains("FOCA0002", Assert.ThrowsAny<Exception>(() => Evaluate($"unix-dateTime({value})", profile)).Message);
+        {
+            var call = $"unix-dateTime({value})";
+            if (profile == XPathCompatibility.XPath40)
+                Assert.Contains("FOCA0002", Assert.ThrowsAny<Exception>(() => Evaluate(call, profile)).Message);
+            else if (value == "-9223372036854775807 - 1")
+                Assert.Contains("FODT0001", Assert.ThrowsAny<Exception>(() => Evaluate(call, profile)).Message);
+            else
+                Assert.Equal(value == "-1" ? "1969-12-31T23:59:59.999Z" : "1969-12-31T00:00:00Z", Evaluate(call, profile));
+        }
     }
 
-    /// <summary>Existing negative-input refusal also holds through references, lookup and partial application.</summary>
+    /// <summary>References, lookup and partial application retain the selected profile domain.</summary>
     /// <param name="profile">The explicit compatibility profile.</param>
     [Theory, InlineData(XPathCompatibility.XPath40), InlineData(XPathCompatibility.XPath40Experimental)]
-    public void NegativeRefusal_IsStableAcrossCallPaths(XPathCompatibility profile)
+    public void NegativeCallPaths_FollowExplicitProfile(XPathCompatibility profile)
     {
         foreach (var call in new[]
         {
             "unix-dateTime#1(-1)",
             "function-lookup(QName('http://www.w3.org/2005/xpath-functions','unix-dateTime'),1)(-1)",
             "unix-dateTime(?)(-1)", "let $epoch := -1 return unix-dateTime($epoch)"
-        }) Assert.Contains("FOCA0002", Assert.ThrowsAny<Exception>(() => Evaluate(call, profile)).Message);
+        })
+        {
+            if (profile == XPathCompatibility.XPath40)
+                Assert.Contains("FOCA0002", Assert.ThrowsAny<Exception>(() => Evaluate(call, profile)).Message);
+            else
+                Assert.Equal("1969-12-31T23:59:59.999Z", Evaluate(call, profile));
+        }
     }
 
     /// <summary>Representable integer inputs beyond the .NET calendar limit use the date-range error.</summary>

@@ -4,6 +4,10 @@
   <p>24 October 2026 — source/public 1.25.0; test and evidence slice</p>
 </div>
 
+**Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
+
+
+
 This slice adds **52 source regression cases**, three complete deadline reports with XPath 3.1 comparisons, and a fresh frozen/current native comparison for `fn:unix-dateTime`. Engine/API, version, frozen gitlink, gate membership and retry policy are unchanged. Braid's signed 1.25.0 smoke/integration proceeds independently. REQ-126/D2/D3/D4/AC-03 remain partial.
 
 ## Contract and observed native boundary
