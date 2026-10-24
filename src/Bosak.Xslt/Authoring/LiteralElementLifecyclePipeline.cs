@@ -15,6 +15,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.2   | 24-10-2026     | Share unchanged closed preflight with REQ-137 reorder proof. |
+
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Xml;
@@ -200,7 +202,7 @@ internal static class LiteralElementLifecyclePipeline
         catch (OperationCanceledException) { return Refuse(AuthoringLiteralElementFailureKind.Cancelled, "Cancelled without candidate or NoChange authority."); }
     }
 
-    private static AuthoringLiteralElementFailure? Preflight(AuthoringSnapshot s, CancellationToken t)
+    internal static AuthoringLiteralElementFailure? Preflight(AuthoringSnapshot s, CancellationToken t)
     {
         if (s.Modules.Count != 1 || s.PrincipalModule.Edges.Count != 0)
             return Fail(s, AuthoringLiteralElementFailureKind.UnsupportedModule, "One dependency-free principal module is required.");
@@ -221,7 +223,7 @@ internal static class LiteralElementLifecyclePipeline
     }
 
     // Streaming XML preflight precedes candidate inspection, DOM construction and resource-capable validation.
-    private static (AuthoringLiteralElementFailureKind Kind, string Message)? CheckXml(AuthoringSource source, CancellationToken t)
+    internal static (AuthoringLiteralElementFailureKind Kind, string Message)? CheckXml(AuthoringSource source, CancellationToken t)
     {
         if (source.OriginalBytes.Length > AuthoringCapabilities.MaxLiteralElementLifecycleSourceBytes)
             return (AuthoringLiteralElementFailureKind.SizeLimit, "Physical source exceeds its independent byte limit.");

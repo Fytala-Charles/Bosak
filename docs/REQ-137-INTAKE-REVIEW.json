@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-24",
+  "base": "4de6968cfb6248b2aa553d930bcf3a63bace9ef4",
+  "request_sha256": "adec8514200070994275b8267570b66096892b5622ce4befd90224b8e2e823f3",
+  "request_preserved_byte_exact": true,
+  "status": "Pending",
+  "owner": "Unassigned",
+  "target": "TBD",
+  "implementation_authorized": false,
+  "consumer_review": "No blocking findings within proposed bounded profile",
+  "source_version": "1.24.1 unpublished",
+  "public_version": "1.24.0",
+  "reviewed_head": "cf66f2be3a8d5dce0b694fdd5c410d2f19adaca4",
+  "reviewed_git_blob_sha256": {
+    "docs/REQ-137-MAINTAINER-SCOPE-REVIEW.md": "b91ff7e629d48766739e39aca07b93b37b175e29d3658663349741577abd2207",
+    "docs/REQ-137-same-parent-child-element-reordering.md": "adec8514200070994275b8267570b66096892b5622ce4befd90224b8e2e823f3"
+  },
+  "consumer_review_sha256": "d758ecd0e9df08bcc04053cc65fc2b1db414e57dfee87b578ee84fcda8951cac",
+  "owner_implementation_approval": "pending",
+  "reviewed_head_ci": "all three checks passed; run 40062952894"
+}

@@ -1,3 +1,9 @@
+24 October 2026: REQ-137 implementation/API guide, immutable historical request/design/review and canonical status pages rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req137-implementation-render`. New links/JSON, raw receipt hashes, source headers/XML documentation and unchanged kit/fixtures/gates checked. HTML only; no screenshot/PDF acceptance.
+
+24 October 2026: REQ-137 consumer design review and synchronized status pages rendered with unchanged Fytala CSS. Original review retained byte-exactly; reviewed proposal/request Git-blob hashes verified. HTML only; owner implementation approval pending.
+
+24 October 2026: REQ-137 request, proposed scope/API and canonical planning counterparts rendered with markdown-it and unchanged Fytala CSS under .guard-tmp/req137-design-render. HTML only; no screenshot/PDF acceptance or runtime change.
+
 <p align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="160" alt="Fytala documentation renderer test">
 </p>
