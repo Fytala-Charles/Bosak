@@ -1,0 +1,21 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-unix-dateTime
+
+Discovered 738 test sets.
+  Starting: fn-unix-dateTime ...
+  Done: fn-unix-dateTime (16 tests total) [P+=16 F+=0 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   16
+Passed:  16
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.00%
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 1.00s

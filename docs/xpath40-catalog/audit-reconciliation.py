@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-24", sourceBase="07db3b57e5eb2d60ab7f02315bd60efe62284408",
-    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Experimental-only signed Unix epochs:27 new source regressions outside catalog manifest. Full11323 plus84 LSP pass; QT3 31142/0/679, frozen qt4 8434/0/1896. Current native Unix20/4/0 exit2 under frozen execution. Wider-integer and minimum-literal representation remain bounded; no gate/fixture/retry/release change. REQ-126 remains partial.",
+receipt = dict(date="2026-10-24", sourceBase="2580823a057afe68d3555904a9f551b5264d5277",
+    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Wide-integer investigation:24 new source boundary cases;74 observed diagnostics retained separately. Numeric cast narrowing, optimizer overflow and runtime integer-tag loss remain unresolved. No engine/API/version/gate/fixture/retry/release change; source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

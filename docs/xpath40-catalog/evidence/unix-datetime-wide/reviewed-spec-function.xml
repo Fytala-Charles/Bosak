@@ -1,0 +1,74 @@
+<ns0:function xmlns:ns0="http://www.w3.org/xpath-functions/spec/namespace" name="unix-dateTime" prefix="fn">
+      <ns0:signatures>
+         <ns0:proto name="unix-dateTime" return-type="xs:dateTimeStamp">
+            <ns0:arg name="value" type="xs:integer?" default="0" note="default-on-empty" />
+         </ns0:proto>
+      </ns0:signatures>
+      <ns0:summary>
+         <p>Returns a dateTime value for a Unix time.</p>
+      </ns0:summary>
+      <ns0:rules>
+         <p>The function returns a dateTime value in UTC timezone for the Unix time specified
+            by <code>$value</code> in milliseconds.
+            The Unix time is defined in <bibref ref="ieee1003.1-2024" />.</p>
+         <p>If the implementation supports data types from XSD 1.1 then the returned value will be
+            an instance of <code>xs:dateTimeStamp</code>. Otherwise, the only guarantees are that it
+            will be an instance of <code>xs:dateTime</code> and will have a timezone component.</p>
+      </ns0:rules>
+      <ns0:equivalent style="xpath-expression">
+xs:dateTime('1970-01-01T00:00:00Z') + ($value otherwise 0) * seconds(0.001)
+      </ns0:equivalent>
+      <ns0:notes>
+         <p>By calling this convenience function, it can be ensured that the correct timezone
+            is used for computing the Unix time.</p>
+         <p>Note that Unix time does not account for leap seconds. It assumes that every day has
+            86,400 seconds.</p>
+         <p>A negative value denotes an instant before <code>1970-01-01T00:00:00Z</code>.</p>
+      </ns0:notes>
+      <ns0:examples>
+         <ns0:example>
+            <ns0:test>
+               <ns0:expression><eg>unix-dateTime()</eg></ns0:expression>
+               <ns0:result>xs:dateTime('1970-01-01T00:00:00Z')</ns0:result>
+            </ns0:test>
+         </ns0:example>
+         <ns0:example>
+            <ns0:test>
+               <ns0:expression><eg>unix-dateTime(1)</eg></ns0:expression>
+               <ns0:result>xs:dateTime('1970-01-01T00:00:00.001Z')</ns0:result>
+            </ns0:test>
+         </ns0:example>
+         <ns0:example>
+            <ns0:test>
+               <ns0:expression><eg>unix-dateTime(1000 * 60 * 60 * 24)</eg></ns0:expression>
+               <ns0:result>xs:dateTime('1970-01-02T00:00:00Z')</ns0:result>
+            </ns0:test>
+            <ns0:test>
+               <ns0:expression><eg>unix-dateTime(-1000 * 60 * 60 * 24)</eg></ns0:expression>
+               <ns0:result>xs:dateTime('1969-12-31T00:00:00Z')</ns0:result>
+            </ns0:test>
+         </ns0:example>
+         <ns0:example>
+            <p>Calculate the Unix time associated with a <code>xs:dateTime</code> value:</p>
+            <eg>let $value := current-dateTime()
+return ($value - unix-dateTime()) div seconds(0.001)</eg>
+         </ns0:example>
+      </ns0:examples>
+      <ns0:changes>
+         <ns0:change issue="959" PR="1358" date="2024-08-01"><p>New in 4.0</p></ns0:change>
+         <ns0:change issue="2849"><p>Changed the type of <code>$value</code> to <code>xs:integer?</code>,
+            allowing instants before 1970.</p></ns0:change>
+      </ns0:changes>
+   </ns0:function>
+
+   
+   
+   
+
+   
+   
+   
+   
+   
+   
+   

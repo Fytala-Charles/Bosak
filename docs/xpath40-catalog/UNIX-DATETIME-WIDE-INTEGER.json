@@ -1,0 +1,83 @@
+{
+  "date": "2026-10-24",
+  "sourceBase": "2580823a057afe68d3555904a9f551b5264d5277",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "newBoundaryCases": 24,
+  "observedDiagnostics": 74,
+  "tests": {
+    "full": {
+      "total": 11347,
+      "passed": 11347,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "native": {
+    "date": "2026-10-24",
+    "sourceBase": "2580823a057afe68d3555904a9f551b5264d5277",
+    "results": [
+      {
+        "label": "frozen-native",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-wide-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "exitCode": 0,
+        "counts": {
+          "Total": 16,
+          "Passed": 16,
+          "Failed": 0,
+          "Skipped": 0
+        },
+        "sha256": "6063285f87c15d2e96fa43025dbeab6dab5fd7fc6e003f7c26007b1709314598"
+      },
+      {
+        "label": "current-native",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-wide-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.upstream\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "exitCode": 2,
+        "counts": {
+          "Total": 24,
+          "Passed": 20,
+          "Failed": 4,
+          "Skipped": 0
+        },
+        "sha256": "a5a14cbb0a36ca5f6c6a8e71c93747d3326bea80225ff867b6f9963909b782a3"
+      }
+    ]
+  },
+  "engineChanged": false,
+  "versionChanged": false,
+  "releasePerformed": false,
+  "manualGatesRerun": false,
+  "inheritedGateReceipt": "UNIX-DATETIME-EXPERIMENTAL.json",
+  "specPin": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+  "testPin": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+  "unresolved": [
+    "Wide integer casts narrow to Int64 and report FORG0001",
+    "Optimizer constant arithmetic wraps",
+    "Runtime promoted arithmetic loses integer type annotation"
+  ],
+  "recommendedNext": "Checked constant folding and integer-preserving promotion with optimized/runtime equivalence checks and frozen gates",
+  "evidenceHashes": {
+    "arithmetic-diagnostics.json": "739faa673f72ac5348bd4af016065ece56229d4714769e72054394093c157ae4",
+    "arithmetic-expressions.json": "2658bfefd578f07b2d902fc4cb0ec3efe8040a050669bc70c345893bc42a1ce5",
+    "current-native.txt": "a5a14cbb0a36ca5f6c6a8e71c93747d3326bea80225ff867b6f9963909b782a3",
+    "expressions.json": "0e58caf25385c169cdbcada2f265510f55edce0977bc73cf66d5469a8fc453dd",
+    "frozen-native.txt": "6063285f87c15d2e96fa43025dbeab6dab5fd7fc6e003f7c26007b1709314598",
+    "native-results.json": "72423ab524dea8df2d2f7cd2e1e072adf17402cf0b52dbb0cd2e1fd773e0e307",
+    "observed-diagnostics.json": "567662dee5c8403e31dbf91d7e33ea42315adbd975ff887a3a8c3fa7b9a5d555",
+    "reviewed-spec-function.xml": "92db4c8da71c65f9a923791da39186936d37dac21adf9b13f1cf9442948fd5f7"
+  }
+}

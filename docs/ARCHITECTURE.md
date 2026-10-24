@@ -7,6 +7,10 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Wide-integer Unix-time investigation — 24 October 2026:** [Evidence and next fix](xpath40-catalog/UNIX-DATETIME-WIDE-INTEGER.md) add24 boundary tests and74 observed diagnostics. Valid wide literals fail Int64 conversion before date arithmetic; constant folding also wraps while runtime promotion loses integer typing. Defects remain explicit; no engine/version/release change. Source1.25.1 unpublished, public1.25.0 accepted; REQ-126 stays partial.
+
+
+
 **Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](xpath40-catalog/UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
 
 

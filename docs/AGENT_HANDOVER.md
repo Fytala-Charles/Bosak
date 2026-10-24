@@ -1,3 +1,9 @@
+## REQ-126 wide-integer investigation — 24 October 2026
+
+Base `2580823a057afe68d3555904a9f551b5264d5277`. **Wide-integer Unix-time investigation — 24 October 2026:** [Evidence and next fix](xpath40-catalog/UNIX-DATETIME-WIDE-INTEGER.md) add24 boundary tests and74 observed diagnostics. Valid wide literals fail Int64 conversion before date arithmetic; constant folding also wraps while runtime promotion loses integer typing. Defects remain explicit; no engine/version/release change. Source1.25.1 unpublished, public1.25.0 accepted; REQ-126 stays partial.
+
+Validation:11,347 solution +84 language-server tests pass; Release build zero errors/existing CS8604 only. Fresh targeted native frozen16/0/0 and current20/4/0. Full manual gates inherited from engine-identical PR434, not rerun. Eight HTML pages rendered. What was built:24 supported-boundary cases;56 conversion and18 optimizer/runtime observations retained separately from required behavior. Next: checked constant folding and integer-preserving promotion, followed by conversion/storage. Braid REQ-137 acceptance is complete. Root pending upstream notes preserved.
+
 **REQ-137 formal Braid acceptance - 24 October 2026:** [Consumer acceptance receipt](REQ-137-BRAID-ACCEPTANCE.md) pins verified pushed Braid checkpoint d601c05eaf0b6c201683b0786336356231ca0ea7, published1.25.0/c005054b, coordinated Move up/down,1,485 Release /905 signed public-package passes and the owner's explicit "Passed — accepted" focused native report. Disposition: implemented, published and consumer-accepted within the delivered bounded profile. Automated coverage is distinct from human observations; optional/unreported variants and accessibility remain unspecified. Documentation only; no engine/release change. Earlier consumer-pending checkpoints are historical.
 
 ## REQ-126 Experimental signed epochs — 24 October 2026
