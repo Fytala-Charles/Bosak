@@ -1,0 +1,94 @@
+{
+  "date": "2026-10-24",
+  "sourceBase": "fadaa44631a0416f24406113e7ab6b3946feb13d",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "newSupportedCases": 72,
+  "diagnosticExpressions": 50,
+  "observedDiagnostics": 150,
+  "profiles": [
+    "XPath31",
+    "XPath40",
+    "XPath40Experimental"
+  ],
+  "observedResultsIdenticalAcrossProfiles": true,
+  "tests": {
+    "full": {
+      "total": 11495,
+      "passed": 11495,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "native": {
+    "date": "2026-10-24",
+    "sourceBase": "fadaa44631a0416f24406113e7ab6b3946feb13d",
+    "results": [
+      {
+        "label": "frozen-native",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-integer-cast-audit-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "exitCode": 0,
+        "counts": {
+          "Total": 16,
+          "Passed": 16,
+          "Failed": 0,
+          "Skipped": 0
+        },
+        "sha256": "8c1a81810987096f773f05e7ed074e143868a0466b1dbe608d42b2ce11c694b1"
+      },
+      {
+        "label": "current-native",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-integer-cast-audit-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.upstream\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "exitCode": 2,
+        "counts": {
+          "Total": 24,
+          "Passed": 22,
+          "Failed": 2,
+          "Skipped": 0
+        },
+        "sha256": "37e81fb6d0bf0215088baf98d69060e3081b5604c73e33fd67354141d01c1cfb"
+      }
+    ]
+  },
+  "engineChanged": false,
+  "versionChanged": false,
+  "releasePerformed": false,
+  "fullManualGatesRerun": false,
+  "inheritedGateReceipt": "UNIX-DATETIME-WIDE-RANGE.json",
+  "primarySources": [
+    "https://www.w3.org/TR/xpath-functions-31/#casting-to-integer",
+    "https://www.w3.org/TR/xpath-functions-31/#casting-from-strings",
+    "https://www.w3.org/TR/xpath-31/#id-castable"
+  ],
+  "findings": [
+    "Castable already catches OverflowException and returns false",
+    "Signed double threshold2^63 admitted by rounded-maximum comparison and saturates to wrong Int64 value on this host",
+    "Unsigned double threshold2^64 admitted and returns value above unsignedLong maximum",
+    "Unsigned Decimal path retains fraction and checks facets before truncation",
+    "Generic integer storage/identity and numeric versus lexical error policy remain unresolved"
+  ],
+  "recommendedNext": "Correct floating-point signed/unsigned integer boundary guards, with adjacent values/castability tests and frozen gates; keep unsigned decimal truncation and storage expansion separate",
+  "evidenceHashes": {
+    "current-native.txt": "37e81fb6d0bf0215088baf98d69060e3081b5604c73e33fd67354141d01c1cfb",
+    "expressions.json": "5720b7e70309413570d87501f45ffcf3cc1655fcf145cfd3d8afbfda0b9bb577",
+    "frozen-native.txt": "8c1a81810987096f773f05e7ed074e143868a0466b1dbe608d42b2ce11c694b1",
+    "native-results.json": "65c838252d22b92a3d2243b2d1d7f37cdd6592d492ec00a11c22168808392fd1",
+    "observed-diagnostics.json": "7873ebfb39f4a5c52c73467de21ddce8c387f822e9c7046e080005abcd73dc80",
+    "unsigned-diagnostics.json": "6460dddc875f0c8ce3bd90e026b51d1d6658c306d1d56f6155787caccf9aa8b0",
+    "unsigned-expressions.json": "1c24fa7fd68830ecae429cf60514b25883b107dff6ab2bc496909d5260b8c8b6"
+  }
+}

@@ -7,6 +7,10 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Integer constructor/cast audit — 24 October 2026:** [Evidence and next correction](xpath40-catalog/INTEGER-CAST-AUDIT.md) add72 supported controls and150 observed diagnostics. Floating-point signed/unsigned boundaries silently admit out-of-range values; unsigned decimal truncation and generic storage/error policy are separate findings. No engine/version/release change. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 **Unix-time wide integer calendar correction — 24 October 2026:** [Behavior and limits](xpath40-catalog/UNIX-DATETIME-WIDE-RANGE.md) report FODT0001 for valid decimal-backed integer epochs beyond the supported calendar, preserving frozen negative refusal and Experimental signed behavior. Adds34 source cases; current native Unix improves to22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
 
 

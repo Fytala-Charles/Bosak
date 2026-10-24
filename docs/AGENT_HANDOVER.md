@@ -1,3 +1,9 @@
+## REQ-126 integer constructor/cast audit — 24 October 2026
+
+Base `fadaa44631a0416f24406113e7ab6b3946feb13d` (PR438 merged). **Integer constructor/cast audit — 24 October 2026:** [Evidence and next correction](xpath40-catalog/INTEGER-CAST-AUDIT.md) add72 supported controls and150 observed diagnostics. Floating-point signed/unsigned boundaries silently admit out-of-range values; unsigned decimal truncation and generic storage/error policy are separate findings. No engine/version/release change. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+Validation:11,495 solution +84 language-server pass; build zero errors/existing CS8604 warning. Fresh native Unix frozen16/0/0, current22/2/0; full gates inherited rather than rerun. Nine HTML pages rendered. What was built:72 supported constructor/cast/castable cases;132 primary and18 unsigned boundary diagnostics. Castable already catches overflow; silent signed/unsigned floating boundary errors and fractional unsigned tagging are recorded as defects. No engine/API/version/release change; full gates inherited from engine-identical PR438. Next: exact floating representability guards, then separate unsigned truncation/storage policy work. Root pending upstream notes preserved.
+
 ## REQ-126 Unix-time wide integer calendar correction — 24 October 2026
 
 Base `fa5c7ec0fb8d1f761e6080a3abd2399a2a21db65` (PR437 merged; engine-identical reviewed head f817b9b3). **Unix-time wide integer calendar correction — 24 October 2026:** [Behavior and limits](xpath40-catalog/UNIX-DATETIME-WIDE-RANGE.md) report FODT0001 for valid decimal-backed integer epochs beyond the supported calendar, preserving frozen negative refusal and Experimental signed behavior. Adds34 source cases; current native Unix improves to22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.

@@ -1,0 +1,863 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "9223372036854775808 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "\u00229223372036854775808\u0022 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "9223372036854775808 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "9223372036854775808 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "\u00229223372036854775808\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:decimal(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:untypedAtomic(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer#1(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u0022-9223372036854775809\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-9223372036854775809\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "-9223372036854775809 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:long(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:long(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "9223372036854775808 castable as xs:long",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:int(\u00222147483648\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:int(2147483648)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "2147483648 castable as xs:int",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:double(\u00229223372036854775808\u0022))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:double(\u00229223372036854775808\u0022) castable as xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:double(\u00229223372036854777856\u0022))",
+    "value": null,
+    "error": "FOCA0003",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:double(\u00229223372036854777856\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:double(\u0022-9223372036854775808\u0022))",
+    "value": "-9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:double(\u0022NaN\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:double(\u0022NaN\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:double(\u0022INF\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:double(\u0022INF\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(\u002218446744073709551615\u0022)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(18446744073709551615)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(18446744073709551615.5)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551615.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(\u002218446744073709551616\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551616\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "18446744073709551616 castable as xs:unsignedLong",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(xs:unsignedLong(\u002218446744073709551615\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u002718446744073709551615\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u00221.0\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.0\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u00221e3\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271e3\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u0022--1\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027--1\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u0022 \u002B001 \u0022)",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(3.9)",
+    "value": "3",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(-3.9)",
+    "value": "-3",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(true())",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u002279228162514264337593543950335\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950335\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(79228162514264337593543950335)",
+    "value": null,
+    "error": "FORG0001: The value \u002779228162514264337593543950335\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "79228162514264337593543950335 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:integer(\u002279228162514264337593543950336\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950336\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "\u002279228162514264337593543950336\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "\u00229223372036854775808\u0022 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "\u00229223372036854775808\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:decimal(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:untypedAtomic(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer#1(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u0022-9223372036854775809\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-9223372036854775809\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "-9223372036854775809 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:long(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:long(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 castable as xs:long",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:int(\u00222147483648\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:int(2147483648)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "2147483648 castable as xs:int",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:double(\u00229223372036854775808\u0022))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:double(\u00229223372036854775808\u0022) castable as xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:double(\u00229223372036854777856\u0022))",
+    "value": null,
+    "error": "FOCA0003",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:double(\u00229223372036854777856\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:double(\u0022-9223372036854775808\u0022))",
+    "value": "-9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:double(\u0022NaN\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:double(\u0022NaN\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:double(\u0022INF\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:double(\u0022INF\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(\u002218446744073709551615\u0022)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(18446744073709551615)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(18446744073709551615.5)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551615.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(\u002218446744073709551616\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551616\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "18446744073709551616 castable as xs:unsignedLong",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(xs:unsignedLong(\u002218446744073709551615\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u002718446744073709551615\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u00221.0\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.0\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u00221e3\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271e3\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u0022--1\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027--1\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u0022 \u002B001 \u0022)",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(3.9)",
+    "value": "3",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(-3.9)",
+    "value": "-3",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(true())",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u002279228162514264337593543950335\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950335\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(79228162514264337593543950335)",
+    "value": null,
+    "error": "FORG0001: The value \u002779228162514264337593543950335\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "79228162514264337593543950335 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u002279228162514264337593543950336\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950336\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "\u002279228162514264337593543950336\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "\u00229223372036854775808\u0022 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 cast as xs:integer",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "\u00229223372036854775808\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:decimal(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:untypedAtomic(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer#1(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u0022-9223372036854775809\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-9223372036854775809\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "-9223372036854775809 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:long(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:long(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for long.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 castable as xs:long",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:int(\u00222147483648\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:int(2147483648)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00272147483648\u0027 to int.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "2147483648 castable as xs:int",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:double(\u00229223372036854775808\u0022))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:double(\u00229223372036854775808\u0022) castable as xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:double(\u00229223372036854777856\u0022))",
+    "value": null,
+    "error": "FOCA0003",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:double(\u00229223372036854777856\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:double(\u0022-9223372036854775808\u0022))",
+    "value": "-9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:double(\u0022NaN\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:double(\u0022NaN\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:double(\u0022INF\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:double(\u0022INF\u0022) castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(\u002218446744073709551615\u0022)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(18446744073709551615)",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(18446744073709551615.5)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551615.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(\u002218446744073709551616\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002718446744073709551616\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "18446744073709551616 castable as xs:unsignedLong",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(xs:unsignedLong(\u002218446744073709551615\u0022))",
+    "value": null,
+    "error": "FORG0001: The value \u002718446744073709551615\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u00221.0\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.0\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u00221e3\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271e3\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u0022--1\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027--1\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u0022 \u002B001 \u0022)",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(3.9)",
+    "value": "3",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(-3.9)",
+    "value": "-3",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(true())",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u002279228162514264337593543950335\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950335\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(79228162514264337593543950335)",
+    "value": null,
+    "error": "FORG0001: The value \u002779228162514264337593543950335\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "79228162514264337593543950335 castable as xs:integer",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u002279228162514264337593543950336\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u002779228162514264337593543950336\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "\u002279228162514264337593543950336\u0022 castable as xs:integer",
+    "value": "false",
+    "error": null
+  }
+]
