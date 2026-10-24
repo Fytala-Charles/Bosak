@@ -1,3 +1,5 @@
+24 October 2026: 1.25.0 release notes, verified publication, exact consumer review, README and canonical status pages rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/release1250-render`. New links/JSON, byte-exact review, package/receipt proofs and unchanged engine/kit/fixtures checked. HTML only; no screenshot/PDF acceptance.
+
 24 October 2026: REQ-137 implementation/API guide, immutable historical request/design/review and canonical status pages rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req137-implementation-render`. New links/JSON, raw receipt hashes, source headers/XML documentation and unchanged kit/fixtures/gates checked. HTML only; no screenshot/PDF acceptance.
 
 24 October 2026: REQ-137 consumer design review and synchronized status pages rendered with unchanged Fytala CSS. Original review retained byte-exactly; reviewed proposal/request Git-blob hashes verified. HTML only; owner implementation approval pending.
