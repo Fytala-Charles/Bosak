@@ -4,6 +4,9 @@
   <p>24 October 2026 — unsigned local packages; unpublished</p>
 </div>
 
+**Publication completed:** [Verified 1.25.1 publication](RELEASE-1.25.1-PUBLICATION.md). The unsigned/unpublished statements below describe the retained pre-publication checkpoint.
+
+
 **Candidate source: `6081e70daa8a49ef3d522b124a18d8de68e0b4d5`**, PR442 merge. Reviewed head `d46f9d2fb8d80393f775c7600dc5189ca2d49649` passed [all CI checks](https://github.com/Fytala-Charles/Bosak/actions/runs/40115516013); the complete candidate tree matches that reviewed head. No candidate tag, GitHub release or NuGet upload was created. Public/Braid1.25.0 remains accepted within REQ-137's delivered scope.
 
 ## Consolidated behavior
