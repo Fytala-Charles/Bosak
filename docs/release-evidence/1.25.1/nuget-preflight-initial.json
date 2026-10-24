@@ -1,0 +1,17 @@
+[
+  {
+    "label": "vulnerability-index",
+    "url": "https://api.nuget.org/v3/vulnerabilities/index.json",
+    "checkedAtUtc": "2026-10-24T17:28:15.587561+00:00",
+    "httpStatus": 200,
+    "error": "'utf-8' codec can't decode byte 0x8b in position 1: invalid start byte"
+  },
+  {
+    "label": "public-xslt-versions",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+    "checkedAtUtc": "2026-10-24T17:28:15.762769+00:00",
+    "httpStatus": 200,
+    "sha256": "e52f5fd87d90e29949d052cb8bcbc3e539cffa0181916191286cebb1b338c747",
+    "candidateVersionPresent": false
+  }
+]
