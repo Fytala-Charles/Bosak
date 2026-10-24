@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 24-10-2026     | Require calendar overflow for valid wide integer epochs in both profiles.                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -70,7 +71,7 @@ public sealed class UnixDateTimeExperimentalTests
     public void SignedCalendarOverflow_RaisesFodt0001(string value) =>
         Assert.Contains("FODT0001", Assert.ThrowsAny<Exception>(() => Evaluate($"unix-dateTime({value})", XPathCompatibility.XPath40Experimental)).Message);
 
-    /// <summary>The separately recorded positive wide-integer error remains unresolved in both profiles.</summary>
+    /// <summary>Valid wide integer epochs report supported-calendar overflow in both profiles.</summary>
     /// <param name="profile">The explicit compatibility profile.</param>
     /// <param name="value">The out-of-Int64 positive magnitude.</param>
     [Theory]
@@ -78,8 +79,8 @@ public sealed class UnixDateTimeExperimentalTests
     [InlineData(XPathCompatibility.XPath40, "9223372036854775809")]
     [InlineData(XPathCompatibility.XPath40Experimental, "9223372036854775808")]
     [InlineData(XPathCompatibility.XPath40Experimental, "9223372036854775809")]
-    public void ObservedWideIntegerError_RemainsExplicit(XPathCompatibility profile, string value) =>
-        Assert.Contains("FORG0001", Assert.ThrowsAny<Exception>(() => Evaluate($"unix-dateTime({value})", profile)).Message);
+    public void WideIntegerEpoch_RaisesCalendarOverflow(XPathCompatibility profile, string value) =>
+        Assert.Contains("FODT0001", Assert.ThrowsAny<Exception>(() => Evaluate($"unix-dateTime({value})", profile)).Message);
 
     /// <summary>The direct minimum literal's type and frozen error remain historical limitations.</summary>
     [Fact]
