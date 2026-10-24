@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-24",
+  "sourceBase": "fadaa44631a0416f24406113e7ab6b3946feb13d",
+  "results": [
+    {
+      "label": "frozen-native",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-integer-cast-audit-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "exitCode": 0,
+      "counts": {
+        "Total": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "Skipped": 0
+      },
+      "sha256": "8c1a81810987096f773f05e7ed074e143868a0466b1dbe608d42b2ce11c694b1"
+    },
+    {
+      "label": "current-native",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-integer-cast-audit-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "sha256": "37e81fb6d0bf0215088baf98d69060e3081b5604c73e33fd67354141d01c1cfb"
+    }
+  ]
+}

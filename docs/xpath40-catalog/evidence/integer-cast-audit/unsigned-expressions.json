@@ -1,0 +1,8 @@
+[
+  "xs:unsignedLong(xs:double(\"18446744073709551616\"))",
+  "xs:double(\"18446744073709551616\") castable as xs:unsignedLong",
+  "xs:unsignedLong(xs:double(\"18446744073709555712\"))",
+  "xs:unsignedLong(18446744073709551614.5)",
+  "xs:unsignedLong(18446744073709551614.5) instance of xs:integer",
+  "xs:unsignedLong(18446744073709551615.5)"
+]
