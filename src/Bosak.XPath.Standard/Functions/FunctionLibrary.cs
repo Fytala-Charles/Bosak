@@ -465,6 +465,7 @@
 //                      | Charles Korthout | 5.145 | 21-10-2026     | Default empty index-of collation only in explicit XPath 4.0 compatibility modes.           |
 //                      | Charles Korthout | 5.146 | 24-10-2026     | Normalize absent index-of-substring pattern only in XPath40Experimental.                  |
 //                      | Charles Korthout | 5.147 | 24-10-2026     | Opt signed Unix epochs into XPath40Experimental; retain frozen domain.                    |
+//                      | Charles Korthout | 5.148 | 24-10-2026     | Range-check decimal-backed Unix integer epochs before Int64 narrowing.                   |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -16954,6 +16955,16 @@ public static class FunctionLibrary
             var value = UnwrapSequenceOrUndefined(args[0]);
             if (value.Kind == XdmValueKind.Integer)
                 milliseconds = value.IntegerValue;
+            else if (value.Kind == XdmValueKind.Decimal && VmEngine.ValueMatchesType(value, "xs:integer", ctx))
+            {
+                // Valid decimal-backed integers must reach domain/calendar checks without an Int64 cast failure.
+                decimal integerMilliseconds = value.DecimalValue;
+                if (integerMilliseconds < 0 && !ctx.IsXPath40Experimental)
+                    throw new InvalidOperationException($"FOCA0002: fn:unix-dateTime value {integerMilliseconds} is out of range for xs:nonNegativeInteger.");
+                if (integerMilliseconds < -62135596800000m || integerMilliseconds > 253402300799999m)
+                    throw new InvalidOperationException("FODT0001: fn:unix-dateTime value is outside the representable date range.");
+                milliseconds = (long)integerMilliseconds;
+            }
             else
                 milliseconds = (long)VmEngine.Cast(value, ctx.IsXPath40Experimental ? "integer" : "nonNegativeInteger").IntegerValue;
             if (milliseconds < 0 && !ctx.IsXPath40Experimental)

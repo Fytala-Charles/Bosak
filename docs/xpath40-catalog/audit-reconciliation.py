@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-24", sourceBase="2ff6804ad4a7236b7f8980f1ca76294810043e00",
-    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Checked integer folding and integer-preserving runtime binary arithmetic;42 new source cases outside catalog. Source1.25.1 unpublished/public1.25.0 accepted. General conversion, unary/division and decimal precision remain bounded. No API/version/gate/fixture/retry/release change; REQ-126 partial.",
+receipt = dict(date="2026-10-24", sourceBase="fa5c7ec0fb8d1f761e6080a3abd2399a2a21db65",
+    sourceVersion="1.25.1", publishedVersion="1.25.0", scope="Unix-time valid wide integer calendar correction;34 new source cases outside catalog; current native Unix22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted. No API/version/gate/fixture/retry/release change; REQ-126 partial.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

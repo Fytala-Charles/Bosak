@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-24",
+  "base": "f817b9b3c707cc17da926d0dfefb88a18ec5e7d9",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-wide-range-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-24T15:41:20.940809+00:00",
+      "completedAtUtc": "2026-10-24T15:41:44.011637+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "logSha256": "8da48a900a933b0e9a12ae524b8464fb648c8574da98076519ebe9959a389917"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-wide-range-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-24T15:41:20.940994+00:00",
+      "completedAtUtc": "2026-10-24T15:42:42.608385+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "65657d97253de6ac2d7c6a2f7a10335294613a30f81cb4ececc136547cb19e2a"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-wide-range-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-24T15:41:20.941442+00:00",
+      "completedAtUtc": "2026-10-24T15:41:22.437316+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "logSha256": "5e2ddcc8584f1b413ec7d63f7b4bf413cd5a0c3280df1c914410b6bc5f2abbe5"
+    }
+  ],
+  "runnerSha256": "51d843d16de7cdaa973e4a6c093be43f1ca05cc690e8f9286daff96810380c58",
+  "approvedPolicy": "Valid integer Unix epochs reach domain/calendar checks before narrowing; generic casts unchanged",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeNegativeFailuresRemainExplicit": true,
+  "releasePerformed": false,
+  "mergedBase": "fa5c7ec0fb8d1f761e6080a3abd2399a2a21db65",
+  "unitTests": {
+    "before": {
+      "total": 32,
+      "passed": 12,
+      "failed": 20
+    },
+    "after": {
+      "total": 136,
+      "passed": 136,
+      "failed": 0
+    },
+    "full": {
+      "total": 11423,
+      "passed": 11423,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "newCases": 34,
+  "versionChanged": false,
+  "limits": [
+    "Generic integer casts/constructors unchanged",
+    "Ordinary decimals/untyped values retain existing conversion",
+    "Frozen negative-domain failures120/121 remain explicit",
+    "Calendar remains years1\u20139999; backing precision unchanged"
+  ],
+  "evidenceHashes": {
+    "current-native-after.txt": "5e2ddcc8584f1b413ec7d63f7b4bf413cd5a0c3280df1c914410b6bc5f2abbe5",
+    "diagnostics-after.json": "6bf5399743419bc9287390f906fe0af166022a7f2635a145063af76d7dc10139",
+    "frozen-gate-skips.txt": "817f2d936eaeefdd75c777eb40b56ec2775e2ab7d2ff8c59ee41ddc96a83787f",
+    "frozen-gate.txt": "8da48a900a933b0e9a12ae524b8464fb648c8574da98076519ebe9959a389917",
+    "qt3.txt": "65657d97253de6ac2d7c6a2f7a10335294613a30f81cb4ececc136547cb19e2a"
+  }
+}

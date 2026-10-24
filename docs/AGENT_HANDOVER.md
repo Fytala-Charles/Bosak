@@ -1,3 +1,9 @@
+## REQ-126 Unix-time wide integer calendar correction — 24 October 2026
+
+Base `fa5c7ec0fb8d1f761e6080a3abd2399a2a21db65` (PR437 merged; engine-identical reviewed head f817b9b3). **Unix-time wide integer calendar correction — 24 October 2026:** [Behavior and limits](xpath40-catalog/UNIX-DATETIME-WIDE-RANGE.md) report FODT0001 for valid decimal-backed integer epochs beyond the supported calendar, preserving frozen negative refusal and Experimental signed behavior. Adds34 source cases; current native Unix improves to22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+Validation:11,423 solution +84 language-server pass; QT3 31142/0/679; frozen qt4 8436/0/1894. Build zero errors/existing CS8604 warning. Current native Unix22/2/0. Ten HTML pages rendered. What was built: valid integer type check before calendar-safe Int64 narrowing;32 API/two host cases. Before20 failed/12 passed; focused136 Unix API pass. Negative domain and generic conversion controls retained. No API/version/release change. Next: review correction then audit generic integer constructors/casts. Root upstream notes preserved. Earlier four-native-failure statements below are historical.
+
 ## REQ-126 checked integer arithmetic — 24 October 2026
 
 Base `2ff6804ad4a7236b7f8980f1ca76294810043e00` (PR436 merged). **Checked integer arithmetic — 24 October 2026:** [Correction and limits](xpath40-catalog/INTEGER-PROMOTION.md) prevent folded binary arithmetic wraparound and preserve integer identity through decimal-backed addition/subtraction/multiplication, with42 profile/call-path regression cases. General casts, unary/division and Unix-time wide conversion remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 stays partial.

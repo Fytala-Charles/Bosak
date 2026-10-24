@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-10-2026     | Creation: Legacy and Draft hosts retain frozen negative-epoch refusal.  |
+//                      | Charles Korthout | 0.2   | 24-10-2026     | Verify valid wide positive epochs raise calendar errors in both XSLT hosts.               |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -41,5 +42,15 @@ public sealed class UnixDateTimeExperimentalHostBoundaryTests
         Assert.Equal("1970-01-01T00:00:00Z", compiler.Compile(XDocument.Parse(Sheet("0"))).TransformToString(input));
         var failure = Assert.ThrowsAny<Exception>(() => compiler.Compile(XDocument.Parse(Sheet("-1"))).TransformToString(input));
         Assert.Contains("FOCA0002", failure.Message);
+    }
+    /// <summary>Valid wide positive integers reach the supported calendar boundary in both XSLT hosts.</summary>
+    /// <param name="profile">The captured XSLT host profile.</param>
+    [Theory, InlineData(XsltProcessorProfile.Legacy), InlineData(XsltProcessorProfile.Xslt40Draft)]
+    public void HostReportsWideIntegerCalendarOverflow(XsltProcessorProfile profile)
+    {
+        var compiler = new XsltCompiler { ProcessorProfile = profile };
+        var input = new XDocumentNode(XDocument.Parse("<root/>"));
+        var failure = Assert.ThrowsAny<Exception>(() => compiler.Compile(XDocument.Parse(Sheet("9223372036854775808"))).TransformToString(input));
+        Assert.Contains("FODT0001", failure.Message);
     }
 }

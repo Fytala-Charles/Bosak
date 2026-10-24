@@ -4,6 +4,10 @@
   <p>23 October 2026</p>
 </div>
 
+**Unix-time wide integer calendar correction — 24 October 2026:** [Behavior and limits](UNIX-DATETIME-WIDE-RANGE.md) report FODT0001 for valid decimal-backed integer epochs beyond the supported calendar, preserving frozen negative refusal and Experimental signed behavior. Adds34 source cases; current native Unix improves to22/2/0. Generic constructors/casts remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 **Arithmetic correction gate follow-up — 24 October 2026:** [Fresh receipts](INTEGER-PROMOTION.json) record frozen qt4 **8,436/0/1,894**, replacing two prior compile-overflow skips with passes accepted through runtime FOAR0002. QT3 remains31,142/0/679;224 gates, fixture and retry policy unchanged. Current Unix20/4/0 remains; earlier comparison counts below are historical.
 
 
