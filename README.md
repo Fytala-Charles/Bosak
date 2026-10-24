@@ -79,7 +79,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10), then
 ```bash
 dotnet new console -n BosakDemo
 cd BosakDemo
-dotnet add package Bosak.XPath.Api --version 1.24.0
+dotnet add package Bosak.XPath.Api --version 1.25.0
 ```
 
 Replace `Program.cs` with:
@@ -97,9 +97,9 @@ Run it with `dotnet run`. Reuse `expression` for subsequent evaluations. For tra
 
 | Package | Use it for |
 |---|---|
-| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.24.0) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.24.0) | Compile stylesheets and transform documents. |
-| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.24.0) | Compile and evaluate XQuery. |
+| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.25.0) | Compile and evaluate XPath. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.25.0) | Compile stylesheets and transform documents. |
+| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.25.0) | Compile and evaluate XQuery. |
 
 Continue with the [API integration guide](docs/INTEGRATION.md) and [feature catalog](docs/xpath40-catalog/README.md).
 
@@ -150,7 +150,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Integration](docs/INTEGRATION.md) | Public APIs, supported profiles and consumer guidance. |
 | [Roadmap](ROADMAP.md) and [feature requests](docs/FEATURE_REQUESTS.md) | Planned work and current delivery status. |
-| [1.24.0 release notes](docs/RELEASE-NOTES-1.24.0.md) | Release scope, compatibility and limitations. |
+| [1.25.0 release notes](docs/RELEASE-NOTES-1.25.0.md) | Release scope, compatibility and limitations. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived implementation checkpoints and the former README reference material. |
 
 Build and test from a source checkout with the .NET 10 SDK:

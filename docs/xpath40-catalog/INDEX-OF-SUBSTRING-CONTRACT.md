@@ -4,6 +4,9 @@
   <p>24 October 2026 — source1.24.1, unpublished</p>
 </div>
 
+**Published in 1.25.0 — 24 October 2026:** [Verified publication](../RELEASE-1.25.0-PUBLICATION.md) includes this Experimental-only correction and 40 fresh signed-package substring/host checks. Frozen XPath40/XSLT behavior is unchanged. The source1.24.1/unpublished labels and counts below describe the original PR429 development receipt; they are historical, not the current publication status.
+
+
 **Final local verification:** All11,173 solution +84 language-server tests pass, zero failures/skips, including38 new API/two host cases. Release build succeeds with the existing CS8604 conformance warning. Fresh QT3 remains31,142/0/679 and frozen qt4 remains8,434/0/1,896. Current native case021 remains an expected frozen-profile diagnostic failure; native skips are distinct from unit skips. Full TRX hashes are retained; temporary fixture junctions are removed.
 
 
