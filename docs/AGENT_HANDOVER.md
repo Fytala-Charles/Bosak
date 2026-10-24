@@ -1,3 +1,9 @@
+## REQ-126 checked integer arithmetic — 24 October 2026
+
+Base `2ff6804ad4a7236b7f8980f1ca76294810043e00` (PR436 merged). **Checked integer arithmetic — 24 October 2026:** [Correction and limits](xpath40-catalog/INTEGER-PROMOTION.md) prevent folded binary arithmetic wraparound and preserve integer identity through decimal-backed addition/subtraction/multiplication, with42 profile/call-path regression cases. General casts, unary/division and Unix-time wide conversion remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 stays partial.
+
+Validation:11,389 solution +84 LSP pass; fresh QT3 31142/0/679, qt4 8436/0/1894 (two previous compile-overflow skips now accept runtime FOAR0002). Current native Unix20/4/0 remains. Build zero errors; existing CS8604/NU1900 metadata warnings retained. What was built: checked folding and safe runtime subtraction; integer-preserving decimal promotion and arithmetic;42 new regression cases. Before30 failed/12 passed; after39/3 exposed test whitespace, corrected42/0. Original receipts retained. No public API/version/release change; source1.25.1 already unpublished. Braid1.25.0 acceptance complete. Root upstream notes preserved. Next: review arithmetic fix, then wide conversion/storage; remaining unary/division and decimal precision limits explicit. Earlier defect observations below are historical.
+
 ## REQ-126 wide-integer investigation — 24 October 2026
 
 Base `2580823a057afe68d3555904a9f551b5264d5277`. **Wide-integer Unix-time investigation — 24 October 2026:** [Evidence and next fix](xpath40-catalog/UNIX-DATETIME-WIDE-INTEGER.md) add24 boundary tests and74 observed diagnostics. Valid wide literals fail Int64 conversion before date arithmetic; constant folding also wraps while runtime promotion loses integer typing. Defects remain explicit; no engine/version/release change. Source1.25.1 unpublished, public1.25.0 accepted; REQ-126 stays partial.

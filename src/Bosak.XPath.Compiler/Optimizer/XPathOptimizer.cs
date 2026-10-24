@@ -50,6 +50,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 08-10-2026     | REQ-118 4.0-S4: OptimizePipeline for PipelineExprNode ('->')
+//                      | Charles Korthout | 1.14  | 24-10-2026     | Check integer folding overflow and retain decimal-backed integer literal type.            |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -317,13 +318,13 @@ internal sealed class XPathOptimizer
                 {
                     BinaryOperator.Plus => _backwardsCompatible
                         ? new DoubleLiteralNode((double)li.Value + (double)ri.Value)
-                        : new IntegerLiteralNode(li.Value + ri.Value),
+                        : new IntegerLiteralNode(checked(li.Value + ri.Value)),
                     BinaryOperator.Minus => _backwardsCompatible
                         ? new DoubleLiteralNode((double)li.Value - (double)ri.Value)
-                        : new IntegerLiteralNode(li.Value - ri.Value),
+                        : new IntegerLiteralNode(checked(li.Value - ri.Value)),
                     BinaryOperator.Multiply => _backwardsCompatible
                         ? new DoubleLiteralNode((double)li.Value * (double)ri.Value)
-                        : new IntegerLiteralNode(li.Value * ri.Value),
+                        : new IntegerLiteralNode(checked(li.Value * ri.Value)),
                     BinaryOperator.Divide => _backwardsCompatible
                         ? new DoubleLiteralNode((double)li.Value / (double)ri.Value)
                         : new DecimalLiteralNode((decimal)li.Value / (decimal)ri.Value),
@@ -352,6 +353,10 @@ internal sealed class XPathOptimizer
             catch (DivideByZeroException)
             {
                 // Skip constant folding; let runtime evaluate and produce the proper XPath error/INF
+            }
+            catch (OverflowException)
+            {
+                // Keep the operation for runtime checked arithmetic and decimal-backed integer promotion.
             }
         }
 
@@ -382,9 +387,9 @@ internal sealed class XPathOptimizer
             {
                 var result = node.Operator switch
                 {
-                    BinaryOperator.Plus => new DecimalLiteralNode(lc.Value + rc.Value),
-                    BinaryOperator.Minus => new DecimalLiteralNode(lc.Value - rc.Value),
-                    BinaryOperator.Multiply => new DecimalLiteralNode(lc.Value * rc.Value),
+                    BinaryOperator.Plus => new DecimalLiteralNode(lc.Value + rc.Value, IsIntegerLiteral: lc.IsIntegerLiteral && rc.IsIntegerLiteral),
+                    BinaryOperator.Minus => new DecimalLiteralNode(lc.Value - rc.Value, IsIntegerLiteral: lc.IsIntegerLiteral && rc.IsIntegerLiteral),
+                    BinaryOperator.Multiply => new DecimalLiteralNode(lc.Value * rc.Value, IsIntegerLiteral: lc.IsIntegerLiteral && rc.IsIntegerLiteral),
                     BinaryOperator.Divide => new DecimalLiteralNode(lc.Value / rc.Value),
                     _ => null
                 };

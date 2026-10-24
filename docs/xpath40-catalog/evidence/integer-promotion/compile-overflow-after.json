@@ -1,0 +1,30 @@
+[
+  {
+    "profile": "XPath40",
+    "expression": "(-9223372036854775807 - 1) idiv -1",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "(-9223372036854775807 - 1) mod -1",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "(-9223372036854775807 - 1) idiv -1",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "(-9223372036854775807 - 1) mod -1",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]

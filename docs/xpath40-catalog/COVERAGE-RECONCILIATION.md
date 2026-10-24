@@ -4,6 +4,10 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**Checked integer arithmetic — 24 October 2026:** [Correction and limits](INTEGER-PROMOTION.md) prevent folded binary arithmetic wraparound and preserve integer identity through decimal-backed addition/subtraction/multiplication, with42 profile/call-path regression cases. General casts, unary/division and Unix-time wide conversion remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 stays partial.
+
+
+
 **Wide-integer Unix-time investigation — 24 October 2026:** [Evidence and next fix](UNIX-DATETIME-WIDE-INTEGER.md) add24 boundary tests and74 observed diagnostics. Valid wide literals fail Int64 conversion before date arithmetic; constant folding also wraps while runtime promotion loses integer typing. Defects remain explicit; no engine/version/release change. Source1.25.1 unpublished, public1.25.0 accepted; REQ-126 stays partial.
 
 

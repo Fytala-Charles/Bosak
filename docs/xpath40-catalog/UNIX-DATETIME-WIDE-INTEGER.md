@@ -4,6 +4,10 @@
   <p>24 October 2026 — source 1.25.1 unpublished; public 1.25.0 consumer-accepted</p>
 </div>
 
+**Checked integer arithmetic — 24 October 2026:** [Correction and limits](INTEGER-PROMOTION.md) prevent folded binary arithmetic wraparound and preserve integer identity through decimal-backed addition/subtraction/multiplication, with42 profile/call-path regression cases. General casts, unary/division and Unix-time wide conversion remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 stays partial.
+
+
+
 This REQ-126 investigation follows the [signed-epoch correction](UNIX-DATETIME-EXPERIMENTAL.md). It adds 24 boundary tests and preserves 74 observed diagnostics, without changing engine behavior. Base: `2580823a057afe68d3555904a9f551b5264d5277`, after PR434 and Braid acceptance PR435. Public 1.25.0 is accepted by Braid within REQ-137's delivered scope; source 1.25.1 remains unpublished.
 
 ## Conversion failure is separate from calendar range
