@@ -1,0 +1,382 @@
+[
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775807 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 instance of xs:decimal",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775808 eq 9223372036854775809",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "9223372036854775807 \u002B 1",
+    "value": "-9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u0022-9223372036854775809\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-9223372036854775809\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(\u0022not-an-integer\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027not-an-integer\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:integer(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:nonNegativeInteger(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(253402300799999)",
+    "value": "9999-12-31T23:59:59.999Z",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(253402300800000)",
+    "value": null,
+    "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(9223372036854775807)",
+    "value": null,
+    "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(9223372036854775809)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775809\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(-9223372036854775809)",
+    "value": null,
+    "error": "FORG0001: The value \u0027-9223372036854775809\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(xs:untypedAtomic(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(xs:integer(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime#1(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(?)(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "function-lookup(QName(\u0022http://www.w3.org/2005/xpath-functions\u0022,\u0022unix-dateTime\u0022),1)(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := 9223372036854775808 return unix-dateTime($v)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(79228162514264337593543950335)",
+    "value": null,
+    "error": "FORG0001: The value \u002779228162514264337593543950335\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(xs:untypedAtomic(\u0022not-an-integer\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027not-an-integer\u0027 to nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(xs:double(\u0022INF\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(xs:double(\u0022NaN\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(9223372036854775808.5)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808.5\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "unix-dateTime(-62135596800001)",
+    "value": null,
+    "error": "FOCA0002: fn:unix-dateTime value -62135596800001 is out of range for xs:nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775807 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 instance of xs:integer",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 instance of xs:decimal",
+    "value": "true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775808 eq 9223372036854775809",
+    "value": "false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "9223372036854775807 \u002B 1",
+    "value": "-9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u00229223372036854775808\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u0022-9223372036854775809\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-9223372036854775809\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(\u0022not-an-integer\u0022)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027not-an-integer\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:integer(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:nonNegativeInteger(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for nonNegativeInteger.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(253402300799999)",
+    "value": "9999-12-31T23:59:59.999Z",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(253402300800000)",
+    "value": null,
+    "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(9223372036854775807)",
+    "value": null,
+    "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(9223372036854775809)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775809\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(-9223372036854775809)",
+    "value": null,
+    "error": "FORG0001: The value \u0027-9223372036854775809\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(xs:untypedAtomic(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(xs:integer(\u00229223372036854775808\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime#1(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(?)(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "function-lookup(QName(\u0022http://www.w3.org/2005/xpath-functions\u0022,\u0022unix-dateTime\u0022),1)(9223372036854775808)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := 9223372036854775808 return unix-dateTime($v)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(79228162514264337593543950335)",
+    "value": null,
+    "error": "FORG0001: The value \u002779228162514264337593543950335\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(xs:untypedAtomic(\u0022not-an-integer\u0022))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027not-an-integer\u0027 to integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(xs:double(\u0022INF\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027INF\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(xs:double(\u0022NaN\u0022))",
+    "value": null,
+    "error": "FOCA0002: The value \u0027NaN\u0027 is out of range or not representable for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(9223372036854775808.5)",
+    "value": null,
+    "error": "FORG0001: The value \u00279223372036854775808.5\u0027 is out of range for integer.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "unix-dateTime(-62135596800001)",
+    "value": null,
+    "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]
