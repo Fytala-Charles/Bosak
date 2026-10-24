@@ -1,0 +1,20 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.guard-tmp\req126-map-gate-evidence\controls\happy\catalog.xml
+
+Discovered 1 test sets.
+  Starting: fn-map-to-element ...
+  Done: fn-map-to-element (1 tests total) [P+=1 F+=0 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   1
+Passed:  1
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.00%
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 1.01s

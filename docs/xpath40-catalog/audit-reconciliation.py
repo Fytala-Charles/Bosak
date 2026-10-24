@@ -80,8 +80,8 @@ for item in matrix["rows"]:
         assert not test["method"] or test["method"] + "(" in text, test
 assert len(matrix["rows"]) == 18
 summary["mappedGrammarClusterRows"] = len(matrix["rows"])
-receipt = dict(date="2026-10-23", sourceBase="d014365a9782811311fcca7f07130535b051d492",
-    sourceVersion="1.24.0", publishedVersion="1.24.0", scope="Current-upstream gate audit corrects documentation extraction of six dotted set names:224 configured,223 executed,one dormant map-to-element name. CSV and other current-contract differences recorded separately; owner-approved AC-03 policy; no engine or gate membership change; prior receipts retained.",
+receipt = dict(date="2026-10-24", sourceBase="7a2b85e4ac2525a3d0127aea6fe3c0d72f3d2ca1",
+    sourceVersion="1.24.0", publishedVersion="1.24.0", scope="Repair dormant map-to-element gate name to fn-map-to-element:224 configured and executed frozen sets,8434/0/1896. Upstream revision unchanged; current-contract adoption remains separate; owner-approved AC-03 policy; prior receipts retained.",
     summary=summary, entries=entries, currentGatedSets=gates, historicalAdoptedSpecPinsMissing=missing_pins,
     inputHashes={str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in [CATALOG/"examples/cases.json", CATALOG/"provenance.json", ROOT/"tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs"]},
     ac03OwnerDecision=dict(date="2026-10-22", choice="Adopt applicable-evidence policy (recommended)", criterionAmended=True, criterionClosed=False),

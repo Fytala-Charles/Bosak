@@ -346,3 +346,7 @@ Contract/receipt links, seven native failure IDs, immutable revisions and canoni
 ## Current upstream gate audit - 23 October 2026
 
 Ten audit/canonical Markdown pages render with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-current-gate-render`. Receipt hashes,223 executed names,224 configured names, six dotted-name extraction corrections, all45 native failures, JSON and new relative links are checked. Imported native output is retained byte-for-byte, including the skip dumps' final blank separators through receipt-specific whitespace attributes. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.
+
+## Frozen map-to-element gate repair - 24 October 2026
+
+Eleven repair/canonical/catalog pages render with markdown-it and unchanged Fytala CSS under `.guard-tmp/req126-map-gate-render`. Exact224-name resolution/execution,8434/0/1896,QT3, original receipt hashes, synthetic control XML/exit policy, sixteen-field entry, JSON and new links checked. Native text and synthetic XML evidence retain original bytes and separators. HTML only; no screenshot/PDF acceptance. Kit assets unchanged.

@@ -49,6 +49,8 @@
 //                      | Charles Korthout | 0.12  | 16-10-2026     | REQ-123 PR1131 destructuring-let slice: prod-LetClause + fn-compare promoted into        |
 //                      |                  |       |                | GatedSets (223 sets); Destructure/SaveVariables/RestoreVariables opcodes, 4.0 §3.4.2     |
 //                      |                  |       |                | typed-let coercion incl. numeric downcasting, lexical let scoping                        |
+//                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
+//                      | Charles Korthout | 0.13  | 24-10-2026     | Correct fn-map-to-element gate name to enforce the frozen native test set.                |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -246,7 +248,7 @@ internal sealed class ConformanceRunner40
         "map-find",
         "map-remove",
         "map-size",
-        "map-to-element",
+        "fn-map-to-element",
         "array-append",
         "array-build",
         "array-flatten",

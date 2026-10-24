@@ -55,3 +55,6 @@
 
 # Preserve frozen/current full gate and supplemental native execution receipts.
 /docs/xpath40-catalog/evidence/current-gate-audit/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve frozen gate repair execution receipts and standalone process-control fixtures.
+/docs/xpath40-catalog/evidence/map-to-element-gate/** -text whitespace=cr-at-eol,-blank-at-eof

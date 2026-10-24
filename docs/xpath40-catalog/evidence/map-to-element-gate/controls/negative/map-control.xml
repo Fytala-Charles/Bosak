@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<test-set xmlns="http://www.w3.org/2010/09/qt-fots-catalog" name="fn-map-to-element"><dependency type="spec" value="XP40+ XQ40+" /><test-case name="map-gate-negative"><test>map-to-element({'a':'x'})</test><result><assert-xml>&lt;wrong/&gt;</assert-xml></result></test-case></test-set>
