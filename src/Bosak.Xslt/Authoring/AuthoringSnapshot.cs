@@ -28,6 +28,8 @@
 
 //                      | Charles Korthout | 1.1   | 23-10-2026     | REQ-136: element rename and subtree deletion. |
 
+//                      | Charles Korthout | 1.2   | 24-10-2026     | REQ-137: direction-bound sibling reordering. |
+
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Authoring;
@@ -43,6 +45,30 @@ namespace Bosak.Xslt.Authoring;
 /// </summary>
 public sealed class AuthoringSnapshot
 {
+    /// <summary>Discovers direction-bound adjacent literal element exchange authority.</summary>
+    /// <param name="node">The actual selected snapshot-owned element.</param>
+    /// <param name="direction">The requested adjacent sibling direction, captured in the target.</param>
+    /// <param name="cancellationToken">Cancellation observed before authority is published.</param>
+    /// <returns>An owned target or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    public AuthoringLiteralElementReorderTargetResult GetLiteralElementReorderTarget(AuthoringNodeDescriptor node,
+        AuthoringLiteralElementMoveDirection direction, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        return LiteralElementReorderPipeline.Discover(this, node, direction, cancellationToken);
+    }
+    /// <summary>Proposes one pure exact-source adjacent sibling exchange.</summary>
+    /// <param name="proposal">The snapshot-owned, direction-bound operation intent.</param>
+    /// <param name="cancellationToken">Cancellation observed before Changed or NoChange is published.</param>
+    /// <returns>Exactly one complete candidate, original-selection NoChange or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringLiteralElementReorderResult ProposeLiteralElementReorder(AuthoringLiteralElementReorderProposal proposal,
+        CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return LiteralElementReorderPipeline.Propose(this, proposal, cancellationToken);
+    }
+
     /// <summary>Discovers opaque literal element rename authority.</summary>
     /// <param name="node">The actual snapshot-owned element.</param>
     /// <param name="cancellationToken">Cancellation observed before authority is published.</param>

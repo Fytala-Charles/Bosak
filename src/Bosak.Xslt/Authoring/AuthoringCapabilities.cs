@@ -31,6 +31,8 @@ using System.Reflection;
 
 //                      | Charles Korthout | 1.1   | 23-10-2026     | REQ-136: independent lifecycle capabilities and bounds. |
 
+//                      | Charles Korthout | 1.2   | 24-10-2026     | REQ-137: independent reorder capability, profile and bounds. |
+
 namespace Bosak.Xslt.Authoring;
 
 /// <summary>
@@ -53,6 +55,25 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether bounded direction-bound adjacent literal element exchanges are supported.</summary>
+    public static bool SupportsLiteralElementReordering => true;
+    /// <summary>Gets the independent original and candidate physical byte bound for reordering.</summary>
+    public static int MaxLiteralElementReorderSourceBytes => 8_388_608;
+    /// <summary>Gets the combined subtree and separator physical byte bound for reordering.</summary>
+    public static int MaxLiteralElementReorderExchangeBytes => 8_388_608;
+    /// <summary>Gets the cumulative complete copied review evidence byte bound for reordering.</summary>
+    public static int MaxLiteralElementReorderEvidenceBytes => 16_777_216;
+    /// <summary>Gets the independent original and candidate descriptor count bound for reordering.</summary>
+    public static int MaxLiteralElementReorderNodes => 65_536;
+    /// <summary>Gets the independent original and candidate attribute count bound for reordering.</summary>
+    public static int MaxLiteralElementReorderAttributes => 65_536;
+    /// <summary>Gets the maximum descriptor traversal depth for reordering.</summary>
+    public static int MaxLiteralElementReorderDepth => 256;
+    /// <summary>Gets immutable reorder encodings; UTF-16 requires a matching BOM/declaration.</summary>
+    public static IReadOnlyList<string> LiteralElementReorderSupportedEncodings { get; } = Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+    /// <summary>Gets the initial reorder coverage: dependency-free explicit 3.0/4.0 Legacy authoring host, no-namespace literal parent and adjacent children, creation-compatible literal ancestry, REQ-136 closed vocabulary, absent or ordinary lexical whitespace separator; no CDATA or preserved-space.</summary>
+    public static string LiteralElementReorderProfile => "LiteralSiblingExchangeV1";
+
     /// <summary>Gets the independent REQ-136 SupportsLiteralElementRename capability or bound.</summary>
     public static bool SupportsLiteralElementRename => true;
     /// <summary>Gets the independent REQ-136 SupportsLiteralElementDeletion capability or bound.</summary>

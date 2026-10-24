@@ -64,3 +64,4 @@
 
 /docs/REQ-137-same-parent-child-element-reordering.md -text whitespace=cr-at-eol
 /docs/REQ-137-BRAID-CONSUMER-DESIGN-REVIEW.md -text whitespace=cr-at-eol
+/docs/req137-evidence/* -text whitespace=cr-at-eol,-blank-at-eof
