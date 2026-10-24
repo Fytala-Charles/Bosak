@@ -5,6 +5,8 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**REQ-137 consumer design review — 24 October 2026:** [Braid review](REQ-137-BRAID-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings against exact proposal head `cf66f2be3a8d5dce0b694fdd5c410d2f19adaca4`; both reviewed document hashes independently match Git blobs. All three CI checks passed at that head. No design correction requested. Owner implementation approval remains pending; REQ-137 stays Pending / TBD / Unassigned. No implementation, merge, release or consumer runtime acceptance is inferred.
+
 **REQ-137 design review - 24 October 2026:** [Maintainer scope/API proposal](REQ-137-MAINTAINER-SCOPE-REVIEW.md) proposes both directions together, one exact replacement, direction-bound authority and a total piecewise correspondence with explicit sibling exchange. Pending / TBD / Unassigned; consumer design review and owner implementation approval remain required. Documentation only; no move API or release delivered.
 
 **Experimental substring correction - 24 October 2026:** Owner-approved source **1.24.1 (unpublished)** normalizes absent `index-of-substring` patterns only in `XPath40Experimental`; frozen `XPath40` retains XPTY0004. [Contract and proof](xpath40-catalog/INDEX-OF-SUBSTRING-CONTRACT.md) records38 API/two XSLT host controls, fresh QT3 31,142/0/679 and frozen qt4 8,434/0/1,896. Current native case021 remains an explicit frozen-profile failure; no retry/gate/fixture-policy change. Public1.24.0 and REQ-136 acceptance stay current; REQ-126 remains partial. No release or Braid change. Earlier decision-pending checkpoints are historical.

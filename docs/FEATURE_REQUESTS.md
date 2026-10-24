@@ -5,6 +5,8 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**REQ-137 consumer design review — 24 October 2026:** [Braid review](REQ-137-BRAID-CONSUMER-DESIGN-REVIEW.md) reports no blocking findings against exact proposal head `cf66f2be3a8d5dce0b694fdd5c410d2f19adaca4`; both reviewed document hashes independently match Git blobs. All three CI checks passed at that head. No design correction requested. Owner implementation approval remains pending; REQ-137 stays Pending / TBD / Unassigned. No implementation, merge, release or consumer runtime acceptance is inferred.
+
 **REQ-137 design review - 24 October 2026:** [Maintainer scope/API proposal](REQ-137-MAINTAINER-SCOPE-REVIEW.md) proposes both directions together, one exact replacement, direction-bound authority and a total piecewise correspondence with explicit sibling exchange. Pending / TBD / Unassigned; consumer design review and owner implementation approval remain required. Documentation only; no move API or release delivered.
 
 **REQ-137 consumer registration - 24 October 2026:** Bosak.Braid requests same-parent child element Move up/down together in one feature/implementation PR. [Complete request and 14 planned acceptance groups](REQ-137-same-parent-child-element-reordering.md) define exact adjacent subtree exchange, a preserved whitespace-only separator, no skip/wrap/cross-parent movement, total descriptor/attribute bijection with explicit changed sibling order, byte-identical NoChange and separate review/Apply/history. Status Pending; target TBD; owner Unassigned. Documentation only, explicitly authorized by the owner; no API/engine implementation or release is approved. Existing REQ-136 acceptance remains unchanged.
