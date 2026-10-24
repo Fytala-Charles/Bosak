@@ -4,6 +4,10 @@
   <p>24 October 2026 — source 1.25.1 unpublished; public 1.25.0 accepted</p>
 </div>
 
+**Exact floating integer boundaries — 24 October 2026:** [Correction and limits](FLOATING-INTEGER-BOUNDARIES.md) reject the signed2⁶³/unsigned2⁶⁴ overflow thresholds and preserve accepted large unsigned magnitudes, with72 constructor/cast/reference/castable cases. Unsigned Decimal truncation and generic storage remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 This bounded REQ-126 audit follows the [Unix-time correction](UNIX-DATETIME-WIDE-RANGE.md), merged as PR438 at base `fadaa44631a0416f24406113e7ab6b3946feb13d`. It adds72 supported conversion tests and retains150 observed diagnostics across XPath31, XPath40 and XPath40Experimental. Engine/API/version, fixtures, gates and retry policy are unchanged. Source1.25.1 remains unpublished; public/Braid1.25.0 is consumer-accepted within REQ-137's delivered profile.
 
 ## Contract distinctions

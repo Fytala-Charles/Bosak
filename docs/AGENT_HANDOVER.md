@@ -1,3 +1,9 @@
+## REQ-126 floating integer boundary correction — 24 October 2026
+
+Reviewed base `8fb2efc35ee7bd05b446550d59d5bb608317f9a2` (PR439 merged at `2437a9e1cb77ea7989f01373326532483332ed43`). **Exact floating integer boundaries — 24 October 2026:** [Correction and limits](xpath40-catalog/FLOATING-INTEGER-BOUNDARIES.md) reject the signed2⁶³/unsigned2⁶⁴ overflow thresholds and preserve accepted large unsigned magnitudes, with72 constructor/cast/reference/castable cases. Unsigned Decimal truncation and generic storage remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+Validation:11,567 solution +84 language-server pass; build zero errors/existing CS8604 warning. Fresh QT3 31142/0/679; frozen qt4 8436/0/1894; current native Unix22/2/0. Ten HTML pages rendered. What was built: exact signed/unsigned binary thresholds and UInt64-backed conversion of accepted large floating unsigned values;72 new cases. Before24 failed/48 passed; after72/0, same expectations. No API/version/release change. Next: review correction then unsigned Decimal truncation/facet order, leaving generic storage/errors separate. Shared-checkout REQ-138 draft/registry and pending upstream notes remain untouched.
+
 ## REQ-126 integer constructor/cast audit — 24 October 2026
 
 Base `fadaa44631a0416f24406113e7ab6b3946feb13d` (PR438 merged). **Integer constructor/cast audit — 24 October 2026:** [Evidence and next correction](xpath40-catalog/INTEGER-CAST-AUDIT.md) add72 supported controls and150 observed diagnostics. Floating-point signed/unsigned boundaries silently admit out-of-range values; unsigned decimal truncation and generic storage/error policy are separate findings. No engine/version/release change. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
