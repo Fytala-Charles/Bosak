@@ -1,0 +1,573 @@
+{
+  "recordedAtUtc": "2026-10-24T14:18:39.349673+00:00",
+  "base": "f69f30fd01922db275be1ac6d0871c712bc3af73",
+  "version": "1.25.0",
+  "pins": {
+    "qtspecs": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+    "qt4tests": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2"
+  },
+  "files": {
+    "qtspecs/specifications/xpath-functions-40/src/function-catalog.xml": {
+      "revision": "b4723ff52fd9d4fabf2b4cd33bd44f21939c512c",
+      "gitBlob": "be337810df22269ea814c218de01a03596a09cac",
+      "bytes": 1801007,
+      "sha256": "feafdd1dff45c323e371ab5a9d0d3386a470bf719bab02a3826910e9b5985010"
+    },
+    "qt4tests/catalog.xml": {
+      "revision": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+      "gitBlob": "48a0ff7634b8f20518a4eb897908920c7ad6fbf2",
+      "bytes": 70491,
+      "sha256": "fd1e024c976f3c92b742573e53485d20b5e04373ea001dea6efff57fd73281f0"
+    },
+    "qt4tests/fn/unix-dateTime.xml": {
+      "revision": "3a2640cf649a9bff6c7a5b257a1fe7e50450b2c2",
+      "gitBlob": "43b40eeff45265f8f68a8626f068812293bbf60d",
+      "bytes": 9161,
+      "sha256": "0af925e65c281514c8028582135cd9b3dae0749067f44301561c751a9052e00c"
+    }
+  },
+  "frozenQt4Revision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+  "nativeCases": {
+    "frozen": {
+      "unix-dateTime-001": {
+        "expression": "unix-dateTime()",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-002": {
+        "expression": "unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-003": {
+        "expression": "unix-dateTime(0)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-004": {
+        "expression": "unix-dateTime(1)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00.001Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-005": {
+        "expression": "unix-dateTime(86400 * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-02T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-006": {
+        "expression": "unix-dateTime(0x7FFFFFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-25T20:31:23.647Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-007": {
+        "expression": "unix-dateTime(0xFFFFFFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-02-19T17:02:47.295Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-008": {
+        "expression": "unix-dateTime(0x7FFFFFFF * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('2038-01-19T03:14:07Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-009": {
+        "expression": "unix-dateTime(0xFFFF_FFFF * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('2106-02-07T06:28:15Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-010": {
+        "expression": "unix-dateTime(0x7FFF_FFFF_FFFF_FFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n          <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.807Z')</ns0:assert-eq>\n          <ns0:error code=\"FODT0001\" />\n       </ns0:any-of>\n    </ns0:result>\n  "
+      },
+      "unix-DateTime-101": {
+        "expression": "fn:unix-dateTime()",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTimeStamp</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-102": {
+        "expression": "fn:unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTimeStamp</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-103": {
+        "expression": "fn:unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-104": {
+        "expression": "fn:unix-dateTime(1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:01Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-105": {
+        "expression": "fn:unix-dateTime(1_000_000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z') + seconds(1000)</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-106": {
+        "expression": "fn:unix-dateTime() + xs:dayTimeDuration(\"P1DT0.005S\")",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-02T00:00:00.005Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      }
+    },
+    "current": {
+      "unix-dateTime-001": {
+        "expression": "unix-dateTime()",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-002": {
+        "expression": "unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-003": {
+        "expression": "unix-dateTime(0)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-004": {
+        "expression": "unix-dateTime(1)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00.001Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-005": {
+        "expression": "unix-dateTime(86400 * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-02T00:00:00Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-006": {
+        "expression": "unix-dateTime(0x7FFFFFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-01-25T20:31:23.647Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-007": {
+        "expression": "unix-dateTime(0xFFFFFFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('1970-02-19T17:02:47.295Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-008": {
+        "expression": "unix-dateTime(0x7FFFFFFF * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('2038-01-19T03:14:07Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-009": {
+        "expression": "unix-dateTime(0xFFFF_FFFF * 1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n      <ns0:assert-eq>xs:dateTime('2106-02-07T06:28:15Z')</ns0:assert-eq>\n    </ns0:result>\n  "
+      },
+      "unix-dateTime-010": {
+        "expression": "unix-dateTime(0x7FFF_FFFF_FFFF_FFFF)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n       <ns0:any-of>\n          <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.807Z')</ns0:assert-eq>\n          <ns0:error code=\"FODT0001\" />\n       </ns0:any-of>\n    </ns0:result>\n  "
+      },
+      "unix-DateTime-101": {
+        "expression": "fn:unix-dateTime()",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTimeStamp</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-102": {
+        "expression": "fn:unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTimeStamp</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-103": {
+        "expression": "fn:unix-dateTime(())",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-104": {
+        "expression": "fn:unix-dateTime(1000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:01Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-105": {
+        "expression": "fn:unix-dateTime(1_000_000)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-01T00:00:00Z') + seconds(1000)</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-106": {
+        "expression": "fn:unix-dateTime() + xs:dayTimeDuration(\"P1DT0.005S\")",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:all-of>\n            <ns0:assert-eq>xs:dateTime('1970-01-02T00:00:00.005Z')</ns0:assert-eq>\n            <ns0:assert-type>xs:dateTime</ns0:assert-type>\n         </ns0:all-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-110": {
+        "expression": "fn:unix-dateTime(2147483647)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1970-01-25T20:31:23.647Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-111": {
+        "expression": "fn:unix-dateTime(2147483648)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1970-01-25T20:31:23.648Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-112": {
+        "expression": "fn:unix-dateTime(2147483649)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1970-01-25T20:31:23.649Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-113": {
+        "expression": "fn:unix-dateTime(9223372036854775807)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.807Z')</ns0:assert-eq>\n            <ns0:error code=\"FODT0001\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-114": {
+        "expression": "fn:unix-dateTime(9223372036854775808)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.808Z')</ns0:assert-eq>\n            <ns0:error code=\"FODT0001\" />\n            <ns0:error code=\"FOAR0002\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-115": {
+        "expression": "fn:unix-dateTime(9223372036854775809)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>xs:dateTime('292278994-08-17T07:12:55.809Z')</ns0:assert-eq>\n            <ns0:error code=\"FODT0001\" />\n            <ns0:error code=\"FOAR0002\" />\n         </ns0:any-of>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-120": {
+        "expression": "fn:unix-dateTime(-1000 * 60 * 60 * 24)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1969-12-31T00:00:00Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+      },
+      "unix-DateTime-121": {
+        "expression": "fn:unix-dateTime(-1)",
+        "result": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>xs:dateTime('1969-12-31T23:59:59.999Z')</ns0:assert-eq>\n      </ns0:result>\n   "
+      }
+    }
+  },
+  "addedCaseNames": [
+    "unix-DateTime-110",
+    "unix-DateTime-111",
+    "unix-DateTime-112",
+    "unix-DateTime-113",
+    "unix-DateTime-114",
+    "unix-DateTime-115",
+    "unix-DateTime-120",
+    "unix-DateTime-121"
+  ],
+  "removedCaseNames": [],
+  "changedExecutionCases": [],
+  "upstreamSpecChange": {
+    "pr": 2885,
+    "mergeCommit": "d071fac94ca4f29fa8d515eb8cde5b1f34d22aa5",
+    "mergedAt": "2026-10-20T16:20:47Z",
+    "title": "2849 xs:integer vs. restricted subtypes"
+  },
+  "engineChanged": false,
+  "adoptionDecision": "No adoption in this test/contract slice; frozen and Experimental time behavior preserved; a later semantic change needs a separate decision.",
+  "currentWorkingCopySha256": "33bd6d096b656e52ef591304d713707b4f2c14276ae6908d2f5644d1e4f73924",
+  "nativeGitBlobMatchesVerifiedApiBytes": true,
+  "workingCopyLineEndingConversionOnly": true,
+  "nativeResults": [
+    {
+      "lane": "frozen",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-contract-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": null,
+      "logCompletedAtUtc": "2026-10-24T14:24:45.771710+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 16,
+        "Passed": 16,
+        "Failed": 0,
+        "Skipped": 0
+      },
+      "sha256": "783e1f745a02cbcfd7d11d7c067a3ce90561e10e60c96c5582726e2377eada59",
+      "failures": []
+    },
+    {
+      "lane": "current",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-contract-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": null,
+      "logCompletedAtUtc": "2026-10-24T14:24:45.778243+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 20,
+        "Failed": 4,
+        "Skipped": 0
+      },
+      "sha256": "71dade37360eb51d19939e7e634e0b0c399628d39f61cf568e54a0eb885b2f3f",
+      "failures": [
+        [
+          "unix-DateTime-114",
+          "any-of: none matched. [Unexpected error: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.; Expected error FODT0001, got: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.; Expected error FOAR0002, got: FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.]\r"
+        ],
+        [
+          "unix-DateTime-115",
+          "any-of: none matched. [Unexpected error: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.; Expected error FODT0001, got: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.; Expected error FOAR0002, got: FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.]\r"
+        ],
+        [
+          "unix-DateTime-120",
+          "Unexpected error: FOCA0002: fn:unix-dateTime value -86400000 is out of range for xs:nonNegativeInteger.\r"
+        ],
+        [
+          "unix-DateTime-121",
+          "Unexpected error: FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.\r"
+        ]
+      ]
+    }
+  ],
+  "observedDiagnostics": [
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(9223372036854775808)",
+      "value": null,
+      "error": "FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(9223372036854775809)",
+      "value": null,
+      "error": "FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(-1)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(-86400000)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -86400000 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(-9223372036854775808)",
+      "value": null,
+      "error": "FORG0001: Cannot cast '-9223372036854775808' to nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(-9223372036854775807 - 1)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -9223372036854775808 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(xs:integer('-9223372036854775808'))",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -9223372036854775808 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "(-9223372036854775808) instance of xs:integer",
+      "value": "false",
+      "error": null
+    },
+    {
+      "profile": "XPath40",
+      "expression": "(-9223372036854775807 - 1) instance of xs:integer",
+      "value": "true",
+      "error": null
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(253402300799999)",
+      "value": "9999-12-31T23:59:59.999Z",
+      "error": null
+    },
+    {
+      "profile": "XPath40",
+      "expression": "unix-dateTime(253402300800000)",
+      "value": null,
+      "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(9223372036854775808)",
+      "value": null,
+      "error": "FORG0001: The value '9223372036854775808' is out of range for nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(9223372036854775809)",
+      "value": null,
+      "error": "FORG0001: The value '9223372036854775809' is out of range for nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(-1)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(-86400000)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -86400000 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(-9223372036854775808)",
+      "value": null,
+      "error": "FORG0001: Cannot cast '-9223372036854775808' to nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(-9223372036854775807 - 1)",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -9223372036854775808 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(xs:integer('-9223372036854775808'))",
+      "value": null,
+      "error": "FOCA0002: fn:unix-dateTime value -9223372036854775808 is out of range for xs:nonNegativeInteger.",
+      "exceptionType": "System.InvalidOperationException"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "(-9223372036854775808) instance of xs:integer",
+      "value": "false",
+      "error": null
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "(-9223372036854775807 - 1) instance of xs:integer",
+      "value": "true",
+      "error": null
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(253402300799999)",
+      "value": "9999-12-31T23:59:59.999Z",
+      "error": null
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "unix-dateTime(253402300800000)",
+      "value": null,
+      "error": "FODT0001: fn:unix-dateTime value is outside the representable date range.",
+      "exceptionType": "System.InvalidOperationException"
+    }
+  ],
+  "runnerSha256": "cad7974f9c40da2efc11072300ae847f29e37dad0750a6e2806ed1ad3636d226",
+  "frozenNativeFileSha256": "8e4bc4763b935daf5edc839fb726503e1cc446ba7ba225c7b96ebc9b1fc20daa",
+  "fullValidation": {
+    "solutionPassed": 11296,
+    "languageServerPassed": 84,
+    "newRegressionCases": 52,
+    "failed": 0,
+    "skipped": 0,
+    "full": [
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_19_net10.0.trx",
+        "passed": 1500,
+        "sha256": "a14f6286c8e965536ae69b64ff2b00bc0e44c3eea09458ce2b32536e9dd0bd22"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_20_net10.0.trx",
+        "passed": 66,
+        "sha256": "c6b1b3ee70a6037f5236f134ca0eac2ac71883e6a6b2e617e0fd3917a9174f79"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_20_net10.0[1].trx",
+        "passed": 202,
+        "sha256": "ca9053c94b0eca05f31eb679cd90cd20665cf3e5bd3f682e3acd7e6ce1e38f1a"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_20_net10.0[2].trx",
+        "passed": 132,
+        "sha256": "86262edace0cd1bc2e8afbb02846a190956fb89044cbf6a8e4914fe66f951375"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_21_net10.0.trx",
+        "passed": 269,
+        "sha256": "23dbd6132000f2f056a2a10b7af515b707dcd132f5b5fa4cdb78e7d18a39f2e2"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_21_net10.0[1].trx",
+        "passed": 489,
+        "sha256": "5e02f46c14031b75f0d985c64b6260d1dff9989465dea6407034f8251caeae64"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_21_net10.0[2].trx",
+        "passed": 303,
+        "sha256": "062ec6b0984daaa456c0b5f442f7465136469424b5120b4facad9d5481d1e210"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_21_net10.0[3].trx",
+        "passed": 47,
+        "sha256": "f3a1482e98add96dc8b9b4ad42e4d6a8d4746cb08fbe6b2830c5e7162ce63d81"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_21_net10.0[4].trx",
+        "passed": 153,
+        "sha256": "a8eb86c32e17ebcee137a3ad3fcd7461f897921dca7c17542438a1767b785014"
+      },
+      {
+        "path": "full\\charl_CHARLES_2026-10-24_16_24_23_net10.0.trx",
+        "passed": 8135,
+        "sha256": "6ee7043af2d3d8845a3e58f69a4e5ec8fb6127a3e3dfb6cd6cf28553faa77971"
+      }
+    ],
+    "focused": [
+      {
+        "path": "focused-corrected\\charl_CHARLES_2026-10-24_16_22_16_net10.0.trx",
+        "passed": 52,
+        "sha256": "5ebe84e202e1289935c0bfb0e7e1f4e67649d4002d2df95dee1ab754ceb64740"
+      }
+    ],
+    "languageServer": [
+      {
+        "path": "language-server\\charl_CHARLES_2026-10-24_16_25_35_net10.0.trx",
+        "passed": 84,
+        "sha256": "cd218f316f4452ddd2e8c236575c6a0e728df41369026df1c795e23ea3187895"
+      }
+    ],
+    "build": "Release succeeded; one existing CS8604 conformance warning; zero errors",
+    "temporaryFixtureJunctionsRemoved": true
+  },
+  "catalogInventory": {
+    "entries": 76,
+    "featureChecks": 3148,
+    "chapterChecks": 24,
+    "totalDocumentationChecks": 3172,
+    "newTestsAreOutsideCatalogManifest": true
+  },
+  "scope": {
+    "engineApiVersionReleaseUnchanged": true,
+    "frozenFixtureGateRetryUnchanged": true,
+    "newerNegativeContractNotAdopted": true,
+    "req126": "D2/D3/D4/AC-03 remain partial",
+    "braid": "1.25.0 smoke/integration remains separate and unaffected"
+  },
+  "captureCorrections": [
+    "Original unit run47/5 retained: three nonportable chained-let baselines corrected; two direct-minimum-literal observations retained separately and integer-domain controls use computed Int64.MinValue.",
+    "Native preflight distinguished working-copy CRLF from exact Git-blob API bytes; no fixture changed.",
+    "Native summary parser corrected for indentation after both original runs completed; existing execution receipts reused unchanged, not rerun."
+  ],
+  "testSourceSha256": "d765ac69ac675ae22b9b9906578b9ffe0e60d2424d7f7160d3328735f3ad71c3",
+  "engineSourceSha256": "cbbf3724d11d12b9521d51260bb231a332eea0df129eeb4933c7e2408c422ac9",
+  "nativeFileHistory": [
+    {
+      "revision": "1d149118d85df69aa7bee1b2b3ee67cdb3624533",
+      "committedAt": "2026-10-19T14:23:04Z",
+      "message": "xs:integer vs. restricted subtypes. qt4cg/qtspecs#2849"
+    },
+    {
+      "revision": "166453359bd7770fb113b6d9c9015df7f7fa5d02",
+      "committedAt": "2026-10-16T09:28:19Z",
+      "message": "More limit tests"
+    },
+    {
+      "revision": "42a8c79d9b42eab4a4db14078722c5a2cb45e24d",
+      "committedAt": "2026-10-16T09:20:57Z",
+      "message": "XSD 1.1 for 4.0 datatypes and regexes. qt4cg/qtspecs#2520"
+    },
+    {
+      "revision": "6178bbb13d9ef2dbaa63e4a2068d662148040210",
+      "committedAt": "2026-10-04T17:08:13Z",
+      "message": "Fix covers-40 tags: issue numbers and typos"
+    },
+    {
+      "revision": "39261bad7b038b0b3afcb6a52e80a2e210dc0bc5",
+      "committedAt": "2024-10-09T16:44:53Z",
+      "message": "Merge branch 'master' into master"
+    },
+    {
+      "revision": "413e22e2455c4ee09167bd362fb6f198496ee79f",
+      "committedAt": "2024-10-09T16:38:19Z",
+      "message": "Combined/renamed tests for unix-dateTime"
+    },
+    {
+      "revision": "0a0d5bdee202e0318b618a71cf728e164fe331ea",
+      "committedAt": "2024-09-30T11:25:39Z",
+      "message": "fn:unix-dateTime. qt4cg/qtspecs#1435"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "evidence/unix-datetime-contract/frozen-native.txt",
+      "sha256": "783e1f745a02cbcfd7d11d7c067a3ce90561e10e60c96c5582726e2377eada59"
+    },
+    {
+      "path": "evidence/unix-datetime-contract/current-native.txt",
+      "sha256": "71dade37360eb51d19939e7e634e0b0c399628d39f61cf568e54a0eb885b2f3f"
+    }
+  ]
+}

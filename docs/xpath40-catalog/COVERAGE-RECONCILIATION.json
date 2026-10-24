@@ -1,9 +1,9 @@
 {
   "date": "2026-10-24",
-  "sourceBase": "525832a4c12fc2b5d88a829362ee1f91f7e593e3",
-  "sourceVersion": "1.24.1",
-  "publishedVersion": "1.24.0",
-  "scope": "Owner-approved Experimental-only absent index-of-substring normalization;40 API/host controls; frozen XPath40,224 configured/executed gate names and native expectations unchanged. Current native case021 remains a frozen-profile diagnostic failure; prior receipts retained; source unpublished.",
+  "sourceBase": "f69f30fd01922db275be1ac6d0871c712bc3af73",
+  "sourceVersion": "1.25.0",
+  "publishedVersion": "1.25.0",
+  "scope": "Unix timestamp boundary review:52 new source regressions outside catalog manifest; targeted frozen16/0/0 and current20/4/0 exit2. Native negative/wide-integer and minimum-literal diagnostics retained; no semantic adoption, engine/API/version/gate/fixture/release change. Source/public1.25.0; REQ-126 remains partial.",
   "summary": {
     "entries": 76,
     "featureChecks": 3148,
@@ -1382,7 +1382,7 @@
       "classification": "**Timestamp deadlines \u2014 Frozen 4.0.** [fn:unix-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-unix-dateTime), [fn:seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-seconds), and [fn:duration-to-seconds](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-duration-to-seconds).\nInitial engine delivery: [PR #84](https://github.com/Fytala-Charles/Bosak/pull/84),\n[revision f7f55b4e](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19), REQ-118 4.0-S2.\nDefinitions reviewed **2026-10-11** against immutable\n[QT4CG function source a014e1b4](https://github.com/qt4cg/qtspecs/blob/a014e1b408baf5614a11401d3570a04498ab76be/specifications/xpath-functions-40/src/function-catalog.xml).\nThis review pin does not recover the unavailable historical adopted specification snapshot.",
       "numberedFields": 16,
       "indexed": true,
-      "knownUsesSha256": "646e69166b823086f13cd35044629995e7b11d4d7a3fe7d6cc72f35f7321c343",
+      "knownUsesSha256": "8bacb8018d8eb9ed6b3a93eedc718b3e11e33efcca692f47a08e4182f374f69e",
       "exactManifestIdsInKnownUses": [],
       "mentionedCurrentGatedSets": [
         "fn-seconds-from-duration",
@@ -1390,6 +1390,7 @@
       ],
       "knownUseLocalFiles": [
         "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+        "tests/Bosak.XPath.Standard.Tests/UnixDateTimeContractTests.cs",
         "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
       ],
       "sampleLocalFiles": [

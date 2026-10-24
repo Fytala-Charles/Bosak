@@ -4,6 +4,8 @@
   <p>Gregorian components, epoch milliseconds and retention seconds</p>
 </div>
 
+**Unix timestamp boundary review — 24 October 2026:** [Contract and evidence](UNIX-DATETIME-CONTRACT.md) add52 source regression cases, UTC/default/call-path/calendar/2038 deadline checks and a fresh complete native-set comparison: frozen16/0/0; current20/4/0, exit2. Current negative-epoch semantics and wide-integer errors remain explicit adoption boundaries; a minimum-literal representation diagnostic is retained. All11,296 solution +84 language-server tests pass. Catalog remains76 entries /3,172 documentation checks; no engine/API/version/gate/fixture/release change. Source/public1.25.0 and Braid integration remain separate; REQ-126/D2/D3/D4/AC-03 stay partial.
+
 **Primitive numeric coercion - 2026-10-14:** Source candidate 1.3.2 supports the permitted decimal/float/double casts in XPath and ordinary XSLT 4.0 function arguments, including defaults. Double-to-integer remains invalid. The previous broader changelog interpretation is corrected: [PR #32](https://github.com/qt4cg/xslt40-test/pull/32) retains its original 903 fixture and updates only the error expectation. [Contract and evidence](../XSLT40-PRIMITIVE-NUMERIC-COERCION.md). Published libraries remain 1.2.1 and extension 0.1.6; source 1.3.2 is unpublished. Earlier milestone entries below are historical.
 
 ## Scope and outcome
