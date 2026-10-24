@@ -1,3 +1,9 @@
+## REQ-126 unsigned Decimal truncation — 24 October 2026
+
+Reviewed base `d0b8f35b2a8b6cea2ef768b9bbf4e74f76010f9b` (PR440 merged at `acc56ae1a5962f2361825d9b6d0ad470a598163c`). **Unsigned Decimal truncation — 24 October 2026:** [Correction and limits](xpath40-catalog/UNSIGNED-DECIMAL-TRUNCATION.md) discard numeric fractions before unsignedLong range facets/backing selection, with48 constructor/cast/reference/castable cases. Fractional lexical forms still refuse; floating near-zero consistency remains separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+Validation:11,615 solution +84 language-server pass; build zero errors/existing CS8604 warning. Fresh QT3 31142/0/679; frozen qt4 8436/0/1894; current native Unix22/2/0. Eleven HTML pages rendered. What was built: truncate Decimal before unsignedLong range checks/backing selection;48 source cases. Before15 failed/33 passed; after48/0 with unchanged expectations.36 diagnostic records retain the separate floating(-1,0) inconsistency. No API/version/release change; generic storage/errors remain separate. Next: review correction then unsigned floating near-zero consistency. Shared-checkout REQ-138 draft/registry and upstream notes remain untouched.
+
 ## REQ-126 floating integer boundary correction — 24 October 2026
 
 Reviewed base `8fb2efc35ee7bd05b446550d59d5bb608317f9a2` (PR439 merged at `2437a9e1cb77ea7989f01373326532483332ed43`). **Exact floating integer boundaries — 24 October 2026:** [Correction and limits](xpath40-catalog/FLOATING-INTEGER-BOUNDARIES.md) reject the signed2⁶³/unsigned2⁶⁴ overflow thresholds and preserve accepted large unsigned magnitudes, with72 constructor/cast/reference/castable cases. Unsigned Decimal truncation and generic storage remain separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.

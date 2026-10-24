@@ -4,6 +4,10 @@
   <p>24 October 2026 — source 1.25.1 unpublished; public 1.25.0 accepted</p>
 </div>
 
+**Unsigned Decimal truncation — 24 October 2026:** [Correction and limits](UNSIGNED-DECIMAL-TRUNCATION.md) discard numeric fractions before unsignedLong range facets/backing selection, with48 constructor/cast/reference/castable cases. Fractional lexical forms still refuse; floating near-zero consistency remains separate. Source1.25.1 unpublished/public1.25.0 accepted; REQ-126 partial.
+
+
+
 This bounded REQ-126 fix follows the [constructor/cast audit](INTEGER-CAST-AUDIT.md), reviewed at `8fb2efc35ee7bd05b446550d59d5bb608317f9a2` (PR439 merged at `2437a9e1cb77ea7989f01373326532483332ed43`). It corrects floating-point representability checks and accepted large unsigned values across XPath31, XPath40 and Experimental. It does not expand integer storage or adopt newer argument contracts. Source remains the existing unpublished1.25.1 patch; public/Braid1.25.0 remains accepted within REQ-137's delivered scope.
 
 ## Corrected behavior

@@ -421,6 +421,7 @@
 //                      | Charles Korthout | 2.194 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 2.195 | 24-10-2026     | Preserve promoted integer arithmetic and check subtraction without negating Int64.MinValue. |
 //                      | Charles Korthout | 2.196 | 24-10-2026     | Check exact floating integer thresholds and preserve accepted unsigned magnitudes.          |
+//                      | Charles Korthout | 2.197 | 24-10-2026     | Truncate unsignedLong decimal operands before range facets and integer backing selection. |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -9444,7 +9445,8 @@ internal static class VmEngine
                     }
                     if (value.Kind == XdmValueKind.Decimal)
                     {
-                        decimal d = value.DecimalValue;
+                        // Numeric integer casts discard the fraction before derived-type range checks.
+                        decimal d = decimal.Truncate(value.DecimalValue);
                         if (d < 0 || d > ulong.MaxValue) return false;
                         if (d <= long.MaxValue)
                             result = XdmValue.FromInteger((long)d, normalized);
