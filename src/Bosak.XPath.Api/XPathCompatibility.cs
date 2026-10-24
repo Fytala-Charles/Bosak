@@ -18,6 +18,7 @@
 //                      | Charles Korthout | 0.3   | 09-10-2026     | REQ-123: added XPath40Experimental (1.1.0 track — 4.0-Exp S1 level plumbing)             |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 24-10-2026     | Document Experimental opt-in to the newer absent-substring contract.                     |
+//                      | Charles Korthout | 0.5   | 24-10-2026     | Document Experimental signed Unix epochs with frozen domain preserved.                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
@@ -41,7 +42,9 @@ public enum XPathCompatibility
     /// change as the draft moves. This profile also opts into documented newer
     /// contracts for existing functions: <c>index-of-substring</c> interprets an
     /// absent substring as an empty string; frozen <see cref="XPath40"/> retains
-    /// the XPTY0004 refusal for that argument.
+    /// the XPTY0004 refusal for that argument. <c>unix-dateTime</c> accepts signed
+    /// epochs within the supported calendar; frozen <see cref="XPath40"/> retains
+    /// the nonnegative epoch domain.
     /// </summary>
     XPath40Experimental = 50,
 

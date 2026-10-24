@@ -1,0 +1,101 @@
+{
+  "date": "2026-10-24",
+  "base": "07db3b57e5eb2d60ab7f02315bd60efe62284408",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-experimental-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-24T14:51:26.190573+00:00",
+      "completedAtUtc": "2026-10-24T14:51:49.846011+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8434,
+        "Failed": 0,
+        "Skipped": 1896
+      },
+      "logSha256": "8d9406df090d310b4ed7a153873c52796fea24fd730bb024fb60fee68de9ef62"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-experimental-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-24T14:51:26.190758+00:00",
+      "completedAtUtc": "2026-10-24T14:52:46.670045+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "947f2f3f6d579de6a847be5d1caa16a0f40126de1df47f2fbae56c50fb1c67a9"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-unix-experimental-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-24T14:51:26.190970+00:00",
+      "completedAtUtc": "2026-10-24T14:51:27.457658+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 20,
+        "Failed": 4,
+        "Skipped": 0
+      },
+      "logSha256": "9c99bc4347effd8ba79abc24fa059c7173f6467ba466fad3f765f030c9ba9a8a"
+    }
+  ],
+  "runnerSha256": "1b18763f9dc99cab2c8b4d3beda11307770fa5670e68c5528be54b2dc0d2bdd6",
+  "approvedPolicy": "Signed Unix epochs in XPath40Experimental only; frozen XPath40 unchanged",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeFourFailuresRemainExplicit": true,
+  "releasePerformed": false,
+  "unitTests": {
+    "before": {
+      "total": 25,
+      "passed": 5,
+      "failed": 20
+    },
+    "focused-after": {
+      "total": 80,
+      "passed": 80,
+      "failed": 0
+    },
+    "host": {
+      "total": 2,
+      "passed": 2,
+      "failed": 0
+    },
+    "full": {
+      "total": 11323,
+      "passed": 11323,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "knownLimits": [
+    "DateTimeOffset years 1\u20139999",
+    "Wider-than-Int64 positive conversion remains FORG0001",
+    "Minimum literal representation and complete function conversion remain unresolved"
+  ]
+}
