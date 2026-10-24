@@ -1,0 +1,236 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775807.9\u0027))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775808.9\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551614.5\u0027))",
+    "value": "18446744073709551614",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551615.5\u0027))",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(\u00271.9\u0027)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.9\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775807.9\u0027))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775808.9\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551614.5\u0027))",
+    "value": "18446744073709551614",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551615.5\u0027))",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(\u00271.9\u0027)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.9\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-0.5\u0027))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:float(\u0027-0.5\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-0.5\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u0027-1.1\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u0027-1.1\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775807.9\u0027))",
+    "value": "9223372036854775807",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u00279223372036854775808.9\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551614.5\u0027))",
+    "value": "18446744073709551614",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:decimal(\u002718446744073709551615.5\u0027))",
+    "value": "18446744073709551615",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(\u00271.9\u0027)",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.9\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u002718446744073709551616\u0027))",
+    "value": null,
+    "error": "FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "xs:unsignedLong(xs:double(\u00279223372036854775808\u0027))",
+    "value": "9223372036854775808",
+    "error": null
+  }
+]

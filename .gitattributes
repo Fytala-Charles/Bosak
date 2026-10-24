@@ -81,3 +81,5 @@ docs/xpath40-catalog/evidence/unix-datetime-wide-range/*.txt -text whitespace=cr
 docs/xpath40-catalog/evidence/integer-cast-audit/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/xpath40-catalog/evidence/floating-integer-boundaries/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+docs/xpath40-catalog/evidence/unsigned-decimal-truncation/*.txt -text whitespace=cr-at-eol,-blank-at-eof
