@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-24",
+  "base": "4de6968cfb6248b2aa553d930bcf3a63bace9ef4",
+  "request_sha256": "adec8514200070994275b8267570b66096892b5622ce4befd90224b8e2e823f3",
+  "request_preserved_byte_exact": true,
+  "status": "Pending",
+  "owner": "Unassigned",
+  "target": "TBD",
+  "implementation_authorized": false,
+  "consumer_review": "pending",
+  "source_version": "1.24.1 unpublished",
+  "public_version": "1.24.0"
+}

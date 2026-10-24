@@ -5,6 +5,8 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**REQ-137 design review - 24 October 2026:** [Maintainer scope/API proposal](REQ-137-MAINTAINER-SCOPE-REVIEW.md) proposes both directions together, one exact replacement, direction-bound authority and a total piecewise correspondence with explicit sibling exchange. Pending / TBD / Unassigned; consumer design review and owner implementation approval remain required. Documentation only; no move API or release delivered.
+
 **Experimental substring correction - 24 October 2026:** Owner-approved source **1.24.1 (unpublished)** normalizes absent `index-of-substring` patterns only in `XPath40Experimental`; frozen `XPath40` retains XPTY0004. [Contract and proof](xpath40-catalog/INDEX-OF-SUBSTRING-CONTRACT.md) records38 API/two XSLT host controls, fresh QT3 31,142/0/679 and frozen qt4 8,434/0/1,896. Current native case021 remains an explicit frozen-profile failure; no retry/gate/fixture-policy change. Public1.24.0 and REQ-136 acceptance stay current; REQ-126 remains partial. No release or Braid change. Earlier decision-pending checkpoints are historical.
 
 **Frozen map-to-element gate restored - 24 October 2026:** [Repair and process controls](xpath40-catalog/MAP-TO-ELEMENT-GATE-REPAIR.md) correct the dormant name to `fn-map-to-element`. All224 configured sets execute; expanded frozen gate8,434/0/1,896 includes156 additional passes/two skips. QT3 remains31,142/0/679. A synthetic negative assertion now exits2 instead of exploratory exit0. No engine/API/version/fixture-pin/release change; current upstream remains unadopted. REQ-126 stays partial; REQ-136 remains accepted. Earlier gate counts and dormant-name observations are historical.

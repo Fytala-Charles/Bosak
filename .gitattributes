@@ -61,3 +61,5 @@
 
 # Preserve the original focused native substring-contract comparison receipts.
 /docs/xpath40-catalog/evidence/substring-empty-contract/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+/docs/REQ-137-same-parent-child-element-reordering.md -text whitespace=cr-at-eol

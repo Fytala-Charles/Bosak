@@ -1,3 +1,7 @@
+## REQ-137 proposed design — 24 October 2026
+
+Reviewed base `4de6968cfb6248b2aa553d930bcf3a63bace9ef4`. **REQ-137 design review - 24 October 2026:** [Maintainer scope/API proposal](REQ-137-MAINTAINER-SCOPE-REVIEW.md) proposes both directions together, one exact replacement, direction-bound authority and a total piecewise correspondence with explicit sibling exchange. Pending / TBD / Unassigned; consumer design review and owner implementation approval remain required. Documentation only; no move API or release delivered. Root pending upstream contribution notes remain separate. Original consumer request copied byte-exactly. Public 1.24.0/source 1.24.1 unpublished remain unchanged. Next: Braid reviews the exact design revision, then owner approves implementation; no engine work authorized by registration.
+
 **Final local verification:** All11,173 solution +84 language-server tests pass, zero failures/skips, including38 new API/two host cases. Release build succeeds with the existing CS8604 conformance warning. Fresh QT3 remains31,142/0/679 and frozen qt4 remains8,434/0/1,896. Current native case021 remains an expected frozen-profile diagnostic failure; native skips are distinct from unit skips. Full TRX hashes are retained; temporary fixture junctions are removed.
 
 # Experimental substring correction - 24 October 2026
