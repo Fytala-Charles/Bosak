@@ -1,9 +1,9 @@
 {
   "date": "2026-10-24",
-  "sourceBase": "7a2b85e4ac2525a3d0127aea6fe3c0d72f3d2ca1",
-  "sourceVersion": "1.24.0",
+  "sourceBase": "525832a4c12fc2b5d88a829362ee1f91f7e593e3",
+  "sourceVersion": "1.24.1",
   "publishedVersion": "1.24.0",
-  "scope": "Repair dormant map-to-element gate name to fn-map-to-element:224 configured and executed frozen sets,8434/0/1896. Upstream revision unchanged; current-contract adoption remains separate; owner-approved AC-03 policy; prior receipts retained.",
+  "scope": "Owner-approved Experimental-only absent index-of-substring normalization;40 API/host controls; frozen XPath40,224 configured/executed gate names and native expectations unchanged. Current native case021 remains a frozen-profile diagnostic failure; prior receipts retained; source unpublished.",
   "summary": {
     "entries": 76,
     "featureChecks": 3148,
@@ -863,14 +863,17 @@
       "classification": "**Import file names \u2014 Frozen 4.0.** [fn:substring-before-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [fn:substring-after-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), and [fn:index-of-substring](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring).\nInitial delivery: [PR #83](https://github.com/Fytala-Charles/Bosak/pull/83), [532d04f4](https://github.com/Fytala-Charles/Bosak/commit/532d04f4672df430d93752e3158fc3cdfd4c7c39), REQ-118 S1 part 2.",
       "numberedFields": 16,
       "indexed": true,
-      "knownUsesSha256": "7639f1b869bcaf7d79d19297400021733ebc3cb1c49699baa6ebd87ef1e52cce",
+      "knownUsesSha256": "1f732fd3d8827fae3061a20a8b3b0f48a5ea24b8ebee71ebac04aa058bcfa44b",
       "exactManifestIdsInKnownUses": [],
       "mentionedCurrentGatedSets": [
         "fn-index-of-substring"
       ],
       "knownUseLocalFiles": [
+        "docs/xpath40-catalog/INDEX-OF-SUBSTRING-CONTRACT.md",
         "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
-        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs"
+        "tests/Bosak.XPath.Standard.Tests/SubstringExperimentalContractTests.cs",
+        "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs",
+        "tests/Bosak.Xslt.Tests/SubstringExperimentalHostBoundaryTests.cs"
       ],
       "sampleLocalFiles": [
         "docs/xpath40-catalog/examples/import-file-names/baseline.xpath",

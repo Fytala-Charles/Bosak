@@ -1,0 +1,27 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.guard-tmp\req126-substring-contract-evidence\upstream\qt4tests\catalog.xml
+Test-set filter:  fn-index-of-substring
+
+Discovered 741 test sets.
+  Starting: fn-index-of-substring ...
+  Done: fn-index-of-substring (22 tests total) [P+=20 F+=1 S+=1]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   22
+Passed:  20
+Failed:  1
+Skipped: 1
+
+Pass rate: 90.91%
+
+First 20 failures:
+  FAIL index-of-substring-021: Unexpected error: XPTY0004
+
+Skip reasons (grouped):
+      1  Unsupported dependency
+
+Gated failures (fail the run): 1   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.99s

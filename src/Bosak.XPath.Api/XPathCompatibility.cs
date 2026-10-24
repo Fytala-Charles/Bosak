@@ -17,6 +17,8 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 09-10-2026     | REQ-123: added XPath40Experimental (1.1.0 track — 4.0-Exp S1 level plumbing)             |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 24-10-2026     | Document Experimental opt-in to the newer absent-substring contract.                     |
+//                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Api;
 
@@ -25,7 +27,8 @@ namespace Bosak.XPath.Api;
 /// The default (<see cref="XPath31"/>) is unchanged from previous releases;
 /// <see cref="XPath40"/> opts in to XPath 4.0 features (REQ-118 version gate,
 /// dossier docs/REQ-118-xpath-xslt-40.md); <see cref="XPath40Experimental"/>
-/// additionally opts in to not-yet-stabilized 4.0 draft additions (REQ-123).
+/// additionally opts in to not-yet-stabilized 4.0 draft additions and explicitly
+/// documented newer function contracts (REQ-123).
 /// </summary>
 public enum XPathCompatibility
 {
@@ -35,7 +38,10 @@ public enum XPathCompatibility
     /// stabilized — post-June-2026 spec sections carrying churn risk
     /// (REQ-123). Experimental-only functions raise XPST0017 at both
     /// <see cref="XPath31"/> and <see cref="XPath40"/>; semantics may
-    /// change as the draft moves.
+    /// change as the draft moves. This profile also opts into documented newer
+    /// contracts for existing functions: <c>index-of-substring</c> interprets an
+    /// absent substring as an empty string; frozen <see cref="XPath40"/> retains
+    /// the XPTY0004 refusal for that argument.
     /// </summary>
     XPath40Experimental = 50,
 

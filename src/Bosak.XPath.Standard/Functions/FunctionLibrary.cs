@@ -463,6 +463,7 @@
 
 //                      | Charles Korthout | 5.144 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 5.145 | 21-10-2026     | Default empty index-of collation only in explicit XPath 4.0 compatibility modes.           |
+//                      | Charles Korthout | 5.146 | 24-10-2026     | Normalize absent index-of-substring pattern only in XPath40Experimental.                  |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -12782,7 +12783,11 @@ public static class FunctionLibrary
     private static XdmValue IndexOfSubstring_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         string value = RequireString(args[0], ctx.BackwardsCompatible);
-        string substring = RequireStringRequired(args[1], ctx.BackwardsCompatible);
+        // The frozen 4.0 contract requires a present substring; the newer draft
+        // normalizes an absent substring only under the explicit Experimental opt-in.
+        string substring = ctx.IsXPath40Experimental
+            ? RequireString(args[1], ctx.BackwardsCompatible)
+            : RequireStringRequired(args[1], ctx.BackwardsCompatible);
         var result = new List<XdmValue>();
         if (substring.Length == 0)
         {

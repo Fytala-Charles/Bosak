@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Experimental substring correction - 24 October 2026:** Owner-approved source **1.24.1 (unpublished)** normalizes absent `index-of-substring` patterns only in `XPath40Experimental`; frozen `XPath40` retains XPTY0004. [Contract and proof](INDEX-OF-SUBSTRING-CONTRACT.md) records38 API/two XSLT host controls, fresh QT3 31,142/0/679 and frozen qt4 8,434/0/1,896. Current native case021 remains an explicit frozen-profile failure; no retry/gate/fixture-policy change. Public1.24.0 and REQ-136 acceptance stay current; REQ-126 remains partial. No release or Braid change. Earlier decision-pending checkpoints are historical.
+
 **Frozen map-to-element gate restored - 24 October 2026:** [Repair and process controls](MAP-TO-ELEMENT-GATE-REPAIR.md) correct the dormant name to `fn-map-to-element`. All224 configured sets execute; expanded frozen gate8,434/0/1,896 includes156 additional passes/two skips. QT3 remains31,142/0/679. A synthetic negative assertion now exits2 instead of exploratory exit0. No engine/API/version/fixture-pin/release change; current upstream remains unadopted. REQ-126 stays partial; REQ-136 remains accepted. Earlier gate counts and dormant-name observations are historical.
 
 **Current upstream gate audit - 23 October 2026:** [Audit](CURRENT-GATE-AUDIT.md) corrects the documentation inventory:224 configured names,223 executed sets,one dormant `map-to-element` name. Frozen8,278/0/1,894 remains unchanged; current8,297/45/1,894 fails across8 sets. Supplemental `fn-map-to-element`: frozen156/0/2,current173/53/7; current exit0 is exploratory, not green. Documentation extraction now includes six dotted names; no engine, runtime gate, fixture pin or release change. REQ-126 remains partial; REQ-136 remains accepted. Next: repair the dormant gate against frozen fixtures before upstream adoption. Earlier218-count statements are historical.
@@ -47,7 +49,7 @@
 <!-- The Bosak XPath/XSLT 4.0 Feature Catalog -->
 <!-- Living document: one file per feature; index updated in the same PR as any entry. -->
 
-> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-23. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
+> **Purpose:** A catalog, in the spirit of the Design Patterns template (Gamma, Helm, Johnson, Vlissides, pp. 6–7), of every XPath/XSLT 4.0 feature Bosak ships, defers, or rejects. **Audience:** engine users choosing which 4.x idioms to adopt, Bosak.Braid (which syntax it may generate per compatibility level), and contributors extending the engine. **Living document:** last updated 2026-10-24. **Governing REQ:** [REQ-126](../FEATURE_REQUESTS.md); adoption plan and stability tiers: [REQ-118 dossier](../REQ-118-xpath-xslt-40.md); experimental track: [REQ-123](../FEATURE_REQUESTS.md).
 
 ## Current coverage and acceptance
 
