@@ -73,3 +73,5 @@ docs/xpath40-catalog/evidence/unix-datetime-experimental/*.txt -text whitespace=
 
 docs/xpath40-catalog/evidence/unix-datetime-wide/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 docs/xpath40-catalog/evidence/unix-datetime-wide/reviewed-spec-function.xml -text whitespace=-blank-at-eol,-blank-at-eof
+
+docs/xpath40-catalog/evidence/integer-promotion/*.txt -text whitespace=cr-at-eol,-blank-at-eof

@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-24",
+  "base": "2ff6804ad4a7236b7f8980f1ca76294810043e00",
+  "sourceVersion": "1.25.1",
+  "publicVersion": "1.25.0",
+  "results": [
+    {
+      "label": "qt3",
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "exitCode": 0,
+      "logSha256": "d32bed070dd01ca16325866f6a83cc80b941b572a94eeb5081679ecd7e7eacf7"
+    },
+    {
+      "label": "frozen-gate",
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "exitCode": 0,
+      "logSha256": "d7f63b898be0b58fca70ddd9da4790d09275e7a4a643d24434a9693479ee6564"
+    },
+    {
+      "label": "current-native-after",
+      "counts": {
+        "Total": 24,
+        "Passed": 20,
+        "Failed": 4,
+        "Skipped": 0
+      },
+      "exitCode": 2,
+      "logSha256": "4561dc17295598c441b6ba1caabef83983d967d50d3cfe247f2bb13a8b14e499"
+    }
+  ],
+  "configuredAndExecutedSets": 224,
+  "previousFrozenQt4": {
+    "passed": 8434,
+    "failed": 0,
+    "skipped": 1896
+  },
+  "formerCompileOverflowSkipsNowPassing": [
+    "op-numeric-integer-divide-3",
+    "op-numeric-mod-6"
+  ],
+  "receiptCorrection": "Initial verifier expected prior frozen totals and rejected the two newly passing cases. Raw first-run logs retained and inspected; reconciled without rerun or fixture/assertion/retry changes.",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "releasePerformed": false,
+  "unitTests": {
+    "before": {
+      "total": 42,
+      "passed": 12,
+      "failed": 30
+    },
+    "after": {
+      "total": 42,
+      "passed": 39,
+      "failed": 3
+    },
+    "after-corrected": {
+      "total": 42,
+      "passed": 42,
+      "failed": 0
+    },
+    "full": {
+      "total": 11389,
+      "passed": 11389,
+      "failed": 0
+    },
+    "language-server": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0
+    }
+  },
+  "newCases": 42,
+  "versionChanged": false,
+  "limits": [
+    "Decimal backing remains bounded in range/precision",
+    "Unary and general division/cast behavior remain separate audit work",
+    "Current native Unix set still has four frozen-profile failures"
+  ],
+  "evidenceHashes": {
+    "arithmetic-after.json": "1d783746fc920bef601f9cc0ad4335310ca356aac18d250e2a7163f7646978ed",
+    "compile-overflow-after.json": "80586a160da6c7f942b92274a9592cb287fbcad681d8b25f45838a0dcc66ad46",
+    "compile-overflow-expressions.json": "1c00400ad65448484e1b252bcc308d704097637d4fb54724aa2837815bf946c3",
+    "current-native-after.txt": "4561dc17295598c441b6ba1caabef83983d967d50d3cfe247f2bb13a8b14e499",
+    "frozen-gate-skips.txt": "817f2d936eaeefdd75c777eb40b56ec2775e2ab7d2ff8c59ee41ddc96a83787f",
+    "frozen-gate.txt": "d7f63b898be0b58fca70ddd9da4790d09275e7a4a643d24434a9693479ee6564",
+    "qt3.txt": "d32bed070dd01ca16325866f6a83cc80b941b572a94eeb5081679ecd7e7eacf7"
+  }
+}

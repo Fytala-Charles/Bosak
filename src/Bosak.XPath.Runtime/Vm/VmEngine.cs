@@ -419,6 +419,7 @@
 //                      | Charles Korthout | 2.192 | 16-10-2026     | Compare structural record signatures with case-sensitive fields and typed zero-arity results. |
 //                      | Charles Korthout | 2.193 | 16-10-2026     | Compare record fields against map value types and generic function supertypes.               |
 //                      | Charles Korthout | 2.194 | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 2.195 | 24-10-2026     | Preserve promoted integer arithmetic and check subtraction without negating Int64.MinValue. |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -6599,9 +6600,9 @@ internal static class VmEngine
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) + ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
-            return XdmValue.FromDecimal(ToDecimal(left) + ToDecimal(right));
+            return DecimalArithmeticResult(ToDecimal(left) + ToDecimal(right), left, right);
 
-        return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), false);
+        return IntegerArithmetic(ToInteger(left), ToInteger(right), '+');
     }
 
     // A duration operand in date/time arithmetic must be an xs:dayTimeDuration or
@@ -6744,9 +6745,9 @@ internal static class VmEngine
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) - ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
-            return XdmValue.FromDecimal(ToDecimal(left) - ToDecimal(right));
+            return DecimalArithmeticResult(ToDecimal(left) - ToDecimal(right), left, right);
 
-        return MultiplyOrAddInteger(ToInteger(left), -ToInteger(right), false);
+        return IntegerArithmetic(ToInteger(left), ToInteger(right), '-');
     }
 
     private static string FormatDurationFromDateTimeDiff(XPathDateTime left, XPathDateTime right)
@@ -7456,9 +7457,9 @@ internal static class VmEngine
         if (IsFloat(left) || IsFloat(right))
             return XdmValue.FromFloat(ToFloat(left) * ToFloat(right));
         if (IsDecimal(left) || IsDecimal(right))
-            return XdmValue.FromDecimal(ToDecimal(left) * ToDecimal(right));
+            return DecimalArithmeticResult(ToDecimal(left) * ToDecimal(right), left, right);
 
-        return MultiplyOrAddInteger(ToInteger(left), ToInteger(right), true);
+        return IntegerArithmetic(ToInteger(left), ToInteger(right), '*');
     }
 
     private static XdmValue Divide(XdmValue left, XdmValue right, EvaluationContext context)
@@ -7710,23 +7711,38 @@ internal static class VmEngine
         return value;
     }
 
-    /// <summary>
-    /// Performs integer multiplication or addition with overflow detection.
-    /// If the result overflows <see cref="long"/>, promotes to <see cref="decimal"/>.
-    /// </summary>
-    private static XdmValue MultiplyOrAddInteger(long a, long b, bool multiply)
+    /// <summary>Retains the integer result type only when both arithmetic operands are integers.</summary>
+    private static XdmValue DecimalArithmeticResult(decimal value, XdmValue left, XdmValue right)
+        => IsIntegerOperand(left) && IsIntegerOperand(right)
+            ? XdmValue.FromDecimal(value, "integer")
+            : XdmValue.FromDecimal(value);
+
+    private static bool IsIntegerOperand(XdmValue value)
+        => value.Kind == XdmValueKind.Integer
+            || (value.Kind == XdmValueKind.Decimal && IsIntegerSchemaType(value.SchemaTypeName));
+
+    /// <summary>Performs checked integer arithmetic with decimal-backed integer promotion.</summary>
+    private static XdmValue IntegerArithmetic(long a, long b, char operation)
     {
         try
         {
-            checked
+            long result = operation switch
             {
-                long result = multiply ? a * b : a + b;
-                return XdmValue.FromInteger(result);
-            }
+                '+' => checked(a + b),
+                '-' => checked(a - b),
+                _ => checked(a * b)
+            };
+            return XdmValue.FromInteger(result);
         }
         catch (OverflowException)
         {
-            return XdmValue.FromDecimal(multiply ? (decimal)a * (decimal)b : (decimal)a + (decimal)b);
+            decimal result = operation switch
+            {
+                '+' => (decimal)a + b,
+                '-' => (decimal)a - b,
+                _ => (decimal)a * b
+            };
+            return XdmValue.FromDecimal(result, "integer");
         }
     }
 

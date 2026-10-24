@@ -4,6 +4,10 @@
   <p>23 October 2026</p>
 </div>
 
+**Arithmetic correction gate follow-up — 24 October 2026:** [Fresh receipts](INTEGER-PROMOTION.json) record frozen qt4 **8,436/0/1,894**, replacing two prior compile-overflow skips with passes accepted through runtime FOAR0002. QT3 remains31,142/0/679;224 gates, fixture and retry policy unchanged. Current Unix20/4/0 remains; earlier comparison counts below are historical.
+
+
+
 **Experimental signed Unix epochs — 24 October 2026:** [Implementation and limits](UNIX-DATETIME-EXPERIMENTAL.md) record the opt-in correction, 27 new source tests, 11,407 passing tests and unchanged frozen gates. Source 1.25.1 is unpublished; public/Braid 1.25.0 remains current. REQ-126 stays partial.
 
 
