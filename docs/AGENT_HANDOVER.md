@@ -1,3 +1,9 @@
+## REQ-126 division/modulo audit — 25 October 2026
+
+Base `74472aa8cf904c4b4d44814df8cdbb53a095737f`, PR445 merged after all three CI checks passed (11,807 solution/LSP). **Division/modulo audit — 25 October 2026:** [Evidence and next correction](xpath40-catalog/DIVISION-MODULO-AUDIT.md) add 72 supported controls and 84 observed diagnostics. Minimum/-1 modulo overflow and wide remainder type loss are the recommended next bounded correction; quotient narrowing and precision remain separate. Engine/version unchanged: source 1.25.2 unpublished, public 1.25.1. REQ-126 remains partial.
+
+What was built: 72 supported arithmetic controls and 84 diagnostic records. No engine/version/release change. Release build succeeds with zero errors and the existing CS8604 warning. All **11,795 solution +84 language-server tests pass (11,879 total)**; focused controls are **72/0/0**. The 84-record diagnostic rerun exactly matches the original observations. Eleven documentation pages rendered as HTML with unchanged Fytala CSS; no screenshot/PDF acceptance claimed.. Next: review evidence, then bounded modulo correction; quotient range and precision require separate investigation. Root pending REQ-138/upstream files remain preserved. Braid1.25.1 smoke/adoption is independent.
+
 ## REQ-126 integer unary correction — 25 October 2026
 
 Base `3b419f1c259097cccc3cc9bfa46abe9ad59de211`. **Integer unary correction — 25 October 2026:** [Behavior and evidence](xpath40-catalog/INTEGER-UNARY.md) fix Int64-minimum negation wraparound and retain decimal-backed integer identity in folded/runtime paths. Adds 48 cross-profile regressions (24 failed before, all pass after). Source 1.25.2 is unpublished; public 1.25.1 and Braid smoke/adoption remain separate. Division/modulo and wider storage work remain open; REQ-126 stays partial.

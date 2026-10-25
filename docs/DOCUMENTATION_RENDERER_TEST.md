@@ -1,3 +1,5 @@
+25 October 2026: division/modulo audit and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON and exact unchanged engine boundaries verified. HTML only; no screenshot/PDF acceptance.
+
 25 October 2026: integer unary boundary correction, canonical status and catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON and engine/gate/kit boundaries checked. HTML only; no screenshot/PDF acceptance.
 
 24 October 2026: 1.25.1 publication, release notes, retained candidate checkpoint, README and canonical status pages rendered as HTML with markdown-it and unchanged Fytala CSS. JSON/public receipts and links checked; no screenshot/PDF acceptance.
