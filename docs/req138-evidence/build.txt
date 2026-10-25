@@ -1,0 +1,9 @@
+D:\Development\Bosak\.guard-tmp\req138-implementation-source\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\.guard-tmp\req138-implementation-source\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+
+Build succeeded.
+
+D:\Development\Bosak\.guard-tmp\req138-implementation-source\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\Development\Bosak\.guard-tmp\req138-implementation-source\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.52

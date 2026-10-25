@@ -9,7 +9,9 @@
 
 **1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
 
-**REQ-138 scope/API proposal — 25 October 2026:** [Maintainer design](REQ-138-MAINTAINER-SCOPE-REVIEW.md) proposes coordinated Wrap/Edit condition/Unwrap, two-boundary whitespace provenance, parent-context namespace proof and a bounded/cancellable bridge to the existing expression editor. Pending consumer design review; owner Bosak; target TBD subsequent feature release. No implementation or release approval is implied; numeric 1.25.2 remains separate.
+**REQ-138 implementation prepared ? 25 October 2026:** [API and proof guide](REQ-138-IMPLEMENTATION.md) implements coordinated Wrap/Edit condition/Unwrap against reviewed design `35f259ff24bd43c8e5b9927e4f62e38c9fcfef23`. [Braid design review](req138-evidence/original-braid-consumer-design-review.md) found no blockers; the owner separately approved implementation. Source version **1.26.0**, unpublished; exact-head consumer implementation review is next. REQ-138 remains **In progress**. Numeric 1.25.2 candidate/source/publication decisions remain separate.
+
+Historical design checkpoint: the original proposal below and its exact reviewed scope remain preserved.
 
 **Exact idiv truncation — 25 October 2026:** [Correction and evidence](xpath40-catalog/EXACT-IDIV.md) compute exact decimal-backed quotients before applying the existing Int64 bounds. Adds 132 direct/runtime regressions (48 failed before, all pass after); all 96 oracle observations now match the exact reference/range policy. FOAR0001/FOAR0002 codes, other dispatch and storage bounds remain intact. Source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
 
@@ -668,7 +670,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented, published and consumer-accepted | 1.23.0 | Bosak | 2026-10-21 |
 | REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented, published and consumer-accepted | 1.24.0 | Charles Korthout | 2026-10-23 |
 | REQ-137 | Bosak.Braid | Same-parent child element Move up / Move down together, exchanging adjacent supported literal subtrees with exact source and complete changed-order provenance | Change output order through explicit review/Apply and one-step history without deleting/recreating content | Implemented, published and consumer-accepted | 1.25.0 | Bosak | 2026-10-24 |
-| REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | Pending — scope/API proposed; consumer design review required | TBD subsequent feature release | Bosak | 2026-10-25 |
+| REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | Pending — scope/API proposed; consumer design review required | 1.26.0 source candidate (unpublished) | Bosak | 2026-10-25 |
 
 
 > **Legend:
@@ -1989,9 +1991,9 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 ### REQ-138: Conditional Wrapper Authoring for Bosak.Braid
 
-Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **Pending — scope/API proposed; consumer design review required**. Target: **TBD subsequent feature release**. Design owner: **Bosak**.
+Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **Pending — scope/API proposed; consumer design review required**. Target: **1.26.0 source candidate (unpublished)**. Design owner: **Bosak**.
 
-[Original request and IF01–IF15](REQ-138-conditional-wrapper-authoring.md) are retained byte-exact. The owner separately authorized preparing the [maintainer scope/API design](REQ-138-MAINTAINER-SCOPE-REVIEW.md): coordinated Wrap/Edit condition/Unwrap, both boundary merges, parent-context prefix proof, exhaustive reparenting partitions and an additive bounded/cancellable bridge to the existing expression editor. Braid design review and owner implementation approval remain separate gates. The six public 1.25.0 baseline probes establish condition editing only and were not rerun. No conditional implementation, feature version, publication or Braid integration is delivered here; numeric 1.25.2 is separate.
+[Original request and IF01?IF15](REQ-138-conditional-wrapper-authoring.md) and [reviewed scope](REQ-138-MAINTAINER-SCOPE-REVIEW.md) remain byte-unchanged. [Braid design review](req138-evidence/original-braid-consumer-design-review.md) clears the bounded coordinated design; owner implementation approval was received on 25 October 2026. The [implementation/API guide](REQ-138-IMPLEMENTATION.md) records exact paired edits, complete graph and two-boundary merge proof, independent cancellation/limits and the additive existing-editor bridge. Implementation acceptance, signed publication, Braid integration and native acceptance remain later gates. Numeric 1.25.2 remains a separate pinned candidate.
 
 ### REQ-137: Same-parent Child Element Move Up / Move Down for Bosak.Braid
 

@@ -1,0 +1,337 @@
+{
+  "date": "2026-10-25",
+  "reviewedDesignHead": "35f259ff24bd43c8e5b9927e4f62e38c9fcfef23",
+  "implementationSource": "5e268552cfd241262ade266ab00fc716591b48cd",
+  "sourceVersion": "1.26.0",
+  "publicVersion": "1.25.1",
+  "status": "In progress; consumer implementation review pending",
+  "designReviewSha256": "344936fc73a0faf5a36bca9f4920fd5703b24298203b2192e62a7001e71e12b6",
+  "ownerImplementationApprovalReceived": true,
+  "sourceManifest": [
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs",
+      "gitBlobSha256": "bacdcf5045bf1f0a774fdbde8d931657d7c58ef7bd68f0284d7a25da3a2210fd",
+      "checkoutSha256": "b8bd97004f4c0cf60a239d289a7b24991c36adfee5320cab4f9baa5561728f53",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringConditionalWrapper.cs",
+      "gitBlobSha256": "9b25549732676b5524d622c4de8612440508f6827b9b4b22fcd948bc7716c7eb",
+      "checkoutSha256": "e0d246b3daa461214735de7fe8de24df6b63e6a5bf3c3e92b4dde37793f2d1d3",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringEdit.cs",
+      "gitBlobSha256": "482812770f4387d626736ad4c1313d96ffc3bad2eb71c27b134c63c9bcd0a859",
+      "checkoutSha256": "9a05e6551495cd83662f7cf9cfd7980ce3d783731f08b324f5f5cc488bff01a1",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs",
+      "gitBlobSha256": "27c6be65b4b7a6a1964cd11bc3bc9f5020fa4d2dd35b80acb61f882312ef0a33",
+      "checkoutSha256": "d4cd377f3f041cc7666780ae5f46e56d03efbd966c3e767f2dcbb0ed48d0bbdb",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/BoundedExpressionEditPipeline.cs",
+      "gitBlobSha256": "56db02112cd20423a54f20360bea170900f09b5704fc7bb9223601de2874227d",
+      "checkoutSha256": "d5a22727bc5018c67d5015e4bfc019aaf631bcd2129f12c9228c14db56f17475",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ConditionalProof.cs",
+      "gitBlobSha256": "8702ed2bf663addfef0ae687d19d1a0f1bd685f6ecf177b5f15a263469fdc782",
+      "checkoutSha256": "bcb8ddba2ea9d02c8818b596d2358156f3ae8d4b948a44ceaafdcf75832bd316",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ConditionalWrapperPipeline.cs",
+      "gitBlobSha256": "b7df76f721c4398182a5c2c42fcb2cd260e19915fbbd619544997915fdc8e329",
+      "checkoutSha256": "4cc57f788badf0dc9c0113261bb8eb3aaaece479e39d834a1e5ef307ad293f5b",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs",
+      "gitBlobSha256": "c8d0d073922be0860ac1a1f01e4669cc88a4b3928a85e15dd22d992a936fb2b9",
+      "checkoutSha256": "400855a70b84803790bb3f34154b402681d848a8fdbd216bb5a254ef8748c57c",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "src/Directory.Build.props",
+      "gitBlobSha256": "c6bedac2a08f7972784301ddba0b000ab71772f4836a24d07274758ac3757e58",
+      "checkoutSha256": "5511235ab9a83341369eac04210a3f15730ebe5d002d555a6e15a7c601d326f1",
+      "onlyCheckoutLineEndingConversion": true
+    },
+    {
+      "path": "tests/Bosak.Xslt.Tests/Authoring/AuthoringConditionalWrapperTests.cs",
+      "gitBlobSha256": "f590a37ce880b1f4cb5968daacab9bc145cf3e3cc634c6d6e272e43da3caada5",
+      "checkoutSha256": "70b4e66fda144e5903ba5faabd08ebc0b1b6753e4e8cb533808dcfd7e5ba8575",
+      "onlyCheckoutLineEndingConversion": true
+    }
+  ],
+  "validation": {
+    "fullSolution": [
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_07_net10.0.trx",
+        "sha256": "e402d88519ac2f1b419743d09492367e29c5dba3d670f69d40934e787d16af02",
+        "counts": {
+          "total": 202,
+          "executed": 202,
+          "passed": 202,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0.trx",
+        "sha256": "af574b96ffe7e464747c5df3fa4e45bc7b4cf5e17ea720745bd9b1497bfe9c7f",
+        "counts": {
+          "total": 66,
+          "executed": 66,
+          "passed": 66,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0[1].trx",
+        "sha256": "caef57e677ddb688e4e3c8b75a34cd750c30ae011056b2803ce6eb3a577858f3",
+        "counts": {
+          "total": 269,
+          "executed": 269,
+          "passed": 269,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0[2].trx",
+        "sha256": "e4dd7251c4ed00eaea7cacf479828a69f53b174de351e4d622fd739631e04316",
+        "counts": {
+          "total": 489,
+          "executed": 489,
+          "passed": 489,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0[3].trx",
+        "sha256": "22ac7e8c6084311758c58db25adde7104088cec2a49d8b5c58b00fa81b5717cd",
+        "counts": {
+          "total": 132,
+          "executed": 132,
+          "passed": 132,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0[4].trx",
+        "sha256": "61a6be5f203554fff3d16a726471e8a5964fe89bb049e04702b9759faa7c7476",
+        "counts": {
+          "total": 47,
+          "executed": 47,
+          "passed": 47,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_08_net10.0[5].trx",
+        "sha256": "701e6236c822605a4a0bd69d82add6f72705f2deb7430dc0bfb26a7674e0eaea",
+        "counts": {
+          "total": 153,
+          "executed": 153,
+          "passed": 153,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_09_net10.0.trx",
+        "sha256": "24aa8ba2e14677c558d7f41496901ccb0134e1be1e63e95f217370af413806c9",
+        "counts": {
+          "total": 303,
+          "executed": 303,
+          "passed": 303,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_09_net10.0[1].trx",
+        "sha256": "81e589a113f3e6232379647df182f909c40bb07966a33a2707adb27c8b5bd55f",
+        "counts": {
+          "total": 2259,
+          "executed": 2259,
+          "passed": 2259,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      },
+      {
+        "file": ".guard-tmp/req138-evidence/final/full/charl_CHARLES_2026-10-25_10_00_09_net10.0[2].trx",
+        "sha256": "79fcad5effe13b27b84bb4ac50ef0654fe8be2db01e8e5396932c295b9d18280",
+        "counts": {
+          "total": 8195,
+          "executed": 8195,
+          "passed": 8195,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      }
+    ],
+    "lsp": [
+      {
+        "file": ".guard-tmp/req138-evidence/final/lsp/charl_CHARLES_2026-10-25_10_04_17_net10.0.trx",
+        "sha256": "cf125944581eca389de2ff2618726aa88d7f7f740bd514bc637d736ee2df4a02",
+        "counts": {
+          "total": 84,
+          "executed": 84,
+          "passed": 84,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      }
+    ],
+    "affectedXslt": [
+      {
+        "file": ".guard-tmp/req138-evidence/affected-final/charl_CHARLES_2026-10-25_10_05_04_net10.0.trx",
+        "sha256": "92da893c97917aa1566b8a597d07391b81d6d34b541ecb710bac18e3430365a8",
+        "counts": {
+          "total": 8196,
+          "executed": 8196,
+          "passed": 8196,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      }
+    ],
+    "finalFocused": [
+      {
+        "file": ".guard-tmp/req138-evidence/reviewed-source-focused/charl_CHARLES_2026-10-25_10_09_40_net10.0.trx",
+        "sha256": "87706714daa44e3875088ef15932e33ec86ff65240f5f2b814526f142393b35a",
+        "counts": {
+          "total": 57,
+          "executed": 57,
+          "passed": 57,
+          "failed": 0,
+          "notExecuted": 0
+        }
+      }
+    ],
+    "distinctSolutionTests": 12116,
+    "distinctSolutionAndLspTests": 12200,
+    "sequence": "Full solution 12115 and LSP84 passed; affected XSLT rerun8196 supersedes8195; final early-bound-ordering refinement then passed all57 REQ-138 cases. Exact final PR-head full CI is separate.",
+    "buildErrors": 0,
+    "existingWarning": "CS8604 in XSLT conformance runner; no new source/XML-documentation warnings",
+    "freshRestoreAuditWarningCount": 0
+  },
+  "gates": [
+    {
+      "label": "qt3",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "startedAtUtc": "2026-10-25T09:06:02.360132+00:00",
+      "completedAtUtc": "2026-10-25T09:07:17.200286+00:00",
+      "logSha256": "3a2b9b7ddc76ca1839d0949d74369e2db10f1337c150574aec953ad490a48675"
+    },
+    {
+      "label": "frozen-gate",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "startedAtUtc": "2026-10-25T09:06:02.361299+00:00",
+      "completedAtUtc": "2026-10-25T09:06:21.912431+00:00",
+      "logSha256": "facd93602bbf7d92940da903b1d197f17faf99612d35791175c752a1f915e5b8"
+    },
+    {
+      "label": "current-native",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "startedAtUtc": "2026-10-25T09:06:02.361548+00:00",
+      "completedAtUtc": "2026-10-25T09:06:03.589989+00:00",
+      "logSha256": "47b87722bbe43c415a48da31bd47ed7f2206bb88e6198e35680869af79a78a4b"
+    }
+  ],
+  "engineConsumerBoundary": "Engine source tests only; no signed package, consumer Apply/history, Braid integration or native acceptance claimed",
+  "releasePerformed": false,
+  "braidFilesChanged": false,
+  "retainedEvidence": [
+    {
+      "path": "affected-xslt-tests.txt",
+      "sha256": "8eea286c104b4742d33510b6b9ca0bd7a893b12942145edee423a793bfe8301a",
+      "originalLogSha256": "3c45a5a059f358f1e55c647f5e0b21aa622d3b8feea8860e86a2432d78e9725b",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-16 with BOM"
+    },
+    {
+      "path": "build.txt",
+      "sha256": "3fc6584f0f595f1d2fca98543fe68ff1c28aa217b7fca601091b607f5bded28b",
+      "originalLogSha256": "9b69dd465eda5f8e90383cc900a551bc2477f8695178b7cc6e8495e7b28cd4d0",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-16 with BOM"
+    },
+    {
+      "path": "current-native.txt",
+      "sha256": "47b87722bbe43c415a48da31bd47ed7f2206bb88e6198e35680869af79a78a4b",
+      "originalLogSha256": "47b87722bbe43c415a48da31bd47ed7f2206bb88e6198e35680869af79a78a4b",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-8"
+    },
+    {
+      "path": "focused-tests.trx",
+      "sha256": "87706714daa44e3875088ef15932e33ec86ff65240f5f2b814526f142393b35a"
+    },
+    {
+      "path": "focused-tests.txt",
+      "sha256": "172214d2b8fe7f2bfb08e818cedb5f8be8eb0fdc5092c30aca45433542eb3662",
+      "originalLogSha256": "9fe94a2e1b44e6ee4dc1332608877dfc85d30de55bd594e9e813170560e2cba0",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-16 with BOM"
+    },
+    {
+      "path": "frozen-gate.txt",
+      "sha256": "facd93602bbf7d92940da903b1d197f17faf99612d35791175c752a1f915e5b8",
+      "originalLogSha256": "facd93602bbf7d92940da903b1d197f17faf99612d35791175c752a1f915e5b8",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-8"
+    },
+    {
+      "path": "full-solution-tests.txt",
+      "sha256": "40713c9ac0fb5f41d9a1f6ea0dcc2acfc145ee60aa5af130450242a288c935ef",
+      "originalLogSha256": "40713c9ac0fb5f41d9a1f6ea0dcc2acfc145ee60aa5af130450242a288c935ef",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-8"
+    },
+    {
+      "path": "lsp-tests.txt",
+      "sha256": "4f2d0798b7875ae8d805ce22e52f6141fca3c288e16fef6cbaa928b650d961ef",
+      "originalLogSha256": "4f2d0798b7875ae8d805ce22e52f6141fca3c288e16fef6cbaa928b650d961ef",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-8"
+    },
+    {
+      "path": "qt3.txt",
+      "sha256": "3a2b9b7ddc76ca1839d0949d74369e2db10f1337c150574aec953ad490a48675",
+      "originalLogSha256": "3a2b9b7ddc76ca1839d0949d74369e2db10f1337c150574aec953ad490a48675",
+      "transcript": "UTF-8 Unicode transcript; original newlines preserved",
+      "originalEncoding": "UTF-8"
+    }
+  ]
+}
