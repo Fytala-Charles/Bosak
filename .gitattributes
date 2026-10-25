@@ -105,3 +105,5 @@ docs/release-evidence/1.25.2/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 
 /docs/req138-evidence/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 /docs/req138-evidence/*.trx -text whitespace=cr-at-eol,-blank-at-eof
+
+/docs/req138-evidence/original-braid-*.json -text whitespace=cr-at-eol

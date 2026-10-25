@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-25",
+  "reviewedHead": "417482421343d72496d0f2dedcd45cfb1f463207",
+  "reviewSha256": "2df944ce7e767278907ac3cd8a660914f161cf0b459c9aefe4a73b494ea77e59",
+  "originalReceiptSha256": "b5efe099bc489bed1c89266ac1faf6659ee174583422ef250a708964f7589628",
+  "sourceManifestVerified": true,
+  "independentlyReportedAndLocallyVerifiedTrx": [
+    {
+      "file": "authoring.trx",
+      "passed": 1364,
+      "sha256": "ccf81c5a3316615ce20538e2432ef014ff82f9cc1923dbad3ae24680956d7655"
+    },
+    {
+      "file": "consumer.trx",
+      "passed": 968,
+      "sha256": "f8d4b6c39c1a6286435b162bf735b8bb34d7dd14df716424dfdecfd68585dcc5"
+    }
+  ],
+  "countsOverlap": true,
+  "disposition": "No blocking implementation findings within the reviewed bounded conditional profile",
+  "documentationFindingsResolved": [
+    "P3 registry/detail synchronization",
+    "P3 literal question marks in current prose"
+  ],
+  "codeChanged": false,
+  "mergeAuthorizedByThisReview": false,
+  "publicationAuthorizedByThisReview": false,
+  "packageVerificationPerformed": false,
+  "braidRuntimeNativeAcceptance": false
+}
