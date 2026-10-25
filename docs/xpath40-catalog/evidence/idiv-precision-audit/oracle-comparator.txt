@@ -1,0 +1,19 @@
+from pathlib import Path
+import json,sys
+t=Path('D:/Development/Bosak/.guard-tmp');e=t/'req126-idiv-audit-evidence';name=sys.argv[1] if len(sys.argv)>1 else 'original'
+inputs=json.loads((e/'oracle-inputs.json').read_text(encoding='utf-8'));observed=json.loads((e/('diagnostics-'+name+'.json')).read_text(encoding='utf-8-sig'));assert len(inputs)==32 and len(observed)==96
+for i in range(32):
+ assert len({(observed[i+j]['value'],observed[i+j]['error']) for j in [0,32,64]})==1
+rows=[]
+for i,row in enumerate(observed):
+ oracle=inputs[i%32];assert row['expression']==oracle['expression']
+ actual=row['value'] if row['error'] is None else row['error'].split(':')[0]
+ match=actual==oracle['policyExpected']
+ if not match:
+  assert oracle['withinInt64'] and row['error'] is None and row['value'].endswith('|true')
+  assert abs(int(row['value'].split('|')[0])-int(oracle['exactTruncatedQuotient']))==1
+ rows.append(dict(profile=row['profile'],**oracle,observedValue=row['value'],observedError=row['error'],matchesExactOracleWithinCurrentRangePolicy=match))
+mismatches=[x for x in rows if not x['matchesExactOracleWithinCurrentRangePolicy']];assert len(mismatches)==48
+receipt=dict(observations=96,referenceMatches=48,inRangePrecisionDiscrepancies=48,allProfilesAgree=True,allDiscrepanciesOneAwayFromExactTruncation=True,currentInt64RangePolicyPreservedInReference=True,precisionQualificationsRemainExplicit=True,rows=rows)
+(e/('oracle-comparison-'+name+'.json')).write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
+print('96 observations: 48 exact-oracle matches, 48 in-range one-unit precision discrepancies; these are diagnostics, not conformance results.')
