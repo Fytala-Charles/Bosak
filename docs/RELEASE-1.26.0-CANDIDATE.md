@@ -4,6 +4,9 @@
   <p>25 October 2026 - unsigned local candidate; unpublished</p>
 </div>
 
+**Publication completed:** [Verified 1.26.0 publication](RELEASE-1.26.0-PUBLICATION.md). The unsigned/unpublished statements below describe the retained pre-publication checkpoint. Original candidate JSON and evidence are unchanged.
+
+
 **Publication source: `1f06efb4d938d3d8e12eb273e632a8fe15110041`**, merge of PR452. Its complete tree equals the green corrected PR head `5fa82f8dace00ee379640d21d14bd7f2ebe575d5`. [Merge-source CI](https://github.com/Fytala-Charles/Bosak/actions/runs/40182817580) passes all checks. Braid reviewed engine/code at `41748242`; its two documentation corrections are included without changing engine/test/version/design bytes. GitHub also marks the included design PR451 merged. Candidate documentation commits are separate and must never replace this immutable package/tag source.
 
 [Release notes](RELEASE-NOTES-1.26.0.md) describe the complete conditional lifecycle and the numeric corrections carried forward from the separately pinned unsigned 1.25.2 candidate. Source version 1.26.0 is a minor feature increment. Public packages remain 1.25.1; neither 1.25.2 nor 1.26.0 was published by this preparation.
