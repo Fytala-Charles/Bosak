@@ -1,0 +1,112 @@
+[
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_03_58_net10.0.trx",
+    "sha256": "5607a09c87759117b555a70948cbd83459f6f3c1bdd6a06c3908b826eef387d4",
+    "counters": {
+      "total": 2799,
+      "passed": 2799,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_03_59_net10.0.trx",
+    "sha256": "625c8d4c3b02af61d91d26b37f0d44f681e4c3ed05ffbc5552214b08241e4dcb",
+    "counters": {
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_03_59_net10.0[1].trx",
+    "sha256": "a56a56bbd0492b9d2000019706802b2523fb95d1d314c70ff2aef8f361c79182",
+    "counters": {
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_03_59_net10.0[2].trx",
+    "sha256": "79107b7b8dc769bbf9a7d720fc01e06f03281ce3a8027a4a1a8fb1d1af59c1fa",
+    "counters": {
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_00_net10.0.trx",
+    "sha256": "287b8be8ce4066f7b52dc03f2ea4a479cb10b313c6bba59257eff34ea39ac126",
+    "counters": {
+      "total": 269,
+      "passed": 269,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_00_net10.0[1].trx",
+    "sha256": "c50f7d562de12dcaa21c2ecc1ea27055af4ee1501a222ebd27140a9c371ebedd",
+    "counters": {
+      "total": 489,
+      "passed": 489,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_00_net10.0[2].trx",
+    "sha256": "d4e7b80f3210fd2ceb155968a674f1dc834360804ac8ed1200bf21c6f0abe4dd",
+    "counters": {
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_00_net10.0[3].trx",
+    "sha256": "3eeabaae40aa32ee8551eff6f5c280da35be6b2b1d456fd9523b551985a6d553",
+    "counters": {
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_00_net10.0[4].trx",
+    "sha256": "0a283beef5c4defc8fad5dd5e4252e825c00e2247f660be32bedae0e9e3ec275",
+    "counters": {
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\full\\charl_CHARLES_2026-10-25_17_04_02_net10.0.trx",
+    "sha256": "4c4809251797d9959334011451034dff28c53d94f36dfddde392810f1fa65887",
+    "counters": {
+      "total": 8196,
+      "passed": 8196,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-binary-empty-evidence\\lsp\\charl_CHARLES_2026-10-25_17_08_00_net10.0.trx",
+    "sha256": "385ad9aaefa565c1fe2a08cde457bd84831a3b59479063d34c0d18cbbbbb65bf",
+    "counters": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  }
+]

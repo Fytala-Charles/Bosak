@@ -428,6 +428,7 @@
 //                      | Charles Korthout | 2.201 | 25-10-2026     | Truncate decimal-backed idiv exactly before checking existing Int64 result bounds.         |
 //                      | Charles Korthout | 2.202 | 25-10-2026     | Preserve an empty atomized operand before numeric unary negation.                           |
 //                      | Charles Korthout | 2.203 | 25-10-2026     | Count atomic values after recursive array-member atomization for singleton consumers.       |
+//                      | Charles Korthout | 2.204 | 25-10-2026     | Propagate empty atomized numeric binary and modern range operands before conversion.         |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -6457,6 +6458,11 @@ internal static class VmEngine
             return XdmValue.FromSequence(XdmSequence.FromSource(new IntegerRangeSequence(from, to)));
         }
 
+        left = Atomize(left);
+        right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.FromSequence(XdmSequence.Empty);
+
         if (!TryGetRangeOperand(left, out var fromDecimal) || !TryGetRangeOperand(right, out var toDecimal))
             throw new InvalidOperationException("XPTY0004: The operands of 'to' must be xs:integer");
 
@@ -6618,6 +6624,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) + ToDouble(right));
 
@@ -6763,6 +6771,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) - ToDouble(right));
 
@@ -7475,6 +7485,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) * ToDouble(right));
 
@@ -7521,6 +7533,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
             return XdmValue.FromDouble(ToDouble(left) / ToDouble(right));
 
@@ -7553,6 +7567,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
         {
             double l = ToDouble(left);
@@ -7681,6 +7697,8 @@ internal static class VmEngine
 
         left = Atomize(left);
         right = Atomize(right);
+        if (IsEmptySequence(left) || IsEmptySequence(right))
+            return XdmValue.Undefined;
         if (IsUntypedAtomic(left) || IsUntypedAtomic(right))
         {
             if (ToDouble(right) == 0)

@@ -1,0 +1,115 @@
+{
+  "shapes": 16,
+  "contexts": 12,
+  "profiles": 3,
+  "pairs": 576,
+  "rawObservations": 1152,
+  "matches": 528,
+  "discrepancies": 48,
+  "allProfilesAgree": true,
+  "perContext": {
+    "data": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "unary-minus": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "unary-plus": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "add": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "multiply": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "idiv": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "range": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "value-eq": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "general-eq": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "cast": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "castable": {
+      "pairs": 48,
+      "matches": 48,
+      "discrepancies": 0,
+      "actualMatchesIndependentExpectation": 48,
+      "actualDiscrepancies": 0,
+      "referenceDiscrepancies": 0
+    },
+    "function-argument": {
+      "pairs": 48,
+      "matches": 0,
+      "discrepancies": 48,
+      "actualMatchesIndependentExpectation": 12,
+      "actualDiscrepancies": 36,
+      "referenceDiscrepancies": 12
+    }
+  },
+  "textualAtomizeReferences": 73,
+  "classification": "Diagnostic comparisons with independently flattened pure-integer/empty shape inputs; not passing native conformance assertions. Equal error codes do not certify all error precedence.",
+  "engineChanged": true,
+  "actualMatchesIndependentExpectation": 540,
+  "actualDiscrepancies": 36,
+  "referenceDiscrepancies": 12,
+  "independentExpectation": "Python recursive flattening plus explicit empty/singleton/multiple and integer/boolean/string result rules; does not trust the processor reference as an oracle."
+}

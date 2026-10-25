@@ -4,6 +4,9 @@
   <p>25 October 2026 - source 1.26.1 unpublished; public 1.26.0</p>
 </div>
 
+**Merged follow-up:** PR459 passed all three CI checks (12,526 tests) and merged at `50cac81c47d751eac4b190e8250d664139259006`. The [numeric binary/range empty correction](BINARY-EMPTY-ATOMIZATION.md) reduces matrix discrepancies from 84 to 36. Original evidence below is unchanged; 1.26.1 is still unpublished.
+
+
 This bounded REQ-126 correction implements the first recommendation from the [caller/cardinality audit](ARRAY-ATOMIZATION-AUDIT.md), merged as PR458 at `8263f689216ea8f8ad0a719dd3552490499d0a69` after all three CI checks passed (12,415 tests). The VM's singleton array path now counts atomic values after recursive member atomization. Source stays in the existing unpublished **1.26.1** patch; [public 1.26.0](../RELEASE-1.26.0-PUBLICATION.md) and independent Braid validation remain separate.
 
 ## Behavior and implementation

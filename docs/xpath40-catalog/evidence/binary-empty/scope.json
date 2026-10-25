@@ -1,0 +1,10 @@
+{
+  "base": "50cac81c47d751eac4b190e8250d664139259006",
+  "cases": 214,
+  "modernEmptyCases": 168,
+  "modernControls": 36,
+  "backwardsControls": 10,
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "limits": "Numeric binary paths and modern range path only. Early date/duration dispatch, BC idiv/range, and standard-function conversion remain separate."
+}

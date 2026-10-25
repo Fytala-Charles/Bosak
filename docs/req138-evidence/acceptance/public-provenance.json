@@ -1,0 +1,97 @@
+{
+  "tagObject": "3a33c705d54b7783bbbe8117acbe69d615d71b6c",
+  "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "reviewedSourceAndTestsUnchanged": true,
+  "packages": [
+    {
+      "id": "Bosak.XPath.Api",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "8e0eaf17c3fcfd5a6dc0bf95dbf84c2bdcc4e5c85051904216bc70ab2c92846a",
+      "dllSha256": "fbe3e14ecee1fb201abeb3f218f89625f2c1a0388a6b133368fd9212a9d2d4d5",
+      "canonicalContentHash": "WhMfXJsqICjt1/o3ZxY2h+q4HvretD8eI0k2ufStxdL9q/u1a2WLQIh1cmkoDy9wPo+LVwq8z5loCgkgzLWvNA==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.api.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "2de34daf444fa9bbc04a5ddaa02e1ac909a47ff7d4fd3a51e55e763d025e3d4c",
+      "dllSha256": "dd066efe9eaa164c0d876f630f18508dc80a3aea356be95f370ab0cad3a2bdfc",
+      "canonicalContentHash": "KPARDqOadozeJaXGbV09E4HrAreY6jhpeXIVs8/4FmWFdXlwesC3slo+TTGp43I4nNO8eoGowC2Oqgvp79IEzQ==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.compiler.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "dd2d110c172ca680e783aa86d0f394862b07c82d47cba4bfe19beeca140d492f",
+      "dllSha256": "772e3870f53d9fa6c0d5d9a85933d8e151512f73aea3435cdb615619089720b7",
+      "canonicalContentHash": "UpzmYR8e3diBdhiYv3of0y+9LBXhcR/fZz/xad4CmQ+1qaZhH/JKXIOQGEkI+gPBWxnSMcrtkevMhQCJSdyoZg==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.core.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "8ba0e6fc736275c66379b717ccfcda90709c513491e4713d750ce57e60cf1cd0",
+      "dllSha256": "76d9cbc794497f2f86eba2e4aed27cbc25e78d85e466de90a86b174374992492",
+      "canonicalContentHash": "0Oao670liAvvON3yiXzEAE+nuxcwRshaWZgPDWmxEVdmNJMRpJzID/ZFCyek+JG0ohdxQocUYCU6JuDwwgWdVQ==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.parser.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "79ffbb86ca770f0fc1215315ec11f89e9c26544afa0796df7e269aaef40621ab",
+      "dllSha256": "46ec64fe6a2c6716f4d18a9f915256ceafd8ecfbed359cff9a2bc9ae9b71c714",
+      "canonicalContentHash": "vE2xVaxbKTnx7e6QKPJZJnjKdR/9UxV7SI4FIQ3ACykh4veVpv8yaXs/AlLQZ38v6INexmbkynV9/SQaptxeVQ==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.providers.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "1f03b012ae0d228cb44f83f28f125770d8b396b279cd5cec68ac830229f32799",
+      "dllSha256": "ee552d625809e77a24917242f79b7eeaa24aaa26dbe86e511f8f604d543e0e5b",
+      "canonicalContentHash": "VEPixyTauqq7GXa5IPHZd1BjVNZIVvUyzJ3rUSTApvdj1n+oiFvY4U8j3mWW9f5zfcTa0v/2DErXO2Mr1QoCqw==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.runtime.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "e1788dd292bbb0ae855b73e4820fb8e4059b4ce4bfc7e9f703ee5a2dcff00766",
+      "dllSha256": "1384286d0f9578cf84a8960b2307a6a5a0fc013d8a419ba1bda338b557aa230a",
+      "canonicalContentHash": "VMmrVZZtlhIOSf3KQmZXrZTX/7gVL1aTkVcUe6USyIrk20P9ROlkhFawe+pKi9c5RIK3o2+4L128XhokV0d/oA==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xpath.standard.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.XQuery",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "50cc79a0616faff217a22d9cd213f717743a41277dfed13ae469540ce709156b",
+      "dllSha256": "8055121835fdddb1f31288634854367cb4fb3662e851064c94d0308bb26411aa",
+      "canonicalContentHash": "mmUgW8hxAttE+eYnflglpXsv0lsbNh0V7dA5BqHa8GHVoC9HQ94soEHSgwMoLrZ0RHnhCNLx0krN0HesXGx84A==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xquery.1.26.0.nupkg.signature.log"
+    },
+    {
+      "id": "Bosak.Xslt",
+      "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+      "archiveSha256": "a67e336461aa2558b8346975463b4cc0e2f3f2a265fd4690974b35fdebc90806",
+      "dllSha256": "6007354304dc8236a882a875a37e4d2f739eca9267342e78aa50ba688f07a384",
+      "canonicalContentHash": "aUy2U5EjeNCJNVkK1nDNhwREHxRcqGLYd5ssYZOGB/rPcLuRWK6e3R4nkG5l5cveuszoeH/Ql/i7lJEjKCnfiQ==",
+      "freshOfficialArchiveMatches": true,
+      "rawArchiveSidecarMatches": true,
+      "signatureLog": "bosak.xslt.1.26.0.nupkg.signature.log"
+    }
+  ]
+}

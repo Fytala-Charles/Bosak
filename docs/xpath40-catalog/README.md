@@ -7,6 +7,9 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Numeric binary/range empty correction - 25 October 2026:** [Behavior and evidence](BINARY-EMPTY-ATOMIZATION.md) propagate empty atomized operands in six numeric paths and modern ranges. Adds 214 cases (168 failed before; all pass after), 12,740 solution/LSP passes and unchanged fresh frozen gates. Matrix discrepancies fall 84 to 36 (48 corrected, no regressions); function conversion remains separate. Existing source patch 1.26.1 is unpublished; public 1.26.0 has bounded Braid acceptance. REQ-126 stays partial.
+
+
 **Recursive array singleton correction - 25 October 2026:** [Behavior and evidence](ARRAY-SINGLETON-ATOMIZATION.md) count atomic values after recursively processing array members. Adds 111 regressions (92 failed before; all pass after), 12,526 solution/LSP passes and unchanged fresh frozen gates. Independent matrix discrepancies fall 207 to 84 (123 corrected, no regressions); caller empty handling and function conversion remain separate. Existing source patch 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains current. REQ-126 stays partial.
 
 
