@@ -1,3 +1,9 @@
+## Bosak 1.25.2 consolidated candidate — 25 October 2026
+
+**1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
+
+What was built: fresh source/LSP/gates, ten local packages, 153 broad/1429 focused package-only checks and all19 assembly identities. Added384 cases counted independently; existing minimum-literal control refreshed. Exact immutable source and full reviewed tree retained. No engine/version/tag/release/upload changes in candidate documentation. Next: review candidate docs, then separately authorize publication. REQ138 design and Braid acceptance remain independent; root pending notes preserved.
+
 ## REQ-126 exact idiv truncation — 25 October 2026
 
 Base `31ea265321107f94a2c8486218b3746d200d214b`, PR448 merged after all three CI checks passed (12,011 solution/LSP). **Exact idiv truncation — 25 October 2026:** [Correction and evidence](xpath40-catalog/EXACT-IDIV.md) compute exact decimal-backed quotients before applying the existing Int64 bounds. Adds 132 direct/runtime regressions (48 failed before, all pass after); all 96 oracle observations now match the exact reference/range policy. FOAR0001/FOAR0002 codes, other dispatch and storage bounds remain intact. Source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.

@@ -5,6 +5,8 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](../RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
+
 **Exact idiv truncation — 25 October 2026:** [Correction and evidence](EXACT-IDIV.md) compute exact decimal-backed quotients before applying the existing Int64 bounds. Adds 132 direct/runtime regressions (48 failed before, all pass after); all 96 oracle observations now match the exact reference/range policy. FOAR0001/FOAR0002 codes, other dispatch and storage bounds remain intact. Source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
 
 

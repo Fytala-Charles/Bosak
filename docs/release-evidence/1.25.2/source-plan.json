@@ -1,0 +1,12 @@
+{
+  "version": "1.25.2",
+  "publicVersion": "1.25.1",
+  "immutableSource": "3785672d695cbc8467e1c027d5ce4304e9f92152",
+  "reviewedHead": "0489b5cd60dcf91f0ed92dd88a32ba1a3479273d",
+  "completeTreeMatchesReviewedHead": true,
+  "implementationPR": 449,
+  "exactHeadCI": 40169031220,
+  "publicationPerformed": false,
+  "publicBase": "6081e70daa8a49ef3d522b124a18d8de68e0b4d5",
+  "xsltAuthoringSourceUnchangedSince1251": true
+}
