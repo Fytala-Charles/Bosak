@@ -1,0 +1,29 @@
+{
+  "date": "2026-10-25",
+  "reviewedBosakBase": "3785672d695cbc8467e1c027d5ce4304e9f92152",
+  "ownerAuthorization": "Please follow your recommendations: consolidate1.25.2 and prepareREQ138 design; implementation remains separate",
+  "originalRegistrationSha256": "d40e2845f55ceb3f41c0f71ee645fac0a081f3b60f682c55a18079308448da9a",
+  "originals": [
+    {
+      "original": "D:\\Development\\Bosak.Braid\\docs\\CONDITIONAL_WRAPPER_REQUEST.md",
+      "retained": "docs/req138-evidence/original-braid-request.md",
+      "sha256": "332cce5ddd05b02acb632515f9481b313cc112bfafab46538429dfee59b1671d"
+    },
+    {
+      "original": "D:\\Development\\Bosak.Braid\\docs\\ADR-025-conditional-wrapper-authoring.md",
+      "retained": "docs/req138-evidence/original-braid-adr.md",
+      "sha256": "852c8cda0189c40143e8d30386dcbfcf46e81d6638f2c6a04f766f9fef247b8b"
+    }
+  ],
+  "reviewKind": "Local document/source review; existing six public1.25.0 probes are historical and were not rerun",
+  "currentPublished": "1.25.1",
+  "numericCandidate": "1.25.2 unpublished",
+  "status": "Pending; maintainer scope/API proposed for Braid review",
+  "owner": "Bosak",
+  "target": "TBD subsequent feature release",
+  "implementationPerformed": false,
+  "releasePerformed": false,
+  "reviewDependencyPR": 450,
+  "reviewBranchBase": "154db43f2a01fe1f7a040c21cc6552903099bd9b",
+  "dependencyChangesDocumentationOnly": true
+}

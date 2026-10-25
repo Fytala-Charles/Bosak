@@ -1,3 +1,9 @@
+## REQ-138 design proposed — 25 October 2026
+
+Reviewed base `3785672d695cbc8467e1c027d5ce4304e9f92152` (merged PR449). **REQ-138 scope/API proposal — 25 October 2026:** [Maintainer design](REQ-138-MAINTAINER-SCOPE-REVIEW.md) proposes coordinated Wrap/Edit condition/Unwrap, two-boundary whitespace provenance, parent-context namespace proof and a bounded/cancellable bridge to the existing expression editor. Pending consumer design review; owner Bosak; target TBD subsequent feature release. No implementation or release approval is implied; numeric 1.25.2 remains separate.
+
+Original registered request and Braid request/ADR retained byte-exact with hashes. Public authoring code is unchanged; historical six1.25.0 test-slot probes were not rerun. What was prepared: concrete profile/API, exact two-edit convention, both boundary merges/CRLF normalization, full reparent/partition proof, additive cancellation/bounds bridge and IF01–IF15 responsibilities. Next: exact-revision Braid design review, then separate owner implementation approval. No engine/version/release or Braid edits. Root pending upstream notes and original registration remain preserved.
+
 ## Bosak 1.25.2 consolidated candidate — 25 October 2026
 
 **1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
