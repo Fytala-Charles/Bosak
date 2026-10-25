@@ -424,6 +424,7 @@
 //                      | Charles Korthout | 2.197 | 24-10-2026     | Truncate unsignedLong decimal operands before range facets and integer backing selection. |
 //                      | Charles Korthout | 2.198 | 24-10-2026     | Truncate finite unsigned floating operands before lower/upper range facets.                |
 //                      | Charles Korthout | 2.199 | 25-10-2026     | Preserve integer identity and promote minimum-value unary negation without wraparound.     |
+//                      | Charles Korthout | 2.200 | 25-10-2026     | Preserve integer modulo identity and return zero for Int64 minimum modulo negative one.    |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -7644,12 +7645,15 @@ internal static class VmEngine
         {
             if (ToDecimal(right) == 0)
                 throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromDecimal(ToDecimal(left) % ToDecimal(right));
+            return DecimalArithmeticResult(ToDecimal(left) % ToDecimal(right), left, right);
         }
 
-        if (ToInteger(right) == 0)
+        long divisor = ToInteger(right);
+        if (divisor == 0)
             throw new InvalidOperationException("FOAR0001: Division by zero.");
-        return XdmValue.FromInteger(ToInteger(left) % ToInteger(right));
+        long dividend = ToInteger(left);
+        // The remainder is zero even though the corresponding Int64 quotient overflows.
+        return XdmValue.FromInteger(dividend == long.MinValue && divisor == -1 ? 0 : dividend % divisor);
     }
 
     private static XdmValue Negate(XdmValue value, EvaluationContext context)

@@ -7,6 +7,9 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Integer modulo correction — 25 October 2026:** [Behavior and evidence](xpath40-catalog/INTEGER-MODULO.md) return integer zero for Int64 minimum modulo -1 and preserve integer identity for decimal-backed remainders. Adds 84 direct/runtime regression cases (45 failed before, all pass after). Genuine decimal/floating policies and `idiv` remain unchanged. Source 1.25.2 unpublished/public 1.25.1; REQ-126 stays partial.
+
+
 **Division/modulo audit — 25 October 2026:** [Evidence and next correction](xpath40-catalog/DIVISION-MODULO-AUDIT.md) add 72 supported controls and 84 observed diagnostics. Minimum/-1 modulo overflow and wide remainder type loss are the recommended next bounded correction; quotient narrowing and precision remain separate. Engine/version unchanged: source 1.25.2 unpublished, public 1.25.1. REQ-126 remains partial.
 
 

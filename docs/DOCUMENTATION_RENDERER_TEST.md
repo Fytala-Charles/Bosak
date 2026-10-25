@@ -1,3 +1,5 @@
+25 October 2026: integer modulo correction, canonical status and catalog evidence pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON and unchanged gate/fixture/kit boundaries verified. HTML only; no screenshot/PDF acceptance.
+
 25 October 2026: division/modulo audit and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON and exact unchanged engine boundaries verified. HTML only; no screenshot/PDF acceptance.
 
 25 October 2026: integer unary boundary correction, canonical status and catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON and engine/gate/kit boundaries checked. HTML only; no screenshot/PDF acceptance.

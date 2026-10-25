@@ -4,6 +4,9 @@
   <p>25 October 2026 — source 1.25.2 unpublished; public 1.25.1</p>
 </div>
 
+**Integer modulo correction — 25 October 2026:** [Behavior and evidence](INTEGER-MODULO.md) return integer zero for Int64 minimum modulo -1 and preserve integer identity for decimal-backed remainders. Adds 84 direct/runtime regression cases (45 failed before, all pass after). Genuine decimal/floating policies and `idiv` remain unchanged. Source 1.25.2 unpublished/public 1.25.1; REQ-126 stays partial.
+
+
 This REQ-126 evidence slice follows [integer unary negation](INTEGER-UNARY.md), merged as PR445 at `74472aa8cf904c4b4d44814df8cdbb53a095737f`. It adds 72 supported controls and 84 observed diagnostics across XPath31, frozen XPath40 and XPath40Experimental. No engine, API, version, fixture, gate, retry policy or release change is introduced. Public 1.25.1 and Braid smoke/adoption remain separate.
 
 ## Supported controls
