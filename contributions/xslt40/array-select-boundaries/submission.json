@@ -1,0 +1,22 @@
+{
+  "submittedOn": "2026-10-20",
+  "url": "https://github.com/qt4cg/xslt40-test/pull/33",
+  "stateAtSubmission": "OPEN",
+  "upstreamDefaultBranch": "master",
+  "refreshedBase": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "submittedHead": "d1aec33e14ce623e2b65c4c592d51804353cf47d",
+  "headBranch": "Fytala-Charles:bosak/array-select-boundaries-20261020",
+  "filesChanged": 26,
+  "newCases": 24,
+  "validation": {
+    "nativeCatalogSchema": "Both modified test sets valid",
+    "existingCases": "Unchanged against refreshed upstream base",
+    "stylesheets": "All 24 match executed Bosak fixtures",
+    "newCasesPerProcessorProfile": "24 passed / 0 failed / 0 skipped",
+    "bosakMain": "fbfb7ea4764a6cb9c6d3a368053a4234daac6d1d",
+    "bosakMainCI": "https://github.com/Fytala-Charles/Bosak/actions/runs/39438760635",
+    "upstreamChecksAtSubmission": [],
+    "independentProcessorConfirmation": false
+  },
+  "originalEvidence": "Original execution receipts, fixture versions and correction metadata retained unchanged."
+}

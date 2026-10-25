@@ -1,0 +1,17 @@
+{
+  "date": "2026-10-23",
+  "url": "https://github.com/qt4cg/xslt40-test/pull/34",
+  "status": "OPEN_READY_FOR_REVIEW",
+  "draft": false,
+  "upstreamDefaultRefreshed": true,
+  "upstreamBase": "91328fbf0fed4a5d2813eb3661808ee53cb961ba",
+  "contributionHead": "91d81459c18742fc89d937c1d2c30898770172b6",
+  "diff": "13 files, 180 insertions, no removals; diff --check passed",
+  "mergeable": true,
+  "reviews": 0,
+  "comments": 0,
+  "listedStatusChecks": 0,
+  "independentProcessorConfirmed": false,
+  "upstreamAccepted": false,
+  "note": "Marked ready for test-design review. Original submission and execution receipts retained unchanged. No new processor execution or source modification."
+}

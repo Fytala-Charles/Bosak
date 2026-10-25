@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-25",
+  "state": "RESTART_CHECKPOINT",
+  "sourceVersion": "1.26.1 unpublished",
+  "publicVersion": "1.26.0 signed and verified",
+  "braidReq138": "Implemented, published and consumer-accepted within delivered profile",
+  "braidCheckpoint": "29acaac761206d6b316e8844930ce5d4e8043835",
+  "mergedPRs": [
+    457,
+    459
+  ],
+  "implementationPR": 460,
+  "validatedImplementationHead": "2ddd2faf55ba128c942c9c507333e10e415971e6",
+  "mainBeforeFinalMerge": "50cac81c47d751eac4b190e8250d664139259006",
+  "solutionAndLanguageServerTestsPassed": 12740,
+  "qt3": "31142/0/679",
+  "qt4": "8436/0/1894;224 unchanged configured/executed gates;11 existing Experimental fallback passes",
+  "currentNativeUnix": "22/2/0;exit2;known 120/121 failures",
+  "diagnosticMatrix": {
+    "cases": 576,
+    "remainingArrayDiscrepancies": 36,
+    "unchangedFaultyFlatReferences": 12
+  },
+  "nextStep": "Audit standard-function atomic conversion/cardinality before a bounded correction; do not start before machine restart.",
+  "baselineBackup": {
+    "branch": "backup/restart-2026-10-25",
+    "commit": "4b399323e89df3be305d07a02f91a899e92e88eb",
+    "files": 111,
+    "bytes": 12026143,
+    "allGitBlobHashesMatchOriginals": true,
+    "remoteVerified": true
+  },
+  "pendingDocumentationOriginalHashes": {
+    "contributions/xslt40/array-select-boundaries/README.md": "0e3e344f7727644bd3784bd3fd5c1b79af7de1324bf298d04124aaf3bdd6d98f",
+    "contributions/xslt40/switch-comparison-boundaries/README.md": "affec2cf85cc9a8d2cc91f8d51a85bb7fa4c28819eadcc625cdaa53cd75d3d48",
+    "docs/AGENT_HANDOVER.md": "043239b9eab826d387d5ea71daa1fa5df427e68130af0978fc0403fa874e1ba1",
+    "docs/XSLT40_UPSTREAM_TESTING.md": "0c6e7b30fbefa644f0d61de52f758f66b80fb7f533803264dcd0bad730f06e62",
+    "contributions/xslt40/array-select-boundaries/submission.json": "f330e43bc49e7d54da3cf3d8beaf8bc909d457c22a4bb39c1969272ee091226e",
+    "contributions/xslt40/switch-comparison-boundaries/review-readiness.json": "d678bf1dce0c0ee12f897c6b18361edff16edf8bf02b63842b7317be53eb6e8a"
+  },
+  "upstreamPR33": {
+    "state": "OPEN",
+    "draft": false,
+    "head": "d1aec33e14ce623e2b65c4c592d51804353cf47d"
+  },
+  "upstreamPR34": {
+    "state": "OPEN",
+    "draft": false,
+    "head": "91d81459c18742fc89d937c1d2c30898770172b6"
+  },
+  "localIgnoredEvidence": "Retained under .guard-tmp; all original stashes/worktrees preserved; no cleanup performed.",
+  "protectedPR132": "Untouched",
+  "publicationPerformed": false
+}
