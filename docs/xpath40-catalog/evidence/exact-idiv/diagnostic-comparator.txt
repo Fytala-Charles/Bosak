@@ -1,0 +1,21 @@
+from pathlib import Path
+import json
+t=Path('D:/Development/Bosak/.guard-tmp');e=t/'req126-idiv-fix-evidence';a=t/'req126-idiv-audit-evidence'
+before=json.loads((a/'diagnostics-merged.json').read_text(encoding='utf-8-sig'));after=json.loads((e/'diagnostics-after.json').read_text(encoding='utf-8-sig'));oracle=json.loads((e/'oracle-inputs.json').read_text(encoding='utf-8'));assert len(before)==len(after)==96
+precision=[];messages=[];identical=0
+for i,(old,new) in enumerate(zip(before,after)):
+ ref=oracle[i%32];assert new['expression']==old['expression']==ref['expression'] and new['profile']==old['profile']
+ actual=new['value'] if new['error'] is None else new['error'].split(':')[0]
+ assert actual==ref['policyExpected'],(i,ref,new)
+ if old==new:identical+=1
+ elif new['error'] is None:
+  assert old['error'] is None and abs(int(old['value'].split('|')[0])-int(new['value'].split('|')[0]))==1
+  precision.append(dict(before=old,after=new))
+ else:
+  assert old['error'].startswith('FOAR0002:') and new['error'].startswith('FOAR0002:') and old['exceptionType']==new['exceptionType']
+  messages.append(dict(before=old,after=new))
+assert len(precision)==48 and len(messages)==12 and identical==36
+for i in range(32):assert len({(after[i+j]['value'],after[i+j]['error']) for j in [0,32,64]})==1
+receipt=dict(totalRecords=96,allMatchExactReferenceAndCurrentRangePolicy=True,correctedPrecisionRecords=48,byteIdenticalAcceptedControls=36,retainedOverflowCodesWithStandardizedMessage=12,allProfilesAgree=True,precisionChanges=precision,overflowMessageChanges=messages)
+(e/'diagnostic-verification.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8')
+print('96/96 match reference/policy: 48 precision corrections, 36 identical controls, 12 retained FOAR0002 codes with standardized messages.')

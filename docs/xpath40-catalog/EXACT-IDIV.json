@@ -1,0 +1,132 @@
+{
+  "date": "2026-10-25",
+  "base": "31ea265321107f94a2c8486218b3746d200d214b",
+  "sourceVersion": "1.25.2",
+  "publicVersion": "1.25.1",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-idiv-fix-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-25T06:20:38.624332+00:00",
+      "completedAtUtc": "2026-10-25T06:20:58.705784+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "logSha256": "4293967bb063a36ae7188abb9a96342152e15fdec6e29e24e1ee5acb49bd9097"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-idiv-fix-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-25T06:20:38.624702+00:00",
+      "completedAtUtc": "2026-10-25T06:21:51.779291+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "c6c468141dd1a6ee7866246b2558387555872f62a26ed0bbeb1fa293cefb2138"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-idiv-fix-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-25T06:20:38.625233+00:00",
+      "completedAtUtc": "2026-10-25T06:20:40.041393+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "logSha256": "46074f00887d0662347cf9736fff4944ecdc0fc54a27cff14644b84f4978a3b3"
+    }
+  ],
+  "runnerSha256": "37048e8d33404fd1d924d5759625c8e1ab603a226ae8f2fd67037e9aaf4b843e",
+  "approvedPolicy": "Exact decimal-backed idiv truncation with existing Int64 bounds and error policies",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeNegativeFailuresRemainExplicit": true,
+  "releasePerformed": false,
+  "unitTests": {
+    "before": {
+      "total": 132,
+      "passed": 84,
+      "failed": 48,
+      "notExecuted": 0
+    },
+    "after": {
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "full": {
+      "total": 12059,
+      "passed": 12059,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "lsp": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  "newCases": 132,
+  "versionChanged": false,
+  "diagnosticComparison": {
+    "totalRecords": 96,
+    "allMatchExactReferenceAndCurrentRangePolicy": true,
+    "correctedPrecisionRecords": 48,
+    "byteIdenticalAcceptedControls": 36,
+    "retainedOverflowCodesWithStandardizedMessage": 12,
+    "allProfilesAgree": true
+  },
+  "contract": [
+    "Exact truncation for finite existing decimal/integer backing",
+    "Existing inclusive Int64 result bounds retained",
+    "Zero divisor FOAR0001; result overflow FOAR0002",
+    "Float/double, untyped-atomic, backwards-compatible and Int64-only dispatch unchanged",
+    "XDM representation, public APIs, ordinary div and modulo unchanged"
+  ],
+  "temporaryMagnitudeBound": "less than 2^190",
+  "limits": [
+    "Existing Int64 idiv result range remains",
+    "Generic constructors/storage/error policy and broader decimal precision remain separate",
+    "No arbitrary-precision storage or full current-draft conformance claim"
+  ],
+  "evidenceHashes": {
+    "current-native-after.txt": "46074f00887d0662347cf9736fff4944ecdc0fc54a27cff14644b84f4978a3b3",
+    "diagnostic-comparator.txt": "8be1b23577e7c90ccb1cbf584d2b6ac051d8c44e6178e3382b923b291f152714",
+    "diagnostic-verification.json": "62f53c0cd17c20eb454242ec67d36e78ae026460a0fde550a63c86c0a126441a",
+    "diagnostics-after.json": "068d4b68c3e3ba39c45f2ff996045a91c7d5288dbb83939ea3326cf29bdcd103",
+    "diagnostics-before.json": "6aa1eaa761f5ddbeb8b80029b1f4d741f34624b630e5d38ce7c464a9c573b921",
+    "expressions.json": "6a65087ddc2991f52f8fb9bac788769dc96c10daf037cfd3561ccf91fdf54d8b",
+    "frozen-gate-skips.txt": "817f2d936eaeefdd75c777eb40b56ec2775e2ab7d2ff8c59ee41ddc96a83787f",
+    "frozen-gate.txt": "4293967bb063a36ae7188abb9a96342152e15fdec6e29e24e1ee5acb49bd9097",
+    "oracle-inputs.json": "de0a3da1c76b4741a5e427058bce9f77a54f71f3e255209f4857545ee9daa3e4",
+    "qt3.txt": "c6c468141dd1a6ee7866246b2558387555872f62a26ed0bbeb1fa293cefb2138",
+    "regression-inputs.json": "42786372868b9bf8c5f592e55e4c87a11d1d526f85f1e7e52185239e77a0f491",
+    "test-receipts.json": "ce29a97886ea32396138282bba4fc1ce2d160059e86e667093e8674fb289c92f"
+  }
+}

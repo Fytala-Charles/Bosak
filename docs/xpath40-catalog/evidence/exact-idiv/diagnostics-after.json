@@ -1,0 +1,590 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((-9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((-9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-79228162514264337593543950335)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950333) idiv (-39614081257132168796771975167)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "1|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-79228162514264337593543950334) idiv (-26409387504754779197847983445)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "2|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-9223372036854775808) idiv (1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-9223372036854775808) idiv (-1)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-9223372036854775808) idiv (2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((-9223372036854775808) idiv (-2)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "4611686018427387904|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u00277.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00277.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-7.9228162514264337593543950334\u0027) idiv xs:decimal(\u0027-7.9228162514264337593543950335\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "0|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775807.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "9223372036854775807|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u00271\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00279223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": "-9223372036854775808|true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-9223372036854775808.9\u0027) idiv xs:decimal(\u0027-1\u0027)) return concat(string($v),\u0027|\u0027,$v instance of xs:integer)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]
