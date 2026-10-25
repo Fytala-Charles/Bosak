@@ -1,0 +1,8 @@
+{
+  "base": "8263f689216ea8f8ad0a719dd3552490499d0a69",
+  "cases": 111,
+  "profileCases": 105,
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "remaining": "Binary/range post-atomization empty handling and standard-function conversion/cardinality remain separate."
+}

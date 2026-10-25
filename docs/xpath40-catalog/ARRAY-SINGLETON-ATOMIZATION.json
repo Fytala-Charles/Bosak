@@ -1,0 +1,300 @@
+{
+  "date": "2026-10-25",
+  "base": "8263f689216ea8f8ad0a719dd3552490499d0a69",
+  "status": "IMPLEMENTED_VALIDATED_UNPUBLISHED",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "before": {
+    "total": 111,
+    "passed": 19,
+    "failed": 92,
+    "notExecuted": 0
+  },
+  "after": {
+    "total": 111,
+    "passed": 111,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "solutionTestsPassed": 12442,
+  "languageServerTestsPassed": 84,
+  "totalSourceAndLanguageServerTests": 12526,
+  "gates": {
+    "date": "2026-10-25",
+    "base": "8263f689216ea8f8ad0a719dd3552490499d0a69",
+    "sourceVersion": "1.26.1",
+    "publicVersion": "1.26.0",
+    "results": [
+      {
+        "label": "frozen-gate",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests"
+        ],
+        "startedAtUtc": "2026-10-25T15:42:26.879920+00:00",
+        "completedAtUtc": "2026-10-25T15:42:46.457327+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 10330,
+          "Passed": 8436,
+          "Failed": 0,
+          "Skipped": 1894
+        },
+        "logSha256": "8f7a418e62d2bcfd326caab98c2bf44e3b772a26773f290d97929deb39d2fca6"
+      },
+      {
+        "label": "qt3",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+          "D:\\Development\\Bosak\\tests\\qt3tests"
+        ],
+        "startedAtUtc": "2026-10-25T15:42:26.880392+00:00",
+        "completedAtUtc": "2026-10-25T15:43:40.370026+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 31821,
+          "Passed": 31142,
+          "Failed": 0,
+          "Skipped": 679
+        },
+        "logSha256": "847ccef6524eaaa029453cbf184d0cd29a4f302ad7197940233cc7d08fbc6698"
+      },
+      {
+        "label": "current-native-after",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.upstream\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "startedAtUtc": "2026-10-25T15:42:26.880667+00:00",
+        "completedAtUtc": "2026-10-25T15:42:28.159647+00:00",
+        "exitCode": 2,
+        "counts": {
+          "Total": 24,
+          "Passed": 22,
+          "Failed": 2,
+          "Skipped": 0
+        },
+        "logSha256": "8ec72601b9f9c21cc5a92b5a2eef503ec4eff72a208ae52608da8b30e6d086ff"
+      }
+    ],
+    "runnerSha256": "c23a08a2f7e952e7438be405272bdcae3fafbaad7aecccbb4f0632bf1d8b69a6",
+    "approvedPolicy": "Recursively count atomic array-member values for singleton consumers; retain separate caller empty and function conversion boundaries",
+    "frozenFixtureChanged": false,
+    "harnessRetryPolicyChanged": false,
+    "currentNativeNegativeFailuresRemainExplicit": true,
+    "releasePerformed": false
+  },
+  "diagnostics": {
+    "shapes": 16,
+    "contexts": 12,
+    "profiles": 3,
+    "pairs": 576,
+    "rawObservations": 1152,
+    "matches": 480,
+    "discrepancies": 96,
+    "allProfilesAgree": true,
+    "perContext": {
+      "data": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "unary-minus": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "unary-plus": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "add": {
+        "pairs": 48,
+        "matches": 36,
+        "discrepancies": 12,
+        "actualMatchesIndependentExpectation": 36,
+        "actualDiscrepancies": 12,
+        "referenceDiscrepancies": 0
+      },
+      "multiply": {
+        "pairs": 48,
+        "matches": 36,
+        "discrepancies": 12,
+        "actualMatchesIndependentExpectation": 36,
+        "actualDiscrepancies": 12,
+        "referenceDiscrepancies": 0
+      },
+      "idiv": {
+        "pairs": 48,
+        "matches": 36,
+        "discrepancies": 12,
+        "actualMatchesIndependentExpectation": 36,
+        "actualDiscrepancies": 12,
+        "referenceDiscrepancies": 0
+      },
+      "range": {
+        "pairs": 48,
+        "matches": 36,
+        "discrepancies": 12,
+        "actualMatchesIndependentExpectation": 36,
+        "actualDiscrepancies": 12,
+        "referenceDiscrepancies": 0
+      },
+      "value-eq": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "general-eq": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "cast": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "castable": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "function-argument": {
+        "pairs": 48,
+        "matches": 0,
+        "discrepancies": 48,
+        "actualMatchesIndependentExpectation": 12,
+        "actualDiscrepancies": 36,
+        "referenceDiscrepancies": 12
+      }
+    },
+    "textualAtomizeReferences": 71,
+    "classification": "Diagnostic comparisons with independently flattened pure-integer/empty shape inputs; not passing native conformance assertions. Equal error codes do not certify all error precedence.",
+    "engineChanged": true,
+    "actualMatchesIndependentExpectation": 492,
+    "actualDiscrepancies": 84,
+    "referenceDiscrepancies": 12,
+    "independentExpectation": "Python recursive flattening plus explicit empty/singleton/multiple and integer/boolean/string result rules; does not trust the processor reference as an oracle."
+  },
+  "matrixImprovement": {
+    "pairs": 576,
+    "beforeDiscrepancies": 207,
+    "afterDiscrepancies": 84,
+    "corrected": 123,
+    "regressions": 0,
+    "unchangedFlatReferences": 576,
+    "faultyFlatReferencesStillExplicit": 12
+  },
+  "evidence": [
+    {
+      "path": "evidence/array-singleton/scope.json",
+      "sha256": "34204d67c407807f5f3b2a608cb0b2a9c5f3c7421a40731ed4083a7d617eb372"
+    },
+    {
+      "path": "evidence/array-singleton/validation-exits.json",
+      "sha256": "8a09a832676bd52ffe0bccec8f1130147324427f93e9f671b1afa68f905f6b44"
+    },
+    {
+      "path": "evidence/array-singleton/gate-verification.json",
+      "sha256": "1ba85cbc99d5e9157aebb3c6ea73ffc2712ec9b30fb1fd8b601ed8f87d13ae3d"
+    },
+    {
+      "path": "evidence/array-singleton/build.log",
+      "sha256": "5f2d74ad0748708d7d8b75b045aa6758d982ca0daa4aedca65671baca9806958"
+    },
+    {
+      "path": "evidence/array-singleton/source-tests.log",
+      "sha256": "415668ae224c899eab5a872a615fa197ec320d2bce264827951e720b176a48ad"
+    },
+    {
+      "path": "evidence/array-singleton/lsp-tests.log",
+      "sha256": "5b965d65abfd9575b0cc47e2410df73f04ffded07447772f3ec2b0832d35fc4c"
+    },
+    {
+      "path": "evidence/array-singleton/qt3.log",
+      "sha256": "847ccef6524eaaa029453cbf184d0cd29a4f302ad7197940233cc7d08fbc6698"
+    },
+    {
+      "path": "evidence/array-singleton/frozen-gate.log",
+      "sha256": "8f7a418e62d2bcfd326caab98c2bf44e3b772a26773f290d97929deb39d2fca6"
+    },
+    {
+      "path": "evidence/array-singleton/current-native-after.log",
+      "sha256": "8ec72601b9f9c21cc5a92b5a2eef503ec4eff72a208ae52608da8b30e6d086ff"
+    },
+    {
+      "path": "evidence/array-singleton/full-test-receipts.json",
+      "sha256": "5942842d49dfd7966ccbbe3c90307e379a4afcafd9f8d8619637eb1e7d90eca9"
+    },
+    {
+      "path": "evidence/array-singleton/inputs.json",
+      "sha256": "de55fc2a9514d23856a8138093516d8f7f9865ea2b84083000f4b53588b7e255"
+    },
+    {
+      "path": "evidence/array-singleton/observations-before.json",
+      "sha256": "518a1813a61314665ed05ed74fe4f8fa6679056b8eeb74d8f61988814a5c28ce"
+    },
+    {
+      "path": "evidence/array-singleton/observations.json",
+      "sha256": "d12f8efa57a1105dc558ebc40a82cccc6ce8ebc9682d19e4c66822f1e8abf1dc"
+    },
+    {
+      "path": "evidence/array-singleton/comparisons.json",
+      "sha256": "4c7110ab0e116e82c716dc00516181c5efe08b0e42d8cc9b2bda273900ae1f72"
+    },
+    {
+      "path": "evidence/array-singleton/diagnostic-summary.json",
+      "sha256": "559e78b0c2ae132da9e1354ad1bb4f3e17e739921b553f98f513021bfe0fa2e6"
+    },
+    {
+      "path": "evidence/array-singleton/diagnostic-comparison.json",
+      "sha256": "5e8911e9cc97f93a4af7fbb7206db13b2a0133b3d13e5808b22ea4607f8bab93"
+    },
+    {
+      "path": "evidence/array-singleton/before.trx",
+      "sha256": "601cc11411059a3cdc508a77f9b548abecce37be2072ba422601e40c4159d33e"
+    },
+    {
+      "path": "evidence/array-singleton/after.trx",
+      "sha256": "fcccf8cec868bf4f49395ba668309310f514c15a6c871883f1a43285f37e648b"
+    },
+    {
+      "path": "evidence/array-singleton/analyze.py",
+      "sha256": "71ad547524056821d5eff1bdf3cd6bdb125249356e8e49617b35d1d66b1a3a72"
+    }
+  ],
+  "releasePerformed": false,
+  "braidModified": false,
+  "remaining": "REQ-126 partial; binary/range post-atomization empty handling and function conversion/cardinality remain separate.",
+  "validatedSourceGitBlobIds": {
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": "45a48297ad371e45df5058a8449f987447703b6a",
+    "tests/Bosak.XPath.Standard.Tests/ArraySingletonAtomizationTests.cs": "f9e5c9206f46755b3e82826b1825e846fcffd413"
+  }
+}

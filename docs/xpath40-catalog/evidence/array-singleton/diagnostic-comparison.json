@@ -1,0 +1,626 @@
+{
+  "pairs": 576,
+  "beforeDiscrepancies": 207,
+  "afterDiscrepancies": 84,
+  "corrected": 123,
+  "regressions": 0,
+  "unchangedFlatReferences": 576,
+  "faultyFlatReferencesStillExplicit": 12,
+  "correctedCases": [
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-first",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "add"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "range"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "empty-last",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "add"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "range"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "singleton-between-empty",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "add"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "range"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "two-empty-before-singleton",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "three-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "three-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "three-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath31",
+      "shape": "nested-empty-first",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-first",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "empty-last",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "singleton-between-empty",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "two-empty-before-singleton",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "three-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "three-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "three-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40",
+      "shape": "nested-empty-first",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-first",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "empty-last",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "singleton-between-empty",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "two-empty-before-singleton",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "three-empty-arrays",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "three-empty-arrays",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "three-empty-arrays",
+      "context": "value-eq"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "unary-minus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "unary-plus"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "add"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "multiply"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "idiv"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "range"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "shape": "nested-empty-first",
+      "context": "value-eq"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+[
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_10_net10.0.trx",
+    "sha256": "d434c09c582df01e0d357ee3d7fdf0ab4d5bb50b639d440d0aef3520d3584bd2",
+    "counters": {
+      "total": 2585,
+      "passed": 2585,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_11_net10.0.trx",
+    "sha256": "06f22bebc69bf0e3a87061c375e2053503f467fb71875ff3657b8b57e7fb7cb5",
+    "counters": {
+      "total": 66,
+      "passed": 66,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_11_net10.0[1].trx",
+    "sha256": "6e04d9fabae72660885521abe7ff430eda031cc4e063c260e1639160eb38fe53",
+    "counters": {
+      "total": 202,
+      "passed": 202,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_11_net10.0[2].trx",
+    "sha256": "aa1bd8a66b38c859bfb2e185f0933d159c3fc2c7b0c10f6601f5722ce1e1aebd",
+    "counters": {
+      "total": 132,
+      "passed": 132,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_11_net10.0[3].trx",
+    "sha256": "8c9f244f21e41b4ed84624232400a2d4a864fce4ae548dec4d828e50fba8f154",
+    "counters": {
+      "total": 489,
+      "passed": 489,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_11_net10.0[4].trx",
+    "sha256": "12c5619fddc5c5ec0796d0dd990dd04bc24b8dcc4156d7a6523a8341b8719a69",
+    "counters": {
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_12_net10.0.trx",
+    "sha256": "6feefff6a2a1d6d34559cf85e22cb2df810142f6d7da5210ee0b250b3ea3dc45",
+    "counters": {
+      "total": 269,
+      "passed": 269,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_12_net10.0[1].trx",
+    "sha256": "db1e7f40c700a8a4a5698f8d42552da3a2862fe6319d22c4872cd847b498a793",
+    "counters": {
+      "total": 303,
+      "passed": 303,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_12_net10.0[2].trx",
+    "sha256": "b5ed0ed26a37d80b479c5b6309b6424d3e2591d1f2d116bd5bb1974618a8dc4d",
+    "counters": {
+      "total": 153,
+      "passed": 153,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\full\\charl_CHARLES_2026-10-25_16_42_14_net10.0.trx",
+    "sha256": "86f74425c43ecada469d30477b56cef71e296c6d9685b9133c1df06d2f94eac5",
+    "counters": {
+      "total": 8196,
+      "passed": 8196,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  {
+    "path": "D:\\Development\\Bosak\\.guard-tmp\\req126-array-singleton-evidence\\lsp\\charl_CHARLES_2026-10-25_16_46_16_net10.0.trx",
+    "sha256": "68c66eb240bc368a87d9516afdd73a552e7ef89d8af19b7a510294e36d382747",
+    "counters": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  }
+]

@@ -4,6 +4,9 @@
   <p>25 October 2026 - source 1.26.1 unpublished; public 1.26.0</p>
 </div>
 
+**Implemented follow-up:** PR458 passed all three CI checks (12,415 tests) and merged at `8263f689216ea8f8ad0a719dd3552490499d0a69`. The [singleton-array correction](ARRAY-SINGLETON-ATOMIZATION.md) reduces matrix discrepancies from 207 to 84, while the original audit inputs/checker/observations remain unchanged below. Source 1.26.1 remains unpublished.
+
+
 This REQ-126 investigation follows the [empty unary correction](UNARY-EMPTY-ATOMIZATION.md), merged as PR456 at `f646d9da6b97fab6816fca0c8fa8bd43ca94a79b` after all three CI checks passed (12,343 tests). It adds **72 supported regression controls** and **576 diagnostic array/reference pairs**, comprising 1,152 raw observations. It changes tests and documentation; the complete `src` tree is identical to PR456. Source version, public API, engine, fixtures, gates, retries and public packages are unchanged. Braid independently validates public 1.26.0.
 
 ## Contract and independent expectation
