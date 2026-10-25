@@ -1,0 +1,1023 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="f3fd9693-c575-42ec-ad21-75da470e2681" name="charl@CHARLES 2026-10-25 12:25:02" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-25T12:25:02.6265012+01:00" queuing="2026-10-25T12:25:02.6265013+01:00" start="2026-10-25T12:25:00.0920069+01:00" finish="2026-10-25T12:25:02.6977562+01:00" />
+  <TestSettings name="default" id="491786ca-fe06-484b-9ed0-eeed3d87f9c8">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-25_12_25_02" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="71af1524-80ab-4634-94bd-eb8b2acd41f4" testId="5b4eb0b4-46a2-3d76-4f3d-1d871966f1de" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" computerName="CHARLES" duration="00:00:00.0010466" startTime="2026-10-25T12:25:02.5867695+01:00" endTime="2026-10-25T12:25:02.5867696+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="71af1524-80ab-4634-94bd-eb8b2acd41f4" />
+    <UnitTestResult executionId="1e9a14d1-d6c3-4a3c-86ab-a7d5a2e0eb17" testId="12dac005-110b-a06a-9f86-3534a643812f" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0002570" startTime="2026-10-25T12:25:02.6440747+01:00" endTime="2026-10-25T12:25:02.6440747+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1e9a14d1-d6c3-4a3c-86ab-a7d5a2e0eb17" />
+    <UnitTestResult executionId="27022627-2b50-40cf-981c-c1db7fc47d1d" testId="8d2508cd-48a2-3b46-8e6c-4b5b38a6575c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[()]]&quot;)" computerName="CHARLES" duration="00:00:00.0000557" startTime="2026-10-25T12:25:02.6424443+01:00" endTime="2026-10-25T12:25:02.6424444+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27022627-2b50-40cf-981c-c1db7fc47d1d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a3d59cb4-f7a5-4e0d-b65a-2bfecd78fa6e" testId="e9c810f7-a921-29ba-e197-ed55726c8e51" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;()&quot;)" computerName="CHARLES" duration="00:00:00.0021555" startTime="2026-10-25T12:25:02.6082792+01:00" endTime="2026-10-25T12:25:02.6082792+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a3d59cb4-f7a5-4e0d-b65a-2bfecd78fa6e" />
+    <UnitTestResult executionId="b0184e34-454a-4435-a2b5-18af601e42aa" testId="856cb027-48dd-a5a1-29c9-bfe6d17b9128" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" computerName="CHARLES" duration="00:00:00.0006202" startTime="2026-10-25T12:25:02.5856867+01:00" endTime="2026-10-25T12:25:02.5856870+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0184e34-454a-4435-a2b5-18af601e42aa" />
+    <UnitTestResult executionId="1f27515b-df5a-41b4-901c-476c7c64771f" testId="2d875adc-c105-2252-d6f1-5be4005f369e" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0004280" startTime="2026-10-25T12:25:02.6073358+01:00" endTime="2026-10-25T12:25:02.6073358+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1f27515b-df5a-41b4-901c-476c7c64771f" />
+    <UnitTestResult executionId="ec89efa1-3749-4011-819d-b49180f407b6" testId="e1820d34-13f3-3010-16b4-60e26b1f03d9" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0001876" startTime="2026-10-25T12:25:02.6439788+01:00" endTime="2026-10-25T12:25:02.6439789+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ec89efa1-3749-4011-819d-b49180f407b6" />
+    <UnitTestResult executionId="86dffdbc-c89d-440e-9fe1-4cf81793c58c" testId="8a21afa9-627b-cfbe-5b33-351e3a6fb947" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[()]]&quot;)" computerName="CHARLES" duration="00:00:00.0000447" startTime="2026-10-25T12:25:02.6272277+01:00" endTime="2026-10-25T12:25:02.6272277+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86dffdbc-c89d-440e-9fe1-4cf81793c58c">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ff61f2e2-a74f-4467-94e6-723c38863aaa" testId="92f45e69-097f-7335-a069-5968aa06408c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;()&quot;)" computerName="CHARLES" duration="00:00:00.0079504" startTime="2026-10-25T12:25:02.6361833+01:00" endTime="2026-10-25T12:25:02.6361835+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff61f2e2-a74f-4467-94e6-723c38863aaa" />
+    <UnitTestResult executionId="9b96ceb7-539f-4440-af4f-5477d1fb7489" testId="fadbca43-f52b-6512-c59a-0121c8699603" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" computerName="CHARLES" duration="00:00:00.0004864" startTime="2026-10-25T12:25:02.6072765+01:00" endTime="2026-10-25T12:25:02.6072765+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b96ceb7-539f-4440-af4f-5477d1fb7489" />
+    <UnitTestResult executionId="0d0638bb-5e43-45da-8222-980a3bc9c436" testId="6de07508-86ee-a6ca-f5ea-98c87c762946" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[]&quot;)" computerName="CHARLES" duration="00:00:00.0001787" startTime="2026-10-25T12:25:02.6152324+01:00" endTime="2026-10-25T12:25:02.6152324+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d0638bb-5e43-45da-8222-980a3bc9c436">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fd462c92-8775-4b05-8000-10fa90efb8e5" testId="e5355440-6380-e1f2-a380-f6347b6532a9" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[()]&quot;)" computerName="CHARLES" duration="00:00:00.0001191" startTime="2026-10-25T12:25:02.6232806+01:00" endTime="2026-10-25T12:25:02.6232806+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd462c92-8775-4b05-8000-10fa90efb8e5">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="04c15337-5d5d-454f-b582-45a7b0a60a87" testId="ea748c51-78cf-c8f7-54e2-d5f54f8abf4c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0010800" startTime="2026-10-25T12:25:02.6425544+01:00" endTime="2026-10-25T12:25:02.6425545+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="04c15337-5d5d-454f-b582-45a7b0a60a87" />
+    <UnitTestResult executionId="2a2a86b2-68b7-4bf3-85e1-17390584ba5c" testId="9fc68451-0529-925b-260b-186860063777" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0003229" startTime="2026-10-25T12:25:02.5889004+01:00" endTime="2026-10-25T12:25:02.5889004+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2a2a86b2-68b7-4bf3-85e1-17390584ba5c" />
+    <UnitTestResult executionId="dca0b475-1797-4473-89f2-485a2052ebfa" testId="9648f8c1-b0b3-fbf6-6a16-1220e0bf12f5" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0005166" startTime="2026-10-25T12:25:02.6426082+01:00" endTime="2026-10-25T12:25:02.6426082+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dca0b475-1797-4473-89f2-485a2052ebfa" />
+    <UnitTestResult executionId="f6a3f544-c395-46a2-96dd-397e5a12f4bc" testId="9fa5bfae-408f-ebba-5357-63be9191aaa1" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" computerName="CHARLES" duration="00:00:00.0004024" startTime="2026-10-25T12:25:02.6073581+01:00" endTime="2026-10-25T12:25:02.6073581+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6a3f544-c395-46a2-96dd-397e5a12f4bc" />
+    <UnitTestResult executionId="6013761c-a93c-40e5-9169-b2cae51f917f" testId="ee0f0370-d029-8c0b-7c6f-ea241be7b444" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0004321" startTime="2026-10-25T12:25:02.5872331+01:00" endTime="2026-10-25T12:25:02.5872331+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6013761c-a93c-40e5-9169-b2cae51f917f" />
+    <UnitTestResult executionId="b575e6d1-d7ef-4456-b6cd-39fda7a7e131" testId="457842a3-11a7-7513-a957-0c7a1aba585c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" computerName="CHARLES" duration="00:00:00.0002166" startTime="2026-10-25T12:25:02.6439999+01:00" endTime="2026-10-25T12:25:02.6440000+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b575e6d1-d7ef-4456-b6cd-39fda7a7e131" />
+    <UnitTestResult executionId="b847d067-9e01-47a3-a1bc-b390249d97e2" testId="f0be3643-5b71-3257-763f-e3d3e9775142" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[]&quot;)" computerName="CHARLES" duration="00:00:00.0003863" startTime="2026-10-25T12:25:02.6450970+01:00" endTime="2026-10-25T12:25:02.6450970+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b847d067-9e01-47a3-a1bc-b390249d97e2" />
+    <UnitTestResult executionId="c59506c5-d783-4b4b-aec2-84abb2bc8ac6" testId="1871da7d-5ecc-1b37-5deb-e8c69d116c03" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[()]&quot;)" computerName="CHARLES" duration="00:00:00.0000655" startTime="2026-10-25T12:25:02.6357709+01:00" endTime="2026-10-25T12:25:02.6357710+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c59506c5-d783-4b4b-aec2-84abb2bc8ac6">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8cca2809-eab5-4ea7-9b78-ad3f8deb07cb" testId="a36de8ee-2bd5-7edd-8cac-f6bb25c4f860" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" computerName="CHARLES" duration="00:00:00.0005873" startTime="2026-10-25T12:25:02.5878492+01:00" endTime="2026-10-25T12:25:02.5878492+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8cca2809-eab5-4ea7-9b78-ad3f8deb07cb" />
+    <UnitTestResult executionId="4213750c-3917-4814-ba7e-1a3daae087d0" testId="8d3914c2-1ba8-196c-c8d7-5ec242b576a0" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;array { () }&quot;)" computerName="CHARLES" duration="00:00:00.0000537" startTime="2026-10-25T12:25:02.6269954+01:00" endTime="2026-10-25T12:25:02.6269954+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4213750c-3917-4814-ba7e-1a3daae087d0">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e0f7cdac-7549-4b55-b9eb-72f281c333b8" testId="dd9b86e3-1dfc-728c-ed07-143aaf37695c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[(),()]&quot;)" computerName="CHARLES" duration="00:00:00.0000860" startTime="2026-10-25T12:25:02.6229512+01:00" endTime="2026-10-25T12:25:02.6229514+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e0f7cdac-7549-4b55-b9eb-72f281c333b8">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1db31910-a40c-4eb1-878a-00a933080548" testId="9ba7afc8-5dfb-8188-fe6b-047fc222a256" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" computerName="CHARLES" duration="00:00:00.0010150" startTime="2026-10-25T12:25:02.6071154+01:00" endTime="2026-10-25T12:25:02.6071155+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1db31910-a40c-4eb1-878a-00a933080548" />
+    <UnitTestResult executionId="6d977357-4354-402e-9f7c-79063cf34102" testId="a2168abd-1328-47d6-2f55-f91b00daf73b" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" computerName="CHARLES" duration="00:00:00.0004136" startTime="2026-10-25T12:25:02.6073116+01:00" endTime="2026-10-25T12:25:02.6073116+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6d977357-4354-402e-9f7c-79063cf34102" />
+    <UnitTestResult executionId="48e52064-1c60-4b0d-ae4a-4281917ef74d" testId="7cfebe1b-f326-d3d5-14eb-83264e3fefea" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[[]]]&quot;)" computerName="CHARLES" duration="00:00:00.0000535" startTime="2026-10-25T12:25:02.6276660+01:00" endTime="2026-10-25T12:25:02.6276661+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="48e52064-1c60-4b0d-ae4a-4281917ef74d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="fd4edefb-6a73-4fae-99c1-2b6a3434a890" testId="c11f6fdf-c945-214d-d5a4-c25ecc46f751" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" computerName="CHARLES" duration="00:00:00.0003007" startTime="2026-10-25T12:25:02.6072395+01:00" endTime="2026-10-25T12:25:02.6072395+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd4edefb-6a73-4fae-99c1-2b6a3434a890" />
+    <UnitTestResult executionId="35671d4d-fef3-44cd-9ebc-6417de00c1ae" testId="34cb91a9-141a-0737-03f1-d489b4bd699e" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[()]]&quot;)" computerName="CHARLES" duration="00:00:00.0009957" startTime="2026-10-25T12:25:02.6144384+01:00" endTime="2026-10-25T12:25:02.6144387+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="35671d4d-fef3-44cd-9ebc-6417de00c1ae">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6668dbf9-0bbd-4446-b522-62363a082a88" testId="a1aef1c3-ea3f-c08e-e5e3-08dd33837b75" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0052626" startTime="2026-10-25T12:25:02.6438808+01:00" endTime="2026-10-25T12:25:02.6438809+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6668dbf9-0bbd-4446-b522-62363a082a88" />
+    <UnitTestResult executionId="f9a2ab8a-b9ac-4397-a898-0cfd8578db0d" testId="9253ac87-a1df-3da9-47c7-5bba4efa7dd1" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[[]]&quot;)" computerName="CHARLES" duration="00:00:00.0000518" startTime="2026-10-25T12:25:02.6457399+01:00" endTime="2026-10-25T12:25:02.6457400+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f9a2ab8a-b9ac-4397-a898-0cfd8578db0d" />
+    <UnitTestResult executionId="f6e21c7c-870d-4e54-b354-da8b9922d31e" testId="8c5f98e3-ac1b-35fa-6cde-81b321330736" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" computerName="CHARLES" duration="00:00:00.0002647" startTime="2026-10-25T12:25:02.6440567+01:00" endTime="2026-10-25T12:25:02.6440567+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6e21c7c-870d-4e54-b354-da8b9922d31e" />
+    <UnitTestResult executionId="b3343df7-1928-4432-9f95-b745870910eb" testId="57e17fc7-b5b8-1ea9-7d8c-f61fc8c9f438" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0003454" startTime="2026-10-25T12:25:02.6447211+01:00" endTime="2026-10-25T12:25:02.6447212+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3343df7-1928-4432-9f95-b745870910eb" />
+    <UnitTestResult executionId="34a023bb-1885-41a6-b1ee-33032f04876e" testId="e26c46cc-3b03-94c8-8f80-fe7c744cafb2" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0006663" startTime="2026-10-25T12:25:02.5885451+01:00" endTime="2026-10-25T12:25:02.5885454+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="34a023bb-1885-41a6-b1ee-33032f04876e" />
+    <UnitTestResult executionId="20433dd5-d92c-4eff-bc25-286f9eeb7ed5" testId="8536a36e-2305-fbac-ac2a-ec3c6d92e179" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0001903" startTime="2026-10-25T12:25:02.6449401+01:00" endTime="2026-10-25T12:25:02.6449402+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20433dd5-d92c-4eff-bc25-286f9eeb7ed5" />
+    <UnitTestResult executionId="e77723d4-0431-4602-a237-e34e64030d9d" testId="f2229e99-f67b-a17d-aab4-49ed5760e577" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" computerName="CHARLES" duration="00:00:00.0002807" startTime="2026-10-25T12:25:02.6439104+01:00" endTime="2026-10-25T12:25:02.6439105+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e77723d4-0431-4602-a237-e34e64030d9d" />
+    <UnitTestResult executionId="e3f4699a-fbbe-4580-b9a7-59cd06e10e2e" testId="64986c56-aad3-5a7b-80ed-0f26610d15ca" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0001826" startTime="2026-10-25T12:25:02.6440381+01:00" endTime="2026-10-25T12:25:02.6440381+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e3f4699a-fbbe-4580-b9a7-59cd06e10e2e" />
+    <UnitTestResult executionId="257aad08-8a55-4de2-a85f-06fb84d55b80" testId="40a29af0-7b03-475a-a3f9-387f55d26f3b" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0001566" startTime="2026-10-25T12:25:02.6447000+01:00" endTime="2026-10-25T12:25:02.6447001+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="257aad08-8a55-4de2-a85f-06fb84d55b80" />
+    <UnitTestResult executionId="d72fcf66-2136-4e41-9da5-63c86416e35b" testId="acf37cf2-64ad-089c-693c-d499af80c59d" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" computerName="CHARLES" duration="00:00:00.0007586" startTime="2026-10-25T12:25:02.6072597+01:00" endTime="2026-10-25T12:25:02.6072598+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d72fcf66-2136-4e41-9da5-63c86416e35b" />
+    <UnitTestResult executionId="28668274-fbbb-49f6-8d34-9e73d3ac6888" testId="0e35d42d-0485-8e6a-f8b7-8bd6c2ca8d47" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0002203" startTime="2026-10-25T12:25:02.6450189+01:00" endTime="2026-10-25T12:25:02.6450190+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="28668274-fbbb-49f6-8d34-9e73d3ac6888" />
+    <UnitTestResult executionId="92081cbe-cceb-47c7-9ad8-7b13881f5b0d" testId="297ade11-ba86-9d6b-ec65-7e8959f23119" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[]]&quot;)" computerName="CHARLES" duration="00:00:00.0000640" startTime="2026-10-25T12:25:02.6396966+01:00" endTime="2026-10-25T12:25:02.6396967+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="92081cbe-cceb-47c7-9ad8-7b13881f5b0d">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ababbeb1-1533-4efc-9eb2-f4db11503efa" testId="061aa446-f711-b064-e3d6-e80d62726eb5" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0019953" startTime="2026-10-25T12:25:02.5849524+01:00" endTime="2026-10-25T12:25:02.5849525+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ababbeb1-1533-4efc-9eb2-f4db11503efa" />
+    <UnitTestResult executionId="5a8ab051-37c9-4e3b-9aa3-6b685ec3e3fd" testId="eed5bf58-c747-6373-5150-c2a8d083e856" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[()]&quot;)" computerName="CHARLES" duration="00:00:00.0000591" startTime="2026-10-25T12:25:02.6452683+01:00" endTime="2026-10-25T12:25:02.6452685+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5a8ab051-37c9-4e3b-9aa3-6b685ec3e3fd" />
+    <UnitTestResult executionId="dd6c3ae8-06a6-4187-b03c-c81eaee38ac9" testId="454ecd9e-199d-b8b8-98fa-508a97637775" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0001680" startTime="2026-10-25T12:25:02.6439308+01:00" endTime="2026-10-25T12:25:02.6439308+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd6c3ae8-06a6-4187-b03c-c81eaee38ac9" />
+    <UnitTestResult executionId="363bf521-15d2-4dc1-b6c5-83587a47fb39" testId="baff3908-49fc-b3d9-f801-b22d7c225334" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[(),()]&quot;)" computerName="CHARLES" duration="00:00:00.0002438" startTime="2026-10-25T12:25:02.6148727+01:00" endTime="2026-10-25T12:25:02.6148727+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="363bf521-15d2-4dc1-b6c5-83587a47fb39">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2ca5bef0-1796-4f10-831c-3e25caed9b89" testId="5f1a71ab-7d3c-9d4f-d4d6-f64b8438e12d" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0002181" startTime="2026-10-25T12:25:02.6428205+01:00" endTime="2026-10-25T12:25:02.6428207+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2ca5bef0-1796-4f10-831c-3e25caed9b89" />
+    <UnitTestResult executionId="d029e32b-c867-4198-a242-55a3fe19e8d1" testId="f1d6092e-39d0-d0dc-5f92-371ae31178e3" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[]&quot;)" computerName="CHARLES" duration="00:00:00.0000494" startTime="2026-10-25T12:25:02.6412694+01:00" endTime="2026-10-25T12:25:02.6412695+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d029e32b-c867-4198-a242-55a3fe19e8d1">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="14c1a5bd-6eb2-48e9-917a-caf7b0b1c6cf" testId="6b39a88e-91e2-33c8-328d-28a1044538e1" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[]&quot;)" computerName="CHARLES" duration="00:00:00.0000438" startTime="2026-10-25T12:25:02.6278891+01:00" endTime="2026-10-25T12:25:02.6278891+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="14c1a5bd-6eb2-48e9-917a-caf7b0b1c6cf">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b3f6cfd2-0d88-4989-9fd2-69a748730e7b" testId="c186c99d-43c9-9d2d-3471-990c6a3dbd53" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[[]]]&quot;)" computerName="CHARLES" duration="00:00:00.0000588" startTime="2026-10-25T12:25:02.6274468+01:00" endTime="2026-10-25T12:25:02.6274468+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b3f6cfd2-0d88-4989-9fd2-69a748730e7b">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="be0e73be-8cd7-4d28-853b-21aafe5a241e" testId="064ec645-ee1b-de66-1d4c-80c484e3db77" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[[]]]&quot;)" computerName="CHARLES" duration="00:00:00.0000660" startTime="2026-10-25T12:25:02.6286196+01:00" endTime="2026-10-25T12:25:02.6286197+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="be0e73be-8cd7-4d28-853b-21aafe5a241e">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="bc5f2955-6680-4f5f-83d0-5343932665a3" testId="e13f0532-8ef3-99cc-812b-e9eb70908f20" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0001452" startTime="2026-10-25T12:25:02.6440194+01:00" endTime="2026-10-25T12:25:02.6440194+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bc5f2955-6680-4f5f-83d0-5343932665a3" />
+    <UnitTestResult executionId="9985b178-e480-48bd-83a0-5942e660a3d5" testId="d8827ccd-750d-1f10-f9fe-ef9e76f23398" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" computerName="CHARLES" duration="00:00:00.0002818" startTime="2026-10-25T12:25:02.6447402+01:00" endTime="2026-10-25T12:25:02.6447402+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9985b178-e480-48bd-83a0-5942e660a3d5" />
+    <UnitTestResult executionId="01867b88-ca59-4d23-9786-ba95de6f6a56" testId="d616289e-a8a5-628a-9ed8-f8c03a1de34b" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[]]&quot;)" computerName="CHARLES" duration="00:00:00.0001287" startTime="2026-10-25T12:25:02.6381331+01:00" endTime="2026-10-25T12:25:02.6381332+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="01867b88-ca59-4d23-9786-ba95de6f6a56">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="8256ff60-8d61-4651-a93b-8e5c3cc534f0" testId="0cf8ecfc-749b-8412-ced0-f3443dab7e09" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" computerName="CHARLES" duration="00:00:00.7654113" startTime="2026-10-25T12:25:02.5770243+01:00" endTime="2026-10-25T12:25:02.5770465+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8256ff60-8d61-4651-a93b-8e5c3cc534f0" />
+    <UnitTestResult executionId="d585c28b-4551-46e3-8440-6f39e8a5ce27" testId="eba0b16a-73ee-00c3-5090-21521f30f262" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;()&quot;)" computerName="CHARLES" duration="00:00:00.0001920" startTime="2026-10-25T12:25:02.6451612+01:00" endTime="2026-10-25T12:25:02.6451613+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d585c28b-4551-46e3-8440-6f39e8a5ce27" />
+    <UnitTestResult executionId="1a9e0db1-13bd-435d-98f3-2602374c3e54" testId="05ed9db9-da6b-c936-92e4-eb896559c3d9" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;array { () }&quot;)" computerName="CHARLES" duration="00:00:00.0002010" startTime="2026-10-25T12:25:02.6235489+01:00" endTime="2026-10-25T12:25:02.6235489+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a9e0db1-13bd-435d-98f3-2602374c3e54">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9192f6b7-8ebe-4be1-b5a0-71393586b7f7" testId="d422c55b-465a-5925-dd33-7d704aeb3a7e" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" computerName="CHARLES" duration="00:00:00.0062344" startTime="2026-10-25T12:25:02.5829207+01:00" endTime="2026-10-25T12:25:02.5829208+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9192f6b7-8ebe-4be1-b5a0-71393586b7f7" />
+    <UnitTestResult executionId="11376a9f-548b-4db4-a96a-9a7f7b56fe96" testId="e3bbea41-7253-5a86-960b-ac0d57363f77" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[()]&quot;)" computerName="CHARLES" duration="00:00:00.0000594" startTime="2026-10-25T12:25:02.6238203+01:00" endTime="2026-10-25T12:25:02.6238203+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="11376a9f-548b-4db4-a96a-9a7f7b56fe96">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b5f6250a-def1-490e-8638-619f79d25941" testId="3870f410-0ff6-a2d1-eb48-b47bc3f08aed" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" computerName="CHARLES" duration="00:00:00.0003283" startTime="2026-10-25T12:25:02.6073830+01:00" endTime="2026-10-25T12:25:02.6073830+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b5f6250a-def1-490e-8638-619f79d25941" />
+    <UnitTestResult executionId="cf106681-0edd-48b0-9827-f1f289a18939" testId="392b74be-5f00-dcb1-11ae-d61e4418000c" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[]]&quot;)" computerName="CHARLES" duration="00:00:00.0000540" startTime="2026-10-25T12:25:02.6242321+01:00" endTime="2026-10-25T12:25:02.6242322+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf106681-0edd-48b0-9827-f1f289a18939">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="87eb86b4-5561-47ab-ae3e-7592a385cf61" testId="5bc78375-0aaf-faf5-861e-a297ad71c008" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[(),()]&quot;)" computerName="CHARLES" duration="00:00:00.0000523" startTime="2026-10-25T12:25:02.6281334+01:00" endTime="2026-10-25T12:25:02.6281335+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="87eb86b4-5561-47ab-ae3e-7592a385cf61">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="2f3b65e6-4528-428a-bf7c-cc78408138ba" testId="482ad3f4-b5ef-3041-f6dc-e737c5e60fdb" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;array { () }&quot;)" computerName="CHARLES" duration="00:00:00.0000532" startTime="2026-10-25T12:25:02.6266263+01:00" endTime="2026-10-25T12:25:02.6266264+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f3b65e6-4528-428a-bf7c-cc78408138ba">
+      <Output>
+        <ErrorInfo>
+          <Message>System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer</Message>
+          <StackTrace>   at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 15842&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 7734&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 3201&#xD;
+   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs:line 467&#xD;
+   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs:line 862&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 128&#xD;
+   at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand) in D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs:line 47&#xD;
+   at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e571b4c1-6c60-4ee6-992c-2413be2bcb33" testId="c18ceb3f-b2be-aac6-3161-e9aeed376fb4" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" computerName="CHARLES" duration="00:00:00.0004159" startTime="2026-10-25T12:25:02.6072933+01:00" endTime="2026-10-25T12:25:02.6072933+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e571b4c1-6c60-4ee6-992c-2413be2bcb33" />
+    <UnitTestResult executionId="bb56e36f-95de-4711-bd05-56773f82094f" testId="69b7fe95-c31e-26d9-9f08-88794ca7e387" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;()&quot;)" computerName="CHARLES" duration="00:00:00.0004979" startTime="2026-10-25T12:25:02.6279198+01:00" endTime="2026-10-25T12:25:02.6279198+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="bb56e36f-95de-4711-bd05-56773f82094f" />
+    <UnitTestResult executionId="10c8d148-ae28-4f4c-91d6-c42db9a74abe" testId="6afb3397-d0fa-dd8c-5ecd-c4e22d5d0985" testName="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" computerName="CHARLES" duration="00:00:00.0002064" startTime="2026-10-25T12:25:02.6446678+01:00" endTime="2026-10-25T12:25:02.6446679+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="10c8d148-ae28-4f4c-91d6-c42db9a74abe" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e3bbea41-7253-5a86-960b-ac0d57363f77">
+      <Execution id="11376a9f-548b-4db4-a96a-9a7f7b56fe96" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="12dac005-110b-a06a-9f86-3534a643812f">
+      <Execution id="1e9a14d1-d6c3-4a3c-86ab-a7d5a2e0eb17" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="9648f8c1-b0b3-fbf6-6a16-1220e0bf12f5">
+      <Execution id="dca0b475-1797-4473-89f2-485a2052ebfa" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="d8827ccd-750d-1f10-f9fe-ef9e76f23398">
+      <Execution id="9985b178-e480-48bd-83a0-5942e660a3d5" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;array { () }&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="05ed9db9-da6b-c936-92e4-eb896559c3d9">
+      <Execution id="1a9e0db1-13bd-435d-98f3-2602374c3e54" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;()&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="eba0b16a-73ee-00c3-5090-21521f30f262">
+      <Execution id="d585c28b-4551-46e3-8440-6f39e8a5ce27" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="BackwardsCompatibleEmptyRemainsNaN" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="3870f410-0ff6-a2d1-eb48-b47bc3f08aed">
+      <Execution id="b5f6250a-def1-490e-8638-619f79d25941" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="9ba7afc8-5dfb-8188-fe6b-047fc222a256">
+      <Execution id="1db31910-a40c-4eb1-878a-00a933080548" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="57e17fc7-b5b8-1ea9-7d8c-f61fc8c9f438">
+      <Execution id="b3343df7-1928-4432-9f95-b745870910eb" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="6afb3397-d0fa-dd8c-5ecd-c4e22d5d0985">
+      <Execution id="10c8d148-ae28-4f4c-91d6-c42db9a74abe" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="9fc68451-0529-925b-260b-186860063777">
+      <Execution id="2a2a86b2-68b7-4bf3-85e1-17390584ba5c" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="eed5bf58-c747-6373-5150-c2a8d083e856">
+      <Execution id="5a8ab051-37c9-4e3b-9aa3-6b685ec3e3fd" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="BackwardsCompatibleEmptyRemainsNaN" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="297ade11-ba86-9d6b-ec65-7e8959f23119">
+      <Execution id="92081cbe-cceb-47c7-9ad8-7b13881f5b0d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="856cb027-48dd-a5a1-29c9-bfe6d17b9128">
+      <Execution id="b0184e34-454a-4435-a2b5-18af601e42aa" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="ea748c51-78cf-c8f7-54e2-d5f54f8abf4c">
+      <Execution id="04c15337-5d5d-454f-b582-45a7b0a60a87" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="f0be3643-5b71-3257-763f-e3d3e9775142">
+      <Execution id="b847d067-9e01-47a3-a1bc-b390249d97e2" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="BackwardsCompatibleEmptyRemainsNaN" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="6b39a88e-91e2-33c8-328d-28a1044538e1">
+      <Execution id="14c1a5bd-6eb2-48e9-917a-caf7b0b1c6cf" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="454ecd9e-199d-b8b8-98fa-508a97637775">
+      <Execution id="dd6c3ae8-06a6-4187-b03c-c81eaee38ac9" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="0e35d42d-0485-8e6a-f8b7-8bd6c2ca8d47">
+      <Execution id="28668274-fbbb-49f6-8d34-9e73d3ac6888" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="8536a36e-2305-fbac-ac2a-ec3c6d92e179">
+      <Execution id="20433dd5-d92c-4eff-bc25-286f9eeb7ed5" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[(),()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="baff3908-49fc-b3d9-f801-b22d7c225334">
+      <Execution id="363bf521-15d2-4dc1-b6c5-83587a47fb39" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="f1d6092e-39d0-d0dc-5f92-371ae31178e3">
+      <Execution id="d029e32b-c867-4198-a242-55a3fe19e8d1" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;()&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="92f45e69-097f-7335-a069-5968aa06408c">
+      <Execution id="ff61f2e2-a74f-4467-94e6-723c38863aaa" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;[1,2]&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="5f1a71ab-7d3c-9d4f-d4d6-f64b8438e12d">
+      <Execution id="2ca5bef0-1796-4f10-831c-3e25caed9b89" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="fadbca43-f52b-6512-c59a-0121c8699603">
+      <Execution id="9b96ceb7-539f-4440-af4f-5477d1fb7489" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="8c5f98e3-ac1b-35fa-6cde-81b321330736">
+      <Execution id="f6e21c7c-870d-4e54-b354-da8b9922d31e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;true()&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e1820d34-13f3-3010-16b4-60e26b1f03d9">
+      <Execution id="ec89efa1-3749-4011-819d-b49180f407b6" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40Experimental, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="f2229e99-f67b-a17d-aab4-49ed5760e577">
+      <Execution id="e77723d4-0431-4602-a237-e34e64030d9d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;array { () }&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="482ad3f4-b5ef-3041-f6dc-e737c5e60fdb">
+      <Execution id="2f3b65e6-4528-428a-bf7c-cc78408138ba" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="c11f6fdf-c945-214d-d5a4-c25ecc46f751">
+      <Execution id="fd4edefb-6a73-4fae-99c1-2b6a3434a890" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="6de07508-86ee-a6ca-f5ea-98c87c762946">
+      <Execution id="0d0638bb-5e43-45da-8222-980a3bc9c436" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="a36de8ee-2bd5-7edd-8cac-f6bb25c4f860">
+      <Execution id="8cca2809-eab5-4ea7-9b78-ad3f8deb07cb" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;'2'&quot;, code: &quot;XPTY0004&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="40a29af0-7b03-475a-a3f9-387f55d26f3b">
+      <Execution id="257aad08-8a55-4de2-a85f-06fb84d55b80" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="d616289e-a8a5-628a-9ed8-f8c03a1de34b">
+      <Execution id="01867b88-ca59-4d23-9786-ba95de6f6a56" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e26c46cc-3b03-94c8-8f80-fe7c744cafb2">
+      <Execution id="34a023bb-1885-41a6-b1ee-33032f04876e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[[]]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="064ec645-ee1b-de66-1d4c-80c484e3db77">
+      <Execution id="be0e73be-8cd7-4d28-853b-21aafe5a241e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="a2168abd-1328-47d6-2f55-f91b00daf73b">
+      <Execution id="6d977357-4354-402e-9f7c-79063cf34102" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e5355440-6380-e1f2-a380-f6347b6532a9">
+      <Execution id="fd462c92-8775-4b05-8000-10fa90efb8e5" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath31, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="acf37cf2-64ad-089c-693c-d499af80c59d">
+      <Execution id="d72fcf66-2136-4e41-9da5-63c86416e35b" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="2d875adc-c105-2252-d6f1-5be4005f369e">
+      <Execution id="1f27515b-df5a-41b4-901c-476c7c64771f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;9223372036854775808&quot;, positive: &quot;9223372036854775808|integer&quot;, negative: &quot;-9223372036854775808|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="9fa5bfae-408f-ebba-5357-63be9191aaa1">
+      <Execution id="f6a3f544-c395-46a2-96dd-397e5a12f4bc" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;array { () }&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="8d3914c2-1ba8-196c-c8d7-5ec242b576a0">
+      <Execution id="4213750c-3917-4814-ba7e-1a3daae087d0" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;function(){1}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="64986c56-aad3-5a7b-80ed-0f26610d15ca">
+      <Execution id="e3f4699a-fbbe-4580-b9a7-59cd06e10e2e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.BackwardsCompatibleEmptyRemainsNaN(operand: &quot;[[]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="9253ac87-a1df-3da9-47c7-5bba4efa7dd1">
+      <Execution id="f9a2ab8a-b9ac-4397-a898-0cfd8578db0d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="BackwardsCompatibleEmptyRemainsNaN" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[[]]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="7cfebe1b-f326-d3d5-14eb-83264e3fefea">
+      <Execution id="48e52064-1c60-4b0d-ae4a-4281917ef74d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="061aa446-f711-b064-e3d6-e80d62726eb5">
+      <Execution id="ababbeb1-1533-4efc-9eb2-f4db11503efa" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[xs:untypedAtomic('2.5')]&quot;, positive: &quot;2.5|double&quot;, negative: &quot;-2.5|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="d422c55b-465a-5925-dd33-7d704aeb3a7e">
+      <Execution id="9192f6b7-8ebe-4be1-b5a0-71393586b7f7" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;parse-xml('&lt;n&gt;3&lt;/n&gt;')/n&quot;, positive: &quot;3|double&quot;, negative: &quot;-3|double&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="0cf8ecfc-749b-8412-ced0-f3443dab7e09">
+      <Execution id="8256ff60-8d61-4651-a93b-8e5c3cc534f0" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[(),()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="5bc78375-0aaf-faf5-861e-a297ad71c008">
+      <Execution id="87eb86b4-5561-47ab-ae3e-7592a385cf61" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[[]]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="c186c99d-43c9-9d2d-3471-990c6a3dbd53">
+      <Execution id="b3f6cfd2-0d88-4989-9fd2-69a748730e7b" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40Experimental, operand: &quot;xs:decimal('2.5')&quot;, positive: &quot;2.5|decimal&quot;, negative: &quot;-2.5|decimal&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="5b4eb0b4-46a2-3d76-4f3d-1d871966f1de">
+      <Execution id="71af1524-80ab-4634-94bd-eb8b2acd41f4" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;[xs:untypedAtomic('bad')]&quot;, code: &quot;FORG0001&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="457842a3-11a7-7513-a957-0c7a1aba585c">
+      <Execution id="b575e6d1-d7ef-4456-b6cd-39fda7a7e131" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="392b74be-5f00-dcb1-11ae-d61e4418000c">
+      <Execution id="cf106681-0edd-48b0-9827-f1f289a18939" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath40, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="a1aef1c3-ea3f-c08e-e5e3-08dd33837b75">
+      <Execution id="6668dbf9-0bbd-4446-b522-62363a082a88" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="1871da7d-5ecc-1b37-5deb-e8c69d116c03">
+      <Execution id="c59506c5-d783-4b4b-aec2-84abb2bc8ac6" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[(),()]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="dd9b86e3-1dfc-728c-ed07-143aaf37695c">
+      <Execution id="e0f7cdac-7549-4b55-b9eb-72f281c333b8" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyErrorsRemainErrors(profile: XPath31, operand: &quot;map{}&quot;, code: &quot;FOTY0013&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e13f0532-8ef3-99cc-812b-e9eb70908f20">
+      <Execution id="bc5f2955-6680-4f5f-83d0-5343932665a3" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyErrorsRemainErrors" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;()&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="69b7fe95-c31e-26d9-9f08-88794ca7e387">
+      <Execution id="bb56e36f-95de-4711-bd05-56773f82094f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: &quot;[[()]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="8d2508cd-48a2-3b46-8e6c-4b5b38a6575c">
+      <Execution id="27022627-2b50-40cf-981c-c1db7fc47d1d" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[2]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="c18ceb3f-b2be-aac6-3161-e9aeed376fb4">
+      <Execution id="e571b4c1-6c60-4ee6-992c-2413be2bcb33" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.NonemptyValuesRemainNumeric(profile: XPath40, operand: &quot;[[2]]&quot;, positive: &quot;2|integer&quot;, negative: &quot;-2|integer&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="ee0f0370-d029-8c0b-7c6f-ea241be7b444">
+      <Execution id="6013761c-a93c-40e5-9169-b2cae51f917f" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="NonemptyValuesRemainNumeric" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: &quot;[[()]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="34cb91a9-141a-0737-03f1-d489b4bd699e">
+      <Execution id="35671d4d-fef3-44cd-9ebc-6417de00c1ae" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;()&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="e9c810f7-a921-29ba-e197-ed55726c8e51">
+      <Execution id="a3d59cb4-f7a5-4e0d-b65a-2bfecd78fa6e" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+    <UnitTest name="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: &quot;[[()]]&quot;)" storage="d:\development\bosak\.guard-tmp\req126-unary-empty-source\tests\bosak.xpath.standard.tests\bin\release\net10.0\bosak.xpath.standard.tests.dll" id="8a21afa9-627b-cfbe-5b33-351e3a6fb947">
+      <Execution id="86dffdbc-c89d-440e-9fe1-4cf81793c58c" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests" name="EmptyAfterAtomizationRemainsEmpty" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="5b4eb0b4-46a2-3d76-4f3d-1d871966f1de" executionId="71af1524-80ab-4634-94bd-eb8b2acd41f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12dac005-110b-a06a-9f86-3534a643812f" executionId="1e9a14d1-d6c3-4a3c-86ab-a7d5a2e0eb17" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d2508cd-48a2-3b46-8e6c-4b5b38a6575c" executionId="27022627-2b50-40cf-981c-c1db7fc47d1d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e9c810f7-a921-29ba-e197-ed55726c8e51" executionId="a3d59cb4-f7a5-4e0d-b65a-2bfecd78fa6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="856cb027-48dd-a5a1-29c9-bfe6d17b9128" executionId="b0184e34-454a-4435-a2b5-18af601e42aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2d875adc-c105-2252-d6f1-5be4005f369e" executionId="1f27515b-df5a-41b4-901c-476c7c64771f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1820d34-13f3-3010-16b4-60e26b1f03d9" executionId="ec89efa1-3749-4011-819d-b49180f407b6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8a21afa9-627b-cfbe-5b33-351e3a6fb947" executionId="86dffdbc-c89d-440e-9fe1-4cf81793c58c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92f45e69-097f-7335-a069-5968aa06408c" executionId="ff61f2e2-a74f-4467-94e6-723c38863aaa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fadbca43-f52b-6512-c59a-0121c8699603" executionId="9b96ceb7-539f-4440-af4f-5477d1fb7489" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6de07508-86ee-a6ca-f5ea-98c87c762946" executionId="0d0638bb-5e43-45da-8222-980a3bc9c436" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e5355440-6380-e1f2-a380-f6347b6532a9" executionId="fd462c92-8775-4b05-8000-10fa90efb8e5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ea748c51-78cf-c8f7-54e2-d5f54f8abf4c" executionId="04c15337-5d5d-454f-b582-45a7b0a60a87" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9fc68451-0529-925b-260b-186860063777" executionId="2a2a86b2-68b7-4bf3-85e1-17390584ba5c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9648f8c1-b0b3-fbf6-6a16-1220e0bf12f5" executionId="dca0b475-1797-4473-89f2-485a2052ebfa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9fa5bfae-408f-ebba-5357-63be9191aaa1" executionId="f6a3f544-c395-46a2-96dd-397e5a12f4bc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ee0f0370-d029-8c0b-7c6f-ea241be7b444" executionId="6013761c-a93c-40e5-9169-b2cae51f917f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="457842a3-11a7-7513-a957-0c7a1aba585c" executionId="b575e6d1-d7ef-4456-b6cd-39fda7a7e131" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f0be3643-5b71-3257-763f-e3d3e9775142" executionId="b847d067-9e01-47a3-a1bc-b390249d97e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1871da7d-5ecc-1b37-5deb-e8c69d116c03" executionId="c59506c5-d783-4b4b-aec2-84abb2bc8ac6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a36de8ee-2bd5-7edd-8cac-f6bb25c4f860" executionId="8cca2809-eab5-4ea7-9b78-ad3f8deb07cb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8d3914c2-1ba8-196c-c8d7-5ec242b576a0" executionId="4213750c-3917-4814-ba7e-1a3daae087d0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="dd9b86e3-1dfc-728c-ed07-143aaf37695c" executionId="e0f7cdac-7549-4b55-b9eb-72f281c333b8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9ba7afc8-5dfb-8188-fe6b-047fc222a256" executionId="1db31910-a40c-4eb1-878a-00a933080548" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a2168abd-1328-47d6-2f55-f91b00daf73b" executionId="6d977357-4354-402e-9f7c-79063cf34102" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7cfebe1b-f326-d3d5-14eb-83264e3fefea" executionId="48e52064-1c60-4b0d-ae4a-4281917ef74d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c11f6fdf-c945-214d-d5a4-c25ecc46f751" executionId="fd4edefb-6a73-4fae-99c1-2b6a3434a890" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="34cb91a9-141a-0737-03f1-d489b4bd699e" executionId="35671d4d-fef3-44cd-9ebc-6417de00c1ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a1aef1c3-ea3f-c08e-e5e3-08dd33837b75" executionId="6668dbf9-0bbd-4446-b522-62363a082a88" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9253ac87-a1df-3da9-47c7-5bba4efa7dd1" executionId="f9a2ab8a-b9ac-4397-a898-0cfd8578db0d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8c5f98e3-ac1b-35fa-6cde-81b321330736" executionId="f6e21c7c-870d-4e54-b354-da8b9922d31e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="57e17fc7-b5b8-1ea9-7d8c-f61fc8c9f438" executionId="b3343df7-1928-4432-9f95-b745870910eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e26c46cc-3b03-94c8-8f80-fe7c744cafb2" executionId="34a023bb-1885-41a6-b1ee-33032f04876e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8536a36e-2305-fbac-ac2a-ec3c6d92e179" executionId="20433dd5-d92c-4eff-bc25-286f9eeb7ed5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2229e99-f67b-a17d-aab4-49ed5760e577" executionId="e77723d4-0431-4602-a237-e34e64030d9d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="64986c56-aad3-5a7b-80ed-0f26610d15ca" executionId="e3f4699a-fbbe-4580-b9a7-59cd06e10e2e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="40a29af0-7b03-475a-a3f9-387f55d26f3b" executionId="257aad08-8a55-4de2-a85f-06fb84d55b80" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acf37cf2-64ad-089c-693c-d499af80c59d" executionId="d72fcf66-2136-4e41-9da5-63c86416e35b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0e35d42d-0485-8e6a-f8b7-8bd6c2ca8d47" executionId="28668274-fbbb-49f6-8d34-9e73d3ac6888" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="297ade11-ba86-9d6b-ec65-7e8959f23119" executionId="92081cbe-cceb-47c7-9ad8-7b13881f5b0d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="061aa446-f711-b064-e3d6-e80d62726eb5" executionId="ababbeb1-1533-4efc-9eb2-f4db11503efa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eed5bf58-c747-6373-5150-c2a8d083e856" executionId="5a8ab051-37c9-4e3b-9aa3-6b685ec3e3fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="454ecd9e-199d-b8b8-98fa-508a97637775" executionId="dd6c3ae8-06a6-4187-b03c-c81eaee38ac9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="baff3908-49fc-b3d9-f801-b22d7c225334" executionId="363bf521-15d2-4dc1-b6c5-83587a47fb39" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5f1a71ab-7d3c-9d4f-d4d6-f64b8438e12d" executionId="2ca5bef0-1796-4f10-831c-3e25caed9b89" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1d6092e-39d0-d0dc-5f92-371ae31178e3" executionId="d029e32b-c867-4198-a242-55a3fe19e8d1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6b39a88e-91e2-33c8-328d-28a1044538e1" executionId="14c1a5bd-6eb2-48e9-917a-caf7b0b1c6cf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c186c99d-43c9-9d2d-3471-990c6a3dbd53" executionId="b3f6cfd2-0d88-4989-9fd2-69a748730e7b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="064ec645-ee1b-de66-1d4c-80c484e3db77" executionId="be0e73be-8cd7-4d28-853b-21aafe5a241e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e13f0532-8ef3-99cc-812b-e9eb70908f20" executionId="bc5f2955-6680-4f5f-83d0-5343932665a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d8827ccd-750d-1f10-f9fe-ef9e76f23398" executionId="9985b178-e480-48bd-83a0-5942e660a3d5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d616289e-a8a5-628a-9ed8-f8c03a1de34b" executionId="01867b88-ca59-4d23-9786-ba95de6f6a56" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0cf8ecfc-749b-8412-ced0-f3443dab7e09" executionId="8256ff60-8d61-4651-a93b-8e5c3cc534f0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="eba0b16a-73ee-00c3-5090-21521f30f262" executionId="d585c28b-4551-46e3-8440-6f39e8a5ce27" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="05ed9db9-da6b-c936-92e4-eb896559c3d9" executionId="1a9e0db1-13bd-435d-98f3-2602374c3e54" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d422c55b-465a-5925-dd33-7d704aeb3a7e" executionId="9192f6b7-8ebe-4be1-b5a0-71393586b7f7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e3bbea41-7253-5a86-960b-ac0d57363f77" executionId="11376a9f-548b-4db4-a96a-9a7f7b56fe96" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3870f410-0ff6-a2d1-eb48-b47bc3f08aed" executionId="b5f6250a-def1-490e-8638-619f79d25941" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="392b74be-5f00-dcb1-11ae-d61e4418000c" executionId="cf106681-0edd-48b0-9827-f1f289a18939" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bc78375-0aaf-faf5-861e-a297ad71c008" executionId="87eb86b4-5561-47ab-ae3e-7592a385cf61" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="482ad3f4-b5ef-3041-f6dc-e737c5e60fdb" executionId="2f3b65e6-4528-428a-bf7c-cc78408138ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c18ceb3f-b2be-aac6-3161-e9aeed376fb4" executionId="e571b4c1-6c60-4ee6-992c-2413be2bcb33" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="69b7fe95-c31e-26d9-9f08-88794ca7e387" executionId="bb56e36f-95de-4711-bd05-56773f82094f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6afb3397-d0fa-dd8c-5ecd-c4e22d5d0985" executionId="10c8d148-ae28-4f4c-91d6-c42db9a74abe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="64" executed="64" passed="43" failed="21" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.47]   Discovering: Bosak.XPath.Standard.Tests&#xD;
+[xUnit.net 00:00:00.62]   Discovered:  Bosak.XPath.Standard.Tests&#xD;
+[xUnit.net 00:00:00.62]   Starting:    Bosak.XPath.Standard.Tests&#xD;
+[xUnit.net 00:00:01.45]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.45]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.45]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.45]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.45]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.45]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.45]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.45]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.45]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.45]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.45]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.45]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.47]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.47]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.47]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.47]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.47]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.47]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.47]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.47]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.47]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.47]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.47]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.47]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.47]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.47]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.48]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.48]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.48]       System.InvalidOperationException : XPTY0004: Cannot convert Undefined to integer&#xD;
+[xUnit.net 00:00:01.48]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(15842,0): at Bosak.XPath.Runtime.Vm.VmEngine.ToInteger(XdmValue value)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(7734,0): at Bosak.XPath.Runtime.Vm.VmEngine.Negate(XdmValue value, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(3201,0): at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Runtime\Vm\VmEngine.cs(467,0): at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\src\Bosak.XPath.Api\XPath31Expression.cs(862,0): at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(128,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.Evaluate(String source, XPathCompatibility profile)&#xD;
+[xUnit.net 00:00:01.48]         D:\Development\Bosak\.guard-tmp\req126-unary-empty-source\tests\Bosak.XPath.Standard.Tests\UnaryEmptyAtomizationTests.cs(47,0): at Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(XPathCompatibility profile, String operand)&#xD;
+[xUnit.net 00:00:01.48]            at InvokeStub_UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.48]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.48]   Finished:    Bosak.XPath.Standard.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6307788+01:00">
+        <Text>[xUnit.net 00:00:01.45]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[[()]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6309544+01:00">
+        <Text>[xUnit.net 00:00:01.45]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[(),()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6309806+01:00">
+        <Text>[xUnit.net 00:00:01.45]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6310067+01:00">
+        <Text>[xUnit.net 00:00:01.45]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[(),()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6310286+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6310775+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "array { () }") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6311088+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6311301+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[[]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6326896+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "array { () }") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6327195+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "array { () }") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6327395+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[[()]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6327674+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[[[]]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6328046+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[[[]]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6328272+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6329448+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[(),()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6330450+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath31, operand: "[[[]]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6364989+01:00">
+        <Text>[xUnit.net 00:00:01.47]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[()]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6367019+01:00">
+        <Text>[xUnit.net 00:00:01.47]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40Experimental, operand: "[[]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6384965+01:00">
+        <Text>[xUnit.net 00:00:01.47]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[[]]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6400062+01:00">
+        <Text>[xUnit.net 00:00:01.47]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[]") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-25T12:25:02.6414996+01:00">
+        <Text>[xUnit.net 00:00:01.48]     Bosak.XPath.Standard.Tests.UnaryEmptyAtomizationTests.EmptyAfterAtomizationRemainsEmpty(profile: XPath40, operand: "[[()]]") [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

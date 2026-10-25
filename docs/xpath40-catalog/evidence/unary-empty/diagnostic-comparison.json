@@ -1,0 +1,91 @@
+{
+  "observations": 36,
+  "correctedEmptyResults": 21,
+  "unchangedControlsAndSeparateFindings": 15,
+  "changed": [
+    {
+      "profile": "XPath31",
+      "expression": "count(-[])"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count(-[()])"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count(-[[]])"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count(-[[()]])"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count(-(-[]))"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count((function($x){-$x})([]))"
+    },
+    {
+      "profile": "XPath31",
+      "expression": "count(-[(),()])"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-[])"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-[()])"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-[[]])"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-[[()]])"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-(-[]))"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count((function($x){-$x})([]))"
+    },
+    {
+      "profile": "XPath40",
+      "expression": "count(-[(),()])"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-[])"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-[()])"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-[[]])"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-[[()]])"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-(-[]))"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count((function($x){-$x})([]))"
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "count(-[(),()])"
+    }
+  ]
+}

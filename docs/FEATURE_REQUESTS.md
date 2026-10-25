@@ -7,6 +7,9 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**Empty unary atomization correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-EMPTY-ATOMIZATION.md) return empty after unary-minus atomization instead of converting an empty atomic result to integer. Adds 64 cases (21 failed before; all pass after), with 12,343 solution/LSP passes and unchanged frozen gates. Source remains unpublished 1.26.1; public/Braid-validation 1.26.0 stays separate. Shared recursive-array cardinality remains an explicit follow-up; REQ-126 stays partial.
+
+
 **Repeated unary conversion correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-COERCION.md) remove unsafe double-negation elimination, preserving atomization, untyped-to-double conversion, numeric normalization and required errors. Adds 79 regressions (46 failed before; all pass after). All 12,279 solution/LSP tests and unchanged frozen gates pass. Source 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains separate. REQ-126 stays partial.
 
 

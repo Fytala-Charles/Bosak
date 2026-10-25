@@ -426,6 +426,7 @@
 //                      | Charles Korthout | 2.199 | 25-10-2026     | Preserve integer identity and promote minimum-value unary negation without wraparound.     |
 //                      | Charles Korthout | 2.200 | 25-10-2026     | Preserve integer modulo identity and return zero for Int64 minimum modulo negative one.    |
 //                      | Charles Korthout | 2.201 | 25-10-2026     | Truncate decimal-backed idiv exactly before checking existing Int64 result bounds.         |
+//                      | Charles Korthout | 2.202 | 25-10-2026     | Preserve an empty atomized operand before numeric unary negation.                           |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -7708,6 +7709,9 @@ internal static class VmEngine
         // The operand is atomized first (XPTY0004 for a multi-item sequence): unary
         // minus on a node yields the negated typed value, not a node.
         value = Atomize(value);
+        // An array can be nonempty as an item while its atomized value is empty.
+        if (IsEmptySequence(value))
+            return XdmValue.Undefined;
 
         if (value.Kind == XdmValueKind.Duration)
         {

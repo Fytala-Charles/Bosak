@@ -1,3 +1,9 @@
+## REQ-126 empty unary atomization correction - 25 October 2026
+
+Base `d89b50e8223cec9913a8c41c9cef8c870bb6228a` (PR455 merged after all three CI checks passed; 12,279 tests). **Empty unary atomization correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-EMPTY-ATOMIZATION.md) return empty after unary-minus atomization instead of converting an empty atomic result to integer. Adds 64 cases (21 failed before; all pass after), with 12,343 solution/LSP passes and unchanged frozen gates. Source remains unpublished 1.26.1; public/Braid-validation 1.26.0 stays separate. Shared recursive-array cardinality remains an explicit follow-up; REQ-126 stays partial.
+
+What was built: one post-atomization empty guard in Negate, 64 source regressions and a 36-observation before/after comparison. All 12,259 solution +84 LSP tests pass; mandatory frozen gates unchanged. Original failing TRX and raw evidence retained. Existing unpublished patch 1.26.1; no version/publication/API/fixture/gate/kit change. Next: review this correction, then shared recursive-array caller/cardinality audit. Braid 1.26.0 validation, upstream notes, retained stashes, sweep baselines and protected PR132 remain separate and preserved. README installation commands remain current.
+
 ## REQ-126 repeated unary conversion correction - 25 October 2026
 
 Base `352622aa807760fc27e446f4f3656eb00a1b956b` (PR454 merged; public 1.26.0). **Repeated unary conversion correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-COERCION.md) remove unsafe double-negation elimination, preserving atomization, untyped-to-double conversion, numeric normalization and required errors. Adds 79 regressions (46 failed before; all pass after). All 12,279 solution/LSP tests and unchanged frozen gates pass. Source 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains separate. REQ-126 stays partial.

@@ -1,3 +1,5 @@
+25 October 2026: nine REQ-126 empty unary atomization/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Receipt/source hashes, links and diff checked; no screenshot/PDF acceptance.
+
 25 October 2026: REQ-126 unary conversion guide and updated canonical/catalog/history pages rendered as HTML with markdown-it and unchanged Fytala CSS. Receipt hashes, local links and diff checked; no screenshot/PDF acceptance.
 
 25 October 2026: twelve 1.26.0 publication/release/API/canonical/catalog pages rendered as HTML using markdown-it and unchanged Fytala CSS; receipt hashes and local links checked. No screenshot/PDF acceptance.

@@ -1,0 +1,11 @@
+{
+  "base": "d89b50e8223cec9913a8c41c9cef8c870bb6228a",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "cases": 64,
+  "emptyModern": 24,
+  "nonemptyModernValues": 18,
+  "nonemptyModernErrors": 18,
+  "backwardCompatible": 4,
+  "separateSharedAtomizationFinding": "[[],2] still fails before unary handling; no shared flattening change proposed here."
+}

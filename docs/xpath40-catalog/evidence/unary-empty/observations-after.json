@@ -1,0 +1,224 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "count(-[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(-[()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(-[[]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(-[[()]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(\u002B[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(-(-[]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count((function($x){-$x})([]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "-[2]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "-[[2]]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "-[1,2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "count(-[(),()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "-[[],2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-[()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-[[]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-[[()]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(\u002B[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-(-[]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count((function($x){-$x})([]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "-[2]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "-[[2]]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "-[1,2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "count(-[(),()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "-[[],2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-[()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-[[]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-[[()]])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(\u002B[])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-(-[]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count((function($x){-$x})([]))",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "-[2]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "-[[2]]",
+    "value": "-2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "-[1,2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "count(-[(),()])",
+    "value": "0",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "-[[],2]",
+    "value": null,
+    "error": "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with 2 items",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]
