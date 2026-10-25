@@ -27,6 +27,8 @@
 
 //                      | Charles Korthout | 1.0   | 20-10-2026     | REQ-135: advertise complete literal attribute lifecycle.                                 |
 
+//                      | Charles Korthout | 1.3   | 25-10-2026     | REQ-138: advertise coordinated operations and independent resource bounds. |
+
 using System.Reflection;
 
 //                      | Charles Korthout | 1.1   | 23-10-2026     | REQ-136: independent lifecycle capabilities and bounds. |
@@ -55,6 +57,37 @@ public enum AuthoringFidelityMode
 /// </summary>
 public static class AuthoringCapabilities
 {
+    /// <summary>Gets whether the bounded conditional Wrap operation is implemented.</summary>
+    public static bool SupportsConditionalWrapping => true;
+    /// <summary>Gets whether independent conditional Unwrap is implemented.</summary>
+    public static bool SupportsConditionalUnwrapping => true;
+    /// <summary>Gets whether the cancellable restricted expression overload is implemented.</summary>
+    public static bool SupportsBoundedExpressionSlotReplacement => true;
+    /// <summary>Gets the dependency-free Legacy-host conditional lifecycle profile.</summary>
+    public static string ConditionalWrapperProfile => "ConditionalLiteralLifecycleV1";
+    /// <summary>Gets the separately advertised restricted expression profile.</summary>
+    public static string BoundedExpressionSlotReplacementProfile => "BoundedPrincipalExpressionV1";
+    /// <summary>Gets the independent original and candidate physical byte bound.</summary>
+    public static int MaxConditionalSourceBytes => 8388608;
+    /// <summary>Gets the condition UTF-16 unit bound.</summary>
+    public static int MaxConditionalConditionUnits => 65536;
+    /// <summary>Gets the encoded escaped condition byte bound.</summary>
+    public static int MaxConditionalEscapedConditionBytes => 1048576;
+    /// <summary>Gets the selected prefix UTF-16 unit bound.</summary>
+    public static int MaxConditionalPrefixUnits => 256;
+    /// <summary>Gets the combined encoded opening and closing markup bound.</summary>
+    public static int MaxConditionalMarkupBytes => 1052672;
+    /// <summary>Gets each graph descriptor bound.</summary>
+    public static int MaxConditionalNodes => 65536;
+    /// <summary>Gets each graph attribute bound.</summary>
+    public static int MaxConditionalAttributes => 65536;
+    /// <summary>Gets the maximum descriptor depth.</summary>
+    public static int MaxConditionalDepth => 256;
+    /// <summary>Gets the cumulative complete copied evidence budget.</summary>
+    public static int MaxConditionalEvidenceBytes => 33554432;
+    /// <summary>Gets strict encodings shared by conditional and bounded expression profiles; UTF-16 requires BOM.</summary>
+    public static IReadOnlyList<string> ConditionalWrapperSupportedEncodings { get; } = Array.AsReadOnly(new[] { "UTF-8", "UTF-16LE", "UTF-16BE" });
+
     /// <summary>Gets whether bounded direction-bound adjacent literal element exchanges are supported.</summary>
     public static bool SupportsLiteralElementReordering => true;
     /// <summary>Gets the independent original and candidate physical byte bound for reordering.</summary>
@@ -159,7 +192,7 @@ public static class AuthoringCapabilities
     public static bool SupportsInspection => true;
 
     /// <summary>
-    /// Gets whether expression-slot replacement is supported: <see cref="AuthoringSnapshot.ProposeExpressionEdit"/>
+    /// Gets whether expression-slot replacement is supported: <see cref="AuthoringSnapshot.ProposeExpressionEdit(AuthoringEditProposal)"/>
     /// accepts proposals targeting attributes classified as <see cref="AuthoringAttributeSlotKind.Expression"/>.
     /// </summary>
     public static bool SupportsExpressionSlotReplacement => true;

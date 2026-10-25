@@ -18,6 +18,8 @@
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.5   | 25-10-2026     | REQ-138: append bounded editor refusals without renumbering. |
+
 using Bosak.Xslt.Api;
 
 namespace Bosak.Xslt.Authoring;
@@ -88,6 +90,24 @@ public enum AuthoringEditFailureKind
 
     /// <summary>The escaped edit cannot be encoded in the module's declared encoding.</summary>
     NotRepresentableInEncoding,
+    /// <summary>Bounded proposal cancellation was requested.</summary>
+    Cancelled,
+
+    /// <summary>An independent bounded-profile resource limit was exceeded.</summary>
+    SizeLimit,
+
+    /// <summary>The module or slot is outside the restricted profile.</summary>
+    UnsupportedProfile,
+
+    /// <summary>The original restricted module does not validate.</summary>
+    InvalidOriginal,
+
+    /// <summary>The candidate restricted module does not validate.</summary>
+    InvalidCandidate,
+
+    /// <summary>Complete descriptor and per-owner attribute correspondence was not proved.</summary>
+    UnsupportedCorrespondence,
+
 }
 
 /// <summary>
@@ -130,7 +150,7 @@ public sealed class AuthoringEditFailure
 }
 
 /// <summary>
-/// The outcome of <see cref="AuthoringSnapshot.ProposeExpressionEdit"/>: exactly one of
+/// The outcome of <see cref="AuthoringSnapshot.ProposeExpressionEdit(AuthoringEditProposal)"/>: exactly one of
 /// <see cref="Candidate"/> or <see cref="Failure"/> is non-null. Instances are immutable.
 /// </summary>
 /// <remarks>
@@ -236,14 +256,18 @@ public sealed class AuthoringChangedSlot
 /// </summary>
 public sealed class AuthoringEditCandidate
 {
+    private readonly ReadOnlyMemory<byte> _emittedSource;
+    private readonly bool _defensiveExports;
+
     internal AuthoringEditCandidate(
         ReadOnlyMemory<byte> emittedSource,
         IReadOnlyList<SourceRange> affectedRanges,
         AuthoringSnapshot snapshot,
         IReadOnlyDictionary<int, int> nodeCorrespondence,
-        AuthoringChangedSlot changedSlot)
+        AuthoringChangedSlot changedSlot, bool defensiveExports = false)
     {
-        EmittedSource = emittedSource;
+        _defensiveExports = defensiveExports;
+        _emittedSource = defensiveExports ? emittedSource.ToArray() : emittedSource;
         AffectedRanges = affectedRanges;
         Snapshot = snapshot;
         NodeCorrespondence = nodeCorrespondence;
@@ -251,7 +275,7 @@ public sealed class AuthoringEditCandidate
     }
 
     /// <summary>Gets the emitted bytes of the principal module: original bytes with only the affected range spliced.</summary>
-    public ReadOnlyMemory<byte> EmittedSource { get; }
+    public ReadOnlyMemory<byte> EmittedSource => _defensiveExports ? _emittedSource.ToArray() : _emittedSource;
 
     /// <summary>Gets the source ranges affected by the edit (the replaced attribute value range).</summary>
     public IReadOnlyList<SourceRange> AffectedRanges { get; }

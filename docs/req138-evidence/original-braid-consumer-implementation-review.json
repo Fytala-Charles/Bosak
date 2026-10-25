@@ -1,0 +1,34 @@
+{
+  "head": "417482421343d72496d0f2dedcd45cfb1f463207",
+  "implementationSource": "5e268552cfd241262ade266ab00fc716591b48cd",
+  "sourceManifestVerified": [
+    "src/Bosak.Xslt/Authoring/AuthoringCapabilities.cs",
+    "src/Bosak.Xslt/Authoring/AuthoringConditionalWrapper.cs",
+    "src/Bosak.Xslt/Authoring/AuthoringEdit.cs",
+    "src/Bosak.Xslt/Authoring/AuthoringSnapshot.cs",
+    "src/Bosak.Xslt/Authoring/BoundedExpressionEditPipeline.cs",
+    "src/Bosak.Xslt/Authoring/ConditionalProof.cs",
+    "src/Bosak.Xslt/Authoring/ConditionalWrapperPipeline.cs",
+    "src/Bosak.Xslt/Authoring/ExpressionEditPipeline.cs",
+    "src/Directory.Build.props",
+    "tests/Bosak.Xslt.Tests/Authoring/AuthoringConditionalWrapperTests.cs"
+  ],
+  "retainedDesignReviewSha256": "344936fc73a0faf5a36bca9f4920fd5703b24298203b2192e62a7001e71e12b6",
+  "scopeGitSha256": "e6913368245aa644b719e3242a9014ca27e5d0dbe91bd70b0e7fe74438c29fcd",
+  "localResults": [
+    {
+      "file": "authoring.trx",
+      "passed": 1364,
+      "sha256": "ccf81c5a3316615ce20538e2432ef014ff82f9cc1923dbad3ae24680956d7655"
+    },
+    {
+      "file": "consumer.trx",
+      "passed": 968,
+      "sha256": "f8d4b6c39c1a6286435b162bf735b8bb34d7dd14df716424dfdecfd68585dcc5"
+    }
+  ],
+  "upstreamFocusedPassed": 57,
+  "adoptedBraidVersion": "1.25.1",
+  "candidateVersion": "1.26.0 unpublished",
+  "packageVerificationPerformed": false
+}

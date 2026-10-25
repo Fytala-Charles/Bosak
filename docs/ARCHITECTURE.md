@@ -9,6 +9,14 @@
 
 **1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
 
+**REQ-138 consumer implementation review - 25 October 2026:** [Retained Braid review](req138-evidence/original-braid-consumer-implementation-review.md) found no blocking implementation findings at `417482421343d72496d0f2dedcd45cfb1f463207`. Its 1,364 authoring and 968 external consumer passes were independently executed by Braid; raw TRX hashes/counters are [verified](req138-evidence/consumer-implementation-review-verification.json), and overlapping counts are not added. Both documentation nits are corrected. REQ-138 is **In progress**; source **1.26.0** remains unpublished. Next: owner merge/release decisions, followed by signed-package verification, Braid integration and native acceptance. Numeric 1.25.2 remains a separate pinned candidate.
+
+Historical implementation preparation checkpoint:
+
+**REQ-138 implementation prepared - 25 October 2026:** [API and proof guide](REQ-138-IMPLEMENTATION.md) implements coordinated Wrap/Edit condition/Unwrap against reviewed design `35f259ff24bd43c8e5b9927e4f62e38c9fcfef23`. [Braid design review](req138-evidence/original-braid-consumer-design-review.md) found no blockers; the owner separately approved implementation. Source version **1.26.0**, unpublished; exact-head consumer implementation review is next. REQ-138 remains **In progress**. Numeric 1.25.2 candidate/source/publication decisions remain separate.
+
+Historical design checkpoint: the original proposal below and its exact reviewed scope remain preserved.
+
 **Exact idiv truncation — 25 October 2026:** [Correction and evidence](xpath40-catalog/EXACT-IDIV.md) compute exact decimal-backed quotients before applying the existing Int64 bounds. Adds 132 direct/runtime regressions (48 failed before, all pass after); all 96 oracle observations now match the exact reference/range policy. FOAR0001/FOAR0002 codes, other dispatch and storage bounds remain intact. Source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
 
 

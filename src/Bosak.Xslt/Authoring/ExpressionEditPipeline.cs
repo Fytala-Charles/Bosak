@@ -19,13 +19,15 @@
 //                      | Charles Korthout | 0.5   | 14-10-2026     | Compile supported edits with captured optional host signatures.                          |
 // ===========================================================================================================================================================
 
+//                      | Charles Korthout | 0.6   | 25-10-2026     | REQ-138: share existing expression validation and escaping with bounded proposals. |
+
 using System.Text;
 using Bosak.XPath.Api;
 
 namespace Bosak.Xslt.Authoring;
 
 /// <summary>
-/// The engine behind <see cref="AuthoringSnapshot.ProposeExpressionEdit"/>. Validates the proposal
+/// The engine behind <see cref="AuthoringSnapshot.ProposeExpressionEdit(AuthoringEditProposal)"/>. Validates the proposal
 /// against the input snapshot, compiles the new expression in the slot's real static context, escapes
 /// and encodes it under the module's declared encoding, splices only the attribute-value byte span of
 /// the retained original bytes, re-inspects the emitted bytes with the snapshot's own resolver and
@@ -166,12 +168,12 @@ internal static class ExpressionEditPipeline
             changedSlot));
     }
 
-    private static AuthoringEditResult? ValidateInStaticContext(
+    internal static AuthoringEditResult? ValidateInStaticContext(
         AuthoringSnapshot snapshot,
         string newExpressionText,
         AuthoringAttributeDescriptor attribute,
         AuthoringNodeDescriptor node,
-        SourceCoordinateMap map)
+        SourceCoordinateMap map, bool expectedFailuresOnly = false)
     {
         var context = attribute.SlotContext!;
         var compatibility = Stylesheet.Stylesheet.GetXPathCompatibility(context.EffectiveVersion);
@@ -234,7 +236,8 @@ internal static class ExpressionEditPipeline
                 attribute.ValueRange,
                 StartTagRange(map, node)));
         }
-        catch (Exception ex)
+        catch (Exception ex) when (!expectedFailuresOnly || ex is Bosak.XPath.Parser.XPathParseException
+            || ex is InvalidOperationException && System.Text.RegularExpressions.Regex.IsMatch(ex.Message, @"\b(?:XT|XP|XQ|FO)[A-Z]{2}[0-9]{4}\b"))
         {
             return AuthoringEditResult.FailureResult(new AuthoringEditFailure(
                 AuthoringEditFailureKind.ExpressionParseError,
@@ -253,7 +256,7 @@ internal static class ExpressionEditPipeline
         return map.RangeFromCharOffsets(elementStart, startTagEnd);
     }
 
-    private static string EscapeAttributeValue(string value, char quote)
+    internal static string EscapeAttributeValue(string value, char quote)
     {
         var escaped = value.Replace("&", "&amp;").Replace("<", "&lt;");
         return quote == '"'

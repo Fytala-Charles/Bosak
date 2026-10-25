@@ -99,3 +99,11 @@ docs/xpath40-catalog/evidence/idiv-precision-audit/*.txt -text whitespace=cr-at-
 docs/xpath40-catalog/evidence/exact-idiv/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/release-evidence/1.25.2/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+/docs/REQ-138-conditional-wrapper-authoring.md -text whitespace=cr-at-eol
+/docs/req138-evidence/original-braid-*.md -text whitespace=cr-at-eol
+
+/docs/req138-evidence/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+/docs/req138-evidence/*.trx -text whitespace=cr-at-eol,-blank-at-eof
+
+/docs/req138-evidence/original-braid-*.json -text whitespace=cr-at-eol

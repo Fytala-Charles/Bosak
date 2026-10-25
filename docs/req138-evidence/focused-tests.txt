@@ -1,0 +1,5 @@
+Test run for D:\Development\Bosak\.guard-tmp\req138-implementation-source\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\req138-evidence\reviewed-source-focused\charl_CHARLES_2026-10-25_10_09_40_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    57, Skipped:     0, Total:    57, Duration: 5 s - Bosak.Xslt.Tests.dll (net10.0)
