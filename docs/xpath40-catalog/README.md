@@ -5,6 +5,9 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Integer division precision audit — 25 October 2026:** [Evidence and proposed scope](IDIV-PRECISION-AUDIT.md) add 48 result-range controls and 96 exact-rational comparisons, exposing 48 in-range one-unit discrepancies while documenting precision qualifications. Recommend exact truncation for existing decimal-backed operands with the current Int64 result bounds preserved. Engine/version unchanged; source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
+
+
 **Integer modulo correction — 25 October 2026:** [Behavior and evidence](INTEGER-MODULO.md) return integer zero for Int64 minimum modulo -1 and preserve integer identity for decimal-backed remainders. Adds 84 direct/runtime regression cases (45 failed before, all pass after). Genuine decimal/floating policies and `idiv` remain unchanged. Source 1.25.2 unpublished/public 1.25.1; REQ-126 stays partial.
 
 

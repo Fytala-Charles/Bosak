@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-25",
+  "base": "40555175ef59a826994bc8f6d29c35018837eeaf",
+  "sourceVersion": "1.25.2",
+  "publicVersion": "1.25.1",
+  "engineSourceTree": "23f57553b4d5eeeac54d7a2c859c7fd23f8c6f98",
+  "engineHarnessFixturesUnchanged": true,
+  "manualGateEvidence": "Inherited exact unchanged PR447 engine/harness source; gates not rerun in this test-only investigation",
+  "gateTotals": {
+    "qt3": "31142/0/679",
+    "frozenQt4": "8436/0/1894",
+    "configuredAndExecutedSets": 224,
+    "existingExperimentalFallbackPasses": 11,
+    "currentNativeUnix": "22/2/0 exit2 under frozen runner"
+  },
+  "unitTests": {
+    "focused": {
+      "total": 48,
+      "passed": 48,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "full": {
+      "total": 11927,
+      "passed": 11927,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "lsp": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  "newRangeControls": 48,
+  "observedRecordsPerRun": 96,
+  "repeatedObservationsEqual": true,
+  "referenceMatches": 48,
+  "inRangePrecisionDiscrepancies": 48,
+  "discrepanciesOneAwayFromExactTruncation": true,
+  "precisionQualificationsExplicit": true,
+  "mathematicalComparisonIsNotConformancePassFail": true,
+  "versionChanged": false,
+  "releasePerformed": false,
+  "recommendedNextContract": [
+    "Exact truncation using existing decimal/integer coefficients and scales",
+    "Retain inclusive Int64 minimum/maximum result bounds and FOAR0002 outside",
+    "Retain FOAR0001 zero-divisor precedence",
+    "Keep float/double, untyped-atomic and backwards-compatible dispatch unchanged",
+    "Keep public APIs, XDM storage, ordinary div, modulo and generic precision policy unchanged"
+  ],
+  "evidenceHashes": {
+    "diagnostics-merged.json": "6aa1eaa761f5ddbeb8b80029b1f4d741f34624b630e5d38ce7c464a9c573b921",
+    "diagnostics-original.json": "6aa1eaa761f5ddbeb8b80029b1f4d741f34624b630e5d38ce7c464a9c573b921",
+    "expressions.json": "6a65087ddc2991f52f8fb9bac788769dc96c10daf037cfd3561ccf91fdf54d8b",
+    "inherited-modulo-gates.json": "45d1683a87e23e314749124cb5e1ca0433ac183a683ecf79b06466a3374d73d0",
+    "oracle-comparator.txt": "88e6ac9391c57f3cbdef782fca9aa4f7566e916ea7e68f70a055e4ceac509ad4",
+    "oracle-comparison-merged.json": "c9d3cded6a06a13eefceddce5879eb2aaaaad26111e7e13090b3e337b070f12c",
+    "oracle-comparison-original.json": "c9d3cded6a06a13eefceddce5879eb2aaaaad26111e7e13090b3e337b070f12c",
+    "oracle-generator.txt": "1dc1ddad26fc15bd9368c9131f288a0beb60e7a966c9476da851bce63a4106aa",
+    "oracle-inputs.json": "de0a3da1c76b4741a5e427058bce9f77a54f71f3e255209f4857545ee9daa3e4",
+    "probe-project.txt": "d282ed2cc53546ce519dffe9f332b5ac93427ea6f8ad1f7cee02920d15c76e09",
+    "probe-source.txt": "c4956c481eddd709cb3c750f2565212a7cfac9d580264fbc215a818a50605339",
+    "test-receipts.json": "e140cb635c97705ef346846b16c027e864a595a5dba4289cc0211cdf75abfbd0"
+  }
+}

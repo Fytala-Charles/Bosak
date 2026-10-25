@@ -1,0 +1,22 @@
+from pathlib import Path
+from fractions import Fraction
+import json
+t=Path('D:/Development/Bosak/.guard-tmp');e=t/'req126-idiv-audit-evidence';p=e/'probe';p.mkdir(exist_ok=True)
+old=t/'req126-modulo-evidence/probe'
+(p/'Program.cs').write_bytes((old/'Program.cs').read_bytes())
+(p/'Probe.csproj').write_text((old/'Probe.csproj').read_text(encoding='utf-8'),encoding='utf-8')
+m=79228162514264337593543950335
+pairs=[('integer',str(m-1),str(m)),('integer',str(m-2),str(m//2)),('integer',str(m-1),str(m//3)),('integer','9223372036854775808','1'),('integer','9223372036854775808','2'),('decimal','7.9228162514264337593543950334','7.9228162514264337593543950335'),('decimal','9223372036854775807.9','1'),('decimal','9223372036854775808.9','1')]
+rows=[]
+for kind,left,right in pairs:
+ for sa,sb in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+  a=('-' if sa<0 else '')+left;b=('-' if sb<0 else '')+right
+  quotient=Fraction(a)/Fraction(b);q=abs(quotient.numerator)//quotient.denominator
+  if quotient<0:q=-q
+  inside=-(2**63)<=q<2**63
+  operand=lambda x:"xs:decimal('"+x+"')" if kind=='decimal' else '('+x+')'
+  expression='let $v := ('+operand(a)+' idiv '+operand(b)+") return concat(string($v),'|',$v instance of xs:integer)"
+  rows.append(dict(kind=kind,dividend=a,divisor=b,expression=expression,exactTruncatedQuotient=str(q),withinInt64=inside,policyExpected=(str(q)+'|true') if inside else 'FOAR0002'))
+(e/'oracle-inputs.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+(e/'expressions.json').write_text(json.dumps([row['expression'] for row in rows],indent=2)+'\n',encoding='utf-8')
+print('Prepared 32 exact-rational oracle inputs, evaluated under three profiles (96 observations).')

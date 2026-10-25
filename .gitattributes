@@ -93,3 +93,5 @@ docs/xpath40-catalog/evidence/integer-unary/*.txt -text whitespace=cr-at-eol,-bl
 docs/xpath40-catalog/evidence/division-modulo-audit/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/xpath40-catalog/evidence/integer-modulo/*.txt -text whitespace=cr-at-eol,-blank-at-eof
+
+docs/xpath40-catalog/evidence/idiv-precision-audit/*.txt -text whitespace=cr-at-eol,-blank-at-eof

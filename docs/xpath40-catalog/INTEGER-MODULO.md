@@ -4,6 +4,9 @@
   <p>25 October 2026 — source 1.25.2 unpublished; public 1.25.1</p>
 </div>
 
+**Integer division precision audit — 25 October 2026:** [Evidence and proposed scope](IDIV-PRECISION-AUDIT.md) add 48 result-range controls and 96 exact-rational comparisons, exposing 48 in-range one-unit discrepancies while documenting precision qualifications. Recommend exact truncation for existing decimal-backed operands with the current Int64 result bounds preserved. Engine/version unchanged; source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
+
+
 This bounded REQ-126 correction follows the [division/modulo audit](DIVISION-MODULO-AUDIT.md), merged as PR446 at base `f69dc9c6a3de41b3e286dcaf158037ad12921ec9`. It repairs minimum-integer remainder overflow and preserves integer result identity when existing decimal backing is used. Source remains the existing unpublished patch 1.25.2; public 1.25.1 and independent Braid smoke/adoption remain separate.
 
 | Expression | Before | Corrected result |
