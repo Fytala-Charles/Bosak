@@ -1,0 +1,347 @@
+{
+  "totalRecords": 84,
+  "correctedModuloRecords": 21,
+  "unchangedQuotientAndOtherControls": 63,
+  "allIdivRecordsUnchanged": true,
+  "changes": [
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": null,
+        "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+        "exceptionType": "System.InvalidOperationException"
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath31",
+      "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath31",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath31",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": null,
+        "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+        "exceptionType": "System.InvalidOperationException"
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40",
+      "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": null,
+        "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+        "exceptionType": "System.InvalidOperationException"
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (xs:integer('-9223372036854775808') mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "-2|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "79228162514264337593543950334|integer=true|decimal=true",
+        "error": null
+      }
+    },
+    {
+      "profile": "XPath40Experimental",
+      "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+      "before": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=false|decimal=true",
+        "error": null
+      },
+      "after": {
+        "profile": "XPath40Experimental",
+        "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),'|integer=',$v instance of xs:integer,'|decimal=',$v instance of xs:decimal)",
+        "value": "0|integer=true|decimal=true",
+        "error": null
+      }
+    }
+  ]
+}

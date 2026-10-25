@@ -1,0 +1,119 @@
+{
+  "date": "2026-10-25",
+  "base": "f69dc9c6a3de41b3e286dcaf158037ad12921ec9",
+  "sourceVersion": "1.25.2",
+  "publicVersion": "1.25.1",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-modulo-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-25T05:47:22.473279+00:00",
+      "completedAtUtc": "2026-10-25T05:47:44.052791+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "logSha256": "e37f5648e2fc9dcafeba1db7823a64086360a3fd53d88f2f2457ea8b51c02a73"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-modulo-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-25T05:47:22.473555+00:00",
+      "completedAtUtc": "2026-10-25T05:48:41.096192+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "aaf2918906e984c921538b4713263403f7e2a393ea4a5f9fa9858954c2e6d232"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\req126-modulo-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-25T05:47:22.473750+00:00",
+      "completedAtUtc": "2026-10-25T05:47:24.006533+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "logSha256": "8a872753a8e2a9822a63e5181428601a1514e017ecb22f6f4a464ad47300db5e"
+    }
+  ],
+  "runnerSha256": "7c6a7cf85f1c78a8aa9efe452c1cb94378144ced335a63f8c6d743d4980728d7",
+  "approvedPolicy": "Fix modulo minimum/-1 and integer remainder identity; no idiv change",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeNegativeFailuresRemainExplicit": true,
+  "releasePerformed": false,
+  "unitTests": {
+    "before": {
+      "total": 84,
+      "passed": 39,
+      "failed": 45,
+      "notExecuted": 0
+    },
+    "after": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "full": {
+      "total": 11879,
+      "passed": 11879,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "lsp": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  "newCases": 84,
+  "versionChanged": false,
+  "diagnosticComparison": {
+    "totalRecords": 84,
+    "correctedModuloRecords": 21,
+    "unchangedQuotientAndOtherControls": 63,
+    "allIdivRecordsUnchanged": true
+  },
+  "limits": [
+    "idiv quotient range and precision remain unchanged",
+    "General constructors/storage/error policy and bounded decimal precision remain separate",
+    "No arbitrary precision or full current-draft conformance claim"
+  ],
+  "evidenceHashes": {
+    "current-native-after.txt": "8a872753a8e2a9822a63e5181428601a1514e017ecb22f6f4a464ad47300db5e",
+    "diagnostic-verification.json": "96f8567bada73398a07f6b4f604b81e95115c78c467a4fa627eb6cb179952ba1",
+    "diagnostics-after.json": "402b58ceff245a9d597ef96cd921136f1451643e2fe44077966ca784e37aa713",
+    "diagnostics-before.json": "a9903ad41b79a535c96309095d62a1371f4a3803f7c0dcaa108c8bf7e7b17fa1",
+    "expressions.json": "d6afe81aa61c5eb05af6f216009677a419a0e4f75dac1ee7bb6eea7dce6f7e06",
+    "frozen-gate-skips.txt": "817f2d936eaeefdd75c777eb40b56ec2775e2ab7d2ff8c59ee41ddc96a83787f",
+    "frozen-gate.txt": "e37f5648e2fc9dcafeba1db7823a64086360a3fd53d88f2f2457ea8b51c02a73",
+    "qt3.txt": "aaf2918906e984c921538b4713263403f7e2a393ea4a5f9fa9858954c2e6d232",
+    "test-receipts.json": "5f402eb25745c6d85e3bbc02490275627ea48618abfd99ad912bed857bb2753b"
+  }
+}
