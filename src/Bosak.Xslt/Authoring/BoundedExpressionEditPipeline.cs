@@ -77,7 +77,7 @@ internal static class BoundedExpressionEditPipeline
             if (!Proof(snapshot.PrincipalModule.Root, fresh.PrincipalModule.Root))
                 return Refuse(AuthoringEditFailureKind.UnsupportedCorrespondence, "Complete nodes and per-owner attributes with exactly one changed slot were not proved.");
             var newNode = fresh.FindNodeById(correspondence[node.Id])!; var newSlot = newNode.Attributes.Single(a => a.Name == slot.Name);
-            var result = new AuthoringEditCandidate(emitted.Source!.OriginalBytes.ToArray(), Array.AsReadOnly(new[] { slot.ValueRange }), fresh.WithSuccessfulCompilation(),
+            var result = new AuthoringEditCandidate(emitted.Source!.OriginalBytes, Array.AsReadOnly(new[] { slot.ValueRange }), fresh.WithSuccessfulCompilation(),
                 new ReadOnlyDictionary<int,int>(correspondence), new(node.Id, slot.Name, slot.ValueRange, newSlot.ValueRange, slot.RawLiteral, newSlot.RawLiteral), defensiveExports: true);
             token.ThrowIfCancellationRequested(); return AuthoringEditResult.SuccessResult(result);
         }
