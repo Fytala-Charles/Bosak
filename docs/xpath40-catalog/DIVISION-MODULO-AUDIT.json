@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-25",
+  "base": "74472aa8cf904c4b4d44814df8cdbb53a095737f",
+  "sourceVersion": "1.25.2",
+  "publicVersion": "1.25.1",
+  "engineSourceTree": "4cbd0ed2caf46fd9c4d5302b96f03bd3bbcf01cc",
+  "engineAndHarnessFixturesUnchanged": true,
+  "gateVerification": "Inherited exact unchanged engine gates from PR445; not rerun by this test-only audit",
+  "gateTotals": {
+    "qt3": "31142/0/679",
+    "frozenQt4": "8436/0/1894",
+    "configuredAndExecutedSets": 224,
+    "existingExperimentalFallbackPasses": 11,
+    "currentNativeUnix": "22/2/0 exit2 under frozen runner"
+  },
+  "unitTests": {
+    "focused": {
+      "total": 72,
+      "passed": 72,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "full": {
+      "total": 11795,
+      "passed": 11795,
+      "failed": 0,
+      "notExecuted": 0
+    },
+    "lsp": {
+      "total": 84,
+      "passed": 84,
+      "failed": 0,
+      "notExecuted": 0
+    }
+  },
+  "newSupportedControls": 72,
+  "diagnosticRecords": 84,
+  "diagnosticsRepeatedAndEqual": true,
+  "diagnosticsAreNotPassingConformanceAssertions": true,
+  "versionChanged": false,
+  "releasePerformed": false,
+  "findings": [
+    "Runtime Int64 minimum mod -1 overflows; literal path returns decimal zero",
+    "Wide integer modulo results lose integer identity",
+    "idiv result remains Int64-bound; separate quotient range policy",
+    "idiv precision near one reflects decimal division rounding; separate precision investigation"
+  ],
+  "recommendedNextSlice": "Modulo minimum/-1 and decimal-backed integer result identity only",
+  "deferred": [
+    "idiv quotient range and precision",
+    "General constructors/storage/error policy",
+    "Full REQ126 conformance/adoption",
+    "Braid1.25.1 smoke/adoption and REQ138"
+  ],
+  "evidenceHashes": {
+    "diagnostics-merged.json": "a9903ad41b79a535c96309095d62a1371f4a3803f7c0dcaa108c8bf7e7b17fa1",
+    "diagnostics.json": "a9903ad41b79a535c96309095d62a1371f4a3803f7c0dcaa108c8bf7e7b17fa1",
+    "expressions.json": "d6afe81aa61c5eb05af6f216009677a419a0e4f75dac1ee7bb6eea7dce6f7e06",
+    "inherited-unary-gates.json": "2750c19138f9e9b85eb09269a30fb877bb9770d9a76759cd8f144430b8e08a3a",
+    "probe-project.txt": "40b036941a8c362ca90d8893f70162a17392f2b90b3a4b337ca40bad04e0b976",
+    "probe-source.txt": "c4956c481eddd709cb3c750f2565212a7cfac9d580264fbc215a818a50605339",
+    "test-receipts.json": "103109b849e3f5aca0422d21d0ddd9172fe5d7d482a46310ce4209064ee00b86"
+  }
+}

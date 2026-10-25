@@ -7,6 +7,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Division/modulo audit — 25 October 2026:** [Evidence and next correction](xpath40-catalog/DIVISION-MODULO-AUDIT.md) add 72 supported controls and 84 observed diagnostics. Minimum/-1 modulo overflow and wide remainder type loss are the recommended next bounded correction; quotient narrowing and precision remain separate. Engine/version unchanged: source 1.25.2 unpublished, public 1.25.1. REQ-126 remains partial.
+
+
 **Integer unary correction — 25 October 2026:** [Behavior and evidence](xpath40-catalog/INTEGER-UNARY.md) fix Int64-minimum negation wraparound and retain decimal-backed integer identity in folded/runtime paths. Adds 48 cross-profile regressions (24 failed before, all pass after). Source 1.25.2 is unpublished; public 1.25.1 and Braid smoke/adoption remain separate. Division/modulo and wider storage work remain open; REQ-126 stays partial.
 
 

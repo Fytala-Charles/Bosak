@@ -1,0 +1,533 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Value was either too large or too small for an Int64.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (79228162514264337593543950335 idiv 79228162514264337593543950334) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (79228162514264337593543950334 idiv 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "79228162514264337593543950334|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 idiv 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 div 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) idiv xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-3|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) mod xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-1.5|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775808|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:integer(\u00279223372036854775807\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775807|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (9223372036854775808 div 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (1 idiv xs:double(\u0027INF\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:double(\u0027NaN\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) mod 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:double(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:float(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "let $v := (xs:decimal(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Value was either too large or too small for an Int64.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (79228162514264337593543950335 idiv 79228162514264337593543950334) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (79228162514264337593543950334 idiv 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "79228162514264337593543950334|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 idiv 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 div 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) idiv xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-3|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) mod xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-1.5|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775808|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:integer(\u00279223372036854775807\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775807|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (9223372036854775808 div 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (1 idiv xs:double(\u0027INF\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:double(\u0027NaN\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) mod 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:double(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:float(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "let $v := (xs:decimal(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (-9223372036854775808 mod -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := ((0 - 9223372036854775808) mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-2|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Value was either too large or too small for an Int64.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Arithmetic operation resulted in an overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (79228162514264337593543950335 idiv 79228162514264337593543950334) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (79228162514264337593543950334 idiv 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "1|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (79228162514264337593543950334 mod 79228162514264337593543950335) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "79228162514264337593543950334|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (79228162514264337593543950335 mod 3) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 idiv 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 div 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "4611686018427387904|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) idiv xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-3|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u0027-7.5\u0027) mod xs:decimal(\u00272\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-1.5|integer=false|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) mod 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:integer(\u0027-9223372036854775808\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775808|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:integer(\u00279223372036854775807\u0027) idiv -1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "-9223372036854775807|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (9223372036854775808 div 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) idiv 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (1 idiv xs:double(\u0027INF\u0027)) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "0|integer=true|decimal=true",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:double(\u0027NaN\u0027) idiv 1) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0002: Integer division overflow.",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:double(\u0027INF\u0027) mod 2) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:double(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:float(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": "NaN|integer=false|decimal=false",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "let $v := (xs:decimal(\u00272\u0027) mod 0) return concat(string($v),\u0027|integer=\u0027,$v instance of xs:integer,\u0027|decimal=\u0027,$v instance of xs:decimal)",
+    "value": null,
+    "error": "FOAR0001: Division by zero.",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]

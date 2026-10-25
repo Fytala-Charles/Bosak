@@ -4,6 +4,9 @@
   <p>25 October 2026 — source 1.25.2 unpublished; public 1.25.1</p>
 </div>
 
+**Division/modulo audit — 25 October 2026:** [Evidence and next correction](DIVISION-MODULO-AUDIT.md) add 72 supported controls and 84 observed diagnostics. Minimum/-1 modulo overflow and wide remainder type loss are the recommended next bounded correction; quotient narrowing and precision remain separate. Engine/version unchanged: source 1.25.2 unpublished, public 1.25.1. REQ-126 remains partial.
+
+
 This bounded REQ-126 slice follows the published [1.25.1 numeric corrections](../RELEASE-1.25.1-PUBLICATION.md), from base `3b419f1c259097cccc3cc9bfa46abe9ad59de211`. It fixes unary negation of Int64 minimum and preserves integer identity for existing decimal-backed integer values. Patch source is 1.25.2, unpublished. Braid's independent 1.25.1 smoke/adoption remains separate; no consumer acceptance is inferred.
 
 | Expression | Before | Corrected result |
