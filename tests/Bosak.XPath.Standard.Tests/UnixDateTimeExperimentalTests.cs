@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 24-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 24-10-2026     | Require calendar overflow for valid wide integer epochs in both profiles.                 |
+//                      | Charles Korthout | 0.3   | 25-10-2026     | Require repaired minimum literal identity and existing domain/calendar error precedence.  |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -82,12 +83,13 @@ public sealed class UnixDateTimeExperimentalTests
     public void WideIntegerEpoch_RaisesCalendarOverflow(XPathCompatibility profile, string value) =>
         Assert.Contains("FODT0001", Assert.ThrowsAny<Exception>(() => Evaluate($"unix-dateTime({value})", profile)).Message);
 
-    /// <summary>The direct minimum literal's type and frozen error remain historical limitations.</summary>
+    /// <summary>The corrected minimum literal reaches the existing domain and calendar policies.</summary>
     [Fact]
-    public void FrozenMinimumLiteral_IsNotSilentlyRepaired()
+    public void MinimumLiteral_PreservesIntegerIdentityAndEpochPolicy()
     {
-        Assert.Equal("false", Evaluate("(-9223372036854775808) instance of xs:integer", XPathCompatibility.XPath40Experimental));
-        Assert.Contains("FORG0001", Assert.ThrowsAny<Exception>(() => Evaluate("unix-dateTime(-9223372036854775808)", XPathCompatibility.XPath40)).Message);
+        Assert.Equal("true", Evaluate("(-9223372036854775808) instance of xs:integer", XPathCompatibility.XPath40Experimental));
+        Assert.Contains("FOCA0002", Assert.ThrowsAny<Exception>(() => Evaluate("unix-dateTime(-9223372036854775808)", XPathCompatibility.XPath40)).Message);
+        Assert.Contains("FODT0001", Assert.ThrowsAny<Exception>(() => Evaluate("unix-dateTime(-9223372036854775808)", XPathCompatibility.XPath40Experimental)).Message);
     }
 
     /// <summary>Reusing an evaluation context cannot leak Experimental signed support into frozen evaluation.</summary>

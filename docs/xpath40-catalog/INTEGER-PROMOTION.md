@@ -4,6 +4,9 @@
   <p>24 October 2026 — source 1.25.1 unpublished; public 1.25.0 accepted</p>
 </div>
 
+**Integer unary correction — 25 October 2026:** [Behavior and evidence](INTEGER-UNARY.md) fix Int64-minimum negation wraparound and retain decimal-backed integer identity in folded/runtime paths. Adds 48 cross-profile regressions (24 failed before, all pass after). Source 1.25.2 is unpublished; public 1.25.1 and Braid smoke/adoption remain separate. Division/modulo and wider storage work remain open; REQ-126 stays partial.
+
+
 This bounded REQ-126 correction follows the [wide-integer investigation](UNIX-DATETIME-WIDE-INTEGER.md), merged as PR436 at base `2ff6804ad4a7236b7f8980f1ca76294810043e00`. It fixes binary integer addition, subtraction and multiplication consistency across constant folding and runtime promotion. It applies across modern profiles as an arithmetic bug fix, without adopting additional newer-draft function contracts. Source remains the existing unpublished patch1.25.1; public/Braid1.25.0 is unchanged and consumer-accepted within REQ-137's delivered profile.
 
 ## Behavior and implementation

@@ -7,6 +7,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Integer unary correction — 25 October 2026:** [Behavior and evidence](xpath40-catalog/INTEGER-UNARY.md) fix Int64-minimum negation wraparound and retain decimal-backed integer identity in folded/runtime paths. Adds 48 cross-profile regressions (24 failed before, all pass after). Source 1.25.2 is unpublished; public 1.25.1 and Braid smoke/adoption remain separate. Division/modulo and wider storage work remain open; REQ-126 stays partial.
+
+
 **1.25.1 published and verified — 24 October 2026:** [Publication proof](RELEASE-1.25.1-PUBLICATION.md) records immutable source `6081e70daa8a49ef3d522b124a18d8de68e0b4d5`, one Release run with 11,675 solution tests/ten uploads, ten verified signed packages and fresh nuget.org-only 153 broad/1,045 focused checks (431 added numeric/Unix cases), matching provenance and clear transitive audits. No new public API is added; XSLT authoring source is unchanged from 1.25.0. Braid 1.25.1 smoke/adoption remains separate. REQ-126 remains partial; REQ-138 is outside this release. Earlier candidate/unpublished receipts are historical.
 
 **1.25.1 release candidate validated — 24 October 2026:** [Consolidated proof](RELEASE-1.25.1-CANDIDATE.md) pins exact source6081e70d,11,759 passing source/language-server tests, unchanged frozen gates, ten verified unsigned local packages and153 broad/1,045 focused package checks. Public1.25.0 remains current; no tag/publication. REQ-126 stays partial; generic wide storage/error and remaining audit limits remain explicit.

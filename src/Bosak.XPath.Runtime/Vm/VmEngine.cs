@@ -423,6 +423,7 @@
 //                      | Charles Korthout | 2.196 | 24-10-2026     | Check exact floating integer thresholds and preserve accepted unsigned magnitudes.          |
 //                      | Charles Korthout | 2.197 | 24-10-2026     | Truncate unsignedLong decimal operands before range facets and integer backing selection. |
 //                      | Charles Korthout | 2.198 | 24-10-2026     | Truncate finite unsigned floating operands before lower/upper range facets.                |
+//                      | Charles Korthout | 2.199 | 25-10-2026     | Preserve integer identity and promote minimum-value unary negation without wraparound.     |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -7686,8 +7687,13 @@ internal static class VmEngine
         if (IsFloat(value))
             return XdmValue.FromFloat(-ToFloat(value));
         if (IsDecimal(value))
-            return XdmValue.FromDecimal(-ToDecimal(value));
-        return XdmValue.FromInteger(-ToInteger(value));
+            return IsIntegerOperand(value)
+                ? XdmValue.FromDecimal(-ToDecimal(value), "integer")
+                : XdmValue.FromDecimal(-ToDecimal(value));
+        long integer = ToInteger(value);
+        return integer == long.MinValue
+            ? XdmValue.FromDecimal(-(decimal)integer, "integer")
+            : XdmValue.FromInteger(-integer);
     }
 
     private static XdmValue UnaryPlus(XdmValue value, EvaluationContext context)

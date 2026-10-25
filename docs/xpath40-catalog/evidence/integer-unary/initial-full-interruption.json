@@ -1,0 +1,5 @@
+{
+  "reason": "PowerShell ErrorActionPreference Stop terminated wrapper on xUnit stderr for historical FrozenMinimumLiteral_IsNotSilentlyRepaired failure",
+  "originalLog": "source-tests.log",
+  "correction": "Replace historical limitation assertions with integer identity, frozen FOCA0002 and Experimental FODT0001; no function policy change"
+}
