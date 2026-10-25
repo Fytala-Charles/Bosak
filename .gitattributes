@@ -113,3 +113,5 @@ docs/release-evidence/1.25.2/*.txt -text whitespace=cr-at-eol,-blank-at-eof
 docs/release-evidence/1.26.0-publication/* -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/xpath40-catalog/evidence/unary-coercion/* -text whitespace=cr-at-eol,-blank-at-eof
+
+docs/xpath40-catalog/evidence/unary-empty/* -text whitespace=cr-at-eol,-blank-at-eof

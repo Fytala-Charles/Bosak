@@ -4,6 +4,9 @@
   <p>25 October 2026 - source 1.26.1 unpublished; public 1.26.0</p>
 </div>
 
+**Merged follow-up:** PR455 passed all three CI checks (12,279 tests) and merged at `d89b50e8223cec9913a8c41c9cef8c870bb6228a`. The next bounded [empty unary atomization correction](UNARY-EMPTY-ATOMIZATION.md) is validated separately. Original source/candidate evidence below remains unchanged; 1.26.1 is still unpublished.
+
+
 This bounded REQ-126 slice follows the [verified 1.26.0 publication](../RELEASE-1.26.0-PUBLICATION.md) at base `352622aa807760fc27e446f4f3656eb00a1b956b`. It removes the optimizer's unconditional `-(-x) => x` rewrite. Cancelling signs must preserve atomization, conversion, numeric base-type normalization and errors. Source is the new unpublished patch **1.26.1**. Public installation pins remain **1.26.0** while Braid independently validates that release.
 
 ## Contract and correction
