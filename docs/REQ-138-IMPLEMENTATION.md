@@ -1,10 +1,10 @@
 <div align="center">
   <img src="../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala conditional wrapper authoring implementation">
   <h1>REQ-138 conditional wrapper implementation</h1>
-  <p>25 October 2026 - unpublished 1.26.0 source candidate</p>
+  <p>25 October 2026 - published in 1.26.0; consumer integration/native acceptance pending</p>
 </div>
 
-Implements the [exact reviewed design](REQ-138-MAINTAINER-SCOPE-REVIEW.md) at `35f259ff24bd43c8e5b9927e4f62e38c9fcfef23`, accepted without blocking consumer findings in the [retained Braid design review](req138-evidence/original-braid-consumer-design-review.md). Owner implementation approval was separately received on 25 October 2026. [Braid implementation review](req138-evidence/original-braid-consumer-implementation-review.md) found no blocking findings at PR head `417482421343d72496d0f2dedcd45cfb1f463207`; its registry/punctuation corrections are addressed in a documentation-only follow-up. Merge/release authorization, signed package validation, Braid integration and native acceptance remain separate gates. REQ-138 is **In progress**, not consumer-accepted. Numeric 1.25.2 is a separate pinned candidate; public packages remain 1.25.1.
+Implements the [exact reviewed design](REQ-138-MAINTAINER-SCOPE-REVIEW.md) at `35f259ff24bd43c8e5b9927e4f62e38c9fcfef23`, accepted without blocking consumer findings in the [retained Braid design review](req138-evidence/original-braid-consumer-design-review.md). Owner implementation approval was separately received on 25 October 2026. [Braid implementation review](req138-evidence/original-braid-consumer-implementation-review.md) found no blocking findings at PR head `417482421343d72496d0f2dedcd45cfb1f463207`; its registry/punctuation corrections are addressed in a documentation-only follow-up. [Verified publication](RELEASE-1.26.0-PUBLICATION.md) records completed merge/release authorization, tagging and signed public-package validation at source `1f06efb4d938d3d8e12eb273e632a8fe15110041`. Braid integration and native acceptance remain pending. REQ-138 is **In progress: implemented and published**, not consumer-accepted. The original numeric 1.25.2 checkpoint remains separately pinned; its corrections are included in public 1.26.0.
 
 ## Coordinated API
 
@@ -70,7 +70,7 @@ Engine source: `5e268552cfd241262ade266ab00fc716591b48cd`. Local validation cove
 
 Verification receipts: [implementation evidence](req138-evidence/implementation-verification.json). Tests cover complete lifecycle and actual execution, strict encoding variants, exact paired replay, total partitions/per-owner attributes, parent-prefix shadowing, slot normalization, two CR/LF seams, refusal shapes, invalid originals, foreign/forged metadata, source/depth/evidence limits, deterministic traversal cancellation, defensive expression exports, hostile ambient resolver and legacy ancestry/editor controls. The solution and conformance receipt records actual run results; design review is not runtime acceptance.
 
-Consumer-owned IF01-IF15 obligations remain independent: review/intent invalidation, disclosure and unconditional-content acknowledgement, complete source/slot/proof comparison, atomic Apply and late cancellation semantics, history/redo, fresh ports/navigation, license/currentness and historical validation/preview/export receipts. The consumer source review is cleared, with [verified receipt/counters](req138-evidence/consumer-implementation-review-verification.json). Next: owner merge/release decisions for the coordinated engine PR. Signed publication, consumer integration and native acceptance follow separately.
+Consumer-owned IF01-IF15 obligations remain independent: review/intent invalidation, disclosure and unconditional-content acknowledgement, complete source/slot/proof comparison, atomic Apply and late cancellation semantics, history/redo, fresh ports/navigation, license/currentness and historical validation/preview/export receipts. The consumer source review is cleared, with [verified receipt/counters](req138-evidence/consumer-implementation-review-verification.json). Merge, release and signed public-package verification are complete. Next: Braid 1.26.0 conditional integration, public-package smoke and native acceptance, including the independent IF01-IF15 consumer obligations.
 
 ## IF01-IF15 evidence ownership
 

@@ -7,6 +7,9 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**1.26.0 published and verified - 25 October 2026:** [Publication proof](RELEASE-1.26.0-PUBLICATION.md) records immutable source `1f06efb4d938d3d8e12eb273e632a8fe15110041`, one Release run with 12,116 solution passes and ten uploads, ten verified signed packages, fresh nuget.org-only 153 broad/1,493 focused checks, 19 matching assembly identities and clear audits. Coordinated conditional Wrap/Edit/Unwrap and the previously unpublished 384 numeric cases are available. REQ-138 remains In progress pending Braid integration/native acceptance; REQ-126 remains partial. Earlier source-review/candidate/unpublished notices below are historical checkpoints, not current availability.
+
+
 **1.26.0 candidate validated - 25 October 2026:** [Candidate proof](RELEASE-1.26.0-CANDIDATE.md) pins merged source `1f06efb4d938d3d8e12eb273e632a8fe15110041`, 12,200 solution/LSP passes, unchanged frozen gates and ten unsigned packages with 153 broad/1,493 focused package-only passes, 19 matching assembly identities and clear audits. Conditional Wrap/Edit/Unwrap is source-reviewed; REQ-138 remains In progress pending publication and consumer integration/native acceptance. Public 1.25.1 remains current; numeric 1.25.2 receipts remain separately pinned. No tag/publication.
 
 Historical preparation/review checkpoints follow.

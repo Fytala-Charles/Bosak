@@ -1,3 +1,5 @@
+**Publication update - 25 October 2026:** [Bosak 1.26.0 is published and verified](../RELEASE-1.26.0-PUBLICATION.md), including the carried-forward 384 numeric cases. REQ-126 remains partial; D2/D3/D4 and applicable-evidence AC-03 remain open. Earlier candidate/public-version notices below are historical. No fixture/gate promotion or full current-draft conformance is claimed.
+
 <div align="center">
   <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala REQ-126 grammar coverage and acceptance reconciliation">
   <h1>REQ-126 coverage and acceptance reconciliation</h1>

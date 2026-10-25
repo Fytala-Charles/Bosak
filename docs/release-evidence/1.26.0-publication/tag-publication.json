@@ -1,0 +1,52 @@
+{
+  "version": "1.26.0",
+  "revision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "ownerAuthorization": "User approved merging PR453 and tagging/publishing1.26.0 from1f06efb4, with signed public verification",
+  "checkedAtUtc": "2026-10-25T10:31:06.916793+00:00",
+  "indexes": [
+    {
+      "id": "Bosak.XPath.Api",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XQuery",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.Xslt",
+      "candidatePresent": false
+    }
+  ],
+  "duplicateDispatchPerformed": false,
+  "status": "ONE_TAG_PUSHED_RELEASE_WORKFLOW_PENDING",
+  "tagObject": "3a33c705d54b7783bbbe8117acbe69d615d71b6c",
+  "remote": "3a33c705d54b7783bbbe8117acbe69d615d71b6c\trefs/tags/v1.26.0\n1f06efb4d938d3d8e12eb273e632a8fe15110041\trefs/tags/v1.26.0^{}"
+}
