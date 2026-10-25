@@ -1,0 +1,74 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: strip-space
+
+  Starting: strip-space ...
+  RUN  strip-space-001
+  PASS strip-space-001
+  RUN  strip-space-002
+  PASS strip-space-002
+  RUN  strip-space-003
+  PASS strip-space-003
+  RUN  strip-space-004
+  PASS strip-space-004
+  RUN  strip-space-005
+  PASS strip-space-005
+  RUN  strip-space-006
+  PASS strip-space-006
+  RUN  strip-space-007
+  RUN  strip-space-008
+  RUN  strip-space-009
+  RUN  strip-space-010
+  PASS strip-space-010
+  RUN  strip-space-011
+  PASS strip-space-011
+  RUN  strip-space-012
+  PASS strip-space-012
+  RUN  strip-space-013
+  PASS strip-space-013
+  RUN  strip-space-014
+  PASS strip-space-014
+  RUN  strip-space-015
+  PASS strip-space-015
+  RUN  strip-space-016
+  PASS strip-space-016
+  RUN  strip-space-017
+  PASS strip-space-017
+  RUN  strip-space-018
+  PASS strip-space-018
+  RUN  strip-space-019
+  PASS strip-space-019
+  RUN  strip-space-019a
+  PASS strip-space-019a
+  RUN  strip-space-020
+  PASS strip-space-020
+  RUN  strip-space-021
+  PASS strip-space-021
+  RUN  strip-space-022
+  PASS strip-space-022
+  RUN  strip-space-023
+  PASS strip-space-023
+  RUN  strip-space-024
+  PASS strip-space-024
+  RUN  strip-space-025
+  PASS strip-space-025
+  RUN  strip-space-026
+  PASS strip-space-026
+  RUN  strip-space-027
+  PASS strip-space-027
+  RUN  strip-space-028
+  PASS strip-space-028
+  RUN  strip-space-029
+  PASS strip-space-029
+  Done: strip-space (30 tests, 27 passed, 0 failed, 3 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   30
+Passed:  27
+Failed:  0
+Skipped: 3
+
+Pass rate: 100.0%

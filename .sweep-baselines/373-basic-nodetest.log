@@ -1,0 +1,58 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: nodetest
+
+  Starting: nodetest ...
+  RUN  nodetest-001
+  PASS nodetest-001
+  RUN  nodetest-002
+  PASS nodetest-002
+  RUN  nodetest-003
+  PASS nodetest-003
+  RUN  nodetest-004
+  RUN  nodetest-005
+  RUN  nodetest-006
+  RUN  nodetest-007
+  RUN  nodetest-008
+  RUN  nodetest-009
+  RUN  nodetest-010
+  RUN  nodetest-011
+  RUN  nodetest-012
+  RUN  nodetest-013
+  RUN  nodetest-014
+  RUN  nodetest-015
+  RUN  nodetest-016
+  RUN  nodetest-017
+  RUN  nodetest-018
+  RUN  nodetest-019
+  RUN  nodetest-020
+  RUN  nodetest-021
+  RUN  nodetest-022
+  RUN  nodetest-023
+  RUN  nodetest-024
+  RUN  nodetest-025
+  RUN  nodetest-026
+  RUN  nodetest-027
+  RUN  nodetest-028
+  RUN  nodetest-029
+  RUN  nodetest-030
+  RUN  nodetest-031
+  RUN  nodetest-032
+  RUN  nodetest-033
+  RUN  nodetest-034
+  RUN  nodetest-035
+  RUN  nodetest-036
+  RUN  nodetest-037
+  RUN  nodetest-038
+  Done: nodetest (38 tests, 3 passed, 0 failed, 35 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   38
+Passed:  3
+Failed:  0
+Skipped: 35
+
+Pass rate: 100.0%

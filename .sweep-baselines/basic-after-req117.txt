@@ -1,0 +1,26 @@
+  FAIL non-stream-107: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL non-stream-108: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL non-stream-109: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-001: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-002: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-003: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-004: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-005: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-006: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-007: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-008: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-009: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-901: Expected error XTSE3430, got: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-fork-902: Expected error XTSE3430, got: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-001: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-002: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-003: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-004: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-005: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-006: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-007: Expected error XTDE3365, got: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-008: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL si-map-009: Expected error XTTE3375, got: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL stream-107: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL stream-108: XTSE1650: xsl:import-schema requires a schema-aware processor
+  FAIL stream-109: XTSE1650: xsl:import-schema requires a schema-aware processor

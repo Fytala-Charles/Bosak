@@ -1,0 +1,38 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: catalog
+
+  Starting: catalog ...
+  RUN  catalog-001
+  RUN  catalog-002
+  PASS catalog-002
+  RUN  catalog-003
+  PASS catalog-003
+  RUN  catalog-004
+  PASS catalog-004
+  RUN  catalog-005
+  RUN  catalog-005b
+  RUN  catalog-006
+  PASS catalog-006
+  RUN  catalog-006b
+  RUN  catalog-007
+  PASS catalog-007
+  RUN  catalog-008
+  PASS catalog-008
+  RUN  catalog-009
+  RUN  catalog-010
+  PASS catalog-010
+  RUN  catalog-012
+  PASS catalog-012
+  Done: catalog (13 tests, 8 passed, 0 failed, 5 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   13
+Passed:  8
+Failed:  0
+Skipped: 5
+
+Pass rate: 100.0%

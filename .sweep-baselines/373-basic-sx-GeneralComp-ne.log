@@ -1,0 +1,123 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: sx-GeneralComp-ne
+
+  Starting: sx-GeneralComp-ne ...
+  RUN  sx-gc-ne-003
+  PASS sx-gc-ne-003
+  RUN  sx-gc-ne-004
+  PASS sx-gc-ne-004
+  RUN  sx-gc-ne-005
+  PASS sx-gc-ne-005
+  RUN  sx-gc-ne-006
+  PASS sx-gc-ne-006
+  RUN  sx-gc-ne-007
+  PASS sx-gc-ne-007
+  RUN  sx-gc-ne-008
+  PASS sx-gc-ne-008
+  RUN  sx-gc-ne-009
+  PASS sx-gc-ne-009
+  RUN  sx-gc-ne-010
+  PASS sx-gc-ne-010
+  RUN  sx-gc-ne-011
+  PASS sx-gc-ne-011
+  RUN  sx-gc-ne-012
+  PASS sx-gc-ne-012
+  RUN  sx-gc-ne-013
+  PASS sx-gc-ne-013
+  RUN  sx-gc-ne-015
+  PASS sx-gc-ne-015
+  RUN  sx-gc-ne-016
+  PASS sx-gc-ne-016
+  RUN  sx-gc-ne-017
+  PASS sx-gc-ne-017
+  RUN  sx-gc-ne-018
+  PASS sx-gc-ne-018
+  RUN  sx-gc-ne-019
+  PASS sx-gc-ne-019
+  RUN  sx-gc-ne-020
+  PASS sx-gc-ne-020
+  RUN  sx-gc-ne-021
+  PASS sx-gc-ne-021
+  RUN  sx-gc-ne-022
+  PASS sx-gc-ne-022
+  RUN  sx-gc-ne-023
+  PASS sx-gc-ne-023
+  RUN  sx-gc-ne-024
+  PASS sx-gc-ne-024
+  RUN  sx-gc-ne-025
+  PASS sx-gc-ne-025
+  RUN  sx-gc-ne-026
+  PASS sx-gc-ne-026
+  RUN  sx-gc-ne-027
+  PASS sx-gc-ne-027
+  RUN  sx-gc-ne-028
+  PASS sx-gc-ne-028
+  RUN  sx-gc-ne-100
+  RUN  sx-gc-ne-101
+  RUN  sx-gc-ne-103
+  PASS sx-gc-ne-103
+  RUN  sx-gc-ne-104
+  PASS sx-gc-ne-104
+  RUN  sx-gc-ne-105
+  PASS sx-gc-ne-105
+  RUN  sx-gc-ne-106
+  PASS sx-gc-ne-106
+  RUN  sx-gc-ne-107
+  PASS sx-gc-ne-107
+  RUN  sx-gc-ne-108
+  PASS sx-gc-ne-108
+  RUN  sx-gc-ne-109
+  PASS sx-gc-ne-109
+  RUN  sx-gc-ne-110
+  PASS sx-gc-ne-110
+  RUN  sx-gc-ne-111
+  PASS sx-gc-ne-111
+  RUN  sx-gc-ne-112
+  PASS sx-gc-ne-112
+  RUN  sx-gc-ne-113
+  PASS sx-gc-ne-113
+  RUN  sx-gc-ne-115
+  PASS sx-gc-ne-115
+  RUN  sx-gc-ne-116
+  PASS sx-gc-ne-116
+  RUN  sx-gc-ne-117
+  PASS sx-gc-ne-117
+  RUN  sx-gc-ne-118
+  PASS sx-gc-ne-118
+  RUN  sx-gc-ne-119
+  PASS sx-gc-ne-119
+  RUN  sx-gc-ne-120
+  PASS sx-gc-ne-120
+  RUN  sx-gc-ne-121
+  PASS sx-gc-ne-121
+  RUN  sx-gc-ne-122
+  PASS sx-gc-ne-122
+  RUN  sx-gc-ne-123
+  PASS sx-gc-ne-123
+  RUN  sx-gc-ne-124
+  PASS sx-gc-ne-124
+  RUN  sx-gc-ne-125
+  PASS sx-gc-ne-125
+  RUN  sx-gc-ne-126
+  PASS sx-gc-ne-126
+  RUN  sx-gc-ne-127
+  PASS sx-gc-ne-127
+  RUN  sx-gc-ne-128
+  PASS sx-gc-ne-128
+  RUN  sx-gc-ne-901
+  PASS sx-gc-ne-901
+  RUN  sx-gc-ne-902
+  PASS sx-gc-ne-902
+  Done: sx-GeneralComp-ne (54 tests, 52 passed, 0 failed, 2 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   54
+Passed:  52
+Failed:  0
+Skipped: 2
+
+Pass rate: 100.0%

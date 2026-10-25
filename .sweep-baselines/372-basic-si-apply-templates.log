@@ -1,0 +1,41 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-apply-templates
+
+  Starting: si-apply-templates ...
+  RUN  si-apply-templates-001
+  PASS si-apply-templates-001
+  RUN  si-apply-templates-002
+  PASS si-apply-templates-002
+  RUN  si-apply-templates-003
+  PASS si-apply-templates-003
+  RUN  si-apply-templates-004
+  PASS si-apply-templates-004
+  RUN  si-apply-templates-005
+  PASS si-apply-templates-005
+  RUN  si-apply-templates-006
+  PASS si-apply-templates-006
+  RUN  si-apply-templates-007
+  RUN  si-apply-templates-008
+  PASS si-apply-templates-008
+  RUN  si-apply-templates-009
+  PASS si-apply-templates-009
+  RUN  si-apply-templates-010
+  PASS si-apply-templates-010
+  RUN  si-apply-templates-011
+  PASS si-apply-templates-011
+  RUN  si-apply-templates-012
+  RUN  si-apply-templates-013
+  PASS si-apply-templates-013
+  Done: si-apply-templates (13 tests, 11 passed, 0 failed, 2 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   13
+Passed:  11
+Failed:  0
+Skipped: 2
+
+Pass rate: 100.0%

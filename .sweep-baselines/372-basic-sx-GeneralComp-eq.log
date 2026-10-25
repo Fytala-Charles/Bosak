@@ -1,0 +1,125 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: sx-GeneralComp-eq
+
+  Starting: sx-GeneralComp-eq ...
+  RUN  sx-gc-eq-003
+  PASS sx-gc-eq-003
+  RUN  sx-gc-eq-004
+  PASS sx-gc-eq-004
+  RUN  sx-gc-eq-005
+  PASS sx-gc-eq-005
+  RUN  sx-gc-eq-006
+  PASS sx-gc-eq-006
+  RUN  sx-gc-eq-007
+  PASS sx-gc-eq-007
+  RUN  sx-gc-eq-008
+  PASS sx-gc-eq-008
+  RUN  sx-gc-eq-009
+  PASS sx-gc-eq-009
+  RUN  sx-gc-eq-010
+  PASS sx-gc-eq-010
+  RUN  sx-gc-eq-011
+  PASS sx-gc-eq-011
+  RUN  sx-gc-eq-012
+  PASS sx-gc-eq-012
+  RUN  sx-gc-eq-013
+  PASS sx-gc-eq-013
+  RUN  sx-gc-eq-015
+  PASS sx-gc-eq-015
+  RUN  sx-gc-eq-016
+  PASS sx-gc-eq-016
+  RUN  sx-gc-eq-017
+  PASS sx-gc-eq-017
+  RUN  sx-gc-eq-018
+  PASS sx-gc-eq-018
+  RUN  sx-gc-eq-019
+  PASS sx-gc-eq-019
+  RUN  sx-gc-eq-020
+  PASS sx-gc-eq-020
+  RUN  sx-gc-eq-021
+  PASS sx-gc-eq-021
+  RUN  sx-gc-eq-022
+  PASS sx-gc-eq-022
+  RUN  sx-gc-eq-023
+  PASS sx-gc-eq-023
+  RUN  sx-gc-eq-024
+  PASS sx-gc-eq-024
+  RUN  sx-gc-eq-025
+  PASS sx-gc-eq-025
+  RUN  sx-gc-eq-026
+  PASS sx-gc-eq-026
+  RUN  sx-gc-eq-027
+  PASS sx-gc-eq-027
+  RUN  sx-gc-eq-028
+  PASS sx-gc-eq-028
+  RUN  sx-gc-eq-100
+  RUN  sx-gc-eq-101
+  RUN  sx-gc-eq-103
+  PASS sx-gc-eq-103
+  RUN  sx-gc-eq-104
+  PASS sx-gc-eq-104
+  RUN  sx-gc-eq-105
+  PASS sx-gc-eq-105
+  RUN  sx-gc-eq-106
+  PASS sx-gc-eq-106
+  RUN  sx-gc-eq-107
+  PASS sx-gc-eq-107
+  RUN  sx-gc-eq-108
+  PASS sx-gc-eq-108
+  RUN  sx-gc-eq-109
+  PASS sx-gc-eq-109
+  RUN  sx-gc-eq-110
+  PASS sx-gc-eq-110
+  RUN  sx-gc-eq-111
+  PASS sx-gc-eq-111
+  RUN  sx-gc-eq-112
+  PASS sx-gc-eq-112
+  RUN  sx-gc-eq-113
+  PASS sx-gc-eq-113
+  RUN  sx-gc-eq-115
+  PASS sx-gc-eq-115
+  RUN  sx-gc-eq-116
+  PASS sx-gc-eq-116
+  RUN  sx-gc-eq-117
+  PASS sx-gc-eq-117
+  RUN  sx-gc-eq-118
+  PASS sx-gc-eq-118
+  RUN  sx-gc-eq-119
+  PASS sx-gc-eq-119
+  RUN  sx-gc-eq-120
+  PASS sx-gc-eq-120
+  RUN  sx-gc-eq-121
+  PASS sx-gc-eq-121
+  RUN  sx-gc-eq-122
+  PASS sx-gc-eq-122
+  RUN  sx-gc-eq-123
+  PASS sx-gc-eq-123
+  RUN  sx-gc-eq-124
+  PASS sx-gc-eq-124
+  RUN  sx-gc-eq-125
+  PASS sx-gc-eq-125
+  RUN  sx-gc-eq-126
+  PASS sx-gc-eq-126
+  RUN  sx-gc-eq-127
+  PASS sx-gc-eq-127
+  RUN  sx-gc-eq-128
+  PASS sx-gc-eq-128
+  RUN  sx-gc-eq-801
+  PASS sx-gc-eq-801
+  RUN  sx-gc-eq-901
+  PASS sx-gc-eq-901
+  RUN  sx-gc-eq-902
+  PASS sx-gc-eq-902
+  Done: sx-GeneralComp-eq (55 tests, 53 passed, 0 failed, 2 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   55
+Passed:  53
+Failed:  0
+Skipped: 2
+
+Pass rate: 100.0%

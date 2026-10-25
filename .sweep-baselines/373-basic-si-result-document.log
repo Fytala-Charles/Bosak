@@ -1,0 +1,78 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-result-document
+
+  Starting: si-result-document ...
+  RUN  si-result-document-001
+  PASS si-result-document-001
+  RUN  si-result-document-002
+  PASS si-result-document-002
+  RUN  si-result-document-003
+  PASS si-result-document-003
+  RUN  si-result-document-004
+  PASS si-result-document-004
+  RUN  si-result-document-005
+  PASS si-result-document-005
+  RUN  si-result-document-006
+  PASS si-result-document-006
+  RUN  si-result-document-007
+  PASS si-result-document-007
+  RUN  si-result-document-008
+  PASS si-result-document-008
+  RUN  si-result-document-009
+  PASS si-result-document-009
+  RUN  si-result-document-010
+  PASS si-result-document-010
+  RUN  si-result-document-011
+  PASS si-result-document-011
+  RUN  si-result-document-022
+  PASS si-result-document-022
+  RUN  si-result-document-023
+  PASS si-result-document-023
+  RUN  si-result-document-024
+  PASS si-result-document-024
+  RUN  si-result-document-101
+  RUN  si-result-document-102
+  RUN  si-result-document-103
+  RUN  si-result-document-104
+  RUN  si-result-document-105
+  RUN  si-result-document-106
+  RUN  si-result-document-107
+  RUN  si-result-document-108
+  RUN  si-result-document-109
+  RUN  si-result-document-110
+  RUN  si-result-document-111
+  RUN  si-result-document-112
+  RUN  si-result-document-113
+  RUN  si-result-document-114
+  RUN  si-result-document-115
+  RUN  si-result-document-116
+  RUN  si-result-document-117
+  RUN  si-result-document-121
+  RUN  si-result-document-122
+  RUN  si-result-document-123
+  RUN  si-result-document-124
+  RUN  si-result-document-125
+  RUN  si-result-document-126
+  RUN  si-result-document-127
+  RUN  si-result-document-128
+  RUN  si-result-document-301
+  PASS si-result-document-301
+  RUN  si-result-document-302
+  PASS si-result-document-302
+  RUN  si-result-document-303
+  PASS si-result-document-303
+  RUN  si-result-document-304
+  PASS si-result-document-304
+  Done: si-result-document (43 tests, 18 passed, 0 failed, 25 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   43
+Passed:  18
+Failed:  0
+Skipped: 25
+
+Pass rate: 100.0%

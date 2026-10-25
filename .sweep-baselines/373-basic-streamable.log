@@ -1,0 +1,220 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: streamable
+
+  Starting: streamable ...
+  RUN  streamable-001
+  SKIP streamable-001: Streaming source not supported
+  RUN  streamable-002
+  SKIP streamable-002: Streaming source not supported
+  RUN  streamable-003
+  SKIP streamable-003: Streaming source not supported
+  RUN  streamable-004
+  SKIP streamable-004: Streaming source not supported
+  RUN  streamable-005
+  SKIP streamable-005: Streaming source not supported
+  RUN  streamable-006
+  SKIP streamable-006: Streaming source not supported
+  RUN  streamable-007
+  SKIP streamable-007: Streaming source not supported
+  RUN  streamable-008
+  SKIP streamable-008: Streaming source not supported
+  RUN  streamable-009
+  RUN  streamable-010
+  RUN  streamable-011
+  RUN  streamable-012
+  RUN  streamable-013
+  RUN  streamable-014
+  RUN  streamable-015
+  RUN  streamable-016
+  RUN  streamable-017
+  RUN  streamable-018
+  RUN  streamable-019
+  RUN  streamable-020
+  RUN  streamable-021
+  RUN  streamable-022
+  RUN  streamable-023
+  RUN  streamable-024
+  RUN  streamable-025
+  RUN  streamable-026
+  RUN  streamable-027
+  SKIP streamable-027: Streaming source not supported
+  RUN  streamable-028
+  SKIP streamable-028: Streaming source not supported
+  RUN  streamable-029
+  PASS streamable-029
+  RUN  streamable-030
+  SKIP streamable-030: Streaming source not supported
+  RUN  streamable-031
+  RUN  streamable-032
+  SKIP streamable-032: Streaming source not supported
+  RUN  streamable-033
+  SKIP streamable-033: Streaming source not supported
+  RUN  streamable-034
+  SKIP streamable-034: Streaming source not supported
+  RUN  streamable-035
+  RUN  streamable-036
+  RUN  streamable-037
+  SKIP streamable-037: Streaming source not supported
+  RUN  streamable-038
+  RUN  streamable-039
+  SKIP streamable-039: Streaming source not supported
+  RUN  streamable-040
+  RUN  streamable-041
+  SKIP streamable-041: Streaming source not supported
+  RUN  streamable-042
+  RUN  streamable-043
+  RUN  streamable-044
+  RUN  streamable-045
+  RUN  streamable-046
+  SKIP streamable-046: Streaming source not supported
+  RUN  streamable-047
+  SKIP streamable-047: Streaming source not supported
+  RUN  streamable-048
+  SKIP streamable-048: Streaming source not supported
+  RUN  streamable-049
+  SKIP streamable-049: Streaming source not supported
+  RUN  streamable-050
+  SKIP streamable-050: Streaming source not supported
+  RUN  streamable-051
+  SKIP streamable-051: Streaming source not supported
+  RUN  streamable-052
+  SKIP streamable-052: Streaming source not supported
+  RUN  streamable-053
+  SKIP streamable-053: Streaming source not supported
+  RUN  streamable-054
+  RUN  streamable-055
+  RUN  streamable-056
+  RUN  streamable-057
+  RUN  streamable-058
+  RUN  streamable-059
+  RUN  streamable-060
+  SKIP streamable-060: Streaming source not supported
+  RUN  streamable-061
+  SKIP streamable-061: Streaming source not supported
+  RUN  streamable-062
+  SKIP streamable-062: Streaming source not supported
+  RUN  streamable-063
+  SKIP streamable-063: Streaming source not supported
+  RUN  streamable-064
+  SKIP streamable-064: Streaming source not supported
+  RUN  streamable-065
+  SKIP streamable-065: Streaming source not supported
+  RUN  streamable-066
+  SKIP streamable-066: Streaming source not supported
+  RUN  streamable-071
+  SKIP streamable-071: Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md 6)
+  RUN  streamable-072
+  SKIP streamable-072: Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md 6)
+  RUN  streamable-073
+  RUN  streamable-074
+  RUN  streamable-075
+  RUN  streamable-076
+  RUN  streamable-077
+  RUN  streamable-078
+  RUN  streamable-079
+  SKIP streamable-079: Streaming source not supported
+  RUN  streamable-080
+  RUN  streamable-081
+  RUN  streamable-082
+  RUN  streamable-083
+  RUN  streamable-084
+  RUN  streamable-085
+  RUN  streamable-086
+  RUN  streamable-087
+  RUN  streamable-088
+  RUN  streamable-089
+  RUN  streamable-090
+  RUN  streamable-091
+  RUN  streamable-092
+  RUN  streamable-093
+  RUN  streamable-094
+  SKIP streamable-094: Streaming source not supported
+  RUN  streamable-097
+  SKIP streamable-097: Streaming source not supported
+  RUN  streamable-098
+  SKIP streamable-098: Streaming source not supported
+  RUN  streamable-099
+  SKIP streamable-099: Streaming source not supported
+  RUN  streamable-100
+  SKIP streamable-100: Streaming source not supported
+  RUN  streamable-101
+  SKIP streamable-101: Streaming source not supported
+  RUN  streamable-102
+  SKIP streamable-102: Streaming source not supported
+  RUN  streamable-103
+  PASS streamable-103
+  RUN  streamable-104
+  RUN  streamable-105
+  RUN  streamable-106
+  SKIP streamable-106: Streaming source not supported
+  RUN  streamable-107
+  RUN  streamable-109
+  RUN  streamable-110
+  RUN  streamable-111
+  SKIP streamable-111: Streaming source not supported
+  RUN  streamable-112
+  SKIP streamable-112: Streaming source not supported
+  RUN  streamable-113
+  SKIP streamable-113: Streaming source not supported
+  RUN  streamable-114
+  SKIP streamable-114: Streaming source not supported
+  RUN  streamable-115
+  SKIP streamable-115: Streaming source not supported
+  RUN  streamable-116
+  RUN  streamable-117
+  RUN  streamable-118
+  RUN  streamable-119
+  RUN  streamable-120
+  RUN  streamable-121
+  RUN  streamable-122
+  RUN  streamable-123
+  RUN  streamable-124
+  RUN  streamable-125
+  RUN  streamable-126
+  RUN  streamable-127
+  RUN  streamable-128
+  RUN  streamable-129
+  RUN  streamable-130
+  SKIP streamable-130: Streaming source not supported
+  RUN  streamable-134
+  SKIP streamable-134: Streaming source not supported
+  RUN  streamable-135
+  SKIP streamable-135: Streaming source not supported
+  RUN  streamable-136
+  SKIP streamable-136: Streaming source not supported
+  RUN  streamable-137
+  SKIP streamable-137: Streaming source not supported
+  RUN  streamable-138
+  SKIP streamable-138: Streaming source not supported
+  RUN  streamable-139
+  SKIP streamable-139: Streaming source not supported
+  RUN  streamable-140
+  SKIP streamable-140: Streaming source not supported
+  RUN  streamable-141
+  SKIP streamable-141: Streaming source not supported
+  RUN  streamable-142
+  SKIP streamable-142: Streaming source not supported
+  RUN  streamable-143
+  SKIP streamable-143: Streaming source not supported
+  RUN  streamable-144
+  SKIP streamable-144: Streaming source not supported
+  RUN  streamable-145
+  SKIP streamable-145: Streaming source not supported
+  RUN  streamable-146
+  SKIP streamable-146: Streaming source not supported
+  RUN  streamable-147
+  RUN  streamable-148
+  RUN  streamable-149
+  Done: streamable (139 tests, 2 passed, 0 failed, 137 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   139
+Passed:  2
+Failed:  0
+Skipped: 137
+
+Pass rate: 100.0%

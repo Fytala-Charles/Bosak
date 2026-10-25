@@ -1,0 +1,16 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: treat-as
+
+  SKIP treat-as: Requires unsupported feature 'schema_aware' (4 tests)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   4
+Passed:  0
+Failed:  0
+Skipped: 4
+
+Pass rate: 0.0%

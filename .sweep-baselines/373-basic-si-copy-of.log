@@ -1,0 +1,82 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-copy-of
+
+  Starting: si-copy-of ...
+  RUN  si-copy-of-001
+  PASS si-copy-of-001
+  RUN  si-copy-of-002
+  PASS si-copy-of-002
+  RUN  si-copy-of-003
+  PASS si-copy-of-003
+  RUN  si-copy-of-004
+  PASS si-copy-of-004
+  RUN  si-copy-of-005
+  PASS si-copy-of-005
+  RUN  si-copy-of-006
+  PASS si-copy-of-006
+  RUN  si-copy-of-007
+  PASS si-copy-of-007
+  RUN  si-copy-of-008
+  PASS si-copy-of-008
+  RUN  si-copy-of-009
+  PASS si-copy-of-009
+  RUN  si-copy-of-010
+  PASS si-copy-of-010
+  RUN  si-copy-of-011
+  PASS si-copy-of-011
+  RUN  si-copy-of-020
+  PASS si-copy-of-020
+  RUN  si-copy-of-021
+  PASS si-copy-of-021
+  RUN  si-copy-of-022
+  PASS si-copy-of-022
+  RUN  si-copy-of-023
+  PASS si-copy-of-023
+  RUN  si-copy-of-024
+  PASS si-copy-of-024
+  RUN  si-copy-of-025
+  PASS si-copy-of-025
+  RUN  si-copy-of-026
+  PASS si-copy-of-026
+  RUN  si-copy-of-027
+  PASS si-copy-of-027
+  RUN  si-copy-of-101
+  RUN  si-copy-of-102
+  RUN  si-copy-of-103
+  RUN  si-copy-of-104
+  RUN  si-copy-of-105
+  RUN  si-copy-of-106
+  RUN  si-copy-of-107
+  RUN  si-copy-of-108
+  RUN  si-copy-of-109
+  RUN  si-copy-of-110
+  RUN  si-copy-of-111
+  RUN  si-copy-of-112
+  RUN  si-copy-of-113
+  RUN  si-copy-of-114
+  RUN  si-copy-of-115
+  RUN  si-copy-of-116
+  RUN  si-copy-of-117
+  RUN  si-copy-of-121
+  RUN  si-copy-of-122
+  RUN  si-copy-of-123
+  RUN  si-copy-of-124
+  RUN  si-copy-of-125
+  RUN  si-copy-of-126
+  RUN  si-copy-of-127
+  RUN  si-copy-of-128
+  RUN  si-copy-of-801
+  PASS si-copy-of-801
+  Done: si-copy-of (45 tests, 20 passed, 0 failed, 25 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   45
+Passed:  20
+Failed:  0
+Skipped: 25
+
+Pass rate: 100.0%

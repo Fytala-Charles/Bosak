@@ -1,0 +1,201 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: type
+
+  Starting: strip-type-annotations ...
+  RUN  strip-type-annotations-001
+  RUN  strip-type-annotations-002
+  RUN  strip-type-annotations-003
+  RUN  strip-type-annotations-004
+  RUN  strip-type-annotations-005
+  RUN  strip-type-annotations-006
+  RUN  strip-type-annotations-007
+  RUN  strip-type-annotations-008
+  RUN  strip-type-annotations-009
+  RUN  strip-type-annotations-010
+  RUN  strip-type-annotations-011
+  RUN  strip-type-annotations-012
+  RUN  strip-type-annotations-013
+  RUN  strip-type-annotations-014
+  RUN  strip-type-annotations-015
+  RUN  strip-type-annotations-016
+  RUN  strip-type-annotations-017
+  RUN  strip-type-annotations-018
+  RUN  strip-type-annotations-019
+  RUN  strip-type-annotations-020
+  RUN  strip-type-annotations-021
+  RUN  strip-type-annotations-022
+  RUN  strip-type-annotations-023
+  PASS strip-type-annotations-023
+  RUN  strip-type-annotations-024
+  PASS strip-type-annotations-024
+  RUN  strip-type-annotations-025
+  PASS strip-type-annotations-025
+  RUN  strip-type-annotations-026
+  RUN  strip-type-annotations-027
+  Done: strip-type-annotations (27 tests, 3 passed, 0 failed, 24 skipped)
+  SKIP type-expr: Requires unsupported feature 'schema_aware' (4 tests)
+  SKIP type-functions: Requires unsupported feature 'schema_aware' (12 tests)
+  Starting: type-available ...
+  RUN  type-available-0146
+  PASS type-available-0146
+  RUN  type-available-0147
+  RUN  type-available-0148
+  RUN  type-available-0149
+  RUN  type-available-0150
+  PASS type-available-0150
+  RUN  type-available-0151
+  RUN  type-available-0151a
+  PASS type-available-0151a
+  Done: type-available (7 tests, 3 passed, 0 failed, 4 skipped)
+  Starting: type ...
+  RUN  type-0101
+  RUN  type-0102
+  RUN  type-0103
+  RUN  type-0104
+  RUN  type-0105
+  RUN  type-0106
+  RUN  type-0107
+  RUN  type-0108
+  RUN  type-0109
+  RUN  type-0110
+  RUN  type-0111
+  RUN  type-0112
+  RUN  type-0113
+  RUN  type-0114
+  RUN  type-0115
+  RUN  type-0116
+  PASS type-0116
+  RUN  type-0117
+  PASS type-0117
+  RUN  type-0118
+  PASS type-0118
+  RUN  type-0119
+  PASS type-0119
+  RUN  type-0120
+  PASS type-0120
+  RUN  type-0121
+  PASS type-0121
+  RUN  type-0122
+  PASS type-0122
+  RUN  type-0123
+  PASS type-0123
+  RUN  type-0124
+  PASS type-0124
+  RUN  type-0125
+  PASS type-0125
+  RUN  type-0126
+  PASS type-0126
+  RUN  type-0127
+  PASS type-0127
+  RUN  type-0128
+  PASS type-0128
+  RUN  type-0129
+  PASS type-0129
+  RUN  type-0130
+  PASS type-0130
+  RUN  type-0131
+  PASS type-0131
+  RUN  type-0132
+  PASS type-0132
+  RUN  type-0133
+  PASS type-0133
+  RUN  type-0134
+  PASS type-0134
+  RUN  type-0135
+  PASS type-0135
+  RUN  type-0136
+  PASS type-0136
+  RUN  type-0137
+  PASS type-0137
+  RUN  type-0138
+  PASS type-0138
+  RUN  type-0139
+  PASS type-0139
+  RUN  type-0140
+  PASS type-0140
+  RUN  type-0141
+  PASS type-0141
+  RUN  type-0142
+  PASS type-0142
+  RUN  type-0143
+  PASS type-0143
+  RUN  type-0144
+  PASS type-0144
+  RUN  type-0150
+  PASS type-0150
+  RUN  type-0151
+  PASS type-0151
+  RUN  type-0152
+  PASS type-0152
+  RUN  type-0153
+  PASS type-0153
+  RUN  type-0154
+  PASS type-0154
+  RUN  type-0155
+  PASS type-0155
+  RUN  type-0156
+  PASS type-0156
+  RUN  type-0157
+  PASS type-0157
+  RUN  type-0158
+  PASS type-0158
+  RUN  type-0159
+  RUN  type-0160
+  PASS type-0160
+  RUN  type-0161
+  PASS type-0161
+  RUN  type-0162
+  PASS type-0162
+  RUN  type-0163
+  PASS type-0163
+  RUN  type-0164
+  PASS type-0164
+  RUN  type-0165
+  PASS type-0165
+  RUN  type-0166
+  PASS type-0166
+  RUN  type-0167
+  PASS type-0167
+  RUN  type-0168a
+  RUN  type-0168b
+  PASS type-0168b
+  RUN  type-0169
+  PASS type-0169
+  RUN  type-0170
+  PASS type-0170
+  RUN  type-0171
+  PASS type-0171
+  RUN  type-0172
+  PASS type-0172
+  RUN  type-0173
+  PASS type-0173
+  RUN  type-0174
+  PASS type-0174
+  RUN  type-0175
+  PASS type-0175
+  RUN  type-0201
+  RUN  type-0202
+  PASS type-0202
+  RUN  type-0203
+  PASS type-0203
+  RUN  type-0301
+  RUN  type-0302
+  RUN  type-0303
+  PASS type-0303
+  RUN  type-0401
+  PASS type-0401
+  RUN  type-0501
+  PASS type-0501
+  Done: type (79 tests, 59 passed, 0 failed, 20 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   129
+Passed:  65
+Failed:  0
+Skipped: 64
+
+Pass rate: 100.0%

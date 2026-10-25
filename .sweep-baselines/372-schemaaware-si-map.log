@@ -1,0 +1,42 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-map
+Mode: schema-aware (schema_aware / schema-import features un-gated)
+
+  Starting: si-map ...
+  RUN  si-map-001
+  PASS si-map-001
+  RUN  si-map-002
+  PASS si-map-002
+  RUN  si-map-003
+  PASS si-map-003
+  RUN  si-map-004
+  PASS si-map-004
+  RUN  si-map-005
+  PASS si-map-005
+  RUN  si-map-006
+  PASS si-map-006
+  RUN  si-map-007
+  PASS si-map-007
+  RUN  si-map-008
+  PASS si-map-008
+  RUN  si-map-009
+  PASS si-map-009
+  RUN  si-map-901
+  PASS si-map-901
+  RUN  si-map-902
+  PASS si-map-902
+  RUN  si-map-903
+  PASS si-map-903
+  Done: si-map (12 tests, 12 passed, 0 failed, 0 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   12
+Passed:  12
+Failed:  0
+Skipped: 0
+
+Pass rate: 100.0%

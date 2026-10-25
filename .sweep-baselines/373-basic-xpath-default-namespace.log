@@ -1,0 +1,65 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: xpath-default-namespace
+
+  Starting: xpath-default-namespace ...
+  RUN  xpath-default-namespace-0101
+  PASS xpath-default-namespace-0101
+  RUN  xpath-default-namespace-0102
+  PASS xpath-default-namespace-0102
+  RUN  xpath-default-namespace-0103
+  PASS xpath-default-namespace-0103
+  RUN  xpath-default-namespace-0104
+  PASS xpath-default-namespace-0104
+  RUN  xpath-default-namespace-0105
+  PASS xpath-default-namespace-0105
+  RUN  xpath-default-namespace-0106
+  PASS xpath-default-namespace-0106
+  RUN  xpath-default-namespace-0107
+  PASS xpath-default-namespace-0107
+  RUN  xpath-default-namespace-0108
+  PASS xpath-default-namespace-0108
+  RUN  xpath-default-namespace-0201
+  PASS xpath-default-namespace-0201
+  RUN  xpath-default-namespace-0202
+  PASS xpath-default-namespace-0202
+  RUN  xpath-default-namespace-0301
+  PASS xpath-default-namespace-0301
+  RUN  xpath-default-namespace-0401
+  PASS xpath-default-namespace-0401
+  RUN  xpath-default-namespace-0501
+  SKIP xpath-default-namespace-0501: Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md 6)
+  RUN  xpath-default-namespace-0502
+  SKIP xpath-default-namespace-0502: Implicit schema-awareness dependency: environment includes a <schema> element (w3c/xslt30-test maintainer confirmation, issue #90; see docs/BASIC_SWEEP_TRIAGE.md 6)
+  RUN  xpath-default-namespace-0503
+  RUN  xpath-default-namespace-0601
+  PASS xpath-default-namespace-0601
+  RUN  xpath-default-namespace-0701
+  RUN  xpath-default-namespace-0702
+  RUN  xpath-default-namespace-0703
+  RUN  xpath-default-namespace-0801
+  PASS xpath-default-namespace-0801
+  RUN  xpath-default-namespace-0901
+  PASS xpath-default-namespace-0901
+  RUN  xpath-default-namespace-1001
+  PASS xpath-default-namespace-1001
+  RUN  xpath-default-namespace-1101
+  PASS xpath-default-namespace-1101
+  RUN  xpath-default-namespace-1102
+  PASS xpath-default-namespace-1102
+  RUN  xpath-default-namespace-1201
+  PASS xpath-default-namespace-1201
+  RUN  xpath-default-namespace-1202
+  PASS xpath-default-namespace-1202
+  Done: xpath-default-namespace (26 tests, 20 passed, 0 failed, 6 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   26
+Passed:  20
+Failed:  0
+Skipped: 6
+
+Pass rate: 100.0%

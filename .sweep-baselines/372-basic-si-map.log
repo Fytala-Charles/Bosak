@@ -1,0 +1,32 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-map
+
+  Starting: si-map ...
+  SKIP si-map-001: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-002: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-003: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-004: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-005: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-006: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-007: Schema-aware error test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 at compile time (XSLT 3.0 27.2) and the expected error is unreachable; passes in --schema-aware mode
+  SKIP si-map-008: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-map-009: Schema-aware error test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 at compile time (XSLT 3.0 27.2) and the expected error is unreachable; passes in --schema-aware mode
+  RUN  si-map-901
+  PASS si-map-901
+  RUN  si-map-902
+  PASS si-map-902
+  RUN  si-map-903
+  PASS si-map-903
+  Done: si-map (12 tests, 3 passed, 0 failed, 9 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   12
+Passed:  3
+Failed:  0
+Skipped: 9
+
+Pass rate: 100.0%

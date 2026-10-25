@@ -1,0 +1,117 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: source-document
+
+  Starting: source-document ...
+  RUN  stream-001
+  PASS stream-001
+  RUN  stream-002
+  PASS stream-002
+  RUN  stream-003
+  PASS stream-003
+  RUN  stream-004
+  PASS stream-004
+  RUN  stream-005
+  PASS stream-005
+  RUN  stream-006
+  PASS stream-006
+  RUN  stream-007
+  PASS stream-007
+  RUN  stream-008
+  PASS stream-008
+  RUN  stream-009
+  PASS stream-009
+  RUN  stream-010
+  PASS stream-010
+  RUN  stream-011
+  PASS stream-011
+  RUN  stream-012
+  PASS stream-012
+  RUN  stream-013
+  PASS stream-013
+  RUN  stream-014
+  PASS stream-014
+  RUN  stream-101
+  RUN  stream-102
+  RUN  stream-103
+  RUN  stream-104
+  RUN  stream-105
+  RUN  stream-106
+  SKIP stream-107: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  SKIP stream-108: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  SKIP stream-109: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  RUN  stream-200
+  PASS stream-200
+  RUN  stream-201
+  PASS stream-201
+  RUN  stream-202
+  PASS stream-202
+  RUN  stream-203
+  PASS stream-203
+  RUN  stream-204
+  PASS stream-204
+  RUN  stream-205
+  PASS stream-205
+  RUN  stream-206
+  PASS stream-206
+  RUN  stream-207
+  SKIP stream-207: Streaming source not supported
+  RUN  stream-208
+  PASS stream-208
+  RUN  stream-210
+  PASS stream-210
+  RUN  stream-211
+  PASS stream-211
+  RUN  stream-500
+  PASS stream-500
+  RUN  non-stream-001
+  PASS non-stream-001
+  RUN  non-stream-002
+  PASS non-stream-002
+  RUN  non-stream-003
+  PASS non-stream-003
+  RUN  non-stream-004
+  PASS non-stream-004
+  RUN  non-stream-005
+  PASS non-stream-005
+  RUN  non-stream-006
+  PASS non-stream-006
+  RUN  non-stream-007
+  PASS non-stream-007
+  RUN  non-stream-008
+  PASS non-stream-008
+  RUN  non-stream-009
+  PASS non-stream-009
+  RUN  non-stream-010
+  PASS non-stream-010
+  RUN  non-stream-011
+  PASS non-stream-011
+  RUN  non-stream-012
+  PASS non-stream-012
+  RUN  non-stream-013
+  PASS non-stream-013
+  RUN  non-stream-101
+  RUN  non-stream-102
+  RUN  non-stream-103
+  RUN  non-stream-104
+  RUN  non-stream-105
+  RUN  non-stream-106
+  SKIP non-stream-107: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  SKIP non-stream-108: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  SKIP non-stream-109: Schema-aware test without a catalog schema_aware dependency: environment stylesheet stream-B.xsl contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; in --schema-aware mode the set is skipped anyway (books.xsd uses XSD 1.1 assertions)
+  RUN  non-stream-200
+  PASS non-stream-200
+  RUN  non-stream-201
+  PASS non-stream-201
+  Done: source-document (59 tests, 40 passed, 0 failed, 19 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   59
+Passed:  40
+Failed:  0
+Skipped: 19
+
+Pass rate: 100.0%

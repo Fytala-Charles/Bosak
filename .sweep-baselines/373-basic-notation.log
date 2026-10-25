@@ -1,0 +1,72 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: notation
+
+  Starting: strip-type-annotations ...
+  RUN  strip-type-annotations-001
+  RUN  strip-type-annotations-002
+  RUN  strip-type-annotations-003
+  RUN  strip-type-annotations-004
+  RUN  strip-type-annotations-005
+  RUN  strip-type-annotations-006
+  RUN  strip-type-annotations-007
+  RUN  strip-type-annotations-008
+  RUN  strip-type-annotations-009
+  RUN  strip-type-annotations-010
+  RUN  strip-type-annotations-011
+  RUN  strip-type-annotations-012
+  RUN  strip-type-annotations-013
+  RUN  strip-type-annotations-014
+  RUN  strip-type-annotations-015
+  RUN  strip-type-annotations-016
+  RUN  strip-type-annotations-017
+  RUN  strip-type-annotations-018
+  RUN  strip-type-annotations-019
+  RUN  strip-type-annotations-020
+  RUN  strip-type-annotations-021
+  RUN  strip-type-annotations-022
+  RUN  strip-type-annotations-023
+  PASS strip-type-annotations-023
+  RUN  strip-type-annotations-024
+  PASS strip-type-annotations-024
+  RUN  strip-type-annotations-025
+  PASS strip-type-annotations-025
+  RUN  strip-type-annotations-026
+  RUN  strip-type-annotations-027
+  Done: strip-type-annotations (27 tests, 3 passed, 0 failed, 24 skipped)
+  Starting: notation ...
+  RUN  notation-0001
+  RUN  notation-0002
+  RUN  notation-0003
+  RUN  notation-0004
+  RUN  notation-0101
+  RUN  notation-0102
+  RUN  notation-0103
+  RUN  notation-0201
+  RUN  notation-0202
+  RUN  notation-0301
+  RUN  notation-0302
+  RUN  notation-0303
+  RUN  notation-0304
+  RUN  notation-0305
+  RUN  notation-0401
+  RUN  notation-0402
+  RUN  notation-0403
+  RUN  notation-0404
+  RUN  notation-0501
+  RUN  notation-0502
+  RUN  notation-0601
+  RUN  notation-0701
+  RUN  notation-0702
+  Done: notation (23 tests, 0 passed, 0 failed, 23 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   50
+Passed:  3
+Failed:  0
+Skipped: 47
+
+Pass rate: 100.0%

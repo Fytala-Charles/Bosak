@@ -1,0 +1,123 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: sx-GeneralComp-gt
+
+  Starting: sx-GeneralComp-gt ...
+  RUN  sx-gc-gt-003
+  PASS sx-gc-gt-003
+  RUN  sx-gc-gt-004
+  PASS sx-gc-gt-004
+  RUN  sx-gc-gt-005
+  PASS sx-gc-gt-005
+  RUN  sx-gc-gt-006
+  PASS sx-gc-gt-006
+  RUN  sx-gc-gt-007
+  PASS sx-gc-gt-007
+  RUN  sx-gc-gt-008
+  PASS sx-gc-gt-008
+  RUN  sx-gc-gt-009
+  PASS sx-gc-gt-009
+  RUN  sx-gc-gt-010
+  PASS sx-gc-gt-010
+  RUN  sx-gc-gt-011
+  PASS sx-gc-gt-011
+  RUN  sx-gc-gt-012
+  PASS sx-gc-gt-012
+  RUN  sx-gc-gt-013
+  PASS sx-gc-gt-013
+  RUN  sx-gc-gt-015
+  PASS sx-gc-gt-015
+  RUN  sx-gc-gt-016
+  PASS sx-gc-gt-016
+  RUN  sx-gc-gt-017
+  PASS sx-gc-gt-017
+  RUN  sx-gc-gt-018
+  PASS sx-gc-gt-018
+  RUN  sx-gc-gt-019
+  PASS sx-gc-gt-019
+  RUN  sx-gc-gt-020
+  PASS sx-gc-gt-020
+  RUN  sx-gc-gt-021
+  PASS sx-gc-gt-021
+  RUN  sx-gc-gt-022
+  PASS sx-gc-gt-022
+  RUN  sx-gc-gt-023
+  PASS sx-gc-gt-023
+  RUN  sx-gc-gt-024
+  PASS sx-gc-gt-024
+  RUN  sx-gc-gt-025
+  PASS sx-gc-gt-025
+  RUN  sx-gc-gt-026
+  PASS sx-gc-gt-026
+  RUN  sx-gc-gt-027
+  PASS sx-gc-gt-027
+  RUN  sx-gc-gt-028
+  PASS sx-gc-gt-028
+  RUN  sx-gc-gt-100
+  RUN  sx-gc-gt-101
+  RUN  sx-gc-gt-103
+  PASS sx-gc-gt-103
+  RUN  sx-gc-gt-104
+  PASS sx-gc-gt-104
+  RUN  sx-gc-gt-105
+  PASS sx-gc-gt-105
+  RUN  sx-gc-gt-106
+  PASS sx-gc-gt-106
+  RUN  sx-gc-gt-107
+  PASS sx-gc-gt-107
+  RUN  sx-gc-gt-108
+  PASS sx-gc-gt-108
+  RUN  sx-gc-gt-109
+  PASS sx-gc-gt-109
+  RUN  sx-gc-gt-110
+  PASS sx-gc-gt-110
+  RUN  sx-gc-gt-111
+  PASS sx-gc-gt-111
+  RUN  sx-gc-gt-112
+  PASS sx-gc-gt-112
+  RUN  sx-gc-gt-113
+  PASS sx-gc-gt-113
+  RUN  sx-gc-gt-115
+  PASS sx-gc-gt-115
+  RUN  sx-gc-gt-116
+  PASS sx-gc-gt-116
+  RUN  sx-gc-gt-117
+  PASS sx-gc-gt-117
+  RUN  sx-gc-gt-118
+  PASS sx-gc-gt-118
+  RUN  sx-gc-gt-119
+  PASS sx-gc-gt-119
+  RUN  sx-gc-gt-120
+  PASS sx-gc-gt-120
+  RUN  sx-gc-gt-121
+  PASS sx-gc-gt-121
+  RUN  sx-gc-gt-122
+  PASS sx-gc-gt-122
+  RUN  sx-gc-gt-123
+  PASS sx-gc-gt-123
+  RUN  sx-gc-gt-124
+  PASS sx-gc-gt-124
+  RUN  sx-gc-gt-125
+  PASS sx-gc-gt-125
+  RUN  sx-gc-gt-126
+  PASS sx-gc-gt-126
+  RUN  sx-gc-gt-127
+  PASS sx-gc-gt-127
+  RUN  sx-gc-gt-128
+  PASS sx-gc-gt-128
+  RUN  sx-gc-gt-901
+  PASS sx-gc-gt-901
+  RUN  sx-gc-gt-902
+  PASS sx-gc-gt-902
+  Done: sx-GeneralComp-gt (54 tests, 52 passed, 0 failed, 2 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   54
+Passed:  52
+Failed:  0
+Skipped: 2
+
+Pass rate: 100.0%

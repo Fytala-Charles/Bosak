@@ -1,0 +1,84 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: sf-avg
+
+  Starting: sf-avg ...
+  RUN  sf-avg-003
+  PASS sf-avg-003
+  RUN  sf-avg-004
+  PASS sf-avg-004
+  RUN  sf-avg-005
+  PASS sf-avg-005
+  RUN  sf-avg-006
+  PASS sf-avg-006
+  RUN  sf-avg-007
+  PASS sf-avg-007
+  RUN  sf-avg-008
+  PASS sf-avg-008
+  RUN  sf-avg-009
+  PASS sf-avg-009
+  RUN  sf-avg-010
+  PASS sf-avg-010
+  RUN  sf-avg-011
+  PASS sf-avg-011
+  RUN  sf-avg-012
+  PASS sf-avg-012
+  RUN  sf-avg-013
+  PASS sf-avg-013
+  RUN  sf-avg-014
+  PASS sf-avg-014
+  RUN  sf-avg-015
+  PASS sf-avg-015
+  RUN  sf-avg-016
+  PASS sf-avg-016
+  RUN  sf-avg-017
+  PASS sf-avg-017
+  RUN  sf-avg-018
+  PASS sf-avg-018
+  RUN  sf-avg-019
+  PASS sf-avg-019
+  RUN  sf-avg-020
+  PASS sf-avg-020
+  RUN  sf-avg-021
+  PASS sf-avg-021
+  RUN  sf-avg-022
+  PASS sf-avg-022
+  RUN  sf-avg-023
+  PASS sf-avg-023
+  RUN  sf-avg-040
+  PASS sf-avg-040
+  RUN  sf-avg-041
+  PASS sf-avg-041
+  RUN  sf-avg-042
+  PASS sf-avg-042
+  RUN  sf-avg-043
+  PASS sf-avg-043
+  RUN  sf-avg-050
+  PASS sf-avg-050
+  RUN  sf-avg-051
+  PASS sf-avg-051
+  RUN  sf-avg-052
+  PASS sf-avg-052
+  RUN  sf-avg-053
+  PASS sf-avg-053
+  RUN  sf-avg-054
+  PASS sf-avg-054
+  RUN  sf-avg-055
+  PASS sf-avg-055
+  RUN  sf-avg-100
+  RUN  sf-avg-901
+  PASS sf-avg-901
+  RUN  sf-avg-902
+  PASS sf-avg-902
+  Done: sf-avg (34 tests, 33 passed, 0 failed, 1 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   34
+Passed:  33
+Failed:  0
+Skipped: 1
+
+Pass rate: 100.0%

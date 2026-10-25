@@ -1,0 +1,187 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-copy
+
+  Starting: si-copy ...
+  RUN  si-copy-001
+  PASS si-copy-001
+  RUN  si-copy-002
+  PASS si-copy-002
+  RUN  si-copy-003
+  PASS si-copy-003
+  RUN  si-copy-004
+  PASS si-copy-004
+  RUN  si-copy-005
+  PASS si-copy-005
+  RUN  si-copy-006
+  PASS si-copy-006
+  RUN  si-copy-007
+  PASS si-copy-007
+  RUN  si-copy-008
+  PASS si-copy-008
+  RUN  si-copy-009
+  PASS si-copy-009
+  RUN  si-copy-010
+  PASS si-copy-010
+  RUN  si-copy-011
+  PASS si-copy-011
+  RUN  si-copy-020
+  PASS si-copy-020
+  RUN  si-copy-021
+  PASS si-copy-021
+  RUN  si-copy-022
+  PASS si-copy-022
+  RUN  si-copy-023
+  PASS si-copy-023
+  RUN  si-copy-024
+  PASS si-copy-024
+  RUN  si-copy-025
+  PASS si-copy-025
+  RUN  si-copy-026
+  PASS si-copy-026
+  RUN  si-copy-027
+  PASS si-copy-027
+  RUN  si-copy-028
+  PASS si-copy-028
+  RUN  si-copy-029
+  PASS si-copy-029
+  RUN  si-copy-040
+  PASS si-copy-040
+  RUN  si-copy-041
+  PASS si-copy-041
+  RUN  si-copy-042
+  PASS si-copy-042
+  RUN  si-copy-043
+  PASS si-copy-043
+  RUN  si-copy-044
+  PASS si-copy-044
+  RUN  si-copy-045
+  PASS si-copy-045
+  RUN  si-copy-046
+  PASS si-copy-046
+  RUN  si-copy-047
+  PASS si-copy-047
+  RUN  si-copy-048
+  PASS si-copy-048
+  RUN  si-copy-049
+  PASS si-copy-049
+  RUN  si-copy-050
+  PASS si-copy-050
+  RUN  si-copy-051
+  PASS si-copy-051
+  RUN  si-copy-052
+  PASS si-copy-052
+  RUN  si-copy-101
+  RUN  si-copy-102
+  RUN  si-copy-103
+  RUN  si-copy-104
+  RUN  si-copy-105
+  RUN  si-copy-106
+  RUN  si-copy-107
+  RUN  si-copy-108
+  RUN  si-copy-109
+  RUN  si-copy-110
+  RUN  si-copy-111
+  RUN  si-copy-112
+  RUN  si-copy-113
+  RUN  si-copy-114
+  RUN  si-copy-115
+  RUN  si-copy-116
+  RUN  si-copy-117
+  RUN  si-copy-121
+  RUN  si-copy-122
+  RUN  si-copy-123
+  RUN  si-copy-124
+  RUN  si-copy-125
+  RUN  si-copy-126
+  RUN  si-copy-127
+  RUN  si-copy-128
+  RUN  si-copy-129
+  RUN  si-copy-130
+  RUN  si-copy-200
+  PASS si-copy-200
+  RUN  si-copy-901
+  PASS si-copy-901
+  RUN  si-copy-902
+  PASS si-copy-902
+  RUN  si-copy-903
+  PASS si-copy-903
+  Done: si-copy (65 tests, 38 passed, 0 failed, 27 skipped)
+  Starting: si-copy-of ...
+  RUN  si-copy-of-001
+  PASS si-copy-of-001
+  RUN  si-copy-of-002
+  PASS si-copy-of-002
+  RUN  si-copy-of-003
+  PASS si-copy-of-003
+  RUN  si-copy-of-004
+  PASS si-copy-of-004
+  RUN  si-copy-of-005
+  PASS si-copy-of-005
+  RUN  si-copy-of-006
+  PASS si-copy-of-006
+  RUN  si-copy-of-007
+  PASS si-copy-of-007
+  RUN  si-copy-of-008
+  PASS si-copy-of-008
+  RUN  si-copy-of-009
+  PASS si-copy-of-009
+  RUN  si-copy-of-010
+  PASS si-copy-of-010
+  RUN  si-copy-of-011
+  PASS si-copy-of-011
+  RUN  si-copy-of-020
+  PASS si-copy-of-020
+  RUN  si-copy-of-021
+  PASS si-copy-of-021
+  RUN  si-copy-of-022
+  PASS si-copy-of-022
+  RUN  si-copy-of-023
+  PASS si-copy-of-023
+  RUN  si-copy-of-024
+  PASS si-copy-of-024
+  RUN  si-copy-of-025
+  PASS si-copy-of-025
+  RUN  si-copy-of-026
+  PASS si-copy-of-026
+  RUN  si-copy-of-027
+  PASS si-copy-of-027
+  RUN  si-copy-of-101
+  RUN  si-copy-of-102
+  RUN  si-copy-of-103
+  RUN  si-copy-of-104
+  RUN  si-copy-of-105
+  RUN  si-copy-of-106
+  RUN  si-copy-of-107
+  RUN  si-copy-of-108
+  RUN  si-copy-of-109
+  RUN  si-copy-of-110
+  RUN  si-copy-of-111
+  RUN  si-copy-of-112
+  RUN  si-copy-of-113
+  RUN  si-copy-of-114
+  RUN  si-copy-of-115
+  RUN  si-copy-of-116
+  RUN  si-copy-of-117
+  RUN  si-copy-of-121
+  RUN  si-copy-of-122
+  RUN  si-copy-of-123
+  RUN  si-copy-of-124
+  RUN  si-copy-of-125
+  RUN  si-copy-of-126
+  RUN  si-copy-of-127
+  RUN  si-copy-of-128
+  RUN  si-copy-of-801
+  PASS si-copy-of-801
+  Done: si-copy-of (45 tests, 20 passed, 0 failed, 25 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   110
+Passed:  58
+Failed:  0
+Skipped: 52
+
+Pass rate: 100.0%

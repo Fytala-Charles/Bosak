@@ -1,0 +1,116 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-fork
+
+  Starting: si-fork ...
+  SKIP si-fork-001: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-002: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-003: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-004: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-005: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-006: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-007: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-008: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  SKIP si-fork-009: Schema-aware test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 (XSLT 3.0 27.2) and the expected result is unreachable; passes in --schema-aware mode
+  RUN  si-fork-101
+  PASS si-fork-101
+  RUN  si-fork-102
+  PASS si-fork-102
+  RUN  si-fork-103
+  PASS si-fork-103
+  RUN  si-fork-104
+  PASS si-fork-104
+  RUN  si-fork-105
+  PASS si-fork-105
+  RUN  si-fork-106
+  PASS si-fork-106
+  RUN  si-fork-107
+  PASS si-fork-107
+  RUN  si-fork-108
+  PASS si-fork-108
+  RUN  si-fork-109
+  PASS si-fork-109
+  RUN  si-fork-110
+  PASS si-fork-110
+  RUN  si-fork-111
+  PASS si-fork-111
+  RUN  si-fork-112
+  PASS si-fork-112
+  RUN  si-fork-113
+  PASS si-fork-113
+  RUN  si-fork-114
+  PASS si-fork-114
+  RUN  si-fork-115
+  PASS si-fork-115
+  RUN  si-fork-116
+  PASS si-fork-116
+  RUN  si-fork-117
+  PASS si-fork-117
+  RUN  si-fork-118
+  PASS si-fork-118
+  RUN  si-fork-119
+  PASS si-fork-119
+  RUN  si-fork-801
+  PASS si-fork-801
+  RUN  si-fork-802
+  PASS si-fork-802
+  RUN  si-fork-803
+  PASS si-fork-803
+  RUN  si-fork-804
+  PASS si-fork-804
+  RUN  si-fork-805
+  PASS si-fork-805
+  RUN  si-fork-806
+  PASS si-fork-806
+  RUN  si-fork-807
+  PASS si-fork-807
+  RUN  si-fork-808
+  PASS si-fork-808
+  RUN  si-fork-808-ns
+  PASS si-fork-808-ns
+  RUN  si-fork-809
+  PASS si-fork-809
+  RUN  si-fork-810
+  PASS si-fork-810
+  RUN  si-fork-811
+  PASS si-fork-811
+  RUN  si-fork-812
+  PASS si-fork-812
+  RUN  si-fork-812ns
+  PASS si-fork-812ns
+  RUN  si-fork-813
+  PASS si-fork-813
+  RUN  si-fork-814
+  PASS si-fork-814
+  RUN  si-fork-815
+  PASS si-fork-815
+  RUN  si-fork-816
+  PASS si-fork-816
+  SKIP si-fork-901: Schema-aware error test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 at compile time (XSLT 3.0 27.2) and the expected error is unreachable; passes in --schema-aware mode
+  SKIP si-fork-902: Schema-aware error test without a catalog schema_aware dependency: the stylesheet contains xsl:import-schema, so a basic processor must raise XTSE1650 at compile time (XSLT 3.0 27.2) and the expected error is unreachable; passes in --schema-aware mode
+  RUN  si-fork-951
+  PASS si-fork-951
+  RUN  si-fork-952
+  PASS si-fork-952
+  RUN  si-fork-953
+  PASS si-fork-953
+  RUN  si-fork-954
+  PASS si-fork-954
+  RUN  si-fork-955
+  PASS si-fork-955
+  RUN  si-fork-956
+  PASS si-fork-956
+  RUN  si-fork-957
+  PASS si-fork-957
+  Done: si-fork (55 tests, 44 passed, 0 failed, 11 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   55
+Passed:  44
+Failed:  0
+Skipped: 11
+
+Pass rate: 100.0%

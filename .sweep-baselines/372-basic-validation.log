@@ -1,0 +1,90 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: validation
+
+  Starting: validation ...
+  RUN  validation-0004
+  RUN  validation-0005
+  RUN  validation-0006
+  RUN  validation-0101
+  PASS validation-0101
+  RUN  validation-0102a
+  RUN  validation-0102b
+  PASS validation-0102b
+  RUN  validation-0103a
+  RUN  validation-0103b
+  PASS validation-0103b
+  RUN  validation-0104
+  PASS validation-0104
+  RUN  validation-0105a
+  RUN  validation-0105b
+  PASS validation-0105b
+  RUN  validation-0106
+  RUN  validation-0106a
+  PASS validation-0106a
+  RUN  validation-0107
+  RUN  validation-0108
+  RUN  validation-0109
+  RUN  validation-0110
+  RUN  validation-0111
+  RUN  validation-0201
+  RUN  validation-0202
+  RUN  validation-0203
+  RUN  validation-0204
+  RUN  validation-0205
+  RUN  validation-0206
+  RUN  validation-0207
+  RUN  validation-0208
+  RUN  validation-0209
+  RUN  validation-0210
+  RUN  validation-0211
+  RUN  validation-0212
+  RUN  validation-0213
+  RUN  validation-0214
+  RUN  validation-0215
+  RUN  validation-0301
+  RUN  validation-0401
+  RUN  validation-0501
+  RUN  validation-0601
+  RUN  validation-0701
+  RUN  validation-0801
+  RUN  validation-0901
+  RUN  validation-1001
+  RUN  validation-1002
+  RUN  validation-1101
+  RUN  validation-1201
+  RUN  validation-1202
+  RUN  validation-1203
+  RUN  validation-1204
+  RUN  validation-1301
+  RUN  validation-1401
+  RUN  validation-1501
+  RUN  validation-1601
+  RUN  validation-1602
+  RUN  validation-1603
+  RUN  validation-1604
+  RUN  validation-1605
+  RUN  validation-1606
+  RUN  validation-1607
+  RUN  validation-1701
+  RUN  validation-1702
+  RUN  validation-1703
+  RUN  validation-1704
+  RUN  validation-1705
+  RUN  validation-1706
+  RUN  validation-1707
+  RUN  validation-1708
+  RUN  validation-2001
+  RUN  validation-2002
+  Done: validation (67 tests, 6 passed, 0 failed, 61 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   67
+Passed:  6
+Failed:  0
+Skipped: 61
+
+Pass rate: 100.0%

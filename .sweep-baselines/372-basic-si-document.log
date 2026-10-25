@@ -1,0 +1,70 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: si-document
+
+  Starting: si-document ...
+  RUN  si-document-001
+  PASS si-document-001
+  RUN  si-document-002
+  PASS si-document-002
+  RUN  si-document-003
+  PASS si-document-003
+  RUN  si-document-004
+  PASS si-document-004
+  RUN  si-document-005
+  PASS si-document-005
+  RUN  si-document-006
+  PASS si-document-006
+  RUN  si-document-007
+  PASS si-document-007
+  RUN  si-document-008
+  PASS si-document-008
+  RUN  si-document-009
+  PASS si-document-009
+  RUN  si-document-010
+  PASS si-document-010
+  RUN  si-document-011
+  PASS si-document-011
+  RUN  si-document-022
+  PASS si-document-022
+  RUN  si-document-023
+  PASS si-document-023
+  RUN  si-document-024
+  PASS si-document-024
+  RUN  si-document-101
+  RUN  si-document-102
+  RUN  si-document-103
+  RUN  si-document-104
+  RUN  si-document-105
+  RUN  si-document-106
+  RUN  si-document-107
+  RUN  si-document-108
+  RUN  si-document-109
+  RUN  si-document-110
+  RUN  si-document-111
+  RUN  si-document-112
+  RUN  si-document-113
+  RUN  si-document-114
+  RUN  si-document-115
+  RUN  si-document-116
+  RUN  si-document-117
+  RUN  si-document-121
+  RUN  si-document-122
+  RUN  si-document-123
+  RUN  si-document-124
+  RUN  si-document-125
+  RUN  si-document-126
+  RUN  si-document-127
+  RUN  si-document-128
+  Done: si-document (39 tests, 14 passed, 0 failed, 25 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   39
+Passed:  14
+Failed:  0
+Skipped: 25
+
+Pass rate: 100.0%

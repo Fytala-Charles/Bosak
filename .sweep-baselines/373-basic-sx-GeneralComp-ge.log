@@ -1,0 +1,123 @@
+Bosak XSLT Conformance Harness
+Catalog: tests/xslt30-test/catalog.xml
+Test sets: 234
+Filter: sx-GeneralComp-ge
+
+  Starting: sx-GeneralComp-ge ...
+  RUN  sx-gc-ge-003
+  PASS sx-gc-ge-003
+  RUN  sx-gc-ge-004
+  PASS sx-gc-ge-004
+  RUN  sx-gc-ge-005
+  PASS sx-gc-ge-005
+  RUN  sx-gc-ge-006
+  PASS sx-gc-ge-006
+  RUN  sx-gc-ge-007
+  PASS sx-gc-ge-007
+  RUN  sx-gc-ge-008
+  PASS sx-gc-ge-008
+  RUN  sx-gc-ge-009
+  PASS sx-gc-ge-009
+  RUN  sx-gc-ge-010
+  PASS sx-gc-ge-010
+  RUN  sx-gc-ge-011
+  PASS sx-gc-ge-011
+  RUN  sx-gc-ge-012
+  PASS sx-gc-ge-012
+  RUN  sx-gc-ge-013
+  PASS sx-gc-ge-013
+  RUN  sx-gc-ge-015
+  PASS sx-gc-ge-015
+  RUN  sx-gc-ge-016
+  PASS sx-gc-ge-016
+  RUN  sx-gc-ge-017
+  PASS sx-gc-ge-017
+  RUN  sx-gc-ge-018
+  PASS sx-gc-ge-018
+  RUN  sx-gc-ge-019
+  PASS sx-gc-ge-019
+  RUN  sx-gc-ge-020
+  PASS sx-gc-ge-020
+  RUN  sx-gc-ge-021
+  PASS sx-gc-ge-021
+  RUN  sx-gc-ge-022
+  PASS sx-gc-ge-022
+  RUN  sx-gc-ge-023
+  PASS sx-gc-ge-023
+  RUN  sx-gc-ge-024
+  PASS sx-gc-ge-024
+  RUN  sx-gc-ge-025
+  PASS sx-gc-ge-025
+  RUN  sx-gc-ge-026
+  PASS sx-gc-ge-026
+  RUN  sx-gc-ge-027
+  PASS sx-gc-ge-027
+  RUN  sx-gc-ge-028
+  PASS sx-gc-ge-028
+  RUN  sx-gc-ge-100
+  RUN  sx-gc-ge-101
+  RUN  sx-gc-ge-103
+  PASS sx-gc-ge-103
+  RUN  sx-gc-ge-104
+  PASS sx-gc-ge-104
+  RUN  sx-gc-ge-105
+  PASS sx-gc-ge-105
+  RUN  sx-gc-ge-106
+  PASS sx-gc-ge-106
+  RUN  sx-gc-ge-107
+  PASS sx-gc-ge-107
+  RUN  sx-gc-ge-108
+  PASS sx-gc-ge-108
+  RUN  sx-gc-ge-109
+  PASS sx-gc-ge-109
+  RUN  sx-gc-ge-110
+  PASS sx-gc-ge-110
+  RUN  sx-gc-ge-111
+  PASS sx-gc-ge-111
+  RUN  sx-gc-ge-112
+  PASS sx-gc-ge-112
+  RUN  sx-gc-ge-113
+  PASS sx-gc-ge-113
+  RUN  sx-gc-ge-115
+  PASS sx-gc-ge-115
+  RUN  sx-gc-ge-116
+  PASS sx-gc-ge-116
+  RUN  sx-gc-ge-117
+  PASS sx-gc-ge-117
+  RUN  sx-gc-ge-118
+  PASS sx-gc-ge-118
+  RUN  sx-gc-ge-119
+  PASS sx-gc-ge-119
+  RUN  sx-gc-ge-120
+  PASS sx-gc-ge-120
+  RUN  sx-gc-ge-121
+  PASS sx-gc-ge-121
+  RUN  sx-gc-ge-122
+  PASS sx-gc-ge-122
+  RUN  sx-gc-ge-123
+  PASS sx-gc-ge-123
+  RUN  sx-gc-ge-124
+  PASS sx-gc-ge-124
+  RUN  sx-gc-ge-125
+  PASS sx-gc-ge-125
+  RUN  sx-gc-ge-126
+  PASS sx-gc-ge-126
+  RUN  sx-gc-ge-127
+  PASS sx-gc-ge-127
+  RUN  sx-gc-ge-128
+  PASS sx-gc-ge-128
+  RUN  sx-gc-ge-901
+  PASS sx-gc-ge-901
+  RUN  sx-gc-ge-902
+  PASS sx-gc-ge-902
+  Done: sx-GeneralComp-ge (54 tests, 52 passed, 0 failed, 2 skipped)
+
+============================================================
+XSLT Conformance Test Results
+============================================================
+Total:   54
+Passed:  52
+Failed:  0
+Skipped: 2
+
+Pass rate: 100.0%
