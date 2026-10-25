@@ -1,3 +1,9 @@
+## REQ-126 repeated unary conversion correction - 25 October 2026
+
+Base `352622aa807760fc27e446f4f3656eb00a1b956b` (PR454 merged; public 1.26.0). **Repeated unary conversion correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-COERCION.md) remove unsafe double-negation elimination, preserving atomization, untyped-to-double conversion, numeric normalization and required errors. Adds 79 regressions (46 failed before; all pass after). All 12,279 solution/LSP tests and unchanged frozen gates pass. Source 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains separate. REQ-126 stays partial.
+
+What was built: removed unconditional optimizer pair cancellation; retained numeric literal folding and runtime behavior. New source version 1.26.1; no publication. Original 46-failure TRX and corrected 79-pass receipt retained. Full build/solution/LSP and both frozen gates pass; current-native Unix remains 22/2/0. Next: review patch while Braid validates 1.26.0. Root upstream notes, sweep baselines and protected PR132 are untouched. README install pins remain current; no structural/CLI/API changes.
+
 ## Bosak 1.26.0 published and independently verified - 25 October 2026
 
 **1.26.0 published and verified - 25 October 2026:** [Publication proof](RELEASE-1.26.0-PUBLICATION.md) records immutable source `1f06efb4d938d3d8e12eb273e632a8fe15110041`, one Release run with 12,116 solution passes and ten uploads, ten verified signed packages, fresh nuget.org-only 153 broad/1,493 focused checks, 19 matching assembly identities and clear audits. Coordinated conditional Wrap/Edit/Unwrap and the previously unpublished 384 numeric cases are available. REQ-138 remains In progress pending Braid integration/native acceptance; REQ-126 remains partial. Earlier source-review/candidate/unpublished notices below are historical checkpoints, not current availability.

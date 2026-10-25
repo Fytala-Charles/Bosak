@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 1.13  | 08-10-2026     | REQ-118 4.0-S4: OptimizePipeline for PipelineExprNode ('->')
 //                      | Charles Korthout | 1.14  | 24-10-2026     | Check integer folding overflow and retain decimal-backed integer literal type.            |
 //                      | Charles Korthout | 1.15  | 25-10-2026     | Avoid unary minimum-value wraparound and retain wide integer literal identity.             |
+//                      | Charles Korthout | 1.16  | 25-10-2026     | Preserve atomization, conversion and errors across repeated unary negation.                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -458,14 +459,9 @@ internal sealed class XPathOptimizer
             node = node with { Operand = operand };
         }
 
-        // not(not(x)) => x
-        if (node.Operator == UnaryOperator.Minus &&
-            operand is UnaryExpressionNode inner &&
-            inner.Operator == UnaryOperator.Minus)
-        {
-            changed = true;
-            return inner.Operand;
-        }
+        // Do not cancel -(-x): the inner operation may atomize x, convert an
+        // untyped value, normalize a numeric subtype or raise an error. The
+        // runtime must retain those semantics even when the two signs cancel.
 
         // -(IntegerLiteral) => negated literal. In XPath 1.0 BC mode, -0 must produce
         // a negative zero double, so do not fold the unary minus on integer zero.

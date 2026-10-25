@@ -1,0 +1,9 @@
+{
+  "base": "352622aa807760fc27e446f4f3656eb00a1b956b",
+  "modernRows": 24,
+  "modernProfileCases": 72,
+  "derivedTypeAndSignedZeroCases": 3,
+  "backwardsCompatibleCases": 4,
+  "totalCases": 79,
+  "publicRelease": "1.26.0"
+}

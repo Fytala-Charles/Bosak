@@ -1,0 +1,150 @@
+{
+  "date": "2026-10-25",
+  "base": "352622aa807760fc27e446f4f3656eb00a1b956b",
+  "status": "IMPLEMENTED_VALIDATED_UNPUBLISHED",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "before": {
+    "total": 79,
+    "passed": 33,
+    "failed": 46,
+    "notExecuted": 0
+  },
+  "after": {
+    "total": 79,
+    "passed": 79,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "solutionTestsPassed": 12195,
+  "languageServerTestsPassed": 84,
+  "totalSourceAndLanguageServerTests": 12279,
+  "gates": {
+    "date": "2026-10-25",
+    "base": "352622aa807760fc27e446f4f3656eb00a1b956b",
+    "sourceVersion": "1.26.1",
+    "publicVersion": "1.26.0",
+    "results": [
+      {
+        "label": "frozen-gate",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-coercion-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests"
+        ],
+        "startedAtUtc": "2026-10-25T11:10:28.833472+00:00",
+        "completedAtUtc": "2026-10-25T11:10:52.388425+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 10330,
+          "Passed": 8436,
+          "Failed": 0,
+          "Skipped": 1894
+        },
+        "logSha256": "fe42b03d3e89a93d82cefed47422b6f92a197d61aadee0c7602d745ca8598389"
+      },
+      {
+        "label": "qt3",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-coercion-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+          "D:\\Development\\Bosak\\tests\\qt3tests"
+        ],
+        "startedAtUtc": "2026-10-25T11:10:28.833784+00:00",
+        "completedAtUtc": "2026-10-25T11:11:51.268349+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 31821,
+          "Passed": 31142,
+          "Failed": 0,
+          "Skipped": 679
+        },
+        "logSha256": "575e5ccd5a039f8914fa3226f60fe7b8623ae66a1a5a61b85c13c8cbae8cffa3"
+      },
+      {
+        "label": "current-native-after",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-coercion-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.upstream\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "startedAtUtc": "2026-10-25T11:10:28.834065+00:00",
+        "completedAtUtc": "2026-10-25T11:10:30.539721+00:00",
+        "exitCode": 2,
+        "counts": {
+          "Total": 24,
+          "Passed": 22,
+          "Failed": 2,
+          "Skipped": 0
+        },
+        "logSha256": "934bd736c68c6d0c534dfa5311fb3e01f6cbf3a24cdbde9609f39c2cb86c8475"
+      }
+    ],
+    "runnerSha256": "60fac4f7b9892e1437f72293baacc1fe50fd62c7135fe417aea8f763f771fdae",
+    "approvedPolicy": "Preserve double-negation atomization, numeric conversion, subtype normalization and errors; no runtime/storage change",
+    "frozenFixtureChanged": false,
+    "harnessRetryPolicyChanged": false,
+    "currentNativeNegativeFailuresRemainExplicit": true,
+    "releasePerformed": false
+  },
+  "evidence": [
+    {
+      "path": "evidence/unary-coercion/scope.json",
+      "sha256": "829f8c6cd3d088a9de7dbaefb5f754600b5ca906af12bf9b9f729f58a0fe4eb2"
+    },
+    {
+      "path": "evidence/unary-coercion/before-before.trx",
+      "sha256": "660a3dd62911e075cec5103a17d8e5f6bf26949de85547b0b241d89475d15ca1"
+    },
+    {
+      "path": "evidence/unary-coercion/after-after.trx",
+      "sha256": "3fa32d109fb1b6644e853710eb53722c88ac8f86fdf89ed991a3eb330cc8eeee"
+    },
+    {
+      "path": "evidence/unary-coercion/validation-exits.json",
+      "sha256": "8a09a832676bd52ffe0bccec8f1130147324427f93e9f671b1afa68f905f6b44"
+    },
+    {
+      "path": "evidence/unary-coercion/gate-verification.json",
+      "sha256": "4d60bbf186f2d6159d6f8318cc5cab3994431d0c57483799a8272b82f3cffed0"
+    },
+    {
+      "path": "evidence/unary-coercion/build.log",
+      "sha256": "20576f1168e49e276390debede36f7ba2841fd91c9674b56aa4503d8dde185e0"
+    },
+    {
+      "path": "evidence/unary-coercion/source-tests.log",
+      "sha256": "c50958036188f1ef1e1cf363f98a22ae4b45bd88af6c1976ec8987b7df9363ca"
+    },
+    {
+      "path": "evidence/unary-coercion/lsp-tests.log",
+      "sha256": "02695db5ddfb498555034babe947e40e9f3ba2feb2e78c013502811df5bbf0ad"
+    },
+    {
+      "path": "evidence/unary-coercion/qt3.log",
+      "sha256": "575e5ccd5a039f8914fa3226f60fe7b8623ae66a1a5a61b85c13c8cbae8cffa3"
+    },
+    {
+      "path": "evidence/unary-coercion/frozen-gate.log",
+      "sha256": "fe42b03d3e89a93d82cefed47422b6f92a197d61aadee0c7602d745ca8598389"
+    },
+    {
+      "path": "evidence/unary-coercion/current-native-after.log",
+      "sha256": "934bd736c68c6d0c534dfa5311fb3e01f6cbf3a24cdbde9609f39c2cb86c8475"
+    },
+    {
+      "path": "evidence/unary-coercion/full-test-receipts.json",
+      "sha256": "07e0f1228c4357fe69de5ab30cfd258a71c5bb76f31509a1d4d0da7d1b992c41"
+    }
+  ],
+  "engineChange": "Remove unconditional double-negation elimination; retain existing literal folds and runtime unary operations.",
+  "remaining": "REQ-126/D2/D3/D4/AC-03 partial; generic wide storage/casts/errors, unary-plus subtype normalization and broader coercion remain separate.",
+  "releasePerformed": false,
+  "braidModified": false,
+  "validatedSourceGitBlobIds": {
+    "src/Bosak.XPath.Compiler/Optimizer/XPathOptimizer.cs": "29f3706f86defa8e45f7e3a1c33c3b7b96df52a9",
+    "src/Directory.Build.props": "2d2efc89fe4e1ea238061eb53fc6b56f9be29b64",
+    "tests/Bosak.XPath.Standard.Tests/UnaryCoercionTests.cs": "fe795b7c06e0bcc955ca09481485570e0f5fcb91"
+  }
+}
