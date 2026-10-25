@@ -1,0 +1,72 @@
+{
+  "checkpoint": "29acaac761206d6b316e8844930ce5d4e8043835",
+  "ci": {
+    "conclusion": "success",
+    "headSha": "29acaac761206d6b316e8844930ce5d4e8043835"
+  },
+  "engine": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "fullReleasePasses": 1518,
+  "publicPackagePasses": 1784,
+  "verifiedRawTrx": [
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_06_net10.0.trx",
+      "sha256": "b7d68ea47f1bba5319afdf8e6cc8dc75a1f437b1b1bfd527cc7c06d27b365a2c",
+      "passed": 27
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_07_net10.0.trx",
+      "sha256": "2aeafa626a2c3a8c1c6756fd389b82131b2d9f6e4fbd5580d531ac2fbba1f0e3",
+      "passed": 514
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_09_net10.0.trx",
+      "sha256": "0013bdf44d2d5e5df6cb8a5cfceb25142f7d0ee67f0b4cc58d93bcd4d70268e9",
+      "passed": 607
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_11_net10.0.trx",
+      "sha256": "396efda9e01823f2712806ce325bec025eb11e57ac88fee7216d2e8f6739b49b",
+      "passed": 370
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\results\\public.trx",
+      "sha256": "f9a0a390cc74f923c41150e358124241532165c15011f0e455a8cc65b02ee2ab",
+      "passed": 1784
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\conditional-results-final\\conditional.trx",
+      "sha256": "ea38337a8ad3e58387df25d1677e6ac0d47320e104ed65c7496603f317167f95",
+      "passed": 24
+    },
+    {
+      "path": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-public-1260\\conditional-ui-results-final\\conditional-ui.trx",
+      "sha256": "104d0cf775ab92969c359f7517513ede649f9ac23372a00f5ac48d2822b7f368",
+      "passed": 9
+    }
+  ],
+  "consumedSignedPackages": 9,
+  "publicArchiveHashesMatchIndependentBosakPublication": true,
+  "nativeAcceptance": {
+    "date": "2026-10-25",
+    "report": "Passed - accepted",
+    "scope": [
+      "Wrap true()",
+      "Edit test false()",
+      "Acknowledged Unwrap",
+      "Actual selection",
+      "Undo/Redo",
+      "Expected-output preview"
+    ],
+    "optionalObservationsReported": false,
+    "newRuntimeTestRun": false,
+    "baseCommit": "56f2c18e4b3483b38698bf2b2054264e6ba14270",
+    "engineRevision": "1f06efb4d938d3d8e12eb273e632a8fe15110041"
+  },
+  "earlierFinalVerificationFlagsAreHistorical": {
+    "nativeAccepted": false,
+    "committed": false,
+    "pushed": false
+  },
+  "independentNewRuntimeTestsPerformed": false,
+  "nativeHostNotClaimedCleanCheckpointBuild": true
+}

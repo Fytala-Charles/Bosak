@@ -1,0 +1,190 @@
+{
+  "baseCommit": "56f2c18e4b3483b38698bf2b2054264e6ba14270",
+  "engineRevision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "fullRelease": [
+    {
+      "path": ".acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_06_net10.0.trx",
+      "sha256": "b7d68ea47f1bba5319afdf8e6cc8dc75a1f437b1b1bfd527cc7c06d27b365a2c",
+      "counters": {
+        "total": "27",
+        "executed": "27",
+        "passed": "27",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": ".acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_07_net10.0.trx",
+      "sha256": "2aeafa626a2c3a8c1c6756fd389b82131b2d9f6e4fbd5580d531ac2fbba1f0e3",
+      "counters": {
+        "total": "514",
+        "executed": "514",
+        "passed": "514",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": ".acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_09_net10.0.trx",
+      "sha256": "0013bdf44d2d5e5df6cb8a5cfceb25142f7d0ee67f0b4cc58d93bcd4d70268e9",
+      "counters": {
+        "total": "607",
+        "executed": "607",
+        "passed": "607",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": ".acceptance\\req138-public-1260\\integrated-full-results\\charl_CHARLES_2026-10-25_12_21_11_net10.0.trx",
+      "sha256": "396efda9e01823f2712806ce325bec025eb11e57ac88fee7216d2e8f6739b49b",
+      "counters": {
+        "total": "370",
+        "executed": "370",
+        "passed": "370",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "public": {
+    "path": ".acceptance\\req138-public-1260\\results\\public.trx",
+    "sha256": "f9a0a390cc74f923c41150e358124241532165c15011f0e455a8cc65b02ee2ab",
+    "counters": {
+      "total": "1784",
+      "executed": "1784",
+      "passed": "1784",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  },
+  "conditional": {
+    "path": ".acceptance\\req138-public-1260\\conditional-results-final\\conditional.trx",
+    "sha256": "ea38337a8ad3e58387df25d1677e6ac0d47320e104ed65c7496603f317167f95",
+    "counters": {
+      "total": "24",
+      "executed": "24",
+      "passed": "24",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  },
+  "conditionalUi": {
+    "path": ".acceptance\\req138-public-1260\\conditional-ui-results-final\\conditional-ui.trx",
+    "sha256": "104d0cf775ab92969c359f7517513ede649f9ac23372a00f5ac48d2822b7f368",
+    "counters": {
+      "total": "9",
+      "executed": "9",
+      "passed": "9",
+      "failed": "0",
+      "error": "0",
+      "timeout": "0",
+      "aborted": "0",
+      "inconclusive": "0",
+      "passedButRunAborted": "0",
+      "notRunnable": "0",
+      "notExecuted": "0",
+      "disconnected": "0",
+      "warning": "0",
+      "completed": "0",
+      "inProgress": "0",
+      "pending": "0"
+    }
+  },
+  "nativeAccepted": false,
+  "nativeHostProcessId": 19712,
+  "committed": false,
+  "pushed": false,
+  "evidence": [
+    {
+      "path": "public-provenance.json",
+      "sha256": "3d34853f7f4e847fde4e424d9a608ff632d6852a2d322d3555d5a868db7cc654"
+    },
+    {
+      "path": "assembly-metadata.json",
+      "sha256": "453139236ca4ebff4f5aa9fd2ff586c4bcab77783948e86b70002b1514de71ab"
+    },
+    {
+      "path": "audit.log",
+      "sha256": "822d8feafd0aa95499ac279d1df703803d604435600910567cbd3bfcaef360c9"
+    },
+    {
+      "path": "licensing.log",
+      "sha256": "f14885e7d784539f47b5ce9548da54bc117bff2b992d2bc7f9eb18ef62d98f2f"
+    },
+    {
+      "path": "publish.log",
+      "sha256": "66947ae8ad6102b97011e8a105924908ad7b76203b612483281378711156258f"
+    },
+    {
+      "path": "native-host-build.log",
+      "sha256": "87cf2a4cf939babbe2554b75abaa2a8cd5e4a638d5dd9ce0469c6e7b7cd5e8dc"
+    }
+  ]
+}

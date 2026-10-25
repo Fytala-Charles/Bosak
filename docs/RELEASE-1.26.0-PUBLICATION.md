@@ -4,6 +4,9 @@
   <p>25 October 2026</p>
 </div>
 
+**REQ-138 accepted by Braid - 25 October 2026:** [Formal acceptance](REQ-138-BRAID-ACCEPTANCE.md) pins pushed checkpoint `29acaac761206d6b316e8844930ce5d4e8043835`, green checkpoint CI, 1,518 Release /1,784 isolated public-package passes and the separate owner "Passed - accepted" native receipt. [Maintainer verification](req138-evidence/acceptance/verification.json) rechecks all seven TRX hashes/counters and correlates nine consumed archive identities with independently verified Bosak signatures. Acceptance covers the delivered conditional lifecycle. Optional/unreported native variants remain unspecified; the host is not represented as a clean-checkpoint build. Earlier consumer-pending notices are historical. The original publication-time pending statements below and machine-readable publication receipt are retained historical evidence.
+
+
 **Published and independently verified.** [Bosak v1.26.0](https://github.com/Fytala-Charles/Bosak/releases/tag/v1.26.0) uses approved immutable source `1f06efb4d938d3d8e12eb273e632a8fe15110041` and annotated tag object `3a33c705d54b7783bbbe8117acbe69d615d71b6c`. The candidate documentation merge is separate from package source. The owner authorized merging PR453, tagging this exact source and publishing before these actions.
 
 | Verification | Observed result |

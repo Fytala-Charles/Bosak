@@ -1,5 +1,7 @@
 # Native switch comparison and result boundaries
 
+**Ready for upstream review - 23 October 2026:** [PR34](https://github.com/qt4cg/xslt40-test/pull/34) is now open for review. Refreshed upstream default remains `91328fbf`; contribution head remains `91d81459`. The final diff remains 13 files /180 additions, with no whitespace errors or merge conflicts. No review objections or CI checks are listed. Independent processor confirmation and upstream acceptance remain pending. [Readiness receipt](review-readiness.json) supplements the unchanged original submission receipt. Draft-status statements below are historical.
+
 **Switch slice merged and upstream draft submitted - 21 October 2026:** [Bosak PR395](https://github.com/Fytala-Charles/Bosak/pull/395) merged as `d53d64bdce34bf3cfdabee98b6ccf2a7ef31f1b4` after exact-head CI passed10,246 solution +84 language-server tests. [Upstream draft PR34](https://github.com/qt4cg/xslt40-test/pull/34) contains the12 native switch cases, based on refreshed default `91328fbf`; [submission proof](submission.json) records exact revisions and the unchanged prepared patch hash. Upstream review/acceptance and independent processor confirmation remain pending. Source1.23.1 is unpublished; public1.23.0 and Braid REQ-135 validation remain unchanged. Merged-main CI39572257850 is running at this checkpoint. Earlier prepared/not-submitted statements below are historical.
 
 ## Original preparation and verification

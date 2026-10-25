@@ -7,6 +7,11 @@
   <p>Technical design document — XPath 3.1 register-VM engine</p>
 </div>
 
+**Numeric binary/range empty correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/BINARY-EMPTY-ATOMIZATION.md) propagate empty atomized operands in six numeric paths and modern ranges. Adds 214 cases (168 failed before; all pass after), 12,740 solution/LSP passes and unchanged fresh frozen gates. Matrix discrepancies fall 84 to 36 (48 corrected, no regressions); function conversion remains separate. Existing source patch 1.26.1 is unpublished; public 1.26.0 has bounded Braid acceptance. REQ-126 stays partial.
+
+**REQ-138 accepted by Braid - 25 October 2026:** [Formal acceptance](REQ-138-BRAID-ACCEPTANCE.md) pins pushed checkpoint `29acaac761206d6b316e8844930ce5d4e8043835`, green checkpoint CI, 1,518 Release /1,784 isolated public-package passes and the separate owner "Passed - accepted" native receipt. [Maintainer verification](req138-evidence/acceptance/verification.json) rechecks all seven TRX hashes/counters and correlates nine consumed archive identities with independently verified Bosak signatures. Acceptance covers the delivered conditional lifecycle. Optional/unreported native variants remain unspecified; the host is not represented as a clean-checkpoint build. Earlier consumer-pending notices are historical.
+
+
 **Recursive array singleton correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/ARRAY-SINGLETON-ATOMIZATION.md) count atomic values after recursively processing array members. Adds 111 regressions (92 failed before; all pass after), 12,526 solution/LSP passes and unchanged fresh frozen gates. Independent matrix discrepancies fall 207 to 84 (123 corrected, no regressions); caller empty handling and function conversion remain separate. Existing source patch 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains current. REQ-126 stays partial.
 
 
