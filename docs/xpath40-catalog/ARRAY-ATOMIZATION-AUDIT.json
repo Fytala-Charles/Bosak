@@ -1,0 +1,279 @@
+{
+  "date": "2026-10-25",
+  "base": "f646d9da6b97fab6816fca0c8fa8bd43ca94a79b",
+  "status": "AUDITED_IMPLEMENTATION_PROPOSED",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "controls": {
+    "total": 72,
+    "passed": 72,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "solutionTestsPassed": 12331,
+  "languageServerTestsPassed": 84,
+  "totalSourceAndLanguageServerTests": 12415,
+  "diagnostics": {
+    "shapes": 16,
+    "contexts": 12,
+    "profiles": 3,
+    "pairs": 576,
+    "rawObservations": 1152,
+    "matches": 357,
+    "discrepancies": 219,
+    "allProfilesAgree": true,
+    "perContext": {
+      "data": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "unary-minus": {
+        "pairs": 48,
+        "matches": 27,
+        "discrepancies": 21,
+        "actualMatchesIndependentExpectation": 27,
+        "actualDiscrepancies": 21,
+        "referenceDiscrepancies": 0
+      },
+      "unary-plus": {
+        "pairs": 48,
+        "matches": 27,
+        "discrepancies": 21,
+        "actualMatchesIndependentExpectation": 27,
+        "actualDiscrepancies": 21,
+        "referenceDiscrepancies": 0
+      },
+      "add": {
+        "pairs": 48,
+        "matches": 21,
+        "discrepancies": 27,
+        "actualMatchesIndependentExpectation": 21,
+        "actualDiscrepancies": 27,
+        "referenceDiscrepancies": 0
+      },
+      "multiply": {
+        "pairs": 48,
+        "matches": 21,
+        "discrepancies": 27,
+        "actualMatchesIndependentExpectation": 21,
+        "actualDiscrepancies": 27,
+        "referenceDiscrepancies": 0
+      },
+      "idiv": {
+        "pairs": 48,
+        "matches": 21,
+        "discrepancies": 27,
+        "actualMatchesIndependentExpectation": 21,
+        "actualDiscrepancies": 27,
+        "referenceDiscrepancies": 0
+      },
+      "range": {
+        "pairs": 48,
+        "matches": 21,
+        "discrepancies": 27,
+        "actualMatchesIndependentExpectation": 21,
+        "actualDiscrepancies": 27,
+        "referenceDiscrepancies": 0
+      },
+      "value-eq": {
+        "pairs": 48,
+        "matches": 27,
+        "discrepancies": 21,
+        "actualMatchesIndependentExpectation": 27,
+        "actualDiscrepancies": 21,
+        "referenceDiscrepancies": 0
+      },
+      "general-eq": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "cast": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "castable": {
+        "pairs": 48,
+        "matches": 48,
+        "discrepancies": 0,
+        "actualMatchesIndependentExpectation": 48,
+        "actualDiscrepancies": 0,
+        "referenceDiscrepancies": 0
+      },
+      "function-argument": {
+        "pairs": 48,
+        "matches": 0,
+        "discrepancies": 48,
+        "actualMatchesIndependentExpectation": 12,
+        "actualDiscrepancies": 36,
+        "referenceDiscrepancies": 12
+      }
+    },
+    "textualAtomizeReferences": 71,
+    "classification": "Diagnostic comparisons with independently flattened pure-integer/empty shape inputs; not passing native conformance assertions. Equal error codes do not certify all error precedence.",
+    "engineChanged": false,
+    "actualMatchesIndependentExpectation": 369,
+    "actualDiscrepancies": 207,
+    "referenceDiscrepancies": 12,
+    "independentExpectation": "Python recursive flattening plus explicit empty/singleton/multiple and integer/boolean/string result rules; does not trust the processor reference as an oracle."
+  },
+  "engineSrcTree": "924fe8d87edb472a9a7c811b1008aa16881b8490",
+  "engineChanged": false,
+  "freshManualGatesRerun": false,
+  "baselineGates": {
+    "date": "2026-10-25",
+    "base": "d89b50e8223cec9913a8c41c9cef8c870bb6228a",
+    "sourceVersion": "1.26.1",
+    "publicVersion": "1.26.0",
+    "results": [
+      {
+        "label": "frozen-gate",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-empty-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\tests\\qt4tests"
+        ],
+        "startedAtUtc": "2026-10-25T11:26:01.405237+00:00",
+        "completedAtUtc": "2026-10-25T11:26:23.501783+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 10330,
+          "Passed": 8436,
+          "Failed": 0,
+          "Skipped": 1894
+        },
+        "logSha256": "e8fba54194b3fdde8c5ba88e2536de629f3b1cc4ab227c4a009e124a0e326520"
+      },
+      {
+        "label": "qt3",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-empty-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+          "D:\\Development\\Bosak\\tests\\qt3tests"
+        ],
+        "startedAtUtc": "2026-10-25T11:26:01.405496+00:00",
+        "completedAtUtc": "2026-10-25T11:27:17.226280+00:00",
+        "exitCode": 0,
+        "counts": {
+          "Total": 31821,
+          "Passed": 31142,
+          "Failed": 0,
+          "Skipped": 679
+        },
+        "logSha256": "607968db168565b0300c08513464b800109db25d1b95e049e1752dbb2f8a7828"
+      },
+      {
+        "label": "current-native-after",
+        "command": [
+          "dotnet",
+          "D:\\Development\\Bosak\\.guard-tmp\\req126-unary-empty-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+          "D:\\Development\\Bosak\\.upstream\\qt4tests",
+          "fn-unix-dateTime"
+        ],
+        "startedAtUtc": "2026-10-25T11:26:01.405755+00:00",
+        "completedAtUtc": "2026-10-25T11:26:03.029964+00:00",
+        "exitCode": 2,
+        "counts": {
+          "Total": 24,
+          "Passed": 22,
+          "Failed": 2,
+          "Skipped": 0
+        },
+        "logSha256": "23b42d4a43aa1aa3f0331081cc82e6c50b70433da9d445e40467e6183cb22b84"
+      }
+    ],
+    "runnerSha256": "51d86a12b8b8b697e13158431647b41dfeb329d47dccac372cccda8c4ae4b9a0",
+    "approvedPolicy": "Preserve empty values after modern unary-minus atomization; no shared atomizer/storage change",
+    "frozenFixtureChanged": false,
+    "harnessRetryPolicyChanged": false,
+    "currentNativeNegativeFailuresRemainExplicit": true,
+    "releasePerformed": false
+  },
+  "evidence": [
+    {
+      "path": "evidence/array-atomization-audit/inputs.json",
+      "sha256": "de55fc2a9514d23856a8138093516d8f7f9865ea2b84083000f4b53588b7e255"
+    },
+    {
+      "path": "evidence/array-atomization-audit/expressions.json",
+      "sha256": "b4d107f2b62fb7ec63caf9aaaa1047dda3019cb8c5f4c8a9582f37036474990a"
+    },
+    {
+      "path": "evidence/array-atomization-audit/observations.json",
+      "sha256": "518a1813a61314665ed05ed74fe4f8fa6679056b8eeb74d8f61988814a5c28ce"
+    },
+    {
+      "path": "evidence/array-atomization-audit/comparisons.json",
+      "sha256": "b915c1d0506d330ff08df5acab212700d37706b92fb9f51c3947855ab834ec1f"
+    },
+    {
+      "path": "evidence/array-atomization-audit/diagnostic-summary.json",
+      "sha256": "5b1bd72faba4380d21e5695189b616c29a30b511fccf9ecfd938373a572b8d70"
+    },
+    {
+      "path": "evidence/array-atomization-audit/caller-inventory.json",
+      "sha256": "a6d590d9a683b5e32402c45161a47ed4426d72fda54046f4d4304b5bf6461f4b"
+    },
+    {
+      "path": "evidence/array-atomization-audit/validation-exits.json",
+      "sha256": "8a09a832676bd52ffe0bccec8f1130147324427f93e9f671b1afa68f905f6b44"
+    },
+    {
+      "path": "evidence/array-atomization-audit/build.log",
+      "sha256": "68401bfdfd97404d5218b009ce8591ef533b8d8861f2221349f08fef92ce12a2"
+    },
+    {
+      "path": "evidence/array-atomization-audit/source-tests.log",
+      "sha256": "dc7b0ff630ce73779af4164c5e1baeddb81b9cbf5de7b1ba87e6d31fc20056d5"
+    },
+    {
+      "path": "evidence/array-atomization-audit/lsp-tests.log",
+      "sha256": "e40cce57da87ecc3af13b54d9b164c5e5dd4c83aad6e1e2983b0b77c7602a7be"
+    },
+    {
+      "path": "evidence/array-atomization-audit/full-test-receipts.json",
+      "sha256": "8822ff548d3dce2910c3b1f75fe9baf5abf0f938d7729841a67c666fe6f51122"
+    },
+    {
+      "path": "evidence/array-atomization-audit/engine-identical-baseline-gates.json",
+      "sha256": "cc00c9a15d099778f36efb5aa8f54c540269984e1aae1269c084f6dc18198304"
+    },
+    {
+      "path": "evidence/array-atomization-audit/controls.trx",
+      "sha256": "a393c6886696e9f5a0d5bfb475bef38b96b5fe5ac333980d77f9e7250fabe7ac"
+    },
+    {
+      "path": "evidence/array-atomization-audit/analyze.py",
+      "sha256": "56cf85359f05f0c5fd0435e71881aeaa785075d1fdaf1d40d2be5e4736fe85e1"
+    },
+    {
+      "path": "evidence/array-atomization-audit/prepare.py",
+      "sha256": "529b2eb29227c1555f506391fd421fde07bfeef6cda29f0569a61c7ac82ce59e"
+    },
+    {
+      "path": "evidence/array-atomization-audit/probe-program.cs.txt",
+      "sha256": "c4956c481eddd709cb3c750f2565212a7cfac9d580264fbc215a818a50605339"
+    },
+    {
+      "path": "evidence/array-atomization-audit/probe-project.csproj.txt",
+      "sha256": "93c3023db6a9177a01f25ce092d60f6e5775a634f6ff06f811c9907717bc5a36"
+    }
+  ],
+  "releasePerformed": false,
+  "braidModified": false,
+  "req126Status": "Partial; D2/D3/D4/applicable-evidence AC-03 remain open.",
+  "validatedSourceGitBlobIds": {
+    "tests/Bosak.XPath.Standard.Tests/ArrayAtomizationAuditTests.cs": "89e321e0326b0cda5de07810ed5ddd32ff34e870"
+  }
+}

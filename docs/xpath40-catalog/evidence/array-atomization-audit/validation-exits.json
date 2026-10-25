@@ -1,0 +1,14 @@
+[
+  {
+    "label": "build",
+    "exitCode": 0
+  },
+  {
+    "label": "source-tests",
+    "exitCode": 0
+  },
+  {
+    "label": "lsp-tests",
+    "exitCode": 0
+  }
+]

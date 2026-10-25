@@ -4,6 +4,9 @@
   <p>25 October 2026 - source 1.26.1 unpublished; public 1.26.0</p>
 </div>
 
+**Merged follow-up:** PR456 passed all three CI checks (12,343 tests) and merged at `f646d9da6b97fab6816fca0c8fa8bd43ca94a79b`. The [recursive array caller/cardinality audit](ARRAY-ATOMIZATION-AUDIT.md) is now prepared separately. Original implementation evidence remains unchanged; 1.26.1 remains unpublished.
+
+
 This bounded REQ-126 slice follows [PR455's unary conversion correction](UNARY-COERCION.md), merged at `d89b50e8223cec9913a8c41c9cef8c870bb6228a` after all three CI checks passed (12,279 solution/LSP tests). It adds the missing empty-result check immediately after unary-minus atomization. Source remains the existing unpublished **1.26.1** patch; [public 1.26.0](../RELEASE-1.26.0-PUBLICATION.md) and Braid validation are unchanged.
 
 ## Contract and behavior

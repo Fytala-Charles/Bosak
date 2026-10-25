@@ -1,0 +1,363 @@
+{
+  "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+  "gitBlob": "cc5dfb46bbb30b876180f5ea93a95b3ce462a693",
+  "sha256": "69ed52595441fab09ad07c4c4b7083d812bf91e971af97ad460e8862cb00fa1d",
+  "references": [
+    {
+      "line": 1455,
+      "enclosingMethod": "Execute",
+      "source": "keys[k] = Atomize(rawKey);"
+    },
+    {
+      "line": 1571,
+      "enclosingMethod": "Execute",
+      "source": "if (!InstanceOf(Atomize(keyValue), declaredType, groupInfo.DeclaredTypeOccurrences[k], null, context))"
+    },
+    {
+      "line": 1608,
+      "enclosingMethod": "Execute",
+      "source": "mergedTuple[slot] = SingleGroupKeyItem(Atomize(keyValue));"
+    },
+    {
+      "line": 1885,
+      "enclosingMethod": "Execute",
+      "source": "var nameAtom = Atomize(registers[instr.RegisterB]);"
+    },
+    {
+      "line": 1914,
+      "enclosingMethod": "Execute",
+      "source": "var prefixAtom = Atomize(registers[instr.RegisterB]);"
+    },
+    {
+      "line": 1978,
+      "enclosingMethod": "Execute",
+      "source": "string uri = nsValue.IsUndefined ? string.Empty : Atomize(nsValue).ToString();"
+    },
+    {
+      "line": 2729,
+      "enclosingMethod": "Execute",
+      "source": "var keyValue = Atomize(registers[instr.RegisterC]);"
+    },
+    {
+      "line": 2966,
+      "enclosingMethod": "Execute",
+      "source": "var atomizedItem = Atomize(singletonItem);"
+    },
+    {
+      "line": 3252,
+      "enclosingMethod": "Execute",
+      "source": "double startD = ToDouble(Atomize(registers[instr.RegisterC]));"
+    },
+    {
+      "line": 3265,
+      "enclosingMethod": "Execute",
+      "source": "double lenD = ToDouble(Atomize(registers[instr.Operand]));"
+    },
+    {
+      "line": 3610,
+      "enclosingMethod": "Execute",
+      "source": "long pos = ToInteger(Atomize(registers[instr.RegisterC]));"
+    },
+    {
+      "line": 3623,
+      "enclosingMethod": "Execute",
+      "source": "long pos = ToInteger(Atomize(registers[instr.RegisterC]));"
+    },
+    {
+      "line": 3643,
+      "enclosingMethod": "Execute",
+      "source": "double startD = ToDouble(Atomize(registers[instr.RegisterC]));"
+    },
+    {
+      "line": 3658,
+      "enclosingMethod": "Execute",
+      "source": "double lenD = ToDouble(Atomize(registers[instr.Operand]));"
+    },
+    {
+      "line": 4363,
+      "enclosingMethod": "SequenceContainsBooleanItem",
+      "source": "var atomized = Atomize(item);"
+    },
+    {
+      "line": 5168,
+      "enclosingMethod": "Atomize",
+      "source": "private static XdmValue Atomize(XdmValue value)"
+    },
+    {
+      "line": 5209,
+      "enclosingMethod": "Atomize",
+      "source": "return Atomize(members[0]);"
+    },
+    {
+      "line": 5220,
+      "enclosingMethod": "Atomize",
+      "source": "return Atomize(value.JNodeValue.Value);"
+    },
+    {
+      "line": 5227,
+      "enclosingMethod": "Atomize",
+      "source": "return Atomize(items[0]);"
+    },
+    {
+      "line": 5259,
+      "enclosingMethod": "AtomizeForCast",
+      "source": "return Atomize(value);"
+    },
+    {
+      "line": 5328,
+      "enclosingMethod": "AtomizeItems",
+      "source": "return Atomize(value);"
+    },
+    {
+      "line": 5345,
+      "enclosingMethod": "AtomizeItems",
+      "source": "atomized.Add(item.IsNode ? Atomize(item) : item);"
+    },
+    {
+      "line": 5374,
+      "enclosingMethod": "AtomizedStringValue",
+      "source": "var atomized = Atomize(value);"
+    },
+    {
+      "line": 5716,
+      "enclosingMethod": "LazyFilterIterator",
+      "source": "var atomizedItem = Atomize(singletonItem);"
+    },
+    {
+      "line": 6600,
+      "enclosingMethod": "Add",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 6601,
+      "enclosingMethod": "Add",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 6745,
+      "enclosingMethod": "Subtract",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 6746,
+      "enclosingMethod": "Subtract",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 7457,
+      "enclosingMethod": "Multiply",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 7458,
+      "enclosingMethod": "Multiply",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 7503,
+      "enclosingMethod": "Divide",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 7504,
+      "enclosingMethod": "Divide",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 7535,
+      "enclosingMethod": "IntegerDivide",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 7536,
+      "enclosingMethod": "IntegerDivide",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 7663,
+      "enclosingMethod": "Modulo",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 7664,
+      "enclosingMethod": "Modulo",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 7711,
+      "enclosingMethod": "Negate",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 7759,
+      "enclosingMethod": "UnaryPlus",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 7817,
+      "enclosingMethod": "Compare",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 7818,
+      "enclosingMethod": "Compare",
+      "source": "right = Atomize(right);"
+    },
+    {
+      "line": 8506,
+      "enclosingMethod": "CompareGeneral",
+      "source": "var atomizedL = Atomize(l);"
+    },
+    {
+      "line": 8507,
+      "enclosingMethod": "CompareGeneral",
+      "source": "var atomizedR = Atomize(r);"
+    },
+    {
+      "line": 8702,
+      "enclosingMethod": "TryIntegerSetComparison",
+      "source": "var atom = Atomize(single);"
+    },
+    {
+      "line": 8710,
+      "enclosingMethod": "TryIntegerSetComparison",
+      "source": "var other = Atomize(multi);"
+    },
+    {
+      "line": 8744,
+      "enclosingMethod": "BuildIntegerSetHolder",
+      "source": "var atom = Atomize(item);"
+    },
+    {
+      "line": 8760,
+      "enclosingMethod": "HasBooleanItem",
+      "source": "var atomized = Atomize(item);"
+    },
+    {
+      "line": 8806,
+      "enclosingMethod": "ToDoubleOrNaN",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 8857,
+      "enclosingMethod": "TryGetRangeOperand",
+      "source": "var atomized = Atomize(value);"
+    },
+    {
+      "line": 8892,
+      "enclosingMethod": "ValidateNumericOperand",
+      "source": "var atomized = Atomize(value);"
+    },
+    {
+      "line": 14472,
+      "enclosingMethod": "ApplyFunctionConversion",
+      "source": "var atomic = Atomize(item);"
+    },
+    {
+      "line": 15815,
+      "enclosingMethod": "ToDouble",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 15828,
+      "enclosingMethod": "ToDecimal",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 15840,
+      "enclosingMethod": "ToInteger",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 15852,
+      "enclosingMethod": "ToFloat",
+      "source": "value = Atomize(value);"
+    },
+    {
+      "line": 15908,
+      "enclosingMethod": "AtomizeMapKey",
+      "source": "return Atomize(value);"
+    },
+    {
+      "line": 15983,
+      "enclosingMethod": "ArrayLookup",
+      "source": "var akey = Atomize(key);"
+    },
+    {
+      "line": 16066,
+      "enclosingMethod": "Sum",
+      "source": "var a = Atomize(item);"
+    },
+    {
+      "line": 16077,
+      "enclosingMethod": "Sum",
+      "source": "sum += ToDecimal(Atomize(item));"
+    },
+    {
+      "line": 16082,
+      "enclosingMethod": "Sum",
+      "source": "sumD += ToDouble(Atomize(item));"
+    },
+    {
+      "line": 16091,
+      "enclosingMethod": "MinMax",
+      "source": "var a = Atomize(item);"
+    },
+    {
+      "line": 16100,
+      "enclosingMethod": "MinMax",
+      "source": "decimal result = ToDecimal(Atomize(items[0]));"
+    },
+    {
+      "line": 16103,
+      "enclosingMethod": "MinMax",
+      "source": "decimal v = ToDecimal(Atomize(items[i]));"
+    },
+    {
+      "line": 16109,
+      "enclosingMethod": "MinMax",
+      "source": "double resultD = ToDouble(Atomize(items[0]));"
+    },
+    {
+      "line": 16112,
+      "enclosingMethod": "MinMax",
+      "source": "double v = ToDouble(Atomize(items[i]));"
+    },
+    {
+      "line": 16278,
+      "enclosingMethod": "JoinAtomizedItems",
+      "source": "return Atomize(value).ToString();"
+    },
+    {
+      "line": 16288,
+      "enclosingMethod": "JoinAtomizedItems",
+      "source": "parts[i] = Atomize(items[i]).ToString();"
+    },
+    {
+      "line": 16472,
+      "enclosingMethod": "AppendConstructorLocalNamespaces",
+      "source": "var atomized = Atomize(nameValue);"
+    },
+    {
+      "line": 16599,
+      "enclosingMethod": "GroupKeyValuesEqual",
+      "source": "left = SingleGroupKeyItem(Atomize(left));"
+    },
+    {
+      "line": 16600,
+      "enclosingMethod": "GroupKeyValuesEqual",
+      "source": "right = SingleGroupKeyItem(Atomize(right));"
+    },
+    {
+      "line": 16659,
+      "enclosingMethod": "CompareOrderByValues",
+      "source": "left = Atomize(left);"
+    },
+    {
+      "line": 16660,
+      "enclosingMethod": "CompareOrderByValues",
+      "source": "right = Atomize(right);"
+    }
+  ],
+  "note": "Textual references including declaration/recursive calls; enclosing methods are nearest preceding static declarations, not a whole-program call graph. AtomizeForCast/AtomizeItems and standard-library data/conversion paths are separate."
+}
