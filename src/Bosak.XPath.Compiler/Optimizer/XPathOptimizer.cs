@@ -2,7 +2,7 @@
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 19 mei 2026
 // PURPOSE              : Performs bottom-up optimizations on the XPath AST before lowering to IR
-// SPECIAL NOTES        : Part of the Bosak XPath 3.1 implementation.
+// SPECIAL NOTES        : Part of the AST-to-IR compilation pipeline.
 //
 // COPYRIGHT            : Fytala
 // LICENSE              : license.md (Apache-2.0)
@@ -51,6 +51,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.13  | 08-10-2026     | REQ-118 4.0-S4: OptimizePipeline for PipelineExprNode ('->')
 //                      | Charles Korthout | 1.14  | 24-10-2026     | Check integer folding overflow and retain decimal-backed integer literal type.            |
+//                      | Charles Korthout | 1.15  | 25-10-2026     | Avoid unary minimum-value wraparound and retain wide integer literal identity.             |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -472,6 +473,9 @@ internal sealed class XPathOptimizer
         {
             if (_backwardsCompatible && i.Value == 0)
                 return node;
+            // Let runtime promote the negation of Int64.MinValue instead of wrapping.
+            if (i.Value == long.MinValue)
+                return node;
             changed = true;
             return new IntegerLiteralNode(-i.Value);
         }
@@ -487,7 +491,7 @@ internal sealed class XPathOptimizer
         if (node.Operator == UnaryOperator.Minus && operand is DecimalLiteralNode dec)
         {
             changed = true;
-            return new DecimalLiteralNode(-dec.Value);
+            return new DecimalLiteralNode(-dec.Value, IsIntegerLiteral: dec.IsIntegerLiteral);
         }
 
         // +x => x only for numeric literals; non-numeric operands must be checked at runtime

@@ -5,6 +5,9 @@
   <p>Structured reference for every XPath/XSLT 4.0 syntax decision in Bosak — where each feature comes from, why it exists, what it replaces, and what it costs</p>
 </div>
 
+**Integer unary correction — 25 October 2026:** [Behavior and evidence](INTEGER-UNARY.md) fix Int64-minimum negation wraparound and retain decimal-backed integer identity in folded/runtime paths. Adds 48 cross-profile regressions (24 failed before, all pass after). Source 1.25.2 is unpublished; public 1.25.1 and Braid smoke/adoption remain separate. Division/modulo and wider storage work remain open; REQ-126 stays partial.
+
+
 **1.25.1 release candidate validated — 24 October 2026:** [Consolidated proof](../RELEASE-1.25.1-CANDIDATE.md) pins exact source6081e70d,11,759 passing source/language-server tests, unchanged frozen gates, ten verified unsigned local packages and153 broad/1,045 focused package checks. Public1.25.0 remains current; no tag/publication. REQ-126 stays partial; generic wide storage/error and remaining audit limits remain explicit.
 
 
