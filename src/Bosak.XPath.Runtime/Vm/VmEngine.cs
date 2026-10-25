@@ -425,6 +425,7 @@
 //                      | Charles Korthout | 2.198 | 24-10-2026     | Truncate finite unsigned floating operands before lower/upper range facets.                |
 //                      | Charles Korthout | 2.199 | 25-10-2026     | Preserve integer identity and promote minimum-value unary negation without wraparound.     |
 //                      | Charles Korthout | 2.200 | 25-10-2026     | Preserve integer modulo identity and return zero for Int64 minimum modulo negative one.    |
+//                      | Charles Korthout | 2.201 | 25-10-2026     | Truncate decimal-backed idiv exactly before checking existing Int64 result bounds.         |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -7595,15 +7596,51 @@ internal static class VmEngine
         }
 
         if (IsDecimal(left) || IsDecimal(right))
-        {
-            if (ToDecimal(right) == 0)
-                throw new InvalidOperationException("FOAR0001: Division by zero.");
-            return XdmValue.FromInteger((long)(ToDecimal(left) / ToDecimal(right)));
-        }
+            return DivideDecimalToInteger(ToDecimal(left), ToDecimal(right));
 
         if (ToInteger(right) == 0)
             throw new InvalidOperationException("FOAR0001: Division by zero.");
         return XdmValue.FromInteger(ToInteger(left) / ToInteger(right));
+    }
+
+    /// <summary>Truncates an exact decimal quotient before enforcing the existing Int64 result range.</summary>
+    /// <param name="left">The finite decimal dividend.</param>
+    /// <param name="right">The finite decimal divisor.</param>
+    /// <returns>The exact truncated quotient as an Int64-backed integer.</returns>
+    private static XdmValue DivideDecimalToInteger(decimal left, decimal right)
+    {
+        if (right == 0)
+            throw new InvalidOperationException("FOAR0001: Division by zero.");
+
+        BigInteger numerator = DecimalIntegerCoefficient(left, out int leftScale);
+        BigInteger denominator = DecimalIntegerCoefficient(right, out int rightScale);
+        int scaleDifference = rightScale - leftScale;
+        if (scaleDifference > 0)
+            numerator *= BigInteger.Pow(10, scaleDifference);
+        else if (scaleDifference < 0)
+            denominator *= BigInteger.Pow(10, -scaleDifference);
+
+        // BigInteger division truncates toward zero. Temporary values are bounded by
+        // decimal's 96-bit coefficient and scale 0..28; XDM storage stays unchanged.
+        BigInteger quotient = numerator / denominator;
+        if (quotient < long.MinValue || quotient > long.MaxValue)
+            throw new InvalidOperationException("FOAR0002: Integer division overflow.");
+        return XdmValue.FromInteger((long)quotient);
+    }
+
+    /// <summary>Extracts a signed decimal coefficient and scale without allocating a bits array.</summary>
+    /// <param name="value">The decimal value to decompose.</param>
+    /// <param name="scale">The decimal scale between zero and 28.</param>
+    /// <returns>The signed 96-bit coefficient.</returns>
+    private static BigInteger DecimalIntegerCoefficient(decimal value, out int scale)
+    {
+        Span<int> bits = stackalloc int[4];
+        decimal.GetBits(value, bits);
+        scale = (bits[3] >> 16) & 0xff;
+        BigInteger coefficient = (BigInteger)(uint)bits[0]
+            | ((BigInteger)(uint)bits[1] << 32)
+            | ((BigInteger)(uint)bits[2] << 64);
+        return bits[3] < 0 ? -coefficient : coefficient;
     }
 
     private static XdmValue Modulo(XdmValue left, XdmValue right, EvaluationContext context)

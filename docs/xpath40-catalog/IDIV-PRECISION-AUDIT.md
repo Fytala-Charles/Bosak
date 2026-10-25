@@ -4,6 +4,9 @@
   <p>25 October 2026 — source 1.25.2 unpublished; public 1.25.1</p>
 </div>
 
+**Exact idiv truncation — 25 October 2026:** [Correction and evidence](EXACT-IDIV.md) compute exact decimal-backed quotients before applying the existing Int64 bounds. Adds 132 direct/runtime regressions (48 failed before, all pass after); all 96 oracle observations now match the exact reference/range policy. FOAR0001/FOAR0002 codes, other dispatch and storage bounds remain intact. Source 1.25.2 unpublished/public 1.25.1; REQ-126 partial.
+
+
 This REQ-126 investigation follows the [modulo correction](INTEGER-MODULO.md), merged as PR447 at `40555175ef59a826994bc8f6d29c35018837eeaf`. It adds 48 supported result-range controls and 96 observations compared with an independent exact rational reference. Engine, version, APIs, fixtures, gates, retry policy and public packages are unchanged. Braid 1.25.1 smoke/adoption remains separate.
 
 ## Findings
