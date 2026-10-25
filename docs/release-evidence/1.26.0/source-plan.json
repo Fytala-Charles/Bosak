@@ -1,0 +1,13 @@
+{
+  "version": "1.26.0",
+  "publicVersion": "1.25.1",
+  "immutableSource": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "reviewedHead": "5fa82f8dace00ee379640d21d14bd7f2ebe575d5",
+  "consumerReviewedImplementationHead": "417482421343d72496d0f2dedcd45cfb1f463207",
+  "completeTreeMatchesReviewedHead": true,
+  "implementationPR": 452,
+  "exactHeadCI": 40181931136,
+  "publicationPerformed": false,
+  "publicBase": "6081e70daa8a49ef3d522b124a18d8de68e0b4d5",
+  "numeric1252CandidateSeparate": true
+}

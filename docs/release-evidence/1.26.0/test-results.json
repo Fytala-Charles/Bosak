@@ -1,0 +1,119 @@
+{
+  "full": {
+    "passed": 12116,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_54_net10.0.trx",
+        "sha256": "f17d63e4bb25c08da817bc724d999a8dd85d09bbbc011f020447bbab23579928",
+        "total": 202,
+        "passed": 202,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_54_net10.0[1].trx",
+        "sha256": "9d00d34a3de27fe9ff7cd3f61a9608d4d4469c6c1d22b8d388dbcaf79ea33fb2",
+        "total": 66,
+        "passed": 66,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_54_net10.0[2].trx",
+        "sha256": "ace76f342be3e7c2487cabf5b291bc331b6735ed77d6aa420aca7a6af1953513",
+        "total": 132,
+        "passed": 132,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_54_net10.0[3].trx",
+        "sha256": "4d25340a86bb306407dbec9c4f968bf6493a06201aa59904f1a43acc9c02f36b",
+        "total": 47,
+        "passed": 47,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_55_net10.0.trx",
+        "sha256": "b8471498460a0da91b22775d330b1e89f76d393d13234a7a31b7effb212ebeae",
+        "total": 269,
+        "passed": 269,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_55_net10.0[1].trx",
+        "sha256": "127935322d017ed8133c53dc7bf14b4af4c36c03a29084895acdfec52b6978cd",
+        "total": 489,
+        "passed": 489,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_55_net10.0[2].trx",
+        "sha256": "16a70a4ec108c7c64cb57e860176bbaf252d0859ad464307ae2797120d3309a6",
+        "total": 303,
+        "passed": 303,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_55_net10.0[3].trx",
+        "sha256": "bba71999ce22a903d4131fea88b7e3af3544eee765561d9a1b24b662b59616c3",
+        "total": 2259,
+        "passed": 2259,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_55_net10.0[4].trx",
+        "sha256": "e3dcfa9ce0e34c73c4da160a56ea0601d20d955c5f9b8d8abebcd07f8fc7a747",
+        "total": 153,
+        "passed": 153,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "file": "charl_CHARLES_2026-10-25_10_59_57_net10.0.trx",
+        "sha256": "af30e54acccf2af8a63366278905b03f49f54c448dbea1250d7f531e44c47b54",
+        "total": 8196,
+        "passed": 8196,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  },
+  "lsp": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      {
+        "file": "charl_CHARLES_2026-10-25_11_04_11_net10.0.trx",
+        "sha256": "11a594528c6c711cf4eb811e09e42871a2c1e1fc41702b550ea9e712d82b21f9",
+        "total": 84,
+        "passed": 84,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  },
+  "focused-results": {
+    "passed": 1493,
+    "failed": 0,
+    "skipped": 0,
+    "files": [
+      {
+        "file": "focused.trx",
+        "sha256": "0e33a20b51292d3bd8df6352da004668f7f03b6d997968cb95056078d2b62035",
+        "total": 1493,
+        "passed": 1493,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  }
+}

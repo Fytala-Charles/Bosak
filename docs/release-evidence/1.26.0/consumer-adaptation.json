@@ -1,0 +1,30 @@
+{
+  "previousPublic": "1.25.1",
+  "retainedCandidateBaseline": "1.25.2",
+  "candidate": "1.26.0",
+  "broadChecks": 153,
+  "retainedFocusedChecks": 1429,
+  "addedPublicConditionalChecks": 47,
+  "addedIndependentBraidProbes": 17,
+  "totalFocusedChecks": 1493,
+  "packageSourceMapping": "Bosak.* exclusively local candidate feed; external dependencies nuget.org",
+  "freshSeparateCaches": true,
+  "exactRevision": "1f06efb4d938d3d8e12eb273e632a8fe15110041",
+  "adaptation": "Retain1429 numeric/authoring checks; add47 public conditional cases and17 independent consumer probes. Exclude10 internal-construction cases from package-only assembly; retain them in source57. Change only exact assembly identity and local header/provenance in added probe copy.",
+  "addedProbeProvenance": [
+    {
+      "file": "AuthoringConditionalWrapperPublicTests.cs",
+      "originalPath": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-implementation-review\\consumer\\AuthoringConditionalWrapperPublicTests.cs",
+      "originalSha256": "bfbed751588668751971ce8a7e3fe256deaaffd2799ee2ed4d5d3b6bb14233af",
+      "adaptedSha256": "d3ee1d2fbaef77c23899693ae70d2519493b21dc7e07acd469d3565715f54c16",
+      "checkoutNewlinesNormalized": true
+    },
+    {
+      "file": "BraidConditionalProbes.cs",
+      "originalPath": "D:\\Development\\Bosak.Braid\\.acceptance\\req138-implementation-review\\consumer\\BraidConditionalProbes.cs",
+      "originalSha256": "fcdc5aedb99524a4666fbd9fec8ff479621d60fcee69fa8898d93387eb606762",
+      "adaptedSha256": "342e48afd72fba318806c7aca51ad3ed4cbac437ea9fc88c081cb1a9a908d6c1",
+      "checkoutNewlinesNormalized": true
+    }
+  ]
+}
