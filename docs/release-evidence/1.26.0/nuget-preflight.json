@@ -1,0 +1,20 @@
+[
+  {
+    "label": "vulnerability-index",
+    "url": "https://api.nuget.org/v3/vulnerabilities/index.json",
+    "checkedAtUtc": "2026-10-25T10:01:38.208912+00:00",
+    "httpStatus": 200,
+    "contentEncoding": "gzip",
+    "sha256": "b17eef389306b99354f3f3881bdabc228a41f24d79a50b7a133baa01c2cea903",
+    "entries": 2
+  },
+  {
+    "label": "public-xslt-versions",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+    "checkedAtUtc": "2026-10-25T10:01:38.395568+00:00",
+    "httpStatus": 200,
+    "contentEncoding": null,
+    "sha256": "8b607517c0d3f0a59f1a3b25e95414a1854adf5c755ab6f78a75534a84d7c41c",
+    "candidateVersionPresent": false
+  }
+]

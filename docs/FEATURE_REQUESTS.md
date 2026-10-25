@@ -7,6 +7,10 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**1.26.0 candidate validated - 25 October 2026:** [Candidate proof](RELEASE-1.26.0-CANDIDATE.md) pins merged source `1f06efb4d938d3d8e12eb273e632a8fe15110041`, 12,200 solution/LSP passes, unchanged frozen gates and ten unsigned packages with 153 broad/1,493 focused package-only passes, 19 matching assembly identities and clear audits. Conditional Wrap/Edit/Unwrap is source-reviewed; REQ-138 remains In progress pending publication and consumer integration/native acceptance. Public 1.25.1 remains current; numeric 1.25.2 receipts remain separately pinned. No tag/publication.
+
+Historical preparation/review checkpoints follow.
+
 **1.25.2 candidate validated — 25 October 2026:** [Consolidated proof](RELEASE-1.25.2-CANDIDATE.md) pins source `3785672d695cbc8467e1c027d5ce4304e9f92152`, 12,143 solution/LSP passes, unchanged frozen gates, ten unsigned local packages and 153 broad/1,429 focused package checks with verified provenance and clear audits. Public 1.25.1 remains current; no tag/publication. REQ-126 remains partial; REQ-138 design is separate.
 
 **REQ-138 consumer implementation review - 25 October 2026:** [Retained Braid review](req138-evidence/original-braid-consumer-implementation-review.md) found no blocking implementation findings at `417482421343d72496d0f2dedcd45cfb1f463207`. Its 1,364 authoring and 968 external consumer passes were independently executed by Braid; raw TRX hashes/counters are [verified](req138-evidence/consumer-implementation-review-verification.json), and overlapping counts are not added. Both documentation nits are corrected. REQ-138 is **In progress**; source **1.26.0** remains unpublished. Next: owner merge/release decisions, followed by signed-package verification, Braid integration and native acceptance. Numeric 1.25.2 remains a separate pinned candidate.
@@ -674,7 +678,7 @@ Every request in the registry must have a matching detail section. Copy this tem
 | REQ-135 | Bosak.Braid | Create, update and delete one unqualified literal result attribute as one coordinated feature/implementation PR | Complete output-attribute lifecycle with exact source fidelity, explicit review/Apply and history | Implemented, published and consumer-accepted | 1.23.0 | Bosak | 2026-10-21 |
 | REQ-136 | Bosak.Braid | Complete literal result element Create/Rename/Delete together; add engine-owned rename and whole-subtree deletion, reuse REQ-132 creation | Complete output-element lifecycle with exact reviewed source changes, survivor provenance and history | Implemented, published and consumer-accepted | 1.24.0 | Charles Korthout | 2026-10-23 |
 | REQ-137 | Bosak.Braid | Same-parent child element Move up / Move down together, exchanging adjacent supported literal subtrees with exact source and complete changed-order provenance | Change output order through explicit review/Apply and one-step history without deleting/recreating content | Implemented, published and consumer-accepted | 1.25.0 | Bosak | 2026-10-24 |
-| REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | In progress - consumer implementation review cleared; merge/release decisions pending | 1.26.0 source candidate (unpublished) | Bosak | 2026-10-25 |
+| REQ-138 | Bosak.Braid | Conditional Wrap/Edit condition/Unwrap as one coordinated feature; add engine-owned xsl:if wrapping and markup-only unwrapping while reusing existing test Expression editing | Make supported output elements conditional and later retain them unconditionally with exact source, complete reparent/depth/boundary provenance and explicit review/Apply/history | In progress - merged; 1.26.0 candidate validated; publication/adoption pending | 1.26.0 source candidate (unpublished) | Bosak | 2026-10-25 |
 
 
 > **Legend:
@@ -1995,7 +1999,7 @@ The [unchanged issue #381 inquiry](REQ-134-literal-text-instruction-deletion.md)
 
 ### REQ-138: Conditional Wrapper Authoring for Bosak.Braid
 
-Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **In progress - consumer implementation review cleared; merge/release decisions pending**. Target: **1.26.0 source candidate (unpublished)**. Design owner: **Bosak**.
+Requester: **Bosak.Braid**. Registered: **2026-10-24**. Status: **In progress - merged; 1.26.0 candidate validated; publication/adoption pending**. Target: **1.26.0 source candidate (unpublished)**. Design owner: **Bosak**.
 
 [Original request and IF01-IF15](REQ-138-conditional-wrapper-authoring.md) and [reviewed scope](REQ-138-MAINTAINER-SCOPE-REVIEW.md) remain byte-unchanged. [Braid design review](req138-evidence/original-braid-consumer-design-review.md) clears the bounded coordinated design; owner implementation approval was received on 25 October 2026. The [implementation/API guide](REQ-138-IMPLEMENTATION.md) records exact paired edits, complete graph and two-boundary merge proof, independent cancellation/limits and the additive existing-editor bridge. The [consumer implementation review](req138-evidence/original-braid-consumer-implementation-review.md) reports no blockers at the exact reviewed source head; the two documentation findings are corrected. Owner merge/release decisions, signed publication, Braid integration and native acceptance remain later gates. Numeric 1.25.2 remains a separate pinned candidate.
 

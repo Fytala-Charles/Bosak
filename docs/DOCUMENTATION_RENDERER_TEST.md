@@ -1,3 +1,5 @@
+25 October 2026: 1.26.0 candidate notes/proof and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. Exact merge/source tree, test/package/assembly/cache/audit hashes, new links/JSON and unchanged engine/test/kit/fixture boundaries verified. HTML only; no screenshot/PDF or signed/native acceptance claimed.
+
 25 October 2026: REQ-138 consumer implementation review, documentation-only registry/punctuation corrections and canonical status pages rendered with unchanged Fytala CSS. Exact reviewed engine/test/version/design bytes and independent consumer TRX hashes/counters verified. HTML only; no signed-package or native acceptance claimed.
 
 25 October 2026: REQ-138 implementation/API guide, retained consumer design review and canonical status pages rendered as HTML with markdown-it and unchanged Fytala CSS under `.guard-tmp/req138-implementation-render`. Exact design/request bytes, new relative links, JSON/receipt hashes, source headers/XML-doc build and unchanged kit/fixture boundaries checked. HTML only; no screenshot/PDF or consumer runtime acceptance.
