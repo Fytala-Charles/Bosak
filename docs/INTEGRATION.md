@@ -7,6 +7,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**Recursive array atomization audit - 25 October 2026:** [Findings and proposed scope](xpath40-catalog/ARRAY-ATOMIZATION-AUDIT.md) add 72 passing controls and 576 diagnostic pairs (1,152 raw observations). Independent expectations identify 207 array-case discrepancies and 12 faulty processor flat references. All three profiles agree; recursive singleton cardinality, caller empty handling and function conversion are separate findings. All 12,415 solution/LSP tests pass. Engine/version unchanged; source 1.26.1 unpublished/public 1.26.0; REQ-126 remains partial.
+
+
 **Empty unary atomization correction - 25 October 2026:** [Behavior and evidence](xpath40-catalog/UNARY-EMPTY-ATOMIZATION.md) return empty after unary-minus atomization instead of converting an empty atomic result to integer. Adds 64 cases (21 failed before; all pass after), with 12,343 solution/LSP passes and unchanged frozen gates. Source remains unpublished 1.26.1; public/Braid-validation 1.26.0 stays separate. Shared recursive-array cardinality remains an explicit follow-up; REQ-126 stays partial.
 
 

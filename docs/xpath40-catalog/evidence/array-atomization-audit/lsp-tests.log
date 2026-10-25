@@ -1,0 +1,20 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\tests\Bosak.LanguageServer.Tests\Bosak.LanguageServer.Tests.csproj (in 232 ms).
+  Restored D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.LanguageServer\Bosak.LanguageServer.csproj (in 232 ms).
+  9 of 11 projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+  Bosak.LanguageServer -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\src\Bosak.LanguageServer\bin\Release\net10.0\Bosak.LanguageServer.dll
+  Bosak.LanguageServer.Tests -> D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\tests\Bosak.LanguageServer.Tests\bin\Release\net10.0\Bosak.LanguageServer.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-source\tests\Bosak.LanguageServer.Tests\bin\Release\net10.0\Bosak.LanguageServer.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\req126-array-atomization-audit-evidence\lsp\charl_CHARLES_2026-10-25_13_16_07_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    84, Skipped:     0, Total:    84, Duration: 1 s - Bosak.LanguageServer.Tests.dll (net10.0)
