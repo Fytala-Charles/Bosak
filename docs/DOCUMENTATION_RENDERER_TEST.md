@@ -1,3 +1,5 @@
+25 October 2026: 1.25.2 release-candidate notes/proof and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. Pinned source, test/package proof, links/JSON and unchanged engine/assets checked. HTML only; no screenshot/PDF acceptance.
+
 25 October 2026: exact idiv correction and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON, oracle comparisons and unchanged fixture/kit boundaries checked. HTML only; no screenshot/PDF acceptance.
 
 25 October 2026: idiv precision/range investigation and canonical/catalog status pages rendered as HTML with markdown-it and unchanged Fytala CSS. New links/JSON, exact engine comparison and oracle receipts checked. HTML only; no screenshot/PDF acceptance.

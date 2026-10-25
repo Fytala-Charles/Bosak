@@ -1,0 +1,20 @@
+{
+  "previous": "1.25.1",
+  "candidate": "1.25.2",
+  "broadChecks": 153,
+  "retainedFocusedChecks": 1045,
+  "addedFocusedChecks": 384,
+  "totalFocusedChecks": 1429,
+  "testSourceHashes": {
+    "tests/Bosak.XPath.Standard.Tests/IntegerUnaryTests.cs": "015bb0cfc5fcedb55bbbd55c8fd75b269296bbf368895b68f8700fe16fad4b4b",
+    "tests/Bosak.XPath.Standard.Tests/DivisionModuloAuditTests.cs": "558884795127e1350c82e83a788adc92d017ae2a4b850abcb4ddbdf0eae7e0a0",
+    "tests/Bosak.XPath.Standard.Tests/IntegerModuloTests.cs": "124455b8520693c9f405280fc97a96e987ac024c88723967f12aeb6eda22c7b1",
+    "tests/Bosak.XPath.Standard.Tests/IntegerDivisionRangeAuditTests.cs": "fc780276d5f99d89beb2c4f5f6fb0eb128ac922666acb47d13237a586b7683cb",
+    "tests/Bosak.XPath.Standard.Tests/ExactIntegerDivisionTests.cs": "46c2c0bf564884262fc5b2f5d83fa8b00a45b69e21b77c5c3c511684ef4dd09f",
+    "tests/Bosak.XPath.Standard.Tests/UnixDateTimeExperimentalTests.cs": "9e40a0c347b7dffb4aa4adc0309a96b218b98d71826517b42c52ab8fecce0b58"
+  },
+  "packageSourceMapping": "Bosak.* only local candidate; external test dependencies from nuget.org",
+  "freshSeparateCaches": true,
+  "exactRevision": "3785672d695cbc8467e1c027d5ce4304e9f92152",
+  "adaptation": "Refresh existing UnixDateTimeExperimentalTests: same25 cases; corrected minimum-literal integer identity/frozenFOCA0002/ExperimentalFODT0001 assertions from PR445"
+}
