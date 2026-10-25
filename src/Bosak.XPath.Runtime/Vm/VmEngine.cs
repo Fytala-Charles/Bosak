@@ -427,6 +427,7 @@
 //                      | Charles Korthout | 2.200 | 25-10-2026     | Preserve integer modulo identity and return zero for Int64 minimum modulo negative one.    |
 //                      | Charles Korthout | 2.201 | 25-10-2026     | Truncate decimal-backed idiv exactly before checking existing Int64 result bounds.         |
 //                      | Charles Korthout | 2.202 | 25-10-2026     | Preserve an empty atomized operand before numeric unary negation.                           |
+//                      | Charles Korthout | 2.203 | 25-10-2026     | Count atomic values after recursive array-member atomization for singleton consumers.       |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -5189,28 +5190,11 @@ internal static class VmEngine
 
         if (value.IsArray && value.ArrayValue is not null)
         {
-            // fn:data semantics: atomizing an array atomizes its members (ArrayTest-028).
-            var members = new List<XdmValue>();
+            // Empty members contribute no atomic values; count after recursive atomization.
+            var singleton = XdmValue.Undefined;
             foreach (var member in value.ArrayValue.Values)
-            {
-                if (member.IsSequence && member.SequenceValue is not null)
-                {
-                    foreach (var inner in XdmSequence.FromSource(member.SequenceValue))
-                        members.Add(inner);
-                }
-                else if (!member.IsUndefined)
-                {
-                    members.Add(member);
-                }
-            }
-            if (members.Count == 0)
-                return XdmValue.Undefined;
-            if (members.Count == 1)
-                return Atomize(members[0]);
-            // Singleton requirement (arithmetic, value comparisons): atomization of a
-            // multi-item array is a type error, as with multi-item sequences.
-            throw new InvalidOperationException(
-                "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with " + members.Count + " items");
+                AppendArrayAtomizedSingleton(member, ref singleton);
+            return singleton;
         }
 
         if (value.IsJNode)
@@ -5234,6 +5218,41 @@ internal static class VmEngine
         }
 
         return value;
+    }
+
+    /// <summary>Accumulates at most one atomic value from a recursively atomized array member.</summary>
+    private static void AppendArrayAtomizedSingleton(XdmValue value, ref XdmValue singleton)
+    {
+        if (value.IsUndefined)
+            return;
+        if (value.IsArray && value.ArrayValue is not null)
+        {
+            foreach (var member in value.ArrayValue.Values)
+                AppendArrayAtomizedSingleton(member, ref singleton);
+            return;
+        }
+        if (value.IsSequence && value.SequenceValue is not null)
+        {
+            foreach (var item in XdmSequence.FromSource(value.SequenceValue))
+                AppendArrayAtomizedSingleton(item, ref singleton);
+            return;
+        }
+        if (value.IsJNode)
+        {
+            AppendArrayAtomizedSingleton(value.JNodeValue.Value, ref singleton);
+            return;
+        }
+        if (value.IsNode)
+        {
+            AppendArrayAtomizedSingleton(Atomize(value), ref singleton);
+            return;
+        }
+        if (value.IsMap || value.IsFunction)
+            throw new InvalidOperationException("FOTY0013: Cannot atomize a function item or map.");
+        if (!singleton.IsUndefined)
+            throw new InvalidOperationException(
+                "XPTY0004: Atomization requires a singleton or empty sequence, but got an array with multiple atomic values.");
+        singleton = value;
     }
 
     /// <summary>
