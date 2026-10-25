@@ -4,6 +4,9 @@
   <p>25 October 2026 — source 1.25.2 unpublished; public 1.25.1</p>
 </div>
 
+**Follow-up:** The numeric corrections below are published in [1.26.0](../RELEASE-1.26.0-PUBLICATION.md). The next bounded [unary conversion correction](UNARY-COERCION.md) is implemented in unpublished 1.26.1. Earlier candidate/next-step statements below are historical.
+
+
 This bounded REQ-126 correction implements the [precision/range investigation's proposal](IDIV-PRECISION-AUDIT.md), merged as PR448 at base `31ea265321107f94a2c8486218b3746d200d214b`. Decimal-backed `idiv` now truncates the exact quotient before applying the existing Int64 result bounds. Source remains the existing unpublished patch 1.25.2; public 1.25.1 and independent Braid smoke/adoption remain separate.
 
 | Operands | Before | Corrected result |

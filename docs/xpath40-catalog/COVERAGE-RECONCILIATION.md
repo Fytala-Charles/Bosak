@@ -6,6 +6,9 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**Repeated unary conversion correction - 25 October 2026:** [Behavior and evidence](UNARY-COERCION.md) remove unsafe double-negation elimination, preserving atomization, untyped-to-double conversion, numeric normalization and required errors. Adds 79 regressions (46 failed before; all pass after). All 12,279 solution/LSP tests and unchanged frozen gates pass. Source 1.26.1 is unpublished; public/Braid-validation 1.26.0 remains separate. REQ-126 stays partial.
+
+
 **1.26.0 candidate validated - 25 October 2026:** [Candidate proof](../RELEASE-1.26.0-CANDIDATE.md) pins merged source `1f06efb4d938d3d8e12eb273e632a8fe15110041`, 12,200 solution/LSP passes, unchanged frozen gates and ten unsigned packages with 153 broad/1,493 focused package-only passes, 19 matching assembly identities and clear audits. Conditional Wrap/Edit/Unwrap is source-reviewed; REQ-138 remains In progress pending publication and consumer integration/native acceptance. Public 1.25.1 remains current; numeric 1.25.2 receipts remain separately pinned. No tag/publication.
 
 Historical preparation/review checkpoints follow.
