@@ -30,6 +30,8 @@
 
 //                      | Charles Korthout | 1.2   | 24-10-2026     | REQ-137: direction-bound sibling reordering. |
 
+//                      | Charles Korthout | 1.3   | 25-10-2026     | REQ-138: coordinated conditional lifecycle and bounded editor overload. |
+
 using System.Xml.Linq;
 
 namespace Bosak.Xslt.Authoring;
@@ -180,6 +182,59 @@ public sealed class AuthoringSnapshot
     {
         ArgumentNullException.ThrowIfNull(proposal);
         return LiteralAttributeLifecyclePipeline.Deletion(this, proposal, cancellationToken);
+    }
+
+    /// <summary>Discovers opaque conditional wrap authority in the bounded profile.</summary>
+    /// <param name="node">The actual selected snapshot-owned descriptor.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    public AuthoringConditionalWrapTargetResult GetConditionalWrapTarget(AuthoringNodeDescriptor node, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        var r = ConditionalWrapperPipeline.Discover(this, node, true, cancellationToken);
+        return new(r.Data, r.Failure);
+    }
+    /// <summary>Proposes a pure exact-source conditional wrap operation.</summary>
+    /// <param name="proposal">The operation-bound owned intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>Exactly one changed candidate or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringConditionalResult ProposeConditionalWrap(AuthoringConditionalWrapProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return ConditionalWrapperPipeline.Propose(this, proposal.Target.Data, proposal.ConditionText, true, cancellationToken);
+    }
+    /// <summary>Discovers opaque conditional unwrap authority in the bounded profile.</summary>
+    /// <param name="node">The actual selected snapshot-owned descriptor.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>An exclusive target or refusal.</returns>
+    /// <exception cref="ArgumentNullException">The node is null.</exception>
+    public AuthoringConditionalUnwrapTargetResult GetConditionalUnwrapTarget(AuthoringNodeDescriptor node, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        var r = ConditionalWrapperPipeline.Discover(this, node, false, cancellationToken);
+        return new(r.Data, r.Failure);
+    }
+    /// <summary>Proposes a pure exact-source conditional unwrap operation.</summary>
+    /// <param name="proposal">The operation-bound owned intent.</param>
+    /// <param name="cancellationToken">Cooperative cancellation.</param>
+    /// <returns>Exactly one changed candidate or typed refusal.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringConditionalResult ProposeConditionalUnwrap(AuthoringConditionalUnwrapProposal proposal, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return ConditionalWrapperPipeline.Propose(this, proposal.Target.Data, null, false, cancellationToken);
+    }
+    /// <summary>Proposes a bounded expression-slot replacement under restricted principal-module validation.</summary>
+    /// <param name="proposal">The actual owned slot identity and replacement text.</param>
+    /// <param name="cancellationToken">Cooperative cancellation, including immediately before success.</param>
+    /// <returns>A compatible candidate-or-refusal result with complete correspondence proved internally.</returns>
+    /// <exception cref="ArgumentNullException">The proposal is null.</exception>
+    public AuthoringEditResult ProposeExpressionEdit(AuthoringEditProposal proposal, CancellationToken cancellationToken)
+    {
+        ArgumentNullException.ThrowIfNull(proposal);
+        return BoundedExpressionEditPipeline.Run(this, proposal, cancellationToken);
     }
 
     private readonly IReadOnlyList<AuthoringModuleDescriptor> _modules;
