@@ -66,9 +66,20 @@ internal static class ConditionalWrapperPipeline
         try
         {
             token.ThrowIfCancellationRequested();
-            var f = Check(snapshot, false, token); if (f is not null) return (null, f);
+            var preflight = LiteralElementLifecyclePipeline.Preflight(snapshot, token);
+            if (preflight is not null) return (null, Convert(preflight.Kind.ToString(), preflight.Message));
             var nodes = Nodes(snapshot.PrincipalModule.Root, token).ToArray();
             if (!nodes.Contains(node)) return (null, Failure(AuthoringConditionalFailureKind.ForeignSnapshot, "Actual snapshot-owned descriptor identity is required."));
+            if (wrap && (nodes.Length + 1 > AuthoringCapabilities.MaxConditionalNodes
+                || nodes.Sum(n => (long)n.Attributes.Count) + 1 > AuthoringCapabilities.MaxConditionalAttributes))
+                return (null, Failure(AuthoringConditionalFailureKind.SizeLimit, "The added wrapper/test exceeds the independent candidate graph limits."));
+            if (wrap)
+            {
+                var depths = Depths(snapshot.PrincipalModule.Root, token);
+                if (Nodes(node, token).Any(n => depths[n] + 1 > AuthoringCapabilities.MaxConditionalDepth))
+                    return (null, Failure(AuthoringConditionalFailureKind.SizeLimit, "Candidate subtree depth exceeds its independent limit."));
+            }
+            var f = Check(snapshot, false, token); if (f is not null) return (null, f);
             var parent = nodes.SingleOrDefault(n => n.Children.Contains(node));
             if (parent is null || node.Kind != AuthoringNodeKind.Element)
                 return (null, Failure(AuthoringConditionalFailureKind.IneligibleTarget, "An eligible contained element is required."));
@@ -105,18 +116,12 @@ internal static class ConditionalWrapperPipeline
             string? prefix = null;
             if (wrap)
             {
-                if (nodes.Length + 1 > AuthoringCapabilities.MaxConditionalNodes
-                    || nodes.Sum(n => (long)n.Attributes.Count) + 1 > AuthoringCapabilities.MaxConditionalAttributes)
-                    return (null, Failure(AuthoringConditionalFailureKind.SizeLimit, "The added wrapper/test exceeds the independent candidate graph limits."));
                 var bindings = new Dictionary<string, string>(StringComparer.Ordinal);
                 foreach (var e in p.AncestorsAndSelf().Reverse())
                     foreach (var a in e.Attributes().Where(a => a.IsNamespaceDeclaration))
                     { token.ThrowIfCancellationRequested(); bindings[a.Name.LocalName == "xmlns" ? "" : a.Name.LocalName] = a.Value; }
                 prefix = bindings.Where(b => b.Key.Length is > 0 and <= 256 && b.Value == Xsl).Select(b => b.Key).Order(StringComparer.Ordinal).FirstOrDefault();
                 if (prefix is null) return (null, Failure(AuthoringConditionalFailureKind.NoSafeXsltPrefix, "A bounded nonempty existing XSLT alias in the parent context is required."));
-                var depths = Depths(snapshot.PrincipalModule.Root, token);
-                if (Nodes(element, token).Any(n => depths[n] + 1 > AuthoringCapabilities.MaxConditionalDepth))
-                    return (null, Failure(AuthoringConditionalFailureKind.SizeLimit, "Candidate subtree depth exceeds its independent limit."));
             }
             token.ThrowIfCancellationRequested();
             return (new(snapshot, node, element, parent, start, end, openingEnd, closing, prefix), null);
