@@ -1,0 +1,210 @@
+{
+  "functions/timestamp-deadlines.md": [
+    "Verified bounded epoch/duration profiles",
+    [
+      "Epoch milliseconds, omitted/empty zero and UTC result are distinct from current time",
+      "Experimental signed epochs coexist with frozen negative refusal",
+      "Duration total seconds preserve signs/fractions; wide calendar/range errors remain bounded"
+    ],
+    [
+      "Signed epoch support is Experimental only; scalar/cardinality tolerance and bounded DateTimeOffset calendar do not certify arbitrary extended-year operations."
+    ]
+  ],
+  "functions/uri-option-policy.md": [
+    "Limited URI options; query precedence gap",
+    [
+      "Typed Boolean deprecated/default-port/UNC options retain their stated policies",
+      "Structured versus raw authority/path/query precedence is explicit",
+      "String-valued Boolean truthiness is observed rather than certified"
+    ],
+    [
+      "C02-F04: empty structured query map falls back to raw query; unsupported string Booleans remain a type-validation limit."
+    ]
+  ],
+  "functions/warehouse-pick-sorting.md": [
+    "Blocked for full default-key/collation/order parity",
+    [
+      "Stable lexicographic sequence keys and whole array-member payloads remain distinct",
+      "Omitted versus explicit-empty keys and explicit data#1 alternative are verified",
+      "Unknown collations, both NaN input orders and exact mixed-number ordering retain independent requirements"
+    ],
+    [
+      "C02-F05/F06: explicit empty-key defaults, unknown-collation refusal and numeric ordering remain incomplete; passing one NaN input order is not complete ordering support."
+    ]
+  ],
+  "operators-and-syntax/array-member-iteration.md": [
+    "Verified bounded member binding",
+    [
+      "A member binds as a whole sequence rather than being flattened",
+      "Empty arrays invoke no body; member values and source order remain distinct",
+      "Nested/container-sequence behavior uses current4 grammar, not earlier-profile syntax"
+    ],
+    [
+      "No complete iteration/coercion/type grammar certification; C05 retains the remaining combinations."
+    ]
+  ],
+  "operators-and-syntax/destructuring-let.md": [
+    "Limited bindings; annotated-record blocker",
+    [
+      "Sequence final variable receives the tail; short input binds empty variables and constructed sequences flatten",
+      "Array patterns discard surplus members but missing indices raise FOAY0001",
+      "Ordinary-map missing keys bind empty; annotated-record undeclared fields require a distinct lookup error",
+      "Per-variable types, lexical scope and all five independent inline examples are verified"
+    ],
+    [
+      "C05-K03: annotated-record unknown-field destructuring incorrectly returns empty instead of XPTY0004; broader type/choice coercion limits remain."
+    ]
+  ],
+  "operators-and-syntax/focus-function-syntax.md": [
+    "Verified bounded focus-function syntax",
+    [
+      "Implicit fn/function signatures bind the whole supplied value with fixed1/1 focus",
+      "Explicit fn parameters, lexical capture and restoration have separate named evidence",
+      "Pipeline, mapping and ordinary arrows establish different context/argument contracts"
+    ],
+    [
+      "No arbitrary callback/constructor/package context acceptance; C04 mapping-extra-focus and C06 host/static-mode limits remain distinct."
+    ]
+  ],
+  "operators-and-syntax/focus-functions.md": [
+    "Verified representative49-constructor boundary",
+    [
+      "All49 registered zero-arity constructors retain representative lexical/type/context examples",
+      "Missing focus, invalid lexical data and references/lookups have separate evidence",
+      "QName/schema, decimal precision and wide-cast/extended-calendar limits remain explicit"
+    ],
+    [
+      "C03 does not certify all facets or every generic cast/extended-year operation; fn focus syntax is a separate entry."
+    ]
+  ],
+  "operators-and-syntax/keyword-arguments.md": [
+    "Limited keywords; placeholder blocker",
+    [
+      "Reordered/mixed keywords and expanded names use actual per-function metadata",
+      "Duplicate/unknown/missing names and positional-after-keyword retain static refusals",
+      "Keyword placeholders remain unmet; positional partial application is the supported alternative"
+    ],
+    [
+      "C04-G03 and C02-F01: keyword placeholders and per-function label/metadata gaps remain; not a universal dynamic-call keyword facility."
+    ]
+  ],
+  "operators-and-syntax/map-entry-iteration.md": [
+    "Verified bounded key/value binding",
+    [
+      "Each value remains a sequence; key/value and positional bindings retain scope",
+      "Positions across supplied maps have named evidence",
+      "Map enumeration is not portable presentation order; labels are explicitly sorted"
+    ],
+    [
+      "Full typed/default/context iteration combinations remain C05 limits."
+    ]
+  ],
+  "operators-and-syntax/mapping-arrow.md": [
+    "Limited mapping; containing-focus blocker",
+    [
+      "Accepted =!> inserts each input item as the first argument",
+      "Empty mapping and simple unary examples retain version/error boundaries",
+      "Focus-sensitive extra arguments incorrectly observe mapped focus; explicit for is the alternative"
+    ],
+    [
+      "C04-G02: containing dot/position/size semantics remain unmet; unary examples cannot certify this boundary."
+    ]
+  ],
+  "operators-and-syntax/method-call-operator.md": [
+    "Verified deferred decision and alternative",
+    [
+      "=?> remains refused at all tested compatibility levels",
+      "Direct array/map calls provide narrower supported alternatives"
+    ],
+    [
+      "No method dictionary or nominal/union dispatch implementation or future tier commitment follows."
+    ]
+  ],
+  "operators-and-syntax/numeric-literals.md": [
+    "Verified bounded literal grammar",
+    [
+      "Binary/hex prefixes and internal underscore groups retain current4 lexical rules",
+      "Malformed fraction/exponent separators refuse; signs are unary operators",
+      "Source separators do not extend xs:integer string lexical forms",
+      "Complete normal/empty/reordered reports retain earlier portable baselines"
+    ],
+    [
+      "Delivered malformed-separator fix remains closed; literals do not create arbitrary-precision decimal arithmetic or unrestricted generic casts."
+    ]
+  ],
+  "operators-and-syntax/otherwise-operator.md": [
+    "Limited released spelling; current grammar mismatch",
+    [
+      "Released ?? tests empty sequence, preserving zero/false/empty-string and whole sequences",
+      "Guarded RHS errors and precedence retain named evidence",
+      "Pinned current spelling otherwise is independently required but refused"
+    ],
+    [
+      "C04-G01: retain frozen spelling and historical adoption uncertainty separately from the current review; no automatic rename/adoption."
+    ]
+  ],
+  "operators-and-syntax/pipeline-operator.md": [
+    "Verified bounded pipeline focus",
+    [
+      "The complete LHS becomes focus once with position/size1/1",
+      "Pipeline is neither first-argument insertion nor per-item mapping",
+      "Focus restoration and complete report baselines retain named evidence"
+    ],
+    [
+      "No universal callback/type-coercion or host/profile propagation acceptance."
+    ]
+  ],
+  "operators-and-syntax/sequence-collection-iteration.md": [
+    "Verified bounded multi-container iteration",
+    [
+      "Members/values stay whole across a sequence of containers",
+      "Empty/invalid containers and continuing positions retain named evidence",
+      "This bounded original deferral is superseded; explicit sorting handles map presentation"
+    ],
+    [
+      "Not a full generic collection/type-model promotion."
+    ]
+  ],
+  "operators-and-syntax/string-templates.md": [
+    "Verified bounded template contract",
+    [
+      "Interpolations atomize values and empty interpolation contributes no text",
+      "Multiple values and explicit business formatting remain distinct",
+      "Backtick grammar and older-profile refusals have applicable lexical evidence"
+    ],
+    [
+      "No separate triple-quote language or arbitrary interpolation/coercion certification."
+    ]
+  ],
+  "rejected/directional-scan.md": [
+    "Verified rejected names",
+    [
+      "scan-left/scan-right remain absent including Experimental",
+      "Experimental scan is a separate left-fold state contract; fold-only-final and right-fold behavior differ"
+    ],
+    [
+      "No right-scan equivalence is inferred from reversing sequences."
+    ]
+  ],
+  "rejected/extensible-map-types.md": [
+    "Verified rejected proposal and record alternatives",
+    [
+      "Record cast discards surplus keys in the supplied shape",
+      "Function-argument coercion rejects surplus keys; rejection does not implement extensible maps"
+    ],
+    [
+      "Keep structural membership, cast, coercion and annotation-aware lookup separate; C05 defects remain."
+    ]
+  ],
+  "rejected/mapping-arrow-gtgt.md": [
+    "Verified rejected spelling and bounded replacement",
+    [
+      "Old =>> refuses independently from the successful =!> query",
+      "Accepted mapping and explicit for alternatives have profile/context boundaries",
+      "Both inline examples now execute separately verbatim"
+    ],
+    [
+      "This proves Bosak refusal/replacement scope, not an exact external rename/adoption history or corrected mapping-extra focus."
+    ]
+  ]
+}

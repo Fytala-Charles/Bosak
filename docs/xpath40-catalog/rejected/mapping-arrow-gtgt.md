@@ -5,6 +5,8 @@
   <p>Catalog entry — Rejected / Superseded</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified rejected spelling and bounded replacement**. This proves Bosak refusal/replacement scope, not an exact external rename/adoption history or corrected mapping-extra focus. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 <!-- Catalog entry: mapping arrow =>>. Template: see ../README.md §1.1. -->
 
 ## 1. Name and Classification
@@ -77,10 +79,14 @@ None, deliberately. If a parser change ever accidentally accepts `=>>`, that is 
 
 ## 13. Sample Code
 
+Run these as independent queries. The first uses frozen `XPath40`; the second deliberately refuses the old spelling:
+
 ~~~xquery
 string-join((' FILTER-A ', ' BOLT-M8 ') =!> normalize-space(), ',')
   (: → "FILTER-A,BOLT-M8" — one call per product code :)
+~~~
 
+~~~xquery
 (' FILTER-A ') =>> normalize-space()
   (: → XPST0003 at every level — old spelling, never implemented :)
 ~~~

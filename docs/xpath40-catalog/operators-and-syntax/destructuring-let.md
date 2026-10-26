@@ -5,6 +5,8 @@
   <p>Catalog entry — Operators &amp; syntax · Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 4 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited bindings; annotated-record blocker**. C05-K03: annotated-record unknown-field destructuring incorrectly returns empty instead of XPTY0004; broader type/choice coercion limits remain. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 <!-- Catalog entry: destructuring let. Template: see ../README.md §1.1. -->
 
 ## 1. Name and Classification
@@ -47,7 +49,7 @@ Prior art: ML/Haskell pattern bindings, ES6 `const {a, b} = obj` / `const [x, y]
 
 - The **last variable of a sequence pattern takes all remaining items** (`let $($x, $y) := (1,2,3)` → `$y = (2,3)`); ES6 array destructuring instead discards surplus elements. Surplus *variables* (too few items) bind `()`.
 - The **array form discards surplus members but requires each bound index**: `let $[$a, $b] := [1,2,3]` discards member 3, but too few members for the variables is **FOAY0001**, not `undefined`-style filling.
-- The **map form binds by variable name** (`${$name}` looks up key `"name"`), closer to ES6 object destructuring than to map lookup — but a missing key binds `()` rather than throwing.
+- The **ordinary map form binds by variable name** (`${$name}` looks up key `"name"`); a missing ordinary-map key binds `()`. Annotated records have a separate undeclared-field lookup rule. The current engine incorrectly binds empty for that record case; C05 K03 retains the required `XPTY0004` expectation.
 
 ## 7. Applicability
 
@@ -102,19 +104,29 @@ currency cardinality `0`. These run at `XPath40` and verify default-mode refusal
 
 Start with [the invoice chapter's practical migration pair](../worked-examples/invoice-to-erp/README.md#where-xpath-40-can-improve-readability): unpack invoice ID and currency from a metadata map to build a display label. Both complete expressions are supplied, engine-verified, and produce `INV-2026-1042 / EUR`. The 4.0 form requires explicit opt-in. The probes below cover the individual binding shapes.
 
+Run each query independently at `XPath40` or `XPath40Experimental`:
+
 ~~~xquery
 let $($x, $y) := (1, 2, 3) return ($x, $y)
-  (: → (1, (2,3)) — last variable takes the rest :)
+  (: → (1,2,3) — $x=1, $y=(2,3); XDM flattens the returned sequence :)
+~~~
 
+~~~xquery
 let $[$a, $b] := [3, 4, 5] return `a={$a} b={$b}`
   (: → "a=3 b=4" — surplus member 5 discarded :)
+~~~
 
+~~~xquery
 let $[$a, $b] := [1] return $b
   (: → FOAY0001 :)
+~~~
 
+~~~xquery
 let ${$name} := map {"name": "Braid"} return $name
   (: → "Braid" — key = variable local name :)
+~~~
 
+~~~xquery
 let $($x as xs:short, $y) := (42, "ok") return ($x, $y)
   (: → (42 xs:short, "ok") — PR 254 relabeling; annotation changes, datum untouched :)
 ~~~

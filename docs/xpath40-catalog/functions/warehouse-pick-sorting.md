@@ -4,6 +4,8 @@
   <p>Retained sorting functions — portable workflow and 4.0 contract limits</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Blocked for full default-key/collation/order parity**. C02-F05/F06: explicit empty-key defaults, unknown-collation refusal and numeric ordering remain incomplete; passing one NaN input order is not complete ordering support. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 [fn:sort](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort)

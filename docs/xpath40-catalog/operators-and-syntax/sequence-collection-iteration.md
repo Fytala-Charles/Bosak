@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded multi-container iteration**. Not a full generic collection/type-model promotion. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Iteration across collection sequences — Frozen 4.0.** [Bosak PR #87](https://github.com/Fytala-Charles/Bosak/pull/87) / [immutable revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813). This is the shipped engine delivery.

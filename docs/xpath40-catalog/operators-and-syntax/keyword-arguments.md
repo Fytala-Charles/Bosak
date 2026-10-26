@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited keywords; placeholder blocker**. C04-G03 and C02-F01: keyword placeholders and per-function label/metadata gaps remain; not a universal dynamic-call keyword facility. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Keyword arguments** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.

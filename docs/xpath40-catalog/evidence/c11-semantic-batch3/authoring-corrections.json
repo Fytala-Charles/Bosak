@@ -1,0 +1,3 @@
+{
+  "reason": "A raw one-item simple-map result displays as (sequence) through XdmValue.ToString. Add a separate string-join projection to inspect its value without changing the source expression or expected result. Retain the original request/result. Add the reverse NaN input order to check the documented order dependence; no existing expectation is relaxed."
+}

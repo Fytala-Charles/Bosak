@@ -4,6 +4,8 @@
   <p>Frozen XPath 4.0 - bounded executable reference</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 4 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded literal grammar**. Delivered malformed-separator fix remains closed; literals do not create arbitrary-precision decimal arithmetic or unrestricted generic casts. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
 
 ## 1. Name and Classification

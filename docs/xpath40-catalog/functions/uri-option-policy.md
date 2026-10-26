@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — Boolean options and component precedence</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited URI options; query precedence gap**. C02-F04: empty structured query map falls back to raw query; unsupported string Booleans remain a type-validation limit. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **URI option policy — Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri) and [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri).

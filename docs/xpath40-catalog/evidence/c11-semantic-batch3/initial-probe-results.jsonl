@@ -1,0 +1,97 @@
+{"id":"verbatim-destructure-0","profile":"XPath40","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"verbatim-destructure-0","profile":"XPath40Experimental","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"verbatim-destructure-1","profile":"XPath40","phase":"success","result":"a=3 b=4","error":null,"errorCode":null}
+{"id":"verbatim-destructure-1","profile":"XPath40Experimental","phase":"success","result":"a=3 b=4","error":null,"errorCode":null}
+{"id":"verbatim-destructure-2","profile":"XPath40","phase":"evaluate","result":null,"error":"FOAY0001: Array index 2 is out of bounds (array size 1).","errorCode":null}
+{"id":"verbatim-destructure-2","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FOAY0001: Array index 2 is out of bounds (array size 1).","errorCode":null}
+{"id":"verbatim-destructure-3","profile":"XPath40","phase":"success","result":"Braid","error":null,"errorCode":null}
+{"id":"verbatim-destructure-3","profile":"XPath40Experimental","phase":"success","result":"Braid","error":null,"errorCode":null}
+{"id":"verbatim-destructure-4","profile":"XPath40","phase":"success","result":"true|ok","error":null,"errorCode":null}
+{"id":"verbatim-destructure-4","profile":"XPath40Experimental","phase":"success","result":"true|ok","error":null,"errorCode":null}
+{"id":"verbatim-arrow-0","profile":"XPath40","phase":"success","result":"FILTER-A,BOLT-M8","error":null,"errorCode":null}
+{"id":"verbatim-arrow-0","profile":"XPath40Experimental","phase":"success","result":"FILTER-A,BOLT-M8","error":null,"errorCode":null}
+{"id":"verbatim-arrow-1","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 17: XPST0003: Expected function name, variable reference, or parenthesized expression after =\u003E","errorCode":null}
+{"id":"verbatim-arrow-1","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 17: XPST0003: Expected function name, variable reference, or parenthesized expression after =\u003E","errorCode":null}
+{"id":"unix-default","profile":"XPath40","phase":"success","result":"1970-01-01T00:00:00Z","error":null,"errorCode":null}
+{"id":"unix-default","profile":"XPath40Experimental","phase":"success","result":"1970-01-01T00:00:00Z","error":null,"errorCode":null}
+{"id":"unix-negative-frozen","profile":"XPath40","phase":"evaluate","result":null,"error":"FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.","errorCode":null}
+{"id":"unix-negative-experimental","profile":"XPath40Experimental","phase":"success","result":"1969-12-31T23:59:59.999Z","error":null,"errorCode":null}
+{"id":"unix-wide-range","profile":"XPath40","phase":"evaluate","result":null,"error":"FODT0001: fn:unix-dateTime value is outside the representable date range.","errorCode":null}
+{"id":"unix-wide-range","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FODT0001: fn:unix-dateTime value is outside the representable date range.","errorCode":null}
+{"id":"duration-fraction","profile":"XPath40","phase":"success","result":"-1.25","error":null,"errorCode":null}
+{"id":"duration-fraction","profile":"XPath40Experimental","phase":"success","result":"-1.25","error":null,"errorCode":null}
+{"id":"uri-empty-query-required","profile":"XPath40","phase":"success","result":"https://example.test?old=1","error":null,"errorCode":null}
+{"id":"uri-empty-query-required","profile":"XPath40Experimental","phase":"success","result":"https://example.test?old=1","error":null,"errorCode":null}
+{"id":"uri-string-false-observation","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"uri-string-false-observation","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"sort-empty-key","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004","errorCode":null}
+{"id":"sort-empty-key","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004","errorCode":null}
+{"id":"array-sort-empty-key","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004","errorCode":null}
+{"id":"array-sort-empty-key","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004","errorCode":null}
+{"id":"sort-unknown-collation","profile":"XPath40","phase":"success","result":"(sequence)","error":null,"errorCode":null}
+{"id":"sort-unknown-collation","profile":"XPath40Experimental","phase":"success","result":"(sequence)","error":null,"errorCode":null}
+{"id":"sort-nan-right","profile":"XPath40","phase":"success","result":"NaN,1","error":null,"errorCode":null}
+{"id":"sort-nan-right","profile":"XPath40Experimental","phase":"success","result":"NaN,1","error":null,"errorCode":null}
+{"id":"sort-exact","profile":"XPath40","phase":"success","result":"double,decimal","error":null,"errorCode":null}
+{"id":"sort-exact","profile":"XPath40Experimental","phase":"success","result":"double,decimal","error":null,"errorCode":null}
+{"id":"sort-explicit-data","profile":"XPath40","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"sort-explicit-data","profile":"XPath40Experimental","phase":"success","result":"1,2,3","error":null,"errorCode":null}
+{"id":"member-whole-sequences","profile":"XPath40","phase":"success","result":"2,0","error":null,"errorCode":null}
+{"id":"member-whole-sequences","profile":"XPath40Experimental","phase":"success","result":"2,0","error":null,"errorCode":null}
+{"id":"member-container-sequences","profile":"XPath40","phase":"success","result":"2,1","error":null,"errorCode":null}
+{"id":"member-container-sequences","profile":"XPath40Experimental","phase":"success","result":"2,1","error":null,"errorCode":null}
+{"id":"map-entry-values","profile":"XPath40","phase":"success","result":"A:2","error":null,"errorCode":null}
+{"id":"map-entry-values","profile":"XPath40Experimental","phase":"success","result":"A:2","error":null,"errorCode":null}
+{"id":"destructure-tail","profile":"XPath40","phase":"success","result":"1:2,3","error":null,"errorCode":null}
+{"id":"destructure-tail","profile":"XPath40Experimental","phase":"success","result":"1:2,3","error":null,"errorCode":null}
+{"id":"destructure-ordinary-missing","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"destructure-ordinary-missing","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"destructure-record-required","profile":"XPath40","phase":"success","result":"()","error":null,"errorCode":null}
+{"id":"destructure-record-required","profile":"XPath40Experimental","phase":"success","result":"()","error":null,"errorCode":null}
+{"id":"focus-whole-sequence","profile":"XPath40","phase":"success","result":"3","error":null,"errorCode":null}
+{"id":"focus-whole-sequence","profile":"XPath40Experimental","phase":"success","result":"3","error":null,"errorCode":null}
+{"id":"focus-empty-fixed","profile":"XPath40","phase":"success","result":"0:1/1","error":null,"errorCode":null}
+{"id":"focus-empty-fixed","profile":"XPath40Experimental","phase":"success","result":"0:1/1","error":null,"errorCode":null}
+{"id":"constructor-focus","profile":"XPath40","phase":"success","result":"(sequence)","error":null,"errorCode":null}
+{"id":"constructor-focus","profile":"XPath40Experimental","phase":"success","result":"(sequence)","error":null,"errorCode":null}
+{"id":"constructor-no-focus","profile":"XPath40","phase":"evaluate","result":null,"error":"XPDY0002: xs:integer() called with no context item.","errorCode":null}
+{"id":"constructor-no-focus","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPDY0002: xs:integer() called with no context item.","errorCode":null}
+{"id":"keyword-valid","profile":"XPath40","phase":"success","result":"BC","error":null,"errorCode":null}
+{"id":"keyword-valid","profile":"XPath40Experimental","phase":"success","result":"BC","error":null,"errorCode":null}
+{"id":"keyword-placeholder-required","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 26: XPST0003: Expected lookup key","errorCode":null}
+{"id":"keyword-placeholder-required","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 26: XPST0003: Expected lookup key","errorCode":null}
+{"id":"keyword-positional-alternative","profile":"XPath31","phase":"success","result":"BC","error":null,"errorCode":null}
+{"id":"keyword-positional-alternative","profile":"XPath40","phase":"success","result":"BC","error":null,"errorCode":null}
+{"id":"keyword-positional-alternative","profile":"XPath40Experimental","phase":"success","result":"BC","error":null,"errorCode":null}
+{"id":"mapping-containing-required","profile":"XPath40","phase":"success","result":"1:1|2:2","error":null,"errorCode":null}
+{"id":"mapping-containing-required","profile":"XPath40Experimental","phase":"success","result":"1:1|2:2","error":null,"errorCode":null}
+{"id":"mapping-for-alternative","profile":"XPath40","phase":"success","result":"1:100|2:100","error":null,"errorCode":null}
+{"id":"mapping-for-alternative","profile":"XPath40Experimental","phase":"success","result":"1:100|2:100","error":null,"errorCode":null}
+{"id":"method-refusal","profile":"XPath30","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected lookup key","errorCode":null}
+{"id":"method-refusal","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected lookup key","errorCode":null}
+{"id":"method-refusal","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected lookup key","errorCode":null}
+{"id":"method-refusal","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 4: XPST0003: Expected lookup key","errorCode":null}
+{"id":"literal-separators","profile":"XPath40","phase":"success","result":"65537","error":null,"errorCode":null}
+{"id":"literal-separators","profile":"XPath40Experimental","phase":"success","result":"65537","error":null,"errorCode":null}
+{"id":"literal-bad-separator","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","errorCode":null}
+{"id":"literal-bad-separator","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","errorCode":null}
+{"id":"literal-string-cast","profile":"XPath40","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u00271_000\u0027 to integer.","errorCode":null}
+{"id":"literal-string-cast","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u00271_000\u0027 to integer.","errorCode":null}
+{"id":"otherwise-present","profile":"XPath40","phase":"success","result":"0|false|0","error":null,"errorCode":null}
+{"id":"otherwise-present","profile":"XPath40Experimental","phase":"success","result":"0|false|0","error":null,"errorCode":null}
+{"id":"otherwise-word-required","profile":"XPath40","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token Name","errorCode":null}
+{"id":"otherwise-word-required","profile":"XPath40Experimental","phase":"compile","result":null,"error":"Parse error at position 3: XPST0003: Unexpected token Name","errorCode":null}
+{"id":"pipeline-whole-focus","profile":"XPath40","phase":"success","result":"3:1/1","error":null,"errorCode":null}
+{"id":"pipeline-whole-focus","profile":"XPath40Experimental","phase":"success","result":"3:1/1","error":null,"errorCode":null}
+{"id":"template-empty","profile":"XPath40","phase":"success","result":"AB","error":null,"errorCode":null}
+{"id":"template-empty","profile":"XPath40Experimental","phase":"success","result":"AB","error":null,"errorCode":null}
+{"id":"scan-left-refusal","profile":"XPath31","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-left#3 not found.","errorCode":null}
+{"id":"scan-left-refusal","profile":"XPath40","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-left#3 not found.","errorCode":null}
+{"id":"scan-left-refusal","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-left#3 not found.","errorCode":null}
+{"id":"scan-right-refusal","profile":"XPath31","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-right#3 not found.","errorCode":null}
+{"id":"scan-right-refusal","profile":"XPath40","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-right#3 not found.","errorCode":null}
+{"id":"scan-right-refusal","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPST0017: Function {http://www.w3.org/2005/xpath-functions}scan-right#3 not found.","errorCode":null}
+{"id":"record-cast-surplus","profile":"XPath40","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"record-cast-surplus","profile":"XPath40Experimental","phase":"success","result":"1","error":null,"errorCode":null}
+{"id":"record-coercion-surplus","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(id as xs:string).","errorCode":null}
+{"id":"record-coercion-surplus","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(id as xs:string).","errorCode":null}

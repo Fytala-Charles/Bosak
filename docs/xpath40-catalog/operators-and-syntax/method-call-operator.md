@@ -5,6 +5,8 @@
   <p>Catalog entry — Operators &amp; syntax · Deferred</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 2 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified deferred decision and alternative**. No method dictionary or nominal/union dispatch implementation or future tier commitment follows. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
 
 <!-- Catalog entry: method-call operator. Template: see ../README.md §1.1. -->

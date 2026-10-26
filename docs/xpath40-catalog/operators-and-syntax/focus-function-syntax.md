@@ -4,6 +4,8 @@
   <p>Frozen XPath 4.0 - bounded executable reference</p>
 </div>
 
+**C11 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-3.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded focus-function syntax**. No arbitrary callback/constructor/package context acceptance; C04 mapping-extra-focus and C06 host/static-mode limits remain distinct. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Focus-function syntax** - **Frozen 4.0**, REQ-118 S4. `fn { E }` and `function { E }` omit the signature and take one `item()*` argument, bound as the whole context value. `fn($x) { E }` abbreviates an ordinary explicit-signature inline function; it is not a focus function. This entry is distinct from the [zero-argument focus constructors](focus-functions.md).
