@@ -1,0 +1,5 @@
+37f3ac7bad503446fc8f4e157e1cd7bd8212ef71
+2026-10-10T18:30:49+02:00
+2026-10-10T18:30:49+02:00
+feat(xpath): REQ-123 destructuring-let cluster — XPath 4.0 destructuring let bindings (qt4 gate 221 → 223)
+

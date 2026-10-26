@@ -1,0 +1,67 @@
+2a62ad4d9f72d2614887c260e8856de0a6617350
+2026-10-08T22:21:37+02:00
+2026-10-08T22:21:37+02:00
+feat(xslt40): REQ-118 4.0-S8 — xsl:array/xsl:array-member, xsl:switch, pattern analysis (#92)
+
+* feat(XSLT): REQ-118 4.0-S8 xsl:array/xsl:array-member and xsl:switch
+
+XSLT 4.0 draft §21.1.2: xsl:array builds an XdmArray — @select contributes
+one singleton member per item; @for-each contributes one member per focus
+item whose value is the whole per-item sequence; sequence-constructor
+content treats each ordinary item as a singleton member while a nested
+xsl:array-member contributes exactly one sequence-valued member (the spec's
+JNode wrapper is unnecessary because XdmArray members hold sequences
+natively). XTTE4060 is unreachable without a JNode model.
+
+XSLT 4.0 draft §8.3: xsl:switch coerces its @select to a single atomic item
+(XPTY0004 otherwise) and matches xsl:when branches by coercing each @test
+to atomic items and comparing with the selector under general-comparison
+(=) semantics, NaN never equal, using the default collation in scope for
+the instruction. xsl:when/xsl:otherwise under xsl:switch gain an optional
+@select (mutually exclusive with content, XTSE3185); under xsl:choose the
+attribute stays inert so choose behavior is bit-identical to 3.0.
+
+Both instructions are known at every effective version (added to
+KnownXsltElementNames) so version="4.0" stylesheets in forwards-compatible
+mode still execute them (§3.8.2/§3.8.3 make the surfaces version-independent;
+the supported-version ceiling deliberately stays 3.0 per the frozen W3C
+forwards-* catalog tests).
+
+Static checks in ValidateInstructionTree: xsl:array/xsl:array-member
+@select+content XTSE3185 (xsl:fallback exempt); xsl:switch requires @select
+and (xsl:when+, xsl:otherwise?, xsl:fallback*) shape XTSE0010; when/
+otherwise @select+content XTSE3185 only under xsl:switch.
+
+StreamabilityAnalyzer mirrors the xsl:map cases for xsl:array (@for-each and
+@select surfaces), xsl:array-member and xsl:switch.
+
+Gates: build 0/0; dotnet test Bosak.sln -c Release 3310/0; QT3 31142/0/679;
+XSLT smoke 162/0/26 of 188.
+
+* test(XSLT): REQ-118 4.0-S8 xsl:array/xsl:array-member and xsl:switch tests
+
+31 tests covering: @select singleton members, tokenized input, @for-each
+whole-sequence members, array-member siblings in content, the spec §21.1.2
+grouping shape via group-by (split-when is not yet implemented), nested
+array-member in for-each, function-body arrays, XTSE3185 (array,
+array-member, when/otherwise), XTDE0450 for element children, switch lookup
+tables, test sequences (days-in-month), numeric-promotion '=' semantics,
+default collation in scope, lazy later branches, empty result without
+otherwise, XPTY0004 selector coercion, XTSE0010 shape errors, xsl:choose
+when/@select inertness, function-body switch, and version 3.0 plus
+forwards-compatible 4.0 execution.
+
+* docs: REQ-118 4.0-S8 registry, integration and handover records
+
+FEATURE_REQUESTS: banner entry, REQ-118 registry status, Continued line,
+4.0-S8 sub-REQ row (landed), acceptance checkbox. INTEGRATION: §0 2026-10-08(k).
+AGENT_HANDOVER: sixty-fourth session block with the full pattern-system
+§6.3–§6.4 analysis (union-priority already 4.0-aligned; new pattern forms
+and the §6.4.2 type-pattern table recorded as deviations pending the
+XSLT-4.0-mode owner decision).
+
+* docs: record 4.0-S8 commit hashes in handover
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

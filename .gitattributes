@@ -166,3 +166,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/xpath40-catalog/evidence/c06-host-profile-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/xpath40-catalog/evidence/c07-lifecycle-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/xpath40-catalog/evidence/c08-adoption-research/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

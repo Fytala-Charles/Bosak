@@ -182,6 +182,12 @@ After **every** successful implementation step, update the following canonical d
 - Use `ArrayPool<T>` or struct enumerators for hot paths; avoid `IEnumerable<T>` boxing on critical loops.
 - Keep the public API surface in `Bosak.XPath.Api` thin; delegate to the runtime layer.
 
+## Specification Adoption Evidence (Mandatory)
+
+Before a new implementation or semantic change, record the exact immutable specification source revision, affected sections, and intentional deviations. Keep historical adoption evidence separate from later review pins, test-fixture revisions, publication dates, and feature-origin PRs.
+
+The owner-approved [legacy adoption policy](docs/xpath40-catalog/LEGACY-ADOPTION-POLICY-PROPOSAL.md) applies only to its original 28 records: 26 provenance exceptions and two non-adoptions. Preserve their original null adoption fields and receipts. This exception does not extend to future work, semantic acceptance, or engine defects.
+
 ## Upstream Test Contribution Base (Mandatory)
 
 Prepare every upstream test correction or addition against the current upstream default branch. Fetch upstream before creating the contribution branch and again immediately before submission. Base the contribution on the refreshed default branch (rebase if it has advanced), record the exact base revision, and re-check the final diff against current upstream. Do not submit patches based only on an older contribution branch. This avoids the application/merge conflicts Michael Kay reported in qt4cg/xslt40-test issue #28. Preserve original submission and execution receipts; record corrections separately.

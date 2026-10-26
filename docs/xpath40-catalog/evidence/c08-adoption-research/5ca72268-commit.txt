@@ -1,0 +1,36 @@
+5ca722686041fc701f8c25c00808eb8169a63053
+2026-10-08T10:45:05+02:00
+2026-10-08T10:45:05+02:00
+feat(xpath40): REQ-118 4.0-S3a — parser version plumbing, otherwise (??) operator, 4.0 numeric literals (#85)
+
+* feat(xpath40): REQ-118 4.0-S3a — '??' otherwise operator + 4.0 numeric literals
+
+- Parser gains xpath40 flag (schemaAware pattern); XPath31Expression.Compile
+  passes Compatibility >= XPath40; all other Parse callers keep 3.1 default
+- Lexer: '??' tokenizes as Otherwise (longest-token rule); 4.0 mode enables
+  0x/0b integer literals and underscore digit separators (xs:integer per §4.3.1)
+- Grammar: OtherwiseExpr between ComparisonExpr and StringConcatExpr (§4.17);
+  3.1 mode rejects Otherwise with XPST0003
+- IrLowerer: LowerOtherwise — RHS evaluated only when LHS is empty, giving the
+  §2.6.5 guarding rule (RHS can never raise a dynamic error when LHS non-empty)
+
+* test(xpath40): REQ-118 4.0-S3a — version gate tests for '??' and 4.0 numeric literals
+
+- 3.1/3.0 mode: '??', 0x/0b, underscores rejected with XPST0003
+- 4.0 semantics: empty/non-empty LHS, whole-sequence result, left
+  associativity, precedence vs comparison/arithmetic/||, RHS guarding
+  (FOAR0001 suppression when LHS non-empty; LHS errors propagate),
+  predicate + lookup + node-sequence usage, containing focus on RHS
+- 4.0 literals: 0xffff, 0xFFFF_FFFF, 0b101, 0b1111_1111, 1_000_000
+
+* docs: REQ-118 4.0-S3a — FEATURE_REQUESTS sub-REQ row, INTEGRATION §0, handover session 57
+
+* docs: AGENT_HANDOVER session 57 — record docs commit hash
+
+* docs: AGENT_HANDOVER session 57 — correct hash-tail wording
+
+* docs: AGENT_HANDOVER session 57 — record QT3 31,142/0/679 result
+
+---------
+
+Co-authored-by: Charles Korthout <charles.korthout@fytala.nl>

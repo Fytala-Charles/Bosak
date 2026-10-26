@@ -1,0 +1,644 @@
+{
+  "operators-and-syntax/array-member-iteration.md": {
+    "gitBlob": "07aae3c3d51b44c9a14081ae1dbf87ba7730c6e0",
+    "classification": "**Array member iteration** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: for expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #87](https://github.com/Fytala-Charles/Bosak/pull/87), [immutable mainline revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/array-member-iteration.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ForMember_31Mode_ThrowsXpst0003",
+        "Evaluate_ForMember_IteratesMembers",
+        "Evaluate_ForMember_MultiItemAndArrayMembersAreBoundWhole"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+      ]
+    }
+  },
+  "operators-and-syntax/destructuring-let.md": {
+    "gitBlob": "62f3a1ab6e1ac35fa6c4c349573569ee7189aba0",
+    "classification": "**Destructuring `let` bindings** — **Frozen 4.0** (ships at the `XPath40` level; static XPST0003 at `XPath31`). Spec: XPath 4.0 §4.14 (FLWOR expressions), [QT4CG PR #1131](https://github.com/qt4cg/qtspecs/pull/1131). Landed: REQ-123 destructuring-let cluster, [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129) (main `b8e4b9f`, 2026-10-10).\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: let expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129), [immutable mainline revision `b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/destructuring-let.md",
+      "bosakPr": 129,
+      "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_DestructuringLet_DefaultOptions_ThrowXpst0003",
+        "Evaluate_DestructuringSequence_FrozenXPath40_Works",
+        "Evaluate_DestructuringSequence_CoercionFailure_ThrowsXpty0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions"
+      ]
+    }
+  },
+  "operators-and-syntax/focus-functions.md": {
+    "gitBlob": "2ffd9dff8cf273aa48099216a54b02b78c1ca6d8",
+    "classification": "**Focus-based constructors** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: constructor functions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions), [F&O 4.0: XML Schema constructors](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #110](https://github.com/Fytala-Charles/Bosak/pull/110), [immutable mainline revision `2871c0d6`](https://github.com/Fytala-Charles/Bosak/commit/2871c0d6ecb76c5099a4f682a71c5da49fb10ecf) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).\n\nThis page covers zero-argument constructors. For `fn { ... }`, `function { ... }`, the `fn(...)` abbreviation and pipeline focus, use the separate [focus-function syntax entry](focus-function-syntax.md). Constructor coverage does not establish that grammar.",
+    "originalRecord": {
+      "entry": "operators-and-syntax/focus-functions.md",
+      "bosakPr": 110,
+      "bosakRevision": "2871c0d6ecb76c5099a4f682a71c5da49fb10ecf",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_FocusConstructors_DefaultOptions_ThrowXpst0017",
+        "Evaluate_FocusConstructors_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "xs-normalizedString",
+        "xs-numeric",
+        "xs-token"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-constructor-functions",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#constructor-functions-for-xsd-types"
+      ]
+    }
+  },
+  "operators-and-syntax/keyword-arguments.md": {
+    "gitBlob": "fd1b4aa33fd2a15058671e562a20ad51f377ca97",
+    "classification": "**Keyword arguments** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: static function calls and keyword arguments](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-static-functions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #86](https://github.com/Fytala-Charles/Bosak/pull/86), [immutable mainline revision `498ae8d7`](https://github.com/Fytala-Charles/Bosak/commit/498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/keyword-arguments.md",
+      "bosakPr": 86,
+      "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_KeywordArgs_31Mode_ThrowsXpst0003",
+        "Evaluate_KeywordArgs_FullyKeyworded_Works",
+        "Evaluate_KeywordArgs_MixedWithPositionals_Works"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-static-functions"
+      ]
+    }
+  },
+  "operators-and-syntax/map-entry-iteration.md": {
+    "gitBlob": "3bfcdde74bcec1aa90af54b4a659d614fa2de658",
+    "classification": "**Map entry iteration** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: for expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #87](https://github.com/Fytala-Charles/Bosak/pull/87), [immutable mainline revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/map-entry-iteration.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ForKeyValue_31Mode_ThrowsXpst0003",
+        "Evaluate_ForKeyValue_IteratesEntries",
+        "Evaluate_ForKeyValue_PositionalCountsAcrossMaps"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-for-expressions"
+      ]
+    }
+  },
+  "operators-and-syntax/mapping-arrow.md": {
+    "gitBlob": "cfc3fd32ce8984a874dca25c469ebbd4977b411c",
+    "classification": "**Mapping arrow** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: mapping arrow expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #87](https://github.com/Fytala-Charles/Bosak/pull/87), [immutable mainline revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/mapping-arrow.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+      ]
+    }
+  },
+  "operators-and-syntax/method-call-operator.md": {
+    "gitBlob": "eb4302c14c223e074c8cfff0a00afce99f22ae9d",
+    "classification": "**Method-call operator `=?>`** — **Deferred** (deliberately not implemented). Spec: XPath 4.0 §4.22.3 (operator summary), [QT4CG issue #2219](https://github.com/qt4cg/qtspecs/issues/2219). Deferral recorded: REQ-118 dossier §1.2 \"Still moving — do NOT build yet\" (semantics changed 25 June 2026).\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: methods and method calls](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #77](https://github.com/Fytala-Charles/Bosak/pull/77), [immutable mainline revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) (2026-10-08). This is the adoption/disposition dossier delivery, not implementation of the refused shape.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "bosakPr": 77,
+      "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-methods"
+      ]
+    }
+  },
+  "operators-and-syntax/otherwise-operator.md": {
+    "gitBlob": "ee93c4c1f841c87ce02a52cb3e2f3b584ac3d45c",
+    "classification": "**Otherwise operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: otherwise expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise), [guarded expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #85](https://github.com/Fytala-Charles/Bosak/pull/85), [immutable mainline revision `5ca72268`](https://github.com/Fytala-Charles/Bosak/commit/5ca722686041fc701f8c25c00808eb8169a63053) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/otherwise-operator.md",
+      "bosakPr": 85,
+      "bosakRevision": "5ca722686041fc701f8c25c00808eb8169a63053",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_Otherwise_Default31Mode_ThrowsXpst0003",
+        "Compile_Otherwise_XPath30Mode_ThrowsXpst0003",
+        "Evaluate_Otherwise_EmptyLeftYieldsRight"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-otherwise",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-guarded-expressions"
+      ]
+    }
+  },
+  "operators-and-syntax/pipeline-operator.md": {
+    "gitBlob": "3d3758470fae8e2cf690890d75659f1415f83fc9",
+    "classification": "**Pipeline operator** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: pipeline operator](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-pipeline-operator). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #87](https://github.com/Fytala-Charles/Bosak/pull/87), [immutable mainline revision `ec793559`](https://github.com/Fytala-Charles/Bosak/commit/ec79355936a29ac70eeea3ae47e4c4e2ee00d813) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/pipeline-operator.md",
+      "bosakPr": 87,
+      "bosakRevision": "ec79355936a29ac70eeea3ae47e4c4e2ee00d813",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_PipelineArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_Pipeline_SpecExample_TokenizeCountConcat",
+        "Evaluate_Pipeline_SpecExample_SumOfPowers"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-pipeline-operator"
+      ]
+    }
+  },
+  "operators-and-syntax/string-templates.md": {
+    "gitBlob": "169e287c3266681ac68080735c7270a3905013f0",
+    "classification": "**String templates** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: string templates](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-string-templates). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #86](https://github.com/Fytala-Charles/Bosak/pull/86), [immutable mainline revision `498ae8d7`](https://github.com/Fytala-Charles/Bosak/commit/498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "operators-and-syntax/string-templates.md",
+      "bosakPr": 86,
+      "bosakRevision": "498ae8d7a1e3b3a11bb404eceb19a29dba21cdc9",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_StringTemplate_31Mode_ThrowsXpst0003",
+        "Evaluate_StringTemplate_FixedOnly_Works",
+        "Evaluate_StringTemplate_Interpolation_Works"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-string-templates"
+      ]
+    }
+  },
+  "functions/atomic-equal.md": {
+    "gitBlob": "a7b477e156c31606b6eaf5410d4aaaf010f52df6",
+    "classification": "**Atomic equality** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [fn:atomic-equal](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-equal). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #108](https://github.com/Fytala-Charles/Bosak/pull/108), [immutable mainline revision `cbf7f88c`](https://github.com/Fytala-Charles/Bosak/commit/cbf7f88ce8364334040a819f96967622992f24a2) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "functions/atomic-equal.md",
+      "bosakPr": 108,
+      "bosakRevision": "cbf7f88ce8364334040a819f96967622992f24a2",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+        "Evaluate_AtomicEqual_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-atomic-equal"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-equal"
+      ]
+    }
+  },
+  "functions/csv-parsing.md": {
+    "gitBlob": "8971533453d1796c87773c2ba9453b56f77a88fa",
+    "classification": "**CSV parsing** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 CSV cluster; local FunctionLibrary CSV implementation. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [fn:parse-csv](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-csv), [fn:csv-doc](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-doc), [fn:csv-to-xml](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-to-xml). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #104](https://github.com/Fytala-Charles/Bosak/pull/104), [immutable mainline revision `e0024f5d`](https://github.com/Fytala-Charles/Bosak/commit/e0024f5d1d00c410e65ebf04f4caf89e770eb8ec) (2026-10-09). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "functions/csv-parsing.md",
+      "bosakPr": 104,
+      "bosakRevision": "e0024f5d1d00c410e65ebf04f4caf89e770eb8ec",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+        "Evaluate_ParseCsv_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-csv-doc",
+        "fn-csv-to-xml",
+        "fn-parse-csv"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-csv",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-doc",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-csv-to-xml"
+      ]
+    }
+  },
+  "functions/element-to-map.md": {
+    "gitBlob": "e8aad62d2598109efc9959f1ed0e878be7408edf",
+    "classification": "**Element-to-map conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [fn:element-to-map](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map), [fn:element-to-map-plan](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #106](https://github.com/Fytala-Charles/Bosak/pull/106), [immutable mainline revision `1bb73147`](https://github.com/Fytala-Charles/Bosak/commit/1bb731474c6ba48dded66441183c676a0ebf9761) (2026-10-09). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "functions/element-to-map.md",
+      "bosakPr": 106,
+      "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_ElementToMap_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-element-to-map",
+        "fn-element-to-map-plan"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-element-to-map-plan"
+      ]
+    }
+  },
+  "functions/map-to-element.md": {
+    "gitBlob": "211208a6d12454b1a136c0718a4af5689a56f5b8",
+    "classification": "**Map-to-element conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [fn:map-to-element](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-to-element). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #106](https://github.com/Fytala-Charles/Bosak/pull/106), [immutable mainline revision `1bb73147`](https://github.com/Fytala-Charles/Bosak/commit/1bb731474c6ba48dded66441183c676a0ebf9761) (2026-10-09). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "functions/map-to-element.md",
+      "bosakPr": 106,
+      "bosakRevision": "1bb731474c6ba48dded66441183c676a0ebf9761",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs",
+      "namedTests": [
+        "MapToElement_SingleEntryMap_BuildsElement",
+        "MapToElement_EmptySequence_ReturnsEmpty",
+        "MapToElement_NonMapInput_Xpty0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-map-to-element"
+      ]
+    }
+  },
+  "functions/sort-with.md": {
+    "gitBlob": "60b3b4ec883e0e92a1055de7ecc3cbc3995a5054",
+    "classification": "**Comparator-based sorting** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [fn:sort-with](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-with), [array:sort-with](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort-with). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #112](https://github.com/Fytala-Charles/Bosak/pull/112), [immutable mainline revision `89c90b4d`](https://github.com/Fytala-Charles/Bosak/commit/89c90b4d5b6a216a4a37223e169d36e3a1a832bd) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "functions/sort-with.md",
+      "bosakPr": 112,
+      "bosakRevision": "89c90b4d5b6a216a4a37223e169d36e3a1a832bd",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_SortWithCluster_DefaultOptions_ThrowXpst0017",
+        "Compile_SortWithCluster_3Point1Functions_StillWork",
+        "Evaluate_SortWithCluster_FrozenXPath40_Works"
+      ],
+      "namedPromotedSets": [
+        "array-sort-with",
+        "fn-sort-with"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-with",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-array-sort-with"
+      ]
+    }
+  },
+  "type-system/choice-types.md": {
+    "gitBlob": "17b7530e4db49a292df4128ab78bcc6324105a6d",
+    "classification": "**Choice item types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; choice item type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: choice item types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #89](https://github.com/Fytala-Charles/Bosak/pull/89), [immutable mainline revision `83d152ff`](https://github.com/Fytala-Charles/Bosak/commit/83d152ffdba55fe160f33366fa14ed2922fa2f9d) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "type-system/choice-types.md",
+      "bosakPr": 89,
+      "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_ChoiceItemType_31Mode_ThrowsXpst0003",
+        "Evaluate_Choice_InstanceOf_AnyAlternativeMatches",
+        "Evaluate_Choice_Cast_FirstCoercibleAlternativeWins"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-choice-item-types"
+      ]
+    }
+  },
+  "type-system/enum-types.md": {
+    "gitBlob": "d42521483d8e842f67927dd6760c32e408a01c46",
+    "classification": "**Enumeration types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; XPath enum type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: enumeration types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-enumeration-types). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #89](https://github.com/Fytala-Charles/Bosak/pull/89), [immutable mainline revision `83d152ff`](https://github.com/Fytala-Charles/Bosak/commit/83d152ffdba55fe160f33366fa14ed2922fa2f9d) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "type-system/enum-types.md",
+      "bosakPr": 89,
+      "bosakRevision": "83d152ffdba55fe160f33366fa14ed2922fa2f9d",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_EnumType_31Mode_ThrowsXpst0003",
+        "Compile_EnumType_EmptyMemberList_ThrowsXpst0003",
+        "Evaluate_Enum_InstanceOf_MembershipIsCodepointSensitive"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-enumeration-types"
+      ]
+    }
+  },
+  "type-system/structural-records.md": {
+    "gitBlob": "9ab2d07e0bab3f0472561cc50632255f8af1f88d",
+    "classification": "**Structural record types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6b; structural record evidence in RecordTypeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: structural record types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types), [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules), [but with operator](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #90](https://github.com/Fytala-Charles/Bosak/pull/90), [immutable mainline revision `ca6e9c27`](https://github.com/Fytala-Charles/Bosak/commit/ca6e9c27cf4c62953763f800bdef2610ff64789a) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "type-system/structural-records.md",
+      "bosakPr": 90,
+      "bosakRevision": "ca6e9c27cf4c62953763f800bdef2610ff64789a",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+      "namedTests": [
+        "Coercion_BuildsAnnotatedRecord",
+        "Coercion_MissingFieldBecomesEmptyEntry",
+        "Coercion_SurplusKeys_XPTY0004"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-structural-record-types",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-with-expression"
+      ]
+    }
+  },
+  "type-system/typed-let-coercion.md": {
+    "gitBlob": "f73396acdd1558dadeb4e022c603b0cb6a64169d",
+    "classification": "**Typed let coercion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 destructuring/typed-let cluster; local coercion tests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: let expressions](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions), [item coercion](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #129](https://github.com/Fytala-Charles/Bosak/pull/129), [immutable mainline revision `b8e4b9f5`](https://github.com/Fytala-Charles/Bosak/commit/b8e4b9f510543c04d88a7c10ee2af28808a0fd5c) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "type-system/typed-let-coercion.md",
+      "bosakPr": 129,
+      "bosakRevision": "b8e4b9f510543c04d88a7c10ee2af28808a0fd5c",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_TypedLet_FrozenXPath40_Coerces"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-let-expressions",
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-item-coercion-rules"
+      ]
+    }
+  },
+  "data-model/jnode-navigation.md": {
+    "gitBlob": "db6cd0ed484c0b7df0fe2dd33979603ceffc1de2",
+    "classification": "**JNode navigation** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 JNode cluster; JNodeTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/JNodeTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: JNode types](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types), [fn:jtree](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree), [fn:jkey](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey), [fn:jvalue](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue), [XDM 4.0](https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #116](https://github.com/Fytala-Charles/Bosak/pull/116), [immutable mainline revision `345ae58e`](https://github.com/Fytala-Charles/Bosak/commit/345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0) (2026-10-10). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "data-model/jnode-navigation.md",
+      "bosakPr": 116,
+      "bosakRevision": "345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0",
+      "deliveryDate": "2026-10-10",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+        "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+      ],
+      "namedPromotedSets": [
+        "fn-jkey",
+        "fn-jtree",
+        "fn-jvalue"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-jnode-types",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jtree",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jkey",
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-jvalue",
+        "https://qt4cg.org/specifications/xpath-datamodel-40/Overview.html"
+      ]
+    }
+  },
+  "xslt-instructions/instruction-separators.md": {
+    "gitBlob": "f0ad3b088afb0d2146083a7d3596abe6bd5a5973",
+    "classification": "**Instruction separators** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: for-each separator](https://qt4cg.org/specifications/xslt-40/Overview.html#for-each-separator), [apply-templates separator](https://qt4cg.org/specifications/xslt-40/Overview.html#apply-templates-separator). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #91](https://github.com/Fytala-Charles/Bosak/pull/91), [immutable mainline revision `c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/instruction-separators.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "ForEach_Separator_BetweenItems",
+        "ForEach_Separator_WithSort",
+        "ForEach_Separator_EmptyAndSingleItem_NoSeparator"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#for-each-separator",
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#apply-templates-separator"
+      ]
+    }
+  },
+  "xslt-instructions/xsl-array.md": {
+    "gitBlob": "8d2828ea99f747c682dcc0ff0ab4c8f02bd75990",
+    "classification": "**xsl:array and xsl:array-member** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: array construction](https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #92](https://github.com/Fytala-Charles/Bosak/pull/92), [immutable mainline revision `2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/xsl-array.md",
+      "bosakPr": 92,
+      "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+      "namedTests": [
+        "Array_Select_OneSingletonMemberPerItem",
+        "Array_Select_TokenizedString",
+        "Array_ForEachSelect_MemberIsWholeSequence"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#array-construction"
+      ]
+    }
+  },
+  "xslt-instructions/xsl-if.md": {
+    "gitBlob": "7ebd64505de05dea1089726f7f6edd4cd6289577",
+    "classification": "**xsl:if then/else** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: conditional processing with xsl:if](https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-if). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #91](https://github.com/Fytala-Charles/Bosak/pull/91), [immutable mainline revision `c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/xsl-if.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "If_ThenElse_TrueBranch",
+        "If_ThenElse_FalseBranch",
+        "If_ThenOnly_FalseIsEmpty"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-if"
+      ]
+    }
+  },
+  "xslt-instructions/xsl-map.md": {
+    "gitBlob": "308b212ead6814203de964386944489cae50de63",
+    "classification": "**xsl:map selection and duplicate policy** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: xsl:map and xsl:map-entry](https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #91](https://github.com/Fytala-Charles/Bosak/pull/91), [immutable mainline revision `c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/xsl-map.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "Map_Select_MergesInputMaps",
+        "Map_Select_DuplicatesDefault_XTDE3365",
+        "Map_Select_DuplicatesUseFirst"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#id-xsl-map-and-entry"
+      ]
+    }
+  },
+  "xslt-instructions/xsl-note.md": {
+    "gitBlob": "40e7eb5711a78aa83e23952cf8ebd5bd474df03c",
+    "classification": "**xsl:note** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: xsl:note](https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-note-elements). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #91](https://github.com/Fytala-Charles/Bosak/pull/91), [immutable mainline revision `c0427907`](https://github.com/Fytala-Charles/Bosak/commit/c0427907002a355f6662ddcdc7412ad8f4a18846) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/xsl-note.md",
+      "bosakPr": 91,
+      "bosakRevision": "c0427907002a355f6662ddcdc7412ad8f4a18846",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40SurfaceTests.cs",
+      "namedTests": [
+        "Note_InTemplate_IsDiscarded",
+        "Note_AtTopLevel_IsDiscarded",
+        "Note_ContentIsNotValidated"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-note-elements"
+      ]
+    }
+  },
+  "xslt-instructions/xsl-switch.md": {
+    "gitBlob": "fc5cb82507cbb80f388384096c56305f11559d9e",
+    "classification": "**xsl:switch** - **Bosak XSLT 4.0 surface**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S7/S8; corresponding local XSLT surface tests. [Primary implementation evidence](../../../tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.\n\n**External specification references (current drafts; links checked 2026-10-11):** [XSLT 4.0: conditional processing with xsl:switch](https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #92](https://github.com/Fytala-Charles/Bosak/pull/92), [immutable mainline revision `2a62ad4d`](https://github.com/Fytala-Charles/Bosak/commit/2a62ad4d9f72d2614887c260e8856de0a6617350) (2026-10-08). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "xslt-instructions/xsl-switch.md",
+      "bosakPr": 92,
+      "bosakRevision": "2a62ad4d9f72d2614887c260e8856de0a6617350",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.Xslt.Tests/Xslt40ArraySwitchTests.cs",
+      "namedTests": [
+        "Switch_LookupTable_SelectBranches",
+        "Switch_TestSequences_DaysInMonth",
+        "Switch_GeneralComparison_NumericPromotion"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xslt-40/Overview.html#xsl-switch"
+      ]
+    }
+  },
+  "experimental/fn-scan.md": {
+    "gitBlob": "68ed35a2893b2d862ada102a6629aa8adaf390ce",
+    "classification": "**`fn:scan`** — **Experimental** (ships only at the `XPath40Experimental` level; static XPST0017 at both `XPath31` *and* frozen `XPath40`). Spec: F&O 4.0 §2.5.15, added by qt4cg Issue 2823 / PR 2824 (31 July 2026). Landed: REQ-123 S1 (1.1.0 track), level-plumbing slice 2026-10-09.\n\n**External specification references (current drafts; links checked 2026-10-11):** [F&O 4.0: fn:scan](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\nDraft evolution: [QT4CG PR #2824](https://github.com/qt4cg/qtspecs/pull/2824) records the scan proposal referenced by the adoption dossier.\n\n**Delivery provenance:** [PR #98](https://github.com/Fytala-Charles/Bosak/pull/98), [immutable mainline revision `bd18e42f`](https://github.com/Fytala-Charles/Bosak/commit/bd18e42f33b5e69817f059f6429f4b08e639a5a3) (2026-10-09). This identifies the engine delivery; later documentation examples do not redefine that delivery.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "experimental/fn-scan.md",
+      "bosakPr": 98,
+      "bosakRevision": "bd18e42f33b5e69817f059f6429f4b08e639a5a3",
+      "deliveryDate": "2026-10-09",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Evaluate_Scan_XPath40Experimental_Works"
+      ],
+      "namedPromotedSets": [
+        "fn-scan"
+      ],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-scan"
+      ]
+    }
+  },
+  "rejected/mapping-arrow-gtgt.md": {
+    "gitBlob": "0236b750c59e0e34de22d268d64dbb7c30c32c79",
+    "classification": "**Mapping arrow, original spelling `=>>`** — **Rejected–Superseded**. Bosak never shipped this spelling; the engine implemented the renamed form directly. Disposition recorded: REQ-118 dossier §1.2 \"Deliberately rejected / renamed (do not implement old shapes)\".\n\n**External specification references (current drafts; links checked 2026-10-11):** [XPath 4.0: accepted mapping-arrow syntax](https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression). See the [catalog source policy](../README.md#external-specifications-and-source-documentation) for adopted-revision provenance.\n\n**Delivery provenance:** [PR #77](https://github.com/Fytala-Charles/Bosak/pull/77), [immutable mainline revision `27bc663b`](https://github.com/Fytala-Charles/Bosak/commit/27bc663b71b948318f69ee1f23173ac63046a525) (2026-10-08). This is the adoption/disposition dossier delivery, not implementation of the refused shape.\n\n**Adopted specification revision:** the historical dossiers refer to live draft sections, but do not retain an immutable specification-source revision for this entry. That provenance gap remains explicit. Current section links checked on 2026-10-11 are navigation references, not proof of the adopted snapshot. See the [provenance ledger](../PROVENANCE.md).",
+    "originalRecord": {
+      "entry": "rejected/mapping-arrow-gtgt.md",
+      "bosakPr": 77,
+      "bosakRevision": "27bc663b71b948318f69ee1f23173ac63046a525",
+      "deliveryDate": "2026-10-08",
+      "testFile": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+      "namedTests": [
+        "Compile_MappingArrow_31Mode_ThrowsXpst0003",
+        "Evaluate_MappingArrow_AppliesFunctionPerItem",
+        "Evaluate_MappingArrow_WithArgumentsPrependsContextItem"
+      ],
+      "namedPromotedSets": [],
+      "adoptedSpecRevision": null,
+      "adoptedSpecRevisionStatus": "Historical immutable snapshot not retained; current navigation references are not adoption evidence",
+      "currentSpecificationSections": [
+        "https://qt4cg.org/specifications/xquery-40/xpath-40.html#id-mapping-arrow-expression"
+      ]
+    }
+  }
+}

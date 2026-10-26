@@ -1,0 +1,14 @@
+dbd17d337012438762922c11fbb8d88312ff59f8
+2026-10-08T20:39:22+02:00
+2026-10-08T20:39:22+02:00
+fix(xslt40): keep supported-version ceiling at 3.0 (S7 post-review correction)
+
+The S7 ceiling bump to 4.0 regressed 21 W3C forwards-*/version-* tests:
+the frozen 3.x catalog exercises forward compatibility with
+version="4.0"/"3.3" stylesheets. The draft's §3.8.2/§3.8.3 same-results
+rule makes the new surfaces version-independent anyway, so the ceiling
+reverts to > 3.0 in Stylesheet.IsForwardsCompatible,
+IsForwardsCompatibleElement, and the TransformEngine mirror. The deviation
+test is rewritten to assert the correct behavior (4.0 = forwards-compatible
+ignore, 3.0 = XTSE0010) plus a new 3.0 rejection test; docs corrected.
+

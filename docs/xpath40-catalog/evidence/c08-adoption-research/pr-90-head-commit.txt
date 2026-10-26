@@ -1,0 +1,5 @@
+310ab3a50c8457cecf0a24fded8da3007ed4cac1
+2026-10-08T17:50:07+02:00
+2026-10-08T17:50:07+02:00
+docs: record 4.0-S6b commit hashes in handover
+

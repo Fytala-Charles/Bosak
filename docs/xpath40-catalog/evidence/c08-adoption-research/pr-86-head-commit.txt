@@ -1,0 +1,5 @@
+dd872bb895900fc3cca9c76c2229d9f27f97de0c
+2026-10-08T11:44:04+02:00
+2026-10-08T11:44:04+02:00
+docs(xpath40): REQ-118 4.0-S3b handover hash tail (final)
+
