@@ -1,0 +1,14 @@
+{
+  "exitCode": 0,
+  "timeout": false,
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\floor-ceiling-contract-probe\\bin\\Release\\net10.0\\Probe.dll",
+    "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\floor-ceiling-contract\\inputs.json",
+    "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\floor-ceiling-contract\\observations.jsonl",
+    "after"
+  ],
+  "watchdogSeconds": 30,
+  "wallSeconds": 1.2304085999930976,
+  "sourceRevision": "1c20de059f268fe6fd76eb355f01b8e6896dc217"
+}

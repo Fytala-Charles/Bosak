@@ -1,0 +1,1864 @@
+[
+  {
+    "Id": 0,
+    "Expression": "floor(-2.5)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 1,
+    "Expression": "floor#1(-2.5)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 2,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(-2.5)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 3,
+    "Expression": "(function($x){floor($x)})(-2.5)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 4,
+    "Expression": "floor(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 5,
+    "Expression": "floor#1(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 6,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 7,
+    "Expression": "(function($x){floor($x)})(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 8,
+    "Expression": "floor([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 9,
+    "Expression": "floor#1([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 10,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 11,
+    "Expression": "(function($x){floor($x)})([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 12,
+    "Expression": "floor([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 13,
+    "Expression": "floor#1([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 14,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 15,
+    "Expression": "(function($x){floor($x)})([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 16,
+    "Expression": "floor([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 17,
+    "Expression": "floor#1([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 18,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 19,
+    "Expression": "(function($x){floor($x)})([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 20,
+    "Expression": "floor([-2.5])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 21,
+    "Expression": "floor#1([-2.5])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 22,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([-2.5])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 23,
+    "Expression": "(function($x){floor($x)})([-2.5])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 24,
+    "Expression": "floor([[[]],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 25,
+    "Expression": "floor#1([[[]],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 26,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([[[]],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 27,
+    "Expression": "(function($x){floor($x)})([[[]],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 28,
+    "Expression": "floor([[],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 29,
+    "Expression": "floor#1([[],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 30,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([[],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 31,
+    "Expression": "(function($x){floor($x)})([[],[-2.5],[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 32,
+    "Expression": "floor(xs:untypedAtomic('-2.5'))",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 33,
+    "Expression": "floor#1(xs:untypedAtomic('-2.5'))",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 34,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:untypedAtomic('-2.5'))",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 35,
+    "Expression": "(function($x){floor($x)})(xs:untypedAtomic('-2.5'))",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 36,
+    "Expression": "floor([xs:untypedAtomic('-2.5')])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 37,
+    "Expression": "floor#1([xs:untypedAtomic('-2.5')])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 38,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:untypedAtomic('-2.5')])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 39,
+    "Expression": "(function($x){floor($x)})([xs:untypedAtomic('-2.5')])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 40,
+    "Expression": "floor(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 41,
+    "Expression": "floor#1(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 42,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 43,
+    "Expression": "(function($x){floor($x)})(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 44,
+    "Expression": "floor([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 45,
+    "Expression": "floor#1([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 46,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 47,
+    "Expression": "(function($x){floor($x)})([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 48,
+    "Expression": "floor('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 49,
+    "Expression": "floor#1('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 50,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 51,
+    "Expression": "(function($x){floor($x)})('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 52,
+    "Expression": "floor(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 53,
+    "Expression": "floor#1(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 54,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 55,
+    "Expression": "(function($x){floor($x)})(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 56,
+    "Expression": "floor(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 57,
+    "Expression": "floor#1(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 58,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 59,
+    "Expression": "(function($x){floor($x)})(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 60,
+    "Expression": "floor([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 61,
+    "Expression": "floor#1([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 62,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 63,
+    "Expression": "(function($x){floor($x)})([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 64,
+    "Expression": "floor((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 65,
+    "Expression": "floor#1((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 66,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 67,
+    "Expression": "(function($x){floor($x)})((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 68,
+    "Expression": "floor([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 69,
+    "Expression": "floor#1([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 70,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 71,
+    "Expression": "(function($x){floor($x)})([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 72,
+    "Expression": "floor([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 73,
+    "Expression": "floor#1([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 74,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 75,
+    "Expression": "(function($x){floor($x)})([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 76,
+    "Expression": "floor(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 77,
+    "Expression": "floor#1(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 78,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 79,
+    "Expression": "(function($x){floor($x)})(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 80,
+    "Expression": "floor([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 81,
+    "Expression": "floor#1([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 82,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 83,
+    "Expression": "(function($x){floor($x)})([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 84,
+    "Expression": "floor(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 85,
+    "Expression": "floor#1(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 86,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 87,
+    "Expression": "(function($x){floor($x)})(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 88,
+    "Expression": "floor([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 89,
+    "Expression": "floor#1([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 90,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 91,
+    "Expression": "(function($x){floor($x)})([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 92,
+    "Expression": "floor(@n)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 93,
+    "Expression": "floor#1(@n)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 94,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(@n)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 95,
+    "Expression": "(function($x){floor($x)})(@n)",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 96,
+    "Expression": "floor([[],@n,[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 97,
+    "Expression": "floor#1([[],@n,[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 98,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([[],@n,[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 99,
+    "Expression": "(function($x){floor($x)})([[],@n,[]])",
+    "Expected": "-3",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 100,
+    "Expression": "floor(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 101,
+    "Expression": "floor#1(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 102,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 103,
+    "Expression": "(function($x){floor($x)})(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 104,
+    "Expression": "floor([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 105,
+    "Expression": "floor#1([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 106,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 107,
+    "Expression": "(function($x){floor($x)})([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 108,
+    "Expression": "floor(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 109,
+    "Expression": "floor#1(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 110,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 111,
+    "Expression": "(function($x){floor($x)})(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 112,
+    "Expression": "floor(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 113,
+    "Expression": "floor#1(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 114,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 115,
+    "Expression": "(function($x){floor($x)})(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 116,
+    "Expression": "floor([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 117,
+    "Expression": "floor#1([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 118,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 119,
+    "Expression": "(function($x){floor($x)})([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 120,
+    "Expression": "floor([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 121,
+    "Expression": "floor#1([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 122,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 123,
+    "Expression": "(function($x){floor($x)})([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 124,
+    "Expression": "floor([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 125,
+    "Expression": "floor#1([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 126,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 127,
+    "Expression": "(function($x){floor($x)})([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 128,
+    "Expression": "floor([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 129,
+    "Expression": "floor#1([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 130,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 131,
+    "Expression": "(function($x){floor($x)})([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 132,
+    "Expression": "(function($f as function(xs:numeric?) as xs:numeric?){local-name-from-QName(function-name($f))})(floor#1)",
+    "Expected": "floor",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 133,
+    "Expression": "ceiling(-2.5)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 134,
+    "Expression": "ceiling#1(-2.5)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 135,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(-2.5)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 136,
+    "Expression": "(function($x){ceiling($x)})(-2.5)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 137,
+    "Expression": "ceiling(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 138,
+    "Expression": "ceiling#1(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 139,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 140,
+    "Expression": "(function($x){ceiling($x)})(())",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 141,
+    "Expression": "ceiling([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 142,
+    "Expression": "ceiling#1([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 143,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 144,
+    "Expression": "(function($x){ceiling($x)})([])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 145,
+    "Expression": "ceiling([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 146,
+    "Expression": "ceiling#1([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 147,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 148,
+    "Expression": "(function($x){ceiling($x)})([()])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 149,
+    "Expression": "ceiling([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 150,
+    "Expression": "ceiling#1([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 151,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 152,
+    "Expression": "(function($x){ceiling($x)})([[],[]])",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 153,
+    "Expression": "ceiling([-2.5])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 154,
+    "Expression": "ceiling#1([-2.5])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 155,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([-2.5])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 156,
+    "Expression": "(function($x){ceiling($x)})([-2.5])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 157,
+    "Expression": "ceiling([[[]],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 158,
+    "Expression": "ceiling#1([[[]],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 159,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([[[]],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 160,
+    "Expression": "(function($x){ceiling($x)})([[[]],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 161,
+    "Expression": "ceiling([[],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 162,
+    "Expression": "ceiling#1([[],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 163,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([[],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 164,
+    "Expression": "(function($x){ceiling($x)})([[],[-2.5],[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 165,
+    "Expression": "ceiling(xs:untypedAtomic('-2.5'))",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 166,
+    "Expression": "ceiling#1(xs:untypedAtomic('-2.5'))",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 167,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:untypedAtomic('-2.5'))",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 168,
+    "Expression": "(function($x){ceiling($x)})(xs:untypedAtomic('-2.5'))",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 169,
+    "Expression": "ceiling([xs:untypedAtomic('-2.5')])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 170,
+    "Expression": "ceiling#1([xs:untypedAtomic('-2.5')])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 171,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:untypedAtomic('-2.5')])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 172,
+    "Expression": "(function($x){ceiling($x)})([xs:untypedAtomic('-2.5')])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 173,
+    "Expression": "ceiling(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 174,
+    "Expression": "ceiling#1(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 175,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 176,
+    "Expression": "(function($x){ceiling($x)})(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 177,
+    "Expression": "ceiling([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 178,
+    "Expression": "ceiling#1([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 179,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 180,
+    "Expression": "(function($x){ceiling($x)})([xs:untypedAtomic('bad')])",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 181,
+    "Expression": "ceiling('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 182,
+    "Expression": "ceiling#1('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 183,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 184,
+    "Expression": "(function($x){ceiling($x)})('-2.5')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 185,
+    "Expression": "ceiling(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 186,
+    "Expression": "ceiling#1(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 187,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 188,
+    "Expression": "(function($x){ceiling($x)})(['-2.5'])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 189,
+    "Expression": "ceiling(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 190,
+    "Expression": "ceiling#1(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 191,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 192,
+    "Expression": "(function($x){ceiling($x)})(true())",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 193,
+    "Expression": "ceiling([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 194,
+    "Expression": "ceiling#1([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 195,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 196,
+    "Expression": "(function($x){ceiling($x)})([true()])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 197,
+    "Expression": "ceiling((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 198,
+    "Expression": "ceiling#1((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 199,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 200,
+    "Expression": "(function($x){ceiling($x)})((-2.5,-3.5))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 201,
+    "Expression": "ceiling([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 202,
+    "Expression": "ceiling#1([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 203,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 204,
+    "Expression": "(function($x){ceiling($x)})([-2.5,-3.5])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 205,
+    "Expression": "ceiling([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 206,
+    "Expression": "ceiling#1([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 207,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 208,
+    "Expression": "(function($x){ceiling($x)})([[[],[-2.5,-3.5]],[]])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 209,
+    "Expression": "ceiling(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 210,
+    "Expression": "ceiling#1(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 211,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 212,
+    "Expression": "(function($x){ceiling($x)})(map{})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 213,
+    "Expression": "ceiling([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 214,
+    "Expression": "ceiling#1([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 215,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 216,
+    "Expression": "(function($x){ceiling($x)})([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 217,
+    "Expression": "ceiling(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 218,
+    "Expression": "ceiling#1(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 219,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 220,
+    "Expression": "(function($x){ceiling($x)})(function(){1})",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 221,
+    "Expression": "ceiling([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 222,
+    "Expression": "ceiling#1([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 223,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 224,
+    "Expression": "(function($x){ceiling($x)})([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 225,
+    "Expression": "ceiling(@n)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 226,
+    "Expression": "ceiling#1(@n)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 227,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(@n)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 228,
+    "Expression": "(function($x){ceiling($x)})(@n)",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 229,
+    "Expression": "ceiling([[],@n,[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 230,
+    "Expression": "ceiling#1([[],@n,[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 231,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([[],@n,[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 232,
+    "Expression": "(function($x){ceiling($x)})([[],@n,[]])",
+    "Expected": "-2",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 233,
+    "Expression": "ceiling(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 234,
+    "Expression": "ceiling#1(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 235,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 236,
+    "Expression": "(function($x){ceiling($x)})(n)",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 237,
+    "Expression": "ceiling([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 238,
+    "Expression": "ceiling#1([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 239,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 240,
+    "Expression": "(function($x){ceiling($x)})([n])",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 241,
+    "Expression": "ceiling(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 242,
+    "Expression": "ceiling#1(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 243,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 244,
+    "Expression": "(function($x){ceiling($x)})(@bad)",
+    "Expected": "FORG0001",
+    "Error": true,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 245,
+    "Expression": "ceiling(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 246,
+    "Expression": "ceiling#1(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 247,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 248,
+    "Expression": "(function($x){ceiling($x)})(missing)",
+    "Expected": "()",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 249,
+    "Expression": "ceiling([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 250,
+    "Expression": "ceiling#1([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 251,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 252,
+    "Expression": "(function($x){ceiling($x)})([xs:integer('-2')]) instance of xs:integer",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 253,
+    "Expression": "ceiling([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 254,
+    "Expression": "ceiling#1([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 255,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 256,
+    "Expression": "(function($x){ceiling($x)})([xs:decimal('-2')]) instance of xs:decimal",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 257,
+    "Expression": "ceiling([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 258,
+    "Expression": "ceiling#1([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 259,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 260,
+    "Expression": "(function($x){ceiling($x)})([xs:float('-2')]) instance of xs:float",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 261,
+    "Expression": "ceiling([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 262,
+    "Expression": "ceiling#1([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 263,
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 264,
+    "Expression": "(function($x){ceiling($x)})([xs:double('-2')]) instance of xs:double",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 265,
+    "Expression": "(function($f as function(xs:numeric?) as xs:numeric?){local-name-from-QName(function-name($f))})(ceiling#1)",
+    "Expected": "ceiling",
+    "Error": false,
+    "BaselineSafe": true
+  }
+]

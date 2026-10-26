@@ -1,0 +1,128 @@
+{
+  "base": "85ad1335dff6e294fdf25e22e68d17a753156203",
+  "sourceVersion": "1.26.3",
+  "publishedVersion": "1.26.2",
+  "publicationPerformed": false,
+  "files": {
+    ".gitignore": {
+      "sha256": "c37a5e58cf53f89cc8ddb0ab1b990040ffb996e81d5c608e89dabc8f9638b678",
+      "bytes": 92
+    },
+    "after-build.log": {
+      "sha256": "421c3a8c100e1c642f572ade85b4c75b52a07968016d0b5e99a53b4cf1792442",
+      "bytes": 1059
+    },
+    "after-probe.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "after-receipt.json": {
+      "sha256": "e8012bb4b662752165062e80d1cff119883ae3776231eeb7f395d5418d99835e",
+      "bytes": 720
+    },
+    "after.jsonl": {
+      "sha256": "750aeb6d75d372d51e48bc20fc42081f75586441788509c4bf7b9e8eff38b46a",
+      "bytes": 78294
+    },
+    "analyze.py": {
+      "sha256": "d9a2952fa7a8873209c1235876593ba6a59547ccbf902d59ab948a3a57721fee",
+      "bytes": 1554
+    },
+    "before-build.log": {
+      "sha256": "12113b334d5bcbcb00b79a9919f775d5c5f0cbed43b4884175a75fe36b770789",
+      "bytes": 1159
+    },
+    "before-probe.log": {
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "before-receipt.json": {
+      "sha256": "fabf1a5a7ebb5a6f830b1744ac4d89cb5493146bc690af2b2cd55acd8ca713b0",
+      "bytes": 721
+    },
+    "before.jsonl": {
+      "sha256": "96200c4174abcd4b50406ff94bc36857cebef2fc69c78b22560dad095eb820a7",
+      "bytes": 78462
+    },
+    "build.log": {
+      "sha256": "6902fa29d8fad3f8af9ea3399e39882a62910a262c691023e9db1400f7c35bfa",
+      "bytes": 4646
+    },
+    "corrected-observations.json": {
+      "sha256": "42f1245433e6e8794677bf6ace9732b6b61b4a264d124b8f2a5960dbaa1f7bc3",
+      "bytes": 98957
+    },
+    "diagnostic-summary.json": {
+      "sha256": "9a836e4db54ef63804901b18d7433e17fd7e0c0e3581ff1a651cf76f849aac97",
+      "bytes": 124
+    },
+    "exits.json": {
+      "sha256": "740e40e888fd3cdbc3aa01efda5f1758273898aee7ebc5417c993dce88dbc494",
+      "bytes": 1311
+    },
+    "floor-ceiling-after.log": {
+      "sha256": "0cb6c1ed30d53a9d1784b7786d6f70a4f2c4abb613ff879eff1e94c39ac39fb3",
+      "bytes": 3974
+    },
+    "floor-ceiling-before.log": {
+      "sha256": "d31398d32e4b0634fff64ea8f676ad3283ef21bd1957982df354a54d102925c5",
+      "bytes": 398122
+    },
+    "generate-tests.py.txt": {
+      "sha256": "69a4dea8760d9a9a862a6ebbd2480383fdc8a9e61d6f0b475e1c9638bb38aca6",
+      "bytes": 3224
+    },
+    "inputs.json": {
+      "sha256": "26e4bd42968a682e72e25e0f753aff9763c71fff6c77c27bc899d85258c7025b",
+      "bytes": 77657
+    },
+    "lsp.log": {
+      "sha256": "14edb7a0a411024b167a74338e52786212eb029c3bc5c9d13343b661e591bd09",
+      "bytes": 1777
+    },
+    "probe-program.cs.txt": {
+      "sha256": "90a5080fcb313f29d04dd0a2c748b2417ee9b9af43885c84ac6f97ea786bd03f",
+      "bytes": 1222
+    },
+    "qt3.log": {
+      "sha256": "89f4b27f9505b75d4b036cbdba217274c83421e3634920288d433f479f02a16f",
+      "bytes": 36685
+    },
+    "qt4.log": {
+      "sha256": "ed3df59d4f32b5984e70719d66fdc6b26a7dc6b25001baf909146ea74b30c92d",
+      "bytes": 22637
+    },
+    "render-receipts.json": {
+      "sha256": "650104f5b646d6a0e210f8947ae3866c9e9a8d8e7a65bf8be411e3ec7141d788",
+      "bytes": 2294
+    },
+    "run-full-validation.py.txt": {
+      "sha256": "a3fffb01dd574673589144762034dc158c206a71dc74d65f84c5381604d88cf2",
+      "bytes": 1484
+    },
+    "run-probe.py.txt": {
+      "sha256": "e32ca621cbff42352a716a8d500237861ec5d2d3548e9657a5efc9197efc7820",
+      "bytes": 1682
+    },
+    "solution.log": {
+      "sha256": "7a6ad2bbb2a6204c6173a767aa0078a6b48877ffbb63b0c3d8fe253224166ce0",
+      "bytes": 4662
+    },
+    "source-identities.json": {
+      "sha256": "840fdcd0273d380c94aea0aa040592c760add26ee3a01ee3a68cae075dacff4c",
+      "bytes": 1176
+    },
+    "test-receipts.json": {
+      "sha256": "26d894a3b35af70fd2f7e26cf2983df7ef938c629394ffc0e9d8ddecf03e5202",
+      "bytes": 7321
+    },
+    "test-receipts.zip": {
+      "sha256": "b2b86cb83e9ed33250cd579d379756e15594683dbc8caa5c3883ccfbbf755b32",
+      "bytes": 5261376
+    },
+    "validate-evidence.py": {
+      "sha256": "dd27f0c24431b696c93285e43b62fc417fd60b341f78365d6d24a98aa70c5b4b",
+      "bytes": 1704
+    }
+  }
+}

@@ -1,0 +1,31 @@
+from pathlib import Path
+import json,math
+from decimal import Decimal,ROUND_FLOOR,ROUND_CEILING
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/floor-ceiling-integer';e.mkdir(parents=True,exist_ok=True);cases=[]
+for name,mode in [('floor',ROUND_FLOOR),('ceiling',ROUND_CEILING)]:
+ rows=[]
+ for value in [-79228162514264337593543950335,-9223372036854775809,-9223372036854775808,-1,0,1,9223372036854775807,9223372036854775808,9223372036854775809,79228162514264337593543950335]:rows.append((f'({value})',f'$r instance of xs:integer and $r eq ({value})'))
+ for arg,value in [("xs:unsignedLong('18446744073709551615')",18446744073709551615),("xs:long('-9223372036854775808')",-9223372036854775808),("xs:byte('-128')",-128)]:rows.append((arg,f'$r instance of xs:integer and $r eq ({value})'))
+ for lex in ['-9223372036854775808','9223372036854775808','-2.5','2.5','-0.25','0.25','-0.0']:
+  expected=str(Decimal(lex).to_integral_value(rounding=mode));rows.append((f"xs:decimal('{lex}')",f"$r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('{expected}')"))
+ for kind in ['float','double']:
+  for lex in ['-2.5','2.5','-0.25','0.25','-0','0','INF','-INF','NaN']:
+   if lex=='NaN':predicate='not($r eq $r)'
+   elif 'INF' in lex:predicate=f"$r eq xs:{kind}('{lex}')"
+   else:
+    value=float(lex);result=math.floor(value) if name=='floor' else math.ceil(value)
+    predicate=f'$r eq {result}'
+    if result==0:predicate+=f" and (1 div $r) eq xs:double('{'-' if math.copysign(1,value)<0 else ''}INF')"
+   rows.append((f"xs:{kind}('{lex}')",f'$r instance of xs:{kind} and {predicate}'))
+ rows.append(('()','empty($r)'))
+ for arg,predicate in rows:
+  for callee in [name,name+'#1',f"function-lookup(QName('http://www.w3.org/2005/xpath-functions','{name}'),1)",f'(function($x){{{name}($x)}})']:
+   cases.append(dict(Id=len(cases),Expression=f'let $r := {callee}({arg}) return ({predicate})',Expected='true',Error=False,BaselineSafe=True))
+(e/'inputs.json').write_text(json.dumps(cases,indent=2)+'\n',encoding='utf-8')
+template=(r/'tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs').read_text(encoding='utf-8')
+header=template.split('using Bosak.XPath.Api;')[0].replace('Verifies abs integer result preservation and numeric edge cases.','Verifies floor and ceiling integer identity and numeric edge cases.')
+body=template[template.index('using Bosak.XPath.Api;'):].replace('Verifies abs integer result preservation and numeric edge cases.','Verifies floor and ceiling integer identity and numeric edge cases.').replace('AbsIntegerPreservationTests','FloorCeilingIntegerPreservationTests').replace('Provides independently expected abs results and existing conversion controls.','Provides exact integer, decimal and floating floor/ceiling expectations.')
+start=body.index('        {',body.index('var cases ='))+len('        {');end=body.index('        };',start)
+body=body[:start]+'\n'+''.join('            ('+json.dumps(x['Expression'])+', "true", false),\n' for x in cases)+body[end:]
+(r/'tests/Bosak.XPath.Standard.Tests/FloorCeilingIntegerPreservationTests.cs').write_text(header+body,encoding='utf-8')
+print(f'{len(cases)} input rows x3 profiles = {len(cases)*3} tests.')

@@ -1,0 +1,50 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Core.Tests\bin\Release\net10.0\Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Compiler.Tests\bin\Release\net10.0\Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Runtime.Tests\bin\Release\net10.0\Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Api.Tests\bin\Release\net10.0\Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Parser.Tests\bin\Release\net10.0\Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Standard.Tests\bin\Release\net10.0\Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Test run for D:\Development\Bosak\tests\Bosak.Xslt.Tests\bin\Release\net10.0\Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Test run for D:\Development\Bosak\tests\Bosak.XQuery.Tests\bin\Release\net10.0\Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_48_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 206 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_48_net10.0[1].trx
+
+Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 141 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_49_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   269, Skipped:     0, Total:   269, Duration: 998 ms - Bosak.XPath.Runtime.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_48_net10.0[2].trx
+
+Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 1 s - Bosak.XPath.Core.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_49_net10.0[1].trx
+
+Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 1 s - Bosak.XPath.Api.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_50_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   303, Skipped:     0, Total:   303, Duration: 1 s - Bosak.XQuery.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_49_net10.0[2].trx
+
+Passed!  - Failed:     0, Passed: 10203, Skipped:     0, Total: 10203, Duration: 1 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_49_net10.0[3].trx
+
+Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 4 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_49_net10.0[4].trx
+
+Passed!  - Failed:     0, Passed:   153, Skipped:     0, Total:   153, Duration: 9 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\abs-integer-validation\solution\charl_CHARLES_2026-10-26_12_37_51_net10.0.trx
+
+Passed!  - Failed:     0, Passed:  8196, Skipped:     0, Total:  8196, Duration: 3 m 42 s - Bosak.Xslt.Tests.dll (net10.0)

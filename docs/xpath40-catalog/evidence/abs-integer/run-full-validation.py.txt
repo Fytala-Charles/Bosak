@@ -1,0 +1,16 @@
+from pathlib import Path
+import subprocess,json,os,concurrent.futures
+r=Path('D:/Development/Bosak');e=r/'.guard-tmp/abs-integer-validation';e.mkdir(exist_ok=True)
+def run(label,args,env=None):
+ print('Running '+label,flush=True)
+ with (e/(label+'.log')).open('wb') as f:proc=subprocess.run(args,cwd=r,stdout=f,stderr=subprocess.STDOUT,env=env)
+ result=dict(label=label,command=args,exitCode=proc.returncode);print(label+' exit '+str(proc.returncode),flush=True);return result
+results=[run('build',['dotnet','build','Bosak.sln','-c','Release'])];assert results[0]['exitCode']==0
+gateEnv=os.environ.copy();gateEnv['BOSAK_QT4_GATE_ONLY']='1'
+jobs=[('solution',['dotnet','test','Bosak.sln','-c','Release','--no-build','--logger','trx','--results-directory',str(e/'solution')],None),('lsp',['dotnet','test','tests/Bosak.LanguageServer.Tests','-c','Release','--logger','trx','--results-directory',str(e/'lsp')],None),('qt3',['dotnet','run','--project','tests/Bosak.XPath.Conformance','-c','Release','--no-build'],None),('qt4',['dotnet','run','--project','tests/Bosak.XPath.Conformance40','-c','Release','--no-build','--','tests/qt4tests'],gateEnv)]
+with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+ for future in concurrent.futures.as_completed([pool.submit(run,*job) for job in jobs]):
+  results.append(future.result());(e/'exits.json').write_text(json.dumps(results,indent=2)+'\n',encoding='utf-8')
+assert all(x['exitCode']==0 for x in results),results
+
+

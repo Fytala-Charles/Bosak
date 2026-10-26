@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-26",
+  "base": "06abb7c794f0f572675bf359130f5e8b98b37311",
+  "sourceVersion": "1.26.3",
+  "publishedVersion": "1.26.2",
+  "publicationPerformed": false,
+  "sources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "localSha256": "a1ed5242841d6057f1c0d96dc5997900b79ca7d0569fbc350bb42ccb7668cb44",
+      "gitBlob": "c0c3c3517b1636c14b591e9b5509a29efc769d6b"
+    },
+    "src/Directory.Build.props": {
+      "localSha256": "bc8ae9c1baf0a9919257c42a388dc7c0bc44fb7d2b9bafdb860c3c712192aea3",
+      "gitBlob": "4bbd3394519d40282be0d97700cd9416bde8a400"
+    },
+    "tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs": {
+      "localSha256": "220bee4eba50933b0cd3285894c612ba683f90a9ecf5c9fd07b5fb0dffff35a6",
+      "gitBlob": "bf14bbd7f6d6718b6c3548fde9eab4d0509ab2cd"
+    }
+  },
+  "focusedCases": 1323,
+  "baseline": {
+    "failed": 288,
+    "passed": 1035
+  },
+  "solutionPassed": 20060,
+  "languageServerPassed": 84,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "frozenQt4": [
+    8436,
+    0,
+    1894
+  ],
+  "experimentalFallbackPasses": 11,
+  "diagnostics": {
+    "rows": 1323,
+    "baselineDiscrepancies": 288,
+    "afterDiscrepancies": 0,
+    "corrected": 288,
+    "regressions": 0
+  },
+  "braid": {
+    "report": {
+      "source": "D:\\Development\\Bosak.Braid\\docs\\BOSAK-1.26.2-ADOPTION.md",
+      "sha256": "846a493e284a74fb7468c526326ad11f8ed2c0585ef2eead06c6bdd06793864a",
+      "repositoryHead": "1b4e97b5872ec6b99527e9e4501ed442d3f8ee49",
+      "documentStatus": "?? docs/BOSAK-1.26.2-ADOPTION.md",
+      "scope": "Owner-supplied local adoption report; adoption is uncommitted in report; no current-adoption CI or new native UI acceptance inferred; no Braid writes."
+    },
+    "reportedReleaseTests": 1876,
+    "reportedPublicXPathCases": 246,
+    "reportedPreviewCases": 72,
+    "reportedOverlappingSignedPublicChecks": 280,
+    "adoptedVersion": "1.26.2",
+    "adoptedSource": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "scope": "Local uncommitted automated adoption per supplied report; no current-adoption CI/new native acceptance or 1.26.3 adoption; no Braid writes."
+  },
+  "renderer": "9 HTML pages, unchanged Fytala CSS; no screenshot/PDF acceptance",
+  "evidenceManifest": "evidence/abs-integer/manifest.json",
+  "evidenceManifestSha256": "8726fa88e821d318c1606ade365be691e200b68a40be7626f7e74f931afd2a0f"
+}

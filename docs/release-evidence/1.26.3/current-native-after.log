@@ -1,0 +1,25 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\.upstream\qt4tests\catalog.xml
+Test-set filter:  fn-unix-dateTime
+
+Discovered 741 test sets.
+  Starting: fn-unix-dateTime ...
+  Done: fn-unix-dateTime (24 tests total) [P+=22 F+=2 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   24
+Passed:  22
+Failed:  2
+Skipped: 0
+
+Pass rate: 91.67%
+
+First 20 failures:
+  FAIL unix-DateTime-120: Unexpected error: FOCA0002: fn:unix-dateTime value -86400000 is out of range for xs:nonNegativeInteger.
+  FAIL unix-DateTime-121: Unexpected error: FOCA0002: fn:unix-dateTime value -1 is out of range for xs:nonNegativeInteger.
+
+Gated failures (fail the run): 2   Exploratory failures (reported only): 0
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 1.09s

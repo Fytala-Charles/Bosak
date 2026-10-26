@@ -1,0 +1,38 @@
+from pathlib import Path
+import json
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/floor-ceiling-contract';e.mkdir(parents=True,exist_ok=True);cases=[]
+for name,rounded in [('floor','-3'),('ceiling','-2')]:
+ rows=[('-2.5',rounded,False),('()','()',False),('[]','()',False),('[()]','()',False),('[[],[]]','()',False),('[-2.5]',rounded,False),('[[[]],[-2.5],[]]',rounded,False),('[[],[-2.5],[]]',rounded,False),("xs:untypedAtomic('-2.5')",rounded,False),("[xs:untypedAtomic('-2.5')]",rounded,False),("xs:untypedAtomic('bad')",'FORG0001',True),("[xs:untypedAtomic('bad')]",'FORG0001',True),("'-2.5'",'XPTY0004',True),("['-2.5']",'XPTY0004',True),('true()','XPTY0004',True),('[true()]','XPTY0004',True),('(-2.5,-3.5)','XPTY0004',True),('[-2.5,-3.5]','XPTY0004',True),('[[[],[-2.5,-3.5]],[]]','XPTY0004',True),('map{}','FOTY0013',True),('[map{}]','FOTY0013',True),('function(){1}','FOTY0013',True),('[function(){1}]','FOTY0013',True),('@n',rounded,False),('[[],@n,[]]',rounded,False),('n','XPTY0004',True),('[n]','XPTY0004',True),('@bad','FORG0001',True),('missing','()',False)]
+ calls=[name,name+'#1',f"function-lookup(QName('http://www.w3.org/2005/xpath-functions','{name}'),1)",f'(function($x){{{name}($x)}})']
+ for arg,expected,error in rows:
+  for call in calls:cases.append(dict(Id=len(cases),Expression=f'{call}({arg})',Expected=expected,Error=error,BaselineSafe=True))
+ for kind in ['integer','decimal','float','double']:
+  for call in calls:cases.append(dict(Id=len(cases),Expression=f"{call}([xs:{kind}('-2')]) instance of xs:{kind}",Expected='true',Error=False,BaselineSafe=True))
+ cases.append(dict(Id=len(cases),Expression=f"(function($f as function(xs:numeric?) as xs:numeric?){{local-name-from-QName(function-name($f))}})({name}#1)",Expected=name,Error=False,BaselineSafe=True))
+(e/'inputs.json').write_text(json.dumps(cases,indent=2)+'\n',encoding='utf-8')
+template=(r/'tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs').read_text(encoding='utf-8').replace('Verifies abs integer result preservation and numeric edge cases.','Verifies floor and ceiling numeric argument contracts.').replace('AbsIntegerPreservationTests','FloorCeilingArgumentContractTests').replace('Provides independently expected abs results and existing conversion controls.','Provides predeclared argument conversion, node and identity controls.')
+template=template.replace('using Bosak.XPath.Api;','using System.Xml.Linq;\nusing Bosak.XPath.Core.Xdm;\nusing Bosak.XPath.Providers.Linq;\nusing Bosak.XPath.Api;')
+# Match the provider namespace already used by the adjacent node tests.
+imports=(r/'tests/Bosak.XPath.Standard.Tests/RoundingFunctionConversionTests.cs').read_text().split('namespace ')[0]
+provider=next(x for x in imports.splitlines() if x.startswith('using Bosak.XPath.Providers'))
+template=template.replace('using Bosak.XPath.Providers.Linq;',provider)
+start=template.index('        {',template.index('var cases ='))+len('        {');end=template.index('        };',start)
+template=template[:start]+'\n'+''.join('            ('+json.dumps(x['Expression'])+', '+json.dumps(x['Expected'])+', '+str(x['Error']).lower()+'),\n' for x in cases)+template[end:]
+template=template.replace('        string Evaluate() =>','        var document = XDocument.Parse("<root n=\'-2.5\' bad=\'bad\'><n>-2.5</n><n>-3.5</n></root>");\n        var context = new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(document.Root!)), 1, 1);\n        string Evaluate() =>').replace('.Evaluate(new EvaluationContext()).ToString();','.Evaluate(context).ToString();')
+footer='''
+    /// <summary>Retains supported static backwards-compatible first-item and empty behavior.</summary>
+    /// <param name="expression">The static function call.</param>
+    /// <param name="expected">The expected value.</param>
+    [Theory]
+    [InlineData("floor((-2.5,-3.5))", "-3")]
+    [InlineData("ceiling((-2.5,-3.5))", "-2")]
+    [InlineData("floor(())", "NaN")]
+    [InlineData("ceiling(())", "NaN")]
+    public void BackwardsCompatibleControls(string expression, string expected)
+    {
+        Assert.Equal(expected, XPath31Expression.Compile(expression, new CompileOptions { BackwardsCompatible = true }).Evaluate(new EvaluationContext { BackwardsCompatible = true }).ToString());
+    }
+'''
+template=template.rstrip()[:-1]+footer+'}\n'
+(r/'tests/Bosak.XPath.Standard.Tests/FloorCeilingArgumentContractTests.cs').write_text(template,encoding='utf-8')
+print(f'{len(cases)*3} modern cases +4 BC controls = {len(cases)*3+4} tests.')

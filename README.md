@@ -6,6 +6,8 @@
 
 Bosak 1.26.2 is available on NuGet, including exact numeric rounding, extreme precision and signed-zero corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.2-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
+The [1.26.3 candidate](docs/RELEASE-1.26.3-CANDIDATE.md) is validated and unpublished: abs, floor and ceiling preserve supported integer results. All 3,061 added source/audit cases pass unchanged in package consumers, with unchanged frozen gates. Public installation remains 1.26.2; its bounded Braid adoption evidence is retained.
+
 
 ---
 

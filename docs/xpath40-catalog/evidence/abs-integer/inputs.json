@@ -1,0 +1,3089 @@
+[
+  {
+    "Expression": "let $r := abs((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 0,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 1,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 2,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 3,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 4,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 5,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 6,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 7,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 8,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 9,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 10,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 11,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 12,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 13,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 14,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 15,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 16,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 17,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 18,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 19,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 20,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 21,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 22,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 23,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 24,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 25,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 26,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 27,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 28,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 29,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 30,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 31,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 32,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 33,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 34,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 35,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((-9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 36,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((-9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 37,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 38,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 39,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(-9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 40,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(-9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 41,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 42,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 43,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(-9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 44,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(-9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 45,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 46,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 47,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((-1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 48,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((-1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 49,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 50,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((-1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 51,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(-1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 52,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(-1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 53,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 54,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(-1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 55,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(-1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 56,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(-1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 57,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 58,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(-1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 59,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 60,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 61,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 62,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 63,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(0)]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 64,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(0)]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 65,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(0)]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 66,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(0)]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 67,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(0),()]]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 68,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(0),()]]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 69,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(0),()]]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 70,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(0),()]]) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 71,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 72,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 73,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 74,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 75,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 76,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 77,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 78,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(1)]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 79,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 80,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 81,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 82,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(1),()]]) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 83,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 84,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 85,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 86,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 87,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 88,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 89,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 90,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775807)]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 91,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 92,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 93,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 94,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775807),()]]) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 95,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 96,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 97,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 98,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 99,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 100,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 101,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 102,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 103,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 104,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 105,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 106,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 107,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 108,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 109,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 110,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 111,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 112,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 113,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 114,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 115,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 116,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 117,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 118,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 119,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 120,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 121,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 122,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 123,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 124,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 125,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 126,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 127,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 128,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 129,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 130,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 131,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 132,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 133,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 134,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 135,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 136,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 137,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 138,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 139,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 140,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 141,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 142,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 143,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:int('-2147483648')) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 144,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:int('-2147483648')) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 145,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:int('-2147483648')) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 146,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:int('-2147483648')) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 147,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:int('-2147483648')]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 148,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:int('-2147483648')]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 149,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:int('-2147483648')]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 150,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:int('-2147483648')]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 151,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:int('-2147483648'),()]]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 152,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:int('-2147483648'),()]]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 153,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:int('-2147483648'),()]]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 154,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:int('-2147483648'),()]]) return ($r instance of xs:integer and $r eq (2147483648))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 155,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:byte('-128')) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 156,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:byte('-128')) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 157,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:byte('-128')) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 158,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:byte('-128')) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 159,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:byte('-128')]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 160,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:byte('-128')]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 161,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:byte('-128')]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 162,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:byte('-128')]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 163,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:byte('-128'),()]]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 164,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:byte('-128'),()]]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 165,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:byte('-128'),()]]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 166,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:byte('-128'),()]]) return ($r instance of xs:integer and $r eq (128))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 167,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 168,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 169,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 170,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 171,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 172,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 173,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 174,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 175,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 176,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 177,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 178,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 179,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:positiveInteger('2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 180,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:positiveInteger('2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 181,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:positiveInteger('2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 182,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:positiveInteger('2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 183,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:positiveInteger('2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 184,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:positiveInteger('2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 185,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:positiveInteger('2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 186,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:positiveInteger('2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 187,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:positiveInteger('2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 188,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:positiveInteger('2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 189,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:positiveInteger('2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 190,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:positiveInteger('2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 191,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:negativeInteger('-2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 192,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:negativeInteger('-2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 193,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:negativeInteger('-2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 194,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:negativeInteger('-2')) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 195,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:negativeInteger('-2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 196,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:negativeInteger('-2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 197,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:negativeInteger('-2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 198,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:negativeInteger('-2')]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 199,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:negativeInteger('-2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 200,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:negativeInteger('-2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 201,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:negativeInteger('-2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 202,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:negativeInteger('-2'),()]]) return ($r instance of xs:integer and $r eq (2))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 203,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 204,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 205,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 206,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 207,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:decimal('-9223372036854775808')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 208,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:decimal('-9223372036854775808')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 209,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:decimal('-9223372036854775808')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 210,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:decimal('-9223372036854775808')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 211,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:decimal('-9223372036854775808'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 212,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:decimal('-9223372036854775808'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 213,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:decimal('-9223372036854775808'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 214,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:decimal('-9223372036854775808'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 215,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:decimal('-79228162514264337593543950335')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 216,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:decimal('-79228162514264337593543950335')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 217,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:decimal('-79228162514264337593543950335')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 218,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:decimal('-79228162514264337593543950335')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 219,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:decimal('-79228162514264337593543950335')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 220,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:decimal('-79228162514264337593543950335')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 221,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:decimal('-79228162514264337593543950335')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 222,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:decimal('-79228162514264337593543950335')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 223,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:decimal('-79228162514264337593543950335'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 224,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:decimal('-79228162514264337593543950335'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 225,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:decimal('-79228162514264337593543950335'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 226,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:decimal('-79228162514264337593543950335'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('79228162514264337593543950335'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 227,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 228,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 229,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 230,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 231,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:decimal('-2.5')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 232,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:decimal('-2.5')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 233,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:decimal('-2.5')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 234,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:decimal('-2.5')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 235,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:decimal('-2.5'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 236,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:decimal('-2.5'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 237,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:decimal('-2.5'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 238,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:decimal('-2.5'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 239,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 240,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 241,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 242,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 243,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:decimal('-0.0')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 244,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:decimal('-0.0')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 245,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:decimal('-0.0')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 246,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:decimal('-0.0')]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 247,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:decimal('-0.0'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 248,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:decimal('-0.0'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 249,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:decimal('-0.0'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 250,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:decimal('-0.0'),()]]) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0.0'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 251,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('-2.5')) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 252,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('-2.5')) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 253,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('-2.5')) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 254,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('-2.5')) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 255,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('-2.5')]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 256,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('-2.5')]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 257,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('-2.5')]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 258,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('-2.5')]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 259,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('-2.5'),()]]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 260,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('-2.5'),()]]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 261,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('-2.5'),()]]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 262,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('-2.5'),()]]) return ($r instance of xs:double and $r eq xs:double('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 263,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('-0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 264,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('-0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 265,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('-0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 266,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('-0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 267,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('-0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 268,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('-0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 269,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('-0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 270,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('-0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 271,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('-0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 272,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('-0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 273,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('-0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 274,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('-0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 275,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 276,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 277,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 278,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('0')) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 279,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 280,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 281,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 282,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('0')]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 283,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 284,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 285,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 286,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('0'),()]]) return ($r instance of xs:double and $r eq xs:double('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 287,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 288,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 289,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 290,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 291,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 292,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 293,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 294,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 295,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 296,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 297,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 298,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 299,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 300,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 301,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 302,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 303,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('-INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 304,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('-INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 305,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('-INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 306,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('-INF')]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 307,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('-INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 308,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('-INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 309,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('-INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 310,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('-INF'),()]]) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 311,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 312,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 313,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 314,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 315,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:double('NaN')]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 316,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:double('NaN')]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 317,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:double('NaN')]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 318,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:double('NaN')]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 319,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:double('NaN'),()]]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 320,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:double('NaN'),()]]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 321,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:double('NaN'),()]]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 322,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:double('NaN'),()]]) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 323,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('-2.5')) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 324,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('-2.5')) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 325,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('-2.5')) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 326,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('-2.5')) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 327,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('-2.5')]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 328,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('-2.5')]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 329,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('-2.5')]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 330,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('-2.5')]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 331,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('-2.5'),()]]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 332,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('-2.5'),()]]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 333,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('-2.5'),()]]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 334,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('-2.5'),()]]) return ($r instance of xs:float and $r eq xs:float('2.5'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 335,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('-0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 336,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('-0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 337,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('-0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 338,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('-0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 339,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('-0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 340,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('-0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 341,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('-0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 342,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('-0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 343,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('-0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 344,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('-0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 345,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('-0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 346,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('-0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 347,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 348,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 349,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 350,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('0')) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 351,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 352,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 353,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 354,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('0')]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 355,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 356,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 357,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 358,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('0'),()]]) return ($r instance of xs:float and $r eq xs:float('0') and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 359,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 360,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 361,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 362,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 363,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 364,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 365,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 366,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 367,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 368,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 369,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 370,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 371,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 372,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 373,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 374,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 375,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('-INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 376,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('-INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 377,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('-INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 378,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('-INF')]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 379,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('-INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 380,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('-INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 381,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('-INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 382,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('-INF'),()]]) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 383,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 384,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 385,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 386,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 387,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:float('NaN')]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 388,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:float('NaN')]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 389,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:float('NaN')]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 390,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:float('NaN')]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 391,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:float('NaN'),()]]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 392,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:float('NaN'),()]]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 393,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:float('NaN'),()]]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 394,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:float('NaN'),()]]) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 395,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 396,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 397,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 398,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 399,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([()]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 400,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([()]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 401,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([()]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 402,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([()]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 403,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[(),()]]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 404,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[(),()]]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 405,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(),()]]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 406,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[(),()]]) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 407,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs(xs:untypedAtomic('-2.5')) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 408,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1(xs:untypedAtomic('-2.5')) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 409,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:untypedAtomic('-2.5')) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 410,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})(xs:untypedAtomic('-2.5')) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 411,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([xs:untypedAtomic('-2.5')]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 412,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([xs:untypedAtomic('-2.5')]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 413,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:untypedAtomic('-2.5')]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 414,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([xs:untypedAtomic('-2.5')]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 415,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs([[xs:untypedAtomic('-2.5'),()]]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 416,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := abs#1([[xs:untypedAtomic('-2.5'),()]]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 417,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:untypedAtomic('-2.5'),()]]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 418,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "let $r := (function($x){abs($x)})([[xs:untypedAtomic('-2.5'),()]]) return ($r instance of xs:double and $r eq 2.5)",
+    "Expected": "true",
+    "Error": false,
+    "Id": 419,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs('bad')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 420,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs#1('bad')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 421,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)('bad')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 422,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "(function($x){abs($x)})('bad')",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 423,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "Id": 424,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs#1(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "Id": 425,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "Id": 426,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "(function($x){abs($x)})(xs:untypedAtomic('bad'))",
+    "Expected": "FORG0001",
+    "Error": true,
+    "Id": 427,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs((1,2))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 428,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs#1((1,2))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 429,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((1,2))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 430,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "(function($x){abs($x)})((1,2))",
+    "Expected": "XPTY0004",
+    "Error": true,
+    "Id": 431,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 432,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs#1([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 433,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 434,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "(function($x){abs($x)})([map{}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 435,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 436,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "abs#1([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 437,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 438,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "(function($x){abs($x)})([function(){1}])",
+    "Expected": "FOTY0013",
+    "Error": true,
+    "Id": 439,
+    "BaselineSafe": true
+  },
+  {
+    "Expression": "local-name-from-QName(function-name((function($f as function(item()*) as item()*){ $f })(abs#1)))",
+    "Expected": "abs",
+    "Error": false,
+    "Id": 440,
+    "BaselineSafe": true
+  }
+]

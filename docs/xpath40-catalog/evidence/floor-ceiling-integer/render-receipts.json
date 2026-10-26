@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/README.md.html",
+      "sha256": "0b492688013371b90b2fc6e9c85ea98365593eeb64b7b60b6c3d5f409a462f50"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_ARCHITECTURE.md.html",
+      "sha256": "a8901e2d0f2585d4f9ca9689d9771193561ced4ae204b5501c75f5c3c89fb9ce"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "d3ca86618570334725f65e21e2a0ca57920c6c63fadc21cd7c2ab6a53498c5b8"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_INTEGRATION.md.html",
+      "sha256": "68d62dab97f1758e7b55efa7b24959fe0c55532af0b2532c3d2eff7d15fdadfd"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "e75f07065f6e9e3a0725b169cceb06d9f1c5bdb460357173a6fd147dfe5ce7d8"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "6a56f22b53561bf0eb7e05685a65668c7f3154b327227491f25dfdcba092754c"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "d3d184e5a3437a9ee2c2ab9c075bb78f1109c1b93ed91b2ada0dee58c8580f59"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "5e826b5310f1d5b38b447e8b84b134f3af74aba92b7d6043ac0822b70eeae7ea"
+    },
+    {
+      "source": "docs/xpath40-catalog/FLOOR-CEILING-INTEGER-PRESERVATION.md",
+      "html": ".guard-tmp/floor-ceiling-integer-render/docs_xpath40-catalog_FLOOR-CEILING-INTEGER-PRESERVATION.md.html",
+      "sha256": "a6aa474000921b0c84536889891b527e57ad466c4534d649afd4744143941708"
+    }
+  ]
+}
