@@ -1,3 +1,5 @@
+26 October 2026: eleven 1.26.2 candidate/release-note/canonical/catalog/kernel pages rendered as HTML with markdown-it and unchanged Fytala CSS. Pinned-source tree, archive/cache/output/assembly provenance, raw receipt and consumer-source hashes, case counts, links and diff verified; no screenshot/PDF, signed public package or Braid outcome inferred.
+
 26 October 2026: ten exact-kernel/canonical/catalog/corrected historical-guide pages rendered as HTML with markdown-it and unchanged Fytala CSS. Source/receipt/index hashes, independent oracle corrections, test counters, local links and diff verified; no screenshot/PDF or Braid outcome inferred.
 
 26 October 2026: nine extreme-rounding precision audit/correction/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Corrected/draft receipt hashes, pinned baseline source, watchdog and retained-kernel findings, links and diff checked; no screenshot/PDF or Braid acceptance.

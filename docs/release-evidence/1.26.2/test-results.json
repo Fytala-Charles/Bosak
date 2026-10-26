@@ -1,0 +1,119 @@
+{
+  "full": {
+    "passed": 18737,
+    "failed": 0,
+    "skipped": 0,
+    "receipts": [
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_28_net10.0.trx",
+        "sha256": "43b8f63c8897fed4512270bf24ebefc7bfd184c611b601906d72b2c60388ba2c",
+        "total": 66,
+        "passed": 66,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_28_net10.0[1].trx",
+        "sha256": "beeb7308d2f96b2a1aa1f1e344d6e8b2bae90e1e9bfdbceb50bb69ac0ff4c018",
+        "total": 202,
+        "passed": 202,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_28_net10.0[2].trx",
+        "sha256": "8113888a80df56c8ab4f04016ee29dd3f689122a69d14ec80f09b6db4be6d186",
+        "total": 132,
+        "passed": 132,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_28_net10.0[3].trx",
+        "sha256": "beb713d82e5b1fef62ed78a1ad635addd6658037e16a34709c1e459a6a08ebe2",
+        "total": 489,
+        "passed": 489,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_28_net10.0[4].trx",
+        "sha256": "bdf8b5cdeb19e384ff1c8f25c1b48f409bd10bb654c45845f0971a2a971fe22f",
+        "total": 47,
+        "passed": 47,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_29_net10.0.trx",
+        "sha256": "13ea49bd611e4779f93fbe006637b1d92f2d0c50a4e00e84df84cfc9e8b9ba2c",
+        "total": 269,
+        "passed": 269,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_29_net10.0[1].trx",
+        "sha256": "3dc528d853d864e61af125e32a4c13806482b69380fb8f0f8636f5e46fe660d0",
+        "total": 303,
+        "passed": 303,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_29_net10.0[2].trx",
+        "sha256": "c3cffb348a1c7fdaebaf94374215993cc106d6429b1acea4d69eafee7ad88fe0",
+        "total": 153,
+        "passed": 153,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_30_net10.0.trx",
+        "sha256": "e11733ffc6e36da336bc4b816f4ef8669c0edde4467a428bd323b12cd72aaaae",
+        "total": 8880,
+        "passed": 8880,
+        "failed": 0,
+        "notExecuted": 0
+      },
+      {
+        "path": ".guard-tmp/release1262-candidate/full/charl_CHARLES_2026-10-26_11_00_31_net10.0.trx",
+        "sha256": "df0a5e36091efe7577ef93a0588e9e128ce0cd08873ba2cd58c9eba52f16f1fb",
+        "total": 8196,
+        "passed": 8196,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  },
+  "lsp": {
+    "passed": 84,
+    "failed": 0,
+    "skipped": 0,
+    "receipts": [
+      {
+        "path": ".guard-tmp/release1262-candidate/lsp/charl_CHARLES_2026-10-26_11_04_20_net10.0.trx",
+        "sha256": "6747dd2642e8eb36e170e46ee68df659125f4845ea30ef480d85795b7d0e652f",
+        "total": 84,
+        "passed": 84,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  },
+  "focused-results": {
+    "passed": 8114,
+    "failed": 0,
+    "skipped": 0,
+    "receipts": [
+      {
+        "path": ".guard-tmp/release1262-candidate/focused-results/focused.trx",
+        "sha256": "a32b7051abe9a8602caa183fc333a86aa1d624547190e92c6ae58b524dbbb786",
+        "total": 8114,
+        "passed": 8114,
+        "failed": 0,
+        "notExecuted": 0
+      }
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/release1262-candidate-render/README.md.html",
+      "sha256": "2b42843d030cca234bf6f28d7127679cc71691a177a78972857cc3e2d56b486b"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_ARCHITECTURE.md.html",
+      "sha256": "116eefb830eecd841b1e0ed7b59b78dd1c76174ff388b0ac4bfcc7470a3a7c6e"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "b77749ad98a0349287e78f5f3a48bb20874a0983f2fc1226934a6f7f5e7c6c14"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_INTEGRATION.md.html",
+      "sha256": "bce605949a5d47a744503bf2d080e4d5ec6fca3c4ef1eeefca728ad4e7ec839a"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "99585ce16c48edce34e8830c7ea2373bb2e5c57303b6952a4c3a782574740f9b"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "80ff43f78bdb089ee6d7114b9bb291ca34a153db401ca3015c14454d6dd9d6fb"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "3b97901b552b99bb348ee9f5f692f0251d4274c13891afed2c297585a60190d8"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "ab41e5126a7b2edd62e8f8bf5836cff4d5f501f3940c8cc2a0802f0656b56c7e"
+    },
+    {
+      "source": "docs/xpath40-catalog/ROUNDING-KERNELS.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_xpath40-catalog_ROUNDING-KERNELS.md.html",
+      "sha256": "970130d49aec3afeeecf85adc3a37fb74e326a3811f9b5c31853bc41d11920e4"
+    },
+    {
+      "source": "docs/RELEASE-1.26.2-CANDIDATE.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_RELEASE-1.26.2-CANDIDATE.md.html",
+      "sha256": "580252ea484d837c32f28e23fb2185c816950d26b7a19b4f85c44dc85fee347f"
+    },
+    {
+      "source": "docs/RELEASE-NOTES-1.26.2.md",
+      "html": ".guard-tmp/release1262-candidate-render/docs_RELEASE-NOTES-1.26.2.md.html",
+      "sha256": "f9527011f37bf39f2d1ae3d7199b9373f8d9f0c4ba50d4690fe427846b3ebc81"
+    }
+  ]
+}

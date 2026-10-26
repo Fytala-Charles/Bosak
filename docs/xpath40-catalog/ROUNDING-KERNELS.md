@@ -4,6 +4,8 @@
   <p>26 October 2026 — unpublished source 1.26.2; public 1.26.1 unchanged</p>
 </div>
 
+**Consolidated checkpoint:** [Verified unsigned 1.26.2 candidate](../RELEASE-1.26.2-CANDIDATE.md) pins this implementation together with the extreme-precision slice. Public 1.26.1 remains current. Original implementation proof/evidence remains unchanged.
+
 This REQ-126 slice follows the [extreme-precision correction](ROUNDING-PRECISION-BOUNDARIES.md), based on commit `b75f7172232f2696f0cfdfdae835261bc0f75d84`. It completes the sampled numerical-kernel work for `fn:round` and `fn:round-half-to-even`. It consolidates into unpublished patch **1.26.2**, with no new public API. The owner reports that Braid has finished its smoke test; its result and acceptance are not supplied here.
 
 ## Behavior and implementation
