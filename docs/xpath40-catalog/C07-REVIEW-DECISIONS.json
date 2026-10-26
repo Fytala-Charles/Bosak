@@ -1,0 +1,749 @@
+{
+  "reviewDate": "2026-10-26",
+  "entries": {
+    "data-model/jnode-navigation.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "data-model/jnode-template-boundary.md": {
+      "group": "moving-jnode-model-and-templates",
+      "classification": "Partial frozen / deferred remainder",
+      "assessment": "JNode navigation is delivered. Generic node identity/type/pattern and full built-in/template behavior remain outside that delivery.",
+      "supportedAlternative": "Explicit navigation is supported; generic XML node operations are not equivalent.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/capturing-accumulators.md": {
+      "group": "wider-capturing-accumulators",
+      "classification": "Deferred",
+      "assessment": "Accepting capture attributes without snapshot behavior is not implementation. Retained probes observe source-node identity.",
+      "supportedAlternative": "Ordinary accumulators and explicit snapshot/in-memory invoice examples are distinct supported operations; no capture/streaming equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/computed-node-constructors.md": {
+      "group": "wider-computed-constructors",
+      "classification": "Deferred",
+      "assessment": "Computed node constructors remain refused by all four standalone XPath modes. Shared XQuery parser support is host gated.",
+      "supportedAlternative": "Existing XQuery3.1 constructors or portable XSLT node construction; text concatenation/parse-xml is not universal safe construction.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/enclosing-modes.md": {
+      "group": "wider-enclosing-modes",
+      "classification": "Deferred",
+      "assessment": "Nested mode declarations refuse XTSE0260 before draft enclosure semantics.",
+      "supportedAlternative": "Top-level named modes with explicit dispatch or #current supply tested alternatives; package/unused-body combinations remain bounded.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/external-input-functions.md": {
+      "group": "wider-external-input",
+      "classification": "Out of scope / absent",
+      "assessment": "Five named external-input proposals remain absent in reviewed registration and execution paths.",
+      "supportedAlternative": "Use documented preprocessed/local XML/JSON/text input with explicit host policy; none is a universal substitute for HTML/iXML/schema services.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/fn-apply-templates.md": {
+      "group": "wider-apply-templates-function",
+      "classification": "Deferred",
+      "assessment": "Function calls/lookup refuse; instruction availability does not register the proposed function.",
+      "supportedAlternative": "Use xsl:apply-templates with explicit host state; instructions inside functions are not adoption of fn:apply-templates.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/language-streaming-scope.md": {
+      "group": "wider-language-streaming",
+      "classification": "Existing language / scoped4 deltas",
+      "assessment": "XQuery3.1 and existing burst/streaming support remain delivered; this is not XQuery4 or full XSLT4 streaming adoption.",
+      "supportedAlternative": "Use existing host APIs and tested bounded transformations; keep language routing and streamability claims separate.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/serialization-parameters.md": {
+      "group": "wider-serialization",
+      "classification": "Deferred additions / supported subset",
+      "assessment": "Ignored keys or JSON escaping observed incidentally do not prove new4.0 parameter semantics.",
+      "supportedAlternative": "Use existing serialization/portable JSON Lines and the explicitly implemented XSLT solidus flag; no canonicalization promise.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/xslt-item-type.md": {
+      "group": "wider-item-type",
+      "classification": "Bounded XSLT declaration",
+      "assessment": "Historical deferred URL now describes implemented bounded aliases; directory name is not classification.",
+      "supportedAlternative": "Use declared aliases in their supported XSLT scope; no standalone XPath declaration facility or full contract certification.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "deferred/xslt-record-type.md": {
+      "group": "wider-record-type",
+      "classification": "Bounded XSLT declaration",
+      "assessment": "Historical deferred URL now describes implemented bounded named records; identity/default/static contexts retain C03/C05 limits.",
+      "supportedAlternative": "Use supported XSLT named records or structural record types with their distinct identity/coercion semantics.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "experimental/fn-scan.md": {
+      "group": "moving-scan",
+      "classification": "Experimental XPath4",
+      "assessment": "Only XPath40Experimental resolves scan; frozen-gate retry is not frozen API promotion.",
+      "supportedAlternative": "Experimental scan preserves array-wrapped intermediate states; fold-left is an alternative only when the final state is sufficient.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/atomic-equal.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/batch-extrema.md": {
+      "group": "existing31-contract",
+      "classification": "Existing3.1 / reviewed4 contracts",
+      "assessment": "Existing function names are not4.0-only additions; changed optional/default/type contracts remain bounded by C01/C02.",
+      "supportedAlternative": "Retain earlier-profile contracts and review option/type differences rather than blanket name-level refusal.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/bounded-retries.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/configured-label-callbacks.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/consecutive-partition.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/csv-parsing.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/customer-reference-matching.md": {
+      "group": "existing31-contract",
+      "classification": "Existing3.1 / reviewed4 contracts",
+      "assessment": "Existing function names are not4.0-only additions; changed optional/default/type contracts remain bounded by C01/C02.",
+      "supportedAlternative": "Retain earlier-profile contracts and review option/type differences rather than blanket name-level refusal.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/customer-text-cleanup.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/element-to-map.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/higher-order-selection.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/import-array-batches.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/import-file-names.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/invoice-api-uris.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/map-to-element.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/measurement-comparison.md": {
+      "group": "existing31-contract",
+      "classification": "Existing3.1 / reviewed4 contracts",
+      "assessment": "Existing function names are not4.0-only additions; changed optional/default/type contracts remain bounded by C01/C02.",
+      "supportedAlternative": "Retain earlier-profile contracts and review option/type differences rather than blanket name-level refusal.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/month-end-cutoffs.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/numeric-import-diagnostics.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/order-sequence-selection.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/ordered-queue-prefix.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/payload-fingerprints.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/product-dependency-closure.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/product-map-index.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/sequence-distinctness.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/shipment-event-sequences.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/sort-with.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/supplier-offer-ranking.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/timestamp-deadlines.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/uri-option-policy.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "functions/warehouse-pick-sorting.md": {
+      "group": "existing31-contract",
+      "classification": "Existing3.1 / reviewed4 contracts",
+      "assessment": "Existing function names are not4.0-only additions; changed optional/default/type contracts remain bounded by C01/C02.",
+      "supportedAlternative": "Retain earlier-profile contracts and review option/type differences rather than blanket name-level refusal.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/array-member-iteration.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/destructuring-let.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/focus-function-syntax.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/focus-functions.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/keyword-arguments.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/map-entry-iteration.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/mapping-arrow.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/method-call-operator.md": {
+      "group": "moving-method-call",
+      "classification": "Deferred",
+      "assessment": "The =?> operator remains refused; mapping-arrow support does not implement method dispatch.",
+      "supportedAlternative": "Direct map/array functions; array:size packing-plan examples are executable.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/numeric-literals.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/otherwise-operator.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/pipeline-operator.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/sequence-collection-iteration.md": {
+      "group": "moving-container-sequences",
+      "classification": "Frozen XPath4",
+      "assessment": "Delivered iteration over sequences of containers supersedes this bounded original deferral; member sequence boundaries remain intact.",
+      "supportedAlternative": "Older-profile for/array/map functions remain alternatives; no portable map order promise.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "operators-and-syntax/string-templates.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "rejected/directional-scan.md": {
+      "group": "rejected-directional-scan",
+      "classification": "Rejected / superseded",
+      "assessment": "scan-left and scan-right remain unavailable, including Experimental.",
+      "supportedAlternative": "Experimental scan is left-fold only; reverse/reverse is not a general right-scan equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "rejected/extensible-map-types.md": {
+      "group": "rejected-extensible-map",
+      "classification": "Rejected proposal / alternatives",
+      "assessment": "No extensible-map proposal promotion follows from delivered record behavior.",
+      "supportedAlternative": "Record cast discards surplus keys; coercion rejects them with XPTY0004. Preserve that distinction and C05 defects.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "rejected/mapping-arrow-gtgt.md": {
+      "group": "rejected-old-arrow",
+      "classification": "Rejected / superseded",
+      "assessment": "Old =>> spelling remains refused; the parser adopted =!> directly.",
+      "supportedAlternative": "Use =!> at frozen4 or an explicit for expression at older profiles; preserve containing focus and C04 mapping-focus defect.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "rejected/obsolete-quantifier-functions.md": {
+      "group": "rejected-quantifier-names",
+      "classification": "Rejected",
+      "assessment": "Bosak never adopted all/some-of registrations; the original dossier records those names as rejected. This does not reconstruct every external draft.",
+      "supportedAlternative": "Use every/some for predicate quantification and all-equal/all-different for value comparison; these contracts differ.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "rejected/xpath-switch-expression.md": {
+      "group": "rejected-xpath-switch",
+      "classification": "Rejected",
+      "assessment": "No XPath switch expression is adopted. XSLT switch is a separate instruction with C06 H02 still open.",
+      "supportedAlternative": "XPath if/then/else is supported; XSLT switch does not establish XPath expression support.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/choice-types.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/enum-types.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/nominative-records.md": {
+      "group": "moving-nominal-records",
+      "classification": "Bounded XSLT declaration",
+      "assessment": "XSLT-defined identity and constructors are implemented; standalone XPath declarations and the complete historical moving proposal are not adopted.",
+      "supportedAlternative": "Use supported XSLT record declarations or structural records; identity and structural membership differ.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/record-updates.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/structural-records.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "type-system/typed-let-coercion.md": {
+      "group": "delivered-xpath",
+      "classification": "Frozen XPath4",
+      "assessment": "Current frozen availability is retained; C01-C05 keep signature, grammar, type and option limitations independent of lifecycle state.",
+      "supportedAlternative": "Use the entry-specific older-profile baseline where supplied; functional resemblance does not certify semantic equivalence.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/compound-patterns.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/instruction-separators.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/module-profiles.md": {
+      "group": "delivered-xslt",
+      "classification": "Host policy",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/processor-profiles.md": {
+      "group": "delivered-xslt",
+      "classification": "Host policy",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/structured-value-patterns.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-array.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-if.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-map.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-note.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-select.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    },
+    "xslt-instructions/xsl-switch.md": {
+      "group": "delivered-xslt",
+      "classification": "Bounded XSLT surface",
+      "assessment": "Delivered Bosak XSLT/host forms remain scoped by C05/C06 and named tests; an experimental XSLT processor profile embeds frozen XPath4.",
+      "supportedAlternative": "Use the supplied portable3.0 baseline or explicit host profile where applicable; known Legacy3 extensions are not portable XSLT3.",
+      "remaining": "Per-contract semantic/applicable-evidence acceptance remains C09-C13; historical adoption gaps remain C08/C13.",
+      "acceptance": "Pending; lifecycle review only"
+    }
+  },
+  "originalGroups": {
+    "type-system/nominative-records.md": {
+      "group": "moving-nominal-records",
+      "disposition": "Bounded XSLT declaration",
+      "assessment": "XSLT-defined identity and constructors are implemented; standalone XPath declarations and the complete historical moving proposal are not adopted.",
+      "alternative": "Use supported XSLT record declarations or structural records; identity and structural membership differ."
+    },
+    "operators-and-syntax/method-call-operator.md": {
+      "group": "moving-method-call",
+      "disposition": "Deferred",
+      "assessment": "The =?> operator remains refused; mapping-arrow support does not implement method dispatch.",
+      "alternative": "Direct map/array functions; array:size packing-plan examples are executable."
+    },
+    "experimental/fn-scan.md": {
+      "group": "moving-scan",
+      "disposition": "Experimental XPath4",
+      "assessment": "Only XPath40Experimental resolves scan; frozen-gate retry is not frozen API promotion.",
+      "alternative": "Experimental scan preserves array-wrapped intermediate states; fold-left is an alternative only when the final state is sufficient."
+    },
+    "operators-and-syntax/sequence-collection-iteration.md": {
+      "group": "moving-container-sequences",
+      "disposition": "Frozen XPath4",
+      "assessment": "Delivered iteration over sequences of containers supersedes this bounded original deferral; member sequence boundaries remain intact.",
+      "alternative": "Older-profile for/array/map functions remain alternatives; no portable map order promise."
+    },
+    "data-model/jnode-template-boundary.md": {
+      "group": "moving-jnode-model-and-templates",
+      "disposition": "Partial frozen / deferred remainder",
+      "assessment": "JNode navigation is delivered. Generic node identity/type/pattern and full built-in/template behavior remain outside that delivery.",
+      "alternative": "Explicit navigation is supported; generic XML node operations are not equivalent."
+    },
+    "rejected/obsolete-quantifier-functions.md": {
+      "group": "rejected-quantifier-names",
+      "disposition": "Rejected",
+      "assessment": "Bosak never adopted all/some-of registrations; the original dossier records those names as rejected. This does not reconstruct every external draft.",
+      "alternative": "Use every/some for predicate quantification and all-equal/all-different for value comparison; these contracts differ."
+    },
+    "rejected/directional-scan.md": {
+      "group": "rejected-directional-scan",
+      "disposition": "Rejected / superseded",
+      "assessment": "scan-left and scan-right remain unavailable, including Experimental.",
+      "alternative": "Experimental scan is left-fold only; reverse/reverse is not a general right-scan equivalence."
+    },
+    "rejected/mapping-arrow-gtgt.md": {
+      "group": "rejected-old-arrow",
+      "disposition": "Rejected / superseded",
+      "assessment": "Old =>> spelling remains refused; the parser adopted =!> directly.",
+      "alternative": "Use =!> at frozen4 or an explicit for expression at older profiles; preserve containing focus and C04 mapping-focus defect."
+    },
+    "rejected/xpath-switch-expression.md": {
+      "group": "rejected-xpath-switch",
+      "disposition": "Rejected",
+      "assessment": "No XPath switch expression is adopted. XSLT switch is a separate instruction with C06 H02 still open.",
+      "alternative": "XPath if/then/else is supported; XSLT switch does not establish XPath expression support."
+    },
+    "rejected/extensible-map-types.md": {
+      "group": "rejected-extensible-map",
+      "disposition": "Rejected proposal / alternatives",
+      "assessment": "No extensible-map proposal promotion follows from delivered record behavior.",
+      "alternative": "Record cast discards surplus keys; coercion rejects them with XPTY0004. Preserve that distinction and C05 defects."
+    },
+    "deferred/xslt-item-type.md": {
+      "group": "wider-item-type",
+      "disposition": "Bounded XSLT declaration",
+      "assessment": "Historical deferred URL now describes implemented bounded aliases; directory name is not classification.",
+      "alternative": "Use declared aliases in their supported XSLT scope; no standalone XPath declaration facility or full contract certification."
+    },
+    "deferred/xslt-record-type.md": {
+      "group": "wider-record-type",
+      "disposition": "Bounded XSLT declaration",
+      "assessment": "Historical deferred URL now describes implemented bounded named records; identity/default/static contexts retain C03/C05 limits.",
+      "alternative": "Use supported XSLT named records or structural record types with their distinct identity/coercion semantics."
+    },
+    "deferred/computed-node-constructors.md": {
+      "group": "wider-computed-constructors",
+      "disposition": "Deferred",
+      "assessment": "Computed node constructors remain refused by all four standalone XPath modes. Shared XQuery parser support is host gated.",
+      "alternative": "Existing XQuery3.1 constructors or portable XSLT node construction; text concatenation/parse-xml is not universal safe construction."
+    },
+    "deferred/capturing-accumulators.md": {
+      "group": "wider-capturing-accumulators",
+      "disposition": "Deferred",
+      "assessment": "Accepting capture attributes without snapshot behavior is not implementation. Retained probes observe source-node identity.",
+      "alternative": "Ordinary accumulators and explicit snapshot/in-memory invoice examples are distinct supported operations; no capture/streaming equivalence."
+    },
+    "deferred/enclosing-modes.md": {
+      "group": "wider-enclosing-modes",
+      "disposition": "Deferred",
+      "assessment": "Nested mode declarations refuse XTSE0260 before draft enclosure semantics.",
+      "alternative": "Top-level named modes with explicit dispatch or #current supply tested alternatives; package/unused-body combinations remain bounded."
+    },
+    "deferred/fn-apply-templates.md": {
+      "group": "wider-apply-templates-function",
+      "disposition": "Deferred",
+      "assessment": "Function calls/lookup refuse; instruction availability does not register the proposed function.",
+      "alternative": "Use xsl:apply-templates with explicit host state; instructions inside functions are not adoption of fn:apply-templates."
+    },
+    "deferred/serialization-parameters.md": {
+      "group": "wider-serialization",
+      "disposition": "Deferred additions / supported subset",
+      "assessment": "Ignored keys or JSON escaping observed incidentally do not prove new4.0 parameter semantics.",
+      "alternative": "Use existing serialization/portable JSON Lines and the explicitly implemented XSLT solidus flag; no canonicalization promise."
+    },
+    "deferred/external-input-functions.md": {
+      "group": "wider-external-input",
+      "disposition": "Out of scope / absent",
+      "assessment": "Five named external-input proposals remain absent in reviewed registration and execution paths.",
+      "alternative": "Use documented preprocessed/local XML/JSON/text input with explicit host policy; none is a universal substitute for HTML/iXML/schema services."
+    },
+    "deferred/language-streaming-scope.md": {
+      "group": "wider-language-streaming",
+      "disposition": "Existing language / scoped4 deltas",
+      "assessment": "XQuery3.1 and existing burst/streaming support remain delivered; this is not XQuery4 or full XSLT4 streaming adoption.",
+      "alternative": "Use existing host APIs and tested bounded transformations; keep language routing and streamability claims separate."
+    }
+  },
+  "followups": [
+    {
+      "id": "L01",
+      "title": "Per-contract semantic and applicable evidence acceptance",
+      "owner": "C09-C13",
+      "exit": "Do not treat lifecycle state, passing alternatives, repository ancestry or named gate membership as contract acceptance. Preserve C02/C04/C05/C06 defects."
+    },
+    {
+      "id": "L02",
+      "title": "Historical adoption and external rename provenance",
+      "owner": "C08/C13",
+      "exit": "Resolve all28 original missing records or leave explicit policy blockers. Current source, delivery objects and disposition dossier do not recover missing spec revisions."
+    },
+    {
+      "id": "L03",
+      "title": "Deferred and partial feature boundaries",
+      "owner": "C09-C13",
+      "exit": "Maintain explicit non-equivalence and host/version limits for every alternative. No implementation commitment or Experimental/frozen promotion follows from this review."
+    }
+  ]
+}

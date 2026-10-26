@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-26",
+  "policy": "Current prose corrections only; original entry sections/Git blobs and requested repository references retained separately. No adoption history reconstructed.",
+  "corrections": [
+    {
+      "entry": "xslt-instructions/compound-patterns.md",
+      "before": "**Implemented bounded XSLT4.0 compound contexts, with an explicit current-draft union-priority gap.** Public/source1.23.2 unchanged. [Pinned review](../COMPOUND-PATTERN-GRAMMAR.md) distinguishes observed behavior from normative expectation.",
+      "after": "**Implemented bounded XSLT 4.0 compound contexts in public 1.26.3.** The union-minimum, EQName URI-priority and opening-bracket parsing corrections are delivered. [C05 review](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) retains their verified scope and the remaining pattern/model limits. [The original review](../COMPOUND-PATTERN-GRAMMAR.md) and dated 1.23.x observations remain historical.",
+      "reason": "Current classification still reported a corrected union-priority gap; preserve all dated original records."
+    },
+    {
+      "entry": "functions/shipment-event-sequences.md",
+      "before": "532d04f40c3f1cbad93752e3158fc3cdfd4c7c39",
+      "after": "532d04f4672df430d93752e3158fc3cdfd4c7c39",
+      "reason": "Malformed full commit ID corrected against retained repository object, PR83 subject and existing provenance ledger. Original reference retained in C07 entry/commit receipts."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "before": "Would interact with: choice item types and union matching (Deferred entries elsewhere), the function-lookup machinery (method dictionaries would need `fn:function-lookup` visibility decisions), and nominative record types (also deferred).",
+      "after": "Any future design would interact with delivered choice types, existing function lookup and bounded XSLT-defined nominative records. Their delivery does not implement method dispatch; full nominal declaration/model contracts remain separately limited.",
+      "reason": "Adjacent delivered features must not be classified as deferred solely because method dispatch remains deferred."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "before": "Deferral consequences: zero engine surface, zero test debt, zero risk to the frozen gate. Cost: consumers must keep using per-type functions (`map:*`, `array:*`), which are stable and gated green today.",
+      "after": "Deferral leaves the operator unavailable. Consumers can use the supplied direct `map:*`/`array:*` alternatives; refusal and alternative checks remain necessary. Their passing results do not implement method dispatch or certify every possible replacement.",
+      "reason": "Remove unsupported zero-test-debt/zero-risk assertion and keep executable alternative scope explicit."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "before": "None. Gate posture if attempted later: it would land at `XPath40Experimental` first (post-churn-line feature), with static XPST0003 at 3.1, until the WG Review Draft stabilizes its semantics.",
+      "after": "No implementation is adopted. The C07 probes verify `XPST0003` in XPath30, XPath31, XPath40 and XPath40Experimental. Any future implementation or tier decision requires a separately scoped review; this disposition makes no promotion commitment.",
+      "reason": "A hypothetical future tier is not an adopted implementation plan."
+    },
+    {
+      "entry": "operators-and-syntax/method-call-operator.md",
+      "before": "an example of a post-June-2026 feature that *did* ship, behind the experimental level; `=?>` differs only in that its semantics, not its age, are the churn source.",
+      "after": "an example of a separately adopted Experimental feature. Its adoption does not supersede the recorded method-call deferral or determine a future implementation tier.",
+      "reason": "Different lifecycle decisions must not be reduced to a speculative single cause."
+    }
+  ]
+}

@@ -30,6 +30,8 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**REQ-126 C07 complete — 26 October 2026:** [Lifecycle/disposition review](LIFECYCLE-RECONCILIATION.md) reconciles all 76 classifications and 19 original/wider decision groups. All 3,519 fresh existing tests and 113 profile controls pass. Current compound-pattern wording, method-call boundaries and a malformed delivery link are corrected with original receipts retained. Six closure workpackages remain; C08 historical adoption evidence is next. All 28 missing adoption pins, earlier defects and semantic acceptance remain open. No feature/profile/gate promotion or release; skips, Braid and extension work stay deferred. Earlier checkpoints are historical.
+
 **REQ-126 C06 complete — 26 October 2026:** [Host/profile review](HOST-PROFILE-RECONCILIATION.md) reconciles the final three grammar rows; all 18 now have bounded reviews, not semantic acceptance. All 376 focused tests and 3,148 catalog examples pass. Of 154 probe observations, 133 controls match, two retain a switch comparison mismatch, and 19 record context boundaries. Seven closure workpackages remain; C07 is next. Static-mode and loader/adoption limits remain explicit. No engine, profile, gate or release change; skips, Braid and extension work stay deferred. Earlier checkpoints are historical.
 
 **REQ-126 C05 complete — 26 October 2026:** [Type/collection/pattern review](TYPE-COLLECTION-PATTERN-RECONCILIATION.md) reconciles nine type/collection/pattern rows and 49 selected production names. All 2,457 focused tests pass. Of 275 independent controls, 259 match; 16 retain choice-coercion, record-destructuring and known generic-model gaps. Delivered union/EQName fixes remain closed. Eight closure workpackages remain; C06 is next. No engine or executable example changes, acceptance waiver, profile/gate promotion or release. Skips, Braid and extension work stay deferred; earlier checkpoints are historical.
@@ -207,7 +209,7 @@ The owner selected the applicable-evidence policy. The alternative of retaining 
 | Criterion | Reconciled state | What still prevents closure |
 |---|---|---|
 | AC-01 | Partial: 18 bounded grammar/cluster rows, existing signature inventories and exact delivery records | Dedicated missing grammar entries, complete per-contract mapping and historical pins. |
-| AC-02 | Partial: current lifecycle table covers original moving/rejected groups plus wider records | Exhaustive source/history validation, including superseded and partially implemented contracts. |
+| AC-02 | Partial: C07 reconciles all 76 current classifications and 19 original/wider groups with source/history/evidence boundaries | C08 historical adoption/rename provenance and C09–C13 per-contract review and owner acceptance remain open. |
 | AC-03 | Partial: applicable-evidence policy owner-approved; reproducible citation inventory supplied | Validate applicable evidence for every entry; absence of a gate stays explicit. |
 | AC-04 | Structure verified for 76 entries; semantic acceptance partial | Feature-specific drift and complete lifecycle/history review; generic headings do not suffice. |
 | AC-05 | Met for current scope | Keep actual registry counts, canonical links and index date synchronized. |

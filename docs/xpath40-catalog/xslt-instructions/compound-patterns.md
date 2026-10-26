@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
+
 **Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.
 
 **22 October 2026 — EQName priority correction, source 1.23.4:** Effective 4.0 name-test priority ignores URI punctuation; earlier profiles retain their existing behavior. [Scope, regressions and validation](../EQNAME-PATTERN-PRIORITY.md). Opening-bracket URI parsing remains a separate limitation. Public release remains 1.23.2; REQ-126 stays In Progress. Prior delivery records below retain their historical versions and outcomes.
@@ -12,7 +14,7 @@
 
 ## 1. Name and Classification
 
-**Implemented bounded XSLT4.0 compound contexts, with an explicit current-draft union-priority gap.** Public/source1.23.2 unchanged. [Pinned review](../COMPOUND-PATTERN-GRAMMAR.md) distinguishes observed behavior from normative expectation.
+**Implemented bounded XSLT 4.0 compound contexts in public 1.26.3.** The union-minimum, EQName URI-priority and opening-bracket parsing corrections are delivered. [C05 review](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) retains their verified scope and the remaining pattern/model limits. [The original review](../COMPOUND-PATTERN-GRAMMAR.md) and dated 1.23.x observations remain historical.
 
 ## 2. Intent
 
