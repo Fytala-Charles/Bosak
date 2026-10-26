@@ -1,0 +1,6 @@
+{
+  "reason": "Separate existing xs:integer string-constructor bounds from supported decimal-backed integer literals. Original draft inputs/observations/tests/receipts retained separately.",
+  "engineBase": "d09b3c571117f58bc7e8aa9f48ce91708d3b51de",
+  "constructorFindings": "representation-inputs.json and representation-observations.jsonl",
+  "sameCorrectedTestSourceOnBothEngines": true
+}

@@ -1,0 +1,65 @@
+from pathlib import Path
+import json,math,struct,random
+from fractions import Fraction
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/rounding-kernel';e.mkdir(parents=True,exist_ok=True)
+rows=[]
+def add(kind,lex,p,half):
+ if kind=='decimal':
+  from decimal import Decimal,localcontext
+  with localcontext() as ctx:
+   ctx.prec=1200
+   raw=Decimal(lex)
+   if abs(raw)>Decimal(79228162514264337593543950335):raw/=100
+   lex=format(raw,'f')
+ expr={'double':f"xs:double('{lex}')",'float':f"xs:float('{lex}')",'decimal':f"xs:decimal('{lex}')",'integer':f'({lex})'}[kind]
+ value=Fraction(lex)
+ if kind in ('double','float'):
+  value=float(lex)
+  if kind=='float':value=struct.unpack('f',struct.pack('f',value))[0]
+  value=Fraction(value)
+ scaled=value*Fraction(10)**p;floor=scaled.numerator//scaled.denominator;rem=scaled-floor
+ q=floor+(rem>Fraction(1,2) or rem==Fraction(1,2) and (floor%2!=0 if half else True))
+ result=Fraction(q)*Fraction(10)**-p
+ error=False
+ if kind in ('double','float'):
+  try:expected=float(result)
+  except OverflowError:expected=-math.inf if result<0 else math.inf
+  if kind=='float':
+   try:expected=struct.unpack('f',struct.pack('f',expected))[0]
+   except OverflowError:expected=math.copysign(math.inf,expected)
+  if expected==0:expected=math.copysign(0,float(lex))
+  lexical='INF' if expected==math.inf else '-INF' if expected==-math.inf else repr(expected)
+  predicate=f"$r instance of xs:{kind} and $r eq xs:{kind}('{lexical}')"
+  if expected==0:predicate+=f" and (1 div $r) eq xs:double('{'-' if math.copysign(1,expected)<0 else ''}INF')"
+ else:
+  error=abs(result)>79228162514264337593543950335
+  from decimal import Decimal,localcontext
+  with localcontext() as ctx:
+   ctx.prec=1200;lexical=format(Decimal(result.numerator)/Decimal(result.denominator),'f')
+  predicate=f"$r instance of xs:{kind} and $r eq xs:decimal('{lexical}')"
+ name='round-half-to-even' if half else 'round'
+ rows.append(dict(Id=len(rows),kind=kind,argument=expr,precision=p,function=name,expected=lexical,error=error,Expression=f'let $r := {name}({expr},{p}) return ({predicate})',predicate=predicate,BaselineSafe=True))
+for kind,lex in [('decimal','2.5'),('decimal','-2.5'),('decimal','79228162514264337593543950335'),('integer','9223372036854775808'),('integer','-9223372036854775808'),('integer','9223372036854775807'),('double','-2.5'),('double','1e300'),('double','4.9406564584124654e-324'),('double','1.7976931348623157e308'),('float','-2.5'),('float','1.401298464324817e-45')]:
+ for p in [28,29,308,309,323,324,1000,-1,-28,-29,-308,-309,-1000]:
+  for half in [False,True]:add(kind,lex,p,half)
+for kind in ['decimal','double','float']:
+ for lex in ['2.5','3.5','-2.5','-3.5','-0.25','-0.0','150.015','250.025','-13.65','0.005','0.125','0.375']:
+  for half in [False,True]:add(kind,lex,0 if lex in ['2.5','3.5','-2.5','-3.5','-0.25','-0.0'] else 2,half)
+rng=random.Random(12620261026)
+for i in range(96):
+ kind=rng.choice(['decimal','integer','double','float']);p=rng.choice([-28,-10,-2,-1,0,1,2,10,28,29,309])
+ lex=str(rng.randrange(-999999999,999999999)) if kind=='integer' else f'{rng.randrange(-999999999,999999999)}e{rng.randrange(-20,21)}'
+ add(kind,lex,p,bool(i%2))
+(e/'oracle-inputs.json').write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+header=(r/'tests/Bosak.XPath.Standard.Tests/RoundingPrecisionBoundaryTests.cs').read_text(encoding='utf-8').split('using Bosak.XPath.Api;')[0].replace('Verifies extreme rounding precision, numeric identity and signed-zero boundaries.','Verifies exact rounding kernels, numeric identity and signed-zero boundaries.')
+lines=[header,'using Bosak.XPath.Api;\nusing Bosak.XPath.Runtime.Vm;\nusing Xunit;\n\nnamespace Bosak.XPath.Standard.Tests;\n',
+'/// <summary>Verifies exact rounding kernels against independently generated rational expectations.</summary>\npublic sealed class RoundingKernelTests\n{',
+'    /// <summary>Provides decimal and IEEE binary rounding expectations from an independent oracle.</summary>\n    /// <returns>Profile, expression and expected error flag.</returns>\n    public static IEnumerable<object[]> Cases()\n    {\n        var cases = new (string Expression, bool Error)[]\n        {']
+for row in rows:
+ for callee in [row['function'],row['function']+'#2']:
+  query=row['Expression'].replace(row['function']+'(',callee+'(',1)
+  lines.append('            ('+json.dumps(query)+', '+str(row['error']).lower()+'),')
+lines+=['        };\n        foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })\n            foreach (var row in cases)\n                yield return new object[] { profile, row.Expression, row.Error };\n    }',
+'    /// <summary>Checks exact values, primitive numeric types, signed zero and bounded overflow.</summary>\n    /// <param name="profile">The XPath compatibility profile.</param>\n    /// <param name="expression">The oracle predicate.</param>\n    /// <param name="error">Whether the mathematical result exceeds supported decimal storage.</param>\n    [Theory, MemberData(nameof(Cases))]\n    public void ExactKernel(XPathCompatibility profile, string expression, bool error)\n    {\n        string Evaluate() => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(new EvaluationContext()).ToString();\n        if (error) Assert.Contains("FOAR0002", Assert.ThrowsAny<Exception>(() => Evaluate()).Message);\n        else Assert.Equal("true", Evaluate());\n    }\n}']
+(r/'tests/Bosak.XPath.Standard.Tests/RoundingKernelTests.cs').write_text('\n'.join(lines)+'\n',encoding='utf-8')
+print(f'{len(rows)} oracle rows; {len(rows)*6} direct/named tests.')

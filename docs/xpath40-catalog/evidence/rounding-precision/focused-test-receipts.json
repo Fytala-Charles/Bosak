@@ -1,0 +1,90 @@
+{
+  "baseline-tests": {
+    "path": "baseline-tests/charl_CHARLES_2026-10-26_09_44_11_net10.0.trx",
+    "sha256": "7600c89631c3dd929c7834031e1bca624cfea5d4d9239984dfc0a8e3d6110bda",
+    "counters": {
+      "total": 1321,
+      "executed": 1321,
+      "passed": 354,
+      "failed": 967,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  "after-tests": {
+    "path": "after-tests/charl_CHARLES_2026-10-26_09_47_15_net10.0.trx",
+    "sha256": "f7a72ca1329cc7bb061b21ec81e902eecd5f58659856b9baba53c20ac99434a0",
+    "counters": {
+      "total": 1321,
+      "executed": 1321,
+      "passed": 599,
+      "failed": 722,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  "corrected-before-tests": {
+    "path": "corrected-before-tests/charl_CHARLES_2026-10-26_09_54_06_net10.0.trx",
+    "sha256": "0ad600394170d2b0e7fb86a573e251c9bcf74e19e0cae26d990b55315c3f15ed",
+    "counters": {
+      "total": 1321,
+      "executed": 1321,
+      "passed": 294,
+      "failed": 1027,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  "corrected-after-tests": {
+    "path": "corrected-after-tests/charl_CHARLES_2026-10-26_09_53_55_net10.0.trx",
+    "sha256": "07b7c7f48373bf2ecff0754fe2f99abde627d2be80a0fc32bad7a762b5bad52b",
+    "counters": {
+      "total": 1321,
+      "executed": 1321,
+      "passed": 1321,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  }
+}

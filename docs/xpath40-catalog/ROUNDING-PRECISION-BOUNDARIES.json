@@ -1,0 +1,71 @@
+{
+  "base": "d09b3c571117f58bc7e8aa9f48ce91708d3b51de",
+  "sourceVersion": "1.26.2",
+  "publishedVersion": "1.26.1",
+  "publicationPerformed": false,
+  "sources": {
+    "src/Directory.Build.props": {
+      "sha256": "2589e3e4629b7963b9040b0bb23ac914e0a83f3906d168f19919613409383060",
+      "gitBlob": "b2978a49e30a518a5765542f1cffbdd50696820b"
+    },
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "sha256": "e9206b07575230aaee95aa4bf7ef73ff0500428bd49fa20a282e773f3732afc4",
+      "gitBlob": "17b8d9816056101f2248af82ccc51a6f9c39f5df"
+    },
+    "tests/Bosak.XPath.Standard.Tests/RoundingPrecisionBoundaryTests.cs": {
+      "sha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+      "gitBlob": "de545c6affb99e2f93454ffc29de33d2cde2f70f"
+    }
+  },
+  "focusedCases": 1321,
+  "correctedBaseline": {
+    "failed": 1027,
+    "passed": 294
+  },
+  "solutionPassed": 15857,
+  "languageServerPassed": 84,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "frozenQt4": [
+    8436,
+    0,
+    1894
+  ],
+  "experimentalFallbackPasses": 11,
+  "diagnostics": {
+    "rows": 3036,
+    "baselineObserved": 2916,
+    "baselineNotExecutedAllocationHazard": 120,
+    "baselineDiscrepancies": 1536,
+    "afterDiscrepancies": 612,
+    "correctedObserved": 924,
+    "regressions": 0,
+    "perScope": {
+      "retained-kernel": {
+        "rows": 1584,
+        "baselineObserved": 1584,
+        "baselineNotExecutedAllocationHazard": 0,
+        "baselineDiscrepancies": 612,
+        "afterDiscrepancies": 612,
+        "correctedObserved": 0,
+        "regressions": 0
+      },
+      "extreme": {
+        "rows": 1452,
+        "baselineObserved": 1332,
+        "baselineNotExecutedAllocationHazard": 120,
+        "baselineDiscrepancies": 924,
+        "afterDiscrepancies": 0,
+        "correctedObserved": 924,
+        "regressions": 0
+      }
+    }
+  },
+  "evidenceManifest": "evidence/rounding-precision/manifest.json",
+  "evidenceManifestSha256": "3f9011fcb403583777ca46c52fff1a72dc4e02aa81632d7864776953867ce09b",
+  "scope": "Extreme precision only; retained numerical kernels, constructor bounds and Braid smoke remain separate",
+  "renderer": "9 HTML pages, unchanged Fytala CSS; no screenshot/PDF acceptance"
+}

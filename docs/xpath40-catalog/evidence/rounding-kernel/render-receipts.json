@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/rounding-kernel-render/README.md.html",
+      "sha256": "f9be2bc4a6bb2378e3a8c903d8831473c3b70fbfc543bcd67edfeca5cddcf3f7"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_ARCHITECTURE.md.html",
+      "sha256": "ea5985a1222bc627ea08feb598d4038ad49b2eca28778c84f266d7cc4b3e8f7e"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "1a86c450a11e4c47857957d8f375fd115fc414b2b4ad29aee1f09a466cea435f"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_INTEGRATION.md.html",
+      "sha256": "08347c1d8865c5285b76c1fc8c0666db617c6cd3b80066e19ba84cc58815faa4"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "99fbc600fc1ec5e2a1aa9803fa4e8a4352f081175439c48dc6facd3151f96bee"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "2cbaa8807d3d41925cb20baa830a1ab49dab8ecba7f53ef8a6b0134241ea40ab"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "e3b608a21c808ef84039351b92c72ab8c27254ca816ebdcadefa90329f7e52db"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "1cbb0072b292831915a24973ea3b5291a71481bc2ac5989aba1b29de7212231a"
+    },
+    {
+      "source": "docs/xpath40-catalog/ROUNDING-PRECISION-BOUNDARIES.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_xpath40-catalog_ROUNDING-PRECISION-BOUNDARIES.md.html",
+      "sha256": "528fb86ada70f3a8a8596f3458664f8aaff73dd062903d3a26e47edde462a7fc"
+    },
+    {
+      "source": "docs/xpath40-catalog/ROUNDING-KERNELS.md",
+      "html": ".guard-tmp/rounding-kernel-render/docs_xpath40-catalog_ROUNDING-KERNELS.md.html",
+      "sha256": "220f8bb6fea49d81e397f655dcd0cd93e9e32b83c96a57fd9fd7eaec19d41232"
+    }
+  ]
+}

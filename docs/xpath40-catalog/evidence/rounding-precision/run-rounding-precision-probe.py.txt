@@ -1,0 +1,11 @@
+from pathlib import Path
+import subprocess,sys,json,time
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/rounding-precision';p=r/'.guard-tmp'/(sys.argv[2] if len(sys.argv)>2 else 'rounding-precision-probe');phase=sys.argv[1]
+command=['dotnet',str(p/'bin/Release/net10.0/Probe.dll'),str(e/'inputs.json'),str(e/(phase+'.jsonl')),phase]
+start=time.monotonic()
+with (e/(phase+'-probe.log')).open('wb') as output:
+ try:result=subprocess.run(command,cwd=r,stdout=output,stderr=subprocess.STDOUT,timeout=30);status=dict(exitCode=result.returncode,timeout=False)
+ except subprocess.TimeoutExpired:status=dict(exitCode=None,timeout=True)
+status.update(phase=phase,wallSeconds=time.monotonic()-start,watchdogSeconds=30,command=command)
+(e/(phase+'-probe-receipt.json')).write_text(json.dumps(status,indent=2)+'\n',encoding='utf-8');assert status['exitCode']==0 and not status['timeout'],status
+print(json.dumps(status))

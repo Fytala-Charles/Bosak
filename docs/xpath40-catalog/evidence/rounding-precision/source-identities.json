@@ -1,0 +1,29 @@
+{
+  "base": "d09b3c571117f58bc7e8aa9f48ce91708d3b51de",
+  "baselineSources": {
+    "src/Directory.Build.props": {
+      "gitBlob": "2d2efc89fe4e1ea238061eb53fc6b56f9be29b64",
+      "sha256": "b33df6bc51ffba657bed0d171aa3c6a6fa0ee7299e8aeccd6efe1dbb309126e2"
+    },
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "gitBlob": "b5762a40f7396cad7be8417f1a42053c8378cc47",
+      "sha256": "db7fef3a604ac84033cc413db52fed08f4e53eeb1be3fb8973b5b3d9404ed582"
+    }
+  },
+  "correctedSources": {
+    "src/Directory.Build.props": {
+      "sha256": "2589e3e4629b7963b9040b0bb23ac914e0a83f3906d168f19919613409383060",
+      "gitBlob": "b2978a49e30a518a5765542f1cffbdd50696820b"
+    },
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "sha256": "e9206b07575230aaee95aa4bf7ef73ff0500428bd49fa20a282e773f3732afc4",
+      "gitBlob": "17b8d9816056101f2248af82ccc51a6f9c39f5df"
+    },
+    "tests/Bosak.XPath.Standard.Tests/RoundingPrecisionBoundaryTests.cs": {
+      "sha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+      "gitBlob": "de545c6affb99e2f93454ffc29de33d2cde2f70f"
+    }
+  },
+  "identicalCorrectedTestSha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+  "baselineEngineUnchanged": true
+}

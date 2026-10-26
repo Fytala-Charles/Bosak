@@ -1,0 +1,13 @@
+// Generated bounded diagnostic probe; reports observations without changing expectations.
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using System.Text.Json;
+using var output = new StreamWriter(args[1]) { AutoFlush = true };
+foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+foreach (var row in JsonSerializer.Deserialize<Row[]>(File.ReadAllText(args[0]))!)
+{
+    if (args[2] == "before" && !row.BaselineSafe) { output.WriteLine(JsonSerializer.Serialize(new { profile=profile.ToString(),row.Id,status="NotExecutedStaticAllocationHazard" })); continue; }
+    try { var value=XPath31Expression.Compile(row.Expression,new CompileOptions { Compatibility=profile }).Evaluate(new EvaluationContext()); output.WriteLine(JsonSerializer.Serialize(new { profile=profile.ToString(),row.Id,value=value.ToString(),error=(string?)null,status="Observed" })); }
+    catch(Exception error) { output.WriteLine(JsonSerializer.Serialize(new { profile=profile.ToString(),row.Id,value=(string?)null,error=error.Message,exceptionType=error.GetType().FullName,status="Observed" })); }
+}
+record Row(int Id,string Expression,bool BaselineSafe);

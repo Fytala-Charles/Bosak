@@ -1,0 +1,12 @@
+from pathlib import Path
+import json,subprocess
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/rounding-precision'
+expressions=["round(2.5,29)","string(round-half-to-even(2.5e0,309))","string(round-half-to-even(1e300,28))","round(9223372036854775808,28) instance of xs:integer","round(9223372036854775808,-28) instance of xs:integer","string(1 div round(-2.5e0,-1000))","string(round-half-to-even(-2.5e0,-1000))"]
+f=e/'retained-kernel-example-inputs.json';f.write_text(json.dumps([dict(Id=i,Expression=x,BaselineSafe=True) for i,x in enumerate(expressions)],indent=2)+'\n',encoding='utf-8')
+for phase,probe in [('before','rounding-precision-baseline-probe'),('after','rounding-precision-probe')]:
+ out=e/('retained-kernel-examples-'+phase+'.jsonl')
+ subprocess.run(['dotnet',str(r/'.guard-tmp'/probe/'bin/Release/net10.0/Probe.dll'),str(f),str(out),phase],check=True,timeout=30)
+before=[json.loads(x) for x in (e/'retained-kernel-examples-before.jsonl').read_text(encoding='utf-8').splitlines()];after=[json.loads(x) for x in (e/'retained-kernel-examples-after.jsonl').read_text(encoding='utf-8').splitlines()]
+assert before==after
+print('All 21 retained-kernel example observations unchanged across the bounded correction.')
+for row in after[:7]:print(expressions[row['Id']],row.get('value') if row.get('error') is None else row['error'])

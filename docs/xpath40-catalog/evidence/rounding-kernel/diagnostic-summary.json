@@ -1,0 +1,16 @@
+{
+  "oracle": {
+    "rows": 1440,
+    "baselineDiscrepancies": 555,
+    "afterDiscrepancies": 0,
+    "corrected": 555,
+    "regressions": 0
+  },
+  "historical-matrix": {
+    "rows": 3036,
+    "baselineDiscrepancies": 600,
+    "afterDiscrepancies": 0,
+    "corrected": 600,
+    "regressions": 0
+  }
+}

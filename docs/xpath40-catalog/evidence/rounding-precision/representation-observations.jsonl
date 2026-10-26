@@ -1,0 +1,15 @@
+{"profile":"XPath31","Id":0,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":1,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":2,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":3,"value":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":4,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":0,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":1,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":2,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":3,"value":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":4,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":0,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":1,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":2,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":3,"value":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":4,"value":"true","error":null,"status":"Observed"}

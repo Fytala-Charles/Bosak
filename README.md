@@ -6,6 +6,8 @@
 
 Bosak 1.26.1 is available on NuGet, including atomic argument/cardinality and rounding corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.1-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
+The [1.26.2 candidate](docs/RELEASE-1.26.2-CANDIDATE.md) is validated and unpublished: extreme precision and exact rounding kernels preserve numeric types and signed zero while avoiding intermediate scaling overflow. All 4,201 new cases pass in source and package consumers, with unchanged frozen gates. Public installation remains 1.26.1.
+
 
 ---
 

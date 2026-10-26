@@ -1,0 +1,20 @@
+[
+  {
+    "file": "RoundingPrecisionBoundaryTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/RoundingPrecisionBoundaryTests.cs",
+    "sha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+    "expectedCases": 1321,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 1321,
+    "packagePassed": 1321
+  },
+  {
+    "file": "RoundingKernelTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/RoundingKernelTests.cs",
+    "sha256": "64a707bce6455be5b3a040c556e88953b6002bade3aa57240cdf17759e070058",
+    "expectedCases": 2880,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 2880,
+    "packagePassed": 2880
+  }
+]

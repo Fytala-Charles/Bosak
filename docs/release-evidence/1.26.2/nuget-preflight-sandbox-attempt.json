@@ -1,0 +1,14 @@
+[
+  {
+    "label": "vulnerability-index",
+    "url": "https://api.nuget.org/v3/vulnerabilities/index.json",
+    "checkedAtUtc": "2026-10-26T10:00:28.718889+00:00",
+    "error": "<urlopen error [WinError 10051] A socket operation was attempted to an unreachable network>"
+  },
+  {
+    "label": "public-xslt-versions",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+    "checkedAtUtc": "2026-10-26T10:00:28.784348+00:00",
+    "error": "<urlopen error [WinError 10051] A socket operation was attempted to an unreachable network>"
+  }
+]
