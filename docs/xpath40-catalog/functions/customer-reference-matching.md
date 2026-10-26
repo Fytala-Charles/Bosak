@@ -4,6 +4,8 @@
 <p>21 October 2026</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited equality/collation contracts**. C02-F01/F09: no deep-equal options maps, complete UCA/normalization, metadata or full comparator acceptance. Other three fn sets are not gated. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Customer-reference equality and collation — existing 3.1 functions with reviewed 4.0 contracts.** Covers fn:distinct-values, fn:index-of, fn:deep-equal, fn:compare and fn:contains-token. Functions are not4.0-only names; this adds no name to the 117-name inventory. [REQ-126](../../FEATURE_REQUESTS.md) equality/collation documentation slice; [review and source pins](../EQUALITY-COLLATION-CONTRACT-REVIEW.md), source base `5de2cfc5213529cdef419b9b7dec3cf9b6c03f7f`. Keyword syntax requires4.0. Unsupported draft forms are explicitly separated from supported calls.

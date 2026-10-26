@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — changed existing-function contracts and observed limits</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Blocked for full current-draft extrema parity**. C02-F06/F08: current mixed-type selection/identity and plain-duration ordering are not fully implemented. Original observed fixtures remain observations. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 [fn:min](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-min)

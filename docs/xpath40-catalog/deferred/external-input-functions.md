@@ -4,6 +4,8 @@
   <p>Out-of-scope proposals — verified narrower processing paths</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified absence and narrower alternatives**. No third-party service/package or proposed factory is implemented by those alternatives. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **External-input function proposals — Out of scope in the original dossier; absent in the reviewed Bosak paths.** Covers `fn:parse-html`, `fn:html-doc`, `fn:invisible-xml`, `fn:unparsed-binary` and `fn:xsd-validator`. The [REQ-118 decision](../../REQ-118-xpath-xslt-40.md) is preserved. Engine 1.1.2 reviewed against [revision bce0d9b1](https://github.com/Fytala-Charles/Bosak/commit/bce0d9b1e21ce2ed875821e592f64bf2ed69ee55).

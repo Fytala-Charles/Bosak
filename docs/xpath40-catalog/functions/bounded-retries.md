@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — precondition and postcondition loops with an attempt budget</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified finite callback contract**. No automatic delay, timeout, retry ceiling or unbounded termination guarantee. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Bounded retry state — Frozen 4.0.** [fn:while-do](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-while-do) and [fn:do-until](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-do-until).

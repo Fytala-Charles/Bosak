@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited implemented declaration**. No complete alias/schema/package/type-conversion acceptance; C03/C05 limits remain. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Implemented bounded XSLT4.0 surface in public1.23.2; complete declaration contract not certified.** This existing path is retained for links; deferred describes its historical dossier, not all present behavior. [Current pinned review](../TYPE-PATTERN-GRAMMAR.md).

@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited implemented nominal declaration**. Broader constructors/defaults/static/package/type conversion remain C03/C05/C06 scope limits. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **REQ-126 C03 complete — 26 October 2026:** [Constructor/type review](../CONSTRUCTOR-TYPE-RECONCILIATION.md) reconciles eight entries and all 49 focus constructors. All 1,333 asserted controls match across 1,357 observations; 245 focused schema/API/host tests pass. Bounded nominal defaults/static fields are now evidenced. Generic wide casts, decimal precision, schema/host context and broader conversion remain explicit boundaries; C02's atomic-annotation defect remains open. Ten closure workpackages remain; C04 is next. No engine/test/example/version/gate change or acceptance waiver; skips/Braid/extension work stays deferred. Earlier checkpoint counts are historical.
 
 ## 1. Name and Classification

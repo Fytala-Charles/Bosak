@@ -4,6 +4,8 @@
   <p>Deferred — instruction and stylesheet-function alternatives</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 3 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified function refusal and instruction alternative**. No proposed fn:apply-templates adoption or complete template-environment certification. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **fn:apply-templates — Deferred.** The [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains in force. Bosak engine 1.1.2 reviewed against [revision 7758c568](https://github.com/Fytala-Charles/Bosak/commit/7758c568612a19781c36bb1ca30c01e973a6246a).

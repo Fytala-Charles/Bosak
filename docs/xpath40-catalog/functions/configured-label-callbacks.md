@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — bind policy arguments and pass through unchanged values</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited frozen binding / draft adoption boundary**. C02-F01/F02/F08: ignored nonpositive draft keys remain unmet; metadata-dependent conversion timing is not universally eager. No exact fn-partial-apply gate. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Configured label callbacks — Frozen 4.0.** [fn:partial-apply](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-partial-apply) and [fn:identity](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-identity).

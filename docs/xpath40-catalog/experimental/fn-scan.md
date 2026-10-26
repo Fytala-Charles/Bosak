@@ -5,6 +5,8 @@
   <p>Catalog entry — Functions · Experimental</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Verified bounded Experimental contract**. Experimental gate retry does not promote frozen API availability; no bounded-memory or general callback-conversion promise. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
 
 <!-- Catalog entry: fn:scan. Template: see ../README.md §1.1. -->
@@ -98,10 +100,14 @@ Practical case: [stock ledger](../examples/fn-scan/main.xpath). The
 balance, displayed as `100`. Both cases require `XPath40Experimental`; the
 [earlier baseline](../examples/fn-scan/before.xpath) runs at `XPath31`.
 
+Run each query independently at `XPath40Experimental`:
+
 ~~~xquery
 fn:scan((1, 2, 3), 0, fn($acc, $it) { $acc + $it })
   (: → [0], [1], [3], [6] — every running total, init first :)
+~~~
 
+~~~xquery
 fn:scan((), "start", fn($acc, $it) { $acc || $it })
   (: → ["start"] — empty input yields just the init :)
 ~~~

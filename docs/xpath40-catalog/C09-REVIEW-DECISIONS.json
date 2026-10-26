@@ -1,0 +1,1941 @@
+{
+  "date": "2026-10-26",
+  "entries": {
+    "data-model/jnode-navigation.md": {
+      "status": "Limited navigation contract",
+      "contracts": [
+        {
+          "id": "C09-01-1",
+          "statement": "jtree wraps supplied maps/arrays; string-key steps and jvalue project values",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-navigation-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-01-2",
+          "statement": "Missing keys produce empty sequences; parent/root and key types preserve navigation context",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-navigation-edge"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-01-3",
+          "statement": "array:members/of-members preserve member sequence boundaries",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [],
+          "probeIds": [],
+          "inheritedEvidence": [
+            "TYPE-COLLECTION-PATTERN-RECONCILIATION.json#REQ123-jnode:members-roundtrip,members-empty,of-members-empty",
+            "evidence/c05-collection-pattern-review/jnode-tests.log"
+          ]
+        }
+      ],
+      "languageAlignment": "JNodes retain parent/key context; plain maps/arrays do not acquire node identity.",
+      "remaining": "Generic node()/xnode()/identity and JNode built-in templates remain unsupported; no full-model acceptance.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-jtree",
+          "fn-jkey",
+          "fn-jvalue"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Compile_JNodeFunctions_DefaultOptions_ThrowXpst0017",
+            "Evaluate_JNodeFunctions_FrozenXPath40_Work"
+          ]
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs",
+          "gitBlob": "b613b6d4290091933750b208105b982cf8b0106a",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "data-model/jnode-template-boundary.md": {
+      "status": "Known model blocker",
+      "contracts": [
+        {
+          "id": "C09-02-1",
+          "statement": "Explicit wrapper/navigation reports preserve normal, empty and reordered values",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-scope-navigation-empty",
+            "jnode-scope-navigation-main",
+            "jnode-scope-navigation-reordered",
+            "jnode-scope-portable-empty",
+            "jnode-scope-portable-reordered",
+            "jnode-template-boundary-navigation"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-02-2",
+          "statement": "Array jkey positions are one-based; root parent is empty",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-scope-array-keys",
+            "jnode-scope-missing-key",
+            "jnode-scope-parent-value",
+            "jnode-scope-root-parent"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-02-3",
+          "statement": "node() is false, xnode() is refused and is requires XML nodes in the released model",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-scope-array-keys",
+            "jnode-scope-attribute-axis",
+            "jnode-scope-identity",
+            "jnode-scope-missing-key",
+            "jnode-scope-navigation-empty",
+            "jnode-scope-navigation-main",
+            "jnode-scope-navigation-reordered",
+            "jnode-scope-parent-value",
+            "jnode-scope-portable-empty",
+            "jnode-scope-portable-main",
+            "jnode-scope-portable-reordered",
+            "jnode-scope-root-parent",
+            "jnode-scope-type-jnode",
+            "jnode-scope-type-node",
+            "jnode-scope-wrong-jvalue",
+            "jnode-scope-xnode-type-31",
+            "jnode-scope-xnode-type-40",
+            "jnode-scope-xnode-type-experimental",
+            "jnode-template-boundary-navigation"
+          ],
+          "probeIds": [
+            "jnode-generic-current",
+            "jnode-generic-required",
+            "jnode-identity-current"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-02-4",
+          "statement": "Plain-map jvalue refuses; attribute navigation is empty in the named case",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "jnode-scope-attribute-axis",
+            "jnode-scope-wrong-jvalue"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Matching navigation output is not generic node identity, XML-axis or template-rule equivalence.",
+      "remaining": "C05-K01: current generic-node membership remains unmet in both4 profiles; full model/template acceptance stays blocked.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/JNodeTests.cs",
+          "gitBlob": "b613b6d4290091933750b208105b982cf8b0106a",
+          "methods": [
+            "InstanceOf_Bare_MatchesAnyJNode",
+            "Nav_ChildOfArray_PositionKeyedJNodes",
+            "Nav_ParentRoundTrip_ReturnsMapJNode",
+            "Nav_AttributeAxisOnJNode_IsEmpty"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/capturing-accumulators.md": {
+      "status": "Verified unsupported-proposal disposition",
+      "contracts": [
+        {
+          "id": "C09-03-1",
+          "statement": "Capture yes/absent/no retains source-node identity in the retained probes",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "capturing-accumulators-capture-absent",
+            "capturing-accumulators-capture-empty",
+            "capturing-accumulators-capture-no",
+            "capturing-accumulators-capture31",
+            "capturing-accumulators-invalid-capture-observed",
+            "capturing-accumulators-main-observed",
+            "capturing-accumulators-start-capture-observed"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-03-2",
+          "statement": "Invalid/start-phase capture attributes are tolerated without implementing snapshot capture",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "capturing-accumulators-invalid-capture-observed",
+            "capturing-accumulators-start-capture-observed"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-03-3",
+          "statement": "Ordinary counters/accumulators and explicit snapshot provide separately tested alternatives",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "capturing-accumulators-ordinary-counter",
+            "capturing-accumulators-snapshot-empty",
+            "capturing-accumulators-snapshot-reordered",
+            "capturing-accumulators-snapshot31"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Ignoring an attribute is not implementing it; a source node and explicit snapshot have different identity.",
+      "remaining": "Capture semantics, option validation and actual capture streamability remain unsupported; catalog cases are in-memory.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/StreamingAccumulatorTests.cs",
+          "gitBlob": "c211d9e83649e0684318c113b72fc9fd0c3daac2",
+          "methods": [
+            "CounterAccumulator_Parity",
+            "SumWithAccumulatorAfter_Parity",
+            "InapplicableAccumulator_ThrowsXTDE3362",
+            "UnknownAccumulator_ThrowsXTDE3341"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/StreamingSnapshotTests.cs",
+          "gitBlob": "3c3b16b730cec6ea4959eb39960fc4a35eef9941",
+          "methods": [
+            "SnapshotDocumentNode_ParityWithInMemory",
+            "SnapshotShellRoot_KeepsDocumentParent"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/computed-node-constructors.md": {
+      "status": "Verified refusal and host alternative",
+      "contracts": [
+        {
+          "id": "C09-04-1",
+          "statement": "Seven computed node kinds and direct XML refuse through standalone XPath profiles",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "computed-xpath-constructors-attribute-31",
+            "computed-xpath-constructors-attribute-40",
+            "computed-xpath-constructors-attribute-experimental",
+            "computed-xpath-constructors-comment-31",
+            "computed-xpath-constructors-comment-40",
+            "computed-xpath-constructors-comment-experimental",
+            "computed-xpath-constructors-direct-element-31",
+            "computed-xpath-constructors-direct-element-40",
+            "computed-xpath-constructors-direct-element-experimental",
+            "computed-xpath-constructors-document-31",
+            "computed-xpath-constructors-document-40",
+            "computed-xpath-constructors-document-experimental",
+            "computed-xpath-constructors-element-31",
+            "computed-xpath-constructors-element-40",
+            "computed-xpath-constructors-element-experimental",
+            "computed-xpath-constructors-namespace-31",
+            "computed-xpath-constructors-namespace-40",
+            "computed-xpath-constructors-namespace-experimental",
+            "computed-xpath-constructors-text-31",
+            "computed-xpath-constructors-text-40",
+            "computed-xpath-constructors-text-experimental"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-04-2",
+          "statement": "Existing XQuery3.1 computed forms construct nodes and retain selected dynamic errors",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [],
+          "probeIds": [
+            "verbatim-computed-xquery"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-04-3",
+          "statement": "Portable XSLT receipt construction escapes source strings and preserves empty cases",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "computed-xpath-constructors-baseline",
+            "computed-xpath-constructors-baseline-empty",
+            "computed-xpath-constructors-baseline-escaped"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-04-4",
+          "statement": "The standalone inline XQuery sample is now executed verbatim",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [],
+          "probeIds": [
+            "verbatim-computed-xquery"
+          ],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Atomic xs:* functions, map/array constructors, XML parsing and safe node construction are different contracts.",
+      "remaining": "No XPath constructor adoption or full XQuery4 grammar. XQuery and XPath parser host flags remain distinct.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XQuery.Tests/PlaceholderTests.cs",
+          "gitBlob": "5c46364a61ab2b139666220634d33b68ae0539db",
+          "methods": [
+            "XQuery_ComputedElement_StaticName",
+            "XQuery_ComputedElement_ComputedNameAndAtomicContent",
+            "XQuery_ComputedElement_EmptyContent",
+            "XQuery_ComputedAttribute_AddsToElement",
+            "XQuery_ComputedTextCommentAndPI",
+            "XQuery_ComputedDocument_WrapsContent",
+            "XQuery_ComputedNamespace_BecomesDeclaration",
+            "XQuery_ComputedComment_DoubleHyphen_Rejected",
+            "XQuery_ComputedPI_NestedTerminator_Rejected",
+            "XQuery_ComputedAttribute_AfterContent_Rejected"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/enclosing-modes.md": {
+      "status": "Verified unsupported-proposal disposition",
+      "contracts": [
+        {
+          "id": "C09-05-1",
+          "statement": "Nested mode declarations refuse XTSE0260 before draft-specific enclosure diagnostics",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "enclosing-modes-default-conflict",
+            "enclosing-modes-duplicate",
+            "enclosing-modes-lexical-default-mode",
+            "enclosing-modes-main-refusal3",
+            "enclosing-modes-main-refusal4"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-05-2",
+          "statement": "Top-level named modes with explicit or #current recursion retain dispatch",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "enclosing-modes-main-refusal3",
+            "enclosing-modes-main-refusal4"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-05-3",
+          "statement": "Omitted mode uses lexical default in the tested stylesheets",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "enclosing-modes-current-mode",
+            "enclosing-modes-default-conflict",
+            "enclosing-modes-lexical-default-mode"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Dynamic #current, lexical default-mode and nested declaration enclosure must not be conflated.",
+      "remaining": "No draft enclosure diagnostic/package/unused-body certification.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/ModeConflictResolutionTests.cs",
+          "gitBlob": "2d813ee224857b49bdf12e19254ca686a69f7f9b",
+          "methods": [
+            "SamePrecedenceConflict_UnresolvedByHigherPrecedence_ThrowsXtse0545",
+            "SamePrecedenceDisjointAttributes_MergeWithoutError"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/StylesheetTests.cs",
+          "gitBlob": "2cc8e2769cd6fffb41f86bc8342cb744be608c84",
+          "methods": [
+            "Hash_Current_Resolves_To_Current_Mode",
+            "Mode_All_Matches_All_Modes",
+            "Mode_OnNoMatch_ShallowSkip",
+            "Initial_Mode_With_Source_Succeeds"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/external-input-functions.md": {
+      "status": "Verified absence and narrower alternatives",
+      "contracts": [
+        {
+          "id": "C09-06-1",
+          "statement": "All reviewed arities of five external-input names refuse XPST0017 in their recorded modes",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "external-input-functions-binary-empty",
+            "external-input-functions-binary-invalid",
+            "external-input-functions-binary-main",
+            "external-input-functions-binary-zero-octet",
+            "external-input-functions-html-doc-31-0",
+            "external-input-functions-html-doc-31-1",
+            "external-input-functions-html-doc-40-0",
+            "external-input-functions-html-doc-40-1",
+            "external-input-functions-html-doc-experimental-0",
+            "external-input-functions-html-doc-experimental-1",
+            "external-input-functions-html-doc-lookup-31",
+            "external-input-functions-html-doc-lookup-40",
+            "external-input-functions-invisible-xml-31-0",
+            "external-input-functions-invisible-xml-31-1",
+            "external-input-functions-invisible-xml-31-2",
+            "external-input-functions-invisible-xml-40-0",
+            "external-input-functions-invisible-xml-40-1",
+            "external-input-functions-invisible-xml-40-2",
+            "external-input-functions-invisible-xml-experimental-0",
+            "external-input-functions-invisible-xml-experimental-1",
+            "external-input-functions-invisible-xml-experimental-2",
+            "external-input-functions-invisible-xml-lookup-31",
+            "external-input-functions-invisible-xml-lookup-40",
+            "external-input-functions-parse-html-31-0",
+            "external-input-functions-parse-html-31-1",
+            "external-input-functions-parse-html-40-0",
+            "external-input-functions-parse-html-40-1",
+            "external-input-functions-parse-html-experimental-0",
+            "external-input-functions-parse-html-experimental-1",
+            "external-input-functions-parse-html-lookup-31",
+            "external-input-functions-parse-html-lookup-40",
+            "external-input-functions-unparsed-binary-31-0",
+            "external-input-functions-unparsed-binary-40-0",
+            "external-input-functions-unparsed-binary-experimental-0",
+            "external-input-functions-unparsed-binary-lookup-31",
+            "external-input-functions-unparsed-binary-lookup-40",
+            "external-input-functions-xsd-validator-31-0",
+            "external-input-functions-xsd-validator-31-1",
+            "external-input-functions-xsd-validator-40-0",
+            "external-input-functions-xsd-validator-40-1",
+            "external-input-functions-xsd-validator-experimental-0",
+            "external-input-functions-xsd-validator-experimental-1",
+            "external-input-functions-xsd-validator-lookup-31",
+            "external-input-functions-xsd-validator-lookup-40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-06-2",
+          "statement": "Function lookup remains absent; factories are never invoked and no network request occurs",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "external-input-functions-html-doc-lookup-31",
+            "external-input-functions-html-doc-lookup-40",
+            "external-input-functions-invisible-xml-lookup-31",
+            "external-input-functions-invisible-xml-lookup-40",
+            "external-input-functions-parse-html-lookup-31",
+            "external-input-functions-parse-html-lookup-40",
+            "external-input-functions-unparsed-binary-lookup-31",
+            "external-input-functions-unparsed-binary-lookup-40",
+            "external-input-functions-xsd-validator-lookup-31",
+            "external-input-functions-xsd-validator-lookup-40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-06-3",
+          "statement": "Local/preprocessed XML, JSON, binary and schema API paths are narrower alternatives",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "external-input-functions-binary-empty",
+            "external-input-functions-binary-invalid",
+            "external-input-functions-binary-main",
+            "external-input-functions-binary-zero-octet",
+            "external-input-functions-invisible-xml-31-0",
+            "external-input-functions-invisible-xml-31-1",
+            "external-input-functions-invisible-xml-31-2",
+            "external-input-functions-invisible-xml-40-0",
+            "external-input-functions-invisible-xml-40-1",
+            "external-input-functions-invisible-xml-40-2",
+            "external-input-functions-invisible-xml-experimental-0",
+            "external-input-functions-invisible-xml-experimental-1",
+            "external-input-functions-invisible-xml-experimental-2",
+            "external-input-functions-invisible-xml-lookup-31",
+            "external-input-functions-invisible-xml-lookup-40",
+            "external-input-functions-normalized-xml-empty",
+            "external-input-functions-normalized-xml-main",
+            "external-input-functions-normalized-xml-reordered",
+            "external-input-functions-unparsed-binary-31-0",
+            "external-input-functions-unparsed-binary-40-0",
+            "external-input-functions-unparsed-binary-experimental-0",
+            "external-input-functions-unparsed-binary-lookup-31",
+            "external-input-functions-unparsed-binary-lookup-40",
+            "external-input-functions-xml-is-not-html"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "A lookup/name refusal is not a draft runtime validation error; preprocessing is not a universal HTML/iXML substitute.",
+      "remaining": "No third-party service/package or proposed factory is implemented by those alternatives.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/AtomicEqualTests.cs",
+          "gitBlob": "7d0c61014a38402db4f13440162e238b664d7c9e",
+          "methods": [
+            "Binary_HexAndBase64ComparableByOctets"
+          ]
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs",
+          "gitBlob": "a6749a57c3e2bc83791a2006f4813d24b52eaa33",
+          "methods": [
+            "ParseXml"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/SchemaAwareValidationTests.cs",
+          "gitBlob": "f516d86bda2274b3ca26243be0f33090c5c4fb11",
+          "methods": [
+            "Copy_ValidationStrict_Valid_Succeeds",
+            "Copy_ValidationStrict_Invalid_Xtte1510"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/fn-apply-templates.md": {
+      "status": "Verified function refusal and instruction alternative",
+      "contracts": [
+        {
+          "id": "C09-07-1",
+          "statement": "Function calls/references at arities1/2 refuse under the supplied XPath/XSLT profiles",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-apply-templates-reference-xslt31",
+            "fn-apply-templates-reference-xslt40",
+            "fn-apply-templates-xpath-31-arity1",
+            "fn-apply-templates-xpath-31-arity2",
+            "fn-apply-templates-xpath-40-arity1",
+            "fn-apply-templates-xpath-40-arity2",
+            "fn-apply-templates-xpath-experimental-arity1",
+            "fn-apply-templates-xpath-experimental-arity2"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-07-2",
+          "statement": "Instruction availability is true while function availability/lookup is absent",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-apply-templates-availability-xslt31",
+            "fn-apply-templates-availability-xslt40",
+            "fn-apply-templates-lookup-31",
+            "fn-apply-templates-lookup-40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-07-3",
+          "statement": "Instruction/wrapper examples retain named-mode, ordinary/tunnel parameter and empty/reordered behavior",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-apply-templates-instruction-xslt31-empty",
+            "fn-apply-templates-instruction-xslt31-reordered",
+            "fn-apply-templates-instruction-xslt40-empty",
+            "fn-apply-templates-instruction-xslt40-reordered",
+            "fn-apply-templates-wrapper-xslt31-empty",
+            "fn-apply-templates-wrapper-xslt31-input",
+            "fn-apply-templates-wrapper-xslt31-reordered",
+            "fn-apply-templates-wrapper-xslt40-empty",
+            "fn-apply-templates-wrapper-xslt40-input",
+            "fn-apply-templates-wrapper-xslt40-reordered"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "An instruction inside an XSLT function does not register the separately proposed function.",
+      "remaining": "No proposed fn:apply-templates adoption or complete template-environment certification.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/StylesheetTests.cs",
+          "gitBlob": "2cc8e2769cd6fffb41f86bc8342cb744be608c84",
+          "methods": [
+            "Function_ApplyTemplates_Inside_Function_Matches_Name_Pattern",
+            "Function_ApplyTemplates_Returns_Atomic_Sequence",
+            "Function_ApplyTemplates_Inside_Function_Matches_Variable_Reference_Pattern"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/language-streaming-scope.md": {
+      "status": "Limited host and streaming contract",
+      "contracts": [
+        {
+          "id": "C09-08-1",
+          "statement": "XQuery3.1 invoice ordering/grouping is supported; version4 declaration refuses XQST0031",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "language-streaming-scope-xquery-empty",
+            "language-streaming-scope-xquery-main",
+            "language-streaming-scope-xquery-reordered",
+            "language-streaming-scope-xquery-version40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-08-2",
+          "statement": "Tested XPath where extension succeeds; order-by/group-by forms refuse",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "language-streaming-scope-portable-reordered",
+            "language-streaming-scope-report-stream31-reordered",
+            "language-streaming-scope-report-stream40-reordered",
+            "language-streaming-scope-report-xslt31-reordered",
+            "language-streaming-scope-report-xslt40-reordered",
+            "language-streaming-scope-xpath-group-31",
+            "language-streaming-scope-xpath-group-40",
+            "language-streaming-scope-xpath-group-experimental",
+            "language-streaming-scope-xpath-order-31",
+            "language-streaming-scope-xpath-order-40",
+            "language-streaming-scope-xpath-order-experimental",
+            "language-streaming-scope-xpath-where-31",
+            "language-streaming-scope-xpath-where-40",
+            "language-streaming-scope-xpath-where-experimental",
+            "language-streaming-scope-xquery-reordered"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-08-3",
+          "statement": "Portable sort/predicate reports retain values and order",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "language-streaming-scope-portable-empty",
+            "language-streaming-scope-portable-main",
+            "language-streaming-scope-portable-reordered"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-08-4",
+          "statement": "Actual streaming API and in-memory capture retain the same tested reports",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "language-streaming-scope-portable-empty",
+            "language-streaming-scope-portable-main",
+            "language-streaming-scope-portable-reordered",
+            "language-streaming-scope-report-stream31-empty",
+            "language-streaming-scope-report-stream31-main",
+            "language-streaming-scope-report-stream31-reordered",
+            "language-streaming-scope-report-stream40-empty",
+            "language-streaming-scope-report-stream40-main",
+            "language-streaming-scope-report-stream40-reordered",
+            "language-streaming-scope-report-xslt31-empty",
+            "language-streaming-scope-report-xslt31-main",
+            "language-streaming-scope-report-xslt31-reordered",
+            "language-streaming-scope-report-xslt40-empty",
+            "language-streaming-scope-report-xslt40-main",
+            "language-streaming-scope-report-xslt40-reordered",
+            "language-streaming-scope-xpath-group-31",
+            "language-streaming-scope-xpath-group-40",
+            "language-streaming-scope-xpath-group-experimental",
+            "language-streaming-scope-xpath-order-31",
+            "language-streaming-scope-xpath-order-40",
+            "language-streaming-scope-xpath-order-experimental",
+            "language-streaming-scope-xpath-where-31",
+            "language-streaming-scope-xpath-where-40",
+            "language-streaming-scope-xpath-where-experimental",
+            "language-streaming-scope-xquery-empty",
+            "language-streaming-scope-xquery-main",
+            "language-streaming-scope-xquery-reordered",
+            "language-streaming-scope-xquery-version40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Accepted where is a Bosak extension in older XPath, not proof of full standard FLWOR; actual streaming differs from capture.",
+      "remaining": "No XQuery4/full4.0 streaming conformance or general bounded-memory guarantee.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XQuery.Tests/PlaceholderTests.cs",
+          "gitBlob": "5c46364a61ab2b139666220634d33b68ae0539db",
+          "methods": [
+            "XQuery_OrderBy_WithWhere",
+            "XQuery_GroupBy_AggregatesNonGroupingVariables"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/StreamingTransformTests.cs",
+          "gitBlob": "14343d4fb1538ddca33f734a7ca613c83417bb62",
+          "methods": [
+            "ApplyTemplates_Parity",
+            "LastFunction_OverStream_RaisesStreamingError",
+            "SecondPassOverStream_RaisesForwardOnlyError",
+            "BoundedMemoryOverLargeStream"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/serialization-parameters.md": {
+      "status": "Limited serialization subset / deferred additions",
+      "contracts": [
+        {
+          "id": "C09-09-1",
+          "statement": "Nine new map keys and invalid values are ignored in the demonstrated serialize paths",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "serialization-parameters-fn-canonical",
+            "serialization-parameters-fn-canonical-main",
+            "serialization-parameters-fn-csv-header",
+            "serialization-parameters-fn-csv-method",
+            "serialization-parameters-fn-csv-quote-character",
+            "serialization-parameters-fn-csv-separator",
+            "serialization-parameters-fn-escape-solidus",
+            "serialization-parameters-fn-indent-attributes",
+            "serialization-parameters-fn-indent-unit",
+            "serialization-parameters-fn-invalid-canonical",
+            "serialization-parameters-fn-invalid-csv-header",
+            "serialization-parameters-fn-invalid-csv-quote-character",
+            "serialization-parameters-fn-invalid-csv-separator",
+            "serialization-parameters-fn-invalid-escape-solidus",
+            "serialization-parameters-fn-invalid-indent-attributes",
+            "serialization-parameters-fn-invalid-indent-unit",
+            "serialization-parameters-fn-invalid-json-lines",
+            "serialization-parameters-fn-invalid-line-ending",
+            "serialization-parameters-fn-json-lines",
+            "serialization-parameters-fn-json-lines-multiple",
+            "serialization-parameters-fn-line-ending",
+            "serialization-parameters-fn-solidus-false",
+            "serialization-parameters-fn-solidus-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-09-2",
+          "statement": "XSLT solidus yes/no controls JSON escaping; fn:serialize does not honor that new false flag",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "serialization-parameters-fn-escape-solidus",
+            "serialization-parameters-fn-invalid-escape-solidus",
+            "serialization-parameters-fn-solidus-false",
+            "serialization-parameters-fn-solidus-main",
+            "serialization-parameters-xslt-solidus-no-xslt31",
+            "serialization-parameters-xslt-solidus-no-xslt40",
+            "serialization-parameters-xslt-solidus-yes-xslt31",
+            "serialization-parameters-xslt-solidus-yes-xslt40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-09-3",
+          "statement": "json-lines does not create multiple lines implicitly; CSV method support is not established",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "serialization-parameters-fn-csv-header",
+            "serialization-parameters-fn-csv-method",
+            "serialization-parameters-fn-csv-quote-character",
+            "serialization-parameters-fn-csv-separator",
+            "serialization-parameters-fn-invalid-csv-header",
+            "serialization-parameters-fn-invalid-csv-quote-character",
+            "serialization-parameters-fn-invalid-csv-separator",
+            "serialization-parameters-fn-invalid-json-lines",
+            "serialization-parameters-fn-json-lines",
+            "serialization-parameters-fn-json-lines-multiple",
+            "serialization-parameters-portable-json-lines-empty",
+            "serialization-parameters-portable-json-lines-input",
+            "serialization-parameters-portable-json-lines-reordered",
+            "serialization-parameters-xslt-csv-header-xslt31",
+            "serialization-parameters-xslt-csv-header-xslt40",
+            "serialization-parameters-xslt-csv-quote-character-xslt31",
+            "serialization-parameters-xslt-csv-quote-character-xslt40",
+            "serialization-parameters-xslt-csv-separator-xslt31",
+            "serialization-parameters-xslt-csv-separator-xslt40",
+            "serialization-parameters-xslt-csv-xslt31",
+            "serialization-parameters-xslt-csv-xslt40",
+            "serialization-parameters-xslt-json-lines-xslt31",
+            "serialization-parameters-xslt-json-lines-xslt40"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-09-4",
+          "statement": "Portable per-record serialization plus LF join supplies explicit JSON Lines",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "serialization-parameters-fn-canonical-main",
+            "serialization-parameters-fn-solidus-main",
+            "serialization-parameters-portable-json-lines-empty",
+            "serialization-parameters-portable-json-lines-input",
+            "serialization-parameters-portable-json-lines-reordered"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "JSON arrays, JSON Lines and canonical byte serialization have different outputs and guarantees.",
+      "remaining": "New serialization additions, CSV method and canonicalization remain unsupported; ignored keys are observations.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Capture/XsltCaptureTests.cs",
+          "gitBlob": "110311f8355c95fe9a13393005ff1740596cd888",
+          "methods": [
+            "Capture_MethodFidelity_XmlHtmlTextJson"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/StylesheetTests.cs",
+          "gitBlob": "2cc8e2769cd6fffb41f86bc8342cb744be608c84",
+          "methods": [
+            "Output_Text_Method_Serializes_Only_Text"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/xslt-item-type.md": {
+      "status": "Limited implemented declaration",
+      "contracts": [
+        {
+          "id": "C09-10-1",
+          "statement": "XSLT aliases resolve in the demonstrated declaring type context",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-alias-duplicate",
+            "intake-types-alias-expanded-name",
+            "intake-types-alias-missing-as",
+            "intake-types-alias-version30",
+            "intake-types-structural-binding",
+            "intake-types-type-structural-annotated",
+            "intake-types-type-structural-map"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-10-2",
+          "statement": "A binding can coerce before membership while the original map is unchanged",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-structural-binding"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-10-3",
+          "statement": "Enum allowed/rejected values and complete intake reports retain normal/empty/reordered evidence",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-enum-allowed",
+            "intake-types-enum-rejected",
+            "intake-types-enum-treat-error",
+            "intake-types-report-3-empty",
+            "intake-types-report-3-normal",
+            "intake-types-report-3-reordered",
+            "intake-types-report-4-empty",
+            "intake-types-report-4-normal",
+            "intake-types-report-4-reordered"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "A structural alias is not a nominal host-language class; binding conversion and instance-of differ.",
+      "remaining": "No complete alias/schema/package/type-conversion acceptance; C03/C05 limits remain.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40ItemTypeTests.cs",
+          "gitBlob": "80c05a40cf69633862f4493cda507a2da3e56c0f",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40StructuralRecordAliasTests.cs",
+          "gitBlob": "ed061a8e84861027a390f28d1daa65da9f16a731",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "deferred/xslt-record-type.md": {
+      "status": "Limited implemented nominal declaration",
+      "contracts": [
+        {
+          "id": "C09-11-1",
+          "statement": "Own constructor values match their named record identity",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-nominal-own",
+            "intake-types-type-nominal-own"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-11-2",
+          "statement": "Other nominal constructors and plain maps do not gain identity from matching fields",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-nominal-other",
+            "intake-types-nominal-plain-map",
+            "intake-types-type-nominal-other"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-11-3",
+          "statement": "A missing constructor refuses XPST0017; supported bindings convert separately",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "intake-types-nominal-no-constructor"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Structural similarity, nominal identity and coercion are separate operations.",
+      "remaining": "Broader constructors/defaults/static/package/type conversion remain C03/C05/C06 scope limits.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "XSLT/deferred/host contracts use named tests/refusals/alternatives; no applicable XPath gate is invented."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40RecordPatternTests.cs",
+          "gitBlob": "392ee66e2cdc428c12d74f131e23084693649ef3",
+          "methods": [
+            "Matching"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Xslt40TypePatternTests.cs",
+          "gitBlob": "4521e6e960596bb55a9e5aaaa8db3bc25475562d",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "experimental/fn-scan.md": {
+      "status": "Verified bounded Experimental contract",
+      "contracts": [
+        {
+          "id": "C09-12-1",
+          "statement": "N+1 single-member arrays retain initial/intermediate accumulator sequence boundaries",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-scan-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-12-2",
+          "statement": "Empty input retains the seed; callback position is optional arity3 context",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-scan-edge"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-12-3",
+          "statement": "Both inline Sample Code queries execute independently verbatim",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [],
+          "probeIds": [
+            "verbatim-scan-running",
+            "verbatim-scan-empty"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-12-4",
+          "statement": "Frozen/older API refusal and finite stock-ledger baseline remain distinct",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "fn-scan-before",
+            "fn-scan-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Unlike a flat running-total list, each state is wrapped in a one-member array; folding only the final state is different.",
+      "remaining": "Experimental gate retry does not promote frozen API availability; no bounded-memory or general callback-conversion promise.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-scan"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Evaluate_Scan_XPath40Experimental_Works"
+          ]
+        },
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/atomic-equal.md": {
+      "status": "Limited atomic equality contract",
+      "contracts": [
+        {
+          "id": "C09-13-1",
+          "statement": "Equal atomic values are compared under the supported comparator",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "atomic-equal-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-13-2",
+          "statement": "NaN equals NaN for this function and incomparable families return false in the probes",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "atomic-equal-edge"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-13-3",
+          "statement": "Missing/invalid inputs retain their declared error boundaries",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "atomic-equal-before",
+            "atomic-equal-edge"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Atomic equality is not general sequence comparison, document equality or reference identity.",
+      "remaining": "Do not generalize to document/map deep equality or all comparator/type combinations.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-atomic-equal"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Compile_AtomicEqual_DefaultOptions_ThrowXpst0017",
+            "Evaluate_AtomicEqual_FrozenXPath40_Works"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/batch-extrema.md": {
+      "status": "Blocked for full current-draft extrema parity",
+      "contracts": [
+        {
+          "id": "C09-14-1",
+          "statement": "Empty input returns empty; untyped atomics convert while explicit strings compare lexically",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "batch-extrema-bad-untyped",
+            "batch-extrema-empty",
+            "batch-extrema-empty-collation",
+            "batch-extrema-empty-values",
+            "batch-extrema-qname-string",
+            "batch-extrema-string-values",
+            "batch-extrema-untyped-values"
+          ],
+          "probeIds": [
+            "extrema-empty"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-14-2",
+          "statement": "NaN contaminates extremes and incomparable families refuse FORG0006",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "batch-extrema-bad-untyped",
+            "batch-extrema-mixed-max",
+            "batch-extrema-mixed-max-observed",
+            "batch-extrema-mixed-min",
+            "batch-extrema-mixed-min-observed",
+            "batch-extrema-mixed-order-observed",
+            "batch-extrema-nan-max",
+            "batch-extrema-nan-min"
+          ],
+          "probeIds": [
+            "extrema-required-mixed"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-14-3",
+          "statement": "QName ordering uses expanded names and supplied collation/keywords retain profile boundaries",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "batch-extrema-ascii-collation",
+            "batch-extrema-codepoint-collation",
+            "batch-extrema-empty-collation",
+            "batch-extrema-keyword-values",
+            "batch-extrema-main",
+            "batch-extrema-qname-max",
+            "batch-extrema-qname-min",
+            "batch-extrema-qname-prefix",
+            "batch-extrema-qname-string",
+            "batch-extrema-unknown-collation"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-14-4",
+          "statement": "Mixed numeric comparison and winning integer-type preservation retain unmet required outcomes",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "batch-extrema-decimal-result-observed",
+            "batch-extrema-mixed-max-observed",
+            "batch-extrema-mixed-min-observed",
+            "batch-extrema-mixed-order-observed",
+            "batch-extrema-plain-duration-max-observed",
+            "batch-extrema-plain-duration-min-observed"
+          ],
+          "probeIds": [
+            "extrema-required-mixed",
+            "extrema-identity-required",
+            "extrema-empty",
+            "extrema-family-refusal"
+          ],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Numeric promotion can change the selected value/type; lexical string order is not numeric order and QName prefixes do not rank values.",
+      "remaining": "C02-F06/F08: current mixed-type selection/identity and plain-duration ordering are not fully implemented. Original observed fixtures remain observations.",
+      "gates": {
+        "applicable": false,
+        "assignedSets": [],
+        "reason": "No exact relevant gate assignment; use named engine tests and scoped examples."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs",
+          "gitBlob": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+          "methods": [
+            "MinMax_QNameOrdering_OnlyIn40"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/bounded-retries.md": {
+      "status": "Verified finite callback contract",
+      "contracts": [
+        {
+          "id": "C09-15-1",
+          "statement": "while-do tests before action; false/empty returns the whole current sequence",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "bounded-retries-while-action-error",
+            "bounded-retries-while-empty-decision",
+            "bounded-retries-while-exhausted",
+            "bounded-retries-while-initially-accepted",
+            "bounded-retries-while-main",
+            "bounded-retries-while-missing-status",
+            "bounded-retries-while-nonboolean",
+            "bounded-retries-while-noncallable-action",
+            "bounded-retries-while-noncallable-predicate",
+            "bounded-retries-while-one-attempt",
+            "bounded-retries-while-sequence-state",
+            "bounded-retries-while-zero-budget"
+          ],
+          "probeIds": [
+            "while-empty-no-action"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-15-2",
+          "statement": "do-until executes action before testing and true stops",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "bounded-retries-until-action-error",
+            "bounded-retries-until-empty-decision",
+            "bounded-retries-until-empty-state",
+            "bounded-retries-until-exhausted",
+            "bounded-retries-until-initially-accepted",
+            "bounded-retries-until-main",
+            "bounded-retries-until-missing-status",
+            "bounded-retries-until-nonboolean",
+            "bounded-retries-until-noncallable-action",
+            "bounded-retries-until-noncallable-predicate",
+            "bounded-retries-until-one-attempt",
+            "bounded-retries-until-zero-budget"
+          ],
+          "probeIds": [
+            "until-action-first"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-15-3",
+          "statement": "Callbacks receive whole state plus one-based position; state may become empty",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "bounded-retries-until-empty-decision",
+            "bounded-retries-until-empty-state",
+            "bounded-retries-until-main",
+            "bounded-retries-while-empty-decision",
+            "bounded-retries-while-main",
+            "bounded-retries-while-sequence-state"
+          ],
+          "probeIds": [
+            "while-empty-no-action"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-15-4",
+          "statement": "Predicates require boolean-or-empty; callable errors propagate in finite examples",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "bounded-retries-until-action-error",
+            "bounded-retries-until-nonboolean",
+            "bounded-retries-until-noncallable-action",
+            "bounded-retries-until-noncallable-predicate",
+            "bounded-retries-while-action-error",
+            "bounded-retries-while-nonboolean",
+            "bounded-retries-while-noncallable-action",
+            "bounded-retries-while-noncallable-predicate"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Predicate truth has opposite stop/continue meaning and callback argument order differs between the two functions.",
+      "remaining": "No automatic delay, timeout, retry ceiling or unbounded termination guarantee.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-while-do",
+          "fn-do-until"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs",
+          "gitBlob": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+          "methods": [
+            "WhileDo_PredicateInitiallyFalse_NeverCallsAction",
+            "WhileDo_ActionError_Propagates",
+            "WhileDo_WholeSequenceIsTheValue",
+            "WhileDo_PositionIncrementsFromOne",
+            "WhileDo_EmptyPredicateResultMeansFalse",
+            "DoUntil_ActionEvaluatedBeforePredicate",
+            "DoUntil_EmptyInput_StillRunsAction",
+            "DoUntil_PositionIncrementsFromOne"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/configured-label-callbacks.md": {
+      "status": "Limited frozen binding / draft adoption boundary",
+      "contracts": [
+        {
+          "id": "C09-16-1",
+          "statement": "Positive integer positions bind arguments and residual parameters retain order",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "configured-label-callbacks-all-bound",
+            "configured-label-callbacks-baseline",
+            "configured-label-callbacks-bound-sequence",
+            "configured-label-callbacks-bound-type-error",
+            "configured-label-callbacks-callable-array",
+            "configured-label-callbacks-callable-map",
+            "configured-label-callbacks-empty-bindings",
+            "configured-label-callbacks-empty-input",
+            "configured-label-callbacks-identity-baseline",
+            "configured-label-callbacks-identity-container",
+            "configured-label-callbacks-identity-empty",
+            "configured-label-callbacks-identity-labels",
+            "configured-label-callbacks-identity-node",
+            "configured-label-callbacks-identity-sequence",
+            "configured-label-callbacks-ignored-high-key",
+            "configured-label-callbacks-main",
+            "configured-label-callbacks-negative-key",
+            "configured-label-callbacks-noncallable",
+            "configured-label-callbacks-preserve-case",
+            "configured-label-callbacks-remaining-order",
+            "configured-label-callbacks-string-key",
+            "configured-label-callbacks-zero-key"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-16-2",
+          "statement": "Empty binding map preserves callable; all-bound gives zero arity; maps/arrays are callable",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "configured-label-callbacks-all-bound",
+            "configured-label-callbacks-baseline",
+            "configured-label-callbacks-bound-sequence",
+            "configured-label-callbacks-bound-type-error",
+            "configured-label-callbacks-callable-array",
+            "configured-label-callbacks-callable-map",
+            "configured-label-callbacks-empty-bindings",
+            "configured-label-callbacks-empty-input",
+            "configured-label-callbacks-identity-baseline",
+            "configured-label-callbacks-identity-container",
+            "configured-label-callbacks-identity-empty",
+            "configured-label-callbacks-identity-labels",
+            "configured-label-callbacks-identity-node",
+            "configured-label-callbacks-identity-sequence",
+            "configured-label-callbacks-ignored-high-key",
+            "configured-label-callbacks-main",
+            "configured-label-callbacks-negative-key",
+            "configured-label-callbacks-noncallable",
+            "configured-label-callbacks-preserve-case",
+            "configured-label-callbacks-remaining-order",
+            "configured-label-callbacks-string-key",
+            "configured-label-callbacks-zero-key"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-16-3",
+          "statement": "Nonpositive frozen keys refuse while current draft would ignore them",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "configured-label-callbacks-negative-key",
+            "configured-label-callbacks-zero-key"
+          ],
+          "probeIds": [
+            "partial-nonpositive-frozen",
+            "partial-nonpositive-draft",
+            "partial-residual-order",
+            "identity-nodes"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-16-4",
+          "statement": "identity preserves whole sequences, containers and node identity",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "configured-label-callbacks-identity-baseline",
+            "configured-label-callbacks-identity-container",
+            "configured-label-callbacks-identity-empty",
+            "configured-label-callbacks-identity-labels",
+            "configured-label-callbacks-identity-node",
+            "configured-label-callbacks-identity-sequence"
+          ],
+          "probeIds": [
+            "identity-nodes"
+          ],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Partial application binds one-based parameter positions, not lexical closure variables; identity does not copy nodes.",
+      "remaining": "C02-F01/F02/F08: ignored nonpositive draft keys remain unmet; metadata-dependent conversion timing is not universally eager. No exact fn-partial-apply gate.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-identity"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs",
+          "gitBlob": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+          "methods": [
+            "PartialApply_InlineFunctionBase",
+            "PartialApply_EmptyMap_ReturnsFunctionUnchanged",
+            "PartialApply_BindingAllArguments_YieldsZeroArityFunction",
+            "PartialApply_KeysBeyondArity_AreIgnored",
+            "PartialApply_ArrayAsFunction",
+            "PartialApply_BoundValueCoercion_FailsAtCallTimeWhenNoTypeMetadata",
+            "PartialApply_NonIntegerKey_RaisesXpty0004",
+            "Identity_ReturnsArgumentUnchanged"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/consecutive-partition.md": {
+      "status": "Verified bounded consecutive partition contract",
+      "contracts": [
+        {
+          "id": "C09-17-1",
+          "statement": "Partition preserves source order and nonadjacent equal routes remain separate",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "consecutive-partition-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-17-2",
+          "statement": "Predicate sees current group, next item and original one-based position",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "consecutive-partition-main"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-17-3",
+          "statement": "Empty/single input avoids unnecessary callback invocation",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "consecutive-partition-edge",
+            "consecutive-partition-singleton"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Consecutive splitting is not SQL GROUP BY or a two-way accepted/rejected filter.",
+      "remaining": "No arbitrary callback conversion or stable grouping after prefiltering guarantee.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-partition"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/XPath40FunctionTests.cs",
+          "gitBlob": "b06e8d2bc9f96a79c4fa26d2622ef0fb3c955268",
+          "methods": [
+            "Partition_FixedSizeGroups",
+            "Partition_SplitsOnValueChange",
+            "Partition_EmptyInput_ReturnsEmpty"
+          ]
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/csv-parsing.md": {
+      "status": "Limited frozen CSV/options contract",
+      "contracts": [
+        {
+          "id": "C09-18-1",
+          "statement": "parse-csv/csv-to-xml/csv-doc distinguish absent/empty/blank text and row/column structures",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "csv-contract-columns",
+            "csv-contract-parse-blank-row",
+            "csv-contract-parse-empty-fields",
+            "csv-contract-parse-empty-header",
+            "csv-contract-parse-empty-input",
+            "csv-contract-parse-empty-input-invalid-options",
+            "csv-contract-parse-empty-map",
+            "csv-contract-parse-empty-options",
+            "csv-contract-parse-empty-select",
+            "csv-contract-parse-empty-string",
+            "csv-contract-parse-empty-text-invalid-options",
+            "csv-contract-parse-trim-rows",
+            "csv-contract-report-before-empty",
+            "csv-contract-report-doc-empty",
+            "csv-contract-report-parse-empty",
+            "csv-contract-report-xml-empty",
+            "csv-contract-xml-blank-row",
+            "csv-contract-xml-empty-fields",
+            "csv-contract-xml-empty-header",
+            "csv-contract-xml-empty-input",
+            "csv-contract-xml-empty-input-invalid-options",
+            "csv-contract-xml-empty-map",
+            "csv-contract-xml-empty-options",
+            "csv-contract-xml-empty-select",
+            "csv-contract-xml-empty-string",
+            "csv-contract-xml-empty-text-invalid-options",
+            "csv-contract-xml-trim-rows"
+          ],
+          "probeIds": [
+            "csv-empty-bypass"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-18-2",
+          "statement": "Separator/quote/comment/trim/header/select options retain their frozen profile semantics",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "csv-contract-duplicate-header",
+            "csv-contract-observed-negative-select",
+            "csv-contract-observed-nonpositive-select",
+            "csv-contract-parse-after-quote",
+            "csv-contract-parse-comment",
+            "csv-contract-parse-comment-default",
+            "csv-contract-parse-custom-quote",
+            "csv-contract-parse-empty-header",
+            "csv-contract-parse-empty-input-invalid-options",
+            "csv-contract-parse-empty-options",
+            "csv-contract-parse-empty-select",
+            "csv-contract-parse-empty-text-invalid-options",
+            "csv-contract-parse-escaped-quote",
+            "csv-contract-parse-header-false",
+            "csv-contract-parse-header-true",
+            "csv-contract-parse-nonmap-options",
+            "csv-contract-parse-quoted-newline",
+            "csv-contract-parse-select-order-duplicate",
+            "csv-contract-parse-select-precedes-trim",
+            "csv-contract-parse-separator",
+            "csv-contract-parse-supplied-header",
+            "csv-contract-parse-trim-unquoted",
+            "csv-contract-parse-unknown-option",
+            "csv-contract-supplied-names-after-select",
+            "csv-contract-xml-after-quote",
+            "csv-contract-xml-comment",
+            "csv-contract-xml-comment-default",
+            "csv-contract-xml-custom-quote",
+            "csv-contract-xml-empty-header",
+            "csv-contract-xml-empty-input-invalid-options",
+            "csv-contract-xml-empty-options",
+            "csv-contract-xml-empty-select",
+            "csv-contract-xml-empty-text-invalid-options",
+            "csv-contract-xml-escaped-quote",
+            "csv-contract-xml-header-false",
+            "csv-contract-xml-header-true",
+            "csv-contract-xml-nonmap-options",
+            "csv-contract-xml-quoted-newline",
+            "csv-contract-xml-select-order-duplicate",
+            "csv-contract-xml-select-precedes-trim",
+            "csv-contract-xml-separator",
+            "csv-contract-xml-supplied-header",
+            "csv-contract-xml-trim-unquoted",
+            "csv-contract-xml-unknown-option",
+            "csv-parsing-main"
+          ],
+          "probeIds": [
+            "csv-invalid-separator"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-18-3",
+          "statement": "Resource/encoding/base-URI and error paths use explicit local fixtures",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "csv-contract-report-doc-duplicate",
+            "csv-contract-report-doc-empty",
+            "csv-contract-report-doc-invalid",
+            "csv-contract-report-doc-malformed",
+            "csv-contract-report-doc-normal",
+            "csv-contract-report-doc-reordered",
+            "csv-contract-report-parse-malformed",
+            "csv-contract-report-xml-malformed"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-18-4",
+          "statement": "Frozen positive indices/get bounds differ from the current draft; absent input bypasses option inspection",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "csv-contract-parse-empty-fields",
+            "csv-contract-parse-empty-header",
+            "csv-contract-parse-empty-input",
+            "csv-contract-parse-empty-input-invalid-options",
+            "csv-contract-parse-empty-map",
+            "csv-contract-parse-empty-options",
+            "csv-contract-parse-empty-select",
+            "csv-contract-parse-empty-string",
+            "csv-contract-parse-empty-text-invalid-options",
+            "csv-contract-report-before-empty",
+            "csv-contract-report-doc-empty",
+            "csv-contract-report-parse-empty",
+            "csv-contract-report-xml-empty",
+            "csv-contract-xml-empty-fields",
+            "csv-contract-xml-empty-header",
+            "csv-contract-xml-empty-input",
+            "csv-contract-xml-empty-input-invalid-options",
+            "csv-contract-xml-empty-map",
+            "csv-contract-xml-empty-options",
+            "csv-contract-xml-empty-select",
+            "csv-contract-xml-empty-string",
+            "csv-contract-xml-empty-text-invalid-options"
+          ],
+          "probeIds": [
+            "csv-empty-bypass"
+          ],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "CSV syntax parsing is not business numeric validation; the3.1 host-parsed array baseline is not another CSV parser.",
+      "remaining": "C02-F03/F12: namespaced unknown options and newer index/get policy remain unsupported/not adopted; no remote/schema completeness.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-parse-csv",
+          "fn-csv-to-xml",
+          "fn-csv-doc"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Api.Tests/VersionGateTests.cs",
+          "gitBlob": "c76cc1bc3e331dc8e640a7e1caeb8efada1d3758",
+          "methods": [
+            "Compile_CsvFunctions_DefaultOptions_ThrowXpst0017",
+            "Evaluate_ParseCsv_FrozenXPath40_Works"
+          ]
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/CsvResourceContractTests.cs",
+          "gitBlob": "df899d0e64d58a51b2bb4ffeefe0bf7046de8517",
+          "methods": [
+            "LocalResource_UsesOptions",
+            "LocalResource_EncodingAndEmptyRows",
+            "LocalResource_PreservesErrors",
+            "MissingResource_RaisesFout1170",
+            "Keywords_ReadLocalResource",
+            "EmptySource_BypassesOptionInspection"
+          ]
+        },
+        {
+          "file": "tests/Bosak.XPath.Standard.Tests/CsvTests.cs",
+          "gitBlob": "f4f1b2bd60c1f641ebd85f3f9997ca05e0a69cd3",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": [
+            "PublishedExample_MatchesDeclaredOutcome"
+          ]
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    },
+    "functions/customer-reference-matching.md": {
+      "status": "Limited equality/collation contracts",
+      "contracts": [
+        {
+          "id": "C09-19-1",
+          "statement": "distinct-values representatives/order are not a business insertion-order guarantee",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "equality-contract-distinct-ascii",
+            "equality-contract-distinct-codepoint",
+            "equality-contract-distinct-empty",
+            "equality-contract-distinct-empty-collation",
+            "equality-contract-distinct-keyword-31",
+            "equality-contract-distinct-keyword-40",
+            "equality-contract-distinct-keyword-experimental",
+            "equality-contract-distinct-nan",
+            "equality-contract-distinct-unknown-collation"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-19-2",
+          "statement": "index-of returns all one-based positions; deep-equal is sequence/order sensitive",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "equality-contract-deep-empty-collation",
+            "equality-contract-deep-keyword-31",
+            "equality-contract-deep-keyword-40",
+            "equality-contract-deep-keyword-experimental",
+            "equality-contract-deep-map-keys",
+            "equality-contract-deep-map-values",
+            "equality-contract-deep-nan",
+            "equality-contract-deep-options-map",
+            "equality-contract-deep-reordered",
+            "equality-contract-deep-same-order",
+            "equality-contract-index-ascii",
+            "equality-contract-index-codepoint",
+            "equality-contract-index-empty",
+            "equality-contract-index-empty-collation",
+            "equality-contract-index-empty-target",
+            "equality-contract-index-keyword-31",
+            "equality-contract-index-keyword-40",
+            "equality-contract-index-keyword-experimental",
+            "equality-contract-index-nan",
+            "equality-contract-index-unknown-collation"
+          ],
+          "probeIds": [],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-19-3",
+          "statement": "NaN and explicit collation behavior retain function-specific distinctions",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "equality-contract-compare-ascii",
+            "equality-contract-compare-unknown-collation",
+            "equality-contract-deep-empty-collation",
+            "equality-contract-deep-nan",
+            "equality-contract-distinct-ascii",
+            "equality-contract-distinct-empty-collation",
+            "equality-contract-distinct-nan",
+            "equality-contract-distinct-unknown-collation",
+            "equality-contract-index-ascii",
+            "equality-contract-index-empty-collation",
+            "equality-contract-index-nan",
+            "equality-contract-index-unknown-collation",
+            "equality-contract-token-ascii-boundary",
+            "equality-contract-token-empty",
+            "equality-contract-token-empty-collation",
+            "equality-contract-token-keyword-31",
+            "equality-contract-token-keyword-40",
+            "equality-contract-token-keyword-experimental",
+            "equality-contract-token-substring",
+            "equality-contract-token-two-words",
+            "equality-contract-token-unknown-collation",
+            "equality-contract-token-whole"
+          ],
+          "probeIds": [
+            "equality-nan-distinct"
+          ],
+          "inheritedEvidence": []
+        },
+        {
+          "id": "C09-19-4",
+          "statement": "Empty index collation, compare keywords and unsupported deep-equal maps retain documented boundaries",
+          "evidenceScope": "Linked case receipts and named tests; complete conditions/results remain inspectable, not universal coverage.",
+          "caseIds": [
+            "equality-contract-compare-draft-keyword-31",
+            "equality-contract-compare-draft-keyword-40",
+            "equality-contract-compare-draft-keyword-experimental",
+            "equality-contract-compare-empty",
+            "equality-contract-compare-implemented-keyword-31",
+            "equality-contract-compare-implemented-keyword-40",
+            "equality-contract-compare-implemented-keyword-experimental",
+            "equality-contract-deep-empty-collation",
+            "equality-contract-deep-keyword-31",
+            "equality-contract-deep-keyword-40",
+            "equality-contract-deep-keyword-experimental",
+            "equality-contract-deep-options-map",
+            "equality-contract-distinct-empty",
+            "equality-contract-distinct-empty-collation",
+            "equality-contract-distinct-keyword-31",
+            "equality-contract-distinct-keyword-40",
+            "equality-contract-distinct-keyword-experimental",
+            "equality-contract-index-empty",
+            "equality-contract-index-empty-collation",
+            "equality-contract-index-empty-target",
+            "equality-contract-index-keyword-31",
+            "equality-contract-index-keyword-40",
+            "equality-contract-index-keyword-experimental",
+            "equality-contract-report-empty-31",
+            "equality-contract-report-empty-40",
+            "equality-contract-token-empty",
+            "equality-contract-token-empty-collation",
+            "equality-contract-token-keyword-31",
+            "equality-contract-token-keyword-40",
+            "equality-contract-token-keyword-experimental"
+          ],
+          "probeIds": [
+            "equality-options-refused"
+          ],
+          "inheritedEvidence": []
+        }
+      ],
+      "languageAlignment": "Host Set/Distinct, reference equality, default culture and Unicode normalization must not silently replace XPath contracts.",
+      "remaining": "C02-F01/F09: no deep-equal options maps, complete UCA/normalization, metadata or full comparator acceptance. Other three fn sets are not gated.",
+      "gates": {
+        "applicable": true,
+        "assignedSets": [
+          "fn-compare",
+          "fn-contains-token"
+        ],
+        "reason": "Existing gated XPath sets apply only within retained frozen scope; scan uses Experimental retry."
+      },
+      "namedTests": [
+        {
+          "file": "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs",
+          "gitBlob": "cbbe665a3aa23b006993cc002ab7e383c8f317df",
+          "methods": []
+        },
+        {
+          "file": "tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs",
+          "gitBlob": "3c13602651ac208808900cbb2358d74b56e18563",
+          "methods": []
+        }
+      ],
+      "acceptance": "Per-contract limits recorded; final owner acceptance remains C13"
+    }
+  },
+  "policy": "Complete19-entry review only. Retain known current-draft unmet outcomes and explicit unsupported/adoption limits; no gate/profile promotion or owner semantic acceptance."
+}

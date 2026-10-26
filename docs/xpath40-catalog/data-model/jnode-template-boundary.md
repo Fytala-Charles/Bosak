@@ -4,6 +4,8 @@
   <p>Deferred remainder; partial Frozen 4.0</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Known model blocker**. C05-K01: current generic-node membership remains unmet in both4 profiles; full model/template acceptance stays blocked. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **JNode model and template boundary — Deferred remainder; partial Frozen 4.0.** Shipped delivery remains [PR #116](https://github.com/Fytala-Charles/Bosak/pull/116), [revision 345ae58e](https://github.com/Fytala-Charles/Bosak/commit/345ae58e5f8e35d1b504aa0a7df250e3eaf88dd0). Scope review: 2026-10-12, engine 1.1.2, [revision 3c0bd599](https://github.com/Fytala-Charles/Bosak/commit/3c0bd5994baf4fa85b1db5805fc5c081d63c50ee). This reconciles the [original full-model exclusion](../../REQ-118-xpath-xslt-40.md) with partial delivered support.

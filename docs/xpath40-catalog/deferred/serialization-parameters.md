@@ -4,6 +4,8 @@
   <p>Deferred additions — existing serialization and portable invoice export</p>
 </div>
 
+**C09 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-1.md) records 4 contract groups with exact sample/context, applicable evidence and language-alignment limits. Status: **Limited serialization subset / deferred additions**. New serialization additions, CSV method and canonicalization remain unsupported; ignored keys are observations. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Serialization 4.0 parameter additions — Deferred, with a supported XSLT solidus control.** [REQ-118 tier-4 decision](../../REQ-118-xpath-xslt-40.md) remains; it must not imply that all serialization is missing. Bosak engine 1.1.2 reviewed against [revision 23218073](https://github.com/Fytala-Charles/Bosak/commit/232180733358fc4239229267763854fda0fa2791).

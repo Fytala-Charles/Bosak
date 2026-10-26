@@ -1,0 +1,2887 @@
+{
+  "data-model/jnode-navigation.md": {
+    "caseIds": [
+      "jnode-navigation-before",
+      "jnode-navigation-edge",
+      "jnode-navigation-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/jnode-navigation/before.xpath",
+      "docs/xpath40-catalog/examples/jnode-navigation/edge.xpath",
+      "docs/xpath40-catalog/examples/jnode-navigation/main.xpath",
+      "docs/xpath40-catalog/TYPE-COLLECTION-PATTERN-RECONCILIATION.json"
+    ],
+    "blocks": []
+  },
+  "data-model/jnode-template-boundary.md": {
+    "caseIds": [
+      "jnode-scope-array-keys",
+      "jnode-scope-attribute-axis",
+      "jnode-scope-identity",
+      "jnode-scope-missing-key",
+      "jnode-scope-navigation-empty",
+      "jnode-scope-navigation-main",
+      "jnode-scope-navigation-reordered",
+      "jnode-scope-parent-value",
+      "jnode-scope-portable-empty",
+      "jnode-scope-portable-main",
+      "jnode-scope-portable-reordered",
+      "jnode-scope-root-parent",
+      "jnode-scope-type-jnode",
+      "jnode-scope-type-node",
+      "jnode-scope-wrong-jvalue",
+      "jnode-scope-xnode-type-31",
+      "jnode-scope-xnode-type-40",
+      "jnode-scope-xnode-type-experimental",
+      "jnode-template-boundary-navigation"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/jnode-scope/array-keys.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/attribute-axis.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/identity.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/missing-key.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/navigation-empty.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/navigation-main.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/navigation-reordered.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/parent-value.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/portable-empty.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/portable-main.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/portable-reordered.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/root-parent.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/type-jnode.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/type-node.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/wrong-jvalue.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/xnode-type-31.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/xnode-type-40.xpath",
+      "docs/xpath40-catalog/examples/jnode-scope/xnode-type-experimental.xpath",
+      "docs/xpath40-catalog/examples/jnode-template-boundary/navigation.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "json",
+        "code": "{\"invoices\":[{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30},{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12}]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/navigation-main.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/portable-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "(: Partner invoice batch: navigate JNodes, unwrap each invoice map for reporting. :)\nlet $tree := jtree(parse-json('{\"invoices\":[{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30},{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12}]}'))\nreturn string-join($tree / invoices / * ! (let $invoice := jvalue(.) return concat($invoice?id, '/', $invoice?currency, ':', format-number($invoice?total, '0.00'))), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/navigation-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/navigation-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xpath",
+        "code": "(: Portable 3.1: plain map/array lookup, without JNode identity or parent context. :)\nlet $batch := parse-json('{\"invoices\":[{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30},{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12}]}')\nreturn string-join($batch?invoices?* ! concat(?id, '/', ?currency, ':', format-number(?total, '0.00')), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/portable-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/portable-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00;INV-1043/USD:12.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "jnode-scope-navigation-main",
+          "jnode-scope-portable-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "json",
+        "code": "{\"invoices\":[]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/portable-empty.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/navigation-empty.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "json",
+        "code": "{\"invoices\":[{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12},{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30}]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/navigation-reordered.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/portable-reordered.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "INV-1043/USD:12.00;INV-1042/EUR:30.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "jnode-scope-navigation-reordered",
+          "jnode-scope-portable-reordered"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "xpath",
+        "code": "let $tree := jtree(map{'id':'INV-1042'}) return $tree is $tree",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/identity.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/identity.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xpath",
+        "code": "jtree(map{'id':'INV-1042'}) instance of node()",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/type-node.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/type-node.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 9,
+        "language": "xpath",
+        "code": "parse-xml('<invoice/>') instance of xnode()",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-experimental.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-31.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-40.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-31.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-40.xpath",
+          "docs/xpath40-catalog/examples/jnode-scope/xnode-type-experimental.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/capturing-accumulators.md": {
+    "caseIds": [
+      "capturing-accumulators-capture-absent",
+      "capturing-accumulators-capture-empty",
+      "capturing-accumulators-capture-no",
+      "capturing-accumulators-capture31",
+      "capturing-accumulators-invalid-capture-observed",
+      "capturing-accumulators-main-observed",
+      "capturing-accumulators-not-applicable",
+      "capturing-accumulators-ordinary-counter",
+      "capturing-accumulators-ordinary31",
+      "capturing-accumulators-projection-empty",
+      "capturing-accumulators-projection31",
+      "capturing-accumulators-snapshot-empty",
+      "capturing-accumulators-snapshot-reordered",
+      "capturing-accumulators-snapshot31",
+      "capturing-accumulators-start-capture-observed",
+      "capturing-accumulators-unknown-accumulator"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/capturing-accumulators/capture-absent.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/capture-empty.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/capture-no.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/capture31.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/empty.xml",
+      "docs/xpath40-catalog/examples/capturing-accumulators/input.xml",
+      "docs/xpath40-catalog/examples/capturing-accumulators/invalid-capture-observed.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/main-observed.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/not-applicable.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/ordinary-counter.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/ordinary31.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/projection-empty.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/projection31.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/reordered.xml",
+      "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-empty.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-reordered.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/snapshot31.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/start-capture-observed.xsl",
+      "docs/xpath40-catalog/examples/capturing-accumulators/unknown-accumulator.xsl",
+      "docs/xpath40-catalog/examples/cases.json"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<batch><invoice id=\"INV-2048\" currency=\"EUR\"><line sku=\"P100\"/><line sku=\"P200\"/></invoice><invoice id=\"INV-2049\" currency=\"USD\"><line sku=\"P300\"/></invoice></batch>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/input.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/input.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred capturing accumulators and in-memory invoice alternatives.\nSPECIAL NOTES: Capture attribute acceptance is not snapshot support; no streaming claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice id and line children. Output: exact identity/line-count report.\nThe retained ordinary accumulator value is a source node. Explicit snapshot creates\na new node; it is not the capture rule's special no-accumulator-values contract.\nAll catalog cases use ordinary in-memory CaptureTransform, not TransformStreaming.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"4.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:accumulator name=\"latest\" initial-value=\"()\">\n    <xsl:accumulator-rule match=\"invoice\" phase=\"end\" capture=\"yes\" select=\".\"/>\n  </xsl:accumulator>\n  <xsl:mode use-accumulators=\"latest\"/>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\"/>\n  </xsl:template>\n  <xsl:template match=\"invoice\">\n    <xsl:variable name=\"last\" select=\"accumulator-after('latest')\"/>\n    <xsl:value-of select=\"concat(@id, ':source=', $last is ., ':lines=', count($last/line), ';')\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/capture-empty.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/main-observed.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/capture-empty.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/main-observed.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "INV-2048:source=true:lines=2;INV-2049:source=true:lines=1;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "capturing-accumulators-capture-absent",
+          "capturing-accumulators-capture-no",
+          "capturing-accumulators-capture31",
+          "capturing-accumulators-invalid-capture-observed",
+          "capturing-accumulators-main-observed",
+          "capturing-accumulators-ordinary31",
+          "capturing-accumulators-start-capture-observed"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred capturing accumulators and in-memory invoice alternatives.\nSPECIAL NOTES: Capture attribute acceptance is not snapshot support; no streaming claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice id and line children. Output: exact identity/line-count report.\nThe retained ordinary accumulator value is a source node. Explicit snapshot creates\na new node; it is not the capture rule's special no-accumulator-values contract.\nAll catalog cases use ordinary in-memory CaptureTransform, not TransformStreaming.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"3.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\"/>\n  </xsl:template>\n  <xsl:template match=\"invoice\">\n    <xsl:variable name=\"copy\" select=\"snapshot(.)\"/>\n    <xsl:value-of select=\"concat(@id, ':source=', $copy is ., ':lines=', count($copy/line), ';')\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot31.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-reordered.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-empty.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-empty.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot-reordered.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/snapshot31.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "INV-2048:source=false:lines=2;INV-2049:source=false:lines=1;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "capturing-accumulators-snapshot31"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred capturing accumulators and in-memory invoice alternatives.\nSPECIAL NOTES: Capture attribute acceptance is not snapshot support; no streaming claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice id and line children. Output: exact identity/line-count report.\nThe retained ordinary accumulator value is a source node. Explicit snapshot creates\na new node; it is not the capture rule's special no-accumulator-values contract.\nAll catalog cases use ordinary in-memory CaptureTransform, not TransformStreaming.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"3.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\"/>\n  </xsl:template>\n  <xsl:template match=\"invoice\">\n    <xsl:value-of select=\"concat(@id, ':lines=', count(line), ';')\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/projection31.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/projection-empty.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/projection-empty.xsl",
+          "docs/xpath40-catalog/examples/capturing-accumulators/projection31.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "INV-2048:lines=2;INV-2049:lines=1;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "capturing-accumulators-projection31"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "xml",
+        "code": "<batch/>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/empty.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/empty.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xml",
+        "code": "<batch><invoice id=\"INV-2049\" currency=\"USD\"><line sku=\"P300\"/></invoice><invoice id=\"INV-2048\" currency=\"EUR\"><line sku=\"P200\"/><line sku=\"P100\"/></invoice></batch>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/reordered.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/capturing-accumulators/reordered.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 9,
+        "language": "text",
+        "code": "INV-2049:source=false:lines=1;INV-2048:source=false:lines=2;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "capturing-accumulators-snapshot-reordered"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/computed-node-constructors.md": {
+    "caseIds": [
+      "computed-xpath-constructors-attribute-31",
+      "computed-xpath-constructors-attribute-40",
+      "computed-xpath-constructors-attribute-experimental",
+      "computed-xpath-constructors-baseline",
+      "computed-xpath-constructors-baseline-empty",
+      "computed-xpath-constructors-baseline-escaped",
+      "computed-xpath-constructors-comment-31",
+      "computed-xpath-constructors-comment-40",
+      "computed-xpath-constructors-comment-experimental",
+      "computed-xpath-constructors-direct-element-31",
+      "computed-xpath-constructors-direct-element-40",
+      "computed-xpath-constructors-direct-element-experimental",
+      "computed-xpath-constructors-document-31",
+      "computed-xpath-constructors-document-40",
+      "computed-xpath-constructors-document-experimental",
+      "computed-xpath-constructors-element-31",
+      "computed-xpath-constructors-element-40",
+      "computed-xpath-constructors-element-experimental",
+      "computed-xpath-constructors-main-refusal",
+      "computed-xpath-constructors-namespace-31",
+      "computed-xpath-constructors-namespace-40",
+      "computed-xpath-constructors-namespace-experimental",
+      "computed-xpath-constructors-processing-instruction-31",
+      "computed-xpath-constructors-processing-instruction-40",
+      "computed-xpath-constructors-processing-instruction-experimental",
+      "computed-xpath-constructors-text-31",
+      "computed-xpath-constructors-text-40",
+      "computed-xpath-constructors-text-experimental",
+      "computed-xpath-constructors-xslt-empty",
+      "computed-xpath-constructors-xslt-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/attribute-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline-empty.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline-escaped.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/comment-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/direct-element-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/document-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/document-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/document-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/element-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/element-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/element-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/empty.xml",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/input.xml",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/main-refusal.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/namespace-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/processing-instruction-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/text-31.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/text-40.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/text-experimental.xpath",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-empty.xsl",
+      "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-main.xsl"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<invoice id=\"INV-2048\"><customer>Ada &amp; Co</customer><amount currency=\"EUR\">125.50</amount></invoice>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/input.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/main-refusal.xpath",
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline.xpath",
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/input.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $i := parse-xml('<invoice id=\"INV-2048\"><customer>Ada &amp; Co</customer><amount currency=\"EUR\">125.50</amount></invoice>')/invoice\nreturn element { 'receipt' } { attribute { 'id' } { string($i/@id) }, element { 'customer' } { string($i/customer) }, element { 'total' } { attribute { 'currency' } { string($i/amount/@currency) }, string($i/amount) } }",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/main-refusal.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/main-refusal.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xpath",
+        "code": "let $i := parse-xml('<invoice id=\"INV-2048\"><customer>Ada &amp; Co</customer><amount currency=\"EUR\">125.50</amount></invoice>')/invoice return concat('id=', $i/@id, '; customer=', $i/customer, '; total=', $i/amount, ' ', $i/amount/@currency)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "id=INV-2048; customer=Ada & Co; total=125.50 EUR",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "computed-xpath-constructors-baseline"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Project a supplier invoice into an ERP receipt using portable XSLT 3.0.\nSPECIAL NOTES: Alternative to deferred computed XPath node constructors; no external I/O.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\n\nInput contract: invoice/@id, customer text, amount text and amount/@currency.\nThe stylesheet projects supplied strings; it does not validate currency or totals.\nXSLT node construction escapes XML characters through the serializer.\nEmpty customer content creates an empty customer element. Attribute instructions\nprecede child nodes. No computed XPath constructor expression is required.\n-->\n<xsl:stylesheet version=\"3.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\n  <xsl:output method=\"xml\" omit-xml-declaration=\"yes\" indent=\"no\"/>\n  <xsl:template match=\"/invoice\">\n    <xsl:element name=\"receipt\">\n      <xsl:attribute name=\"id\" select=\"string(@id)\"/>\n      <customer><xsl:value-of select=\"customer\"/></customer>\n      <total><xsl:attribute name=\"currency\" select=\"string(amount/@currency)\"/><xsl:value-of select=\"amount\"/></total>\n    </xsl:element>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-empty.xsl",
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-main.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-empty.xsl",
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/xslt-main.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<receipt id=\"INV-2048\"><customer>Ada &amp; Co</customer><total currency=\"EUR\">125.50</total></receipt>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "computed-xpath-constructors-xslt-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "xml",
+        "code": "<invoice id=\"INV-EMPTY\"><customer/><amount currency=\"EUR\">0.00</amount></invoice>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/empty.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/baseline-empty.xpath",
+          "docs/xpath40-catalog/examples/computed-xpath-constructors/empty.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "xml",
+        "code": "<receipt id=\"INV-EMPTY\"><customer/><total currency=\"EUR\">0.00</total></receipt>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "computed-xpath-constructors-xslt-empty"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xquery",
+        "code": "(name(element { \"dyn\" } { 1, 2, 3 }), string(element { \"dyn\" } { 1, 2, 3 }))",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [
+          "verbatim-computed-xquery"
+        ]
+      }
+    ]
+  },
+  "deferred/enclosing-modes.md": {
+    "caseIds": [
+      "enclosing-modes-audit",
+      "enclosing-modes-current-mode",
+      "enclosing-modes-default-conflict",
+      "enclosing-modes-duplicate",
+      "enclosing-modes-empty-declaration",
+      "enclosing-modes-explicit-child-mode",
+      "enclosing-modes-external-rule",
+      "enclosing-modes-lexical-default-mode",
+      "enclosing-modes-main-refusal3",
+      "enclosing-modes-main-refusal4",
+      "enclosing-modes-missing-child-match",
+      "enclosing-modes-named-child",
+      "enclosing-modes-namespace-alias",
+      "enclosing-modes-omitted-recursion-mode",
+      "enclosing-modes-portable-empty",
+      "enclosing-modes-portable-reordered",
+      "enclosing-modes-portable-reverse",
+      "enclosing-modes-portable3",
+      "enclosing-modes-portable4",
+      "enclosing-modes-unnamed"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/enclosing-modes/audit.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/current-mode.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/default-conflict.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/duplicate.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/empty-declaration.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/empty.xml",
+      "docs/xpath40-catalog/examples/enclosing-modes/explicit-child-mode.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/external-rule.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/input.xml",
+      "docs/xpath40-catalog/examples/enclosing-modes/lexical-default-mode.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/main-refusal3.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/main-refusal4.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/missing-child-match.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/named-child.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/namespace-alias.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/omitted-recursion-mode.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/portable-empty.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/portable-reordered.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/portable-reverse.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/portable3.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/portable4.xsl",
+      "docs/xpath40-catalog/examples/enclosing-modes/reordered.xml",
+      "docs/xpath40-catalog/examples/enclosing-modes/unnamed.xsl"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<batch><invoice id=\"INV-2048\" currency=\"EUR\"><line sku=\"P100\"/><line sku=\"P200\"/></invoice><invoice id=\"INV-2049\" currency=\"USD\"><line sku=\"P300\"/></invoice></batch>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/input.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/input.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred enclosing modes and portable invoice export/audit dispatch.\nSPECIAL NOTES: Named top-level rules are the supported alternative; no external I/O.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice attributes and ordered line/@sku values. Output: text report.\nInvoice and line rules share the export mode. Explicit mode or #current retains\nexport dispatch during recursion; omitted mode uses the lexical default instead.\nThese projections do not validate invoice data or enforce enclosing-mode isolation.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:erp=\"urn:example:erp\" xmlns:q=\"urn:example:erp\" version=\"4.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:mode name=\"erp:export\">\n    <xsl:template match=\"invoice\">\n      <xsl:value-of select=\"concat(@id, ':', @currency, ':')\"/>\n      <xsl:apply-templates select=\"line\"/>\n      <xsl:text>;</xsl:text>\n    </xsl:template>\n    <xsl:template match=\"line\">\n      <xsl:value-of select=\"concat(@sku, '/')\"/>\n    </xsl:template>\n  </xsl:mode>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\" mode=\"erp:export\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/main-refusal4.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/main-refusal4.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred enclosing modes and portable invoice export/audit dispatch.\nSPECIAL NOTES: Named top-level rules are the supported alternative; no external I/O.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice attributes and ordered line/@sku values. Output: text report.\nInvoice and line rules share the export mode. Explicit mode or #current retains\nexport dispatch during recursion; omitted mode uses the lexical default instead.\nThese projections do not validate invoice data or enforce enclosing-mode isolation.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:erp=\"urn:example:erp\" xmlns:q=\"urn:example:erp\" version=\"3.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:mode name=\"erp:export\"/>\n  <xsl:template match=\"invoice\" mode=\"erp:export\">\n    <xsl:value-of select=\"concat(@id, ':', @currency, ':')\"/>\n    <xsl:apply-templates select=\"line\" mode=\"erp:export\"/>\n    <xsl:text>;</xsl:text>\n  </xsl:template>\n  <xsl:template match=\"line\" mode=\"erp:export\">\n    <xsl:value-of select=\"concat(@sku, '/')\"/>\n  </xsl:template>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\" mode=\"erp:export\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/portable3.xsl",
+          "docs/xpath40-catalog/examples/enclosing-modes/portable-reordered.xsl",
+          "docs/xpath40-catalog/examples/enclosing-modes/portable-empty.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/portable-empty.xsl",
+          "docs/xpath40-catalog/examples/enclosing-modes/portable-reordered.xsl",
+          "docs/xpath40-catalog/examples/enclosing-modes/portable3.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "INV-2048:EUR:P100/P200/;INV-2049:USD:P300/;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "enclosing-modes-current-mode",
+          "enclosing-modes-lexical-default-mode",
+          "enclosing-modes-namespace-alias",
+          "enclosing-modes-portable3",
+          "enclosing-modes-portable4"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify deferred enclosing modes and portable invoice export/audit dispatch.\nSPECIAL NOTES: Named top-level rules are the supported alternative; no external I/O.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: batch/invoice attributes and ordered line/@sku values. Output: text report.\nInvoice and line rules share the export mode. Explicit mode or #current retains\nexport dispatch during recursion; omitted mode uses the lexical default instead.\nThese projections do not validate invoice data or enforce enclosing-mode isolation.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:erp=\"urn:example:erp\" xmlns:q=\"urn:example:erp\" version=\"3.0\">\n  <xsl:output method=\"text\"/>\n  <xsl:mode name=\"erp:export\"/>\n  <xsl:template match=\"invoice\" mode=\"erp:export\">\n    <xsl:value-of select=\"concat(@id, ':', @currency, ':')\"/>\n    <xsl:apply-templates select=\"line\"/>\n    <xsl:text>;</xsl:text>\n  </xsl:template>\n  <xsl:template match=\"line\" mode=\"erp:export\">\n    <xsl:value-of select=\"concat(@sku, '/')\"/>\n  </xsl:template>\n  <xsl:template match=\"line\">\n    <xsl:text>wrong/</xsl:text>\n  </xsl:template>\n  <xsl:template match=\"/\">\n    <xsl:apply-templates select=\"batch/invoice\" mode=\"erp:export\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/omitted-recursion-mode.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/omitted-recursion-mode.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "text",
+        "code": "INV-2048:EUR:wrong/wrong/;INV-2049:USD:wrong/;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "enclosing-modes-omitted-recursion-mode"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "xml",
+        "code": "<batch/>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/empty.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/empty.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "xml",
+        "code": "<batch><invoice id=\"INV-2049\" currency=\"USD\"><line sku=\"P300\"/></invoice><invoice id=\"INV-2048\" currency=\"EUR\"><line sku=\"P200\"/><line sku=\"P100\"/></invoice></batch>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/reordered.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/enclosing-modes/reordered.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "text",
+        "code": "INV-2049:USD:P300/;INV-2048:EUR:P200/P100/;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "enclosing-modes-portable-reordered"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/external-input-functions.md": {
+    "caseIds": [
+      "external-input-functions-binary-empty",
+      "external-input-functions-binary-invalid",
+      "external-input-functions-binary-main",
+      "external-input-functions-binary-zero-octet",
+      "external-input-functions-fixed-record-empty",
+      "external-input-functions-fixed-record-main",
+      "external-input-functions-fixed-record-second",
+      "external-input-functions-html-doc-31-0",
+      "external-input-functions-html-doc-31-1",
+      "external-input-functions-html-doc-40-0",
+      "external-input-functions-html-doc-40-1",
+      "external-input-functions-html-doc-experimental-0",
+      "external-input-functions-html-doc-experimental-1",
+      "external-input-functions-html-doc-lookup-31",
+      "external-input-functions-html-doc-lookup-40",
+      "external-input-functions-invisible-xml-31-0",
+      "external-input-functions-invisible-xml-31-1",
+      "external-input-functions-invisible-xml-31-2",
+      "external-input-functions-invisible-xml-40-0",
+      "external-input-functions-invisible-xml-40-1",
+      "external-input-functions-invisible-xml-40-2",
+      "external-input-functions-invisible-xml-experimental-0",
+      "external-input-functions-invisible-xml-experimental-1",
+      "external-input-functions-invisible-xml-experimental-2",
+      "external-input-functions-invisible-xml-lookup-31",
+      "external-input-functions-invisible-xml-lookup-40",
+      "external-input-functions-invoice-guard-empty",
+      "external-input-functions-invoice-guard-invalid",
+      "external-input-functions-invoice-guard-main",
+      "external-input-functions-invoice-guard-zero",
+      "external-input-functions-normalized-xml-empty",
+      "external-input-functions-normalized-xml-main",
+      "external-input-functions-normalized-xml-reordered",
+      "external-input-functions-parse-html-31-0",
+      "external-input-functions-parse-html-31-1",
+      "external-input-functions-parse-html-40-0",
+      "external-input-functions-parse-html-40-1",
+      "external-input-functions-parse-html-experimental-0",
+      "external-input-functions-parse-html-experimental-1",
+      "external-input-functions-parse-html-lookup-31",
+      "external-input-functions-parse-html-lookup-40",
+      "external-input-functions-unparsed-binary-31-0",
+      "external-input-functions-unparsed-binary-40-0",
+      "external-input-functions-unparsed-binary-experimental-0",
+      "external-input-functions-unparsed-binary-lookup-31",
+      "external-input-functions-unparsed-binary-lookup-40",
+      "external-input-functions-xml-is-not-html",
+      "external-input-functions-xsd-validator-31-0",
+      "external-input-functions-xsd-validator-31-1",
+      "external-input-functions-xsd-validator-40-0",
+      "external-input-functions-xsd-validator-40-1",
+      "external-input-functions-xsd-validator-experimental-0",
+      "external-input-functions-xsd-validator-experimental-1",
+      "external-input-functions-xsd-validator-lookup-31",
+      "external-input-functions-xsd-validator-lookup-40"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/external-input-functions/binary-empty.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/binary-invalid.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/binary-main.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/binary-zero-octet.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/fixed-record-empty.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/fixed-record-main.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/fixed-record-second.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-31-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-31-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-40-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-40-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-experimental-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-experimental-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-lookup-31.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/html-doc-lookup-40.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-31-2.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-40-2.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-experimental-2.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-lookup-31.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invisible-xml-lookup-40.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-empty.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-invalid.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-main.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-zero.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-empty.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-reordered.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-31-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-31-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-40-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-40-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-experimental-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-experimental-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-lookup-31.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/parse-html-lookup-40.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-31-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-40-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-experimental-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-lookup-31.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/unparsed-binary-lookup-40.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xml-is-not-html.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-31-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-31-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-40-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-40-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-experimental-0.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-experimental-1.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-lookup-31.xpath",
+      "docs/xpath40-catalog/examples/external-input-functions/xsd-validator-lookup-40.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "html",
+        "code": "<p>Invoice<br>INV-1042</p>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/xml-is-not-html.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30.00\"/><invoice id=\"INV-1043\" currency=\"USD\" total=\"12.00\"/></invoices>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xpath",
+        "code": "(: Host supplies well-formed invoice XML after acquisition/HTML normalization. :)\nlet $batch := parse-xml('<invoices><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30.00\"/><invoice id=\"INV-1043\" currency=\"USD\" total=\"12.00\"/></invoices>')\nreturn string-join($batch/invoices/invoice ! concat(@id, '/', @currency, ':', format-number(xs:decimal(@total), '0.00')), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00;INV-1043/USD:12.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-normalized-xml-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "xml",
+        "code": "<invoices/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-empty.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1043\" currency=\"USD\" total=\"12.00\"/><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30.00\"/></invoices>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-reordered.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "INV-1043/USD:12.00;INV-1042/EUR:30.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-normalized-xml-reordered"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "text",
+        "code": "INV-1042|EUR|30.00",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/fixed-record-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xpath",
+        "code": "(: Fixed three-field partner record; no quotes, escapes, embedded pipes or grammar parser. :)\nlet $record := 'INV-1042|EUR|30.00'\nreturn if ($record eq '') then '' else let $fields := tokenize($record, '\\|') return concat($fields[1], '/', $fields[2], ':', format-number(xs:decimal($fields[3]), '0.00'))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/fixed-record-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/fixed-record-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 9,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-fixed-record-main",
+          "external-input-functions-invoice-guard-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 10,
+        "language": "xpath",
+        "code": "(: Bytes already acquired by the host; this cast does not fetch a resource. :)\nstring(xs:base64Binary(xs:hexBinary('255044462D312E37')))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/binary-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/binary-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 11,
+        "language": "text",
+        "code": "JVBERi0xLjc=",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-binary-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 12,
+        "language": "xml",
+        "code": "<invoice id=\"INV-1042\" currency=\"EUR\" total=\"30.00\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-main.xpath",
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-main.xpath",
+          "docs/xpath40-catalog/examples/external-input-functions/normalized-xml-reordered.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 13,
+        "language": "xpath",
+        "code": "(: Business guard only; does not validate XSD or annotate nodes. :)\nlet $invoice := parse-xml('<invoice id=\"INV-1042\" currency=\"EUR\" total=\"30.00\"/>')/invoice\nreturn if (string-length(string($invoice/@id)) gt 0 and $invoice/@currency = ('EUR','USD') and $invoice/@total castable as xs:decimal) then\n  if (xs:decimal($invoice/@total) ge 0) then concat($invoice/@id, '/', $invoice/@currency, ':', format-number(xs:decimal($invoice/@total), '0.00'))\n  else error(QName('urn:invoice', 'INVALID-INVOICE'))\nelse error(QName('urn:invoice', 'INVALID-INVOICE'))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 14,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-fixed-record-main",
+          "external-input-functions-invoice-guard-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 15,
+        "language": "xml",
+        "code": "<invoice id=\"INV-1043\" currency=\"USD\" total=\"0\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-zero.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 16,
+        "language": "text",
+        "code": "INV-1043/USD:0.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "external-input-functions-invoice-guard-zero"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 17,
+        "language": "xml",
+        "code": "<invoice id=\"\" currency=\"EUR\" total=\"-1\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-invalid.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 18,
+        "language": "xml",
+        "code": "<invoice/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/external-input-functions/invoice-guard-empty.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/fn-apply-templates.md": {
+    "caseIds": [
+      "fn-apply-templates-availability-xslt31",
+      "fn-apply-templates-availability-xslt40",
+      "fn-apply-templates-call1-xslt31",
+      "fn-apply-templates-call1-xslt40",
+      "fn-apply-templates-call2-xslt31",
+      "fn-apply-templates-call2-xslt40",
+      "fn-apply-templates-instruction-xslt31-empty",
+      "fn-apply-templates-instruction-xslt31-input",
+      "fn-apply-templates-instruction-xslt31-reordered",
+      "fn-apply-templates-instruction-xslt40-empty",
+      "fn-apply-templates-instruction-xslt40-input",
+      "fn-apply-templates-instruction-xslt40-reordered",
+      "fn-apply-templates-lookup-31",
+      "fn-apply-templates-lookup-40",
+      "fn-apply-templates-reference-xslt31",
+      "fn-apply-templates-reference-xslt40",
+      "fn-apply-templates-wrapper-xslt31-empty",
+      "fn-apply-templates-wrapper-xslt31-input",
+      "fn-apply-templates-wrapper-xslt31-reordered",
+      "fn-apply-templates-wrapper-xslt40-empty",
+      "fn-apply-templates-wrapper-xslt40-input",
+      "fn-apply-templates-wrapper-xslt40-reordered",
+      "fn-apply-templates-xpath-31-arity1",
+      "fn-apply-templates-xpath-31-arity2",
+      "fn-apply-templates-xpath-40-arity1",
+      "fn-apply-templates-xpath-40-arity2",
+      "fn-apply-templates-xpath-experimental-arity1",
+      "fn-apply-templates-xpath-experimental-arity2"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/fn-apply-templates/availability-xslt31.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/availability-xslt40.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/call1-xslt31.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/call1-xslt40.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt31.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt40.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/empty.xml",
+      "docs/xpath40-catalog/examples/fn-apply-templates/input.xml",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-empty.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-input.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-reordered.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-empty.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-input.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt40-reordered.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/lookup-31.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/lookup-40.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/reference-xslt31.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/reference-xslt40.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/reordered.xml",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-empty.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-input.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-reordered.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-empty.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-input.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt40-reordered.xsl",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-31-arity1.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-31-arity2.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-40-arity1.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-40-arity2.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-experimental-arity1.xpath",
+      "docs/xpath40-catalog/examples/fn-apply-templates/xpath-experimental-arity2.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1042\" currency=\"EUR\"><line sku=\"FILTER\" quantity=\"2\" price=\"12.50\"/><line sku=\"BLUE\" quantity=\"1\" price=\"5\"/></invoice><invoice id=\"INV-1043\" currency=\"USD\"><line sku=\"SEAL\" quantity=\"3\" price=\"4\"/></invoice></invoices>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/input.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/input.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify invoice template dispatch and the deferred fn:apply-templates boundary.\nSPECIAL NOTES: In-memory catalog example; no streaming or draft function conformance claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice batch. Output: exact text report or declared refusal marker.\nEmpty input returns an empty report; reordered input retains selection order.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:invoice\" version=\"4.0\" exclude-result-prefixes=\"xs f\">\n  <xsl:output method=\"text\"/>\n  <xsl:template match=\"/\">\n    <xsl:sequence xmlns:fn=\"http://www.w3.org/2005/xpath-functions\" select=\"fn:apply-templates(invoices/invoice, map{'mode': QName('urn:invoice','export')})\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt40.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/call2-xslt40.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify invoice template dispatch and the deferred fn:apply-templates boundary.\nSPECIAL NOTES: In-memory catalog example; no streaming or draft function conformance claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice batch. Output: exact text report or declared refusal marker.\nEmpty input returns an empty report; reordered input retains selection order.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:invoice\" version=\"3.0\" exclude-result-prefixes=\"xs f\">\n  <xsl:output method=\"text\"/>\n  <!-- Explicit export mode keeps dispatch independent of the caller's mode. -->\n  <xsl:mode name=\"f:export\"/>\n  <xsl:template match=\"invoice\" mode=\"f:export\">\n    <xsl:param name=\"label\" as=\"xs:string\"/>\n    <xsl:param name=\"batch\" as=\"xs:string\" tunnel=\"yes\"/>\n    <xsl:sequence select=\"concat($batch, '/', $label, '/', @id, '/', @currency, ':', format-number(sum(line ! (xs:decimal(@quantity) * xs:decimal(@price))), '0.00'), ';')\"/>\n  </xsl:template>\n  <xsl:template match=\"/\">\n    <xsl:variable name=\"rows\" as=\"xs:string*\">\n      <xsl:apply-templates select=\"invoices/invoice\" mode=\"f:export\">\n        <xsl:with-param name=\"label\" select=\"'EXPORT'\"/>\n        <xsl:with-param name=\"batch\" select=\"'BATCH-7'\" tunnel=\"yes\"/>\n      </xsl:apply-templates>\n    </xsl:variable>\n    <xsl:value-of select=\"string-join($rows, '')\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-input.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-reordered.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-input.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/instruction-xslt31-reordered.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify invoice template dispatch and the deferred fn:apply-templates boundary.\nSPECIAL NOTES: In-memory catalog example; no streaming or draft function conformance claim.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice batch. Output: exact text report or declared refusal marker.\nEmpty input returns an empty report; reordered input retains selection order.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:invoice\" version=\"3.0\" exclude-result-prefixes=\"xs f\">\n  <xsl:output method=\"text\"/>\n  <!-- Explicit export mode keeps dispatch independent of the caller's mode. -->\n  <xsl:mode name=\"f:export\"/>\n  <xsl:template match=\"invoice\" mode=\"f:export\">\n    <xsl:param name=\"label\" as=\"xs:string\"/>\n    <xsl:param name=\"batch\" as=\"xs:string\" tunnel=\"yes\"/>\n    <xsl:sequence select=\"concat($batch, '/', $label, '/', @id, '/', @currency, ':', format-number(sum(line ! (xs:decimal(@quantity) * xs:decimal(@price))), '0.00'), ';')\"/>\n  </xsl:template>\n  <!-- The wrapper is a user function, not registration of the draft fn function. -->\n  <xsl:function name=\"f:export\" as=\"xs:string*\">\n    <xsl:param name=\"nodes\" as=\"element(invoice)*\"/>\n    <xsl:param name=\"label\" as=\"xs:string\"/>\n    <xsl:param name=\"batch\" as=\"xs:string\"/>\n    <xsl:apply-templates select=\"$nodes\" mode=\"f:export\">\n      <xsl:with-param name=\"label\" select=\"$label\"/>\n      <xsl:with-param name=\"batch\" select=\"$batch\" tunnel=\"yes\"/>\n    </xsl:apply-templates>\n  </xsl:function>\n  <xsl:template match=\"/\">\n    <xsl:value-of select=\"string-join(f:export(invoices/invoice, 'EXPORT', 'BATCH-7'), '')\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-reordered.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-input.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-input.xsl",
+          "docs/xpath40-catalog/examples/fn-apply-templates/wrapper-xslt31-reordered.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "BATCH-7/EXPORT/INV-1042/EUR:30.00;BATCH-7/EXPORT/INV-1043/USD:12.00;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "fn-apply-templates-instruction-xslt31-input",
+          "fn-apply-templates-instruction-xslt40-input",
+          "fn-apply-templates-wrapper-xslt31-input",
+          "fn-apply-templates-wrapper-xslt40-input"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<invoices/>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/empty.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/empty.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1043\" currency=\"USD\"><line sku=\"SEAL\" quantity=\"3\" price=\"4\"/></invoice><invoice id=\"INV-1042\" currency=\"EUR\"><line sku=\"BLUE\" quantity=\"1\" price=\"5\"/><line sku=\"FILTER\" quantity=\"2\" price=\"12.50\"/></invoice></invoices>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/reordered.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/fn-apply-templates/reordered.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "text",
+        "code": "BATCH-7/EXPORT/INV-1043/USD:12.00;BATCH-7/EXPORT/INV-1042/EUR:30.00;",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "fn-apply-templates-instruction-xslt31-reordered",
+          "fn-apply-templates-instruction-xslt40-reordered",
+          "fn-apply-templates-wrapper-xslt31-reordered",
+          "fn-apply-templates-wrapper-xslt40-reordered"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/language-streaming-scope.md": {
+    "caseIds": [
+      "language-streaming-scope-portable-empty",
+      "language-streaming-scope-portable-main",
+      "language-streaming-scope-portable-reordered",
+      "language-streaming-scope-report-stream31-empty",
+      "language-streaming-scope-report-stream31-main",
+      "language-streaming-scope-report-stream31-reordered",
+      "language-streaming-scope-report-stream40-empty",
+      "language-streaming-scope-report-stream40-main",
+      "language-streaming-scope-report-stream40-reordered",
+      "language-streaming-scope-report-xslt31-empty",
+      "language-streaming-scope-report-xslt31-main",
+      "language-streaming-scope-report-xslt31-reordered",
+      "language-streaming-scope-report-xslt40-empty",
+      "language-streaming-scope-report-xslt40-main",
+      "language-streaming-scope-report-xslt40-reordered",
+      "language-streaming-scope-xpath-group-31",
+      "language-streaming-scope-xpath-group-40",
+      "language-streaming-scope-xpath-group-experimental",
+      "language-streaming-scope-xpath-order-31",
+      "language-streaming-scope-xpath-order-40",
+      "language-streaming-scope-xpath-order-experimental",
+      "language-streaming-scope-xpath-where-31",
+      "language-streaming-scope-xpath-where-40",
+      "language-streaming-scope-xpath-where-experimental",
+      "language-streaming-scope-xquery-empty",
+      "language-streaming-scope-xquery-main",
+      "language-streaming-scope-xquery-reordered",
+      "language-streaming-scope-xquery-version40"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/language-streaming-scope/empty.xml",
+      "docs/xpath40-catalog/examples/language-streaming-scope/main.xml",
+      "docs/xpath40-catalog/examples/language-streaming-scope/portable-empty.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/portable-main.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/portable-reordered.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/reordered.xml",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-empty.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-main.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-reordered.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-empty.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-main.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-stream40-reordered.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-empty.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-main.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-reordered.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-empty.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-main.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt40-reordered.xsl",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-31.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-40.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-group-experimental.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-31.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-40.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-order-experimental.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-31.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-40.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-experimental.xpath",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xquery-empty.xq",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xquery-main.xq",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xquery-reordered.xq",
+      "docs/xpath40-catalog/examples/language-streaming-scope/xquery-version40.xq"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1043\" currency=\"USD\" total=\"12\"/><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30\"/><invoice id=\"INV-1044\" currency=\"EUR\" total=\"0\"/></invoices>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/main.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-main.xq",
+          "docs/xpath40-catalog/examples/language-streaming-scope/portable-main.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/main.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xquery",
+        "code": "(: XQuery 3.1: select positive invoices and sort by currency then identifier. :)\nxquery version \"3.1\";\nlet $batch := parse-xml('<invoices><invoice id=\"INV-1043\" currency=\"USD\" total=\"12\"/><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30\"/><invoice id=\"INV-1044\" currency=\"EUR\" total=\"0\"/></invoices>')\nreturn string-join((for $invoice in $batch/invoices/invoice\nwhere xs:decimal($invoice/@total) gt 0\norder by string($invoice/@currency), string($invoice/@id)\nreturn concat($invoice/@id, '/', $invoice/@currency, ':', format-number(xs:decimal($invoice/@total), '0.00'))), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-main.xq"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-main.xq"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "xpath",
+        "code": "(: XPath 3.1: predicate filtering plus explicit sort key. :)\nlet $batch := parse-xml('<invoices><invoice id=\"INV-1043\" currency=\"USD\" total=\"12\"/><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30\"/><invoice id=\"INV-1044\" currency=\"EUR\" total=\"0\"/></invoices>')\nreturn string-join(sort($batch/invoices/invoice[xs:decimal(@total) gt 0], (), function($invoice){concat($invoice/@currency, '/', $invoice/@id)}) ! concat(@id, '/', @currency, ':', format-number(xs:decimal(@total), '0.00')), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/portable-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/portable-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00;INV-1043/USD:12.00",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "language-streaming-scope-portable-main",
+          "language-streaming-scope-portable-reordered",
+          "language-streaming-scope-xquery-main",
+          "language-streaming-scope-xquery-reordered"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "xquery",
+        "code": "xquery version \"4.0\"; 1",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-version40.xq"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-version40.xq"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xpath",
+        "code": "string-join((for $i in (3,1,2) where $i gt 1 return $i) ! string(.), '|')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-40.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-31.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-experimental.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-31.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-40.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/xpath-where-experimental.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify invoice processing through ordinary and streaming XSLT paths.\nSPECIAL NOTES: Exact report parity does not certify Streaming 4.0 or memory bounds.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice XML. Output: one currency-labelled row per invoice, or the declared error.\nEmpty batches return empty text; reordered batches retain input order.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" version=\"3.0\" exclude-result-prefixes=\"xs\">\n  <xsl:output method=\"text\"/>\n  <xsl:template match=\"/\">\n    <!-- A forward pass reports every invoice; sorting is a separate buffered task. -->\n    <xsl:for-each select=\"invoices/invoice\">\n      <xsl:value-of select=\"concat(@id, '/', @currency, ':', format-number(xs:decimal(@total), '0.00'), ';')\"/>\n    </xsl:for-each>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-reordered.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-reordered.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-empty.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-main.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-main.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-empty.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-main.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-stream31-reordered.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-empty.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-main.xsl",
+          "docs/xpath40-catalog/examples/language-streaming-scope/report-xslt31-reordered.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "text",
+        "code": "INV-1043/USD:12.00;INV-1042/EUR:30.00;INV-1044/EUR:0.00;",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "language-streaming-scope-report-stream31-main",
+          "language-streaming-scope-report-stream40-main",
+          "language-streaming-scope-report-xslt31-main",
+          "language-streaming-scope-report-xslt40-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xml",
+        "code": "<invoices/>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/empty.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/portable-empty.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-empty.xq",
+          "docs/xpath40-catalog/examples/language-streaming-scope/empty.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 9,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30\"/><invoice id=\"INV-1043\" currency=\"USD\" total=\"12\"/><invoice id=\"INV-1044\" currency=\"EUR\" total=\"0\"/></invoices>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/reordered.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/language-streaming-scope/xquery-reordered.xq",
+          "docs/xpath40-catalog/examples/language-streaming-scope/portable-reordered.xpath",
+          "docs/xpath40-catalog/examples/language-streaming-scope/reordered.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 10,
+        "language": "text",
+        "code": "INV-1042/EUR:30.00;INV-1043/USD:12.00;INV-1044/EUR:0.00;",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "language-streaming-scope-report-stream31-reordered",
+          "language-streaming-scope-report-stream40-reordered",
+          "language-streaming-scope-report-xslt31-reordered",
+          "language-streaming-scope-report-xslt40-reordered"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/serialization-parameters.md": {
+    "caseIds": [
+      "serialization-parameters-fn-canonical",
+      "serialization-parameters-fn-canonical-main",
+      "serialization-parameters-fn-csv-header",
+      "serialization-parameters-fn-csv-method",
+      "serialization-parameters-fn-csv-quote-character",
+      "serialization-parameters-fn-csv-separator",
+      "serialization-parameters-fn-escape-solidus",
+      "serialization-parameters-fn-indent-attributes",
+      "serialization-parameters-fn-indent-unit",
+      "serialization-parameters-fn-invalid-canonical",
+      "serialization-parameters-fn-invalid-csv-header",
+      "serialization-parameters-fn-invalid-csv-quote-character",
+      "serialization-parameters-fn-invalid-csv-separator",
+      "serialization-parameters-fn-invalid-escape-solidus",
+      "serialization-parameters-fn-invalid-indent-attributes",
+      "serialization-parameters-fn-invalid-indent-unit",
+      "serialization-parameters-fn-invalid-json-lines",
+      "serialization-parameters-fn-invalid-line-ending",
+      "serialization-parameters-fn-json-lines",
+      "serialization-parameters-fn-json-lines-multiple",
+      "serialization-parameters-fn-line-ending",
+      "serialization-parameters-fn-solidus-false",
+      "serialization-parameters-fn-solidus-main",
+      "serialization-parameters-portable-json-lines-empty",
+      "serialization-parameters-portable-json-lines-input",
+      "serialization-parameters-portable-json-lines-reordered",
+      "serialization-parameters-xslt-canonical-xml-xslt31",
+      "serialization-parameters-xslt-canonical-xml-xslt40",
+      "serialization-parameters-xslt-canonical-xslt31",
+      "serialization-parameters-xslt-canonical-xslt40",
+      "serialization-parameters-xslt-csv-header-xslt31",
+      "serialization-parameters-xslt-csv-header-xslt40",
+      "serialization-parameters-xslt-csv-quote-character-xslt31",
+      "serialization-parameters-xslt-csv-quote-character-xslt40",
+      "serialization-parameters-xslt-csv-separator-xslt31",
+      "serialization-parameters-xslt-csv-separator-xslt40",
+      "serialization-parameters-xslt-csv-xslt31",
+      "serialization-parameters-xslt-csv-xslt40",
+      "serialization-parameters-xslt-indent-attributes-xslt31",
+      "serialization-parameters-xslt-indent-attributes-xslt40",
+      "serialization-parameters-xslt-indent-unit-xslt31",
+      "serialization-parameters-xslt-indent-unit-xslt40",
+      "serialization-parameters-xslt-json-lines-xslt31",
+      "serialization-parameters-xslt-json-lines-xslt40",
+      "serialization-parameters-xslt-line-ending-text-xslt31",
+      "serialization-parameters-xslt-line-ending-text-xslt40",
+      "serialization-parameters-xslt-line-ending-xslt31",
+      "serialization-parameters-xslt-line-ending-xslt40",
+      "serialization-parameters-xslt-solidus-no-xslt31",
+      "serialization-parameters-xslt-solidus-no-xslt40",
+      "serialization-parameters-xslt-solidus-yes-xslt31",
+      "serialization-parameters-xslt-solidus-yes-xslt40"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical-main.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-header.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-method.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-quote-character.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-csv-separator.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-escape-solidus.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-attributes.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-unit.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-canonical.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-header.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-quote-character.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-csv-separator.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-escape-solidus.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-attributes.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-unit.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-json-lines.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-line-ending.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-json-lines-multiple.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-json-lines.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-line-ending.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-false.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-main.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/input.xml",
+      "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-empty.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-reordered.xpath",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-header-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-header-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-quote-character-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-quote-character-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-separator-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-separator-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-csv-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-attributes-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-attributes-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-unit-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-indent-unit-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt40.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-yes-xslt31.xsl",
+      "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-yes-xslt40.xsl"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "json",
+        "code": "{\"invoices\":[{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https://partner.example/invoices/1042\"},{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https://partner.example/invoices/1043\"}]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "(: Complete invoice batch; serialize each record separately and join with LF. :)\nlet $batch := parse-json('{\"invoices\":[{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https://partner.example/invoices/1042\"},{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https://partner.example/invoices/1043\"}]}')\nreturn string-join($batch?invoices?* ! serialize(., map{'method':'json'}), codepoints-to-string(10))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}\n{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1043\"}",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "serialization-parameters-portable-json-lines-input"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "json",
+        "code": "{\"invoices\":[]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-empty.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "json",
+        "code": "{\"invoices\":[{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https://partner.example/invoices/1043\"},{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https://partner.example/invoices/1042\"}]}",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-reordered.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "text",
+        "code": "{\"id\":\"INV-1043\",\"currency\":\"USD\",\"total\":12,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1043\"}\n{\"id\":\"INV-1042\",\"currency\":\"EUR\",\"total\":30,\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "serialization-parameters-portable-json-lines-reordered"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "xpath",
+        "code": "serialize(map{'uri':'https://partner.example/invoices/1042'}, map{'method':'json','escape-solidus':false()})",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-false.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-solidus-false.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "text",
+        "code": "{\"uri\":\"https:\\/\\/partner.example\\/invoices\\/1042\"}",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "serialization-parameters-fn-solidus-false",
+          "serialization-parameters-fn-solidus-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 8,
+        "language": "xml",
+        "code": "<invoices><invoice id=\"INV-1042\" currency=\"EUR\" total=\"30\" uri=\"https://partner.example/invoices/1042\"/><invoice id=\"INV-1043\" currency=\"USD\" total=\"12\" uri=\"https://partner.example/invoices/1043\"/></invoices>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/input.xml"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/input.xml"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 9,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify serialization parameter handling for invoice interchange.\nSPECIAL NOTES: In-memory string capture; not octet or canonicalization conformance.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice XML. Output: declared exact text or refusal marker.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"3.0\">\n  <xsl:output method=\"json\" escape-solidus=\"no\"/>\n  <xsl:template match=\"/\">\n    <xsl:sequence select=\"string(invoices/invoice[1]/@uri)\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt31.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-solidus-no-xslt31.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 10,
+        "language": "text",
+        "code": "\"https://partner.example/invoices/1042\"",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/input.xml",
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-reordered.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/portable-json-lines-input.xpath"
+        ],
+        "expectedOutputCases": [
+          "serialization-parameters-xslt-solidus-no-xslt31",
+          "serialization-parameters-xslt-solidus-no-xslt40"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 11,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify serialization parameter handling for invoice interchange.\nSPECIAL NOTES: In-memory string capture; not octet or canonicalization conformance.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice XML. Output: declared exact text or refusal marker.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"4.0\">\n  <xsl:output method=\"json\" json-lines=\"yes\"/>\n  <xsl:template match=\"/\">\n    <xsl:sequence select=\"invoices/invoice/@id ! string(.)\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt40.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-json-lines-xslt40.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 12,
+        "language": "text",
+        "code": "[\"INV-1042\",\"INV-1043\"]",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "serialization-parameters-xslt-json-lines-xslt31",
+          "serialization-parameters-xslt-json-lines-xslt40"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 13,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify serialization parameter handling for invoice interchange.\nSPECIAL NOTES: In-memory string capture; not octet or canonicalization conformance.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice XML. Output: declared exact text or refusal marker.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"4.0\">\n  <xsl:output method=\"xml\" omit-xml-declaration=\"yes\" canonical=\"yes\"/>\n  <xsl:template match=\"/\">\n    <invoice z=\"30\" a=\"EUR\">\n      <line/>\n    </invoice>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt40.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-canonical-xml-xslt40.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 14,
+        "language": "text",
+        "code": "<invoice z=\"30\" a=\"EUR\"><line/></invoice>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-attributes.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-canonical.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-attributes.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-indent-unit.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-canonical-main.xpath",
+          "docs/xpath40-catalog/examples/serialization-parameters/fn-invalid-indent-unit.xpath"
+        ],
+        "expectedOutputCases": [
+          "serialization-parameters-fn-canonical-main",
+          "serialization-parameters-xslt-canonical-xml-xslt31",
+          "serialization-parameters-xslt-canonical-xml-xslt40"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 15,
+        "language": "xml",
+        "code": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<!--\nAUTHOR: Charles Korthout\nCREATE DATE: 12 October 2026\nPURPOSE: Verify serialization parameter handling for invoice interchange.\nSPECIAL NOTES: In-memory string capture; not octet or canonicalization conformance.\nCOPYRIGHT: Fytala\nLICENSE: license.md (Apache-2.0)\nSPDX-License-Identifier: Apache-2.0\nChange History: Charles Korthout | 0.1 | 12-10-2026 | Creation\nInput: invoice XML. Output: declared exact text or refusal marker.\n-->\n<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" version=\"4.0\">\n  <xsl:output method=\"text\" line-ending=\"\\r\\n\"/>\n  <xsl:template match=\"/\">\n    <xsl:value-of select=\"invoices/invoice/@id\" separator=\"&#10;\"/>\n  </xsl:template>\n</xsl:stylesheet>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt40.xsl"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/serialization-parameters/xslt-line-ending-text-xslt40.xsl"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 16,
+        "language": "text",
+        "code": "INV-1042\nINV-1043",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "serialization-parameters-xslt-line-ending-text-xslt31",
+          "serialization-parameters-xslt-line-ending-text-xslt40"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "deferred/xslt-item-type.md": {
+    "caseIds": [
+      "intake-types-alias-duplicate",
+      "intake-types-alias-expanded-name",
+      "intake-types-alias-missing-as",
+      "intake-types-alias-version30",
+      "intake-types-array-empty-member",
+      "intake-types-array-member-plus",
+      "intake-types-array-member-star",
+      "intake-types-array-not-map",
+      "intake-types-array-pattern-version30",
+      "intake-types-array-singletons",
+      "intake-types-array-vacuous",
+      "intake-types-array-whole-sequence",
+      "intake-types-array-wrong-type",
+      "intake-types-enum-allowed",
+      "intake-types-enum-rejected",
+      "intake-types-enum-treat-error",
+      "intake-types-map-closed",
+      "intake-types-map-empty-missing",
+      "intake-types-map-empty-present",
+      "intake-types-map-extra-closed",
+      "intake-types-map-extra-open",
+      "intake-types-map-numeric-key",
+      "intake-types-map-pattern-version30",
+      "intake-types-map-sequence-allowed",
+      "intake-types-map-singleton-required",
+      "intake-types-nominal-no-constructor",
+      "intake-types-nominal-other",
+      "intake-types-nominal-own",
+      "intake-types-nominal-plain-map",
+      "intake-types-report-3-empty",
+      "intake-types-report-3-normal",
+      "intake-types-report-3-reordered",
+      "intake-types-report-4-empty",
+      "intake-types-report-4-normal",
+      "intake-types-report-4-reordered",
+      "intake-types-structural-binding",
+      "intake-types-type-nominal-other",
+      "intake-types-type-nominal-own",
+      "intake-types-type-structural-annotated",
+      "intake-types-type-structural-map"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/intake-types/alias-duplicate.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-expanded-name.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-missing-as.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-empty-member.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-member-plus.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-member-star.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-not-map.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-pattern-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-singletons.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-vacuous.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-whole-sequence.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-wrong-type.xsl",
+      "docs/xpath40-catalog/examples/intake-types/empty.xml",
+      "docs/xpath40-catalog/examples/intake-types/enum-allowed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/enum-rejected.xsl",
+      "docs/xpath40-catalog/examples/intake-types/enum-treat-error.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-closed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-empty-missing.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-empty-present.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-extra-closed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-extra-open.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-numeric-key.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-pattern-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-sequence-allowed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-singleton-required.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-no-constructor.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-other.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-own.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-plain-map.xsl",
+      "docs/xpath40-catalog/examples/intake-types/normal.xml",
+      "docs/xpath40-catalog/examples/intake-types/reordered.xml",
+      "docs/xpath40-catalog/examples/intake-types/report-3.xsl",
+      "docs/xpath40-catalog/examples/intake-types/report-4.xsl",
+      "docs/xpath40-catalog/examples/intake-types/structural-binding.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-nominal-other.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-nominal-own.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-structural-annotated.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-structural-map.xsl"
+    ],
+    "blocks": []
+  },
+  "deferred/xslt-record-type.md": {
+    "caseIds": [
+      "intake-types-alias-duplicate",
+      "intake-types-alias-expanded-name",
+      "intake-types-alias-missing-as",
+      "intake-types-alias-version30",
+      "intake-types-array-empty-member",
+      "intake-types-array-member-plus",
+      "intake-types-array-member-star",
+      "intake-types-array-not-map",
+      "intake-types-array-pattern-version30",
+      "intake-types-array-singletons",
+      "intake-types-array-vacuous",
+      "intake-types-array-whole-sequence",
+      "intake-types-array-wrong-type",
+      "intake-types-enum-allowed",
+      "intake-types-enum-rejected",
+      "intake-types-enum-treat-error",
+      "intake-types-map-closed",
+      "intake-types-map-empty-missing",
+      "intake-types-map-empty-present",
+      "intake-types-map-extra-closed",
+      "intake-types-map-extra-open",
+      "intake-types-map-numeric-key",
+      "intake-types-map-pattern-version30",
+      "intake-types-map-sequence-allowed",
+      "intake-types-map-singleton-required",
+      "intake-types-nominal-no-constructor",
+      "intake-types-nominal-other",
+      "intake-types-nominal-own",
+      "intake-types-nominal-plain-map",
+      "intake-types-report-3-empty",
+      "intake-types-report-3-normal",
+      "intake-types-report-3-reordered",
+      "intake-types-report-4-empty",
+      "intake-types-report-4-normal",
+      "intake-types-report-4-reordered",
+      "intake-types-structural-binding",
+      "intake-types-type-nominal-other",
+      "intake-types-type-nominal-own",
+      "intake-types-type-structural-annotated",
+      "intake-types-type-structural-map"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/intake-types/alias-duplicate.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-expanded-name.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-missing-as.xsl",
+      "docs/xpath40-catalog/examples/intake-types/alias-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-empty-member.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-member-plus.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-member-star.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-not-map.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-pattern-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-singletons.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-vacuous.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-whole-sequence.xsl",
+      "docs/xpath40-catalog/examples/intake-types/array-wrong-type.xsl",
+      "docs/xpath40-catalog/examples/intake-types/empty.xml",
+      "docs/xpath40-catalog/examples/intake-types/enum-allowed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/enum-rejected.xsl",
+      "docs/xpath40-catalog/examples/intake-types/enum-treat-error.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-closed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-empty-missing.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-empty-present.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-extra-closed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-extra-open.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-numeric-key.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-pattern-version30.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-sequence-allowed.xsl",
+      "docs/xpath40-catalog/examples/intake-types/map-singleton-required.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-no-constructor.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-other.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-own.xsl",
+      "docs/xpath40-catalog/examples/intake-types/nominal-plain-map.xsl",
+      "docs/xpath40-catalog/examples/intake-types/normal.xml",
+      "docs/xpath40-catalog/examples/intake-types/reordered.xml",
+      "docs/xpath40-catalog/examples/intake-types/report-3.xsl",
+      "docs/xpath40-catalog/examples/intake-types/report-4.xsl",
+      "docs/xpath40-catalog/examples/intake-types/structural-binding.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-nominal-other.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-nominal-own.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-structural-annotated.xsl",
+      "docs/xpath40-catalog/examples/intake-types/type-structural-map.xsl"
+    ],
+    "blocks": []
+  },
+  "experimental/fn-scan.md": {
+    "caseIds": [
+      "fn-scan-before",
+      "fn-scan-edge",
+      "fn-scan-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/fn-scan/before.xpath",
+      "docs/xpath40-catalog/examples/fn-scan/edge.xpath",
+      "docs/xpath40-catalog/examples/fn-scan/main.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xquery",
+        "code": "fn:scan((1, 2, 3), 0, fn($acc, $it) { $acc + $it })\n  (: → [0], [1], [3], [6] — every running total, init first :)",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [
+          "verbatim-scan-running"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xquery",
+        "code": "fn:scan((), \"start\", fn($acc, $it) { $acc || $it })\n  (: → [\"start\"] — empty input yields just the init :)",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [
+          "verbatim-scan-empty"
+        ]
+      }
+    ]
+  },
+  "functions/atomic-equal.md": {
+    "caseIds": [
+      "atomic-equal-before",
+      "atomic-equal-edge",
+      "atomic-equal-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/atomic-equal/before.xpath",
+      "docs/xpath40-catalog/examples/atomic-equal/edge.xpath",
+      "docs/xpath40-catalog/examples/atomic-equal/main.xpath",
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": []
+  },
+  "functions/batch-extrema.md": {
+    "caseIds": [
+      "batch-extrema-all-invalid",
+      "batch-extrema-ascii-collation",
+      "batch-extrema-bad-untyped",
+      "batch-extrema-baseline",
+      "batch-extrema-booleans",
+      "batch-extrema-codepoint-collation",
+      "batch-extrema-decimal-range",
+      "batch-extrema-decimal-result-observed",
+      "batch-extrema-empty",
+      "batch-extrema-empty-collation",
+      "batch-extrema-empty-values",
+      "batch-extrema-keyword-values",
+      "batch-extrema-main",
+      "batch-extrema-mixed-max",
+      "batch-extrema-mixed-max-observed",
+      "batch-extrema-mixed-min",
+      "batch-extrema-mixed-min-observed",
+      "batch-extrema-mixed-order-observed",
+      "batch-extrema-nan-max",
+      "batch-extrema-nan-min",
+      "batch-extrema-plain-duration-max-observed",
+      "batch-extrema-plain-duration-min-observed",
+      "batch-extrema-qname-max",
+      "batch-extrema-qname-min",
+      "batch-extrema-qname-prefix",
+      "batch-extrema-qname-string",
+      "batch-extrema-string-values",
+      "batch-extrema-unknown-collation",
+      "batch-extrema-untyped-values"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/batch-extrema/all-invalid.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/ascii-collation.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/bad-untyped.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/baseline.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/booleans.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/codepoint-collation.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/decimal-range.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/decimal-result-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/empty-collation.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/empty-values.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/empty.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/keyword-values.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/main.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/mixed-max-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/mixed-max.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/mixed-min-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/mixed-min.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/mixed-order-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/nan-max.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/nan-min.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/plain-duration-max-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/plain-duration-min-observed.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/qname-max.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/qname-min.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/qname-prefix.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/qname-string.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/string-values.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/batch-extrema/untyped-values.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<batch xmlns:q=\"urn:qa:codes\" xmlns:e=\"urn:erp:codes\"><reading id=\"A\" value=\"2.5\" code=\"q:low\"/><reading id=\"B\" value=\"7.5\" code=\"q:high\"/><reading id=\"C\" value=\"5\" code=\"e:normal\"/><reading id=\"D\" value=\"invalid\" code=\"q:invalid\"/><reading id=\"E\" value=\"\" code=\"q:missing\"/></batch>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/batch-extrema/main.xpath",
+          "docs/xpath40-catalog/examples/batch-extrema/baseline.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<batch xmlns:q=\"urn:qa:codes\" xmlns:e=\"urn:erp:codes\"><reading id=\"A\" value=\"2.5\" code=\"q:low\"/><reading id=\"B\" value=\"7.5\" code=\"q:high\"/><reading id=\"C\" value=\"5\" code=\"e:normal\"/><reading id=\"D\" value=\"invalid\" code=\"q:invalid\"/><reading id=\"E\" value=\"\" code=\"q:missing\"/></batch>')/batch/reading\nreturn let $valid := $rows[@value castable as xs:decimal]\nreturn let $invalid := $rows[not(@value castable as xs:decimal)]\nreturn let $values := $valid/@value ! xs:decimal(.)\nreturn let $codes := $rows ! resolve-QName(string(@code), .)\nreturn let $label := function($q) { if (empty($q)) then '-' else concat('Q{', namespace-uri-from-QName($q), '}', local-name-from-QName($q)) }\nreturn let $first := min($codes)\nreturn let $last := max($codes)\nreturn let $low := min($values)\nreturn let $high := max($values)\nreturn concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; min=', if (empty($low)) then '-' else string($low), '; max=', if (empty($high)) then '-' else string($high), '; first-code=', $label($first), '; last-code=', $label($last))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/batch-extrema/main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/batch-extrema/main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "accepted=A,B,C; rejected=D,E; min=2.5; max=7.5; first-code=Q{urn:erp:codes}normal; last-code=Q{urn:qa:codes}missing",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "batch-extrema-baseline",
+          "batch-extrema-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<batch xmlns:q=\"urn:qa:codes\" xmlns:e=\"urn:erp:codes\"><reading id=\"A\" value=\"2.5\" code=\"q:low\"/><reading id=\"B\" value=\"7.5\" code=\"q:high\"/><reading id=\"C\" value=\"5\" code=\"e:normal\"/><reading id=\"D\" value=\"invalid\" code=\"q:invalid\"/><reading id=\"E\" value=\"\" code=\"q:missing\"/></batch>')/batch/reading\nreturn let $valid := $rows[@value castable as xs:decimal]\nreturn let $invalid := $rows[not(@value castable as xs:decimal)]\nreturn let $values := $valid/@value ! xs:decimal(.)\nreturn let $codes := $rows ! resolve-QName(string(@code), .)\nreturn let $label := function($q) { if (empty($q)) then '-' else concat('Q{', namespace-uri-from-QName($q), '}', local-name-from-QName($q)) }\nreturn let $cp := 'http://www.w3.org/2005/xpath-functions/collation/codepoint'\nreturn let $less := function($a, $b) {\n  let $ns := compare(namespace-uri-from-QName($a), namespace-uri-from-QName($b), $cp)\n  return if ($ns eq 0) then compare(local-name-from-QName($a), local-name-from-QName($b), $cp) lt 0 else $ns lt 0\n}\nreturn let $first := fold-left($codes, (), function($best, $next) { if (empty($best)) then $next else if ($less($next, $best)) then $next else $best })\nreturn let $last := fold-left($codes, (), function($best, $next) { if (empty($best)) then $next else if ($less($best, $next)) then $next else $best })\nreturn let $low := min($values)\nreturn let $high := max($values)\nreturn concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; min=', if (empty($low)) then '-' else string($low), '; max=', if (empty($high)) then '-' else string($high), '; first-code=', $label($first), '; last-code=', $label($last))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/batch-extrema/baseline.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/batch-extrema/baseline.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "accepted=A,B,C; rejected=D,E; min=2.5; max=7.5; first-code=Q{urn:erp:codes}normal; last-code=Q{urn:qa:codes}missing",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "batch-extrema-baseline",
+          "batch-extrema-main"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "functions/bounded-retries.md": {
+    "caseIds": [
+      "bounded-retries-baseline",
+      "bounded-retries-until-action-error",
+      "bounded-retries-until-empty-decision",
+      "bounded-retries-until-empty-state",
+      "bounded-retries-until-exhausted",
+      "bounded-retries-until-initially-accepted",
+      "bounded-retries-until-main",
+      "bounded-retries-until-missing-status",
+      "bounded-retries-until-nonboolean",
+      "bounded-retries-until-noncallable-action",
+      "bounded-retries-until-noncallable-predicate",
+      "bounded-retries-until-one-attempt",
+      "bounded-retries-until-zero-budget",
+      "bounded-retries-while-action-error",
+      "bounded-retries-while-empty-decision",
+      "bounded-retries-while-exhausted",
+      "bounded-retries-while-initially-accepted",
+      "bounded-retries-while-main",
+      "bounded-retries-while-missing-status",
+      "bounded-retries-while-nonboolean",
+      "bounded-retries-while-noncallable-action",
+      "bounded-retries-while-noncallable-predicate",
+      "bounded-retries-while-one-attempt",
+      "bounded-retries-while-sequence-state",
+      "bounded-retries-while-zero-budget"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/bounded-retries/baseline.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-action-error.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-empty-decision.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-empty-state.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-exhausted.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-initially-accepted.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-main.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-missing-status.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-nonboolean.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-noncallable-action.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-noncallable-predicate.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-one-attempt.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/until-zero-budget.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-action-error.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-empty-decision.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-exhausted.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-initially-accepted.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-main.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-missing-status.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-nonboolean.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-noncallable-action.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-noncallable-predicate.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-one-attempt.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-sequence-state.xpath",
+      "docs/xpath40-catalog/examples/bounded-retries/while-zero-budget.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<submission id=\"INV-2048\">\n  <response status=\"pending\"/>\n  <response status=\"accepted\"/>\n  <response status=\"pending\"/>\n</submission>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/bounded-retries/baseline.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/until-initially-accepted.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/until-main.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/until-one-attempt.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/until-zero-budget.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/while-initially-accepted.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/while-main.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/while-one-attempt.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/while-zero-budget.xpath"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $responses := parse-xml('<submission id=\"INV-2048\"><response status=\"pending\"/><response status=\"accepted\"/><response status=\"pending\"/></submission>')/submission/response\nlet $limit := 3\nlet $initial := map {'attempts': 0, 'status': 'pending', 'trace': ()}\nlet $advance := function($state, $position) {\n  let $status := string(($responses[$position]/@status, 'pending')[1])\n  return map {'attempts': $state?attempts + 1,\n              'status': $status,\n              'trace': ($state?trace, $status)}\n}\nlet $final := while-do($initial, function($state, $position) { $state?status ne 'accepted' and $state?attempts lt $limit }, $advance)\nreturn concat('status=', $final?status, '; attempts=', $final?attempts, '; exhausted=', $final?status ne 'accepted' and $final?attempts ge $limit, '; trace=', string-join($final?trace, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/while-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/while-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "bounded-retries-baseline",
+          "bounded-retries-until-initially-accepted",
+          "bounded-retries-until-main",
+          "bounded-retries-until-missing-status",
+          "bounded-retries-while-main",
+          "bounded-retries-while-missing-status"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $responses := parse-xml('<submission id=\"INV-2048\"><response status=\"pending\"/><response status=\"accepted\"/><response status=\"pending\"/></submission>')/submission/response\nlet $limit := 3\nlet $initial := map {'attempts': 0, 'status': 'pending', 'trace': ()}\nlet $advance := function($state, $position) {\n  let $status := string(($responses[$position]/@status, 'pending')[1])\n  return map {'attempts': $state?attempts + 1,\n              'status': $status,\n              'trace': ($state?trace, $status)}\n}\nlet $final := if ($limit le 0) then $initial else do-until($initial, $advance, function($state, $position) { $state?status eq 'accepted' or $state?attempts ge $limit })\nreturn concat('status=', $final?status, '; attempts=', $final?attempts, '; exhausted=', $final?status ne 'accepted' and $final?attempts ge $limit, '; trace=', string-join($final?trace, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/until-main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/until-main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "bounded-retries-baseline",
+          "bounded-retries-until-initially-accepted",
+          "bounded-retries-until-main",
+          "bounded-retries-until-missing-status",
+          "bounded-retries-while-main",
+          "bounded-retries-while-missing-status"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xpath",
+        "code": "let $responses := parse-xml('<submission id=\"INV-2048\"><response status=\"pending\"/><response status=\"accepted\"/><response status=\"pending\"/></submission>')/submission/response\nreturn let $limit := 3\nreturn let $initial := map {'attempts': 0, 'status': 'pending', 'trace': ()}\nreturn let $advance := function($state, $position) {\n  let $status := string(($responses[$position]/@status, 'pending')[1])\n  return map {'attempts': $state?attempts + 1,\n              'status': $status,\n              'trace': ($state?trace, $status)}\n}\nreturn let $final := fold-left(1 to $limit, $initial, function($state, $position) { if ($state?status eq 'accepted') then $state else $advance($state, $position) })\nreturn concat('status=', $final?status, '; attempts=', $final?attempts, '; exhausted=', $final?status ne 'accepted' and $final?attempts ge $limit, '; trace=', string-join($final?trace, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/baseline.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/bounded-retries/baseline.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "status=accepted; attempts=2; exhausted=false; trace=pending,accepted",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "bounded-retries-baseline",
+          "bounded-retries-until-initially-accepted",
+          "bounded-retries-until-main",
+          "bounded-retries-until-missing-status",
+          "bounded-retries-while-main",
+          "bounded-retries-while-missing-status"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 7,
+        "language": "xml",
+        "code": "<submission id=\"INV-2048\">\n  <response status=\"pending\"/>\n  <response status=\"pending\"/>\n  <response status=\"pending\"/>\n</submission>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/bounded-retries/until-exhausted.xpath",
+          "docs/xpath40-catalog/examples/bounded-retries/while-exhausted.xpath"
+        ]
+      },
+      {
+        "index": 8,
+        "language": "text",
+        "code": "status=pending; attempts=3; exhausted=true; trace=pending,pending,pending",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "bounded-retries-until-exhausted",
+          "bounded-retries-while-exhausted"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "functions/configured-label-callbacks.md": {
+    "caseIds": [
+      "configured-label-callbacks-all-bound",
+      "configured-label-callbacks-baseline",
+      "configured-label-callbacks-bound-sequence",
+      "configured-label-callbacks-bound-type-error",
+      "configured-label-callbacks-callable-array",
+      "configured-label-callbacks-callable-map",
+      "configured-label-callbacks-empty-bindings",
+      "configured-label-callbacks-empty-input",
+      "configured-label-callbacks-identity-baseline",
+      "configured-label-callbacks-identity-container",
+      "configured-label-callbacks-identity-empty",
+      "configured-label-callbacks-identity-labels",
+      "configured-label-callbacks-identity-node",
+      "configured-label-callbacks-identity-sequence",
+      "configured-label-callbacks-ignored-high-key",
+      "configured-label-callbacks-main",
+      "configured-label-callbacks-negative-key",
+      "configured-label-callbacks-noncallable",
+      "configured-label-callbacks-preserve-case",
+      "configured-label-callbacks-remaining-order",
+      "configured-label-callbacks-string-key",
+      "configured-label-callbacks-zero-key"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/configured-label-callbacks/all-bound.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/baseline.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/bound-sequence.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/bound-type-error.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/callable-array.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/callable-map.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/empty-bindings.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/empty-input.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-baseline.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-container.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-empty.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-labels.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-node.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/identity-sequence.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/ignored-high-key.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/main.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/negative-key.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/noncallable.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/preserve-case.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/remaining-order.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/string-key.xpath",
+      "docs/xpath40-catalog/examples/configured-label-callbacks/zero-key.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<dispatch>\n  <customer name=\"  Ada  \"/>\n  <customer name=\"Grace\"/>\n</dispatch>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/all-bound.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/baseline.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/empty-bindings.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/ignored-high-key.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/main.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/preserve-case.xpath",
+          "docs/xpath40-catalog/examples/configured-label-callbacks/remaining-order.xpath"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $names := parse-xml('<dispatch><customer name=\"  Ada  \"/><customer name=\"Grace\"/></dispatch>')/dispatch/customer/@name ! string(.)\nlet $format := function($prefix, $name, $uppercase) { concat($prefix, if ($uppercase) then upper-case(normalize-space($name)) else normalize-space($name)) }\nlet $label := partial-apply($format, map {1: 'SHIP: ', 3: true()})\nreturn concat('arity=', function-arity($label), '; labels=', string-join(for-each($names, $label), ' | '))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/main.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/main.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "arity=1; labels=SHIP: ADA | SHIP: GRACE",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "configured-label-callbacks-baseline",
+          "configured-label-callbacks-ignored-high-key",
+          "configured-label-callbacks-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $names := parse-xml('<dispatch><customer name=\"  Ada  \"/><customer name=\"Grace\"/></dispatch>')/dispatch/customer/@name ! string(.)\nreturn let $format := function($prefix, $name, $uppercase) { concat($prefix, if ($uppercase) then upper-case(normalize-space($name)) else normalize-space($name)) }\nreturn let $label := $format('SHIP: ', ?, true())\nreturn concat('arity=', function-arity($label), '; labels=', string-join(for-each($names, $label), ' | '))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/baseline.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/baseline.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "arity=1; labels=SHIP: ADA | SHIP: GRACE",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "configured-label-callbacks-baseline",
+          "configured-label-callbacks-ignored-high-key",
+          "configured-label-callbacks-main"
+        ],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 5,
+        "language": "xpath",
+        "code": "let $labels := ('SHIP: ADA', 'SHIP: GRACE')\nreturn string-join(for-each($labels, identity#1), ' | ')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/identity-labels.xpath"
+        ],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/configured-label-callbacks/identity-labels.xpath"
+        ],
+        "expectedOutputCases": [],
+        "verbatimProbeIds": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "SHIP: ADA | SHIP: GRACE",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "configured-label-callbacks-identity-baseline",
+          "configured-label-callbacks-identity-labels"
+        ],
+        "verbatimProbeIds": []
+      }
+    ]
+  },
+  "functions/consecutive-partition.md": {
+    "caseIds": [
+      "consecutive-partition-edge",
+      "consecutive-partition-main",
+      "consecutive-partition-singleton"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/consecutive-partition/edge.xpath",
+      "docs/xpath40-catalog/examples/consecutive-partition/main.xpath",
+      "docs/xpath40-catalog/examples/consecutive-partition/singleton.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": []
+  },
+  "functions/csv-parsing.md": {
+    "caseIds": [
+      "csv-contract-columns",
+      "csv-contract-duplicate-header",
+      "csv-contract-observed-negative-select",
+      "csv-contract-observed-nonpositive-select",
+      "csv-contract-observed-qname-extension",
+      "csv-contract-parse-after-quote",
+      "csv-contract-parse-blank-row",
+      "csv-contract-parse-collision",
+      "csv-contract-parse-comment",
+      "csv-contract-parse-comment-default",
+      "csv-contract-parse-crlf",
+      "csv-contract-parse-custom-quote",
+      "csv-contract-parse-default",
+      "csv-contract-parse-empty-fields",
+      "csv-contract-parse-empty-header",
+      "csv-contract-parse-empty-input",
+      "csv-contract-parse-empty-input-invalid-options",
+      "csv-contract-parse-empty-map",
+      "csv-contract-parse-empty-options",
+      "csv-contract-parse-empty-select",
+      "csv-contract-parse-empty-string",
+      "csv-contract-parse-empty-text-invalid-options",
+      "csv-contract-parse-escaped-quote",
+      "csv-contract-parse-header-false",
+      "csv-contract-parse-header-true",
+      "csv-contract-parse-keyword",
+      "csv-contract-parse-long-delimiter",
+      "csv-contract-parse-nonmap-options",
+      "csv-contract-parse-quoted-newline",
+      "csv-contract-parse-ragged-default",
+      "csv-contract-parse-select-order-duplicate",
+      "csv-contract-parse-select-precedes-trim",
+      "csv-contract-parse-separator",
+      "csv-contract-parse-supplied-header",
+      "csv-contract-parse-trim-rows",
+      "csv-contract-parse-trim-unquoted",
+      "csv-contract-parse-unknown-option",
+      "csv-contract-parse-unterminated",
+      "csv-contract-parse-whitespace-default",
+      "csv-contract-parse-wrong-boolean",
+      "csv-contract-report-before-duplicate",
+      "csv-contract-report-before-empty",
+      "csv-contract-report-before-invalid",
+      "csv-contract-report-before-normal",
+      "csv-contract-report-before-reordered",
+      "csv-contract-report-doc-duplicate",
+      "csv-contract-report-doc-empty",
+      "csv-contract-report-doc-invalid",
+      "csv-contract-report-doc-malformed",
+      "csv-contract-report-doc-normal",
+      "csv-contract-report-doc-reordered",
+      "csv-contract-report-parse-duplicate",
+      "csv-contract-report-parse-empty",
+      "csv-contract-report-parse-invalid",
+      "csv-contract-report-parse-malformed",
+      "csv-contract-report-parse-normal",
+      "csv-contract-report-parse-reordered",
+      "csv-contract-report-xml-duplicate",
+      "csv-contract-report-xml-empty",
+      "csv-contract-report-xml-invalid",
+      "csv-contract-report-xml-malformed",
+      "csv-contract-report-xml-normal",
+      "csv-contract-report-xml-reordered",
+      "csv-contract-supplied-names-after-select",
+      "csv-contract-xml-after-quote",
+      "csv-contract-xml-blank-row",
+      "csv-contract-xml-collision",
+      "csv-contract-xml-comment",
+      "csv-contract-xml-comment-default",
+      "csv-contract-xml-crlf",
+      "csv-contract-xml-custom-quote",
+      "csv-contract-xml-default",
+      "csv-contract-xml-empty-fields",
+      "csv-contract-xml-empty-header",
+      "csv-contract-xml-empty-input",
+      "csv-contract-xml-empty-input-invalid-options",
+      "csv-contract-xml-empty-map",
+      "csv-contract-xml-empty-options",
+      "csv-contract-xml-empty-select",
+      "csv-contract-xml-empty-string",
+      "csv-contract-xml-empty-text-invalid-options",
+      "csv-contract-xml-escaped-quote",
+      "csv-contract-xml-header-false",
+      "csv-contract-xml-header-true",
+      "csv-contract-xml-keyword",
+      "csv-contract-xml-long-delimiter",
+      "csv-contract-xml-nonmap-options",
+      "csv-contract-xml-quoted-newline",
+      "csv-contract-xml-ragged-default",
+      "csv-contract-xml-select-order-duplicate",
+      "csv-contract-xml-select-precedes-trim",
+      "csv-contract-xml-separator",
+      "csv-contract-xml-supplied-header",
+      "csv-contract-xml-trim-rows",
+      "csv-contract-xml-trim-unquoted",
+      "csv-contract-xml-unknown-option",
+      "csv-contract-xml-unterminated",
+      "csv-contract-xml-whitespace-default",
+      "csv-contract-xml-wrong-boolean",
+      "csv-parsing-before",
+      "csv-parsing-edge",
+      "csv-parsing-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/CSV-CONTRACT-REVIEW.json",
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/csv-contracts/columns.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/duplicate-header.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/duplicate.xml",
+      "docs/xpath40-catalog/examples/csv-contracts/empty.xml",
+      "docs/xpath40-catalog/examples/csv-contracts/invalid.xml",
+      "docs/xpath40-catalog/examples/csv-contracts/normal.xml",
+      "docs/xpath40-catalog/examples/csv-contracts/observed-negative-select.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/observed-nonpositive-select.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/observed-qname-extension.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-after-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-blank-row.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-collision.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-comment-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-comment.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-crlf.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-custom-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-fields.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-header.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-input-invalid-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-input.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-map.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-select.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-string.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-empty-text-invalid-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-escaped-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-header-false.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-header-true.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-keyword.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-long-delimiter.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-nonmap-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-quoted-newline.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-ragged-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-select-order-duplicate.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-select-precedes-trim.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-separator.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-supplied-header.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-trim-rows.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-trim-unquoted.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-unknown-option.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-unterminated.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-whitespace-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/parse-wrong-boolean.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/reordered.xml",
+      "docs/xpath40-catalog/examples/csv-contracts/report-before-duplicate.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-before-empty.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-before-invalid.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-before-normal.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-before-reordered.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-duplicate.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-empty.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-invalid.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-malformed.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-normal.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-doc-reordered.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-duplicate.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-empty.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-invalid.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-malformed.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-normal.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-parse-reordered.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-duplicate.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-empty.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-invalid.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-malformed.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-normal.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/report-xml-reordered.xsl",
+      "docs/xpath40-catalog/examples/csv-contracts/supplied-names-after-select.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-after-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-blank-row.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-collision.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-comment-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-comment.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-crlf.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-custom-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-fields.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-header.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-input-invalid-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-input.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-map.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-select.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-string.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-empty-text-invalid-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-escaped-quote.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-header-false.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-header-true.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-keyword.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-long-delimiter.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-nonmap-options.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-quoted-newline.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-ragged-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-select-order-duplicate.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-select-precedes-trim.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-separator.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-supplied-header.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-trim-rows.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-trim-unquoted.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-unknown-option.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-unterminated.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-whitespace-default.xpath",
+      "docs/xpath40-catalog/examples/csv-contracts/xml-wrong-boolean.xpath",
+      "docs/xpath40-catalog/examples/csv-parsing/before.xpath",
+      "docs/xpath40-catalog/examples/csv-parsing/edge.xpath",
+      "docs/xpath40-catalog/examples/csv-parsing/main.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": []
+  },
+  "functions/customer-reference-matching.md": {
+    "caseIds": [
+      "equality-contract-compare-ascii",
+      "equality-contract-compare-codepoint",
+      "equality-contract-compare-draft-keyword-31",
+      "equality-contract-compare-draft-keyword-40",
+      "equality-contract-compare-draft-keyword-experimental",
+      "equality-contract-compare-empty",
+      "equality-contract-compare-implemented-keyword-31",
+      "equality-contract-compare-implemented-keyword-40",
+      "equality-contract-compare-implemented-keyword-experimental",
+      "equality-contract-compare-numeric",
+      "equality-contract-compare-unknown-collation",
+      "equality-contract-deep-empty-collation",
+      "equality-contract-deep-keyword-31",
+      "equality-contract-deep-keyword-40",
+      "equality-contract-deep-keyword-experimental",
+      "equality-contract-deep-map-keys",
+      "equality-contract-deep-map-values",
+      "equality-contract-deep-nan",
+      "equality-contract-deep-options-map",
+      "equality-contract-deep-reordered",
+      "equality-contract-deep-same-order",
+      "equality-contract-distinct-ascii",
+      "equality-contract-distinct-codepoint",
+      "equality-contract-distinct-empty",
+      "equality-contract-distinct-empty-collation",
+      "equality-contract-distinct-keyword-31",
+      "equality-contract-distinct-keyword-40",
+      "equality-contract-distinct-keyword-experimental",
+      "equality-contract-distinct-nan",
+      "equality-contract-distinct-unknown-collation",
+      "equality-contract-index-ascii",
+      "equality-contract-index-codepoint",
+      "equality-contract-index-empty",
+      "equality-contract-index-empty-collation",
+      "equality-contract-index-empty-target",
+      "equality-contract-index-keyword-31",
+      "equality-contract-index-keyword-40",
+      "equality-contract-index-keyword-experimental",
+      "equality-contract-index-nan",
+      "equality-contract-index-unknown-collation",
+      "equality-contract-report-empty-31",
+      "equality-contract-report-empty-40",
+      "equality-contract-report-normal-31",
+      "equality-contract-report-normal-40",
+      "equality-contract-report-reordered-31",
+      "equality-contract-report-reordered-40",
+      "equality-contract-token-ascii-boundary",
+      "equality-contract-token-empty",
+      "equality-contract-token-empty-collation",
+      "equality-contract-token-keyword-31",
+      "equality-contract-token-keyword-40",
+      "equality-contract-token-keyword-experimental",
+      "equality-contract-token-substring",
+      "equality-contract-token-two-words",
+      "equality-contract-token-unknown-collation",
+      "equality-contract-token-whole",
+      "equality-contract-unicode-codepoint",
+      "equality-contract-unicode-normalized"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/audit-equality-collation-contracts.json",
+      "docs/xpath40-catalog/EQUALITY-COLLATION-VERIFICATION.json",
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-ascii.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-codepoint.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-draft-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-draft-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-draft-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-empty.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-implemented-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-implemented-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-implemented-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-numeric.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/compare-unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-empty-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-map-keys.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-map-values.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-nan.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-options-map.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-reordered.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/deep-same-order.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-ascii.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-codepoint.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-empty-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-empty.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-nan.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/distinct-unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-ascii.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-codepoint.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-empty-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-empty-target.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-empty.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-nan.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/index-unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-empty-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-empty-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-normal-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-normal-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-reordered-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/report-reordered-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-ascii-boundary.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-empty-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-empty.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-keyword-31.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-keyword-40.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-keyword-experimental.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-substring.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-two-words.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/token-whole.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/unicode-codepoint.xpath",
+      "docs/xpath40-catalog/examples/equality-contracts/unicode-normalized.xpath",
+      "docs/xpath40-catalog/FUNCTION-OPTIONS-RECONCILIATION.json"
+    ],
+    "blocks": []
+  }
+}
