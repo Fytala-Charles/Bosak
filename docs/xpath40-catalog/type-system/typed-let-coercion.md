@@ -60,6 +60,8 @@ Benefit: State the type requirement at the binding; integral in-range values can
 
 ## 12. Implementation
 
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Typed binding/coercion differs from instance-of and cast; Record and numeric promotion with surplus/invalid value refusal; Inline function parameter/result conversion and modern versus paired static/runtime BC controls. **Boundary:** The probe runner explicitly sets both compile-time and runtime BC flags. These controls do not certify all XSLT 1.0/3.0 host propagation, schema-aware constructors or arbitrary function subtyping. C02 atomic-type-annotation empty-input defect remains open. Ownership: T03, T05, F08-atomic-annotation-empty. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 The [record-contract slice](../RECORD-CONTRACTS.md) adds typed-let record promotion and surplus-field refusal probes. A typed binding uses coercion, not an import cast; extra fields are rejected. See [casts versus coercion](structural-records.md) and [record updates](record-updates.md) for the bounded record-specific matrix.

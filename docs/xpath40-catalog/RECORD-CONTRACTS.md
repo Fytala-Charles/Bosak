@@ -4,6 +4,8 @@
  <p>22 October 2026 - source 1.23.6, unpublished</p>
 </div>
 
+**REQ-126 C03 complete — 26 October 2026:** [Constructor/type review](CONSTRUCTOR-TYPE-RECONCILIATION.md) reconciles eight entries and all 49 focus constructors. All 1,333 asserted controls match across 1,357 observations; 245 focused schema/API/host tests pass. Bounded nominal defaults/static fields are now evidenced. Generic wide casts, decimal precision, schema/host context and broader conversion remain explicit boundaries; C02's atomic-annotation defect remains open. Ten closure workpackages remain; C04 is next. No engine/test/example/version/gate change or acceptance waiver; skips/Braid/extension work stays deferred. Earlier checkpoint counts are historical.
+
 **Public1.23.7 - 23 October2026:** EQName bracket parsing, inline-record signature gates and numeric separator boundaries are [published and verified](../RELEASE-1.23.7-PUBLICATION.md). Current catalog74 entries/2,893 documentation checks; REQ-126/AC-03 remain partial. Braid dependency1.23.4 unchanged. Earlier source/unpublished checkpoints below are historical.
 
 The [new record-update entry](type-system/record-updates.md), expanded [structural-record comparisons](type-system/structural-records.md) and [complete stock-adjustment task](examples/record-contracts/README.md) supply46 public executable checks. These separate cast filtering/value conversion from coercion's surplus-field rejection, present empty fields from absent keys, and reconstruction from mutation. Typed-let/nested promotion, field order, annotation preservation and undeclared lookup/map:get behavior have bounded probes.

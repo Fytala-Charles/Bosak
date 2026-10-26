@@ -4,6 +4,8 @@
   <p>Complete reports and the 49-name focus-constructor audit</p>
 </div>
 
+**REQ-126 C03 complete — 26 October 2026:** [Constructor/type review](../../CONSTRUCTOR-TYPE-RECONCILIATION.md) reconciles eight entries and all 49 focus constructors. All 1,333 asserted controls match across 1,357 observations; 245 focused schema/API/host tests pass. Bounded nominal defaults/static fields are now evidenced. Generic wide casts, decimal precision, schema/host context and broader conversion remain explicit boundaries; C02's atomic-annotation defect remains open. Ten closure workpackages remain; C04 is next. No engine/test/example/version/gate change or acceptance waiver; skips/Braid/extension work stays deferred. Earlier checkpoint counts are historical.
+
 ## Business case
 
 A warehouse receives delivery lines as XML attributes. Before downstream processing, convert quantity to integer, unit price to decimal, promised date to date and active status to Boolean. The report preserves the supplier line ID and document order. `2.50` becomes canonical `2.5`; this is numeric conversion, not currency display formatting. No rounding, totals or missing-field acceptance policy is implied.

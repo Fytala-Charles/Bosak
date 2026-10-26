@@ -1,0 +1,1337 @@
+{"id":"focus-ENTITIES-direct","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-direct","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-reference","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-reference","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-lookup","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-lookup","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument","profile":"XPath31","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-node","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-node","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:ENTITIES() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITIES-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:ENTITIES() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITIES-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}ENTITIES is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITIES-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ENTITIES.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITIES-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ENTITIES.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITIES-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:ENTITY() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITY-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:ENTITY() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITY-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}ENTITY is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITY-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ENTITY.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITY-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ENTITY.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ENTITY-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-ID-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-ID-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:ID() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ID-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:ID() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ID-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}ID is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ID-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ID-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ID-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ID.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ID-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to ID.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-ID-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-ID-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-IDREF-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-IDREF-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:IDREF() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREF-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:IDREF() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREF-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}IDREF is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREF-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREF-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREF-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to IDREF.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREF-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to IDREF.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREF-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-IDREF-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-direct","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-direct","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-reference","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-reference","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-lookup","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-lookup","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument","profile":"XPath31","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-node","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-node","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:IDREFS() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREFS-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:IDREFS() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREFS-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}IDREFS is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREFS-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to IDREFS.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREFS-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to IDREFS.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-IDREFS-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NCName-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NCName-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:NCName() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NCName-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:NCName() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NCName-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}NCName is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NCName-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NCName-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NCName-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NCName.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NCName-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NCName.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NCName-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NCName-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:NMTOKEN() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKEN-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:NMTOKEN() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKEN-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}NMTOKEN is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKEN-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NMTOKEN.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKEN-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NMTOKEN.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKEN-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-direct","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-direct","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-reference","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-reference","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-lookup","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-lookup","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument","profile":"XPath31","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-node","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-node","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:NMTOKENS() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKENS-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:NMTOKENS() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKENS-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}NMTOKENS is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKENS-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NMTOKENS.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKENS-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to NMTOKENS.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-NMTOKENS-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-Name-direct","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-direct","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-reference","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-reference","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-lookup","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-lookup","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-argument","profile":"XPath31","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-argument","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-argument","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-node","profile":"XPath40","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-node","profile":"XPath40Experimental","result":"PART_A","error":null,"exceptionType":null}
+{"id":"focus-Name-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:Name() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-Name-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:Name() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-Name-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}Name is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-Name-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-Name-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-Name-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to Name.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-Name-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to Name.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-Name-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-Name-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-QName-direct","profile":"XPath40","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-direct","profile":"XPath40Experimental","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-reference","profile":"XPath40","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-reference","profile":"XPath40Experimental","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-lookup","profile":"XPath40","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-lookup","profile":"XPath40Experimental","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-argument","profile":"XPath31","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-argument","profile":"XPath40","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-argument","profile":"XPath40Experimental","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-node","profile":"XPath40","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-node","profile":"XPath40Experimental","result":"xs:integer","error":null,"exceptionType":null}
+{"id":"focus-QName-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:QName() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-QName-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:QName() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-QName-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}QName is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-QName-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-QName-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-QName-invalid","profile":"XPath40","result":null,"error":"FORG0001: Invalid lexical QName.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-QName-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Invalid lexical QName.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-QName-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-QName-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-anyURI-direct","profile":"XPath40","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-direct","profile":"XPath40Experimental","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-reference","profile":"XPath40","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-reference","profile":"XPath40Experimental","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-lookup","profile":"XPath40","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-lookup","profile":"XPath40Experimental","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument","profile":"XPath31","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument","profile":"XPath40","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument","profile":"XPath40Experimental","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-node","profile":"XPath40","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-node","profile":"XPath40Experimental","result":"https://supplier.example/invoice/42","error":null,"exceptionType":null}
+{"id":"focus-anyURI-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:anyURI() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-anyURI-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:anyURI() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-anyURI-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}anyURI is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-anyURI-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-anyURI-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-anyURI-invalid","profile":"XPath40","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-anyURI-invalid","profile":"XPath40Experimental","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-anyURI-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-anyURI-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-direct","profile":"XPath40","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-direct","profile":"XPath40Experimental","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-reference","profile":"XPath40","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-reference","profile":"XPath40Experimental","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-lookup","profile":"XPath40","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-lookup","profile":"XPath40Experimental","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument","profile":"XPath31","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument","profile":"XPath40","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument","profile":"XPath40Experimental","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-node","profile":"XPath40","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-node","profile":"XPath40Experimental","result":"QUI=","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:base64Binary() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-base64Binary-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:base64Binary() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-base64Binary-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}base64Binary is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-base64Binary-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to base64Binary.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-base64Binary-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to base64Binary.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-base64Binary-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-direct","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-direct","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-reference","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-reference","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-lookup","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-lookup","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-node","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-node","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:boolean() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-boolean-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:boolean() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-boolean-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}boolean is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-boolean-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-boolean-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-boolean-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to boolean.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-boolean-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to boolean.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-boolean-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-boolean-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-byte-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-byte-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:byte() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-byte-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:byte() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-byte-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}byte is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-byte-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-byte-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-byte-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to byte.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-byte-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to byte.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-byte-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-byte-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-date-direct","profile":"XPath40","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-direct","profile":"XPath40Experimental","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-reference","profile":"XPath40","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-reference","profile":"XPath40Experimental","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-lookup","profile":"XPath40","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-lookup","profile":"XPath40Experimental","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-argument","profile":"XPath31","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-argument","profile":"XPath40","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-argument","profile":"XPath40Experimental","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-node","profile":"XPath40","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-node","profile":"XPath40Experimental","result":"2026-10-12","error":null,"exceptionType":null}
+{"id":"focus-date-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:date() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-date-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:date() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-date-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}date is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-date-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-date-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-date-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to date.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-date-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to date.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-date-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-date-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dateTime-direct","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-direct","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-reference","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-reference","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-lookup","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-lookup","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument","profile":"XPath31","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-node","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-node","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTime-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:dateTime() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTime-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:dateTime() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTime-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}dateTime is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTime-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTime-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTime-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dateTime.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTime-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dateTime.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTime-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dateTime-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-direct","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-direct","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-reference","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-reference","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-lookup","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-lookup","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument","profile":"XPath31","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-node","profile":"XPath40","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-node","profile":"XPath40Experimental","result":"2026-10-12T09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:dateTimeStamp() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTimeStamp-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:dateTimeStamp() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTimeStamp-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}dateTimeStamp is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTimeStamp-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dateTimeStamp.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTimeStamp-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dateTimeStamp.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dateTimeStamp-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-direct","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-direct","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-reference","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-reference","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-lookup","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-lookup","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument","profile":"XPath31","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-node","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-node","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:dayTimeDuration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dayTimeDuration-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:dayTimeDuration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dayTimeDuration-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}dayTimeDuration is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dayTimeDuration-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dayTimeDuration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dayTimeDuration-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to dayTimeDuration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-dayTimeDuration-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-decimal-direct","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-direct","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-reference","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-reference","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-lookup","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-lookup","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument","profile":"XPath31","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-node","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-node","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-decimal-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:decimal() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-decimal-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:decimal() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-decimal-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}decimal is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-decimal-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-decimal-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-decimal-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to decimal.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-decimal-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to decimal.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-decimal-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-decimal-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-double-direct","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-direct","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-reference","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-reference","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-lookup","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-lookup","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-argument","profile":"XPath31","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-argument","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-argument","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-node","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-node","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-double-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:double() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-double-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:double() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-double-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}double is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-double-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-double-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-double-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to double.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-double-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to double.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-double-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-double-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-duration-direct","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-direct","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-reference","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-reference","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-lookup","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-lookup","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-argument","profile":"XPath31","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-argument","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-argument","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-node","profile":"XPath40","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-node","profile":"XPath40Experimental","result":"P1DT2H","error":null,"exceptionType":null}
+{"id":"focus-duration-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:duration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-duration-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:duration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-duration-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}duration is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-duration-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-duration-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-duration-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to duration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-duration-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to duration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-duration-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-duration-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-error-direct","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-direct","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-reference","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-reference","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-lookup","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-lookup","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-argument","profile":"XPath31","result":null,"error":"FORG0001: Cannot cast a value to xs:error (the type is abstract and has no instances).","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-argument","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast a value to xs:error (the type is abstract and has no instances).","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-argument","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast a value to xs:error (the type is abstract and has no instances).","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-node","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-node","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:error() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:error() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}error is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-error-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-error-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-type","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-error-type","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027PART_A\u0027 to error.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-direct","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-direct","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-reference","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-reference","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-lookup","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-lookup","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-argument","profile":"XPath31","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-argument","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-argument","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-node","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-node","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-float-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:float() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:float() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}float is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-float-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-float-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to float.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to float.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-float-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-float-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gDay-direct","profile":"XPath40","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-direct","profile":"XPath40Experimental","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-reference","profile":"XPath40","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-reference","profile":"XPath40Experimental","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-lookup","profile":"XPath40","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-lookup","profile":"XPath40Experimental","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument","profile":"XPath31","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument","profile":"XPath40","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument","profile":"XPath40Experimental","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-node","profile":"XPath40","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-node","profile":"XPath40Experimental","result":"---12","error":null,"exceptionType":null}
+{"id":"focus-gDay-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:gDay() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gDay-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:gDay() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gDay-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}gDay is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gDay-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gDay-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gDay-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gDay.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gDay-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gDay.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gDay-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gDay-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gMonth-direct","profile":"XPath40","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-direct","profile":"XPath40Experimental","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-reference","profile":"XPath40","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-reference","profile":"XPath40Experimental","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-lookup","profile":"XPath40","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-lookup","profile":"XPath40Experimental","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument","profile":"XPath31","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument","profile":"XPath40","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument","profile":"XPath40Experimental","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-node","profile":"XPath40","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-node","profile":"XPath40Experimental","result":"--10","error":null,"exceptionType":null}
+{"id":"focus-gMonth-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:gMonth() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonth-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:gMonth() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonth-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}gMonth is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonth-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonth-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonth-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gMonth.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonth-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gMonth.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonth-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gMonth-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-direct","profile":"XPath40","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-direct","profile":"XPath40Experimental","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-reference","profile":"XPath40","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-reference","profile":"XPath40Experimental","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-lookup","profile":"XPath40","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-lookup","profile":"XPath40Experimental","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument","profile":"XPath31","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument","profile":"XPath40","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument","profile":"XPath40Experimental","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-node","profile":"XPath40","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-node","profile":"XPath40Experimental","result":"--10-12","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:gMonthDay() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonthDay-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:gMonthDay() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonthDay-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}gMonthDay is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonthDay-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gMonthDay.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonthDay-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gMonthDay.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gMonthDay-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gYear-direct","profile":"XPath40","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-direct","profile":"XPath40Experimental","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-reference","profile":"XPath40","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-reference","profile":"XPath40Experimental","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-lookup","profile":"XPath40","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-lookup","profile":"XPath40Experimental","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument","profile":"XPath31","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument","profile":"XPath40","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument","profile":"XPath40Experimental","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-node","profile":"XPath40","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-node","profile":"XPath40Experimental","result":"2026","error":null,"exceptionType":null}
+{"id":"focus-gYear-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:gYear() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYear-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:gYear() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYear-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}gYear is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYear-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYear-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYear-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gYear.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYear-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gYear.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYear-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gYear-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-direct","profile":"XPath40","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-direct","profile":"XPath40Experimental","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-reference","profile":"XPath40","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-reference","profile":"XPath40Experimental","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-lookup","profile":"XPath40","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-lookup","profile":"XPath40Experimental","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument","profile":"XPath31","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument","profile":"XPath40","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument","profile":"XPath40Experimental","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-node","profile":"XPath40","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-node","profile":"XPath40Experimental","result":"2026-10","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:gYearMonth() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYearMonth-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:gYearMonth() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYearMonth-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}gYearMonth is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYearMonth-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gYearMonth.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYearMonth-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to gYearMonth.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-gYearMonth-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-direct","profile":"XPath40","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-direct","profile":"XPath40Experimental","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-reference","profile":"XPath40","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-reference","profile":"XPath40Experimental","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-lookup","profile":"XPath40","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-lookup","profile":"XPath40Experimental","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument","profile":"XPath31","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument","profile":"XPath40","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument","profile":"XPath40Experimental","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-node","profile":"XPath40","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-node","profile":"XPath40Experimental","result":"4142","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:hexBinary() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-hexBinary-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:hexBinary() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-hexBinary-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}hexBinary is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-hexBinary-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to hexBinary.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-hexBinary-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to hexBinary.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-hexBinary-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-int-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-int-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:int() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-int-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:int() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-int-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}int is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-int-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-int-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-int-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to int.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-int-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to int.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-int-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-int-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-integer-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-integer-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:integer() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-integer-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:integer() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-integer-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}integer is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-integer-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-integer-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-integer-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-integer-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-integer-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-integer-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-language-direct","profile":"XPath40","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-direct","profile":"XPath40Experimental","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-reference","profile":"XPath40","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-reference","profile":"XPath40Experimental","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-lookup","profile":"XPath40","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-lookup","profile":"XPath40Experimental","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-argument","profile":"XPath31","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-argument","profile":"XPath40","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-argument","profile":"XPath40Experimental","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-node","profile":"XPath40","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-node","profile":"XPath40Experimental","result":"en-GB","error":null,"exceptionType":null}
+{"id":"focus-language-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:language() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-language-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:language() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-language-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}language is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-language-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-language-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-language-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to language.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-language-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to language.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-language-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-language-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-long-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-long-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:long() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-long-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:long() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-long-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}long is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-long-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-long-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-long-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to long.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-long-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to long.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-long-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-long-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-direct","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-direct","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-reference","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-reference","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-lookup","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-lookup","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument","profile":"XPath31","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-node","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-node","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:negativeInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-negativeInteger-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:negativeInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-negativeInteger-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}negativeInteger is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-negativeInteger-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to negativeInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-negativeInteger-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to negativeInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-negativeInteger-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:nonNegativeInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonNegativeInteger-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:nonNegativeInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonNegativeInteger-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}nonNegativeInteger is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonNegativeInteger-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to nonNegativeInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonNegativeInteger-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to nonNegativeInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonNegativeInteger-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-direct","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-direct","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-reference","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-reference","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-lookup","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-lookup","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument","profile":"XPath31","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-node","profile":"XPath40","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-node","profile":"XPath40Experimental","result":"-12","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:nonPositiveInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonPositiveInteger-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:nonPositiveInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonPositiveInteger-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}nonPositiveInteger is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonPositiveInteger-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to nonPositiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonPositiveInteger-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to nonPositiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-nonPositiveInteger-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-direct","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-direct","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-reference","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-reference","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-lookup","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-lookup","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument","profile":"XPath31","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-node","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-node","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:normalizedString() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-normalizedString-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:normalizedString() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-normalizedString-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}normalizedString is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-normalizedString-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-invalid","profile":"XPath40","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-normalizedString-invalid","profile":"XPath40Experimental","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-normalizedString-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-numeric-direct","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-direct","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-reference","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-reference","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-lookup","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-lookup","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument","profile":"XPath31","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-node","profile":"XPath40","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-node","profile":"XPath40Experimental","result":"12.5","error":null,"exceptionType":null}
+{"id":"focus-numeric-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:numeric() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-numeric-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:numeric() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-numeric-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}numeric is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-numeric-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-numeric-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-numeric-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to numeric.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-numeric-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to numeric.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-numeric-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-numeric-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:positiveInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-positiveInteger-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:positiveInteger() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-positiveInteger-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}positiveInteger is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-positiveInteger-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to positiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-positiveInteger-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to positiveInteger.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-positiveInteger-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-short-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-short-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:short() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-short-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:short() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-short-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}short is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-short-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-short-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-short-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to short.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-short-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to short.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-short-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-short-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-string-direct","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-direct","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-reference","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-reference","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-lookup","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-lookup","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-argument","profile":"XPath31","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-argument","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-argument","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-node","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-node","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-string-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:string() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-string-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:string() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-string-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}string is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-string-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-string-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-string-invalid","profile":"XPath40","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-string-invalid","profile":"XPath40Experimental","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-string-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-string-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-time-direct","profile":"XPath40","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-direct","profile":"XPath40Experimental","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-reference","profile":"XPath40","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-reference","profile":"XPath40Experimental","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-lookup","profile":"XPath40","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-lookup","profile":"XPath40Experimental","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-argument","profile":"XPath31","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-argument","profile":"XPath40","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-argument","profile":"XPath40Experimental","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-node","profile":"XPath40","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-node","profile":"XPath40Experimental","result":"09:30:00Z","error":null,"exceptionType":null}
+{"id":"focus-time-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:time() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-time-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:time() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-time-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}time is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-time-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-time-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-time-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to time.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-time-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to time.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-time-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-time-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-token-direct","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-direct","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-reference","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-reference","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-lookup","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-lookup","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-argument","profile":"XPath31","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-argument","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-argument","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-node","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-node","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-token-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:token() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-token-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:token() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-token-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}token is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-token-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-token-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-token-invalid","profile":"XPath40","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-token-invalid","profile":"XPath40Experimental","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-token-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-token-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:unsignedByte() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedByte-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:unsignedByte() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedByte-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}unsignedByte is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedByte-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedByte.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedByte-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedByte.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedByte-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:unsignedInt() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedInt-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:unsignedInt() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedInt-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}unsignedInt is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedInt-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedInt.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedInt-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedInt.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedInt-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:unsignedLong() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedLong-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:unsignedLong() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedLong-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}unsignedLong is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedLong-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedLong-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedLong-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-direct","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-direct","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument","profile":"XPath31","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-node","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-node","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:unsignedShort() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedShort-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:unsignedShort() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedShort-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}unsignedShort is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedShort-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedShort.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedShort-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to unsignedShort.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-unsignedShort-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-direct","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-direct","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-reference","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-reference","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-lookup","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-lookup","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument","profile":"XPath31","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-node","profile":"XPath40","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-node","profile":"XPath40Experimental","result":"supplier A","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:untypedAtomic() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-untypedAtomic-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:untypedAtomic() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-untypedAtomic-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}untypedAtomic is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-untypedAtomic-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-invalid","profile":"XPath40","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-untypedAtomic-invalid","profile":"XPath40Experimental","result":null,"error":"FOTY0013: Cannot atomize a function item (including maps)","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-untypedAtomic-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-direct","profile":"XPath40","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-direct","profile":"XPath40Experimental","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-reference","profile":"XPath40","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-reference","profile":"XPath40Experimental","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-lookup","profile":"XPath40","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-lookup","profile":"XPath40Experimental","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument","profile":"XPath31","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument","profile":"XPath40","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument","profile":"XPath40Experimental","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-node","profile":"XPath40","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-node","profile":"XPath40Experimental","result":"P2M","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-missing","profile":"XPath40","result":null,"error":"XPDY0002: xs:yearMonthDuration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-yearMonthDuration-missing","profile":"XPath40Experimental","result":null,"error":"XPDY0002: xs:yearMonthDuration() called with no context item.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-yearMonthDuration-old-profile","profile":"XPath31","result":null,"error":"XPST0017: Function {http://www.w3.org/2001/XMLSchema}yearMonthDuration is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-yearMonthDuration-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to yearMonthDuration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-yearMonthDuration-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027bad lexical value!\u0027 to yearMonthDuration.","exceptionType":"System.InvalidOperationException"}
+{"id":"focus-yearMonthDuration-type","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-type","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-cast-extra","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-cast-extra","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-cast-lexical","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-cast-lexical","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-cast-invalid","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-cast-invalid","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-extra","profile":"XPath40","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-extra","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-string","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-string","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-promote","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-promote","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-nested","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-nested","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-missing-empty","profile":"XPath40","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-missing-empty","profile":"XPath40Experimental","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-missing-required","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-missing-required","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-missing","profile":"XPath40","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-missing","profile":"XPath40Experimental","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-order","profile":"XPath40","result":"b|a","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-order","profile":"XPath40Experimental","result":"b|a","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-plain-map","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-plain-map","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-record-star-plain","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-record-star-plain","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-record-star-assert","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-record-star-assert","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-castable-plain","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-castable-plain","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-castable-invalid","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-castable-invalid","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-lookup-unknown","profile":"XPath40","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-lookup-unknown","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-map-get-unknown","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-map-get-unknown","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-value","profile":"XPath40","result":"2","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-value","profile":"XPath40Experimental","result":"2","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-annotation","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-annotation","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-original","profile":"XPath40","result":"1|2","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-original","profile":"XPath40Experimental","result":"1|2","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-extra","profile":"XPath40","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-extra","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-plain","profile":"XPath40","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-plain","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-nonmap","profile":"XPath40","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-nonmap","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-promote","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-promote","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-string","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-string","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-decimal","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-decimal","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-empty-optional","profile":"XPath40","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-empty-optional","profile":"XPath40Experimental","result":"true:0","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-empty-required","profile":"XPath40","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-empty-required","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-order","profile":"XPath40","result":"b|a","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-order","profile":"XPath40Experimental","result":"b|a","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-nested","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-nested","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-update-key-type","profile":"XPath40","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-update-key-type","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-typed-let-promote","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-typed-let-promote","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-typed-let-extra","profile":"XPath40","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-typed-let-extra","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","exceptionType":"System.InvalidOperationException"}
+{"id":"catalog-record-contract-coerce-original","profile":"XPath40","result":"true:true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-coerce-original","profile":"XPath40Experimental","result":"true:true","error":null,"exceptionType":null}
+{"id":"catalog-record-contract-refuse31-cast-lexical","profile":"XPath31","result":null,"error":"Parse error at position 128: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"catalog-record-contract-refuse31-coerce-promote","profile":"XPath31","result":null,"error":"Parse error at position 99: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"catalog-record-contract-refuse31-update-value","profile":"XPath31","result":null,"error":"Parse error at position 126: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"choice-member-integer","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"choice-member-integer","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"choice-member-fraction","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"choice-member-fraction","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"choice-untyped-is-not-membership","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"choice-untyped-is-not-membership","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"choice-coerce-integer-first","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"choice-coerce-integer-first","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"choice-coerce-string-first","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"choice-coerce-string-first","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"enum-member","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"enum-member","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"enum-case-sensitive","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"enum-case-sensitive","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"enum-coerce-untyped","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"enum-coerce-untyped","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"enum-invalid-binding","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type enum(\u0027ready\u0027,\u0027review\u0027)","exceptionType":"System.InvalidOperationException"}
+{"id":"enum-invalid-binding","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type enum(\u0027ready\u0027,\u0027review\u0027)","exceptionType":"System.InvalidOperationException"}
+{"id":"choice-old-profile-refusal","profile":"XPath31","result":null,"error":"Parse error at position 25: XPST0003: A choice item type (\u0027|\u0027 alternatives in parentheses) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"enum-old-profile-refusal","profile":"XPath31","result":null,"error":"Parse error at position -1: XPST0003: An enumeration type (\u0027enum(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"record-old-inline-signature","profile":"XPath31","result":null,"error":"Parse error at position 15: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"record-inline-nested-old-signature","profile":"XPath31","result":null,"error":"Parse error at position 29: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"record-required-empty","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"record-required-empty","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"record-optional-key-present","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"record-optional-key-present","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"list-constructor-items","profile":"XPath31","result":"A|B","error":null,"exceptionType":null}
+{"id":"list-constructor-items","profile":"XPath40","result":"A|B","error":null,"exceptionType":null}
+{"id":"list-constructor-items","profile":"XPath40Experimental","result":"A|B","error":null,"exceptionType":null}
+{"id":"list-item-type-invalid","profile":"XPath31","result":null,"error":"XPST0051","exceptionType":"System.InvalidOperationException"}
+{"id":"list-item-type-invalid","profile":"XPath40","result":null,"error":"XPST0051","exceptionType":"System.InvalidOperationException"}
+{"id":"list-item-type-invalid","profile":"XPath40Experimental","result":null,"error":"XPST0051","exceptionType":"System.InvalidOperationException"}
+{"id":"list-signature","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"list-signature","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"list-signature","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"qname-bound-prefix","profile":"XPath31","result":"http://www.w3.org/2001/XMLSchema","error":null,"exceptionType":null}
+{"id":"qname-bound-prefix","profile":"XPath40","result":"http://www.w3.org/2001/XMLSchema","error":null,"exceptionType":null}
+{"id":"qname-bound-prefix","profile":"XPath40Experimental","result":"http://www.w3.org/2001/XMLSchema","error":null,"exceptionType":null}
+{"id":"qname-unbound-prefix","profile":"XPath31","result":null,"error":"FONS0004: No namespace binding for prefix \u0027unknown\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"qname-unbound-prefix","profile":"XPath40","result":null,"error":"FONS0004: No namespace binding for prefix \u0027unknown\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"qname-unbound-prefix","profile":"XPath40Experimental","result":null,"error":"FONS0004: No namespace binding for prefix \u0027unknown\u0027.","exceptionType":"System.InvalidOperationException"}
+{"id":"function-promote","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"function-promote","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"function-promote","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"function-return-invalid","profile":"XPath31","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"function-return-invalid","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"function-return-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"function-wrapper","profile":"XPath31","result":"3","error":null,"exceptionType":null}
+{"id":"function-wrapper","profile":"XPath40","result":"3","error":null,"exceptionType":null}
+{"id":"function-wrapper","profile":"XPath40Experimental","result":"3","error":null,"exceptionType":null}
+{"id":"function-wrapper-return-invalid","profile":"XPath31","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"function-wrapper-return-invalid","profile":"XPath40","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"function-wrapper-return-invalid","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-integer","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to integer: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-integer","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to integer: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-integer","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to integer: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-decimal","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to decimal: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-decimal","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to decimal: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-decimal","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to decimal: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-double","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to double: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-double","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to double: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-double","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to double: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-boolean","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to boolean: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-boolean","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to boolean: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-boolean","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to boolean: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-string","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to string: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-string","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to string: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-string","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to string: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-date","profile":"XPath31","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to date: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-date","profile":"XPath40","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to date: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-date","profile":"XPath40Experimental","result":null,"error":"XPTY0004: The value \u0027(sequence)\u0027 cannot be cast to date: the cast combination is not permitted (XPath 3.1 \u00A719.3).","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-QName","profile":"XPath31","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-QName","profile":"XPath40","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"cardinality-QName","profile":"XPath40Experimental","result":null,"error":"XPTY0004","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-literal-integer","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"wide-literal-integer","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"wide-literal-integer","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"wide-generic-string","profile":"XPath31","result":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-string","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-string","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u00279223372036854775808\u0027 to integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-numeric","profile":"XPath31","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-numeric","profile":"XPath40","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-numeric","profile":"XPath40Experimental","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-cast","profile":"XPath31","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-cast","profile":"XPath40","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-cast","profile":"XPath40Experimental","result":null,"error":"FORG0001: The value \u00279223372036854775808\u0027 is out of range for xs:integer.","exceptionType":"System.InvalidOperationException"}
+{"id":"wide-generic-castable","profile":"XPath31","result":"false","error":null,"exceptionType":null}
+{"id":"wide-generic-castable","profile":"XPath40","result":"false","error":null,"exceptionType":null}
+{"id":"wide-generic-castable","profile":"XPath40Experimental","result":"false","error":null,"exceptionType":null}
+{"id":"wide-unsigned-preserved","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"wide-unsigned-preserved","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"wide-unsigned-preserved","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"double-signed-overflow","profile":"XPath31","result":null,"error":"FOCA0003","exceptionType":"System.InvalidOperationException"}
+{"id":"double-signed-overflow","profile":"XPath40","result":null,"error":"FOCA0003","exceptionType":"System.InvalidOperationException"}
+{"id":"double-signed-overflow","profile":"XPath40Experimental","result":null,"error":"FOCA0003","exceptionType":"System.InvalidOperationException"}
+{"id":"double-unsigned-overflow","profile":"XPath31","result":null,"error":"FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"double-unsigned-overflow","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"double-unsigned-overflow","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u00271.8446744073709552E19\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"unsigned-decimal-truncation","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-decimal-truncation","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-decimal-truncation","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-float-near-zero","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-float-near-zero","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-float-near-zero","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"unsigned-invalid-lexical","profile":"XPath31","result":null,"error":"FORG0001: Cannot cast \u00271.5\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"unsigned-invalid-lexical","profile":"XPath40","result":null,"error":"FORG0001: Cannot cast \u00271.5\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"unsigned-invalid-lexical","profile":"XPath40Experimental","result":null,"error":"FORG0001: Cannot cast \u00271.5\u0027 to unsignedLong.","exceptionType":"System.InvalidOperationException"}
+{"id":"decimal-storage-precision","profile":"XPath31","result":"12345678901234567890123456789","error":null,"exceptionType":null}
+{"id":"decimal-storage-precision","profile":"XPath40","result":"12345678901234567890123456789","error":null,"exceptionType":null}
+{"id":"decimal-storage-precision","profile":"XPath40Experimental","result":"12345678901234567890123456789","error":null,"exceptionType":null}
+{"id":"literal-radix","profile":"XPath40","result":"256","error":null,"exceptionType":null}
+{"id":"literal-radix","profile":"XPath40Experimental","result":"256","error":null,"exceptionType":null}
+{"id":"literal-separator","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"literal-separator","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"literal-old-profile","profile":"XPath31","result":null,"error":"Parse error at position 0: XPST0003: Unexpected token Invalid in primary expression","exceptionType":"Bosak.XPath.Parser.XPathParseException"}
+{"id":"modern-unary-string","profile":"XPath31","result":null,"error":"XPTY0004: Arithmetic operands must be numeric or xs:untypedAtomic values, but got String","exceptionType":"System.InvalidOperationException"}
+{"id":"modern-unary-string","profile":"XPath40","result":null,"error":"XPTY0004: Arithmetic operands must be numeric or xs:untypedAtomic values, but got String","exceptionType":"System.InvalidOperationException"}
+{"id":"modern-unary-string","profile":"XPath40Experimental","result":null,"error":"XPTY0004: Arithmetic operands must be numeric or xs:untypedAtomic values, but got String","exceptionType":"System.InvalidOperationException"}
+{"id":"modern-unary-untyped","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"modern-unary-untyped","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"modern-unary-untyped","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"modern-unary-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"modern-unary-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"modern-unary-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"bc-static-string","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"bc-static-string","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"bc-static-string","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"bc-static-sequence","profile":"XPath31","result":"true","error":null,"exceptionType":null}
+{"id":"bc-static-sequence","profile":"XPath40","result":"true","error":null,"exceptionType":null}
+{"id":"bc-static-sequence","profile":"XPath40Experimental","result":"true","error":null,"exceptionType":null}
+{"id":"bc-dynamic-function-path","profile":"XPath31","result":"2","error":null,"exceptionType":null}
+{"id":"bc-dynamic-function-path","profile":"XPath40","result":"2","error":null,"exceptionType":null}
+{"id":"bc-dynamic-function-path","profile":"XPath40Experimental","result":"2","error":null,"exceptionType":null}
+{"id":"capture-constructor-reference","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"capture-constructor-reference","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"capture-constructor-lookup","profile":"XPath40","result":"12","error":null,"exceptionType":null}
+{"id":"capture-constructor-lookup","profile":"XPath40Experimental","result":"12","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITIES-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ENTITY-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ID-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ID-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-ID-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREF-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-IDREFS-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NCName-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKEN-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-NMTOKENS-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-Name-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-Name-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-Name-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-QName-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-QName-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-QName-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-anyURI-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-base64Binary-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-boolean-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-byte-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-byte-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-byte-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-date-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-date-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-date-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTime-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dateTimeStamp-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-dayTimeDuration-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-decimal-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-double-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-double-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-double-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-duration-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-duration-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-duration-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-error-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-error-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-error-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-float-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-float-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-float-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gDay-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonth-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gMonthDay-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYear-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-gYearMonth-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-hexBinary-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-int-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-int-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-int-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-integer-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-integer-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-integer-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-language-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-language-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-language-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-long-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-long-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-long-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-negativeInteger-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonNegativeInteger-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-nonPositiveInteger-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-normalizedString-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-numeric-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-positiveInteger-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-short-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-short-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-short-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-string-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-string-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-string-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-time-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-time-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-time-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-token-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-token-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-token-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedByte-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedInt-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedLong-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-unsignedShort-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-untypedAtomic-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument-empty","profile":"XPath31","result":"0","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument-empty","profile":"XPath40","result":"0","error":null,"exceptionType":null}
+{"id":"focus-yearMonthDuration-argument-empty","profile":"XPath40Experimental","result":"0","error":null,"exceptionType":null}

@@ -1,0 +1,14 @@
+// Generated bounded C03 nominal record host diagnostics.
+using Bosak.Xslt.Api;
+using Bosak.XPath.Providers.Xml;
+using System.Xml.Linq;
+using System.Text.Json;
+using var output=new StreamWriter(args[1]){AutoFlush=true};
+foreach(var q in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!)
+foreach(var profile in new[]{XsltProcessorProfile.Legacy,XsltProcessorProfile.Xslt40Draft})
+{
+ string? result=null,error=null;
+ try{result=new XsltCompiler{ProcessorProfile=profile}.Compile(q.GetProperty("stylesheet").GetString()!).TransformToString(new XDocumentNode(XDocument.Parse("<r/>")));}
+ catch(Exception ex){error=ex.Message;}
+ output.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),host=profile.ToString(),result,error}));
+}

@@ -78,6 +78,8 @@ These are tested structural cases, not exhaustive casts, nominal static/default 
 
 ## 12. Implementation
 
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Cast constructs an annotated record and discards surplus fields; Coercion rejects surplus fields and recursively coerces declared fields; Required/optional emptiness, declaration order, record(*) and undeclared lookup/map:get distinctions. **Boundary:** A plain map is not an annotated record. Structural matches do not require annotation identity with the tested target, while named identity remains host-defined. Complete record/nominal/schema conversion combinations are not inferred. Ownership: T04, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code

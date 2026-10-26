@@ -62,6 +62,8 @@ Benefit: Use the current item as the argument to a zero-arity constructor inside
 
 ## 12. Implementation
 
+**C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies All 49 registered zero-arity names with representative lexical conversion, type/error and context checks; Direct/reference/lookup/node paths, explicit one-argument comparison, empty iteration and missing focus; QName static namespace and captured-focus boundaries. **Boundary:** A zero-arity constructor requires suitable focus; empty simple-map input invokes nothing. xs:error has no nonempty successful value, and its empty/type fixture is not proof of a constructed value. Representative inputs do not certify all facets, namespaces, schema types or arbitrary casts. Ownership: T03, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code

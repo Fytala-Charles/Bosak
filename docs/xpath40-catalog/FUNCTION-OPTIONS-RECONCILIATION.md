@@ -4,6 +4,8 @@
   <p>26 October 2026 · published Bosak 1.26.3</p>
 </div>
 
+**REQ-126 C03 complete — 26 October 2026:** [Constructor/type review](CONSTRUCTOR-TYPE-RECONCILIATION.md) reconciles eight entries and all 49 focus constructors. All 1,333 asserted controls match across 1,357 observations; 245 focused schema/API/host tests pass. Bounded nominal defaults/static fields are now evidenced. Generic wide casts, decimal precision, schema/host context and broader conversion remain explicit boundaries; C02's atomic-annotation defect remains open. Ten closure workpackages remain; C04 is next. No engine/test/example/version/gate change or acceptance waiver; skips/Braid/extension work stays deferred. Earlier checkpoint counts are historical.
+
 **C02 completes the bounded reconciliation of 30 function entries and 74 function surfaces. Eleven closure workpackages remain open.** This closes a review workpackage, not all function defects or AC-01–04. The [machine-readable report](FUNCTION-OPTIONS-RECONCILIATION.json) separates verified examples, explicit unsupported boundaries, current-draft adoption choices and correction work. C13 still requires acceptance or resolution of outstanding limitations; C02 grants no waiver. Skip fixes, Braid and the VS Code extension remain deferred.
 
 ## Verification and its limits
