@@ -1,0 +1,62 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383"
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91"
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4"
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a"
+  },
+  {
+    "id": "Bosak.XPath.Providers.Database",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "04fea6c67827b8b1a8b08a361b46b5eb6ecb774c038a934005baa2a418c5a9e7"
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb"
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03"
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+  },
+  {
+    "id": "Bosak.XQuery",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "09620ad0a4ed0235c71a1a917b378c987ccf399bf5bacaa0ad5177e01da74f3b"
+  },
+  {
+    "id": "Bosak.Xslt",
+    "version": "1.26.2.0",
+    "informationalVersion": "1.26.2\u002B6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "sha256": "ac7a1ca27b811295ec00edecf4f8d12605c93284051ea33935e65618cf995b11"
+  }
+]

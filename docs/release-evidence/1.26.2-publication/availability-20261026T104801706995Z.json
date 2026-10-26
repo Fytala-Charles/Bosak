@@ -1,0 +1,167 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "available": true,
+    "indexListed": true,
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/1.26.2/bosak.xpath.providers.1.26.2.nupkg",
+    "archive": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\public-packages\\Bosak.XPath.Providers.1.26.2.nupkg",
+    "sha256": "5dcfa05044e3aae52c7b2461a8042d2cbf304249e10b8512f76d48b92b93855d",
+    "bytes": 162971,
+    "assemblySha256": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+    "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "repositorySignaturePresent": true,
+    "approvedGitAssetBytesMatch": true,
+    "dependencies": [
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      }
+    ]
+  },
+  {
+    "id": "Bosak.XPath.Providers.Database",
+    "available": true,
+    "indexListed": true,
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/1.26.2/bosak.xpath.providers.database.1.26.2.nupkg",
+    "archive": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\public-packages\\Bosak.XPath.Providers.Database.1.26.2.nupkg",
+    "sha256": "ded38045140932505a1d2800da97861152f2ab3f91c9484448707bc0d96ed11c",
+    "bytes": 93197,
+    "assemblySha256": "04fea6c67827b8b1a8b08a361b46b5eb6ecb774c038a934005baa2a418c5a9e7",
+    "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "repositorySignaturePresent": true,
+    "approvedGitAssetBytesMatch": true,
+    "dependencies": [
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      }
+    ]
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XQuery",
+    "available": true,
+    "indexListed": true,
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/1.26.2/bosak.xquery.1.26.2.nupkg",
+    "archive": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\public-packages\\Bosak.XQuery.1.26.2.nupkg",
+    "sha256": "73a9963bff9b4077e92b761b1e9e86045310a57d6f15d7bb5bdc3ed4b67bed4a",
+    "bytes": 137725,
+    "assemblySha256": "09620ad0a4ed0235c71a1a917b378c987ccf399bf5bacaa0ad5177e01da74f3b",
+    "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "repositorySignaturePresent": true,
+    "approvedGitAssetBytesMatch": true,
+    "dependencies": [
+      {
+        "id": "Bosak.XPath.Api",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      }
+    ]
+  },
+  {
+    "id": "Bosak.Xslt",
+    "available": true,
+    "indexListed": true,
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/1.26.2/bosak.xslt.1.26.2.nupkg",
+    "archive": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\public-packages\\Bosak.Xslt.1.26.2.nupkg",
+    "sha256": "853f82f311c1e27d4208a89be3f390c1ae5be6f223126d5350d3c142a9bd58c7",
+    "bytes": 725037,
+    "assemblySha256": "ac7a1ca27b811295ec00edecf4f8d12605c93284051ea33935e65618cf995b11",
+    "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+    "repositorySignaturePresent": true,
+    "approvedGitAssetBytesMatch": true,
+    "dependencies": [
+      {
+        "id": "Bosak.XPath.Api",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Parser",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XQuery",
+        "version": "1.26.2",
+        "exclude": "Build,Analyzers"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-26",
+  "ownerInstruction": "Please continue with your recommendations",
+  "reviewedSource": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+  "version": "1.26.2",
+  "integrationPR": 463,
+  "reviewStatus": "All three CI jobs passed; 18,821 solution/LSP tests",
+  "publicationAuthorization": "Pending explicit owner approval",
+  "automaticReview": "Rejected merge/default-branch and release-tag/public NuGet publication command because explicit approval for irreversible 1.26.2 publication was absent.",
+  "commandExecuted": false,
+  "tagCreated": false,
+  "releaseTriggered": false,
+  "checkedAtUtc": "2026-10-26T10:21:25.016587+00:00"
+}
