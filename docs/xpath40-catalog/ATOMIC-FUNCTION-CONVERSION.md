@@ -4,6 +4,8 @@
   <p>25 October 2026 — source 1.26.1 unpublished; public 1.26.0 accepted</p>
 </div>
 
+**Archive correction — 26 October 2026:** implementation and validation were committed at `ef33fab9`. Git normalized line endings in 18 evidence files and ignored nine raw logs in that commit. The [separate retention correction](evidence/atomic-function-conversion/retention-correction-2026-10-26.json) restores the original raw bytes, adds the nine logs and protects the evidence directory from line-ending conversion. Every original evidence hash still matches the original manifest; execution outcomes and acceptance are unchanged.
+
 This REQ-126 slice starts at local main `ffe3f2a6`, the PR460 merge. It follows the [binary/range empty-result correction](BINARY-EMPTY-ATOMIZATION.md) and closes the sampled `abs` findings from the [recursive-array audit](ARRAY-ATOMIZATION-AUDIT.md). It does not establish correctness of every standard-function conversion path.
 
 ## Contract and audit

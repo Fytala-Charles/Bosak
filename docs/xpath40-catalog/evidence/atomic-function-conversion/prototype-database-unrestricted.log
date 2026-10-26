@@ -1,0 +1,5 @@
+Test run for D:\Development\Bosak\tests\Bosak.XPath.Providers.Database.Tests\bin\Release\net10.0\Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+Results File: D:\Development\Bosak\.guard-tmp\atomic-function-validation\database-unrestricted\charl_CHARLES_2026-10-25_21_11_02_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 4 s - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
