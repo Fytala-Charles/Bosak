@@ -1,0 +1,55 @@
+{
+  "version": "1.26.1",
+  "revision": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+  "ownerAuthorization": "Please tag and publish (If you agree)",
+  "checkedAtUtc": "2026-10-26T07:33:24.982471+00:00",
+  "integrationPR": 461,
+  "integrationMerge": "f82d715003d0c7fc5410660cb74ec52807db5606",
+  "ciRun": 40285794170,
+  "indexes": [
+    {
+      "id": "Bosak.XPath.Api",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XQuery",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.Xslt",
+      "candidatePresent": false
+    }
+  ],
+  "duplicateDispatchPerformed": false,
+  "status": "ONE_TAG_PUSHED_RELEASE_WORKFLOW_PENDING",
+  "tagObject": "de863097ac4b0caff8d32fe54859dd85b6b9779a",
+  "remote": "de863097ac4b0caff8d32fe54859dd85b6b9779a\trefs/tags/v1.26.1\n65417cdb3bff184ca9ff1f624582f55ca4681db9\trefs/tags/v1.26.1^{}"
+}
