@@ -50,7 +50,19 @@
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs",
         "src/Bosak.Xslt/Api/XsltFunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Legacy selects XPath31 or frozen XPath40 from the effective local version; Xslt40Draft always selects frozen XPath40. Neither host enables scan. The 66 ordinary and 114 direct module controls remain supplied. Public PopulateTransformOnly installs transform#1; Populate also installs the XQuery loader delegate, while module source registration is seeded into static use-when contexts.",
+        "remaining": "Full static-error detection mode, transitive profile graphs, package version/override resolution, resource policies and cross-host coercion adoption remain explicit boundaries. Existing package/authoring tests establish only their named cases.",
+        "tickets": [
+          "H01",
+          "H03",
+          "H04"
+        ]
+      }
     },
     {
       "key": "S1-S2-S5",
@@ -412,7 +424,17 @@
       "source": [
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Note content is discarded; then/else evaluates only the selected branch, with then/content refusal and EBV errors. Map duplicate policies, input type and select/content errors match. Separators occur between iterations, including empty bodies, with no leading/trailing delimiter for empty/single input.",
+        "remaining": "Known draft forms accepted by Legacy version3 are Bosak extensions, not portable XSLT3. Attribute/function/static/streaming/package combinations beyond named controls require per-entry acceptance.",
+        "tickets": [
+          "H04"
+        ]
+      }
     },
     {
       "key": "S8-dispatch",
@@ -434,7 +456,18 @@
       "source": [
         "src/Bosak.Xslt/Stylesheet/Stylesheet.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C06 bounded review complete; not accepted",
+        "report": "HOST-PROFILE-RECONCILIATION.json",
+        "assessment": "Array per-item versus whole-sequence member boundaries, empty members, switch general-comparison matching and selected-empty termination, and select text/coercion/node identity are verified. The numeric/boolean switch comparison silently misses where direct XPath = raises XPTY0004.",
+        "remaining": "H02 comparison mismatch remains unfixed. Native/fallback, streaming, collation and arbitrary structured item combinations are limited to named evidence; no full instruction/model acceptance.",
+        "tickets": [
+          "H02",
+          "H04"
+        ]
+      }
     },
     {
       "key": "S8-patterns",
@@ -633,8 +666,8 @@
   ],
   "currentReview": {
     "date": "2026-10-26",
-    "report": "TYPE-COLLECTION-PATTERN-RECONCILIATION.md",
-    "previousReport": "EXPRESSION-CALL-FOCUS-RECONCILIATION.md",
+    "report": "HOST-PROFILE-RECONCILIATION.md",
+    "previousReport": "TYPE-COLLECTION-PATTERN-RECONCILIATION.md",
     "reviewedRows": [
       "S1-S2-S5",
       "S3-otherwise",
@@ -650,10 +683,13 @@
       "S8-compound",
       "REQ123-constructors",
       "REQ123-destructuring",
-      "REQ123-jnode"
+      "REQ123-jnode",
+      "S0",
+      "S7",
+      "S8-dispatch"
     ],
-    "reviewedRowCount": 15,
-    "otherRows": 3,
-    "policy": "C04/C05 bounded reconciliation only. Original baseline and earlier row annotations remain unchanged; acceptance remains partial."
+    "reviewedRowCount": 18,
+    "otherRows": 0,
+    "policy": "C04-C06 bounded reconciliation only. Original baseline and earlier row annotations remain unchanged; no exhaustive grammar coverage or acceptance."
   }
 }

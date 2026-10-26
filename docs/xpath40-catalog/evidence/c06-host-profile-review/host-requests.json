@@ -1,0 +1,784 @@
+[
+  {
+    "id": "local-3.0-none-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-3.0-none-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-3.0-3.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"3.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-3.0-3.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"3.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-3.0-4.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"4.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-3.0-4.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"4.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-none-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-none-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-3.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"3.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-3.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"3.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-4.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"4.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "local-4.0-4.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of version=\"4.0\" select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "serialization-version-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:output version=\"4.0\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0003",
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "serialization-version-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:output version=\"4.0\"/><xsl:template match=\"/\"><xsl:value-of select=\"() ?? 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "closed-variable-False",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"$missing\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0008",
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H01",
+    "requiredStatic": false,
+    "kind": "context-observation",
+    "interpretation": "Default host binding diagnostics only. Pinned XSLT permits a lazy mode; no full static-error detection mode is proved by Compile."
+  },
+  {
+    "id": "closed-variable-True",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"if (false()) then $missing else 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H01",
+    "requiredStatic": false,
+    "kind": "context-observation",
+    "interpretation": "Default host binding diagnostics only. Pinned XSLT permits a lazy mode; no full static-error detection mode is proved by Compile."
+  },
+  {
+    "id": "closed-function-False",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"no-such-function()\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H01",
+    "requiredStatic": false,
+    "kind": "context-observation",
+    "interpretation": "Default host binding diagnostics only. Pinned XSLT permits a lazy mode; no full static-error detection mode is proved by Compile."
+  },
+  {
+    "id": "closed-function-True",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"if (false()) then no-such-function() else 7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H01",
+    "requiredStatic": false,
+    "kind": "context-observation",
+    "interpretation": "Default host binding diagnostics only. Pinned XSLT permits a lazy mode; no full static-error detection mode is proved by Compile."
+  },
+  {
+    "id": "scan-refusal",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"function-available('scan',3)\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "false",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "scan-direct-refusal",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:sequence select=\"scan((),0,function($a,$b){$a})\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPST0017",
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-3.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-3.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"3.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-4.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "F",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-4.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-5.0-Legacy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"5.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "F",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "future-fallback-5.0-Xslt40Draft",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"5.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:future><xsl:fallback><xsl:text>F</xsl:text></xsl:fallback></xsl:future></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "F",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "transform-visible",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"function-available('transform',1)\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "true",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "load-module-visible",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"function-available('load-xquery-module',2)\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "true",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "note-inert",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:note><xsl:value-of select=\"$missing\"/><xsl:future/></xsl:note><xsl:text>ok</xsl:text></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "ok",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "if-false-lazy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:if test=\"false()\" then=\"error()\" else=\"7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "if-true-lazy",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:if test=\"true()\" then=\"7\" else=\"error()\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "if-then-content",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:if test=\"true()\" then=\"7\"><xsl:text>bad</xsl:text></xsl:if></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "if-empty",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:if test=\"false()\" then=\"7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "if-bad-ebv",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:if test=\"(1,2)\" then=\"7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "FORG0006",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-use-first",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"m\" as=\"map(*)\"><xsl:map select=\"(map{'a':1},map{'a':2})\" duplicates=\"'use-first'\"/></xsl:variable><xsl:value-of select=\"$m?a\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "1",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-use-last",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"m\" as=\"map(*)\"><xsl:map select=\"(map{'a':1},map{'a':2})\" duplicates=\"'use-last'\"/></xsl:variable><xsl:value-of select=\"$m?a\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "2",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-combine",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"m\" as=\"map(*)\"><xsl:map select=\"(map{'a':1},map{'a':2})\" duplicates=\"'combine'\"/></xsl:variable><xsl:value-of select=\"$m?a\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "1|2",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-reject",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"m\" as=\"map(*)\"><xsl:map select=\"(map{'a':1},map{'a':2})\" duplicates=\"'reject'\"/></xsl:variable><xsl:value-of select=\"$m?a\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "FOJS0003",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-default-duplicate",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:map select=\"(map{'a':1},map{'a':2})\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTDE3365",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-nonmap",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:map select=\"7\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTTE3375",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "map-select-content",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:map select=\"map{}\"><xsl:map-entry key=\"'a'\" select=\"1\"/></xsl:map></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE3185",
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "separator-()",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:for-each select=\"()\" separator=\"|\"><xsl:if test=\". ne 2\"><xsl:value-of select=\".\"/></xsl:if></xsl:for-each></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "separator-1",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:for-each select=\"1\" separator=\"|\"><xsl:if test=\". ne 2\"><xsl:value-of select=\".\"/></xsl:if></xsl:for-each></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "1",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "separator-(1,2,3)",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:for-each select=\"(1,2,3)\" separator=\"|\"><xsl:if test=\". ne 2\"><xsl:value-of select=\".\"/></xsl:if></xsl:for-each></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "1||3",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "separator-apply",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:apply-templates select=\"r/i\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "A|B",
+    "error": null,
+    "row": "S7",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "array-empty",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"a\" as=\"array(*)\"><xsl:array select=\"()\"/></xsl:variable><xsl:value-of select=\"array:size($a)\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "0",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "array-sequence-members",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"a\" as=\"array(*)\"><xsl:array for-each=\"1 to 2\" select=\"(., .+10)\"/></xsl:variable><xsl:value-of select=\"array:size($a),count($a(1))\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "2|2",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "array-empty-members",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"a\" as=\"array(*)\"><xsl:array for-each=\"1 to 2\" select=\"()\"/></xsl:variable><xsl:value-of select=\"array:size($a),count($a(1))\" separator=\"|\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "2|0",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "array-select-content",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:array select=\"1\"><xsl:array-member select=\"2\"/></xsl:array></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE3185",
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "switch-empty-selected",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch select=\"1\"><xsl:when test=\"1\" select=\"()\"/><xsl:when test=\"1\" select=\"error()\"/><xsl:otherwise select=\"error()\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "switch-general-comparison",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch select=\"2\"><xsl:when test=\"(1,2)\" select=\"7\"/><xsl:otherwise select=\"8\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "7",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "switch-not-boolean-guard",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch select=\"2\"><xsl:when test=\"true()\" select=\"7\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H02"
+  },
+  {
+    "id": "switch-missing-select",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:switch><xsl:when test=\"1\" select=\"7\"/></xsl:switch></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "select-cdata",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:select><![CDATA[1 < 2]]></xsl:select></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "true",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "select-as",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:select as=\"xs:integer\">xs:untypedAtomic(\"12\")</xsl:select></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "12",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "select-child-invalid",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:select><xsl:value-of select=\"7\"/></xsl:select></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XTSE0010",
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "select-node-identity",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:variable name=\"n\" as=\"node()\"><xsl:select>r/i[1]</xsl:select></xsl:variable><xsl:value-of select=\"$n is r/i[1]\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "true",
+    "error": null,
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null
+  },
+  {
+    "id": "switch-direct-comparison",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:value-of select=\"2 = true()\"/></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": "XPTY0004",
+    "row": "S8-dispatch",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H02"
+  },
+  {
+    "id": "stylesheet-loader-invocation",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:text use-when=\"let $m := load-xquery-module('urn:c06:m') return $m?functions(QName('urn:c06:m','read'))(0)() = 12\">12</xsl:text></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": "12",
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H03",
+    "kind": "released-control"
+  },
+  {
+    "id": "stylesheet-loader-external-coercion",
+    "stylesheet": "<xsl:stylesheet xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:f=\"urn:probe\" xmlns:map=\"http://www.w3.org/2005/xpath-functions/map\" xmlns:array=\"http://www.w3.org/2005/xpath-functions/array\" version=\"4.0\"><xsl:output method=\"text\"/><xsl:template match=\"/\"><xsl:text use-when=\"let $m := load-xquery-module('urn:c06:typed',map{'variables':map{QName('urn:c06:typed','x'):12}}) return $m?variables(QName('urn:c06:typed','x')) instance of xs:double\">true</xsl:text></xsl:template></xsl:stylesheet>",
+    "source": "<r><i>A</i><i>B</i></r>",
+    "expected": null,
+    "error": null,
+    "row": "S0",
+    "profiles": [
+      "Legacy",
+      "Xslt40Draft"
+    ],
+    "requiredPhase": null,
+    "ticket": "H03",
+    "kind": "context-observation"
+  }
+]

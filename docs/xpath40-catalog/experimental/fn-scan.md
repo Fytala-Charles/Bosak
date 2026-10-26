@@ -5,6 +5,8 @@
   <p>Catalog entry — Functions · Experimental</p>
 </div>
 
+**C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
+
 <!-- Catalog entry: fn:scan. Template: see ../README.md §1.1. -->
 
 ## 1. Name and Classification

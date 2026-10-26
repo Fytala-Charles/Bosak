@@ -1,0 +1,17 @@
+// Generated C06 public host function registration diagnostics.
+using Bosak.Xslt.Api;
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using System.Text.Json;
+XsltFunctionLibrary.RegisterXQueryModuleSource("urn:c06:m", "module namespace m='urn:c06:m'; declare function m:read(){12};");
+XsltFunctionLibrary.RegisterXQueryModuleSource("urn:c06:typed", "module namespace m='urn:c06:typed'; declare variable $m:x as xs:double external;");
+using var output=new StreamWriter(args[1]){AutoFlush=true};
+foreach(var q in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!){
+ string? result=null,error=null;
+ try{
+ var context=new EvaluationContext();
+ switch(q.GetProperty("registration").GetString()){case "transform":XsltFunctionLibrary.PopulateTransformOnly(context);break;case "all":XsltFunctionLibrary.Populate(context);break;}
+ result=XPath31Expression.Compile(q.GetProperty("expression").GetString()!,new CompileOptions{Compatibility=Enum.Parse<XPathCompatibility>(q.GetProperty("profile").GetString()!)}).Evaluate(context).ToString();
+ }catch(Exception ex){error=ex.Message;}
+ output.WriteLine(JsonSerializer.Serialize(new{id=q.GetProperty("id").GetString(),profile=q.GetProperty("profile").GetString(),result,error}));
+}

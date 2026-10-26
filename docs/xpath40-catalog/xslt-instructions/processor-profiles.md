@@ -4,6 +4,8 @@
   <p>Bosak host policy - bounded executable reference</p>
 </div>
 
+**C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
+
 ## 1. Name and Classification
 
 **Version/profile boundary** - implemented Bosak host policy. Legacy is the default compatibility profile; Xslt40Draft is an opt-in experimental XSLT processor profile whose embedded XPath is frozen 4.0. This is not a new language feature or a promotion to XPath40Experimental. Public/source 1.23.7 already provides this API.
