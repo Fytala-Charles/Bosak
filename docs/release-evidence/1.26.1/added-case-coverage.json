@@ -1,0 +1,65 @@
+[
+  {
+    "file": "UnaryCoercionTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/UnaryCoercionTests.cs",
+    "sha256": "877508a092b91a9ffaabce2d4146be140e12b055fcdfe6adf3b8796313fb34e6",
+    "expectedCases": 79,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 79,
+    "packagePassed": 79
+  },
+  {
+    "file": "UnaryEmptyAtomizationTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/UnaryEmptyAtomizationTests.cs",
+    "sha256": "7412c3fc0973a32acd104195b295d2d49557b83d61ea3d3298549a5b988704e9",
+    "expectedCases": 64,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 64,
+    "packagePassed": 64
+  },
+  {
+    "file": "ArrayAtomizationAuditTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/ArrayAtomizationAuditTests.cs",
+    "sha256": "62c674aabbf1190aa23d4c3711e82fc4684651700ae3805797e2d1559695e35e",
+    "expectedCases": 72,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 72,
+    "packagePassed": 72
+  },
+  {
+    "file": "ArraySingletonAtomizationTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/ArraySingletonAtomizationTests.cs",
+    "sha256": "62cd1eb5b127a66de40ddf32c4fee673046bfb9f52e01f565319c093080a38ab",
+    "expectedCases": 111,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 111,
+    "packagePassed": 111
+  },
+  {
+    "file": "BinaryEmptyAtomizationTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/BinaryEmptyAtomizationTests.cs",
+    "sha256": "8c865c678befe7598c0ccbbb57847d00396b19a8934fb201ab7ecef7dd6cfa77",
+    "expectedCases": 214,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 214,
+    "packagePassed": 214
+  },
+  {
+    "file": "AtomicFunctionConversionTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/AtomicFunctionConversionTests.cs",
+    "sha256": "4054ce4238a040cb82177a8a96fb2424824ad9e77e94e5ce16996e940ebbf831",
+    "expectedCases": 366,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 366,
+    "packagePassed": 366
+  },
+  {
+    "file": "RoundingFunctionConversionTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/RoundingFunctionConversionTests.cs",
+    "sha256": "65af24a6f3042f666ee446d9154960acd708c5e993b7c7143682e61a553f9500",
+    "expectedCases": 1514,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 1514,
+    "packagePassed": 1514
+  }
+]

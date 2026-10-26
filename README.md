@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+Source 1.26.1 is a [validated unsigned candidate](docs/RELEASE-1.26.1-CANDIDATE.md): 14,620 source/LSP tests and 153 broad/3,913 focused package-consumer checks pass with unchanged frozen gates. Public installation remains 1.26.0; publication is pending a separate release decision.
+
 The unpublished 1.26.1 patch also [corrects rounding argument conversion](docs/xpath40-catalog/ROUNDING-FUNCTION-CONVERSION.md): recursive numeric/precision arrays, singleton cardinality and required errors now agree across direct and dynamic calls. Its 1,514 new cases and unchanged frozen gates are verified. Public 1.26.0 remains current.
 
 Source 1.26.1 remains unpublished. Its latest [atomic function conversion correction](docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.md) makes `abs` handle recursively atomized arrays and enforce singleton cardinality while preserving named-function identity; 366 new regressions and unchanged frozen gates are verified. Public 1.26.0 remains current.

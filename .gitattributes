@@ -127,3 +127,6 @@ docs/req138-evidence/acceptance/* -text whitespace=cr-at-eol,-blank-at-eof
 
 contributions/xslt40/array-select-boundaries/submission.json -text whitespace=cr-at-eol,-blank-at-eof
 contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve unsigned 1.26.1 candidate evidence and nested official NuGet receipts byte-for-byte.
+/docs/release-evidence/1.26.1/** -text whitespace=cr-at-eol,-blank-at-eof

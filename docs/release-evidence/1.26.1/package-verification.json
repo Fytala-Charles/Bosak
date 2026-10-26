@@ -1,0 +1,617 @@
+{
+  "date": "2026-10-26",
+  "version": "1.26.1",
+  "immutableSource": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+  "kind": "Unsigned local candidate; no signed public package verification claimed",
+  "packages": [
+    {
+      "package": "Bosak.XPath.Api",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "16ad433a07c968684e38fc45e6e7136dcf8c371ee76855da6c149b95bb9a034c",
+      "dllSha256": "869fcdcdda0ff064c976fe1e985371aa901cfd5b9c75efa2c494bd4048980c26",
+      "xmlDocumentationBytes": 22891,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Compiler",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "89df4e83513fab21cfe3be1bad828df6a81d34e8342e10122fa73eedc8d0f37a",
+      "dllSha256": "fd94c96fb7a682b2424ec10122f4ba57e69c9674099d67f9ed08db0458a6a362",
+      "xmlDocumentationBytes": 89661,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Core",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "e51b14f0977e7b4587271e0cc434fbeeb8ff0381f0682058aba0a901c18a05fd",
+      "dllSha256": "c04cfdbfebf35a3eacdaee227887edeabb9591061647aa1b33dc708210f91da9",
+      "xmlDocumentationBytes": 88273,
+      "dependencies": [],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Parser",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "859bddfe18d7e4840cdeaa1153d45b359ff59e8ffb7eba7af4256c5b356262b5",
+      "dllSha256": "c7c7a5ed369522303bc33c98925deb1f1bc222fde4e38321de10bc3e6c7b13e8",
+      "xmlDocumentationBytes": 165837,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Providers",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "413466da1f4a467f97bd2bd0c09ae909770f6313c0bdb89653ca283c0932a49e",
+      "dllSha256": "be914605b48dbb6177260cb71450a804393c2a3dd78ad94ffbe5c3b088e8bad7",
+      "xmlDocumentationBytes": 143430,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Providers.Database",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "7e1a4f9155175e35eddb8050b51ad87fafdf762892f72187bd3310e091a0ea30",
+      "dllSha256": "53ebda2b652a85fc9bf1c4308fb9b2a971ef6e0f1fa24a3767cd1a1fd3a6e346",
+      "xmlDocumentationBytes": 29864,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Runtime",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "0e2a8f25192f286b3fc3a028c0b62f6d8ffb72291dec9cdee4c15e6a6be9b7ea",
+      "dllSha256": "b8d64e5ed75ada405875c502c8d06a246cdcc863df6d6d26a5b5d39f1e0a0728",
+      "xmlDocumentationBytes": 236150,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Compiler",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XPath.Standard",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "01499ec3cdf70490d892671339712d7930c477ea5b622819cf2b8dd600ed8836",
+      "dllSha256": "7d5c42fd8417ffcf4fe3fe08afb1ed7ef8553cf1eab830bf314cba666b76d873",
+      "xmlDocumentationBytes": 133037,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.XQuery",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "603a875243a0894d20b7e5c45636c2335206f38967ae0ba1cba6e53f56dce72c",
+      "dllSha256": "cf4ddee24c15aff17dfe30f53553be0c7d96522843c0d56bf2fa1acc71807e6e",
+      "xmlDocumentationBytes": 35415,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    },
+    {
+      "package": "Bosak.Xslt",
+      "version": "1.26.1",
+      "repositoryCommit": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+      "archiveSha256": "5589d1635e6a9d9d706f5e747b9f19221a8122d1734a62a0f1656a87253cf1a5",
+      "dllSha256": "e005865aef0919272b4936682aa4da2634408f7f8348e8829c1a7da7395f57fe",
+      "xmlDocumentationBytes": 852113,
+      "dependencies": [
+        {
+          "id": "Bosak.XPath.Api",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Core",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Parser",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Providers",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Runtime",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XPath.Standard",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Bosak.XQuery",
+          "version": "1.26.1",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archiveCacheOutputMatch": true,
+      "packagedReadmeLicenseIconAndBrandAssetsMatchSourceBytes": true
+    }
+  ],
+  "consumerChecks": {
+    "broad": 153,
+    "focused": 3913,
+    "focusedComposition": "1493 retained public checks +2420 new atomic/numeric/rounding cases; overlaps source tests"
+  },
+  "cacheAndSources": "Separate fresh caches; Bosak.* mapped only to local candidate feed; external test dependencies from nuget.org",
+  "vulnerabilityAudits": "Both consumers: no reported vulnerable packages",
+  "consumerAdaptation": {
+    "date": "2026-10-26",
+    "candidate": "1.26.1",
+    "publicVersion": "1.26.0",
+    "immutableSource": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+    "sourceTree": "1c25d64a548d6d27d7b27493cbf94746001e1bbc",
+    "status": "PREPARING_UNSIGNED_LOCAL_CANDIDATE",
+    "broadChecks": 153,
+    "retainedFocusedChecks": 1493,
+    "addedFocusedChecks": 2420,
+    "totalFocusedChecks": 3913,
+    "expectedSourceTests": 14536,
+    "expectedLspTests": 84,
+    "packageSourceMapping": "Bosak.* exclusively local candidate feed; external test dependencies nuget.org",
+    "freshSeparateCaches": true,
+    "addedSourceFiles": [
+      {
+        "file": "UnaryCoercionTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/UnaryCoercionTests.cs",
+        "sha256": "877508a092b91a9ffaabce2d4146be140e12b055fcdfe6adf3b8796313fb34e6",
+        "expectedCases": 79,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "UnaryEmptyAtomizationTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/UnaryEmptyAtomizationTests.cs",
+        "sha256": "7412c3fc0973a32acd104195b295d2d49557b83d61ea3d3298549a5b988704e9",
+        "expectedCases": 64,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "ArrayAtomizationAuditTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/ArrayAtomizationAuditTests.cs",
+        "sha256": "62c674aabbf1190aa23d4c3711e82fc4684651700ae3805797e2d1559695e35e",
+        "expectedCases": 72,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "ArraySingletonAtomizationTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/ArraySingletonAtomizationTests.cs",
+        "sha256": "62cd1eb5b127a66de40ddf32c4fee673046bfb9f52e01f565319c093080a38ab",
+        "expectedCases": 111,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "BinaryEmptyAtomizationTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/BinaryEmptyAtomizationTests.cs",
+        "sha256": "8c865c678befe7598c0ccbbb57847d00396b19a8934fb201ab7ecef7dd6cfa77",
+        "expectedCases": 214,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "AtomicFunctionConversionTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/AtomicFunctionConversionTests.cs",
+        "sha256": "4054ce4238a040cb82177a8a96fb2424824ad9e77e94e5ce16996e940ebbf831",
+        "expectedCases": 366,
+        "copy": "Byte-identical pinned source; public APIs only."
+      },
+      {
+        "file": "RoundingFunctionConversionTests.cs",
+        "source": "tests/Bosak.XPath.Standard.Tests/RoundingFunctionConversionTests.cs",
+        "sha256": "65af24a6f3042f666ee446d9154960acd708c5e993b7c7143682e61a553f9500",
+        "expectedCases": 1514,
+        "copy": "Byte-identical pinned source; public APIs only."
+      }
+    ],
+    "consumerAdaptations": [
+      {
+        "file": "broad/Program.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\broad\\Program.cs",
+        "fromSha256": "7ce6dcaf8f2bb6bd43de99d4b732c3fdba13f0da399090da9a4c6d9ec64c100e",
+        "adaptedSha256": "025cbafc63479852b81dcee7383a38729cb080e742588836a0f33a741c38c0ca",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "broad/Smoke.csproj",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\broad\\Smoke.csproj",
+        "fromSha256": "0d16383699ae685a84c63b9b00a724078068ca7275894047367d1778cb914448",
+        "adaptedSha256": "9c5cba62e100f99f777097473445bb0c9bee0f3ea386a72c26e6e10fe05626b2",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "broad/UsedPackageChecks.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\broad\\UsedPackageChecks.cs",
+        "fromSha256": "8f3444563793c89d487d06c9cd58175a7ce7c6352da953a1652e89b74ada349f",
+        "adaptedSha256": "8f3444563793c89d487d06c9cd58175a7ce7c6352da953a1652e89b74ada349f",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/AuthoringConditionalWrapperPublicTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\AuthoringConditionalWrapperPublicTests.cs",
+        "fromSha256": "d3ee1d2fbaef77c23899693ae70d2519493b21dc7e07acd469d3565715f54c16",
+        "adaptedSha256": "d3ee1d2fbaef77c23899693ae70d2519493b21dc7e07acd469d3565715f54c16",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/AuthoringLiteralAttributeLifecyclePublicBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\AuthoringLiteralAttributeLifecyclePublicBoundaryTests.cs",
+        "fromSha256": "dc41d0ce2387a0bc9d177c137d03a10953be66b14a7c8c1c2860ebf4041a3253",
+        "adaptedSha256": "dc41d0ce2387a0bc9d177c137d03a10953be66b14a7c8c1c2860ebf4041a3253",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/AuthoringLiteralAttributeLifecycleTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\AuthoringLiteralAttributeLifecycleTests.cs",
+        "fromSha256": "21ad1f96cf22c97ec0ec333b3ea4f4faf73db14dae0bd11cd734620dd6fdf0e6",
+        "adaptedSha256": "21ad1f96cf22c97ec0ec333b3ea4f4faf73db14dae0bd11cd734620dd6fdf0e6",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/AuthoringLiteralElementLifecycleTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\AuthoringLiteralElementLifecycleTests.cs",
+        "fromSha256": "3040da52967ff47753a692932f8b7cc7bf00380e95bf41c1cd173aa2491d9784",
+        "adaptedSha256": "3040da52967ff47753a692932f8b7cc7bf00380e95bf41c1cd173aa2491d9784",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/AuthoringLiteralElementReorderingTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\AuthoringLiteralElementReorderingTests.cs",
+        "fromSha256": "488e86a28a1a88c0de181106b65f9adf1491ec9b1b264336ebdceda007788847",
+        "adaptedSha256": "488e86a28a1a88c0de181106b65f9adf1491ec9b1b264336ebdceda007788847",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/BraidConditionalProbes.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\BraidConditionalProbes.cs",
+        "fromSha256": "342e48afd72fba318806c7aca51ad3ed4cbac437ea9fc88c081cb1a9a908d6c1",
+        "adaptedSha256": "761d7418f1a67a02ead8c2e28a401d8d2cd77ecfd7477abd4c90a01e52f028b6",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/DivisionModuloAuditTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\DivisionModuloAuditTests.cs",
+        "fromSha256": "558884795127e1350c82e83a788adc92d017ae2a4b850abcb4ddbdf0eae7e0a0",
+        "adaptedSha256": "558884795127e1350c82e83a788adc92d017ae2a4b850abcb4ddbdf0eae7e0a0",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/EqNameBracketPatternTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\EqNameBracketPatternTests.cs",
+        "fromSha256": "808a7f912119a2747322e30ab061c7d552893afe0e433ba060c8589234dedaff",
+        "adaptedSha256": "808a7f912119a2747322e30ab061c7d552893afe0e433ba060c8589234dedaff",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/ExactIntegerDivisionTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\ExactIntegerDivisionTests.cs",
+        "fromSha256": "46c2c0bf564884262fc5b2f5d83fa8b00a45b69e21b77c5c3c511684ef4dd09f",
+        "adaptedSha256": "46c2c0bf564884262fc5b2f5d83fa8b00a45b69e21b77c5c3c511684ef4dd09f",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/FloatingIntegerBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\FloatingIntegerBoundaryTests.cs",
+        "fromSha256": "951166fbfe182e275cf5ac33db40903f027dad7ae2eca8fcfbaf0cc74cc42b2f",
+        "adaptedSha256": "951166fbfe182e275cf5ac33db40903f027dad7ae2eca8fcfbaf0cc74cc42b2f",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/FunctionApplyTemplatesModeTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\FunctionApplyTemplatesModeTests.cs",
+        "fromSha256": "74ba3bef96fb20dc5db0ad21de22e82ca157fce8079acb9ae9f2abe237c46370",
+        "adaptedSha256": "74ba3bef96fb20dc5db0ad21de22e82ca157fce8079acb9ae9f2abe237c46370",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IndexOfCollationDefaultTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IndexOfCollationDefaultTests.cs",
+        "fromSha256": "b9a08b52f52453856ff395262c7613b2d65d26c9fa3a82e9ecda772a37c151a1",
+        "adaptedSha256": "b9a08b52f52453856ff395262c7613b2d65d26c9fa3a82e9ecda772a37c151a1",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/InlineRecordTypeVersionGateTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\InlineRecordTypeVersionGateTests.cs",
+        "fromSha256": "a7e72648635068435645d5484250d92d57589374ee45ede24b79b4844bd9031c",
+        "adaptedSha256": "a7e72648635068435645d5484250d92d57589374ee45ede24b79b4844bd9031c",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IntegerCastContractTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IntegerCastContractTests.cs",
+        "fromSha256": "44dc5222e3d8c31650515f732ff18b25ed5e5e278b01d1bac73a561017ba9673",
+        "adaptedSha256": "44dc5222e3d8c31650515f732ff18b25ed5e5e278b01d1bac73a561017ba9673",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IntegerDivisionRangeAuditTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IntegerDivisionRangeAuditTests.cs",
+        "fromSha256": "fc780276d5f99d89beb2c4f5f6fb0eb128ac922666acb47d13237a586b7683cb",
+        "adaptedSha256": "fc780276d5f99d89beb2c4f5f6fb0eb128ac922666acb47d13237a586b7683cb",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IntegerModuloTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IntegerModuloTests.cs",
+        "fromSha256": "124455b8520693c9f405280fc97a96e987ac024c88723967f12aeb6eda22c7b1",
+        "adaptedSha256": "124455b8520693c9f405280fc97a96e987ac024c88723967f12aeb6eda22c7b1",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IntegerPromotionTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IntegerPromotionTests.cs",
+        "fromSha256": "6ba06d0919648e9d462560ce783a9377b66c018d40bd001266421aa0a5bd8186",
+        "adaptedSha256": "6ba06d0919648e9d462560ce783a9377b66c018d40bd001266421aa0a5bd8186",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/IntegerUnaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\IntegerUnaryTests.cs",
+        "fromSha256": "015bb0cfc5fcedb55bbbd55c8fd75b269296bbf368895b68f8700fe16fad4b4b",
+        "adaptedSha256": "015bb0cfc5fcedb55bbbd55c8fd75b269296bbf368895b68f8700fe16fad4b4b",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/NumericLiteralBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\NumericLiteralBoundaryTests.cs",
+        "fromSha256": "2b8999107f6f23aa9fcc4fa03ca69b18a081bed63d6ce6d739fbe34161044920",
+        "adaptedSha256": "2b8999107f6f23aa9fcc4fa03ca69b18a081bed63d6ce6d739fbe34161044920",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/Req135.PublicConsumer.csproj",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\Req135.PublicConsumer.csproj",
+        "fromSha256": "d286684f2ec2bb9e5b1ec37204d90a26182d77093b98f492a9ecacccdc1bd490",
+        "adaptedSha256": "3d1a224cf003f26d04e45b3bcdc057733aed660afc8a97b26b0b94e83130ee19",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/SubstringExperimentalContractTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\SubstringExperimentalContractTests.cs",
+        "fromSha256": "da802b044526834fef98378d8608f66aa7423569da3bfe0d59399f181039131d",
+        "adaptedSha256": "da802b044526834fef98378d8608f66aa7423569da3bfe0d59399f181039131d",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/SubstringExperimentalHostBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\SubstringExperimentalHostBoundaryTests.cs",
+        "fromSha256": "d1cefc1dfc3953b452e6a3d43bfc617415a20ee381f699773e33cfeb81d45f91",
+        "adaptedSha256": "d1cefc1dfc3953b452e6a3d43bfc617415a20ee381f699773e33cfeb81d45f91",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/SwitchNativeBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\SwitchNativeBoundaryTests.cs",
+        "fromSha256": "b2ef58285adf69d865317bc3fd101a5a97feef94c93c2e291d90eaf5f5a350c1",
+        "adaptedSha256": "b2ef58285adf69d865317bc3fd101a5a97feef94c93c2e291d90eaf5f5a350c1",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnixDateTimeContractTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnixDateTimeContractTests.cs",
+        "fromSha256": "53b4d934e748e9e5a582efefbf7ec34d968ae21d04a332fcfa5f57fee260f6cc",
+        "adaptedSha256": "53b4d934e748e9e5a582efefbf7ec34d968ae21d04a332fcfa5f57fee260f6cc",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnixDateTimeExperimentalHostBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnixDateTimeExperimentalHostBoundaryTests.cs",
+        "fromSha256": "fa9b41123f55f116cf799b86119c1d2ab97048119e4dd689168239c4cba23b03",
+        "adaptedSha256": "fa9b41123f55f116cf799b86119c1d2ab97048119e4dd689168239c4cba23b03",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnixDateTimeExperimentalTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnixDateTimeExperimentalTests.cs",
+        "fromSha256": "9e40a0c347b7dffb4aa4adc0309a96b218b98d71826517b42c52ab8fecce0b58",
+        "adaptedSha256": "9e40a0c347b7dffb4aa4adc0309a96b218b98d71826517b42c52ab8fecce0b58",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnixDateTimeWideIntegerBoundaryTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnixDateTimeWideIntegerBoundaryTests.cs",
+        "fromSha256": "a0bb89c18ed0654b978cd4c9aab112d51f81f1f1844290c62dcbc75ed2b1a280",
+        "adaptedSha256": "a0bb89c18ed0654b978cd4c9aab112d51f81f1f1844290c62dcbc75ed2b1a280",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnixDateTimeWideRangeTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnixDateTimeWideRangeTests.cs",
+        "fromSha256": "59c03cbd4cbd25c8fc7ced746440a914707cb6aae5e21815c332f7aa0c4d84da",
+        "adaptedSha256": "59c03cbd4cbd25c8fc7ced746440a914707cb6aae5e21815c332f7aa0c4d84da",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnsignedDecimalCastTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnsignedDecimalCastTests.cs",
+        "fromSha256": "38fcc4567d024614e12493013fe38c18cca098f7f3e2d4fe792a9921b1a880a6",
+        "adaptedSha256": "38fcc4567d024614e12493013fe38c18cca098f7f3e2d4fe792a9921b1a880a6",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/UnsignedFloatingCastTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\UnsignedFloatingCastTests.cs",
+        "fromSha256": "b5d386663ad97f42c68204358f1c9caec03291bf33b2d58ffd408ec20ea961ca",
+        "adaptedSha256": "b5d386663ad97f42c68204358f1c9caec03291bf33b2d58ffd408ec20ea961ca",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/Xslt40EqNamePriorityTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\Xslt40EqNamePriorityTests.cs",
+        "fromSha256": "a604574dd837f69aed053a7ad25c92ac30006b667004d404d8d34dd5759bb851",
+        "adaptedSha256": "a604574dd837f69aed053a7ad25c92ac30006b667004d404d8d34dd5759bb851",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/Xslt40SetPatternPriorityTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\Xslt40SetPatternPriorityTests.cs",
+        "fromSha256": "1c99dec61a5a9576bb0a5815188625222d15aa8f479d71d77985dc9a3fb15608",
+        "adaptedSha256": "1c99dec61a5a9576bb0a5815188625222d15aa8f479d71d77985dc9a3fb15608",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "focused/Xslt40UnionPatternTests.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\focused\\Xslt40UnionPatternTests.cs",
+        "fromSha256": "ff01f260436dd2a397a33cafee99a888b1ce40dcd20a9c77f862d3ac58238864",
+        "adaptedSha256": "ff01f260436dd2a397a33cafee99a888b1ce40dcd20a9c77f862d3ac58238864",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "metadata/Metadata.csproj",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\metadata\\Metadata.csproj",
+        "fromSha256": "83f4a7fcb79a4d14c3efe178e1d3921495991b5f2b7a89b677ab81815183ca3a",
+        "adaptedSha256": "83f4a7fcb79a4d14c3efe178e1d3921495991b5f2b7a89b677ab81815183ca3a",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      },
+      {
+        "file": "metadata/Program.cs",
+        "originalPath": "D:\\Development\\Bosak\\.guard-tmp\\release1260-candidate\\metadata\\Program.cs",
+        "fromSha256": "57961f57413a26047fd708d6d6d858e98ec8c1061b326c23098c9a75c2ede9ad",
+        "adaptedSha256": "57961f57413a26047fd708d6d6d858e98ec8c1061b326c23098c9a75c2ede9ad",
+        "change": "Candidate version/revision/assembly identity only, plus dated header row when changed."
+      }
+    ],
+    "adaptation": "Only candidate version/revision/assembly identity retargeting in retained consumer source; new tests copied without edits.",
+    "publicationPerformed": false,
+    "githubCiChecked": false
+  }
+}
