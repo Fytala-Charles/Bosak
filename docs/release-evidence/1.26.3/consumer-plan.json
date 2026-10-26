@@ -1,0 +1,326 @@
+{
+  "date": "2026-10-26",
+  "candidate": "1.26.3",
+  "publicVersion": "1.26.2",
+  "immutableSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "sourceTree": "107acd279d536e019bd968feb0888a37be654137",
+  "status": "PREPARING_UNSIGNED_LOCAL_CANDIDATE",
+  "broadChecks": 153,
+  "retainedFocusedChecks": 8114,
+  "addedFocusedChecks": 3061,
+  "totalFocusedChecks": 11175,
+  "expectedSourceTests": 21798,
+  "expectedLspTests": 84,
+  "packageSourceMapping": "Bosak.* exclusively local candidate feed; external dependencies nuget.org",
+  "freshSeparateCaches": true,
+  "addedSourceFiles": [
+    {
+      "file": "AbsIntegerPreservationTests.cs",
+      "source": "tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs",
+      "sha256": "220bee4eba50933b0cd3285894c612ba683f90a9ecf5c9fd07b5fb0dffff35a6",
+      "expectedCases": 1323,
+      "copy": "Byte-identical pinned source; public APIs only."
+    },
+    {
+      "file": "FloorCeilingIntegerPreservationTests.cs",
+      "source": "tests/Bosak.XPath.Standard.Tests/FloorCeilingIntegerPreservationTests.cs",
+      "sha256": "08d7fcca7ddf38c59cb9b3536ee0e39ac43643c460ef2a36f2638c6cac149ba9",
+      "expectedCases": 936,
+      "copy": "Byte-identical pinned source; public APIs only."
+    },
+    {
+      "file": "FloorCeilingArgumentContractTests.cs",
+      "source": "tests/Bosak.XPath.Standard.Tests/FloorCeilingArgumentContractTests.cs",
+      "sha256": "76855d63bc54d959b006b176dafc51af857f7ebd6640a6bceaf8d28d31215231",
+      "expectedCases": 802,
+      "copy": "Byte-identical pinned source; public APIs only."
+    }
+  ],
+  "consumerAdaptations": [
+    {
+      "file": "broad/Program.cs",
+      "fromSha256": "ad4e46252b1c3c9b7911513a6e199503cb38552c955ad5a5ec0abd9b4638a4e3",
+      "adaptedSha256": "44129f3993f56aa7b7c603ae43b6dc5c48ac8b65a67f51477bb21ffa3f8865a2",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "broad/Smoke.csproj",
+      "fromSha256": "be66c383298f178294f541ea166e4d905a298f2e790a8f8c705bdb17e5a1aa4c",
+      "adaptedSha256": "a35581a34f577942c6ae2c97b6f2abfea7e54bbb71c270fce8121997936e902f",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "broad/UsedPackageChecks.cs",
+      "fromSha256": "8f3444563793c89d487d06c9cd58175a7ce7c6352da953a1652e89b74ada349f",
+      "adaptedSha256": "8f3444563793c89d487d06c9cd58175a7ce7c6352da953a1652e89b74ada349f",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/ArrayAtomizationAuditTests.cs",
+      "fromSha256": "62c674aabbf1190aa23d4c3711e82fc4684651700ae3805797e2d1559695e35e",
+      "adaptedSha256": "62c674aabbf1190aa23d4c3711e82fc4684651700ae3805797e2d1559695e35e",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/ArraySingletonAtomizationTests.cs",
+      "fromSha256": "62cd1eb5b127a66de40ddf32c4fee673046bfb9f52e01f565319c093080a38ab",
+      "adaptedSha256": "62cd1eb5b127a66de40ddf32c4fee673046bfb9f52e01f565319c093080a38ab",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AtomicFunctionConversionTests.cs",
+      "fromSha256": "4054ce4238a040cb82177a8a96fb2424824ad9e77e94e5ce16996e940ebbf831",
+      "adaptedSha256": "4054ce4238a040cb82177a8a96fb2424824ad9e77e94e5ce16996e940ebbf831",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AuthoringConditionalWrapperPublicTests.cs",
+      "fromSha256": "d3ee1d2fbaef77c23899693ae70d2519493b21dc7e07acd469d3565715f54c16",
+      "adaptedSha256": "d3ee1d2fbaef77c23899693ae70d2519493b21dc7e07acd469d3565715f54c16",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AuthoringLiteralAttributeLifecyclePublicBoundaryTests.cs",
+      "fromSha256": "dc41d0ce2387a0bc9d177c137d03a10953be66b14a7c8c1c2860ebf4041a3253",
+      "adaptedSha256": "dc41d0ce2387a0bc9d177c137d03a10953be66b14a7c8c1c2860ebf4041a3253",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AuthoringLiteralAttributeLifecycleTests.cs",
+      "fromSha256": "21ad1f96cf22c97ec0ec333b3ea4f4faf73db14dae0bd11cd734620dd6fdf0e6",
+      "adaptedSha256": "21ad1f96cf22c97ec0ec333b3ea4f4faf73db14dae0bd11cd734620dd6fdf0e6",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AuthoringLiteralElementLifecycleTests.cs",
+      "fromSha256": "3040da52967ff47753a692932f8b7cc7bf00380e95bf41c1cd173aa2491d9784",
+      "adaptedSha256": "3040da52967ff47753a692932f8b7cc7bf00380e95bf41c1cd173aa2491d9784",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/AuthoringLiteralElementReorderingTests.cs",
+      "fromSha256": "488e86a28a1a88c0de181106b65f9adf1491ec9b1b264336ebdceda007788847",
+      "adaptedSha256": "488e86a28a1a88c0de181106b65f9adf1491ec9b1b264336ebdceda007788847",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/BinaryEmptyAtomizationTests.cs",
+      "fromSha256": "8c865c678befe7598c0ccbbb57847d00396b19a8934fb201ab7ecef7dd6cfa77",
+      "adaptedSha256": "8c865c678befe7598c0ccbbb57847d00396b19a8934fb201ab7ecef7dd6cfa77",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/BraidConditionalProbes.cs",
+      "fromSha256": "0663ed4a69455112073b94c9fbefe920ee490b52d3a86e419c938594dea6c8af",
+      "adaptedSha256": "6d2fd2ea8e1d7f19c25dbc7b63034449852a01de435851a61294c50e777d5914",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/DivisionModuloAuditTests.cs",
+      "fromSha256": "558884795127e1350c82e83a788adc92d017ae2a4b850abcb4ddbdf0eae7e0a0",
+      "adaptedSha256": "558884795127e1350c82e83a788adc92d017ae2a4b850abcb4ddbdf0eae7e0a0",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/EqNameBracketPatternTests.cs",
+      "fromSha256": "808a7f912119a2747322e30ab061c7d552893afe0e433ba060c8589234dedaff",
+      "adaptedSha256": "808a7f912119a2747322e30ab061c7d552893afe0e433ba060c8589234dedaff",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/ExactIntegerDivisionTests.cs",
+      "fromSha256": "46c2c0bf564884262fc5b2f5d83fa8b00a45b69e21b77c5c3c511684ef4dd09f",
+      "adaptedSha256": "46c2c0bf564884262fc5b2f5d83fa8b00a45b69e21b77c5c3c511684ef4dd09f",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/FloatingIntegerBoundaryTests.cs",
+      "fromSha256": "951166fbfe182e275cf5ac33db40903f027dad7ae2eca8fcfbaf0cc74cc42b2f",
+      "adaptedSha256": "951166fbfe182e275cf5ac33db40903f027dad7ae2eca8fcfbaf0cc74cc42b2f",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/FunctionApplyTemplatesModeTests.cs",
+      "fromSha256": "74ba3bef96fb20dc5db0ad21de22e82ca157fce8079acb9ae9f2abe237c46370",
+      "adaptedSha256": "74ba3bef96fb20dc5db0ad21de22e82ca157fce8079acb9ae9f2abe237c46370",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IndexOfCollationDefaultTests.cs",
+      "fromSha256": "b9a08b52f52453856ff395262c7613b2d65d26c9fa3a82e9ecda772a37c151a1",
+      "adaptedSha256": "b9a08b52f52453856ff395262c7613b2d65d26c9fa3a82e9ecda772a37c151a1",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/InlineRecordTypeVersionGateTests.cs",
+      "fromSha256": "a7e72648635068435645d5484250d92d57589374ee45ede24b79b4844bd9031c",
+      "adaptedSha256": "a7e72648635068435645d5484250d92d57589374ee45ede24b79b4844bd9031c",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IntegerCastContractTests.cs",
+      "fromSha256": "44dc5222e3d8c31650515f732ff18b25ed5e5e278b01d1bac73a561017ba9673",
+      "adaptedSha256": "44dc5222e3d8c31650515f732ff18b25ed5e5e278b01d1bac73a561017ba9673",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IntegerDivisionRangeAuditTests.cs",
+      "fromSha256": "fc780276d5f99d89beb2c4f5f6fb0eb128ac922666acb47d13237a586b7683cb",
+      "adaptedSha256": "fc780276d5f99d89beb2c4f5f6fb0eb128ac922666acb47d13237a586b7683cb",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IntegerModuloTests.cs",
+      "fromSha256": "124455b8520693c9f405280fc97a96e987ac024c88723967f12aeb6eda22c7b1",
+      "adaptedSha256": "124455b8520693c9f405280fc97a96e987ac024c88723967f12aeb6eda22c7b1",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IntegerPromotionTests.cs",
+      "fromSha256": "6ba06d0919648e9d462560ce783a9377b66c018d40bd001266421aa0a5bd8186",
+      "adaptedSha256": "6ba06d0919648e9d462560ce783a9377b66c018d40bd001266421aa0a5bd8186",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/IntegerUnaryTests.cs",
+      "fromSha256": "015bb0cfc5fcedb55bbbd55c8fd75b269296bbf368895b68f8700fe16fad4b4b",
+      "adaptedSha256": "015bb0cfc5fcedb55bbbd55c8fd75b269296bbf368895b68f8700fe16fad4b4b",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/NumericLiteralBoundaryTests.cs",
+      "fromSha256": "2b8999107f6f23aa9fcc4fa03ca69b18a081bed63d6ce6d739fbe34161044920",
+      "adaptedSha256": "2b8999107f6f23aa9fcc4fa03ca69b18a081bed63d6ce6d739fbe34161044920",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/Req135.PublicConsumer.csproj",
+      "fromSha256": "e5ab19caa03c034c271c8f488b0e6e8df0139b039a7ffad4bde07c5b801141ee",
+      "adaptedSha256": "9440b0a8a1ef5bb325cc202817b24dcbee6f212236f100cc781e31d1c9a4270a",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/RoundingFunctionConversionTests.cs",
+      "fromSha256": "65af24a6f3042f666ee446d9154960acd708c5e993b7c7143682e61a553f9500",
+      "adaptedSha256": "65af24a6f3042f666ee446d9154960acd708c5e993b7c7143682e61a553f9500",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/RoundingKernelTests.cs",
+      "fromSha256": "64a707bce6455be5b3a040c556e88953b6002bade3aa57240cdf17759e070058",
+      "adaptedSha256": "64a707bce6455be5b3a040c556e88953b6002bade3aa57240cdf17759e070058",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/RoundingPrecisionBoundaryTests.cs",
+      "fromSha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+      "adaptedSha256": "debedcea686231f23b69240a71d41b0aeb137f01c4509d74997483fb714a9951",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/SubstringExperimentalContractTests.cs",
+      "fromSha256": "da802b044526834fef98378d8608f66aa7423569da3bfe0d59399f181039131d",
+      "adaptedSha256": "da802b044526834fef98378d8608f66aa7423569da3bfe0d59399f181039131d",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/SubstringExperimentalHostBoundaryTests.cs",
+      "fromSha256": "d1cefc1dfc3953b452e6a3d43bfc617415a20ee381f699773e33cfeb81d45f91",
+      "adaptedSha256": "d1cefc1dfc3953b452e6a3d43bfc617415a20ee381f699773e33cfeb81d45f91",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/SwitchNativeBoundaryTests.cs",
+      "fromSha256": "b2ef58285adf69d865317bc3fd101a5a97feef94c93c2e291d90eaf5f5a350c1",
+      "adaptedSha256": "b2ef58285adf69d865317bc3fd101a5a97feef94c93c2e291d90eaf5f5a350c1",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnaryCoercionTests.cs",
+      "fromSha256": "877508a092b91a9ffaabce2d4146be140e12b055fcdfe6adf3b8796313fb34e6",
+      "adaptedSha256": "877508a092b91a9ffaabce2d4146be140e12b055fcdfe6adf3b8796313fb34e6",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnaryEmptyAtomizationTests.cs",
+      "fromSha256": "7412c3fc0973a32acd104195b295d2d49557b83d61ea3d3298549a5b988704e9",
+      "adaptedSha256": "7412c3fc0973a32acd104195b295d2d49557b83d61ea3d3298549a5b988704e9",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnixDateTimeContractTests.cs",
+      "fromSha256": "53b4d934e748e9e5a582efefbf7ec34d968ae21d04a332fcfa5f57fee260f6cc",
+      "adaptedSha256": "53b4d934e748e9e5a582efefbf7ec34d968ae21d04a332fcfa5f57fee260f6cc",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnixDateTimeExperimentalHostBoundaryTests.cs",
+      "fromSha256": "fa9b41123f55f116cf799b86119c1d2ab97048119e4dd689168239c4cba23b03",
+      "adaptedSha256": "fa9b41123f55f116cf799b86119c1d2ab97048119e4dd689168239c4cba23b03",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnixDateTimeExperimentalTests.cs",
+      "fromSha256": "9e40a0c347b7dffb4aa4adc0309a96b218b98d71826517b42c52ab8fecce0b58",
+      "adaptedSha256": "9e40a0c347b7dffb4aa4adc0309a96b218b98d71826517b42c52ab8fecce0b58",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnixDateTimeWideIntegerBoundaryTests.cs",
+      "fromSha256": "a0bb89c18ed0654b978cd4c9aab112d51f81f1f1844290c62dcbc75ed2b1a280",
+      "adaptedSha256": "a0bb89c18ed0654b978cd4c9aab112d51f81f1f1844290c62dcbc75ed2b1a280",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnixDateTimeWideRangeTests.cs",
+      "fromSha256": "59c03cbd4cbd25c8fc7ced746440a914707cb6aae5e21815c332f7aa0c4d84da",
+      "adaptedSha256": "59c03cbd4cbd25c8fc7ced746440a914707cb6aae5e21815c332f7aa0c4d84da",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnsignedDecimalCastTests.cs",
+      "fromSha256": "38fcc4567d024614e12493013fe38c18cca098f7f3e2d4fe792a9921b1a880a6",
+      "adaptedSha256": "38fcc4567d024614e12493013fe38c18cca098f7f3e2d4fe792a9921b1a880a6",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/UnsignedFloatingCastTests.cs",
+      "fromSha256": "b5d386663ad97f42c68204358f1c9caec03291bf33b2d58ffd408ec20ea961ca",
+      "adaptedSha256": "b5d386663ad97f42c68204358f1c9caec03291bf33b2d58ffd408ec20ea961ca",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/Xslt40EqNamePriorityTests.cs",
+      "fromSha256": "a604574dd837f69aed053a7ad25c92ac30006b667004d404d8d34dd5759bb851",
+      "adaptedSha256": "a604574dd837f69aed053a7ad25c92ac30006b667004d404d8d34dd5759bb851",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/Xslt40SetPatternPriorityTests.cs",
+      "fromSha256": "1c99dec61a5a9576bb0a5815188625222d15aa8f479d71d77985dc9a3fb15608",
+      "adaptedSha256": "1c99dec61a5a9576bb0a5815188625222d15aa8f479d71d77985dc9a3fb15608",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "focused/Xslt40UnionPatternTests.cs",
+      "fromSha256": "ff01f260436dd2a397a33cafee99a888b1ce40dcd20a9c77f862d3ac58238864",
+      "adaptedSha256": "ff01f260436dd2a397a33cafee99a888b1ce40dcd20a9c77f862d3ac58238864",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "metadata/Metadata.csproj",
+      "fromSha256": "83f4a7fcb79a4d14c3efe178e1d3921495991b5f2b7a89b677ab81815183ca3a",
+      "adaptedSha256": "83f4a7fcb79a4d14c3efe178e1d3921495991b5f2b7a89b677ab81815183ca3a",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    },
+    {
+      "file": "metadata/Program.cs",
+      "fromSha256": "57961f57413a26047fd708d6d6d858e98ec8c1061b326c23098c9a75c2ede9ad",
+      "adaptedSha256": "57961f57413a26047fd708d6d6d858e98ec8c1061b326c23098c9a75c2ede9ad",
+      "change": "Body version/revision/assembly identity only; preserve historical header rows and append bumped row when changed."
+    }
+  ],
+  "publicationPerformed": false,
+  "githubCiChecked": false,
+  "braid": "Previously captured local 1.26.2 automated adoption report; uncommitted/no current-adoption CI or new native acceptance at capture; no 1.26.3 adoption inferred."
+}

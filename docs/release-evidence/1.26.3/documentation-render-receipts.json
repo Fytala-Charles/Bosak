@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/release1263-candidate-render/README.md.html",
+      "sha256": "b6ce8fef066dd1613817764c0c2d3871f854f40a2f7f3c7c1a48cdf58acc7ea9"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_ARCHITECTURE.md.html",
+      "sha256": "9798a9df4ade49df08ca6348126aa7938042c5d8679b679e49006a2c6f7dabd6"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "5ca0b2010358cc4a30f269569c266b385e7b6a1971c60954a30595adae55a83b"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_INTEGRATION.md.html",
+      "sha256": "d5346e34a43a7181e51a526a7a796e3d3f26931c7a1b643fa52854b93d8a4e24"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "bec162c0f8e4fd5c3ae4cd38d5d537ea8ef6d7f3677f1a020fd1bba1564a30b7"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "f3e5169bf5d1d398e7a44cb65efaeb44a37348b6b15fbd891223ad416ba4d379"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "8f7950e6b380a57d4da4bf09fd7e953874c8f11f1e458db4c08bc29e63ef726c"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "b60191c3dc618d825629428f622520cc03813de166b37e533c987ba55e93bfe8"
+    },
+    {
+      "source": "docs/xpath40-catalog/FLOOR-CEILING-ARGUMENT-CONTRACT.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_xpath40-catalog_FLOOR-CEILING-ARGUMENT-CONTRACT.md.html",
+      "sha256": "80a1dde33f7edf21ecd18ab3feaf5d80953d057c2510dce9673d1ce1471d919c"
+    },
+    {
+      "source": "docs/RELEASE-1.26.2-CANDIDATE.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_RELEASE-1.26.2-CANDIDATE.md.html",
+      "sha256": "7e3088fafcd6f7c4815fb55f89fcafc8bd3862c0a86170ee4c260c05d20c26dc"
+    },
+    {
+      "source": "docs/RELEASE-NOTES-1.26.2.md",
+      "html": ".guard-tmp/release1263-candidate-render/docs_RELEASE-NOTES-1.26.2.md.html",
+      "sha256": "6f34e5ce482d29dc86642c86d3267868accf889c35f7e69943a7523a4971e30d"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+[
+  {
+    "file": "AbsIntegerPreservationTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs",
+    "sha256": "220bee4eba50933b0cd3285894c612ba683f90a9ecf5c9fd07b5fb0dffff35a6",
+    "expectedCases": 1323,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 1323,
+    "packagePassed": 1323
+  },
+  {
+    "file": "FloorCeilingIntegerPreservationTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/FloorCeilingIntegerPreservationTests.cs",
+    "sha256": "08d7fcca7ddf38c59cb9b3536ee0e39ac43643c460ef2a36f2638c6cac149ba9",
+    "expectedCases": 936,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 936,
+    "packagePassed": 936
+  },
+  {
+    "file": "FloorCeilingArgumentContractTests.cs",
+    "source": "tests/Bosak.XPath.Standard.Tests/FloorCeilingArgumentContractTests.cs",
+    "sha256": "76855d63bc54d959b006b176dafc51af857f7ebd6640a6bceaf8d28d31215231",
+    "expectedCases": 802,
+    "copy": "Byte-identical pinned source; public APIs only.",
+    "sourcePassed": 802,
+    "packagePassed": 802
+  }
+]

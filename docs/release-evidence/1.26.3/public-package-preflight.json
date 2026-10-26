@@ -1,0 +1,92 @@
+[
+  {
+    "package": "Bosak.XPath.Api",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.587327+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Compiler",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.compiler/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.587748+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Core",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.core/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.588095+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Parser",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.parser/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.588378+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Providers",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.806672+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Providers.Database",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.providers.database/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.808674+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "98ef27a369c36af04d1480830bce63a61330327b82119c89df39337793448269"
+  },
+  {
+    "package": "Bosak.XPath.Runtime",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.runtime/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.823078+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XPath.Standard",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.standard/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.831375+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.XQuery",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.964845+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  },
+  {
+    "package": "Bosak.Xslt",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xslt/index.json",
+    "checkedAtUtc": "2026-10-26T12:09:02.977553+00:00",
+    "httpStatus": 200,
+    "public1262Present": true,
+    "candidate1263Present": false,
+    "sha256": "689bd3de1b122de0a4b3e203c4196a5ddd19b8dd5cfabadfe4d2f23e62da99d3"
+  }
+]

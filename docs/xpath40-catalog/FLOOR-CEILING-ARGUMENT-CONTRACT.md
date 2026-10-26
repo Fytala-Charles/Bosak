@@ -4,6 +4,8 @@
   <p>26 October 2026 — source 1.26.3 unpublished; public 1.26.2 unchanged</p>
 </div>
 
+**Consolidated checkpoint:** [Verified unsigned 1.26.3 candidate](../RELEASE-1.26.3-CANDIDATE.md) pins both integer-preservation corrections and this audit. Public 1.26.2 stays current; original audit proof/evidence remains unchanged.
+
 This REQ-126 audit starts from `1c20de059f268fe6fd76eb355f01b8e6896dc217`, after [integer identity preservation](FLOOR-CEILING-INTEGER-PRESERVATION.md). **No engine correction is required by the sampled contract tests.** It adds tests and retained evidence to the existing unpublished 1.26.3 patch; public 1.26.2 remains current.
 
 ## Contract and result
