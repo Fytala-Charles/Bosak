@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+**REQ-126 C01 complete — 26 October 2026:** [Current inventory and ownership record](docs/xpath40-catalog/FUNCTION-INVENTORY-REFRESH.md) refreshes 316 names against published 1.26.3 and pinned current draft b4723ff5: 119 registered 4.0-only names (70 non-constructors, 49 focus constructors), plus 197 existing names. The retained inventory missed `array:members` and `array:of-members`. All 1,581 profile lookup observations completed without probe errors; four changed declarations and remaining semantic/default/empty/error reviews have explicit C02/C03/C06 owners. Twelve closure workpackages remain open; REQ-126 and AC-01–04 remain partial. Finish these packages before skip fixes, Braid or VS Code extension work. Engine, APIs, tests, version and frozen gates are unchanged; existing passing source/gate evidence is inherited. Earlier counts and checkpoint notices are historical.
+
 Bosak 1.26.3 is available on NuGet, including abs, floor and ceiling integer-preservation corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.3-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
 REQ-126 now has a [13-workpackage closure plan](docs/xpath40-catalog/CLOSURE-PLAN.md) and a separate [conformance skip triage](docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md). The catalog remains in progress; frozen conformance policy and public installation are unchanged.

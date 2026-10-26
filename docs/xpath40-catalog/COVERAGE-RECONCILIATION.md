@@ -30,6 +30,8 @@
   <p>23 October 2026 - source 1.23.7; public 1.23.4</p>
 </div>
 
+**REQ-126 C01 complete — 26 October 2026:** [Current inventory and ownership record](FUNCTION-INVENTORY-REFRESH.md) refreshes 316 names against published 1.26.3 and pinned current draft b4723ff5: 119 registered 4.0-only names (70 non-constructors, 49 focus constructors), plus 197 existing names. The retained inventory missed `array:members` and `array:of-members`. All 1,581 profile lookup observations completed without probe errors; four changed declarations and remaining semantic/default/empty/error reviews have explicit C02/C03/C06 owners. Twelve closure workpackages remain open; REQ-126 and AC-01–04 remain partial. Finish these packages before skip fixes, Braid or VS Code extension work. Engine, APIs, tests, version and frozen gates are unchanged; existing passing source/gate evidence is inherited. Earlier counts and checkpoint notices are historical.
+
 **Numeric binary/range empty correction - 25 October 2026:** [Behavior and evidence](BINARY-EMPTY-ATOMIZATION.md) propagate empty atomized operands in six numeric paths and modern ranges. Adds 214 cases (168 failed before; all pass after), 12,740 solution/LSP passes and unchanged fresh frozen gates. Matrix discrepancies fall 84 to 36 (48 corrected, no regressions); function conversion remains separate. Existing source patch 1.26.1 is unpublished; public 1.26.0 has bounded Braid acceptance. REQ-126 stays partial.
 
 

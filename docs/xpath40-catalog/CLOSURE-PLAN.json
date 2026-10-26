@@ -1,6 +1,6 @@
 {
   "date": "2026-10-26",
-  "baseline": "closure-plan-v1",
+  "baseline": "closure-plan-v1-c01",
   "sourceBase": "927d7a458dd90a8b506840c045808f4f27e3c8d1",
   "publishedVersion": "1.26.3",
   "requirement": "REQ-126",
@@ -12,33 +12,35 @@
     "AC04": "Open/partial",
     "AC05": "Met for current scope; maintain"
   },
-  "completedBaselineWork": "C00: inventory, closure decomposition and skip triage supplied by this checkpoint; no acceptance criterion closed",
-  "openClosureWorkpackages": 13,
+  "completedBaselineWork": "C00 decomposition and C01 live inventory complete; no acceptance criterion closed",
+  "openClosureWorkpackages": 12,
   "workpackages": [
     {
       "id": "C01",
       "title": "Refresh function/signature/default/keyword inventory",
-      "status": "Open",
+      "status": "Complete",
       "acceptanceCriteria": [
         "AC-01"
       ],
       "scope": {
-        "registeredNames": 117,
-        "nonConstructorNames": 68,
+        "registeredNames": 119,
+        "nonConstructorNames": 70,
         "focusConstructorNames": 49,
         "existingFunctionNames": 197,
         "records": [
           "audit-function-inventory.json",
           "audit-signature-contracts.json",
           "CHANGED-31-CONTRACT-INVENTORY.md"
-        ]
+        ],
+        "liveInventory": "CURRENT-FUNCTION-INVENTORY.json"
       },
       "doneWhen": [
         "Pin actual current review sources and distinguish them from historical adoption.",
         "Refresh live 1.26.3 registration/arity/parameter/return/default/keyword and omitted/empty/error mappings; classify deltas rather than treating declaration text differences as semantic changes.",
         "Record explicit remaining contract gaps and owners; do not reimplement every draft addition."
       ],
-      "dependsOn": []
+      "dependsOn": [],
+      "completionEvidence": "FUNCTION-INVENTORY-REFRESH.md"
     },
     {
       "id": "C02",
@@ -1576,7 +1578,7 @@
       ]
     }
   ],
-  "scopeControl": "13 planned review/closure workpackages, not 13 guaranteed PRs or an estimate of all engine implementation work. Newly discovered defects receive separate tickets; changes to this baseline must be explicit. No automatic implementation commitment for every unsupported proposal.",
+  "scopeControl": "13 planned review/closure workpackages, with C01 complete and 12 open. Finish REQ-126 before skip fixes, Braid or VS Code extension work. Newly discovered defects receive separate tickets; no automatic implementation commitment for every unsupported proposal.",
   "unrecoverableHistoryPolicy": "No waiver granted; C08/C13 remain blocked where original criterion cannot be evidenced without owner disposition.",
   "catalogSummary": {
     "entries": 76,

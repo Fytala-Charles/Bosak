@@ -4,6 +4,8 @@
   <p>Registrations, pinned declarations, defaults and reproducible consumer boundaries</p>
 </div>
 
+**REQ-126 C01 complete — 26 October 2026:** [Current inventory and ownership record](FUNCTION-INVENTORY-REFRESH.md) refreshes 316 names against published 1.26.3 and pinned current draft b4723ff5: 119 registered 4.0-only names (70 non-constructors, 49 focus constructors), plus 197 existing names. The retained inventory missed `array:members` and `array:of-members`. All 1,581 profile lookup observations completed without probe errors; four changed declarations and remaining semantic/default/empty/error reviews have explicit C02/C03/C06 owners. Twelve closure workpackages remain open; REQ-126 and AC-01–04 remain partial. Finish these packages before skip fixes, Braid or VS Code extension work. Engine, APIs, tests, version and frozen gates are unchanged; existing passing source/gate evidence is inherited. Earlier counts and checkpoint notices are historical.
+
 ## Finding and scope
 
 **D2 has a first comparison matrix; behavioral completion remains partial.** Reviewed 2026-10-12 against Bosak `3a078fa4cb8b17233837670d41e0ef951da86cd1`, published version 1.1.2. REQ-126 stays In Progress. This audit covers all **68 non-constructor 4.0-only names** and **20 selected existing functions**, with **148 exact registrations**. The existing-function sample is not an exhaustive inventory of changed 3.1 behavior. The 49 focus constructors have their [separate audit](operators-and-syntax/focus-functions.md).
