@@ -1,0 +1,8504 @@
+[
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([[],[2.5],[]],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "3"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "3",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "3"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([()])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[]])",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([-2.5])",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([[],[2.5],[]])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})((2.5,3.5))",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([xs:untypedAtomic('2.5')])",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})(map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#1([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),1)([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x){round-half-to-even($x)})([function(){1}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([()],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[]],0)",
+    "expected": "()",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "()"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([-2.5],0)",
+    "expected": "-2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "-2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([[],[2.5],[]],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})((2.5,3.5),0)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "2"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([xs:untypedAtomic('2.5')],0)",
+    "expected": "2",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(xs:untypedAtomic('bad'),0)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "NaN"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(map{},0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([map{}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "round-half-to-even#2([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "numeric",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})([function(){1}],0)",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[1])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[1]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[[],1,[]])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('1'))",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[xs:untypedAtomic('1')])",
+    "expected": "12.5",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "12.5"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,map{})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,[map{}])",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,function(){1})",
+    "expected": "FOTY0013",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FOTY0013"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "round-half-to-even#2(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "function-lookup(QName('http://www.w3.org/2005/xpath-functions','round-half-to-even'),2)(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "precision",
+    "expression": "(function($x,$p){round-half-to-even($x,$p)})(12.5,xs:untypedAtomic('bad'))",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:integer('2')],[0]) instance of xs:integer",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:decimal('2')],[0]) instance of xs:decimal",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:float('2')],[0]) instance of xs:float",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "type",
+    "expression": "round-half-to-even([xs:double('2')],[0]) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "true"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even('bad',1001)",
+    "expected": "XPTY0004",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('bad'),1001)",
+    "expected": "FORG0001",
+    "error": true,
+    "before": {
+      "value": "bad"
+    },
+    "after": {
+      "errorCode": "FORG0001"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "group": "large-positive-contract",
+    "expression": "round-half-to-even(xs:untypedAtomic('2.5'),1001) instance of xs:double",
+    "expected": "true",
+    "error": false,
+    "before": {
+      "value": "false"
+    },
+    "after": {
+      "value": "true"
+    }
+  }
+]

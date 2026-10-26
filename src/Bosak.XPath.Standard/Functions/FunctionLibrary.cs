@@ -466,6 +466,8 @@
 //                      | Charles Korthout | 5.146 | 24-10-2026     | Normalize absent index-of-substring pattern only in XPath40Experimental.                  |
 //                      | Charles Korthout | 5.147 | 24-10-2026     | Opt signed Unix epochs into XPath40Experimental; retain frozen domain.                    |
 //                      | Charles Korthout | 5.148 | 24-10-2026     | Range-check decimal-backed Unix integer epochs before Int64 narrowing.                   |
+//                      | Charles Korthout | 5.149 | 25-10-2026     | Enforce fn:abs numeric optional argument conversion without changing function identity.    |
+//                      | Charles Korthout | 5.150 | 26-10-2026     | Enforce rounding numeric and precision contracts while preserving function coercion types. |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2346,6 +2348,7 @@ public static class FunctionLibrary
                 Arity = 2,
                 ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer],
                 ReturnType = XdmValueKind.Undefined,
+                ParameterTypeNames = [null, "xs:integer"],
                 Implementation = Round_2
             },
 
@@ -2366,6 +2369,7 @@ public static class FunctionLibrary
                 Arity = 2,
                 ParameterTypes = [XdmValueKind.Undefined, XdmValueKind.Integer],
                 ReturnType = XdmValueKind.Undefined,
+                ParameterTypeNames = [null, "xs:integer"],
                 Implementation = RoundHalfToEven_2
             },
 
@@ -14935,8 +14939,10 @@ public static class FunctionLibrary
 
     private static XdmValue Abs(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        XdmValue arg = AtomizeValue(args[0]);
-        if (arg.IsUndefined)
+        // Convert at the implementation boundary so all call forms enforce the
+        // declared argument type without changing named-function coercion identity.
+        XdmValue arg = VmEngine.ApplyFunctionConversion(args[0], "xs:numeric?", ctx);
+        if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 
         return arg.Kind switch
@@ -15017,7 +15023,9 @@ public static class FunctionLibrary
 
     private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
     {
-        arg = AtomizeValue(arg);
+        // Validate before the empty and large-precision shortcuts, retaining the
+        // existing registration types used by named-function coercion.
+        arg = VmEngine.ApplyFunctionConversion(arg, "xs:numeric?", ctx);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
 
@@ -15193,7 +15201,7 @@ public static class FunctionLibrary
 
     private static XdmValue RoundHalfToEven(EvaluationContext ctx, XdmValue arg, long precision)
     {
-        arg = AtomizeValue(arg);
+        arg = VmEngine.ApplyFunctionConversion(arg, "xs:numeric?", ctx);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
 

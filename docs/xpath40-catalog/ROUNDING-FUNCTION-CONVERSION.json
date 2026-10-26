@@ -1,0 +1,362 @@
+{
+  "date": "2026-10-26",
+  "baseRevision": "ef33fab9a0d84d11dd2423c569a832da6d91e4c8",
+  "status": "IMPLEMENTED_VALIDATED_UNPUBLISHED",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "sourceFingerprints": [
+    {
+      "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+      "sha256": "8444d8e3bb5e9098d209e9f7f5b030dd590d34ec8a89bdbd8c77bf0404955793",
+      "gitBlob": "85383daf06921a46ff81656cce8174ad66a7ae01"
+    },
+    {
+      "path": "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+      "sha256": "955cb76d52b8ea4e4b747c241b0ca942f2497aca7ed6b8b0a4f74ed1a26d2d13",
+      "gitBlob": "b5762a40f7396cad7be8417f1a42053c8378cc47"
+    },
+    {
+      "path": "tests/Bosak.XPath.Standard.Tests/RoundingFunctionConversionTests.cs",
+      "sha256": "65af24a6f3042f666ee446d9154960acd708c5e993b7c7143682e61a553f9500",
+      "gitBlob": "0e07376d2c2d7b6ece66fcaa899d30276814f34f"
+    }
+  ],
+  "focusedReceipts": [
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/before.trx",
+      "sha256": "43e0cb0622d506cef95d6da681d615015506d48ed2b70327eab0833efef849ba",
+      "counters": {
+        "total": "1502",
+        "executed": "1502",
+        "passed": "848",
+        "failed": "654",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/first-correction.trx",
+      "sha256": "0b96db36949fa359a6ef1eeae60290795ee772241eaecaacca5fc4c3de76ab5b",
+      "counters": {
+        "total": "1502",
+        "executed": "1502",
+        "passed": "1502",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/compact-tests.trx",
+      "sha256": "a213bbce867834f188eedf0d47871289acf8837682df16aa471b682615b7d7b8",
+      "counters": {
+        "total": "1502",
+        "executed": "1502",
+        "passed": "1502",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/final.trx",
+      "sha256": "6bd3f5a77670f3d5088c9f9cda313557de70a8a3abe284560ca0be26f714fb97",
+      "counters": {
+        "total": "1514",
+        "executed": "1514",
+        "passed": "1514",
+        "failed": "0",
+        "error": "0",
+        "timeout": "0",
+        "aborted": "0",
+        "inconclusive": "0",
+        "passedButRunAborted": "0",
+        "notRunnable": "0",
+        "notExecuted": "0",
+        "disconnected": "0",
+        "warning": "0",
+        "completed": "0",
+        "inProgress": "0",
+        "pending": "0"
+      }
+    }
+  ],
+  "focusedCases": 1514,
+  "solutionPassed": 14536,
+  "languageServerPassed": 84,
+  "totalDistinctSolutionAndLspPassed": 14620,
+  "qt3": {
+    "passed": 31142,
+    "failed": 0,
+    "skipped": 679
+  },
+  "frozenQt4": {
+    "passed": 8436,
+    "failed": 0,
+    "skipped": 1894,
+    "experimentalFallbackPasses": 11
+  },
+  "diagnostics": {
+    "observations": 1494,
+    "beforeDiscrepancies": 654,
+    "afterDiscrepancies": 0,
+    "changed": 654,
+    "regressions": 0,
+    "perGroup": {
+      "numeric": {
+        "observations": 912,
+        "beforeDiscrepancies": 396,
+        "afterDiscrepancies": 0,
+        "changed": 396,
+        "regressions": 0
+      },
+      "precision": {
+        "observations": 480,
+        "beforeDiscrepancies": 204,
+        "afterDiscrepancies": 0,
+        "changed": 204,
+        "regressions": 0
+      },
+      "type": {
+        "observations": 48,
+        "beforeDiscrepancies": 36,
+        "afterDiscrepancies": 0,
+        "changed": 36,
+        "regressions": 0
+      },
+      "identity": {
+        "observations": 12,
+        "beforeDiscrepancies": 0,
+        "afterDiscrepancies": 0,
+        "changed": 0,
+        "regressions": 0
+      },
+      "special": {
+        "observations": 24,
+        "beforeDiscrepancies": 0,
+        "afterDiscrepancies": 0,
+        "changed": 0,
+        "regressions": 0
+      },
+      "large-positive-contract": {
+        "observations": 18,
+        "beforeDiscrepancies": 18,
+        "afterDiscrepancies": 0,
+        "changed": 18,
+        "regressions": 0
+      }
+    }
+  },
+  "validationCommands": [
+    {
+      "label": "build",
+      "exitCode": 0,
+      "command": [
+        "dotnet",
+        "build",
+        "Bosak.sln",
+        "-c",
+        "Release"
+      ],
+      "environment": {}
+    },
+    {
+      "label": "solution",
+      "exitCode": 0,
+      "command": [
+        "dotnet",
+        "test",
+        "Bosak.sln",
+        "-c",
+        "Release",
+        "--no-build",
+        "--logger",
+        "trx",
+        "--results-directory",
+        "D:\\Development\\Bosak\\.guard-tmp\\rounding-function-validation\\solution"
+      ],
+      "environment": {}
+    },
+    {
+      "label": "lsp",
+      "exitCode": 0,
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Bosak.LanguageServer.Tests",
+        "-c",
+        "Release",
+        "--logger",
+        "trx",
+        "--results-directory",
+        "D:\\Development\\Bosak\\.guard-tmp\\rounding-function-validation\\lsp"
+      ],
+      "environment": {}
+    },
+    {
+      "label": "qt3",
+      "exitCode": 0,
+      "command": [
+        "dotnet",
+        "run",
+        "--project",
+        "tests/Bosak.XPath.Conformance",
+        "-c",
+        "Release",
+        "--no-build"
+      ],
+      "environment": {}
+    },
+    {
+      "label": "qt4",
+      "exitCode": 0,
+      "command": [
+        "dotnet",
+        "run",
+        "--project",
+        "tests/Bosak.XPath.Conformance40",
+        "-c",
+        "Release",
+        "--no-build",
+        "--",
+        "tests/qt4tests"
+      ],
+      "environment": {
+        "BOSAK_QT4_GATE_ONLY": "1"
+      }
+    }
+  ],
+  "validationNotes": [
+    "Complete Release build, solution/LSP tests and frozen gates ran outside sandbox for local database HTTP stubs.",
+    "Existing CS8604 conformance-runner warning; zero build errors.",
+    "Original 1502-case baseline has 654 failures/848 passes. Same expectations all pass after correction; 12 additional node controls pass.",
+    "Coarse function item types and return metadata unchanged; two-argument precision uses partial parameter metadata.",
+    "No current-native Unix rerun or full current-draft conformance claimed.",
+    "Numerical kernels, extreme precision, schema-list cardinality and generalized/BC-dynamic conversion remain separate.",
+    "Source remains in existing unpublished 1.26.1 patch; no release.",
+    "Previous abs raw logs are explicitly added despite ignore rules; both evidence directories preserve original bytes."
+  ],
+  "evidence": [
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/analyze.py",
+      "sha256": "468d236d77cae971b8d0922558ba610b81d61619c79154acc08b8a39a63193e6"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/before.trx",
+      "sha256": "43e0cb0622d506cef95d6da681d615015506d48ed2b70327eab0833efef849ba"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/build.log",
+      "sha256": "335a48f87ee4ec6739b5e19133ae73373f4acd91afda7833e0b144c5c04ba3b8"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/compact-tests.trx",
+      "sha256": "a213bbce867834f188eedf0d47871289acf8837682df16aa471b682615b7d7b8"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/diagnostic-changes.json",
+      "sha256": "98737cda27ce56b66b589b4bd2f0949b999ac9a14a72ddb6ba44bc118710f263"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/diagnostic-summary.json",
+      "sha256": "f22ef9e36598a51ffbf410077b752cc43e6edf419d208b1a126784e044c81886"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/documentation-render-receipts.json",
+      "sha256": "b60c9ea70633c4adfae61c36b50843b486d55bc093c7d1c1ce8a8f2dcced9c49"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/expressions.json",
+      "sha256": "9bd3ed2c29a5027f2a39e00a5277fd71291a0844a3b56b095f3b193aaf5cb2a6"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/final.trx",
+      "sha256": "6bd3f5a77670f3d5088c9f9cda313557de70a8a3abe284560ca0be26f714fb97"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/first-correction.trx",
+      "sha256": "0b96db36949fa359a6ef1eeae60290795ee772241eaecaacca5fc4c3de76ab5b"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/full-test-receipts.json",
+      "sha256": "a263e72cbebb49b14513362d87ad3317e5f37f9377e43a47481358163d58e0ad"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/inputs.json",
+      "sha256": "ce70665081276b7800eaea9830de326fa3702dd00134cd66bff82dc166f438fd"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/lsp.log",
+      "sha256": "33867ae94d036b109bb274f7efa597ed05afa1ec7f78901986dfd8f1a9640945"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/observations-before.json",
+      "sha256": "86e70c062270fb2015395c30ec4dfbeac3a03c3c53a32f3c7244f25b8535cf5c"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/observations-final.json",
+      "sha256": "6368e60fcf79b99ca6f712ab1dabc025554536d6b3df731211234485d40e89ba"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/probe-program.cs.txt",
+      "sha256": "c4956c481eddd709cb3c750f2565212a7cfac9d580264fbc215a818a50605339"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/probe-project.csproj.txt",
+      "sha256": "39db2e4d5a2e0b3c927cbdd08d1980fc32fe42501a8c9183a08241b11e610d48"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/qt3.log",
+      "sha256": "4bebbf72fda2a80b4cad2215feb2384794fdc17b8afccc4304411940a99c0af6"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/qt4.log",
+      "sha256": "1376916f747c41f8af146e8256e46736e4b5df92878d96ed55734c6c3d52feda"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/solution.log",
+      "sha256": "91ac663ea4cbfa55eb1a2ee3ef5cd827f590b355693d9a69683914e28b7c0ed5"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/rounding-function-conversion/validation-exits.json",
+      "sha256": "285f958f86c3957954953f8652e31de1beb7615dcb501c890c99ab93bf9f1980"
+    }
+  ],
+  "engineBaseRevision": "ef33fab9a0d84d11dd2423c569a832da6d91e4c8",
+  "parentCheckpointRevision": "4163e8462f6b787824d48e04055fa5b480c3ee67",
+  "archiveCorrection": {
+    "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/retention-correction-2026-10-26.json",
+    "sha256": "4bab472ba04e99e7f491a5efb515a2ecb991d9fbbd231a0bc3d5dd0dc2b55138",
+    "commit": "4163e8462f6b787824d48e04055fa5b480c3ee67"
+  }
+}

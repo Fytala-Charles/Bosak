@@ -1,0 +1,51 @@
+{
+  "observations": 1494,
+  "beforeDiscrepancies": 654,
+  "afterDiscrepancies": 0,
+  "changed": 654,
+  "regressions": 0,
+  "perGroup": {
+    "numeric": {
+      "observations": 912,
+      "beforeDiscrepancies": 396,
+      "afterDiscrepancies": 0,
+      "changed": 396,
+      "regressions": 0
+    },
+    "precision": {
+      "observations": 480,
+      "beforeDiscrepancies": 204,
+      "afterDiscrepancies": 0,
+      "changed": 204,
+      "regressions": 0
+    },
+    "type": {
+      "observations": 48,
+      "beforeDiscrepancies": 36,
+      "afterDiscrepancies": 0,
+      "changed": 36,
+      "regressions": 0
+    },
+    "identity": {
+      "observations": 12,
+      "beforeDiscrepancies": 0,
+      "afterDiscrepancies": 0,
+      "changed": 0,
+      "regressions": 0
+    },
+    "special": {
+      "observations": 24,
+      "beforeDiscrepancies": 0,
+      "afterDiscrepancies": 0,
+      "changed": 0,
+      "regressions": 0
+    },
+    "large-positive-contract": {
+      "observations": 18,
+      "beforeDiscrepancies": 18,
+      "afterDiscrepancies": 0,
+      "changed": 18,
+      "regressions": 0
+    }
+  }
+}

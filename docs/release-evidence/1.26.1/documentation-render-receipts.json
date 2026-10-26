@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "docs/RELEASE-1.26.1-CANDIDATE.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_RELEASE-1.26.1-CANDIDATE.md.html",
+      "sha256": "74b72cbee223f835b622985694714b831a37387e2b4bbec524c5e121c2d3313e"
+    },
+    {
+      "source": "docs/RELEASE-NOTES-1.26.1.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_RELEASE-NOTES-1.26.1.md.html",
+      "sha256": "bf902660691ca4d19519a1f5e7ba284b246d52d7107976a1d3320799857b6f73"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_ARCHITECTURE.md.html",
+      "sha256": "489c45b50e04d0360d9cd152ba5c4c58d8c316d1574fb9891fab0fd30d9059e4"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "e0f4434b04f17f234cd0c9d840a625d92b5174c86603bfd8407efb178e86becd"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_INTEGRATION.md.html",
+      "sha256": "f319522b63884392cda2265038210e70874cc800a1f51e20b9bd4d911272d735"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "19e15f230aad09a8a40701e5a4afd4c85b3388d28a7b5b46b7cba191f0d1fde3"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "b6902e2a2fd170ee50ed421ced246392c3bd9af3d93491da2a3dde917c258e34"
+    },
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/release1261-candidate-render/README.md.html",
+      "sha256": "0f10b19dace8ec03edc5c659fbe7e2a1b9e87096146dadd0b94d4f70a10c0263"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "2ae6d5755cc3fb7f20a2cceb75c105bffba064255429ef1e6fb1eed65d1aa772"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/release1261-candidate-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "47d6525adf66191f90589496b579bd504efdfb9465f3b394aaf199c87230cda1"
+    }
+  ]
+}

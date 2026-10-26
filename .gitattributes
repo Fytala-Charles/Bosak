@@ -121,7 +121,12 @@ docs/xpath40-catalog/evidence/array-atomization-audit/* -text whitespace=cr-at-e
 docs/xpath40-catalog/evidence/array-singleton/* -text whitespace=cr-at-eol,-blank-at-eof
 
 docs/xpath40-catalog/evidence/binary-empty/* -text whitespace=cr-at-eol,-blank-at-eof
+docs/xpath40-catalog/evidence/atomic-function-conversion/* -text whitespace=cr-at-eol,-blank-at-eof
+docs/xpath40-catalog/evidence/rounding-function-conversion/* -text whitespace=cr-at-eol,-blank-at-eof
 docs/req138-evidence/acceptance/* -text whitespace=cr-at-eol,-blank-at-eof
 
 contributions/xslt40/array-select-boundaries/submission.json -text whitespace=cr-at-eol,-blank-at-eof
 contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text whitespace=cr-at-eol,-blank-at-eof
+
+# Preserve unsigned 1.26.1 candidate evidence and nested official NuGet receipts byte-for-byte.
+/docs/release-evidence/1.26.1/** -text whitespace=cr-at-eol,-blank-at-eof

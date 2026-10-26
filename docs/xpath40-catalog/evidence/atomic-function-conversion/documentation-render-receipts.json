@@ -1,0 +1,46 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/atomic-function-render/README.md.html",
+      "sha256": "2cf988b0cc9172c322dd4f3783ecdacd7823828ecff3fd0d03ae58a67cf2ffbb"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/atomic-function-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6b8c49829ba61618244ab48cb2383b6678fca73c75c1aab43dbf603bd39083f5"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/atomic-function-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "2e97f5476d2980f70041390523d66bd6bdb5f4e720ec606e8f35a1184c72e605"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/atomic-function-render/docs_INTEGRATION.md.html",
+      "sha256": "96bedec5165452beca6e8207534822a94d8a9f33d76f69cb9e484b6a7a44f893"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/atomic-function-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "ec8baf0adf0ff86f51fe664e4c9e9b8da2e4b1894ae07866f3bc939664f5e265"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/atomic-function-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "a816678ed0f8aa0e7435241a59ff453e2bcde71568d8bfa601795d9d6eb7bc2d"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/atomic-function-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "07871bf85efba1e8b93998a2e069c1ce1da02e970b201b75f140cbd33f725daa"
+    },
+    {
+      "source": "docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.md",
+      "html": ".guard-tmp/atomic-function-render/docs_xpath40-catalog_ATOMIC-FUNCTION-CONVERSION.md.html",
+      "sha256": "eea64728e671c387ba5901142fd2cbd4706d2a5973d749a9f247e28c3b9398aa"
+    }
+  ]
+}

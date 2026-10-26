@@ -1,3 +1,5 @@
+**1.26.1 candidate validated — 26 October 2026:** [Pinned source and package proof](../RELEASE-1.26.1-CANDIDATE.md) records source `65417cdb3bff184ca9ff1f624582f55ca4681db9`, 14,620 source/LSP passes, unchanged frozen gates, ten unsigned packages and 153 broad/3,913 focused PackageReference-only checks. All 19 consumed assembly identities and archive/cache/output bytes agree; fresh dependency audits report no vulnerable packages. The 2,420 added source cases are copied byte-identically into the package consumer. Public 1.26.0 and bounded Braid acceptance remain current; REQ-126 remains partial. No tag, publication or new Braid adoption/native acceptance.
+
 **Publication update - 25 October 2026:** [Bosak 1.26.0 is published and verified](../RELEASE-1.26.0-PUBLICATION.md), including the carried-forward 384 numeric cases. REQ-126 remains partial; D2/D3/D4 and applicable-evidence AC-03 remain open. Earlier candidate/public-version notices below are historical. No fixture/gate promotion or full current-draft conformance is claimed.
 
 <div align="center">

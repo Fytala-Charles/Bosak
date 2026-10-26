@@ -1,0 +1,69 @@
+{
+  "date": "2026-10-26",
+  "base": "65417cdb3bff184ca9ff1f624582f55ca4681db9",
+  "sourceVersion": "1.26.1",
+  "publicVersion": "1.26.0",
+  "results": [
+    {
+      "label": "frozen-gate",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\release1261-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\tests\\qt4tests"
+      ],
+      "startedAtUtc": "2026-10-26T05:16:21.474719+00:00",
+      "completedAtUtc": "2026-10-26T05:16:37.993304+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 10330,
+        "Passed": 8436,
+        "Failed": 0,
+        "Skipped": 1894
+      },
+      "logSha256": "164f7b60be09fa4f295d295a6cb54386a3c199dcc26e06e1f68782950102310f"
+    },
+    {
+      "label": "qt3",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\release1261-source\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+        "D:\\Development\\Bosak\\tests\\qt3tests"
+      ],
+      "startedAtUtc": "2026-10-26T05:16:21.475144+00:00",
+      "completedAtUtc": "2026-10-26T05:17:26.825703+00:00",
+      "exitCode": 0,
+      "counts": {
+        "Total": 31821,
+        "Passed": 31142,
+        "Failed": 0,
+        "Skipped": 679
+      },
+      "logSha256": "3c84c478a59d00b625dbc99182415550ce2cac846c376124140a3ac581198f47"
+    },
+    {
+      "label": "current-native-after",
+      "command": [
+        "dotnet",
+        "D:\\Development\\Bosak\\.guard-tmp\\release1261-source\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+        "D:\\Development\\Bosak\\.upstream\\qt4tests",
+        "fn-unix-dateTime"
+      ],
+      "startedAtUtc": "2026-10-26T05:16:21.475320+00:00",
+      "completedAtUtc": "2026-10-26T05:16:22.583685+00:00",
+      "exitCode": 2,
+      "counts": {
+        "Total": 24,
+        "Passed": 22,
+        "Failed": 2,
+        "Skipped": 0
+      },
+      "logSha256": "e019b3e14a3ca6c5fe506f562f8ff881b86cd092f04bfd2c0044dc1cb5a69ef6"
+    }
+  ],
+  "runnerSha256": "5c95ea19715eb90204ea1e1bde4ba471e22f4f9c8f554628341aa9c27a070433",
+  "approvedPolicy": "Consolidated1.26.1 candidate regression verification",
+  "frozenFixtureChanged": false,
+  "harnessRetryPolicyChanged": false,
+  "currentNativeNegativeFailuresRemainExplicit": true,
+  "releasePerformed": false
+}

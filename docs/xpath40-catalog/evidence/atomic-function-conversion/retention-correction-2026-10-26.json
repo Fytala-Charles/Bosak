@@ -1,0 +1,155 @@
+{
+  "date": "2026-10-26",
+  "previousCommit": "ef33fab9a0d84d11dd2423c569a832da6d91e4c8",
+  "originalManifest": "docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.json",
+  "originalManifestGitBlob": "f8fd4ff20c403f6dbb60df9994a0625d7f3e8fb0",
+  "change": "Store original evidence bytes under -text attributes and explicitly add ignored raw logs. No test rerun or acceptance change.",
+  "restoredOriginalBytes": [
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/array-matrix-after.json",
+      "sha256": "19f903eb39da1b7fc74cd6707c5001e9227df4651eb12ac4936f001fddd2e6d4",
+      "previousGitBlobSha256": "03e6845260a6bf61b4ae56697e17e4669d390fcca0f232dafa7cbc218d31197d",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/array-matrix-final.json",
+      "sha256": "19f903eb39da1b7fc74cd6707c5001e9227df4651eb12ac4936f001fddd2e6d4",
+      "previousGitBlobSha256": "03e6845260a6bf61b4ae56697e17e4669d390fcca0f232dafa7cbc218d31197d",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/audit-after.json",
+      "sha256": "333264633cbba4c3e1ca77f0a11f9cdcac27d340d2c75a4f3dd531b7acc0a8d2",
+      "previousGitBlobSha256": "3e62d670e34d6f34842552d3087aa670a8799b524aefa6e610850af23bd482d8",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/audit-before.json",
+      "sha256": "80776232352b3b81bfb57774994a1e97803ef47092c459a8d0449e6a17e27471",
+      "previousGitBlobSha256": "87c41b5502efd9e7bab409908276a0557893519236451179778c97fcfb98686b",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/audit-expressions.json",
+      "sha256": "d0673d7645df2e53e7c5071f6869ac19f471d38893565f3730932a10a9fe625d",
+      "previousGitBlobSha256": "e820dd245a87f10a232af1ab5a938cdc1a1847ea82fa4b4582e997e8db323b5f",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/audit-final.json",
+      "sha256": "333264633cbba4c3e1ca77f0a11f9cdcac27d340d2c75a4f3dd531b7acc0a8d2",
+      "previousGitBlobSha256": "3e62d670e34d6f34842552d3087aa670a8799b524aefa6e610850af23bd482d8",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/baseline.trx",
+      "sha256": "e8238fbaa6dc28c99356e41c25bbc0e99657fd5fcad22defd9cf4a5b7a9b5555",
+      "previousGitBlobSha256": "2b9da7f6b0aae7242d2b55302c4e55b3915c2778bfb6567a2cbe4eb891585db5",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/final-366.trx",
+      "sha256": "0629680fecba9217826f5a17220d16ca86d6bd95ab5a05936f5ffe7453618f8f",
+      "previousGitBlobSha256": "44da551a7028481f183327034174480b4228c1d8a77af4ecb793d76d2eb5db19",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/first-draft.trx",
+      "sha256": "9cf3c489691396da3c7f147588a11101df074f937dab2058c6bc06b4a1b5996a",
+      "previousGitBlobSha256": "71f7cdb908f419463249244a9c2bdddff8b16cbc9b014d3eafa5332c85761855",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/full-test-receipts.json",
+      "sha256": "dfa6a349d3465b617e5b52dc7df530cab00a6e7b46edb639b381da041a4daf94",
+      "previousGitBlobSha256": "1a6e5825a2ad01458aabd7efa898ee1408196931b0294904cc6b7ddecec2b4ea",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/identity-empty-attempt.trx",
+      "sha256": "dd11ab397db9b430159121aa260cefb0360d9f53998ce0d61aedecc719a825e6",
+      "previousGitBlobSha256": "57dbf06684d6f0c32760509e8681a499e5101ecb66fa34c3ee20d36e6ffceeec",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/matrix-changes.json",
+      "sha256": "f5c65fe6f02a425de6d4b6e9c31a1850f8df73550e54d9b2ce050861829268aa",
+      "previousGitBlobSha256": "75ae588a912c0b3ddeef43eb7c72502a8a60cfcb1ba776280ef36c19aa27ed39",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/matrix-summary.json",
+      "sha256": "b1774f5d8ddca59439d017b34222b075eef8fe5500595ae392801a7552c27558",
+      "previousGitBlobSha256": "6a001d14ea526701edd7079ca9b03fd270ce1b756fefe2eda284014db3868ad1",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/probe-program.cs.txt",
+      "sha256": "c4956c481eddd709cb3c750f2565212a7cfac9d580264fbc215a818a50605339",
+      "previousGitBlobSha256": "11be08483883ab5c9c358294477581a609a87f3f6eac649e8df655846021d83f",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-300.trx",
+      "sha256": "f4c67490af47dcc0d51fa64b60a379a562ab852e421ac04b08fa199948696306",
+      "previousGitBlobSha256": "6a83eaf2bc828ece1423cf224368e9ae40d74477cfe2883fd0a7bbc78135a069",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-363.trx",
+      "sha256": "93a556cf421bbbe5da51e8c4879130327b1b10b661173f4a47d0463f9d6b568e",
+      "previousGitBlobSha256": "e275987fb04ee81785d034b618ceaaddc0bc3b117dd192cc2597663154a701be",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/signature-only.trx",
+      "sha256": "55dea97683bc10fddcc3c3833770bb59d8a8f20f05ed51715c1dd8b9beff717d",
+      "previousGitBlobSha256": "bf475d6190ddfa1307b416654271da222e0a01519d156a757b612b3f9b1def39",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/validation-exits.json",
+      "sha256": "285f958f86c3957954953f8652e31de1beb7615dcb501c890c99ab93bf9f1980",
+      "previousGitBlobSha256": "25384956a3e81dbe0e3581fa3259d0117152fdb04436be971c00c37432710bb4",
+      "change": "Original line-ending bytes restored; normalized content identical."
+    }
+  ],
+  "explicitlyRetainedLogs": [
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/build.log",
+      "sha256": "b8bcd44e0c13ab8f0b68680a7afe5af5ec6bf75eda7ae6cd77998a4a7c386b4f"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/lsp.log",
+      "sha256": "77750d4b81a84b67aa3c20b5385f3908cc62b56c4bcf6efec6b012834fbeacdb"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-database-unrestricted.log",
+      "sha256": "d5c890c0e000addb996dc0cd7cef1749c68ab91bd8335f18f6a8e1dd3bc734bc"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-qt3.log",
+      "sha256": "df42e8d12b9244d1577a2157c0024448e8b363c9631a7bc8b48bef0cd0ad11ce"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-solution-unrestricted.log",
+      "sha256": "2e0464f29c81ec99ecf36b60d8e3dd649de1abb1899b0090c2549f12de82a14e"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/prototype-solution.log",
+      "sha256": "8576b04cc175bdef00e240ce477e349cc9a755e01bb20cf93a2bf448590596e1"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/qt3.log",
+      "sha256": "4032e4742a1da74aef3f34f9167c9e5f57798abc232adad5ecc8974b2d1435b9"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/qt4.log",
+      "sha256": "e99f5f296dc3e1be10380f77da43e27ae9cdec673bbfae9fa0115db19d1fff06"
+    },
+    {
+      "path": "docs/xpath40-catalog/evidence/atomic-function-conversion/solution.log",
+      "sha256": "50f88bb5fbab35d77a0ab7a2ba56405e71e1177e9b79b89b35f2834bfb8885f9"
+    }
+  ]
+}
