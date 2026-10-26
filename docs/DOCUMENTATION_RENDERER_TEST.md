@@ -1,3 +1,5 @@
+26 October 2026: nine rounding-function correction/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Receipt/source hashes, local links and diff checked; no screenshot/PDF acceptance. Original abs/rounding evidence bytes are protected from line-ending conversion.
+
 25 October 2026: atomic-function conversion audit/correction and canonical status pages rendered as HTML with markdown-it and unchanged Fytala CSS. Local links, source/receipt hashes and diff checked; no screenshot/PDF acceptance.
 
 25 October 2026: five restart/upstream/handover checkpoint pages rendered as HTML with unchanged Fytala CSS. Receipt hashes, upstream heads and engine/test identity verified; no screenshot/PDF acceptance.

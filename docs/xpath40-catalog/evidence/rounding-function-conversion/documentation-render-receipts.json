@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/rounding-function-render/README.md.html",
+      "sha256": "978c9552f4e4e06b98a1276105313c1f3b788b78a803dc0f17af2d97f18928a5"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/rounding-function-render/docs_ARCHITECTURE.md.html",
+      "sha256": "449ab62ebf1f0ad3af344a46d9f86b4e35362f9c669b7bd0d86f280b74f832a7"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/rounding-function-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "bb03593468594a79846a3240c268b12b0a0ce64431d4c8943af079c45e51a5f9"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/rounding-function-render/docs_INTEGRATION.md.html",
+      "sha256": "d8950449ebd3bac7f77c0721117ade36cb6e666980788a9d2bb9c946f6c36d0b"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/rounding-function-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "637a875272497c3a98a9e351f1f2be7a00090eab6c199cc7127dace523499ac1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/rounding-function-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "442df256ae179d18ae928bd037bab65eeada7c0bb809cb5028316611b135f74e"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/rounding-function-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "3c2c0ab6511eb876e32f0d9ca987bc851b5b62dc0f4e9d102b4776a6dc0bdc30"
+    },
+    {
+      "source": "docs/xpath40-catalog/ROUNDING-FUNCTION-CONVERSION.md",
+      "html": ".guard-tmp/rounding-function-render/docs_xpath40-catalog_ROUNDING-FUNCTION-CONVERSION.md.html",
+      "sha256": "8594d9d26ff2dfb420215125d5d788777100bc3d8b7c0b83f5122e3aae350eec"
+    },
+    {
+      "source": "docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.md",
+      "html": ".guard-tmp/rounding-function-render/docs_xpath40-catalog_ATOMIC-FUNCTION-CONVERSION.md.html",
+      "sha256": "1327aad4e48031f3c431c3e89edc236cb7a85d8b0deeaea705b3c6f10b9ac58e"
+    }
+  ]
+}
