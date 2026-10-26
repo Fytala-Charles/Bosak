@@ -4,6 +4,9 @@
   <p>26 October 2026 — unsigned local candidate; unpublished</p>
 </div>
 
+**Publication completed:** [Verified 1.26.1 publication](RELEASE-1.26.1-PUBLICATION.md). The candidate/unpublished statements below describe the retained pre-publication checkpoint. Original candidate JSON and evidence remain unchanged.
+
+
 **Pinned package source: `65417cdb3bff184ca9ff1f624582f55ca4681db9`.** This is the reviewed local rounding commit, containing all preceding unpublished 1.26.1 corrections. It was built and tested in a clean isolated checkout. Its complete Git tree, package RepositoryCommit and assembly informational revisions are recorded in [the machine-readable proof](RELEASE-1.26.1-CANDIDATE.json). Candidate documentation commits are separate and must not replace this package source. Remote CI was not verified by this preparation.
 
 [Candidate release notes](RELEASE-NOTES-1.26.1.md) summarize the patch. Public installation remains **1.26.0**. This step creates no tag, GitHub release, NuGet upload or public signature verification.

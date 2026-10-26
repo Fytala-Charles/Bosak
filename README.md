@@ -4,13 +4,7 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
-Source 1.26.1 is a [validated unsigned candidate](docs/RELEASE-1.26.1-CANDIDATE.md): 14,620 source/LSP tests and 153 broad/3,913 focused package-consumer checks pass with unchanged frozen gates. Public installation remains 1.26.0; publication is pending a separate release decision.
-
-The unpublished 1.26.1 patch also [corrects rounding argument conversion](docs/xpath40-catalog/ROUNDING-FUNCTION-CONVERSION.md): recursive numeric/precision arrays, singleton cardinality and required errors now agree across direct and dynamic calls. Its 1,514 new cases and unchanged frozen gates are verified. Public 1.26.0 remains current.
-
-Source 1.26.1 remains unpublished. Its latest [atomic function conversion correction](docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.md) makes `abs` handle recursively atomized arrays and enforce singleton cardinality while preserving named-function identity; 366 new regressions and unchanged frozen gates are verified. Public 1.26.0 remains current.
-
-Bosak 1.26.0 is available on NuGet. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.0-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
+Bosak 1.26.1 is available on NuGet, including atomic argument/cardinality and rounding corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.1-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
 
 ---
@@ -88,7 +82,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10), then
 ```bash
 dotnet new console -n BosakDemo
 cd BosakDemo
-dotnet add package Bosak.XPath.Api --version 1.26.0
+dotnet add package Bosak.XPath.Api --version 1.26.1
 ```
 
 Replace `Program.cs` with:
@@ -106,9 +100,9 @@ Run it with `dotnet run`. Reuse `expression` for subsequent evaluations. For tra
 
 | Package | Use it for |
 |---|---|
-| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.0) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.0) | Compile stylesheets and transform documents. |
-| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.0) | Compile and evaluate XQuery. |
+| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.1) | Compile and evaluate XPath. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.1) | Compile stylesheets and transform documents. |
+| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.1) | Compile and evaluate XQuery. |
 
 Continue with the [API integration guide](docs/INTEGRATION.md) and [feature catalog](docs/xpath40-catalog/README.md).
 
@@ -159,7 +153,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Integration](docs/INTEGRATION.md) | Public APIs, supported profiles and consumer guidance. |
 | [Roadmap](ROADMAP.md) and [feature requests](docs/FEATURE_REQUESTS.md) | Planned work and current delivery status. |
-| [1.26.0 release notes](docs/RELEASE-NOTES-1.26.0.md) | Release scope, compatibility and limitations. |
+| [1.26.1 release notes](docs/RELEASE-NOTES-1.26.1.md) | Release scope, compatibility and limitations. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived implementation checkpoints and the former README reference material. |
 
 Build and test from a source checkout with the .NET 10 SDK:
