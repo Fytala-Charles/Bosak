@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-26",
+  "ownerInstruction": "Approved",
+  "approvalQuestion": "Approve merging PR463 and tagging/publishing 1.26.2 from 6a3372fc",
+  "approvedSource": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+  "version": "1.26.2",
+  "integrationPR": 463,
+  "releaseWorkflow": "release.yml",
+  "manualDuplicateDispatchAuthorized": false,
+  "priorRejectedCommandExecuted": false,
+  "priorReviewReceipt": "authorization-before-explicit-approval.json"
+}

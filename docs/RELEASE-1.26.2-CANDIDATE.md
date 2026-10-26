@@ -4,6 +4,9 @@
   <p>26 October 2026 — unsigned local candidate; unpublished</p>
 </div>
 
+**Publication completed:** [Verified 1.26.2 publication](RELEASE-1.26.2-PUBLICATION.md). Candidate/unpublished statements below retain the pre-publication checkpoint; original candidate JSON and evidence remain unchanged.
+
+
 **Pinned package source: `6a3372fc3b91e733b71a426cf40f26feaaeb3bcb`.** The candidate consolidates both unpublished rounding slices. A clean isolated checkout supplies the build, tests and ten packages. [Machine-readable proof](RELEASE-1.26.2-CANDIDATE.json) pins its complete tree, RepositoryCommit and assembly informational revision. Candidate documentation commits remain separate from the package source. Remote CI is not verified by this preparation.
 
 [Candidate release notes](RELEASE-NOTES-1.26.2.md) summarize the patch. Public installation remains **1.26.1**. No tag, GitHub release, package upload or signed public verification occurs here. The owner reports that Braid's smoke test finished; its outcome/acceptance has not been supplied.

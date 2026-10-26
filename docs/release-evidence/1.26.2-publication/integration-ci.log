@@ -1,0 +1,860 @@
+XSLT wrapper controls (Windows)	Set up job	﻿2026-10-26T10:12:29.5970468Z Current runner version: '2.338.0'
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6056629Z ##[group]Runner Image Provisioner
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6057465Z Hosted Compute Agent
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6058014Z Version: 20261021.618
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6058645Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6059441Z Build Date: 2026-10-21T00:45:21Z
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6060383Z Worker ID: {bf5d1251-1d66-4650-847f-ad8f804e0871}
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6061069Z Region: westus2
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6061803Z Cloud: Azure
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6062332Z ##[endgroup]
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6063713Z ##[group]Operating System
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6064335Z Microsoft Windows Server 2025
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6064949Z 10.0.26100
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6065443Z Datacenter
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6065921Z ##[endgroup]
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6066444Z ##[group]Runner Image
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6067022Z Image: windows-2025-vs2026
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6067610Z Version: 20261021.278.1
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6068710Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261021.278/images/windows/Windows2025-VS2026-Readme.md
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6070761Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261021.278
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6071710Z ##[endgroup]
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6072910Z ##[group]GITHUB_TOKEN Permissions
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6074736Z Contents: read
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6075407Z Metadata: read
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6075928Z Packages: read
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6076432Z ##[endgroup]
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6078429Z Secret source: Actions
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6079362Z Cache mode: write
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6080331Z Prepare workflow directory
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6450465Z Prepare all required actions
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:29.6524168Z Getting action download info
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:30.0099395Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:30.1410118Z Download action repository 'actions/setup-dotnet@v4' (SHA:67a3573c9a986a3f9c594539f4ab511d57bb3ce9)
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:30.4976101Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+XSLT wrapper controls (Windows)	Set up job	2026-10-26T10:12:30.8355469Z Complete job name: XSLT wrapper controls (Windows)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	﻿2026-10-26T10:12:30.9950491Z ##[group]Run actions/checkout@v4
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9951621Z with:
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9952090Z   repository: Fytala-Charles/Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9956063Z   token: ***
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9956496Z   ssh-strict: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9956941Z   ssh-user: git
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9957387Z   persist-credentials: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9957869Z   clean: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9958315Z   sparse-checkout-cone-mode: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9958851Z   fetch-depth: 1
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9959281Z   fetch-tags: false
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9959737Z   show-progress: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9960179Z   lfs: false
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9960870Z   submodules: false
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9961554Z   set-safe-directory: true
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9962134Z   allow-unsafe-pr-checkout: false
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:30.9962951Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.1397094Z Syncing repository: Fytala-Charles/Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.1399235Z ##[group]Getting Git version info
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.1399998Z Working directory is 'D:\a\Bosak\Bosak'
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.2334167Z [command]"C:\Program Files\Git\bin\git.exe" version
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.6330960Z git version 2.56.0.windows.2
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.6382881Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.6402362Z Temporarily overriding HOME='D:\a\_temp\5894c5b3-7a09-449f-8442-94a741e7a5f4' before making global git config changes
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.6404565Z Adding repository directory to the temporary git global config as a safe directory
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.6412641Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Bosak\Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.7076330Z Deleting the contents of 'D:\a\Bosak\Bosak'
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.7084282Z ##[group]Initializing the repository
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.7093344Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Bosak\Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.8084399Z Initialized empty Git repository in D:/a/Bosak/Bosak/.git/
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.8130445Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/Fytala-Charles/Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.8822817Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.8824720Z ##[group]Disabling automatic garbage collection
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.8831555Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.9217747Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.9219769Z ##[group]Setting up auth
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.9231520Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:31.9632623Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:33.5381829Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:33.5758264Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.1351186Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.1740947Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.7162474Z [command]"C:\Program Files\Git\bin\git.exe" config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.7541575Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.7542622Z ##[group]Fetching the repository
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:34.7553605Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +01a2371df43f35af6d83eaf834417360bc00fc94:refs/remotes/pull/463/merge
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9645105Z From https://github.com/Fytala-Charles/Bosak
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9649119Z  * [new ref]         01a2371df43f35af6d83eaf834417360bc00fc94 -> pull/463/merge
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9685456Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9686100Z ##[group]Determining the checkout info
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9688284Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:37.9704599Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:38.0261528Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:38.0630657Z ##[group]Checking out the ref
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:38.0640781Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force refs/remotes/pull/463/merge
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1294853Z Updating files:  65% (3521/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1389911Z Updating files:  66% (3535/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1502852Z Updating files:  67% (3588/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1610459Z Updating files:  68% (3642/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1713290Z Updating files:  69% (3695/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1813965Z Updating files:  70% (3749/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.1909967Z Updating files:  71% (3803/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2011819Z Updating files:  72% (3856/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2111622Z Updating files:  73% (3910/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2221033Z Updating files:  74% (3963/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2317087Z Updating files:  75% (4017/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2479351Z Updating files:  76% (4070/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2586142Z Updating files:  77% (4124/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2718889Z Updating files:  78% (4177/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2824999Z Updating files:  79% (4231/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.2926906Z Updating files:  80% (4284/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3029117Z Updating files:  81% (4338/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3131890Z Updating files:  82% (4392/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3233002Z Updating files:  83% (4445/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3341506Z Updating files:  84% (4499/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3484201Z Updating files:  85% (4552/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3619584Z Updating files:  86% (4606/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3789515Z Updating files:  87% (4659/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.3956623Z Updating files:  88% (4713/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.4318287Z Updating files:  89% (4766/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.4406692Z Updating files:  90% (4820/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.4675705Z Updating files:  91% (4874/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.4848420Z Updating files:  92% (4927/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5005990Z Updating files:  93% (4981/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5118147Z Updating files:  94% (5034/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5278068Z Updating files:  95% (5088/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5432119Z Updating files:  96% (5141/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5580813Z Updating files:  97% (5195/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.5964740Z Updating files:  98% (5248/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6466140Z Updating files:  99% (5302/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6468856Z Updating files: 100% (5355/5355)
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6469542Z Updating files: 100% (5355/5355), done.
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6622783Z Note: switching to 'refs/remotes/pull/463/merge'.
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6623279Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6623630Z You are in 'detached HEAD' state. You can look around, make experimental
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6624515Z changes and commit them, and you can discard any commits you make in this
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6625393Z state without impacting any branches by switching back to a branch.
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6625897Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6626226Z If you want to create a new branch to retain commits you create, you may
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6627018Z do so (now or later) by using -c with the switch command. Example:
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6627475Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6627669Z   git switch -c <new-branch-name>
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6627973Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6628134Z Or undo this operation with:
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6628421Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6628559Z   git switch -
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6628766Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6629153Z Turn off this advice by setting config variable advice.detachedHead to false
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6629719Z 
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6631396Z HEAD is now at 01a2371 Merge 38be251f8c6a00fc8f3295e138f99e413443557a into d09b3c571117f58bc7e8aa9f48ce91708d3b51de
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.6754002Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.7786409Z [command]"C:\Program Files\Git\bin\git.exe" log -1 --format=%H
+XSLT wrapper controls (Windows)	Run actions/checkout@v4	2026-10-26T10:12:39.8272024Z 01a2371df43f35af6d83eaf834417360bc00fc94
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	﻿2026-10-26T10:12:39.8730328Z ##[group]Run actions/setup-dotnet@v4
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:39.8730695Z with:
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:39.8730890Z   dotnet-version: 10.0.x
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:39.8731130Z   cache: false
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:39.8731313Z ##[endgroup]
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:40.0395635Z (node:5796) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:40.0396427Z (Use `node --trace-deprecation ...` to show where the warning was created)
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:40.1540819Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\v4\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Runtime dotnet -Channel LTS
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:42.2142348Z dotnet-install: Downloaded file https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-win-x64.zip size is 36971047 bytes.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:42.2146166Z dotnet-install: Either downloaded or local package size can not be measured. One of them may be corrupted.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:42.2173756Z dotnet-install: Extracting the archive.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:43.3068847Z dotnet-install: Note that the script does not ensure your Windows version is supported during the installation.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:43.3074009Z dotnet-install: To check the list of supported versions, go to https://learn.microsoft.com/dotnet/core/install/windows#supported-versions
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:43.3084100Z dotnet-install: Installed version is 10.0.14
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:43.3091828Z dotnet-install: Installation finished
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:43.4680340Z [command]"C:\Program Files\PowerShell\7\pwsh.exe" -NoLogo -Sta -NoProfile -NonInteractive -ExecutionPolicy Unrestricted -Command & 'D:\a\_actions\actions\setup-dotnet\v4\externals\install-dotnet.ps1' -SkipNonVersionedFiles -Channel 10.0
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:49.0090072Z dotnet-install: Downloaded file https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-win-x64.zip size is 300745255 bytes.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:49.0101835Z dotnet-install: Either downloaded or local package size can not be measured. One of them may be corrupted.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:12:49.0136889Z dotnet-install: Extracting the archive.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:13:08.3119843Z dotnet-install: Note that the script does not ensure your Windows version is supported during the installation.
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:13:08.3125061Z dotnet-install: To check the list of supported versions, go to https://learn.microsoft.com/dotnet/core/install/windows#supported-versions
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:13:08.3130369Z dotnet-install: Installed version is 10.0.403
+XSLT wrapper controls (Windows)	Run actions/setup-dotnet@v4	2026-10-26T10:13:08.3135952Z dotnet-install: Installation finished
+XSLT wrapper controls (Windows)	Build conformance runner	﻿2026-10-26T10:13:08.3828993Z ##[group]Run dotnet build tests/Bosak.Xslt.Conformance -c Release
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:08.3829592Z ^[[36;1mdotnet build tests/Bosak.Xslt.Conformance -c Release^[[0m
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:08.4282938Z shell: C:\Program Files\PowerShell\7\pwsh.EXE -command ". '{0}'"
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:08.4283401Z env:
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:08.4283638Z   DOTNET_ROOT: C:\Program Files\dotnet
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:08.4283949Z ##[endgroup]
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:11.0999660Z   Determining projects to restore...
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:13.9856913Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 161 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:13.9877327Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 192 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:13.9909223Z   Restored D:\a\Bosak\Bosak\src\Bosak.XQuery\Bosak.XQuery.csproj (in 194 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:13.9928216Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 194 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0052196Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 3 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0350511Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 3 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0411439Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 4 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0474107Z   Restored D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj (in 9 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0520662Z   Restored D:\a\Bosak\Bosak\src\Bosak.Xslt\Bosak.Xslt.csproj (in 30 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:14.0609830Z   Restored D:\a\Bosak\Bosak\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 12 ms).
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:18.5244634Z   Bosak.XPath.Core -> D:\a\Bosak\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:21.5088542Z   Bosak.XPath.Providers -> D:\a\Bosak\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:21.5988395Z   Bosak.XPath.Parser -> D:\a\Bosak\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:23.0333564Z   Bosak.XPath.Compiler -> D:\a\Bosak\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:28.5059987Z   Bosak.XPath.Runtime -> D:\a\Bosak\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:34.3354754Z   Bosak.XPath.Standard -> D:\a\Bosak\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:35.0269532Z   Bosak.XPath.Api -> D:\a\Bosak\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:35.9103478Z   Bosak.XQuery -> D:\a\Bosak\Bosak\src\Bosak.XQuery\bin\Release\net10.0\Bosak.XQuery.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:43.9314552Z   Bosak.Xslt -> D:\a\Bosak\Bosak\src\Bosak.Xslt\bin\Release\net10.0\Bosak.Xslt.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.1072727Z ##[warning]D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.1968005Z   Bosak.Xslt.Conformance -> D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\bin\Release\net10.0\Bosak.Xslt.Conformance.dll
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2144988Z 
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2153210Z Build succeeded.
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2153477Z 
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2157955Z ##[warning]D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\a\Bosak\Bosak\tests\Bosak.Xslt.Conformance\Bosak.Xslt.Conformance.csproj]
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2160127Z     1 Warning(s)
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2160351Z     0 Error(s)
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2160471Z 
+XSLT wrapper controls (Windows)	Build conformance runner	2026-10-26T10:13:45.2160588Z Time Elapsed 00:00:35.98
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	﻿2026-10-26T10:13:45.6797634Z ##[group]Run ./tests/Bosak.Xslt.Conformance/verify-wrapper.ps1
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:45.6798241Z ^[[36;1m./tests/Bosak.Xslt.Conformance/verify-wrapper.ps1^[[0m
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:45.6867236Z shell: C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE -command ". '{0}'"
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:45.6867730Z env:
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:45.6867944Z   DOTNET_ROOT: C:\Program Files\dotnet
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:45.6868226Z ##[endgroup]
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:52.8599711Z PASS wrapper-pass (D:\a\Bosak\Bosak\.artifacts\xslt40\20261026T101349674Z.json)
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:55.1457358Z PASS wrapper-fail (D:\a\Bosak\Bosak\.artifacts\xslt40\20261026T101353423Z.json)
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:57.0811947Z PASS wrapper-no-such-case (D:\a\Bosak\Bosak\.artifacts\xslt40\20261026T101355744Z.json)
+XSLT wrapper controls (Windows)	Verify successful, failing, empty and timed-out receipts	2026-10-26T10:13:59.0517510Z PASS wrapper-slow (D:\a\Bosak\Bosak\.artifacts\xslt40\20261026T101357708Z.json)
+XSLT wrapper controls (Windows)	Retain wrapper evidence	﻿2026-10-26T10:13:59.0900987Z ##[group]Run actions/upload-artifact@v4
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0901373Z with:
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0901594Z   name: xslt-wrapper-controls
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0901873Z   include-hidden-files: true
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0902136Z   path: .artifacts/
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0902356Z   if-no-files-found: warn
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0902591Z   compression-level: 6
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0902818Z   overwrite: false
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0903015Z env:
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0903213Z   DOTNET_ROOT: C:\Program Files\dotnet
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.0903483Z ##[endgroup]
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.3062599Z (node:5772) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.3065647Z (Use `node --trace-deprecation ...` to show where the warning was created)
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.3543848Z With the provided path, there will be 52 files uploaded
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.3551925Z Artifact name is valid!
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.3553447Z Root directory input is valid!
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.7732604Z Beginning upload of artifact content to blob storage
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:13:59.8730335Z (node:5772) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.2297354Z Uploaded bytes 31990
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.3551792Z Finished uploading artifact content to blob storage!
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.3553021Z SHA256 digest of uploaded artifact zip is 9995ca8dc9dd3d5fc61849879cca5f5c6286514db33d66732a6acfd616a1cbf0
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.3555431Z Finalizing artifact upload
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.8406046Z Artifact xslt-wrapper-controls.zip successfully finalized. Artifact ID 12642261513
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.8407606Z Artifact xslt-wrapper-controls has been successfully uploaded! Final size is 31990 bytes. Artifact ID is 12642261513
+XSLT wrapper controls (Windows)	Retain wrapper evidence	2026-10-26T10:14:00.8418388Z Artifact download URL: https://github.com/Fytala-Charles/Bosak/actions/runs/40305573459/artifacts/12642261513
+XSLT wrapper controls (Windows)	Post Run actions/setup-dotnet@v4	﻿2026-10-26T10:14:00.8787256Z Post job cleanup.
+XSLT wrapper controls (Windows)	Post Run actions/setup-dotnet@v4	2026-10-26T10:14:01.0505218Z (node:7784) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+XSLT wrapper controls (Windows)	Post Run actions/setup-dotnet@v4	2026-10-26T10:14:01.0506666Z (Use `node --trace-deprecation ...` to show where the warning was created)
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	﻿2026-10-26T10:14:01.0871417Z Post job cleanup.
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.3169043Z [command]"C:\Program Files\Git\bin\git.exe" version
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.3543573Z git version 2.56.0.windows.2
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.3630653Z Temporarily overriding HOME='D:\a\_temp\30443a5c-8d8a-4560-8ed2-9fcdd0114fed' before making global git config changes
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.3633393Z Adding repository directory to the temporary git global config as a safe directory
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.3647017Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Bosak\Bosak
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.4224614Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:01.4632028Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.0853226Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.1183055Z http.https://github.com/.extraheader
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.1225619Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all http.https://github.com/.extraheader
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.1597074Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.7188911Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+XSLT wrapper controls (Windows)	Post Run actions/checkout@v4	2026-10-26T10:14:02.7557971Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+XSLT wrapper controls (Windows)	Complete job	﻿2026-10-26T10:14:03.3232985Z Cleaning up orphan processes
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.3556553Z Terminate orphan process: pid (5528) (dotnet)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.3682315Z Terminate orphan process: pid (3660) (dotnet)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.3873180Z Terminate orphan process: pid (3496) (dotnet)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.3934720Z Terminate orphan process: pid (5568) (conhost)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.4164505Z Terminate orphan process: pid (9180) (VBCSCompiler)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.4258567Z Terminate orphan process: pid (7928) (conhost)
+XSLT wrapper controls (Windows)	Complete job	2026-10-26T10:14:03.4364782Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-dotnet@v4, actions/upload-artifact@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+VS Code highlighting	Set up job	﻿2026-10-26T10:12:29.5293535Z Current runner version: '2.338.0'
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5317998Z ##[group]Runner Image Provisioner
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5318806Z Hosted Compute Agent
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5319364Z Version: 20261021.618
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5320200Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5320785Z Build Date: 2026-10-21T00:45:21Z
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5321460Z Worker ID: {eb973694-8925-4684-a158-4cbdcb1b911b}
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5322081Z Region: westus3
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5322575Z Cloud: Azure
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5323027Z ##[endgroup]
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5324243Z ##[group]Operating System
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5324833Z Ubuntu
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5325298Z 24.04.5
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5325756Z LTS
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5326200Z ##[endgroup]
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5326657Z ##[group]Runner Image
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5327215Z Image: ubuntu-24.04
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5327715Z Version: 20261012.334.1
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5328606Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5330197Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5331112Z ##[endgroup]
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5332085Z ##[group]GITHUB_TOKEN Permissions
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5333806Z Contents: read
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5334313Z Metadata: read
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5334835Z Packages: read
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5335361Z ##[endgroup]
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5337209Z Secret source: Actions
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5338061Z Cache mode: write
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5338651Z Prepare workflow directory
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5631745Z Prepare all required actions
+VS Code highlighting	Set up job	2026-10-26T10:12:29.5674351Z Getting action download info
+VS Code highlighting	Set up job	2026-10-26T10:12:29.8867749Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+VS Code highlighting	Set up job	2026-10-26T10:12:30.0472121Z Download action repository 'actions/setup-node@v4' (SHA:49933ea5288caeca8642d1e84afbd3f7d6820020)
+VS Code highlighting	Set up job	2026-10-26T10:12:30.2877300Z Complete job name: VS Code highlighting
+VS Code highlighting	Run actions/checkout@v4	﻿2026-10-26T10:12:30.3571204Z ##[group]Run actions/checkout@v4
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3571909Z with:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3572282Z   repository: Fytala-Charles/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3575368Z   token: ***
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3575723Z   ssh-strict: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3576077Z   ssh-user: git
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3576439Z   persist-credentials: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3576827Z   clean: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3577196Z   sparse-checkout-cone-mode: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3577615Z   fetch-depth: 1
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3577973Z   fetch-tags: false
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3578343Z   show-progress: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3578720Z   lfs: false
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3579054Z   submodules: false
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3579423Z   set-safe-directory: true
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3580009Z   allow-unsafe-pr-checkout: false
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.3580615Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4402834Z Syncing repository: Fytala-Charles/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4404987Z ##[group]Getting Git version info
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4405819Z Working directory is '/home/runner/work/Bosak/Bosak'
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4407180Z [command]/usr/bin/git version
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4668649Z git version 2.55.0
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4686053Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4709626Z Temporarily overriding HOME='/home/runner/work/_temp/f8ccbb3d-5282-4415-9d3b-30b7690f2602' before making global git config changes
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4715859Z Adding repository directory to the temporary git global config as a safe directory
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4717490Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4787141Z Deleting the contents of '/home/runner/work/Bosak/Bosak'
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4788187Z ##[group]Initializing the repository
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4788715Z [command]/usr/bin/git init /home/runner/work/Bosak/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4883528Z hint: Using 'master' as the name for the initial branch. This default branch name
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4884832Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4886409Z hint: to use in all of your new repositories, which will suppress this warning,
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4887391Z hint: call:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4888159Z hint:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4888894Z hint: 	git config --global init.defaultBranch <name>
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4890167Z hint:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4890961Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4892193Z hint: 'development'. The just-created branch can be renamed via this command:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4893367Z hint:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4894083Z hint: 	git branch -m <name>
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4894886Z hint:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4895761Z hint: Disable this message with "git config set advice.defaultBranchName false"
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4897205Z Initialized empty Git repository in /home/runner/work/Bosak/Bosak/.git/
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4899967Z [command]/usr/bin/git remote add origin https://github.com/Fytala-Charles/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4957457Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4958541Z ##[group]Disabling automatic garbage collection
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.4961593Z [command]/usr/bin/git config --local gc.auto 0
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.5001131Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.5002025Z ##[group]Setting up auth
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.5014142Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.5052461Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6048466Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6085506Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6294604Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6328167Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6532170Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6571481Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6572214Z ##[group]Fetching the repository
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:30.6579052Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +01a2371df43f35af6d83eaf834417360bc00fc94:refs/remotes/pull/463/merge
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0621523Z From https://github.com/Fytala-Charles/Bosak
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0623159Z  * [new ref]         01a2371df43f35af6d83eaf834417360bc00fc94 -> pull/463/merge
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0626018Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0627315Z ##[group]Determining the checkout info
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0628746Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0633718Z [command]/usr/bin/git sparse-checkout disable
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0913879Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0946611Z ##[group]Checking out the ref
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.0947537Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/463/merge
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4789422Z Note: switching to 'refs/remotes/pull/463/merge'.
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4790529Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4790832Z You are in 'detached HEAD' state. You can look around, make experimental
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4791532Z changes and commit them, and you can discard any commits you make in this
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4792202Z state without impacting any branches by switching back to a branch.
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4792586Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4792900Z If you want to create a new branch to retain commits you create, you may
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4793517Z do so (now or later) by using -c with the switch command. Example:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4793863Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4794046Z   git switch -c <new-branch-name>
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4794580Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4794715Z Or undo this operation with:
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4794951Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4795064Z   git switch -
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4795254Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4795456Z Turn off this advice by setting config variable advice.detachedHead to false
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4795738Z 
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4796051Z HEAD is now at 01a2371 Merge 38be251f8c6a00fc8f3295e138f99e413443557a into d09b3c571117f58bc7e8aa9f48ce91708d3b51de
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4815801Z ##[endgroup]
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4856317Z [command]/usr/bin/git log -1 --format=%H
+VS Code highlighting	Run actions/checkout@v4	2026-10-26T10:12:34.4878945Z 01a2371df43f35af6d83eaf834417360bc00fc94
+VS Code highlighting	Run actions/setup-node@v4	﻿2026-10-26T10:12:34.5109984Z ##[group]Run actions/setup-node@v4
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5110298Z with:
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5110511Z   node-version: 20
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5110717Z   cache: npm
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5110968Z   cache-dependency-path: vscode-bosak/package-lock.json
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5111264Z   always-auth: false
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5111477Z   check-latest: false
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5113432Z   token: ***
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.5113636Z ##[endgroup]
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.6269933Z Attempting to download 20...
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.6354131Z (node:2048) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:34.6354875Z (Use `node --trace-deprecation ...` to show where the warning was created)
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:35.6478636Z Acquiring 20.20.2 - x64 from https://github.com/actions/node-versions/releases/download/20.20.2-23521894959/node-20.20.2-linux-x64.tar.gz
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:36.1535203Z Extracting ...
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:36.1631979Z [command]/usr/bin/tar xz --strip 1 --warning=no-unknown-keyword --overwrite -C /home/runner/work/_temp/12b4f627-9a51-4f15-99c8-7a29c636d942 -f /home/runner/work/_temp/eaa2fa31-4d1d-465e-bd95-d20b564e8e66
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:37.0195776Z Adding to the cache ...
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.6094860Z ##[group]Environment details
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8133526Z node: v20.20.2
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8134000Z npm: 10.8.2
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8134164Z yarn: 1.22.22
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8141014Z ##[endgroup]
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8151690Z [command]/opt/hostedtoolcache/node/20.20.2/x64/bin/npm config get cache
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:39.8971165Z /home/runner/.npm
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:40.1060558Z Cache hit for: node-cache-Linux-x64-npm-de9a118b1a4be836a11c66d1c99cbcbc71d28f75314645c8514a9b6f68ec56be
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:40.1159072Z (node:2048) [DEP0169] DeprecationWarning: `url.parse()` behavior is not standardized and prone to errors that have security implications. Use the WHATWG URL API instead. CVEs are not issued for `url.parse()` vulnerabilities.
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:41.0653662Z Received 5497130 of 5497130 (100.0%), 6.9 MBs/sec
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:41.0654314Z Cache Size: ~5 MB (5497130 B)
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:41.0674222Z [command]/usr/bin/tar -xf /home/runner/work/_temp/ea7c2b34-b0c9-4232-a91a-d80e8346cc68/cache.tzst -P -C /home/runner/work/Bosak/Bosak --use-compress-program unzstd
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:41.0813987Z Cache restored successfully
+VS Code highlighting	Run actions/setup-node@v4	2026-10-26T10:12:41.0820001Z Cache restored from key: node-cache-Linux-x64-npm-de9a118b1a4be836a11c66d1c99cbcbc71d28f75314645c8514a9b6f68ec56be
+VS Code highlighting	Compile and verify TextMate highlighting	﻿2026-10-26T10:12:41.0981098Z ##[group]Run npm ci
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.0981371Z ^[[36;1mnpm ci^[[0m
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.0981567Z ^[[36;1mnpm run compile^[[0m
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.0981760Z ^[[36;1mnpm test^[[0m
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.3932706Z shell: /usr/bin/bash -e {0}
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.3932994Z ##[endgroup]
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.9592615Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.9597571Z added 14 packages, and audited 15 packages in 505ms
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.9598054Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:41.9598250Z found 0 vulnerabilities
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.0491488Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.0492244Z > vscode-bosak@0.2.5 compile
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.0492704Z > tsc -p ./
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.0492905Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.9820798Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.9821574Z > vscode-bosak@0.2.5 test
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.9822162Z > node test/highlighting.cjs && node test/launch.cjs
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:42.9822486Z 
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:43.0551625Z TextMate highlighting checks passed: quotes, function/string scopes, XML exclusions, multiline and doubled quotes.
+VS Code highlighting	Compile and verify TextMate highlighting	2026-10-26T10:12:43.1308893Z Language-server launch checks passed: dotnet DLL, executable apphost and startup registration.
+VS Code highlighting	Post Run actions/setup-node@v4	﻿2026-10-26T10:12:43.1672714Z Post job cleanup.
+VS Code highlighting	Post Run actions/setup-node@v4	2026-10-26T10:12:43.2664343Z (node:2161) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+VS Code highlighting	Post Run actions/setup-node@v4	2026-10-26T10:12:43.2665044Z (Use `node --trace-deprecation ...` to show where the warning was created)
+VS Code highlighting	Post Run actions/setup-node@v4	2026-10-26T10:12:43.2667546Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-de9a118b1a4be836a11c66d1c99cbcbc71d28f75314645c8514a9b6f68ec56be, not saving cache.
+VS Code highlighting	Post Run actions/checkout@v4	﻿2026-10-26T10:12:43.3433758Z Post job cleanup.
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4170310Z [command]/usr/bin/git version
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4192825Z git version 2.55.0
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4220498Z Temporarily overriding HOME='/home/runner/work/_temp/b70d6acc-395b-4dd0-9477-bb614e336dd1' before making global git config changes
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4221724Z Adding repository directory to the temporary git global config as a safe directory
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4226059Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4711890Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.4776538Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5049110Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5077995Z http.https://github.com/.extraheader
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5089349Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5127450Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5345009Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+VS Code highlighting	Post Run actions/checkout@v4	2026-10-26T10:12:43.5377985Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+VS Code highlighting	Complete job	﻿2026-10-26T10:12:43.5709409Z Cleaning up orphan processes
+VS Code highlighting	Complete job	2026-10-26T10:12:43.6025956Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-node@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+Build & test (net10.0)	Set up job	﻿2026-10-26T10:12:29.6506427Z Current runner version: '2.338.0'
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6532920Z ##[group]Runner Image Provisioner
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6533879Z Hosted Compute Agent
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6534499Z Version: 20261021.618
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6535177Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6535957Z Build Date: 2026-10-21T00:45:21Z
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6536689Z Worker ID: {54c5f36d-a70b-4c66-bed7-882bafbb4a5c}
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6537384Z Region: westus
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6538003Z Cloud: Azure
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6538582Z ##[endgroup]
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6540242Z ##[group]Operating System
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6540914Z Ubuntu
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6541736Z 24.04.5
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6542400Z LTS
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6543012Z ##[endgroup]
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6543646Z ##[group]Runner Image
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6544322Z Image: ubuntu-24.04
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6544946Z Version: 20261012.334.1
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6546072Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6547910Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6548914Z ##[endgroup]
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6550165Z ##[group]GITHUB_TOKEN Permissions
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6552316Z Contents: read
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6552955Z Metadata: read
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6553720Z Packages: read
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6554347Z ##[endgroup]
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6556555Z Secret source: Actions
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6557573Z Cache mode: write
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6558273Z Prepare workflow directory
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.6946629Z Prepare all required actions
+Build & test (net10.0)	Set up job	2026-10-26T10:12:29.7008269Z Getting action download info
+Build & test (net10.0)	Set up job	2026-10-26T10:12:30.0727305Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+Build & test (net10.0)	Set up job	2026-10-26T10:12:30.1686468Z Download action repository 'actions/setup-dotnet@v4' (SHA:67a3573c9a986a3f9c594539f4ab511d57bb3ce9)
+Build & test (net10.0)	Set up job	2026-10-26T10:12:30.6667850Z Download action repository 'actions/upload-artifact@v4' (SHA:ea165f8d65b6e75b540449e92b4886f43607fa02)
+Build & test (net10.0)	Set up job	2026-10-26T10:12:30.8716412Z Complete job name: Build & test (net10.0)
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	﻿2026-10-26T10:12:30.9659979Z ##[group]Run actions/checkout@v4
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9661076Z with:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9661813Z   submodules: recursive
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9662376Z   repository: Fytala-Charles/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9666750Z   token: ***
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9667232Z   ssh-strict: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9667721Z   ssh-user: git
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9668212Z   persist-credentials: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9668750Z   clean: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9669317Z   sparse-checkout-cone-mode: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9669888Z   fetch-depth: 1
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9670361Z   fetch-tags: false
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9670853Z   show-progress: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9671585Z   lfs: false
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9672091Z   set-safe-directory: true
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9672652Z   allow-unsafe-pr-checkout: false
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:30.9673543Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0734251Z Syncing repository: Fytala-Charles/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0737510Z ##[group]Getting Git version info
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0738725Z Working directory is '/home/runner/work/Bosak/Bosak'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0740507Z [command]/usr/bin/git version
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0787310Z git version 2.55.0
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0834339Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0867692Z Temporarily overriding HOME='/home/runner/work/_temp/f25d86ee-9400-42a4-a67e-f0f857717004' before making global git config changes
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0870385Z Adding repository directory to the temporary git global config as a safe directory
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0872850Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0913521Z Deleting the contents of '/home/runner/work/Bosak/Bosak'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0932636Z ##[group]Initializing the repository
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.0933942Z [command]/usr/bin/git init /home/runner/work/Bosak/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1054493Z hint: Using 'master' as the name for the initial branch. This default branch name
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1056325Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1057593Z hint: to use in all of your new repositories, which will suppress this warning,
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1058868Z hint: call:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1059410Z hint:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1060079Z hint: 	git config --global init.defaultBranch <name>
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1061093Z hint:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1062622Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1064181Z hint: 'development'. The just-created branch can be renamed via this command:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1065671Z hint:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1066221Z hint: 	git branch -m <name>
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1066842Z hint:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1067591Z hint: Disable this message with "git config set advice.defaultBranchName false"
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1068712Z Initialized empty Git repository in /home/runner/work/Bosak/Bosak/.git/
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1072049Z [command]/usr/bin/git remote add origin https://github.com/Fytala-Charles/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1131864Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1132789Z ##[group]Disabling automatic garbage collection
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1137007Z [command]/usr/bin/git config --local gc.auto 0
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1176690Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1178101Z ##[group]Setting up auth
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1186528Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1230085Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1708618Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1746922Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.1972481Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.2009501Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.2243136Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.2286748Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.2287729Z ##[group]Fetching the repository
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:31.2297437Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +01a2371df43f35af6d83eaf834417360bc00fc94:refs/remotes/pull/463/merge
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2425999Z From https://github.com/Fytala-Charles/Bosak
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2428924Z  * [new ref]         01a2371df43f35af6d83eaf834417360bc00fc94 -> pull/463/merge
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2433450Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2434402Z ##[group]Determining the checkout info
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2435705Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2442285Z [command]/usr/bin/git sparse-checkout disable
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2497874Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2529632Z ##[group]Checking out the ref
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.2533735Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/463/merge
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7519838Z Note: switching to 'refs/remotes/pull/463/merge'.
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7520644Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7521101Z You are in 'detached HEAD' state. You can look around, make experimental
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7522371Z changes and commit them, and you can discard any commits you make in this
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7523268Z state without impacting any branches by switching back to a branch.
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7523830Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7524235Z If you want to create a new branch to retain commits you create, you may
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7525084Z do so (now or later) by using -c with the switch command. Example:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7525997Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7526222Z   git switch -c <new-branch-name>
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7526580Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7612172Z Or undo this operation with:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7612949Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7613265Z   git switch -
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7613529Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7613926Z Turn off this advice by setting config variable advice.detachedHead to false
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7614625Z 
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7615332Z HEAD is now at 01a2371 Merge 38be251f8c6a00fc8f3295e138f99e413443557a into d09b3c571117f58bc7e8aa9f48ce91708d3b51de
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7617380Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7618186Z ##[group]Setting up auth for fetching submodules
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7619257Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7631065Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7667914Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7705191Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-225543477@github.com:
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7737759Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7738262Z ##[group]Fetching submodules
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7742190Z [command]/usr/bin/git submodule sync --recursive
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.7982339Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.8221666Z Submodule 'tests/qt3tests' (https://github.com/w3c/qt3tests.git) registered for path 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.8255465Z Submodule 'tests/qt4tests' (https://github.com/qt4cg/qt4tests) registered for path 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:34.8284034Z Cloning into '/home/runner/work/Bosak/Bosak/tests/qt3tests'...
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:36.1779087Z Cloning into '/home/runner/work/Bosak/Bosak/tests/qt4tests'...
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:38.1725255Z Submodule path 'tests/qt3tests': checked out '201a6e466940cdfc727f4babfedcde5332b9f578'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.3052032Z From https://github.com/qt4cg/qt4tests
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.3053172Z  * branch            68910080d2d4d4092a1c6a908998ceec64ffc6d4 -> FETCH_HEAD
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.6588332Z Submodule path 'tests/qt4tests': checked out '68910080d2d4d4092a1c6a908998ceec64ffc6d4'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.6631933Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.6860515Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.7939661Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.7995623Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.7996279Z ##[group]Persisting credentials for submodules
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8002811Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8282419Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8325038Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8414553Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8693747Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8886108Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config	remote.origin.url
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8915933Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.8968108Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config	remote.origin.url
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.9046984Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.9279341Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.9342143Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.9412834Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-225543477@github.com:'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:39.9652778Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:40.2397630Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:40.4936980Z ##[endgroup]
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:40.6477937Z [command]/usr/bin/git log -1 --format=%H
+Build & test (net10.0)	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:12:40.6509901Z 01a2371df43f35af6d83eaf834417360bc00fc94
+Build & test (net10.0)	Setup .NET 10	﻿2026-10-26T10:12:40.7867089Z ##[group]Run actions/setup-dotnet@v4
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.7867552Z with:
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.7867863Z   dotnet-version: 10.0.x
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.7868237Z   cache: false
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.7868546Z ##[endgroup]
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.9300876Z (node:2550) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.9302091Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:40.9327861Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:42.2095712Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:42.3624051Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz size is 36673986 bytes.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:42.3627817Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0377215Z dotnet-install: Downloaded file size is 36673986 bytes.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0378365Z dotnet-install: The remote and local file sizes are equal.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0685139Z dotnet-install: Installed version is 10.0.14
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0746425Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0748148Z dotnet-install: Note that the script does not resolve dependencies during installation.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0750270Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0751824Z dotnet-install: Installation finished successfully.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.0798307Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.2883310Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.9559718Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz size is 240199984 bytes.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:43.9563091Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.7354272Z dotnet-install: Downloaded file size is 240199984 bytes.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.7354871Z dotnet-install: The remote and local file sizes are equal.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.9927689Z dotnet-install: Installed version is 10.0.403
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.9989875Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.9992319Z dotnet-install: Note that the script does not resolve dependencies during installation.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.9994875Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+Build & test (net10.0)	Setup .NET 10	2026-10-26T10:12:48.9996735Z dotnet-install: Installation finished successfully.
+Build & test (net10.0)	Restore	﻿2026-10-26T10:12:49.0179135Z ##[group]Run dotnet restore Bosak.sln
+Build & test (net10.0)	Restore	2026-10-26T10:12:49.0179511Z ^[[36;1mdotnet restore Bosak.sln^[[0m
+Build & test (net10.0)	Restore	2026-10-26T10:12:49.0468472Z shell: /usr/bin/bash -e {0}
+Build & test (net10.0)	Restore	2026-10-26T10:12:49.0468898Z env:
+Build & test (net10.0)	Restore	2026-10-26T10:12:49.0469221Z   DOTNET_ROOT: /usr/share/dotnet
+Build & test (net10.0)	Restore	2026-10-26T10:12:49.0469844Z ##[endgroup]
+Build & test (net10.0)	Restore	2026-10-26T10:12:50.8243118Z   Determining projects to restore...
+Build & test (net10.0)	Restore	2026-10-26T10:12:51.9920052Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj (in 188 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:51.9952429Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj (in 186 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:51.9953829Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj (in 186 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2142989Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/Bosak.XPath.Runtime.Tests.csproj (in 2.21 sec).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2172603Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/Bosak.XQuery.Tests.csproj (in 2.21 sec).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2242571Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/Bosak.XPath.Standard.Tests.csproj (in 2.21 sec).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2268650Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj (in 2.44 sec).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2352409Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/Bosak.XPath.Parser.Tests.csproj (in 5 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2362723Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/Bosak.XPath.Providers.Database.Tests.csproj (in 9 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2382398Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/Bosak.XPath.Providers.Tests.csproj (in 11 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2412104Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.Xslt/Bosak.Xslt.csproj (in 8 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2471570Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj (in 3 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2498881Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Runtime/Bosak.XPath.Runtime.csproj (in 4 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2512392Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj (in 6 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2548555Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XQuery/Bosak.XQuery.csproj (in 9 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2562317Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Core/Bosak.XPath.Core.csproj (in 2 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2582732Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Parser/Bosak.XPath.Parser.csproj (in 2 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2590930Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Compiler/Bosak.XPath.Compiler.csproj (in 3 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2817105Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance40/Bosak.XPath.Conformance40.csproj (in 19 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2835745Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/Bosak.XPath.Core.Tests.csproj (in 9 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2847770Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.csproj (in 20 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2850044Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/Bosak.XPath.Compiler.Tests.csproj (in 16 ms).
+Build & test (net10.0)	Restore	2026-10-26T10:12:54.2950343Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/Bosak.XPath.Api.Tests.csproj (in 7 ms).
+Build & test (net10.0)	Build	﻿2026-10-26T10:12:54.3523070Z ##[group]Run dotnet build Bosak.sln -c Release --no-restore
+Build & test (net10.0)	Build	2026-10-26T10:12:54.3523573Z ^[[36;1mdotnet build Bosak.sln -c Release --no-restore^[[0m
+Build & test (net10.0)	Build	2026-10-26T10:12:54.3586827Z shell: /usr/bin/bash -e {0}
+Build & test (net10.0)	Build	2026-10-26T10:12:54.3587118Z env:
+Build & test (net10.0)	Build	2026-10-26T10:12:54.3587352Z   DOTNET_ROOT: /usr/share/dotnet
+Build & test (net10.0)	Build	2026-10-26T10:12:54.3587640Z ##[endgroup]
+Build & test (net10.0)	Build	2026-10-26T10:12:59.1520594Z   Bosak.XPath.Core -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Core/bin/Release/net10.0/Bosak.XPath.Core.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:01.5933753Z   Bosak.XPath.Providers -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers/bin/Release/net10.0/Bosak.XPath.Providers.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:03.3210461Z   Bosak.XPath.Parser -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Parser/bin/Release/net10.0/Bosak.XPath.Parser.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:04.5383507Z   Bosak.XPath.Parser.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/bin/Release/net10.0/Bosak.XPath.Parser.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:05.4585596Z   Bosak.XPath.Compiler -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Compiler/bin/Release/net10.0/Bosak.XPath.Compiler.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:05.4894437Z   Bosak.XPath.Providers.Database -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers.Database/bin/Release/net10.0/Bosak.XPath.Providers.Database.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:06.3063387Z   Bosak.XPath.Compiler.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/bin/Release/net10.0/Bosak.XPath.Compiler.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:11.0400409Z   Bosak.XPath.Runtime -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Runtime/bin/Release/net10.0/Bosak.XPath.Runtime.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:16.8941191Z   Bosak.XPath.Standard -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Standard/bin/Release/net10.0/Bosak.XPath.Standard.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:17.5760928Z   Bosak.XPath.Api -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Api/bin/Release/net10.0/Bosak.XPath.Api.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:19.4552984Z   Bosak.XPath.Providers.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:19.4989104Z   Bosak.XPath.Providers.Database.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Database.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:20.3817703Z   Bosak.XPath.Runtime.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/bin/Release/net10.0/Bosak.XPath.Runtime.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:20.8570919Z   Bosak.XPath.Core.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/bin/Release/net10.0/Bosak.XPath.Core.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:20.8853640Z   Bosak.XQuery -> /home/runner/work/Bosak/Bosak/src/Bosak.XQuery/bin/Release/net10.0/Bosak.XQuery.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:24.0388353Z   Bosak.XPath.Api.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/bin/Release/net10.0/Bosak.XPath.Api.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:27.6723250Z   Bosak.XPath.Standard.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/bin/Release/net10.0/Bosak.XPath.Standard.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:33.5175889Z   Bosak.Xslt -> /home/runner/work/Bosak/Bosak/src/Bosak.Xslt/bin/Release/net10.0/Bosak.Xslt.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:34.4061796Z   Bosak.XPath.Conformance40 -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:37.6513111Z   Bosak.XQuery.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/bin/Release/net10.0/Bosak.XQuery.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:37.7293163Z   Bosak.XPath.Conformance -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:41.6914025Z ##[warning]/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj]
+Build & test (net10.0)	Build	2026-10-26T10:13:41.7232326Z   Bosak.Xslt.Conformance -> /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/bin/Release/net10.0/Bosak.Xslt.Conformance.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:43.7128936Z   Bosak.Xslt.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/bin/Release/net10.0/Bosak.Xslt.Tests.dll
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8087552Z 
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8088412Z Build succeeded.
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8088706Z 
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8093513Z ##[warning]/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj]
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8097216Z     1 Warning(s)
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8097615Z     0 Error(s)
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8097809Z 
+Build & test (net10.0)	Build	2026-10-26T10:13:43.8097997Z Time Elapsed 00:00:49.14
+Build & test (net10.0)	Runner processor-profile controls	﻿2026-10-26T10:13:43.8436110Z ##[group]Run ./tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:43.8436766Z ^[[36;1m./tests/Bosak.Xslt.Conformance/verify-runner-profile.ps1^[[0m
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:43.8463378Z shell: /usr/bin/pwsh -command ". '{0}'"
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:43.8463692Z env:
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:43.8463907Z   DOTNET_ROOT: /usr/share/dotnet
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:43.8464170Z ##[endgroup]
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:49.9133636Z PASS default-legacy
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:50.6038407Z PASS explicit-legacy
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:51.3612166Z PASS draft
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:52.0892206Z PASS draft-independent-catalog
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:52.1805960Z PASS draft-empty-selection
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:52.2472792Z PASS invalid-profile
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:52.3159528Z PASS missing-profile
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:52.3704702Z PASS duplicate-profile
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:53.1822128Z PASS adapter-legacy
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:53.7919262Z PASS adapter-draft
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:54.2184592Z PASS filtered-accounting
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:54.9372666Z PASS missing-selected-set
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:55.5410398Z PASS missing-unselected-set
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:55.7850011Z PASS filtered-set-dependency
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:56.4371995Z PASS structured-errors-legacy
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:56.9696703Z PASS structured-errors-draft
+Build & test (net10.0)	Runner processor-profile controls	2026-10-26T10:13:56.9723123Z Verified 16 runner profile controls including exact structured error controls.
+Build & test (net10.0)	Test	﻿2026-10-26T10:13:57.1692514Z ##[group]Run dotnet test Bosak.sln -c Release --no-build --logger trx --results-directory TestResults
+Build & test (net10.0)	Test	2026-10-26T10:13:57.1693831Z ^[[36;1mdotnet test Bosak.sln -c Release --no-build --logger trx --results-directory TestResults^[[0m
+Build & test (net10.0)	Test	2026-10-26T10:13:57.1782036Z shell: /usr/bin/bash -e {0}
+Build & test (net10.0)	Test	2026-10-26T10:13:57.1782353Z env:
+Build & test (net10.0)	Test	2026-10-26T10:13:57.1782574Z   DOTNET_ROOT: /usr/share/dotnet
+Build & test (net10.0)	Test	2026-10-26T10:13:57.1782840Z ##[endgroup]
+Build & test (net10.0)	Test	2026-10-26T10:13:58.6523161Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/bin/Release/net10.0/Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:13:58.9004547Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/bin/Release/net10.0/Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:13:58.9207463Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/bin/Release/net10.0/Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:13:58.9729730Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/bin/Release/net10.0/Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:13:59.1642558Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:13:59.2247241Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:13:59.4067783Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:13:59.5903212Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:02.1195013Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_01_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:02.1252088Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:02.1283011Z Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 349 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:02.3313647Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/bin/Release/net10.0/Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4202938Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_01_net10.0[1].trx
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4266355Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4292987Z Passed!  - Failed:     0, Passed:   269, Skipped:     0, Total:   269, Duration: 1 s - Bosak.XPath.Runtime.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4502222Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_00_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4514082Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:02.4662986Z Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 1 s - Bosak.XPath.Core.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:02.6253608Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/bin/Release/net10.0/Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:02.8882898Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:03.2962745Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:03.5703101Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/bin/Release/net10.0/Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:03.8675180Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_01_net10.0[2].trx
+Build & test (net10.0)	Test	2026-10-26T10:14:03.8722034Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:03.8843297Z Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 1 s - Bosak.XPath.Api.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:04.2862927Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:04.5583352Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/bin/Release/net10.0/Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:05.2869310Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_05_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:05.2911880Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:05.3024460Z Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 270 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:05.3032172Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:05.5399766Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:06.2512274Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:09.3852886Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_08_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:09.3891726Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:09.4003049Z Passed!  - Failed:     0, Passed:   303, Skipped:     0, Total:   303, Duration: 1 s - Bosak.XQuery.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:09.8643914Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:10.4302729Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Test	2026-10-26T10:14:13.8632922Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_13_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:13.8662157Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:13.8793171Z Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 979 ms - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:20.8383284Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_10_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:20.8448338Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:20.8605588Z Passed!  - Failed:     0, Passed:  8880, Skipped:     0, Total:  8880, Duration: 7 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:14:27.6112893Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_09_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:14:27.6142049Z 
+Build & test (net10.0)	Test	2026-10-26T10:14:27.6165269Z Passed!  - Failed:     0, Passed:   153, Skipped:     0, Total:   153, Duration: 18 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+Build & test (net10.0)	Test	2026-10-26T10:19:38.8070238Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_14_17_net10.0.trx
+Build & test (net10.0)	Test	2026-10-26T10:19:38.8072926Z 
+Build & test (net10.0)	Test	2026-10-26T10:19:38.8197887Z Passed!  - Failed:     0, Passed:  8196, Skipped:     0, Total:  8196, Duration: 5 m 20 s - Bosak.Xslt.Tests.dll (net10.0)
+Build & test (net10.0)	Language-server tests	﻿2026-10-26T10:19:38.8984208Z ##[group]Run dotnet test tests/Bosak.LanguageServer.Tests -c Release --logger trx --results-directory TestResults
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:38.8985062Z ^[[36;1mdotnet test tests/Bosak.LanguageServer.Tests -c Release --logger trx --results-directory TestResults^[[0m
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:38.9049591Z shell: /usr/bin/bash -e {0}
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:38.9049869Z env:
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:38.9050276Z   DOTNET_ROOT: /usr/share/dotnet
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:38.9050542Z ##[endgroup]
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:39.6018518Z   Determining projects to restore...
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:42.8809684Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.LanguageServer/Bosak.LanguageServer.csproj (in 1.57 sec).
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:42.8832395Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.LanguageServer.Tests/Bosak.LanguageServer.Tests.csproj (in 1.57 sec).
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:42.8868689Z   9 of 11 projects are up-to-date for restore.
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:43.7723095Z   Bosak.XPath.Core -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Core/bin/Release/net10.0/Bosak.XPath.Core.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.0451187Z   Bosak.XPath.Providers -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers/bin/Release/net10.0/Bosak.XPath.Providers.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.0623076Z   Bosak.XPath.Parser -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Parser/bin/Release/net10.0/Bosak.XPath.Parser.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.2040900Z   Bosak.XPath.Compiler -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Compiler/bin/Release/net10.0/Bosak.XPath.Compiler.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.5522965Z   Bosak.XPath.Runtime -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Runtime/bin/Release/net10.0/Bosak.XPath.Runtime.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.6841851Z   Bosak.XPath.Standard -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Standard/bin/Release/net10.0/Bosak.XPath.Standard.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.8057032Z   Bosak.XPath.Api -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Api/bin/Release/net10.0/Bosak.XPath.Api.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:44.9573292Z   Bosak.XQuery -> /home/runner/work/Bosak/Bosak/src/Bosak.XQuery/bin/Release/net10.0/Bosak.XQuery.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:45.1636058Z   Bosak.Xslt -> /home/runner/work/Bosak/Bosak/src/Bosak.Xslt/bin/Release/net10.0/Bosak.Xslt.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:46.5096482Z   Bosak.LanguageServer -> /home/runner/work/Bosak/Bosak/src/Bosak.LanguageServer/bin/Release/net10.0/Bosak.LanguageServer.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:48.0189031Z   Bosak.LanguageServer.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.LanguageServer.Tests/bin/Release/net10.0/Bosak.LanguageServer.Tests.dll
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:48.0683509Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.LanguageServer.Tests/bin/Release/net10.0/Bosak.LanguageServer.Tests.dll (.NETCoreApp,Version=v10.0)
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:48.4652652Z A total of 1 test files matched the specified pattern.
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:51.0503013Z Results File: /home/runner/work/Bosak/Bosak/TestResults/_runnervmtai0g_2026-10-26_10_19_49_net10.0.trx
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:51.0531873Z 
+Build & test (net10.0)	Language-server tests	2026-10-26T10:19:51.0553950Z Passed!  - Failed:     0, Passed:    84, Skipped:     0, Total:    84, Duration: 1 s - Bosak.LanguageServer.Tests.dll (net10.0)
+Build & test (net10.0)	Post Setup .NET 10	﻿2026-10-26T10:19:51.1477289Z Post job cleanup.
+Build & test (net10.0)	Post Setup .NET 10	2026-10-26T10:19:51.2746226Z (node:8845) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+Build & test (net10.0)	Post Setup .NET 10	2026-10-26T10:19:51.2747566Z (Use `node --trace-deprecation ...` to show where the warning was created)
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	﻿2026-10-26T10:19:51.3091030Z Post job cleanup.
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4187356Z [command]/usr/bin/git version
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4244992Z git version 2.55.0
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4329343Z Temporarily overriding HOME='/home/runner/work/_temp/9df78a87-08ca-45fe-a9f1-23c984fdfe75' before making global git config changes
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4330894Z Adding repository directory to the temporary git global config as a safe directory
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4332400Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4413138Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4472316Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4784096Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4856359Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.4976300Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5015636Z http.https://github.com/.extraheader
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5033366Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5086800Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5385029Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5410942Z http.https://github.com/.extraheader
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5450679Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5476970Z http.https://github.com/.extraheader
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5544335Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5598795Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5850474Z Entering 'tests/qt3tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5870791Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config	remote.origin.url
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5893844Z Entering 'tests/qt4tests'
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5914953Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config	remote.origin.url
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.5961097Z [command]/usr/bin/git config --file /home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config --name-only --get-regexp ^includeIf\.gitdir:
+Build & test (net10.0)	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T10:19:51.6002510Z [command]/usr/bin/git config --file /home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config --name-only --get-regexp ^includeIf\.gitdir:
+Build & test (net10.0)	Complete job	﻿2026-10-26T10:19:51.6220260Z Cleaning up orphan processes
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6542681Z Terminate orphan process: pid (3058) (dotnet)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6590511Z Terminate orphan process: pid (3059) (dotnet)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6626684Z Terminate orphan process: pid (3060) (dotnet)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6662194Z Terminate orphan process: pid (3185) (dotnet)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6703110Z Terminate orphan process: pid (3191) (dotnet)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6745188Z Terminate orphan process: pid (3227) (VBCSCompiler)
+Build & test (net10.0)	Complete job	2026-10-26T10:19:51.6823524Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-dotnet@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

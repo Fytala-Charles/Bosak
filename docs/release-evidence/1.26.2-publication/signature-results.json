@@ -1,0 +1,72 @@
+[
+  {
+    "package": "Bosak.XPath.Api.1.26.2.nupkg",
+    "archiveSha256": "94c27a8d66d7d22bdb45e7a228f93f0301b03bc54419d1f606c0e6f7454199b5",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Api.1.26.2.nupkg.20261026T105140153255Z.log",
+    "verifiedAt": "20261026T105140153255Z"
+  },
+  {
+    "package": "Bosak.XPath.Compiler.1.26.2.nupkg",
+    "archiveSha256": "d2d7acced0d370ae53cf27a4995c6c347f43d5e128c67c58924ae7e225a57d90",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Compiler.1.26.2.nupkg.20261026T105140414963Z.log",
+    "verifiedAt": "20261026T105140414963Z"
+  },
+  {
+    "package": "Bosak.XPath.Core.1.26.2.nupkg",
+    "archiveSha256": "1938d14c5b5abbc9436098a6fbc2504c5682ff100d6e455f744185cbe04065dd",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Core.1.26.2.nupkg.20261026T105140684980Z.log",
+    "verifiedAt": "20261026T105140684980Z"
+  },
+  {
+    "package": "Bosak.XPath.Parser.1.26.2.nupkg",
+    "archiveSha256": "6c3623cb03c6307ea8b705cd6d3b438f3579d666ac2d84cf943551b2f64e7c7f",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Parser.1.26.2.nupkg.20261026T105140952518Z.log",
+    "verifiedAt": "20261026T105140952518Z"
+  },
+  {
+    "package": "Bosak.XPath.Providers.1.26.2.nupkg",
+    "archiveSha256": "5dcfa05044e3aae52c7b2461a8042d2cbf304249e10b8512f76d48b92b93855d",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Providers.1.26.2.nupkg.20261026T105141211137Z.log",
+    "verifiedAt": "20261026T105141211137Z"
+  },
+  {
+    "package": "Bosak.XPath.Providers.Database.1.26.2.nupkg",
+    "archiveSha256": "ded38045140932505a1d2800da97861152f2ab3f91c9484448707bc0d96ed11c",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Providers.Database.1.26.2.nupkg.20261026T105141505896Z.log",
+    "verifiedAt": "20261026T105141505896Z"
+  },
+  {
+    "package": "Bosak.XPath.Runtime.1.26.2.nupkg",
+    "archiveSha256": "3030a7031942a75b181bf28dbbb44e6f164c01146072b95b887260263a3a5a17",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Runtime.1.26.2.nupkg.20261026T105141778192Z.log",
+    "verifiedAt": "20261026T105141778192Z"
+  },
+  {
+    "package": "Bosak.XPath.Standard.1.26.2.nupkg",
+    "archiveSha256": "b7021a4a855212a3e2e03193b37dcf5cba78f202f4b34d18db76c5f91ec6affa",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XPath.Standard.1.26.2.nupkg.20261026T105142044730Z.log",
+    "verifiedAt": "20261026T105142044730Z"
+  },
+  {
+    "package": "Bosak.XQuery.1.26.2.nupkg",
+    "archiveSha256": "73a9963bff9b4077e92b761b1e9e86045310a57d6f15d7bb5bdc3ed4b67bed4a",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.XQuery.1.26.2.nupkg.20261026T105142315016Z.log",
+    "verifiedAt": "20261026T105142315016Z"
+  },
+  {
+    "package": "Bosak.Xslt.1.26.2.nupkg",
+    "archiveSha256": "853f82f311c1e27d4208a89be3f390c1ae5be6f223126d5350d3c142a9bd58c7",
+    "exitCode": 0,
+    "log": "D:\\Development\\Bosak\\.guard-tmp\\release1262-publication\\signature-attempts\\Bosak.Xslt.1.26.2.nupkg.20261026T105142589199Z.log",
+    "verifiedAt": "20261026T105142589199Z"
+  }
+]

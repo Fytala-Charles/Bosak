@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "docs/RELEASE-1.26.2-PUBLICATION.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_RELEASE-1.26.2-PUBLICATION.md.html",
+      "sha256": "9ffbb9a7efa74d2a1d8c77a3599623bb002aceef888e8b612d8ee4c1492eee44"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_ARCHITECTURE.md.html",
+      "sha256": "6c2563f850f6a839c72f4fbb6aec2dc71834a3beb32e8c1508b4cd4425ad0685"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "6c6639d33507a0b42256111ef8316e2753b32fe9da6fb3da23ec07789e0e40c1"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_INTEGRATION.md.html",
+      "sha256": "6f8b13169aa4c6f15bc9f3b92d6d5f6c24910ffaed29e43b1b5dcb04ab17fc2e"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "cfea2cf1e95ce96b2a93bf30484e2434034690e0fc23b4f99a2ecc03bdc9dcee"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "d41331d995d1feb0dcad33cdc186f850dab83ab0c58a8b644d697bacda6c5a0c"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "e9b05fe1d2679435ddae62597d64def2fe3c8f6764687a9ec545c99f35d95634"
+    },
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/release1262-publication-render/README.md.html",
+      "sha256": "354fca144a10b2b8a66c604dc0a74f7568da7307562a3e48f79ec375fa5a39fa"
+    },
+    {
+      "source": "docs/RELEASE-1.26.2-CANDIDATE.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_RELEASE-1.26.2-CANDIDATE.md.html",
+      "sha256": "7e3088fafcd6f7c4815fb55f89fcafc8bd3862c0a86170ee4c260c05d20c26dc"
+    },
+    {
+      "source": "docs/RELEASE-NOTES-1.26.2.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_RELEASE-NOTES-1.26.2.md.html",
+      "sha256": "6f34e5ce482d29dc86642c86d3267868accf889c35f7e69943a7523a4971e30d"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/release1262-publication-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "ef3d335ae6b6cbb6eb5909e62ecfce4e4c8f195d3d387bbee2758c42cfb70843"
+    }
+  ]
+}

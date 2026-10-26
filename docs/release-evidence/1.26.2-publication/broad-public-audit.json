@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "parameters": "--vulnerable --include-transitive",
+  "sources": [
+    "https://api.nuget.org/v3/index.json"
+  ],
+  "projects": [
+    {
+      "path": "D:/Development/Bosak/.guard-tmp/release1262-publication/20261026T105139243057Z-1995c7a8/broad-public/Smoke.csproj"
+    }
+  ]
+}
