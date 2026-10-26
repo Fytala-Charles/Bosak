@@ -56,6 +56,9 @@ Grouping can change membership;4.0 node unions have a single rule identity in th
 
 ## 12. Implementation
 
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-compound. Left-associative intersect/except and grouped membership pass. Delivered 4.0 union-minimum priority, EQName URI-punctuation priority and bracket parsing pass; older uncorrected notices remain historical. Earlier-profile priority compatibility, next-match identity and uncommon mixed pattern contexts retain named unit evidence rather than a blanket whole-pattern acceptance. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
 New manifest cases use default Legacy host with root/local effective3.0/4.0 versions. Local template overrides are tested. No new complete host/module/package/authoring context matrix or gate promotion is claimed.
 
 ## 13. Sample Code

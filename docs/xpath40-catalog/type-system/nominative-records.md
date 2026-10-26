@@ -50,6 +50,9 @@ Equal fields need not satisfy a different named type. Binding/function conversio
 
 ## 12. Implementation
 
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S8-patterns. Fresh version-4 stylesheets in both hosts cover array/member sequences, map missing-versus-empty/surplus keys, aliases, annotated records and nominal identity. Predicates can fail to match without propagating their dynamic errors in the tested forms. No claim of complete declaration/import/package visibility, every composite pattern, generic JNode dispatch or earlier-profile promotion. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
 **C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Host-defined nominal identity differs from plain map shape; Constructor and typed-map coercion paths; Tested select/body/trailing defaults and static constructor/coercion values in Legacy and Xslt40Draft version-4 stylesheets. **Boundary:** Bounded defaults/static fields are verified in both named hosts; no blanket claim of missing support remains for those forms. Import/package identity, visibility, recursion, global-initializer timing and all static override/cast/update combinations still require separate evidence. Ownership: T04. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 New manifest checks use default Legacy host and effective version4.0, hence frozen XPath40. Legacy3.0 declaration/pattern refusals are explicit. Host selection, module/package identity, imports and authoring contexts need their own applicable tests; no exhaustive cross-context claim follows. No engine behavior changes.

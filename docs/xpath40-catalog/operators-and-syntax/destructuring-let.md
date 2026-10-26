@@ -46,7 +46,7 @@ Prior art: ML/Haskell pattern bindings, ES6 `const {a, b} = obj` / `const [x, y]
 **Semantic drift — read before relying on intuition:**
 
 - The **last variable of a sequence pattern takes all remaining items** (`let $($x, $y) := (1,2,3)` → `$y = (2,3)`); ES6 array destructuring instead discards surplus elements. Surplus *variables* (too few items) bind `()`.
-- The **array form is strict about surplus**: `let $[$a, $b] := [1,2,3]` discards member 3, but too few members for the variables is **FOAY0001**, not `undefined`-style filling.
+- The **array form discards surplus members but requires each bound index**: `let $[$a, $b] := [1,2,3]` discards member 3, but too few members for the variables is **FOAY0001**, not `undefined`-style filling.
 - The **map form binds by variable name** (`${$name}` looks up key `"name"`), closer to ES6 object destructuring than to map lookup — but a missing key binds `()` rather than throwing.
 
 ## 7. Applicability
@@ -87,6 +87,9 @@ Benefits: single RHS evaluation; arity made explicit; map unpacks name their key
 Liabilities: three binding semantics to learn (sequence rest / array strictness / map-by-name) — the drift table in §6 is the cheat sheet. Relabeling changes the *annotation*, not the datum (`42` → `xs:short` ✓; `2.5` → `xs:integer` is XPTY0004, never truncation). Save/Restore pairs are exception-unsafe by design (abandoned evaluations discard the frame with the whole stack — intentional).
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers REQ123-destructuring. Sequence rest/short inputs, array member groups/surplus/short errors, map missing keys, per-variable/whole-pattern types, duplicates and lexical shadowing are mapped. Undeclared annotated-record fields incorrectly bind empty when destructured. K03 retains the required record-lookup XPTY0004 expectation. Plain-map missing-key emptiness remains a different supported contract. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 Files: `src/Bosak.XPath.Parser/Ast/XPathParser.cs` (1.74), `src/Bosak.XPath.Parser/Ast/XPathAstNode.cs` (1.25), `src/Bosak.XPath.Compiler/Ir/IrOpCode.cs` (1.12), `src/Bosak.XPath.Compiler/Ir/IrLowerer.cs` (1.54), `src/Bosak.XPath.Runtime/Vm/VmEngine.cs` (2.173/2.174), `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (2.36). Version gate: XPST0003 at `XPath31`; fully legal at `XPath40`. Regression: `VersionGateTests` (0.20, +10 rows), `ParserTests` (0.11, +6 AST tests).
 

@@ -56,9 +56,14 @@ The case combines source values, the named feature, and explicit output formatti
 
 ## 11. Consequences
 
+**Array member wrappers:** `array:members` returns one JNode per member, retaining empty and multi-item values with one-based keys. `array:of-members` reconstructs those wrapped values as separate members; a tested roundtrip preserves empty members, nested arrays and maps. These are released 4.0-only names, distinct from `array:items`. The [C05 matrix](../TYPE-COLLECTION-PATTERN-RECONCILIATION.json) records normal/empty/invalid/parent/type and lower-profile controls. Full generic-node identity/model/template support remains unsupported as described in the [model boundary](jnode-template-boundary.md).
+
 Benefit: Navigate JSON keys with path syntax, then unwrap the selected JNode for its value. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. A missing key selects nothing. JNodes retain navigation context; plain map and array values have different identity semantics.
 
 ## 12. Implementation
+
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers REQ123-jnode. Navigation, key/root/value type checks and array:members/array:of-members preserve member boundaries and empty/nested values. Generic node(), xnode() and is contracts remain unsupported model scope. Explicit jnode-pattern matching refuses XTSE0340 in both named hosts. The six generic-model unmet controls are retained known boundaries, not a new full-model adoption or template-rule certification. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
 
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 

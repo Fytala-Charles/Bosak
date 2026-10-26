@@ -58,6 +58,9 @@ Unknown fields, a plain-map left operand, a non-map right operand and an empty r
 
 ## 12. Implementation
 
+**C05 grammar review — 26 October 2026, published 1.26.3:** [Type/collection/pattern reconciliation](../TYPE-COLLECTION-PATTERN-RECONCILIATION.md) covers S6-update. Updates reconstruct under the existing annotation, retain the original value and reject unknown or noncoercible replacement fields. Field order, empty values and nested promotion retain bounded evidence. Do not generalize structural updates to all nominal/static/package/recursive record combinations. Independent expected results and remaining ownership are retained; no whole-grammar/model or AC-04 acceptance follows.
+
+
 **C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies Annotation-preserving reconstruction retains the original value; Unknown fields, plain-map left operand and invalid replacement values refuse; Optional empty values retain key presence; nested promotion and field order are bounded. **Boundary:** Update uses coercion, not lexical import casting. Structural examples do not establish every nominal static/default-field update, method or package context. Ownership: T04, T05. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Thirty-five XPath probes cover cast/coercion/update distinctions; three explicit 3.1 refusal cases and eight complete3.0/4.0 reports bring the slice to46 documentation checks. The first run exposed a record-signature gate leak in old profiles, separate from value semantics. [The parser finding](../INLINE-RECORD-TYPE-GATE.md) and 44 dedicated API regressions preserve the failures and bounded correction. The new examples do not invent or promote a qt4 gate.

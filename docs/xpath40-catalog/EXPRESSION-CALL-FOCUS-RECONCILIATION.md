@@ -4,6 +4,8 @@
   <p>26 October 2026 · published Bosak 1.26.3</p>
 </div>
 
+**REQ-126 C05 complete — 26 October 2026:** [Type/collection/pattern review](TYPE-COLLECTION-PATTERN-RECONCILIATION.md) reconciles nine type/collection/pattern rows and 49 selected production names. All 2,457 focused tests pass. Of 275 independent controls, 259 match; 16 retain choice-coercion, record-destructuring and known generic-model gaps. Delivered union/EQName fixes remain closed. Eight closure workpackages remain; C06 is next. No engine or executable example changes, acceptance waiver, profile/gate promotion or release. Skips, Braid and extension work stay deferred; earlier checkpoints are historical.
+
 **C04 completes the bounded review of six grammar rows, 33 selected production/token names and nine structured entries. Nine closure workpackages remain open.** This closes review scope, not the discovered gaps, full grammar coverage or AC-01–04. [The machine-readable report](EXPRESSION-CALL-FOCUS-RECONCILIATION.json) preserves expected outcomes and remaining ownership. C05's nine grammar rows and C06's three host/profile rows remain separate; C09–C12 and C13 retain semantic/applicable-evidence review and owner acceptance.
 
 ## Evidence and outcomes

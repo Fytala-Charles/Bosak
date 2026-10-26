@@ -1,0 +1,126 @@
+{
+  "policy": "Retain original authoring inputs/results. Honor retained manifest 3.1 refusal profiles. Preserve the independent choice expectation; add argument/return paths. Capture structured fn:error codes rather than requiring their text in descriptions.",
+  "changes": [
+    {
+      "id": "choice-coerce-matches-first",
+      "original": {
+        "id": "choice-coerce-matches-first",
+        "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+        "expected": "true",
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "released-control",
+        "ticket": null,
+        "requiredPhase": null
+      },
+      "corrected": {
+        "id": "choice-coerce-matches-first",
+        "expression": "let $v as (xs:integer|xs:string) := '12' return $v instance of xs:string",
+        "expected": "true",
+        "error": null,
+        "row": "S6-types",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "current-draft-control",
+        "ticket": "K02-choice-matching-alternative",
+        "requiredPhase": null
+      }
+    },
+    {
+      "id": "retained-record-contract-refuse31-cast-lexical",
+      "original": {
+        "id": "retained-record-contract-refuse31-cast-lexical",
+        "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-record-conversion",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      },
+      "corrected": {
+        "id": "retained-record-contract-refuse31-cast-lexical",
+        "expression": "(: REQ-126 record contract: cast-lexical; explicit input, no external context. :)\n(map{'a':'12'} cast as record(a as xs:integer))?a instance of xs:integer\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-record-conversion",
+        "profiles": [
+          "XPath31"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      }
+    },
+    {
+      "id": "retained-record-contract-refuse31-coerce-promote",
+      "original": {
+        "id": "retained-record-contract-refuse31-coerce-promote",
+        "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-record-conversion",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      },
+      "corrected": {
+        "id": "retained-record-contract-refuse31-coerce-promote",
+        "expression": "(: REQ-126 record contract: coerce-promote; explicit input, no external context. :)\nfunction($r as record(a as xs:double)) { $r?a instance of xs:double }(map{'a':1})\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-record-conversion",
+        "profiles": [
+          "XPath31"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      }
+    },
+    {
+      "id": "retained-record-contract-refuse31-update-value",
+      "original": {
+        "id": "retained-record-contract-refuse31-update-value",
+        "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-update",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      },
+      "corrected": {
+        "id": "retained-record-contract-refuse31-update-value",
+        "expression": "(: REQ-126 record contract: update-value; explicit input, no external context. :)\n((map{'a':1} cast as record(a as xs:integer)) but with map{'a':2})?a\n",
+        "expected": null,
+        "error": "XPST0003",
+        "row": "S6-update",
+        "profiles": [
+          "XPath31"
+        ],
+        "kind": "retained-control",
+        "ticket": null,
+        "requiredPhase": null
+      }
+    }
+  ]
+}
