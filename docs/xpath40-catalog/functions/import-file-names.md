@@ -55,6 +55,8 @@ Earlier separators and dots remain in the preceding parts. Overlapping delimiter
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Last delimiter, overlap and one-based codepoint positions; Empty needle/source, default collation and malformed collation; Experimental absent-pattern correction with frozen refusal retained. **Boundaries:** Do not rely on tolerated typed-numeric string arguments; no grapheme-position or path-authorization contract. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Use CompileOptions.Compatibility40 for the new calls and Compatibility31 for the comparison. Default 3.1 rejects new names. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact report/error markers and default-profile refusal for successful 4.0 cases. All inputs are inline.
 
 **Supplementary text-contract review (2026-10-12):** [Eight-family contract review](../TEXT-CONTRACT-REVIEW.md) and [detailed label/filename README](../examples/text-contracts/README.md) supply explicit keyword refusals at 3.1/4.0/experimental, positional defaults/empty/invalid cases and complete paired reports. Numeric substring/option tolerance and validation boundaries remain observed follow-ups; the review does not implement keywords or certify full Unicode/coercion conformance.

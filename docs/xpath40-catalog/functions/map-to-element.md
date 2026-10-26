@@ -60,6 +60,8 @@ Benefit: Convert an agreed map shape back into XML and inspect its text value. T
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Single tested map-to-XML conversion shape; QName/name/layout, nested content and option boundaries are distinct. **Boundaries:** The reduced example does not certify the whole conversion-plan/record/namespaces space; supplementary provider Unicode limits belong to the deferred skip queue. Current-draft escape-names encoding is unsupported; use XML-compatible field names and verified conversion options. Follow-up groups: F01, F14. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 **Supplementary contract review (2026-10-12):** Keyword drift: implemented input differs from pinned map; the [signature audit](../SIGNATURE-CONTRACT-AUDIT.md) publishes paired success/refusal files. Positional conversion remains separate evidence.

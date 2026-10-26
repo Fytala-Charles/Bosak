@@ -58,6 +58,8 @@ some/every test whether any/all items satisfy a predicate; index-where returns o
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Any/all/position selection and vacuous empty results; Item and one-based position callbacks; Boolean/empty result conversion and invalid callback arity. **Boundaries:** Callable/subtyping combinations beyond the verified signatures remain unsupported in this consumer reference. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 
 **Supplementary contract review (2026-10-12):** [Comparison/selection review](../SELECTION-CONTRACT-REVIEW.md), pinned to F&O e7ee4ab8, and [detailed warehouse README](../examples/selection-contracts/README.md) supply 68 checks: keyword modes, collation/default/key/predicate, atomization, result/cardinality boundaries and complete 3.1/4.0 reports. duplicate-values/highest/lowest keywords remain unavailable; index-where keywords work. Map tolerance and tested extrema NaN results remain explicit engine follow-ups. Extrema return boundary-equal items, not all distinct records sharing its key. Initial delivery/unit/gate and historical adopted-pin limits are unchanged.

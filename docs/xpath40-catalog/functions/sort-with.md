@@ -60,6 +60,8 @@ Benefit: A comparator expresses descending priority directly; zero means equal p
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Comparator-driven numeric ordering and array member boundaries; Empty input, comparator result/arity and consistency requirements. **Boundaries:** Comparator consistency and arbitrary result/coercion combinations are not certified; avoid NaN/mixed-family business order. Follow-up groups: F06, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code

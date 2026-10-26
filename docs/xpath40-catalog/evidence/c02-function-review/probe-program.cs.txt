@@ -1,0 +1,13 @@
+// Generated read-only bounded function/option diagnostics for REQ-126 C02.
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using System.Text.Json;
+using var output=new StreamWriter(args[1]) { AutoFlush=true };
+foreach(var request in JsonSerializer.Deserialize<JsonElement[]>(File.ReadAllText(args[0]))!)
+foreach(var profile in request.GetProperty("profiles").EnumerateArray())
+{
+ string? result=null,error=null;string? exceptionType=null;
+ try { result=XPath31Expression.Compile(request.GetProperty("expression").GetString()!,new CompileOptions{Compatibility=Enum.Parse<XPathCompatibility>(profile.GetString()!)}).Evaluate(new EvaluationContext()).ToString(); }
+ catch(Exception ex){error=ex.Message;exceptionType=ex.GetType().FullName;}
+ output.WriteLine(JsonSerializer.Serialize(new{id=request.GetProperty("id").GetString(),profile=profile.GetString(),result,error,exceptionType}));
+}

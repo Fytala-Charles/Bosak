@@ -60,6 +60,8 @@ Benefit: Make the equality policy for individual atomic values explicit, includi
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Atomic equality distinguishes value-family policy and NaN; Atomic input/type errors remain distinct from deep node/map equality. **Boundaries:** Representative atomic families only; do not generalize the sample to structural equality or every derived atomic type. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code

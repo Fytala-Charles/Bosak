@@ -103,6 +103,8 @@ functions do not automatically convert them into retryable outcomes.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Before-versus-after predicate timing and callback argument order; Whole-sequence state, one-based iteration positions and empty results; Boolean/empty predicate result, callback errors and finite example termination. **Boundaries:** No implicit timeout, retry delay or iteration ceiling; only bounded terminating examples are supplied. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile the new function calls with `CompileOptions.Compatibility40`. The default
 3.1 profile rejects them; compile the `fold-left` comparison with `Compatibility31`.
 The existing [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)

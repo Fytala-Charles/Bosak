@@ -103,6 +103,8 @@ file output occurs in these expressions.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles One-based binding, residual argument order, all-bound and empty-map identity; Callable maps/arrays and bound-value conversion; String/nonpositive/out-of-arity key boundaries in the released profile. **Boundaries:** Current draft permits nonpositive integer keys and ignores them; the frozen positive-key refusal remains explicit. Follow-up groups: F01, F02, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile new calls with `CompileOptions.Compatibility40`; default XPath 3.1
 rejects them. The placeholder and inline-identity comparisons use
 `Compatibility31`. The existing [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)

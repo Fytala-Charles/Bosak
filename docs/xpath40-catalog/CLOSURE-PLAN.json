@@ -1,6 +1,6 @@
 {
   "date": "2026-10-26",
-  "baseline": "closure-plan-v1-c01",
+  "baseline": "closure-plan-v1-c02",
   "sourceBase": "927d7a458dd90a8b506840c045808f4f27e3c8d1",
   "publishedVersion": "1.26.3",
   "requirement": "REQ-126",
@@ -12,8 +12,8 @@
     "AC04": "Open/partial",
     "AC05": "Met for current scope; maintain"
   },
-  "completedBaselineWork": "C00 decomposition and C01 live inventory complete; no acceptance criterion closed",
-  "openClosureWorkpackages": 12,
+  "completedBaselineWork": "C00 decomposition, C01 live inventory and C02 bounded function/options reconciliation complete; no acceptance criterion closed",
+  "openClosureWorkpackages": 11,
   "workpackages": [
     {
       "id": "C01",
@@ -45,7 +45,7 @@
     {
       "id": "C02",
       "title": "Reconcile function/options behavior and semantic drift",
-      "status": "Open",
+      "status": "Complete",
       "acceptanceCriteria": [
         "AC-01",
         "AC-04"
@@ -91,7 +91,8 @@
       ],
       "dependsOn": [
         "C01"
-      ]
+      ],
+      "completionEvidence": "FUNCTION-OPTIONS-RECONCILIATION.md"
     },
     {
       "id": "C03",
@@ -1578,7 +1579,7 @@
       ]
     }
   ],
-  "scopeControl": "13 planned review/closure workpackages, with C01 complete and 12 open. Finish REQ-126 before skip fixes, Braid or VS Code extension work. Newly discovered defects receive separate tickets; no automatic implementation commitment for every unsupported proposal.",
+  "scopeControl": "13 planned review/closure workpackages, with C01/C02 complete and 11 open. C02 retains explicit limitations and an unmet atomic annotation contract; no semantic acceptance follows. Finish REQ-126 before skip fixes, Braid or VS Code extension work. Newly discovered defects receive separate tickets; no automatic implementation commitment for every unsupported proposal.",
   "unrecoverableHistoryPolicy": "No waiver granted; C08/C13 remain blocked where original criterion cannot be evidenced without owner disposition.",
   "catalogSummary": {
     "entries": 76,

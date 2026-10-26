@@ -66,6 +66,8 @@ UNC construction uses a literal `:////` prefix after `file`. The tested leading 
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Boolean deprecated/default-port/UNC policies; Structured versus raw authority/path/query precedence; Nonmap option and malformed authority errors. **Boundaries:** String false currently enables a Boolean option; empty query map currently falls back to raw query. Raw-authority bypass itself is draft-defined. Follow-up groups: F01, F04. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 See [FunctionLibrary](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs): `UriBooleanOption`, `ParseUri` and `BuildUri`. The empty-query-map branch and option truthiness are observed implementation limits. Public function conversion rejects non-map options with `XPTY0004`, including empty parse input; unmatched bracket authority raises `FOUR0001`. No engine changes are included here.
 
 **Supplementary contract review (2026-10-12):** Keyword drift: implemented uri differs from pinned value; the [signature audit](../SIGNATURE-CONTRACT-AUDIT.md) publishes paired success/refusal files. Existing positional option-policy examples remain valid.

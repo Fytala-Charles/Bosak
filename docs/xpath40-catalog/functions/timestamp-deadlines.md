@@ -128,6 +128,8 @@ for a receipt's missing timestamp.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Epoch milliseconds, omitted/empty zero and UTC subtype; Experimental signed epochs with frozen negative refusal; Duration total seconds, signs/fractions and bounded-calendar errors. **Boundaries:** Published wide-integer/range fixes are delivered; permissive scalar/cardinality conversion and bounded DateTimeOffset calendar remain separate. Follow-up groups: F01, F02, F08, F10. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Use `CompileOptions.Compatibility40` for the new calls. The default 3.1 profile
 rejects them; the comparison uses `Compatibility31`. The existing
 [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)

@@ -116,6 +116,8 @@ from byte-for-byte roundtripping.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Raw and decoded URI fields, repeated query keys and plus/percent behavior; Structured segment/query precedence and non-byte-preserving roundtrip; One-pass UTF-8 decoding, absence and malformed syntax. **Boundaries:** Use validated typed Boolean options and remove raw query when deliberately supplying an empty query map. Follow-up groups: F01, F04. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Use `CompileOptions.Compatibility40` for the new functions. The default XPath
 3.1 profile rejects them. The fixed route comparison uses `Compatibility31`.
 The existing [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)

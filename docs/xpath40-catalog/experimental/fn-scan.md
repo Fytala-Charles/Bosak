@@ -82,6 +82,8 @@ Liabilities: **experimental-tier semantics may change as the draft moves** — t
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles N+1 accumulator states retain single-member array boundaries; Empty input retains the initial state; Position-aware callback; Experimental-only availability. **Boundaries:** No frozen-profile adoption or constant-memory guarantee; generic function coercion beyond verified callbacks is not certified. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Files: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (experimental signature + implementation), `src/Bosak.XPath.Api/XPath31Expression.cs` (experimental-aware static gate), `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (`IsXPath40Experimental`). Version gate: XPST0017 at `XPath31` **and** `XPath40`; legal only at `XPath40Experimental`. Unit evidence: experimental-level tests in `Bosak.XPath.Standard.Tests` (see REQ-123 S1).
 
 ## 13. Sample Code

@@ -121,6 +121,8 @@ not evidence that invalid measurement values are acceptable.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Contiguous segment/prefix/suffix matching with order and duplicates; Deep-equal default, asymmetric custom comparators and argument order; Empty requirements, boolean/empty callback conversion and atomic all-equal. **Boundaries:** Use explicit presence/count guards for missing IDs; no complete carrier-state machine or unverified coercion contract. Follow-up groups: F01, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Source: [FunctionLibrary.cs](../../../src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs),
 `ContainsSubsequence`, `StartsWithSubsequence`, `EndsWithSubsequence` and
 `AllEqual`; named assertions are in

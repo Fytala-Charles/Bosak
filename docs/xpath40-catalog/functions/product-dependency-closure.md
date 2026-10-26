@@ -89,6 +89,8 @@ separate path/multiplicity rules.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles One-or-more-step reachability and identity deduplication; Finite cycles may include the initial node; document-order results; Empty start, singleton/node typing and callback errors. **Boundaries:** Only XML nodes in one document are covered; no JNode/cross-document ordering, topological installation order or quantity explosion. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile the new calls using `CompileOptions.Compatibility40`; the default 3.1
 profile rejects them. Compile the bounded-fold comparison and integrity check
 with `Compatibility31`. The existing [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)

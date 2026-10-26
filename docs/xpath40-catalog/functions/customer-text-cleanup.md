@@ -57,6 +57,8 @@ The fixture retains two interior spaces and a decomposed accent. Its eight codep
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles XML boundary whitespace, interior preservation, nontruncating codepoint padding; Character/entity conversion and supported grapheme clusters; Defaults, empty values, side options and invalid input. **Boundaries:** Grapheme segmentation is approximate; missing keywords, implicit trim focus and unknown-option validation are not supported contracts. Follow-up groups: F01, F02, F03, F13. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile new calls with CompileOptions.Compatibility40; the default 3.1 profile rejects them. The comparison uses Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. Unicode inputs are inline XML character references so their intended values are explicit.
 
 **Supplementary text-contract review (2026-10-12):** [Eight-family contract review](../TEXT-CONTRACT-REVIEW.md) and [detailed label/filename README](../examples/text-contracts/README.md) supply explicit keyword refusals at 3.1/4.0/experimental, positional defaults/empty/invalid cases and complete paired reports. Numeric substring/option tolerance and validation boundaries remain observed follow-ups; the review does not implement keywords or certify full Unicode/coercion conformance.

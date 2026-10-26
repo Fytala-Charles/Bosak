@@ -1,0 +1,210 @@
+{
+  "policy": "Original authoring draft and observations retained. Corrections address serialization assumptions, Gregorian field names, CSV row structure, and the frozen char type boundary; no engine expectation is silently changed to pass.",
+  "changes": [
+    {
+      "id": "char-positive",
+      "original": {
+        "id": "char-positive",
+        "expression": "string-to-codepoints(char(65))",
+        "expected": "65",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      },
+      "corrected": {
+        "id": "char-positive",
+        "expression": "char(65) eq 'A'",
+        "expected": "true",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      }
+    },
+    {
+      "id": "char-zero",
+      "original": {
+        "id": "char-zero",
+        "expression": "char(0)",
+        "expected": null,
+        "error": "FOCH0001",
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      },
+      "corrected": {
+        "id": "char-zero",
+        "expression": "char(0)",
+        "expected": null,
+        "error": "XPTY0004",
+        "classification": "frozen-policy",
+        "ticket": "F02",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": "Invalid codepoints remain errors; the current integer signature differs from the retained positiveInteger conversion boundary."
+      }
+    },
+    {
+      "id": "char-negative",
+      "original": {
+        "id": "char-negative",
+        "expression": "char(-1)",
+        "expected": null,
+        "error": "FOCH0001",
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      },
+      "corrected": {
+        "id": "char-negative",
+        "expression": "char(-1)",
+        "expected": null,
+        "error": "XPTY0004",
+        "classification": "frozen-policy",
+        "ticket": "F02",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": "Invalid codepoints remain errors; the current integer signature differs from the retained positiveInteger conversion boundary."
+      }
+    },
+    {
+      "id": "date-fraction-precision",
+      "original": {
+        "id": "date-fraction-precision",
+        "expression": "seconds-from-time(build-dateTime(map{'hour':12,'minute':34,'second':4.2678}))",
+        "expected": null,
+        "error": null,
+        "classification": "limitation",
+        "ticket": "F10",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": "4.2678"
+      },
+      "corrected": {
+        "id": "date-fraction-precision",
+        "expression": "seconds-from-time(build-dateTime(map{'hours':12,'minutes':34,'seconds':4.2678}))",
+        "expected": null,
+        "error": null,
+        "classification": "limitation",
+        "ticket": "F10",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": "4.2678"
+      }
+    },
+    {
+      "id": "csv-positive-selection",
+      "original": {
+        "id": "csv-positive-selection",
+        "expression": "parse-csv('A,B',map{'select-columns':(2,1)})?rows?1?* ! string(.)",
+        "expected": "B A",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      },
+      "corrected": {
+        "id": "csv-positive-selection",
+        "expression": "string-join(parse-csv('A,B',map{'select-columns':(2,1)})?rows?*,',')",
+        "expected": "B,A",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      }
+    },
+    {
+      "id": "csv-nonpositive-selection",
+      "original": {
+        "id": "csv-nonpositive-selection",
+        "expression": "parse-csv('A,B',map{'select-columns':(0,1)})?rows?1?* ! string(.)",
+        "expected": null,
+        "error": null,
+        "classification": "frozen-policy",
+        "ticket": "F12",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": " A"
+      },
+      "corrected": {
+        "id": "csv-nonpositive-selection",
+        "expression": "string-join(parse-csv('A,B',map{'select-columns':(0,1)})?rows?*,',')",
+        "expected": null,
+        "error": null,
+        "classification": "frozen-policy",
+        "ticket": "F12",
+        "profiles": [
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": ",A"
+      }
+    },
+    {
+      "id": "round-extreme-precision",
+      "original": {
+        "id": "round-extreme-precision",
+        "expression": "round(1e300,-29)",
+        "expected": "1E+300",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath31",
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      },
+      "corrected": {
+        "id": "round-extreme-precision",
+        "expression": "round(1e300,-29) eq 1e300",
+        "expected": "true",
+        "error": null,
+        "classification": "control",
+        "ticket": null,
+        "profiles": [
+          "XPath31",
+          "XPath40",
+          "XPath40Experimental"
+        ],
+        "currentDraftExpectation": null
+      }
+    }
+  ]
+}

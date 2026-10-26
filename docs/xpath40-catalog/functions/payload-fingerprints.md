@@ -53,6 +53,8 @@ Content changes are observable without exposing a claim about sender identity. E
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles UTF-8 string versus binary octets and absent versus empty payload; Default/explicit algorithm and unsupported-algorithm errors; Keyword/default/map-shape boundaries; extension parameters are implementation-defined. **Boundaries:** BLAKE3 and CRC-32 remain unsupported FOHA0001; opaque hash options do not establish a missing standard named parameter. Follow-up groups: F01, F11. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Compile new functions with CompileOptions.Compatibility40; default 3.1 rejects them. Earlier-version comparisons use Compatibility31. The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) verifies exact text/error markers and default-profile refusal for successful 4.0 cases. All values are inline and deterministic.
 
 **Supplementary contract review (2026-10-12):** The [signature/options review](../SIGNATURE-CONTRACT-AUDIT.md) and [invoice fingerprint README](../examples/signature-contracts/README.md) add selected default/empty/invalid/map/keyword checks and a full business report. Additional hash options are implementation-defined in the pinned contract; opaque-key tolerance does not establish a missing standard option. Mandatory BLAKE3/CRC-32 remain unsupported. Tested two-let keyword calls refuse hash#0; the positional report is the verified alternative.

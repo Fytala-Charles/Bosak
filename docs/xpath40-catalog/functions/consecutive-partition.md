@@ -58,6 +58,8 @@ partition returns a sequence of arrays. Its split callback receives the current 
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Consecutive partition arrays preserve source order and nonadjacent groups; Split callback receives current partition, next item and original one-based position; Empty/singleton input avoids unnecessary predicate invocation. **Boundaries:** Not SQL grouping or a two-way filter; callback conversion beyond the tested signature remains a separate boundary. Follow-up groups: F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 The [manifest harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) runs the exact files, asserts declared results/errors, and checks default-3.1 refusal for successful 4.0 forms. No engine code changes or conformance promotions are included.
 
 ## 13. Sample Code

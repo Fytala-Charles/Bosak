@@ -117,6 +117,8 @@ unvalidated code/unit/range constraints remain outside the demonstrated contract
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Empty input, atomization, numeric/string and QName extrema; Omitted/empty collation and values keyword; NaN contamination and incomparable-family errors. **Boundaries:** Use homogeneous validated atomic inputs and explicit collation; remaining coercion/mixed-family combinations require targeted review. Follow-up groups: F06, F08. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Use `CompileOptions.Compatibility40` for QName extrema and keyword calls.
 The numeric baseline runs with `Compatibility31` and its QName endpoints use
 folds. Default 3.1 numeric/string extrema remain available, while these nonempty

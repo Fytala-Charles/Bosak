@@ -115,6 +115,8 @@ a member in the separate boundary probe.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Stable lexicographic keys with sequence items versus whole array members; Omitted versus explicit-empty keys and explicit data#1 workaround; Known collation, mixed-type errors, NaN and exact cross-numeric order. **Boundaries:** Explicit empty keys, unknown collations, NaN and promoted mixed-number ties remain unsupported draft contracts; use validated homogeneous keys. Follow-up groups: F05, F06. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 The report runs with either `CompileOptions.Compatibility40` or
 `CompileOptions.Compatibility31`. Keyword calls use 4.0 syntax and match the
 reviewed names `input`/`array`, `collation` and `key`. The explicit `sort-by`

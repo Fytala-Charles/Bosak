@@ -4,6 +4,8 @@
   <p>26 October 2026 · published Bosak 1.26.3</p>
 </div>
 
+**REQ-126 C02 complete — 26 October 2026:** [Function/options reconciliation](FUNCTION-OPTIONS-RECONCILIATION.md) reconciles 30 entries/74 function surfaces with explicit supported boundaries and 14 follow-up groups. Release build and all 21,798 solution tests pass; all 3,148 catalog examples pass separately. The 195 added profile observations include 118 matching controls, two unmet controls for the new `atomic-type-annotation(())` defect, and 75 diagnostics. Eleven closure workpackages remain; C03 is next. C02 closes review scope, not AC-01–04 or the retained defects. Skip fixes, Braid and extension work remain deferred. Original receipts and frozen gates are preserved; no engine/version/release change.
+
 **C01 is complete as an inventory and ownership workpackage. Twelve closure workpackages remain open.** REQ-126 and AC-01–04 remain open/partial; AC-05 remains met for current discoverability. Metadata, availability and declaration comparisons do not accept semantic contracts. Finish REQ-126 before returning to skip fixes, Braid or the VS Code extension.
 
 ## Sources and measured scope

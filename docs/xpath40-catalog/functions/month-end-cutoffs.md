@@ -95,6 +95,8 @@ whether the configured cutoff is a working day.
 
 ## 12. Implementation
 
+**C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles Local Gregorian month/leap rules and supported partial Gregorian values; Timezone presence, field-set, calendar and offset errors; Fractional components and declared singleton/type boundaries. **Boundaries:** Millisecond precision loss, permissive malformed/multi-item input and interop calendar bounds remain explicit; arbitrary extended-year operations are not certified. Follow-up groups: F01, F10. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
+
 Use `CompileOptions.Compatibility40` for the new functions; default XPath 3.1
 rejects them. The earlier-version comparison uses `Compatibility31`.
 The [catalog harness](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs)
