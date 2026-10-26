@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-26",
+  "base": "85ad1335dff6e294fdf25e22e68d17a753156203",
+  "sourceVersion": "1.26.3",
+  "publishedVersion": "1.26.2",
+  "publicationPerformed": false,
+  "sources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "localSha256": "4d50610d2d554a1610902959e8a86fed17b1aa5e0501edfd16508149158121ed",
+      "gitBlob": "6b58f67c84174552e1af9278d348970c2e19658b"
+    },
+    "src/Directory.Build.props": {
+      "localSha256": "bc8ae9c1baf0a9919257c42a388dc7c0bc44fb7d2b9bafdb860c3c712192aea3",
+      "gitBlob": "4bbd3394519d40282be0d97700cd9416bde8a400"
+    },
+    "tests/Bosak.XPath.Standard.Tests/FloorCeilingIntegerPreservationTests.cs": {
+      "localSha256": "08d7fcca7ddf38c59cb9b3536ee0e39ac43643c460ef2a36f2638c6cac149ba9",
+      "gitBlob": "88d844617efe3dc3627ececef5b9d347e34d0f86"
+    }
+  },
+  "focusedCases": 936,
+  "baseline": {
+    "failed": 168,
+    "passed": 768
+  },
+  "solutionPassed": 20996,
+  "languageServerPassed": 84,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "frozenQt4": [
+    8436,
+    0,
+    1894
+  ],
+  "experimentalFallbackPasses": 11,
+  "diagnostics": {
+    "rows": 936,
+    "baselineDiscrepancies": 168,
+    "afterDiscrepancies": 0,
+    "corrected": 168,
+    "regressions": 0
+  },
+  "renderer": "9 HTML pages, unchanged Fytala CSS; no screenshot/PDF acceptance",
+  "evidenceManifest": "evidence/floor-ceiling-integer/manifest.json",
+  "evidenceManifestSha256": "aa716a9d47670e07076a559731b62b6a5355aca53ef60989a6a128dc7249847c"
+}

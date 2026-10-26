@@ -1,0 +1,2186 @@
+[
+  {
+    "Id": 0,
+    "Expression": "let $r := floor((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 1,
+    "Expression": "let $r := floor#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 2,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 3,
+    "Expression": "let $r := (function($x){floor($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 4,
+    "Expression": "let $r := floor((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 5,
+    "Expression": "let $r := floor#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 6,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 7,
+    "Expression": "let $r := (function($x){floor($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 8,
+    "Expression": "let $r := floor((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 9,
+    "Expression": "let $r := floor#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 10,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 11,
+    "Expression": "let $r := (function($x){floor($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 12,
+    "Expression": "let $r := floor((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 13,
+    "Expression": "let $r := floor#1((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 14,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 15,
+    "Expression": "let $r := (function($x){floor($x)})((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 16,
+    "Expression": "let $r := floor((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 17,
+    "Expression": "let $r := floor#1((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 18,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 19,
+    "Expression": "let $r := (function($x){floor($x)})((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 20,
+    "Expression": "let $r := floor((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 21,
+    "Expression": "let $r := floor#1((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 22,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 23,
+    "Expression": "let $r := (function($x){floor($x)})((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 24,
+    "Expression": "let $r := floor((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 25,
+    "Expression": "let $r := floor#1((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 26,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 27,
+    "Expression": "let $r := (function($x){floor($x)})((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 28,
+    "Expression": "let $r := floor((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 29,
+    "Expression": "let $r := floor#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 30,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 31,
+    "Expression": "let $r := (function($x){floor($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 32,
+    "Expression": "let $r := floor((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 33,
+    "Expression": "let $r := floor#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 34,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 35,
+    "Expression": "let $r := (function($x){floor($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 36,
+    "Expression": "let $r := floor((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 37,
+    "Expression": "let $r := floor#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 38,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 39,
+    "Expression": "let $r := (function($x){floor($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 40,
+    "Expression": "let $r := floor(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 41,
+    "Expression": "let $r := floor#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 42,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 43,
+    "Expression": "let $r := (function($x){floor($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 44,
+    "Expression": "let $r := floor(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 45,
+    "Expression": "let $r := floor#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 46,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 47,
+    "Expression": "let $r := (function($x){floor($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 48,
+    "Expression": "let $r := floor(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 49,
+    "Expression": "let $r := floor#1(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 50,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 51,
+    "Expression": "let $r := (function($x){floor($x)})(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 52,
+    "Expression": "let $r := floor(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 53,
+    "Expression": "let $r := floor#1(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 54,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 55,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 56,
+    "Expression": "let $r := floor(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 57,
+    "Expression": "let $r := floor#1(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 58,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 59,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 60,
+    "Expression": "let $r := floor(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 61,
+    "Expression": "let $r := floor#1(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 62,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 63,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 64,
+    "Expression": "let $r := floor(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 65,
+    "Expression": "let $r := floor#1(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 66,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 67,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 68,
+    "Expression": "let $r := floor(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 69,
+    "Expression": "let $r := floor#1(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 70,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 71,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 72,
+    "Expression": "let $r := floor(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 73,
+    "Expression": "let $r := floor#1(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 74,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 75,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 76,
+    "Expression": "let $r := floor(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 77,
+    "Expression": "let $r := floor#1(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 78,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 79,
+    "Expression": "let $r := (function($x){floor($x)})(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 80,
+    "Expression": "let $r := floor(xs:float('-2.5')) return ($r instance of xs:float and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 81,
+    "Expression": "let $r := floor#1(xs:float('-2.5')) return ($r instance of xs:float and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 82,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('-2.5')) return ($r instance of xs:float and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 83,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('-2.5')) return ($r instance of xs:float and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 84,
+    "Expression": "let $r := floor(xs:float('2.5')) return ($r instance of xs:float and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 85,
+    "Expression": "let $r := floor#1(xs:float('2.5')) return ($r instance of xs:float and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 86,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('2.5')) return ($r instance of xs:float and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 87,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('2.5')) return ($r instance of xs:float and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 88,
+    "Expression": "let $r := floor(xs:float('-0.25')) return ($r instance of xs:float and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 89,
+    "Expression": "let $r := floor#1(xs:float('-0.25')) return ($r instance of xs:float and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 90,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('-0.25')) return ($r instance of xs:float and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 91,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('-0.25')) return ($r instance of xs:float and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 92,
+    "Expression": "let $r := floor(xs:float('0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 93,
+    "Expression": "let $r := floor#1(xs:float('0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 94,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 95,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 96,
+    "Expression": "let $r := floor(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 97,
+    "Expression": "let $r := floor#1(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 98,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 99,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 100,
+    "Expression": "let $r := floor(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 101,
+    "Expression": "let $r := floor#1(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 102,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 103,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 104,
+    "Expression": "let $r := floor(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 105,
+    "Expression": "let $r := floor#1(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 106,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 107,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 108,
+    "Expression": "let $r := floor(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 109,
+    "Expression": "let $r := floor#1(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 110,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 111,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 112,
+    "Expression": "let $r := floor(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 113,
+    "Expression": "let $r := floor#1(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 114,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 115,
+    "Expression": "let $r := (function($x){floor($x)})(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 116,
+    "Expression": "let $r := floor(xs:double('-2.5')) return ($r instance of xs:double and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 117,
+    "Expression": "let $r := floor#1(xs:double('-2.5')) return ($r instance of xs:double and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 118,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('-2.5')) return ($r instance of xs:double and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 119,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('-2.5')) return ($r instance of xs:double and $r eq -3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 120,
+    "Expression": "let $r := floor(xs:double('2.5')) return ($r instance of xs:double and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 121,
+    "Expression": "let $r := floor#1(xs:double('2.5')) return ($r instance of xs:double and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 122,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('2.5')) return ($r instance of xs:double and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 123,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('2.5')) return ($r instance of xs:double and $r eq 2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 124,
+    "Expression": "let $r := floor(xs:double('-0.25')) return ($r instance of xs:double and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 125,
+    "Expression": "let $r := floor#1(xs:double('-0.25')) return ($r instance of xs:double and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 126,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('-0.25')) return ($r instance of xs:double and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 127,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('-0.25')) return ($r instance of xs:double and $r eq -1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 128,
+    "Expression": "let $r := floor(xs:double('0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 129,
+    "Expression": "let $r := floor#1(xs:double('0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 130,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 131,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 132,
+    "Expression": "let $r := floor(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 133,
+    "Expression": "let $r := floor#1(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 134,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 135,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 136,
+    "Expression": "let $r := floor(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 137,
+    "Expression": "let $r := floor#1(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 138,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 139,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 140,
+    "Expression": "let $r := floor(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 141,
+    "Expression": "let $r := floor#1(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 142,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 143,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 144,
+    "Expression": "let $r := floor(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 145,
+    "Expression": "let $r := floor#1(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 146,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 147,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 148,
+    "Expression": "let $r := floor(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 149,
+    "Expression": "let $r := floor#1(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 150,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 151,
+    "Expression": "let $r := (function($x){floor($x)})(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 152,
+    "Expression": "let $r := floor(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 153,
+    "Expression": "let $r := floor#1(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 154,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','floor'),1)(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 155,
+    "Expression": "let $r := (function($x){floor($x)})(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 156,
+    "Expression": "let $r := ceiling((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 157,
+    "Expression": "let $r := ceiling#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 158,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 159,
+    "Expression": "let $r := (function($x){ceiling($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (-79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 160,
+    "Expression": "let $r := ceiling((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 161,
+    "Expression": "let $r := ceiling#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 162,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 163,
+    "Expression": "let $r := (function($x){ceiling($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (-9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 164,
+    "Expression": "let $r := ceiling((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 165,
+    "Expression": "let $r := ceiling#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 166,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 167,
+    "Expression": "let $r := (function($x){ceiling($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 168,
+    "Expression": "let $r := ceiling((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 169,
+    "Expression": "let $r := ceiling#1((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 170,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 171,
+    "Expression": "let $r := (function($x){ceiling($x)})((-1)) return ($r instance of xs:integer and $r eq (-1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 172,
+    "Expression": "let $r := ceiling((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 173,
+    "Expression": "let $r := ceiling#1((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 174,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 175,
+    "Expression": "let $r := (function($x){ceiling($x)})((0)) return ($r instance of xs:integer and $r eq (0))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 176,
+    "Expression": "let $r := ceiling((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 177,
+    "Expression": "let $r := ceiling#1((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 178,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 179,
+    "Expression": "let $r := (function($x){ceiling($x)})((1)) return ($r instance of xs:integer and $r eq (1))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 180,
+    "Expression": "let $r := ceiling((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 181,
+    "Expression": "let $r := ceiling#1((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 182,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 183,
+    "Expression": "let $r := (function($x){ceiling($x)})((9223372036854775807)) return ($r instance of xs:integer and $r eq (9223372036854775807))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 184,
+    "Expression": "let $r := ceiling((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 185,
+    "Expression": "let $r := ceiling#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 186,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 187,
+    "Expression": "let $r := (function($x){ceiling($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 188,
+    "Expression": "let $r := ceiling((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 189,
+    "Expression": "let $r := ceiling#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 190,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 191,
+    "Expression": "let $r := (function($x){ceiling($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 192,
+    "Expression": "let $r := ceiling((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 193,
+    "Expression": "let $r := ceiling#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 194,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 195,
+    "Expression": "let $r := (function($x){ceiling($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 196,
+    "Expression": "let $r := ceiling(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 197,
+    "Expression": "let $r := ceiling#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 198,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 199,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 200,
+    "Expression": "let $r := ceiling(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 201,
+    "Expression": "let $r := ceiling#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 202,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 203,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (-9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 204,
+    "Expression": "let $r := ceiling(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 205,
+    "Expression": "let $r := ceiling#1(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 206,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 207,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:byte('-128')) return ($r instance of xs:integer and $r eq (-128))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 208,
+    "Expression": "let $r := ceiling(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 209,
+    "Expression": "let $r := ceiling#1(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 210,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 211,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('-9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 212,
+    "Expression": "let $r := ceiling(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 213,
+    "Expression": "let $r := ceiling#1(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 214,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 215,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('9223372036854775808')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('9223372036854775808'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 216,
+    "Expression": "let $r := ceiling(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 217,
+    "Expression": "let $r := ceiling#1(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 218,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 219,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('-2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-2'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 220,
+    "Expression": "let $r := ceiling(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 221,
+    "Expression": "let $r := ceiling#1(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 222,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 223,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('2.5')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('3'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 224,
+    "Expression": "let $r := ceiling(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 225,
+    "Expression": "let $r := ceiling#1(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 226,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 227,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('-0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 228,
+    "Expression": "let $r := ceiling(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 229,
+    "Expression": "let $r := ceiling#1(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 230,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 231,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('0.25')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('1'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 232,
+    "Expression": "let $r := ceiling(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 233,
+    "Expression": "let $r := ceiling#1(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 234,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 235,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:decimal('-0.0')) return ($r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('-0'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 236,
+    "Expression": "let $r := ceiling(xs:float('-2.5')) return ($r instance of xs:float and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 237,
+    "Expression": "let $r := ceiling#1(xs:float('-2.5')) return ($r instance of xs:float and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 238,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('-2.5')) return ($r instance of xs:float and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 239,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('-2.5')) return ($r instance of xs:float and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 240,
+    "Expression": "let $r := ceiling(xs:float('2.5')) return ($r instance of xs:float and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 241,
+    "Expression": "let $r := ceiling#1(xs:float('2.5')) return ($r instance of xs:float and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 242,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('2.5')) return ($r instance of xs:float and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 243,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('2.5')) return ($r instance of xs:float and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 244,
+    "Expression": "let $r := ceiling(xs:float('-0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 245,
+    "Expression": "let $r := ceiling#1(xs:float('-0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 246,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('-0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 247,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('-0.25')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 248,
+    "Expression": "let $r := ceiling(xs:float('0.25')) return ($r instance of xs:float and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 249,
+    "Expression": "let $r := ceiling#1(xs:float('0.25')) return ($r instance of xs:float and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 250,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('0.25')) return ($r instance of xs:float and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 251,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('0.25')) return ($r instance of xs:float and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 252,
+    "Expression": "let $r := ceiling(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 253,
+    "Expression": "let $r := ceiling#1(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 254,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 255,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('-0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 256,
+    "Expression": "let $r := ceiling(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 257,
+    "Expression": "let $r := ceiling#1(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 258,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 259,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('0')) return ($r instance of xs:float and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 260,
+    "Expression": "let $r := ceiling(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 261,
+    "Expression": "let $r := ceiling#1(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 262,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 263,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('INF')) return ($r instance of xs:float and $r eq xs:float('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 264,
+    "Expression": "let $r := ceiling(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 265,
+    "Expression": "let $r := ceiling#1(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 266,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 267,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('-INF')) return ($r instance of xs:float and $r eq xs:float('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 268,
+    "Expression": "let $r := ceiling(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 269,
+    "Expression": "let $r := ceiling#1(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 270,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 271,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:float('NaN')) return ($r instance of xs:float and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 272,
+    "Expression": "let $r := ceiling(xs:double('-2.5')) return ($r instance of xs:double and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 273,
+    "Expression": "let $r := ceiling#1(xs:double('-2.5')) return ($r instance of xs:double and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 274,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('-2.5')) return ($r instance of xs:double and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 275,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('-2.5')) return ($r instance of xs:double and $r eq -2)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 276,
+    "Expression": "let $r := ceiling(xs:double('2.5')) return ($r instance of xs:double and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 277,
+    "Expression": "let $r := ceiling#1(xs:double('2.5')) return ($r instance of xs:double and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 278,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('2.5')) return ($r instance of xs:double and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 279,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('2.5')) return ($r instance of xs:double and $r eq 3)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 280,
+    "Expression": "let $r := ceiling(xs:double('-0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 281,
+    "Expression": "let $r := ceiling#1(xs:double('-0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 282,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('-0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 283,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('-0.25')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 284,
+    "Expression": "let $r := ceiling(xs:double('0.25')) return ($r instance of xs:double and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 285,
+    "Expression": "let $r := ceiling#1(xs:double('0.25')) return ($r instance of xs:double and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 286,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('0.25')) return ($r instance of xs:double and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 287,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('0.25')) return ($r instance of xs:double and $r eq 1)",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 288,
+    "Expression": "let $r := ceiling(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 289,
+    "Expression": "let $r := ceiling#1(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 290,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 291,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('-0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 292,
+    "Expression": "let $r := ceiling(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 293,
+    "Expression": "let $r := ceiling#1(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 294,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 295,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('0')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 296,
+    "Expression": "let $r := ceiling(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 297,
+    "Expression": "let $r := ceiling#1(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 298,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 299,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('INF')) return ($r instance of xs:double and $r eq xs:double('INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 300,
+    "Expression": "let $r := ceiling(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 301,
+    "Expression": "let $r := ceiling#1(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 302,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 303,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('-INF')) return ($r instance of xs:double and $r eq xs:double('-INF'))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 304,
+    "Expression": "let $r := ceiling(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 305,
+    "Expression": "let $r := ceiling#1(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 306,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 307,
+    "Expression": "let $r := (function($x){ceiling($x)})(xs:double('NaN')) return ($r instance of xs:double and not($r eq $r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 308,
+    "Expression": "let $r := ceiling(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 309,
+    "Expression": "let $r := ceiling#1(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 310,
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','ceiling'),1)(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  },
+  {
+    "Id": 311,
+    "Expression": "let $r := (function($x){ceiling($x)})(()) return (empty($r))",
+    "Expected": "true",
+    "Error": false,
+    "BaselineSafe": true
+  }
+]

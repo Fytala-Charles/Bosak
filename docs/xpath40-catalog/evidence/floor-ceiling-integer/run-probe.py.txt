@@ -1,0 +1,14 @@
+from pathlib import Path
+import subprocess,json,time,hashlib,sys
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/floor-ceiling-integer';p=r/'.guard-tmp/floor-ceiling-integer-probe';p.mkdir(exist_ok=True);phase=sys.argv[1]
+(p/'Program.cs').write_bytes((r/'.guard-tmp/rounding-precision-probe/Program.cs').read_bytes())
+(p/'Probe.csproj').write_bytes((r/'.guard-tmp/rounding-precision-probe/Probe.csproj').read_bytes())
+with (e/(phase+'-build.log')).open('wb') as f:subprocess.run(['dotnet','build',str(p/'Probe.csproj'),'-c','Release'],cwd=r,stdout=f,stderr=subprocess.STDOUT,check=True)
+command=['dotnet',str(p/'bin/Release/net10.0/Probe.dll'),str(e/'inputs.json'),str(e/(phase+'.jsonl')),'after'];start=time.monotonic()
+with (e/(phase+'-probe.log')).open('wb') as f:
+ try:proc=subprocess.run(command,cwd=r,stdout=f,stderr=subprocess.STDOUT,timeout=30);receipt=dict(exitCode=proc.returncode,timeout=False)
+ except subprocess.TimeoutExpired:receipt=dict(exitCode=None,timeout=True)
+receipt.update(command=command,watchdogSeconds=30,wallSeconds=time.monotonic()-start,sourceVersion='1.26.3',sourceRevision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r).decode().strip(),testSourceSha256=hashlib.sha256((r/'tests/Bosak.XPath.Standard.Tests/FloorCeilingIntegerPreservationTests.cs').read_bytes()).hexdigest(),functionLibraryBlob=subprocess.check_output(['git','hash-object','src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs'],cwd=r).decode().strip())
+(e/(phase+'-receipt.json')).write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8');assert receipt['exitCode']==0 and not receipt['timeout']
+print(f'{phase}: 936 observed cases; no timeout.')
+

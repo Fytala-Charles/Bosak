@@ -142,3 +142,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/release-evidence/1.26.2-publication/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 
 /docs/xpath40-catalog/evidence/abs-integer/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+/docs/xpath40-catalog/evidence/floor-ceiling-integer/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

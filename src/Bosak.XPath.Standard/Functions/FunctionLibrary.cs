@@ -471,6 +471,7 @@
 //                      | Charles Korthout | 5.151 | 26-10-2026     | Bound extreme rounding precision and accept decimal-backed integer precision (1.26.2).     |
 //                      | Charles Korthout | 5.152 | 26-10-2026     | Round exact numeric coefficients; preserve zero signs and integer results (1.26.2).       |
 //                      | Charles Korthout | 5.153 | 26-10-2026     | Preserve abs integer results and widen Int64.MinValue within existing storage (1.26.3).   |
+//                      | Charles Korthout | 5.154 | 26-10-2026     | Retain decimal-backed integer identity in floor and ceiling (1.26.3).                    |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -14972,6 +14973,7 @@ public static class FunctionLibrary
         return arg.Kind switch
         {
             XdmValueKind.Integer => arg,
+            XdmValueKind.Decimal when VmEngine.ValueMatchesType(arg, "xs:integer", ctx) => arg,
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Floor(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Floor(arg.DoubleValue)),
             XdmValueKind.Float => XdmValue.FromFloat((float)Math.Floor(arg.DoubleValue)),
@@ -14988,6 +14990,7 @@ public static class FunctionLibrary
         return arg.Kind switch
         {
             XdmValueKind.Integer => arg,
+            XdmValueKind.Decimal when VmEngine.ValueMatchesType(arg, "xs:integer", ctx) => arg,
             XdmValueKind.Decimal => XdmValue.FromDecimal(Math.Ceiling(arg.DecimalValue)),
             XdmValueKind.Double => XdmValue.FromDouble(Math.Ceiling(arg.DoubleValue)),
             XdmValueKind.Float => XdmValue.FromFloat((float)Math.Ceiling(arg.DoubleValue)),

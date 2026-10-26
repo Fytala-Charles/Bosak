@@ -1,0 +1,17 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\floor-ceiling-integer-probe\Probe.csproj (in 77 ms).
+  7 of 8 projects are up-to-date for restore.
+  Bosak.XPath.Core -> D:\Development\Bosak\src\Bosak.XPath.Core\bin\Release\net10.0\Bosak.XPath.Core.dll
+  Bosak.XPath.Parser -> D:\Development\Bosak\src\Bosak.XPath.Parser\bin\Release\net10.0\Bosak.XPath.Parser.dll
+  Bosak.XPath.Providers -> D:\Development\Bosak\src\Bosak.XPath.Providers\bin\Release\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Compiler -> D:\Development\Bosak\src\Bosak.XPath.Compiler\bin\Release\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\src\Bosak.XPath.Runtime\bin\Release\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\src\Bosak.XPath.Standard\bin\Release\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\src\Bosak.XPath.Api\bin\Release\net10.0\Bosak.XPath.Api.dll
+  Probe -> D:\Development\Bosak\.guard-tmp\floor-ceiling-integer-probe\bin\Release\net10.0\Probe.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.40
