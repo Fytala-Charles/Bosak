@@ -6,7 +6,7 @@
 
 Bosak 1.26.2 is available on NuGet, including exact numeric rounding, extreme precision and signed-zero corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.2-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
-Source 1.26.3 is unpublished. Its [abs correction](docs/xpath40-catalog/ABS-INTEGER-PRESERVATION.md) handles Int64.MinValue, and [floor/ceiling corrections](docs/xpath40-catalog/FLOOR-CEILING-INTEGER-PRESERVATION.md) preserve supported wide-integer identity. Together they add 2,259 passing cases with unchanged frozen gates. The abs evidence records Braid's reported local 1.26.2 automated adoption; its uncommitted status and native acceptance limits remain explicit.
+Source 1.26.3 is unpublished. Its [abs correction](docs/xpath40-catalog/ABS-INTEGER-PRESERVATION.md) handles Int64.MinValue, and [floor/ceiling corrections](docs/xpath40-catalog/FLOOR-CEILING-INTEGER-PRESERVATION.md) preserve supported wide-integer identity. Together with the [floor/ceiling argument audit](docs/xpath40-catalog/FLOOR-CEILING-ARGUMENT-CONTRACT.md), the patch adds 3,061 passing cases with unchanged frozen gates. The abs evidence records Braid's reported local 1.26.2 automated adoption; its uncommitted status and native acceptance limits remain explicit.
 
 
 ---

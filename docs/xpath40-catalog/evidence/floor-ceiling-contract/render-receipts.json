@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/README.md.html",
+      "sha256": "c2cbf075beac53168fc2339e7477130a4d798864660e2b43a8c9c4b767824696"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_ARCHITECTURE.md.html",
+      "sha256": "ccfe63c0404d1d5ca3ad9b999ba3a1357bb375cd8c3489a7580191ce2e806195"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "a0b0cd6449b3bf6507fa65cce99348869c3d91dd43a4dec519be65f7c657cea2"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_INTEGRATION.md.html",
+      "sha256": "f571382109544c4ab662286e51ecae64d78b8e3b4de4982a85a86dbe333391d7"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "9467b7c4bf7c5d314f23c5fc9c75e5e0ca5ca0966213ca7c0cfc170cd19d7a51"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "75c4a597d97e9e34718b1d54a2a09197303264a3f75324a474ca343be7169402"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "9c7e16c3279716bc7fcc7febd019832c56ca3c389bf3910e43eac99e4235ddac"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "6f05395fb554515eb1147a68a1e5acb693789a41157fb6ce461f196b0b574c35"
+    },
+    {
+      "source": "docs/xpath40-catalog/FLOOR-CEILING-ARGUMENT-CONTRACT.md",
+      "html": ".guard-tmp/floor-ceiling-contract-render/docs_xpath40-catalog_FLOOR-CEILING-ARGUMENT-CONTRACT.md.html",
+      "sha256": "f9084168c6a1af61b6e61c312be54cc94e79abc4152bf8faefca3837b2aa567d"
+    }
+  ]
+}

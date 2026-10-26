@@ -1,0 +1,17 @@
+from pathlib import Path
+import subprocess,time,json
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/floor-ceiling-contract';p=r/'.guard-tmp/floor-ceiling-contract-probe';p.mkdir(exist_ok=True)
+program=(r/'.guard-tmp/rounding-precision-probe/Program.cs').read_text(encoding='utf-8')
+imports=(r/'tests/Bosak.XPath.Standard.Tests/FloorCeilingArgumentContractTests.cs').read_text().split('namespace ')[0]
+provider=next(x for x in imports.splitlines() if x.startswith('using Bosak.XPath.Providers'))
+program=program.replace('using Bosak.XPath.Api;','using System.Xml.Linq;\nusing Bosak.XPath.Core.Xdm;\n'+provider+'\nusing Bosak.XPath.Api;')
+program=program.replace('try { var value=', 'try { var document=XDocument.Parse("<root n=\'-2.5\' bad=\'bad\'><n>-2.5</n><n>-3.5</n></root>"); var context=new EvaluationContext().WithFocus(XdmValue.FromNode(new XDocumentNode(document.Root!)),1,1); var value=').replace('.Evaluate(new EvaluationContext())','.Evaluate(context)')
+(p/'Program.cs').write_text(program,encoding='utf-8');(p/'Probe.csproj').write_bytes((r/'.guard-tmp/rounding-precision-probe/Probe.csproj').read_bytes())
+with (e/'probe-build.log').open('wb') as f:subprocess.run(['dotnet','build',str(p/'Probe.csproj'),'-c','Release'],cwd=r,stdout=f,stderr=subprocess.STDOUT,check=True)
+command=['dotnet',str(p/'bin/Release/net10.0/Probe.dll'),str(e/'inputs.json'),str(e/'observations.jsonl'),'after'];start=time.monotonic()
+with (e/'probe.log').open('wb') as f:
+ try:proc=subprocess.run(command,cwd=r,stdout=f,stderr=subprocess.STDOUT,timeout=30);receipt=dict(exitCode=proc.returncode,timeout=False)
+ except subprocess.TimeoutExpired:receipt=dict(exitCode=None,timeout=True)
+receipt.update(command=command,watchdogSeconds=30,wallSeconds=time.monotonic()-start,sourceRevision=subprocess.check_output(['git','rev-parse','HEAD'],cwd=r).decode().strip())
+(e/'probe-receipt.json').write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8');(e/'probe-program.cs.txt').write_text(program,encoding='utf-8');assert receipt['exitCode']==0 and not receipt['timeout']
+print('798 public API observations captured; no timeout.')

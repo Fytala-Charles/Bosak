@@ -1,0 +1,22 @@
+{
+  "base": "1c20de059f268fe6fd76eb355f01b8e6896dc217",
+  "engineSourceUnchanged": true,
+  "sources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "localSha256": "4d50610d2d554a1610902959e8a86fed17b1aa5e0501edfd16508149158121ed",
+      "gitBlob": "6b58f67c84174552e1af9278d348970c2e19658b"
+    },
+    "src/Bosak.XPath.Runtime/Vm/VmEngine.cs": {
+      "localSha256": "8444d8e3bb5e9098d209e9f7f5b030dd590d34ec8a89bdbd8c77bf0404955793",
+      "gitBlob": "85383daf06921a46ff81656cce8174ad66a7ae01"
+    },
+    "src/Directory.Build.props": {
+      "localSha256": "bc8ae9c1baf0a9919257c42a388dc7c0bc44fb7d2b9bafdb860c3c712192aea3",
+      "gitBlob": "4bbd3394519d40282be0d97700cd9416bde8a400"
+    },
+    "tests/Bosak.XPath.Standard.Tests/FloorCeilingArgumentContractTests.cs": {
+      "localSha256": "76855d63bc54d959b006b176dafc51af857f7ebd6640a6bceaf8d28d31215231",
+      "gitBlob": "4268fed8abe9c259938ab0a1481a5c787d86c7e3"
+    }
+  }
+}

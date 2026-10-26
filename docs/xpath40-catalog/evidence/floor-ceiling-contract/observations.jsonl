@@ -1,0 +1,798 @@
+{"profile":"XPath31","Id":0,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":1,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":2,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":3,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":4,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":5,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":6,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":7,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":8,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":9,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":10,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":11,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":12,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":13,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":14,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":15,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":16,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":17,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":18,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":19,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":20,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":21,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":22,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":23,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":24,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":25,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":26,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":27,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":28,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":29,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":30,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":31,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":32,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":33,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":34,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":35,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":36,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":37,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":38,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":39,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":40,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":41,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":42,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":43,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":44,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":45,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":46,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":47,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":48,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":49,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":50,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":51,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":52,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":53,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":54,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":55,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":56,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":57,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":58,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":59,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":60,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":61,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":62,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":63,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":64,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":65,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":66,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":67,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":68,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":69,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":70,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":71,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":72,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":73,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":74,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":75,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":76,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":77,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":78,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":79,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":80,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":81,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":82,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":83,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":84,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":85,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":86,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":87,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":88,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":89,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":90,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":91,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":92,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":93,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":94,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":95,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":96,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":97,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":98,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":99,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":100,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":101,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":102,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":103,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":104,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":105,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":106,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":107,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":108,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":109,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":110,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":111,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":112,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":113,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":114,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":115,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":116,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":117,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":118,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":119,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":120,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":121,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":122,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":123,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":124,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":125,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":126,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":127,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":128,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":129,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":130,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":131,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":132,"value":"floor","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":133,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":134,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":135,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":136,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":137,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":138,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":139,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":140,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":141,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":142,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":143,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":144,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":145,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":146,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":147,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":148,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":149,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":150,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":151,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":152,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":153,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":154,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":155,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":156,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":157,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":158,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":159,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":160,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":161,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":162,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":163,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":164,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":165,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":166,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":167,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":168,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":169,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":170,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":171,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":172,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":173,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":174,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":175,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":176,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":177,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":178,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":179,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":180,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":181,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":182,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":183,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":184,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":185,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":186,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":187,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":188,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":189,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":190,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":191,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":192,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":193,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":194,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":195,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":196,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":197,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":198,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":199,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":200,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":201,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":202,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":203,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":204,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":205,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":206,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":207,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":208,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":209,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":210,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":211,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":212,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":213,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":214,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":215,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":216,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":217,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":218,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":219,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":220,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":221,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":222,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":223,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":224,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":225,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":226,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":227,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":228,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":229,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":230,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":231,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":232,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":233,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":234,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":235,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":236,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":237,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":238,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":239,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":240,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":241,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":242,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":243,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":244,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":245,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":246,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":247,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":248,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":249,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":250,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":251,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":252,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":253,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":254,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":255,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":256,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":257,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":258,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":259,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":260,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":261,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":262,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":263,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":264,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":265,"value":"ceiling","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":0,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":1,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":2,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":3,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":4,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":5,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":6,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":7,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":8,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":9,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":10,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":11,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":12,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":13,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":14,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":15,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":16,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":17,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":18,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":19,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":20,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":21,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":22,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":23,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":24,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":25,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":26,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":27,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":28,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":29,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":30,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":31,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":32,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":33,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":34,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":35,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":36,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":37,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":38,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":39,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":40,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":41,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":42,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":43,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":44,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":45,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":46,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":47,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":48,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":49,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":50,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":51,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":52,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":53,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":54,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":55,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":56,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":57,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":58,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":59,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":60,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":61,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":62,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":63,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":64,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":65,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":66,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":67,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":68,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":69,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":70,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":71,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":72,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":73,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":74,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":75,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":76,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":77,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":78,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":79,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":80,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":81,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":82,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":83,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":84,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":85,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":86,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":87,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":88,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":89,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":90,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":91,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":92,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":93,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":94,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":95,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":96,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":97,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":98,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":99,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":100,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":101,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":102,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":103,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":104,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":105,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":106,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":107,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":108,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":109,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":110,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":111,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":112,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":113,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":114,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":115,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":116,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":117,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":118,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":119,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":120,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":121,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":122,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":123,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":124,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":125,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":126,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":127,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":128,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":129,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":130,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":131,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":132,"value":"floor","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":133,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":134,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":135,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":136,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":137,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":138,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":139,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":140,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":141,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":142,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":143,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":144,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":145,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":146,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":147,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":148,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":149,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":150,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":151,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":152,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":153,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":154,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":155,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":156,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":157,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":158,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":159,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":160,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":161,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":162,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":163,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":164,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":165,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":166,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":167,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":168,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":169,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":170,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":171,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":172,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":173,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":174,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":175,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":176,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":177,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":178,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":179,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":180,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":181,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":182,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":183,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":184,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":185,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":186,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":187,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":188,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":189,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":190,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":191,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":192,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":193,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":194,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":195,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":196,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":197,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":198,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":199,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":200,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":201,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":202,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":203,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":204,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":205,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":206,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":207,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":208,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":209,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":210,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":211,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":212,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":213,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":214,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":215,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":216,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":217,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":218,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":219,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":220,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":221,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":222,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":223,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":224,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":225,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":226,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":227,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":228,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":229,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":230,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":231,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":232,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":233,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":234,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":235,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":236,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":237,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":238,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":239,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":240,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":241,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":242,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":243,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":244,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":245,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":246,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":247,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":248,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":249,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":250,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":251,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":252,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":253,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":254,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":255,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":256,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":257,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":258,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":259,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":260,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":261,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":262,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":263,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":264,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":265,"value":"ceiling","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":0,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":1,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":2,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":3,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":4,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":5,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":6,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":7,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":8,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":9,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":10,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":11,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":12,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":13,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":14,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":15,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":16,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":17,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":18,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":19,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":20,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":21,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":22,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":23,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":24,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":25,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":26,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":27,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":28,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":29,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":30,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":31,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":32,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":33,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":34,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":35,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":36,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":37,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":38,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":39,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":40,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":41,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":42,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":43,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":44,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":45,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":46,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":47,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":48,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":49,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":50,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":51,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":52,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":53,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":54,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":55,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":56,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":57,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":58,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":59,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":60,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":61,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":62,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":63,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":64,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":65,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":66,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":67,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":68,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":69,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":70,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":71,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":72,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":73,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":74,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":75,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":76,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":77,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":78,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":79,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":80,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":81,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":82,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":83,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":84,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":85,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":86,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":87,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":88,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":89,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":90,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":91,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":92,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":93,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":94,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":95,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":96,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":97,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":98,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":99,"value":"-3","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":100,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":101,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":102,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":103,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":104,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":105,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":106,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":107,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":108,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":109,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":110,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":111,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":112,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":113,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":114,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":115,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":116,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":117,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":118,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":119,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":120,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":121,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":122,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":123,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":124,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":125,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":126,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":127,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":128,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":129,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":130,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":131,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":132,"value":"floor","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":133,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":134,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":135,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":136,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":137,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":138,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":139,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":140,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":141,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":142,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":143,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":144,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":145,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":146,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":147,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":148,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":149,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":150,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":151,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":152,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":153,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":154,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":155,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":156,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":157,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":158,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":159,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":160,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":161,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":162,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":163,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":164,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":165,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":166,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":167,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":168,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":169,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":170,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":171,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":172,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":173,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":174,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":175,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":176,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":177,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":178,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":179,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":180,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":181,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":182,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":183,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":184,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":185,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":186,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":187,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":188,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":189,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":190,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":191,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":192,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":193,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":194,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":195,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":196,"value":null,"error":"XPTY0004: Cannot convert value to type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":197,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":198,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":199,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":200,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":201,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":202,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":203,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":204,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":205,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":206,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":207,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":208,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":209,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":210,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":211,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":212,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":213,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":214,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":215,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":216,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":217,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":218,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":219,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":220,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":221,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":222,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":223,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":224,"value":null,"error":"FOTY0013: Cannot atomize a function item or map.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":225,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":226,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":227,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":228,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":229,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":230,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":231,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":232,"value":"-2","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":233,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":234,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":235,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":236,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":237,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":238,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":239,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":240,"value":null,"error":"XPTY0004: Sequence of more than one item not allowed for type xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":241,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":242,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":243,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":244,"value":null,"error":"FORG0001: Cannot cast xs:untypedAtomic \u0027bad\u0027 to xs:numeric?","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":245,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":246,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":247,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":248,"value":"()","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":249,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":250,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":251,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":252,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":253,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":254,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":255,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":256,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":257,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":258,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":259,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":260,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":261,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":262,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":263,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":264,"value":"true","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":265,"value":"ceiling","error":null,"status":"Observed"}

@@ -1,3 +1,5 @@
+26 October 2026: nine floor/ceiling contract-audit/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Unchanged-engine source identity, new test/input/receipt/index hashes, required-error controls, links and diff verified. No correction tally, screenshot/PDF, new Braid acceptance or 1.26.3 publication.
+
 26 October 2026: nine floor/ceiling integer/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Baseline/source/test/receipt/index hashes, numeric identity/sign predicates, links and diff verified; original abs/Braid snapshot retained. No screenshot/PDF, new Braid acceptance or 1.26.3 publication.
 
 26 October 2026: nine abs-integer/adoption/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Baseline/source/test/receipt/index identities, supplied Braid report snapshot, numeric type/sign/error predicates, links and diff verified. No screenshot/PDF, new Braid native acceptance or 1.26.3 publication claimed.
