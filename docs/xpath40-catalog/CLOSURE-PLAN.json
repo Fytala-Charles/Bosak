@@ -1,19 +1,19 @@
 {
   "date": "2026-10-26",
-  "baseline": "closure-plan-v1-c12",
+  "baseline": "closure-plan-v1-c13-accepted",
   "sourceBase": "927d7a458dd90a8b506840c045808f4f27e3c8d1",
   "publishedVersion": "1.26.3",
   "requirement": "REQ-126",
-  "status": "In Progress",
+  "status": "Complete",
   "acceptance": {
-    "AC01": "Open/partial",
-    "AC02": "Open/partial",
-    "AC03": "Open/partial",
-    "AC04": "Open/partial",
-    "AC05": "Met for current scope; maintain"
+    "AC01": "Accepted bounded catalog",
+    "AC02": "Accepted bounded catalog",
+    "AC03": "Accepted bounded catalog",
+    "AC04": "Accepted bounded catalog",
+    "AC05": "Met; maintained"
   },
-  "completedBaselineWork": "C00 decomposition, C01 live inventory and C02 function/options, C03 constructor/type, C04 expression/call/focus, C05 type/collection/pattern, C06 host/profile, C07 lifecycle/disposition, C08 historical research/approved disposition, C09 first19-entry, C10 second19-entry, C11 third19-entry and C12 final19-entry semantic reviews complete; no acceptance criterion closed",
-  "openClosureWorkpackages": 1,
+  "completedBaselineWork": "C00 decomposition and C01-C13 complete; AC-01 through AC-04 explicitly accepted for the bounded catalog, AC-05 maintained.",
+  "openClosureWorkpackages": 0,
   "workpackages": [
     {
       "id": "C01",
@@ -1562,7 +1562,7 @@
     {
       "id": "C13",
       "title": "Final closure review and owner acceptance",
-      "status": "Open",
+      "status": "Complete",
       "acceptanceCriteria": [
         "AC-01",
         "AC-02",
@@ -1593,11 +1593,14 @@
         "C10",
         "C11",
         "C12"
-      ]
+      ],
+      "completionEvidence": "CATALOG-ACCEPTANCE.md",
+      "ownerApproval": "evidence/c13-owner-acceptance/owner-approval.json",
+      "acceptedScope": "Owner-accepted bounded documentation catalog; not full current-draft conformance"
     }
   ],
-  "scopeControl": "C12 completes the fourth 19-entry batch: all 76 now reviewed with explicit limitations; 8 fresh unmet controls remain. C13 final disposition/acceptance is open. C11 reviews19 entries/56 groups with20 unmet requirements and2 URI observations; no final acceptance. C10 reviews19 entries/55 contract groups;10 required draft controls and2 disputed source-example controls remain unmet, separately from2 context observations. C09 reviews19 entries/67 contract groups with explicit blockers and8 unmet current-draft controls; no final acceptance. C08 research recovered zero adoption pins. Explicit owner approval accepts26 scoped legacy exceptions and2 non-adoption dispositions, retaining all original null fields. 13 planned review/closure workpackages, with C01-C12 complete and 1 open. C06 retains a switch comparison mismatch and explicit static-mode/loader boundaries. C05 retains choice-coercion/record-destructuring gaps and known generic-model limits. C04 retains syntax/placeholder/mapping-focus gaps. C02 retains explicit limitations and an unmet atomic annotation contract; no semantic acceptance follows. Finish REQ-126 before skip fixes, Braid or VS Code extension work. Newly discovered defects receive separate tickets; no automatic implementation commitment for every unsupported proposal.",
-  "unrecoverableHistoryPolicy": "Explicit owner approval on2026-10-26 accepts only the original28 records:26 legacy provenance exceptions and2 non-adoptions. All original nulls remain; future work requires immutable source pins, and C09-C13 semantic/defect acceptance remains open.",
+  "scopeControl": "All thirteen REQ-126 workpackages are complete for the explicitly accepted bounded catalog. Earlier proposals/reviews remain immutable historical checkpoints. All technical statuses, expectations and independent correction requirements remain in force; this is not an implementation or conformance promotion.",
+  "unrecoverableHistoryPolicy": "Original C08 approval remains exactly26 legacy provenance exceptions and two non-adoptions. All28 adoption fields stay null. C13 accepts the documented bounded catalog without resolving technical findings or expanding that history exception.",
   "catalogSummary": {
     "entries": 76,
     "featureChecks": 3148,
@@ -1607,5 +1610,7 @@
     "entriesWithoutLiteralGate": 50,
     "entriesWithManifestIds": 41,
     "missingAdoptedSpecPins": 28
-  }
+  },
+  "ownerApproval": "evidence/c13-owner-acceptance/owner-approval.json",
+  "completionEvidence": "CATALOG-ACCEPTANCE.md"
 }

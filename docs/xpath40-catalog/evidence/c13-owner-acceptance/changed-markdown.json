@@ -1,0 +1,17 @@
+[
+  "README.md",
+  "docs/ARCHITECTURE.md",
+  "docs/FEATURE_REQUESTS.md",
+  "docs/INTEGRATION.md",
+  "docs/AGENT_HANDOVER.md",
+  "docs/DOCUMENTATION_RENDERER_TEST.md",
+  "docs/xpath40-catalog/README.md",
+  "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+  "docs/xpath40-catalog/CLOSURE-PLAN.md",
+  "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md",
+  "docs/xpath40-catalog/COMPLETENESS-AUDIT.md",
+  "docs/xpath40-catalog/CLOSEOUT-REVIEW.md",
+  "docs/xpath40-catalog/examples/README.md",
+  "docs/xpath40-catalog/worked-examples/README.md",
+  "docs/xpath40-catalog/CATALOG-ACCEPTANCE.md"
+]
