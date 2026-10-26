@@ -1,0 +1,56 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "3d839b5dee652aa3be67ae4ec2f6ff7c87881cdb650feaa1ab7dacf179166713"
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "fc552aa9482d1f96af49f782a6bb64f2b1d64683a353752b7fda32cfb17345c4"
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "aca4a0aebad07bf0a99d31b95e637f798b5b4e31fd74053ae6923ad9fabe7738"
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "8d0532e57e6a8afe852e09769a43b8bcda8e867bb4bc8bc6c06d5beb8f4e07db"
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "c3bdc8c3eb23453800c0c50323794f3365326ce7e9e04962cabdfd9aa69050f4"
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "a5d15e68310562b68281f594831985249cf593c68c2b3494be7d711d2484838e"
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "12e33797c718de19658d212228fdee465dec926e7dc879eca6eaaf89cbe62d22"
+  },
+  {
+    "id": "Bosak.XQuery",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "3ef53a37096651d941f3f6803b591d2115a646aa35dfb11618789bc0c4b5a5fd"
+  },
+  {
+    "id": "Bosak.Xslt",
+    "version": "1.26.3.0",
+    "informationalVersion": "1.26.3\u002B08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "sha256": "e987000b911f16882b7f18dea3ed16442dea63c3150b6a5ff830e39027dbf275"
+  }
+]

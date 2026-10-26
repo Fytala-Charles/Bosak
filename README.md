@@ -4,9 +4,7 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
-Bosak 1.26.2 is available on NuGet, including exact numeric rounding, extreme precision and signed-zero corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.2-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
-
-The [1.26.3 candidate](docs/RELEASE-1.26.3-CANDIDATE.md) is validated and unpublished: abs, floor and ceiling preserve supported integer results. All 3,061 added source/audit cases pass unchanged in package consumers, with unchanged frozen gates. Public installation remains 1.26.2; its bounded Braid adoption evidence is retained.
+Bosak 1.26.3 is available on NuGet, including abs, floor and ceiling integer-preservation corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.3-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
 
 ---
@@ -84,7 +82,7 @@ Install the [.NET 10 SDK](https://dotnet.microsoft.com/download/dotnet/10), then
 ```bash
 dotnet new console -n BosakDemo
 cd BosakDemo
-dotnet add package Bosak.XPath.Api --version 1.26.2
+dotnet add package Bosak.XPath.Api --version 1.26.3
 ```
 
 Replace `Program.cs` with:
@@ -102,9 +100,9 @@ Run it with `dotnet run`. Reuse `expression` for subsequent evaluations. For tra
 
 | Package | Use it for |
 |---|---|
-| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.2) | Compile and evaluate XPath. |
-| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.2) | Compile stylesheets and transform documents. |
-| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.2) | Compile and evaluate XQuery. |
+| [Bosak.XPath.Api](https://www.nuget.org/packages/Bosak.XPath.Api/1.26.3) | Compile and evaluate XPath. |
+| [Bosak.Xslt](https://www.nuget.org/packages/Bosak.Xslt/1.26.3) | Compile stylesheets and transform documents. |
+| [Bosak.XQuery](https://www.nuget.org/packages/Bosak.XQuery/1.26.3) | Compile and evaluate XQuery. |
 
 Continue with the [API integration guide](docs/INTEGRATION.md) and [feature catalog](docs/xpath40-catalog/README.md).
 
@@ -155,7 +153,7 @@ Install [Bosak XPath / XSLT](https://marketplace.visualstudio.com/items?itemName
 | [Architecture](docs/ARCHITECTURE.md) | Layers, execution pipeline and extension points. |
 | [Integration](docs/INTEGRATION.md) | Public APIs, supported profiles and consumer guidance. |
 | [Roadmap](ROADMAP.md) and [feature requests](docs/FEATURE_REQUESTS.md) | Planned work and current delivery status. |
-| [1.26.2 release notes](docs/RELEASE-NOTES-1.26.2.md) | Release scope, compatibility and limitations. |
+| [1.26.3 release notes](docs/RELEASE-NOTES-1.26.3.md) | Release scope, compatibility and limitations. |
 | [Development history](docs/DEVELOPMENT_HISTORY.md) | Archived implementation checkpoints and the former README reference material. |
 
 Build and test from a source checkout with the .NET 10 SDK:

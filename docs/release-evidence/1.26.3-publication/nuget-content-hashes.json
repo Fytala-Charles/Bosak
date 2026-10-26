@@ -1,0 +1,42 @@
+[
+  {
+    "archive": "Bosak.XPath.Api.1.26.3.nupkg",
+    "contentHash": "qAmi4gs\u002Bey20pAgkC0iYEQJ78BDW1uTOn0EHXmZ2Ojio5N8AKVjIcxPohTP9HZyU0VpnvINlRi29BLio\u002BmiSJg=="
+  },
+  {
+    "archive": "Bosak.XPath.Compiler.1.26.3.nupkg",
+    "contentHash": "HcKOTnM9ockFOZDRsxZMQkFjj1YD8osxJIcPnH7lFfxQPEy9NZg\u002Bo7lTC3bneqUTpMOC4UkvXlAaq5O8XhPL3A=="
+  },
+  {
+    "archive": "Bosak.XPath.Core.1.26.3.nupkg",
+    "contentHash": "0ySQGcNPQfp80ttcChowkoNQYEP5uH6HFl8edLrvi7yDlCw9QTqcndrijqxvQhPSKEgom0MWONtUtTIcegwh0Q=="
+  },
+  {
+    "archive": "Bosak.XPath.Parser.1.26.3.nupkg",
+    "contentHash": "n76QKx6NZNh6xh5MhGaQqqvIc4pMB2C6SP7tFbiRN5faK10LMzVR90Ykg/bDqm34avUpX\u002B/rWQLvFXG6FocRxw=="
+  },
+  {
+    "archive": "Bosak.XPath.Providers.1.26.3.nupkg",
+    "contentHash": "fe8CFzXavftdgJXmwbOhomElfN04NSq60ay6p7rm3QTM7H3/g9O2ucqYiSuUeG7EPAyoDqX2fOOCaspgns3YSA=="
+  },
+  {
+    "archive": "Bosak.XPath.Providers.Database.1.26.3.nupkg",
+    "contentHash": "I/XxXP9pyH1ueWpDquGrWAHyfiTVh7Q1Kw9xAVbnjblYu8wJSYO/UJlorWVyB\u002BNuQanjBi8GAmkCCcsRCLEyyQ=="
+  },
+  {
+    "archive": "Bosak.XPath.Runtime.1.26.3.nupkg",
+    "contentHash": "PP\u002BWqEyESYt2kHegelU3OoXzuLUVvE7wcjgqewD9RehB0mQdpY4WFMCRilXVtW8Rp4kta/DBYOMCAaLU\u002ByECwg=="
+  },
+  {
+    "archive": "Bosak.XPath.Standard.1.26.3.nupkg",
+    "contentHash": "tUKsZcuBd0zauWXmmSlQPN5j57qH4F/bD6h8TqfYbouZgVaML0HRtU1WHf4qjr6Q8yE0hWLzccYU2X4E/LWgIA=="
+  },
+  {
+    "archive": "Bosak.XQuery.1.26.3.nupkg",
+    "contentHash": "9lgy\u002B/uOme2OEODdaaUMMYDrJXEfgRKWhhjvzHJf\u002B3ikheflplhAiXm2eD\u002BH5u3688rm6Qr21l0ER4RRbeVSWw=="
+  },
+  {
+    "archive": "Bosak.Xslt.1.26.3.nupkg",
+    "contentHash": "NVwpBZk1jr\u002BesNkEW2iZIsnqEgYpySzgEk3wr7XjmXJKfoie2HpLgiLXusb3eugQjyGNuiMk5ptTwFfwmQN82w=="
+  }
+]

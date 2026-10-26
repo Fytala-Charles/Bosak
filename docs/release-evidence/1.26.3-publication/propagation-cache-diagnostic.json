@@ -1,0 +1,42 @@
+[
+  {
+    "kind": "normal",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/1.26.3/bosak.xpath.api.1.26.3.nupkg",
+    "status": 404,
+    "headers": {
+      "Date": "Mon, 26 Oct 2026 12:34:57 GMT",
+      "Content-Type": "application/xml",
+      "Content-Length": "215",
+      "Connection": "close",
+      "x-ms-request-id": "980b43f3-101e-0043-2146-655bab000000",
+      "x-ms-version": "2009-09-19",
+      "Access-Control-Expose-Headers": "x-ms-request-id,Server,x-ms-version,Content-Length,Date,Transfer-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "x-azure-ref": "20261026T123457Z-16cd6f5698c6vhnkhC1AMSxum00000000a6g00000000n3z1",
+      "x-fd-int-roxy-purgeid": "0",
+      "X-Cache": "TCP_MISS",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff"
+    }
+  },
+  {
+    "kind": "fresh-query",
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xpath.api/1.26.3/bosak.xpath.api.1.26.3.nupkg?verification=1793018098691707100",
+    "status": 404,
+    "headers": {
+      "Date": "Mon, 26 Oct 2026 12:34:57 GMT",
+      "Content-Type": "application/xml",
+      "Content-Length": "215",
+      "Connection": "close",
+      "x-ms-request-id": "d80d533c-001e-002d-6a46-650e84000000",
+      "x-ms-version": "2009-09-19",
+      "Access-Control-Expose-Headers": "x-ms-request-id,Server,x-ms-version,Content-Length,Date,Transfer-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "x-azure-ref": "20261026T123457Z-16cd6f5698c2wz8shC1AMSgntg00000009q000000001nzg2",
+      "x-fd-int-roxy-purgeid": "0",
+      "X-Cache": "TCP_MISS",
+      "Strict-Transport-Security": "max-age=31536000; includeSubDomains",
+      "X-Content-Type-Options": "nosniff"
+    }
+  }
+]

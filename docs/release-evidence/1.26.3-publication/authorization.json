@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-26",
+  "ownerInstruction": "Merge, tag and publish is approved",
+  "approvedSource": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "version": "1.26.3",
+  "candidateDocumentationCommit": "1e376158f4b98e0b26e98cc794388cdb39f896b0",
+  "integrationPR": 465,
+  "releaseWorkflow": "release.yml",
+  "manualDuplicateDispatchAuthorized": false
+}
