@@ -6,7 +6,7 @@
 
 Bosak 1.26.1 is available on NuGet, including atomic argument/cardinality and rounding corrections. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.1-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
-Source 1.26.2 is unpublished. Its [bounded extreme-precision correction](docs/xpath40-catalog/ROUNDING-PRECISION-BOUNDARIES.md) preserves numeric types, signed zero and special values for very large rounding precisions, with 1,321 regressions and unchanged frozen gates. Remaining numerical-kernel findings are documented separately.
+Source 1.26.2 is unpublished. Its [extreme-precision correction](docs/xpath40-catalog/ROUNDING-PRECISION-BOUNDARIES.md) and [exact rounding kernels](docs/xpath40-catalog/ROUNDING-KERNELS.md) preserve numeric types and signed zero, avoid intermediate scaling overflow, and add 4,201 passing cases with unchanged frozen gates. The sampled kernel findings are resolved; corrected diagnostic expectations and original receipts are retained.
 
 
 ---

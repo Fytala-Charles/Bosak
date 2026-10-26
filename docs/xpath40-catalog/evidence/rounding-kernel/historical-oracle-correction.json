@@ -1,0 +1,27 @@
+{
+  "reason": "The exact binary 1e300 is within half a double ULP of its multiple of 10^29; rounding to precision -29 returns the same double, not zero.",
+  "affectedInputRows": 4,
+  "affectedProfileObservations": 12,
+  "corrections": [
+    {
+      "Id": 208,
+      "originalExpression": "let $r := round(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+      "correctedExpression": "let $r := round(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq (1e300))"
+    },
+    {
+      "Id": 209,
+      "originalExpression": "let $r := round#2(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+      "correctedExpression": "let $r := round#2(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq (1e300))"
+    },
+    {
+      "Id": 714,
+      "originalExpression": "let $r := round-half-to-even(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+      "correctedExpression": "let $r := round-half-to-even(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq (1e300))"
+    },
+    {
+      "Id": 715,
+      "originalExpression": "let $r := round-half-to-even#2(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq 0 and (1 div $r) eq xs:double('INF'))",
+      "correctedExpression": "let $r := round-half-to-even#2(1e300,xs:integer('-29')) return ($r instance of xs:double and $r eq (1e300))"
+    }
+  ]
+}

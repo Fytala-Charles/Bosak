@@ -1,0 +1,13 @@
+{
+  "exitCode": 0,
+  "timeout": false,
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\rounding-kernel-probe\\bin\\Release\\net10.0\\Probe.dll",
+    "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\rounding-kernel\\oracle-inputs.json",
+    "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\rounding-kernel\\oracle-after.jsonl",
+    "after"
+  ],
+  "wallSeconds": 0.44515210000099614,
+  "watchdogSeconds": 30
+}

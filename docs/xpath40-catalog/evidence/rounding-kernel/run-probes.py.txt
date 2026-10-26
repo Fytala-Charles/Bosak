@@ -1,0 +1,30 @@
+from pathlib import Path
+import subprocess,json,time,shutil
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/rounding-kernel'
+old=json.loads((r/'docs/xpath40-catalog/evidence/rounding-precision/inputs.json').read_text())
+corrections=[]
+for row in old:
+ row['BaselineSafe']=True
+ if row['argument']=='1e300' and row['precision']=='-29':
+  original=row['Expression']
+  row['Expression']=original.replace("$r eq 0 and (1 div $r) eq xs:double('INF')","$r eq (1e300)")
+  assert row['Expression']!=original
+  row['mathematicalResult']='identity'
+  corrections.append(dict(Id=row['Id'],originalExpression=original,correctedExpression=row['Expression']))
+(e/'historical-oracle-correction.json').write_text(json.dumps(dict(reason='The exact binary 1e300 is within half a double ULP of its multiple of 10^29; rounding to precision -29 returns the same double, not zero.',affectedInputRows=len(corrections),affectedProfileObservations=len(corrections)*3,corrections=corrections),indent=2)+'\n',encoding='utf-8')
+(e/'historical-matrix-inputs.json').write_text(json.dumps(old,indent=2)+'\n',encoding='utf-8')
+program=(r/'.guard-tmp/rounding-precision-probe/Program.cs').read_text()
+for phase,project,api in [('before','rounding-kernel-baseline-probe','../rounding-kernel-baseline-source/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj'),('after','rounding-kernel-probe','../../src/Bosak.XPath.Api/Bosak.XPath.Api.csproj')]:
+ p=r/'.guard-tmp'/project;p.mkdir(exist_ok=True);(p/'Program.cs').write_text(program,encoding='utf-8')
+ (p/'Probe.csproj').write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup><ItemGroup><ProjectReference Include="'+api+'" /></ItemGroup></Project>',encoding='utf-8')
+ with (e/(phase+'-probe-build.log')).open('wb') as f:subprocess.run(['dotnet','build',str(p/'Probe.csproj'),'-c','Release','--no-dependencies'],cwd=r,stdout=f,stderr=subprocess.STDOUT,check=True)
+ for matrix in ['oracle','historical-matrix']:
+  command=['dotnet',str(p/'bin/Release/net10.0/Probe.dll'),str(e/(matrix+'-inputs.json')),str(e/(matrix+'-'+phase+'.jsonl')),'after']
+  start=time.monotonic()
+  with (e/(matrix+'-'+phase+'.log')).open('wb') as f:
+   try:proc=subprocess.run(command,cwd=r,stdout=f,stderr=subprocess.STDOUT,timeout=30);receipt=dict(exitCode=proc.returncode,timeout=False)
+   except subprocess.TimeoutExpired:receipt=dict(exitCode=None,timeout=True)
+  receipt.update(command=command,wallSeconds=time.monotonic()-start,watchdogSeconds=30)
+  (e/(matrix+'-'+phase+'-receipt.json')).write_text(json.dumps(receipt,indent=2)+'\n',encoding='utf-8');assert receipt['exitCode']==0 and not receipt['timeout']
+  print(phase+' '+matrix+' completed',flush=True)
+shutil.copyfile(r/'.guard-tmp/rounding-precision-probe/Program.cs',e/'probe-program.cs.txt')

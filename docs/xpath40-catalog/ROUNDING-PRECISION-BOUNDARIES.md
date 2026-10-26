@@ -4,6 +4,8 @@
   <p>26 October 2026 — source 1.26.2 unpublished; public 1.26.1 unchanged</p>
 </div>
 
+**Subsequent correction — 26 October 2026:** [Exact rounding kernels and expectation correction](ROUNDING-KERNELS.md) supersede the remaining-work interpretation below: the 612 recorded predicate discrepancies comprise 600 actual rounding discrepancies (now corrected) and 12 invalid expectations for `1e300` at precision `-29`. Original raw evidence and this step's receipts remain unchanged. Braid smoke has since finished per owner; no outcome supplied.
+
 This REQ-126 slice starts from main `d09b3c571117f58bc7e8aa9f48ce91708d3b51de`, after [verified 1.26.1 publication](../RELEASE-1.26.1-PUBLICATION.md). Braid is conducting its 1.26.1 smoke test, as reported by the owner; no result or new native acceptance is inferred here. The new correction begins unpublished **1.26.2**.
 
 ## Contract and independent expectations

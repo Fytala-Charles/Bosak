@@ -469,6 +469,7 @@
 //                      | Charles Korthout | 5.149 | 25-10-2026     | Enforce fn:abs numeric optional argument conversion without changing function identity.    |
 //                      | Charles Korthout | 5.150 | 26-10-2026     | Enforce rounding numeric and precision contracts while preserving function coercion types. |
 //                      | Charles Korthout | 5.151 | 26-10-2026     | Bound extreme rounding precision and accept decimal-backed integer precision (1.26.2).     |
+//                      | Charles Korthout | 5.152 | 26-10-2026     | Round exact numeric coefficients; preserve zero signs and integer results (1.26.2).       |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -15063,179 +15064,10 @@ public static class FunctionLibrary
 
     private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
     {
-        // Validate before the empty and large-precision shortcuts, retaining the
-        // existing registration types used by named-function coercion.
         arg = VmEngine.ApplyFunctionConversion(arg, "xs:numeric?", ctx);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return ctx.BackwardsCompatible ? XdmValue.FromDouble(double.NaN) : XdmValue.Undefined;
-
-        // Precision beyond the significant digits of any supported numeric type
-        // is the identity function (avoids int overflow for huge precisions).
-        if (precision > 1000)
-            return arg;
-
-        // All supported finite magnitudes are below 10^309. At this precision
-        // they round to zero; preserve floating signs and special values.
-        if (precision < -1000)
-            return RoundToExtremeZero(ctx, arg);
-
-        // For non-numeric types (string, untypedAtomic, etc.), convert to double first.
-        bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
-        if (!isNumeric)
-        {
-            double d = ConvertToDouble(arg);
-            if (double.IsNaN(d)) return XdmValue.FromDouble(double.NaN);
-            return XdmValue.FromDouble(RoundDouble(d, (int)precision));
-        }
-
-        if (precision >= 0)
-        {
-            int p = (int)precision;
-            return arg.Kind switch
-            {
-                XdmValueKind.Integer => arg,
-                XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(RoundDecimal(arg.DecimalValue, p)),
-                XdmValueKind.Double =>
-                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue, p)),
-                XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)RoundDouble(arg.DoubleValue, p)),
-                _ => throw new InvalidOperationException("XPTY0004")
-            };
-        }
-        else
-        {
-            return arg.Kind switch
-            {
-                // Per F+O 3.1 the result is an instance of the argument's type, so
-                // rounding an xs:integer (even with negative precision) stays xs:integer.
-                XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)RoundDecimal((decimal)arg.IntegerValue, (int)precision)),
-                XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(RoundDecimal(arg.DecimalValue, (int)precision)),
-                XdmValueKind.Double =>
-                    XdmValue.FromDouble(RoundDouble(arg.DoubleValue, (int)precision)),
-                XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)RoundDouble(arg.DoubleValue, (int)precision)),
-                _ => throw new InvalidOperationException("XPTY0004")
-            };
-        }
-    }
-
-    private static double RoundDouble(double value, int precision)
-    {
-        if (double.IsNaN(value) || double.IsInfinity(value))
-            return value;
-
-        // For values that fit in decimal, round via an exact decimal representation
-        // so ties reflect the true double value (e.g. -13.65e0 rounds to -13.7).
-        if (Math.Abs(value) is >= 1e-28 and <= (double)decimal.MaxValue)
-        {
-            try
-            {
-                var dec = DoubleToExactDecimal(value);
-                return (double)RoundDecimal(dec, precision);
-            }
-            catch { /* fall back to double arithmetic */ }
-        }
-
-        // fn:round rounds to nearest; ties are rounded toward positive infinity.
-        // For magnitudes where the exact-decimal path above does not apply, compute
-        // value * 10^precision exactly with rational arithmetic so the rounded integer
-        // converts back to the nearest double of the exact result (math-3701: 9.9e-99
-        // rounds to the double whose shortest form is 1.0E-98, not 1.0000000000000001E-98).
-        return RoundDoubleExact(value, precision);
-    }
-
-    /// <summary>
-    /// Rounds a double to <paramref name="precision"/> decimal places using exact
-    /// BigInteger rational arithmetic: the double is decomposed as mantissa × 2^exp and
-    /// scaled by 10^precision exactly; fn:round is floor(scaled + 0.5). The rounded
-    /// integer is converted back by formatting the exact decimal and parsing to the
-    /// nearest double (.NET parses correctly rounded).
-    /// </summary>
-    private static double RoundDoubleExact(double value, int precision)
-    {
-        if (value == 0.0)
-            return value;
-
-        long bits = BitConverter.DoubleToInt64Bits(value);
-        int rawExp = (int)((bits >> 52) & 0x7FF);
-        long mantissa = bits & 0xFFFFFFFFFFFFFL;
-        int exp = rawExp == 0 ? -1074 : rawExp - 1075;
-        if (rawExp != 0)
-            mantissa |= 1L << 52;
-        var numerator = new BigInteger(bits < 0 ? -mantissa : mantissa);
-        var denominator = BigInteger.One;
-
-        // scaled = value * 10^precision = mantissa * 2^(exp+precision) * 5^precision.
-        if (precision >= 0)
-            numerator *= BigInteger.Pow(5, precision);
-        else
-            denominator = BigInteger.Pow(5, -precision);
-        int binExp = exp + precision;
-        if (binExp >= 0)
-            numerator <<= binExp;
-        else
-            denominator <<= -binExp;
-
-        // fn:round = floor(scaled + 0.5); BigInteger division truncates toward zero,
-        // so negative non-exact quotients need a true-floor adjustment.
-        var twoN = (numerator << 1) + denominator;
-        var twoD = denominator << 1;
-        var q0 = BigInteger.Divide(twoN, twoD);
-        if (twoN.Sign < 0 && twoN != q0 * twoD)
-            q0 -= BigInteger.One;
-
-        // Result = q0 * 10^-precision as an exact decimal string, parsed to the
-        // nearest double.
-        string result = q0.ToString(CultureInfo.InvariantCulture)
-            + "E" + (-precision).ToString(CultureInfo.InvariantCulture);
-        return double.Parse(result, NumberStyles.Float, CultureInfo.InvariantCulture);
-    }
-
-    private static decimal RoundDecimal(decimal value, int precision)
-    {
-        if (precision >= 0)
-        {
-            decimal factor = (decimal)Math.Pow(10.0, precision);
-            if (factor == 0m || Math.Abs(value) > decimal.MaxValue / factor)
-                return value;
-            decimal scaled = value * factor;
-            decimal floor = Math.Floor(scaled);
-            decimal ceil = Math.Ceiling(scaled);
-            decimal diffFloor = scaled - floor;
-            decimal diffCeil = ceil - scaled;
-            if (diffFloor < diffCeil) return floor / factor;
-            if (diffCeil < diffFloor) return ceil / factor;
-            return ceil / factor;
-        }
-        else
-        {
-            decimal factor = (decimal)Math.Pow(10.0, -precision);
-            if (factor == 0m)
-                return value;
-            decimal scaled = value / factor;
-            decimal floor = Math.Floor(scaled);
-            decimal ceil = Math.Ceiling(scaled);
-            decimal diffFloor = scaled - floor;
-            decimal diffCeil = ceil - scaled;
-            if (diffFloor < diffCeil) return floor * factor;
-            if (diffCeil < diffFloor) return ceil * factor;
-            return ceil * factor;
-        }
-    }
-
-    /// <summary>
-    /// Converts a double to a decimal using enough digits to preserve rounding decisions.
-    /// Values smaller than the decimal range underflow to zero; values larger overflow and throw.
-    /// </summary>
-    private static decimal DoubleToExactDecimal(double value)
-    {
-        var s = value.ToString("G30", CultureInfo.InvariantCulture);
-        if (decimal.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out var d))
-            return d;
-        return (decimal)value;
+        return RoundNumeric(ctx, arg, precision, halfToEven: false);
     }
 
     private static XdmValue RoundHalfToEven_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
@@ -15249,104 +15081,121 @@ public static class FunctionLibrary
         arg = VmEngine.ApplyFunctionConversion(arg, "xs:numeric?", ctx);
         if (arg.IsUndefined || IsEmptySequence(arg))
             return XdmValue.Undefined;
+        return RoundNumeric(ctx, arg, precision, halfToEven: true);
+    }
 
-        // Precision beyond the significant digits of any supported numeric type
-        // is the identity function (avoids int overflow for huge precisions).
+    /// <summary>Rounds a converted numeric value while retaining its primitive numeric type.</summary>
+    /// <param name="ctx">The context used to recognize decimal-backed integers.</param>
+    /// <param name="arg">The converted numeric value.</param>
+    /// <param name="precision">The number of decimal places.</param>
+    /// <param name="halfToEven">Whether midpoint ties choose an even digit.</param>
+    /// <returns>The rounded value, preserving floating zero signs and special values.</returns>
+    private static XdmValue RoundNumeric(EvaluationContext ctx, XdmValue arg, long precision, bool halfToEven)
+    {
         if (precision > 1000)
             return arg;
-
         if (precision < -1000)
             return RoundToExtremeZero(ctx, arg);
 
-        // For non-numeric types (string, untypedAtomic, etc.), convert to double first:
-        // the function conversion rules cast untypedAtomic to xs:double for an xs:numeric
-        // parameter (hof-043).
-        bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
-        if (!isNumeric)
+        bool integer = arg.Kind == XdmValueKind.Integer
+            || (arg.Kind == XdmValueKind.Decimal && VmEngine.ValueMatchesType(arg, "xs:integer", ctx));
+        if (integer && precision >= 0)
+            return arg;
+        if (integer || arg.Kind == XdmValueKind.Decimal)
         {
-            double d = ConvertToDouble(arg);
-            if (double.IsNaN(d)) return XdmValue.FromDouble(double.NaN);
-            return XdmValue.FromDouble(RoundHalfToEvenDouble(d, (int)precision));
+            decimal value = arg.Kind == XdmValueKind.Integer ? arg.IntegerValue : arg.DecimalValue;
+            decimal rounded = RoundDecimal(value, (int)precision, halfToEven);
+            if (!integer)
+                return XdmValue.FromDecimal(rounded);
+            return rounded >= long.MinValue && rounded <= long.MaxValue
+                ? XdmValue.FromInteger((long)rounded)
+                : XdmValue.FromDecimal(rounded, "integer");
         }
 
-        if (precision >= 0)
-        {
-            return arg.Kind switch
-            {
-                XdmValueKind.Integer => arg,
-                XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(RoundHalfToEvenDecimal(arg.DecimalValue, (int)precision)),
-                XdmValueKind.Double =>
-                    XdmValue.FromDouble(RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
-                XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
-                _ => throw new InvalidOperationException("XPTY0004")
-            };
-        }
-        else
-        {
-            return arg.Kind switch
-            {
-                // Per F+O 3.1 the result is an instance of the argument's type, so
-                // rounding an xs:integer (even with negative precision) stays xs:integer.
-                XdmValueKind.Integer =>
-                    XdmValue.FromInteger((long)RoundHalfToEvenDecimal((decimal)arg.IntegerValue, (int)precision)),
-                XdmValueKind.Decimal =>
-                    XdmValue.FromDecimal(RoundHalfToEvenDecimal(arg.DecimalValue, (int)precision)),
-                XdmValueKind.Double =>
-                    XdmValue.FromDouble(RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
-                XdmValueKind.Float =>
-                    XdmValue.FromFloat((float)RoundHalfToEvenDouble(arg.DoubleValue, (int)precision)),
-                _ => throw new InvalidOperationException("XPTY0004")
-            };
-        }
+        double binary = arg.DoubleValue;
+        if (!double.IsFinite(binary) || binary == 0d)
+            return arg;
+        string exact = RoundBinaryExact(binary, (int)precision, halfToEven);
+        // Parse directly into the destination format to avoid double rounding of floats.
+        return arg.Kind == XdmValueKind.Float
+            ? XdmValue.FromFloat(float.Parse(exact, NumberStyles.Float, CultureInfo.InvariantCulture))
+            : XdmValue.FromDouble(double.Parse(exact, NumberStyles.Float, CultureInfo.InvariantCulture));
     }
 
-    private static double RoundHalfToEvenDouble(double value, int precision)
+    private static double RoundDouble(double value, int precision)
+        => !double.IsFinite(value) || value == 0d ? value
+            : double.Parse(RoundBinaryExact(value, precision, halfToEven: false), NumberStyles.Float, CultureInfo.InvariantCulture);
+
+    /// <summary>Rounds an exact signed rational to an integer without floating intermediate values.</summary>
+    /// <param name="numerator">The signed numerator.</param>
+    /// <param name="denominator">The positive denominator.</param>
+    /// <param name="halfToEven">Whether ties choose an even integer rather than positive infinity.</param>
+    /// <returns>The nearest integer under the selected tie rule.</returns>
+    private static BigInteger RoundRational(BigInteger numerator, BigInteger denominator, bool halfToEven)
     {
-        if (double.IsNaN(value) || double.IsInfinity(value))
+        BigInteger quotient = BigInteger.DivRem(BigInteger.Abs(numerator), denominator, out var remainder);
+        int comparison = (remainder << 1).CompareTo(denominator);
+        if (comparison > 0 || (comparison == 0 && (halfToEven ? !quotient.IsEven : numerator.Sign > 0)))
+            quotient += BigInteger.One;
+        return numerator.Sign < 0 ? -quotient : quotient;
+    }
+
+    /// <summary>Rounds the exact IEEE binary value and returns its exact decimal scientific notation.</summary>
+    /// <param name="value">A finite nonzero double, including an exactly promoted float.</param>
+    /// <param name="precision">The bounded decimal precision.</param>
+    /// <param name="halfToEven">Whether midpoint ties choose an even digit.</param>
+    /// <returns>Exact decimal notation ready for one correctly rounded destination-format parse.</returns>
+    private static string RoundBinaryExact(double value, int precision, bool halfToEven)
+    {
+        long bits = BitConverter.DoubleToInt64Bits(value);
+        int rawExp = (int)((bits >> 52) & 0x7FF);
+        long mantissa = bits & 0xFFFFFFFFFFFFFL;
+        int exp = rawExp == 0 ? -1074 : rawExp - 1075;
+        if (rawExp != 0)
+            mantissa |= 1L << 52;
+        var numerator = new BigInteger(bits < 0 ? -mantissa : mantissa);
+        var denominator = BigInteger.One;
+        if (precision >= 0)
+            numerator *= BigInteger.Pow(5, precision);
+        else
+            denominator = BigInteger.Pow(5, -precision);
+        int binaryExponent = exp + precision;
+        if (binaryExponent >= 0)
+            numerator <<= binaryExponent;
+        else
+            denominator <<= -binaryExponent;
+        BigInteger rounded = RoundRational(numerator, denominator, halfToEven);
+        if (rounded.IsZero)
+            return bits < 0 ? "-0" : "0";
+        return rounded.ToString(CultureInfo.InvariantCulture)
+            + "E" + (-precision).ToString(CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>Rounds a decimal coefficient exactly without overflowing an intermediate scale factor.</summary>
+    /// <param name="value">The supported decimal value.</param>
+    /// <param name="precision">The bounded decimal precision.</param>
+    /// <param name="halfToEven">Whether midpoint ties choose an even digit.</param>
+    /// <returns>The rounded decimal.</returns>
+    /// <exception cref="OverflowException">The rounded result exceeds decimal storage (FOAR0002).</exception>
+    private static decimal RoundDecimal(decimal value, int precision, bool halfToEven)
+    {
+        Span<int> bits = stackalloc int[4];
+        decimal.GetBits(value, bits);
+        int scale = (bits[3] >> 16) & 0xFF;
+        if (precision >= scale)
             return value;
-
-        // Use the exact decimal representation of the double so rounding reflects the
-        // true double value (e.g. 150.015e0 -> 150.01, 250.025e0 -> 250.03).
-        if (Math.Abs(value) is >= 1e-28 and <= (double)decimal.MaxValue)
-        {
-            try
-            {
-                var dec = DoubleToExactDecimal(value);
-                return (double)RoundHalfToEvenDecimal(dec, precision);
-            }
-            catch { /* fall back to double arithmetic */ }
-        }
-
-        if (precision >= 0)
-        {
-            double factor = Math.Pow(10.0, precision);
-            return Math.Round(value * factor, MidpointRounding.ToEven) / factor;
-        }
-        else
-        {
-            double factor = Math.Pow(10.0, -precision);
-            return Math.Round(value / factor, MidpointRounding.ToEven) * factor;
-        }
-    }
-
-    private static decimal RoundHalfToEvenDecimal(decimal value, int precision)
-    {
-        if (precision >= 0)
-        {
-            decimal factor = (decimal)Math.Pow(10.0, precision);
-            if (factor == 0m || Math.Abs(value) > decimal.MaxValue / factor)
-                return value;
-            return Math.Round(value * factor, MidpointRounding.ToEven) / factor;
-        }
-        else
-        {
-            decimal factor = (decimal)Math.Pow(10.0, -precision);
-            if (factor == 0m)
-                return value;
-            return Math.Round(value / factor, MidpointRounding.ToEven) * factor;
-        }
+        int removedDigits = scale - precision;
+        // A decimal coefficient has at most 29 digits, so larger divisors round to zero.
+        if (removedDigits > 29)
+            return 0m;
+        BigInteger coefficient = (uint)bits[0] | ((BigInteger)(uint)bits[1] << 32) | ((BigInteger)(uint)bits[2] << 64);
+        if (value < 0m)
+            coefficient = -coefficient;
+        BigInteger rounded = RoundRational(coefficient, BigInteger.Pow(10, removedDigits), halfToEven);
+        if (precision < 0)
+            rounded *= BigInteger.Pow(10, -precision);
+        decimal result = (decimal)rounded;
+        return precision > 0 ? result / (decimal)BigInteger.Pow(10, precision) : result;
     }
 
     // ------------------------------------------------------------------

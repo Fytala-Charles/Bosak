@@ -1,0 +1,134 @@
+[
+  {
+    "path": "before-tests/charl_CHARLES_2026-10-26_10_39_25_net10.0.trx",
+    "sha256": "0c92e4867ec1c02c9bde98d1b7dad9909739bc363010b6b812e91e5849bb14b4",
+    "counters": {
+      "total": 0,
+      "executed": 0,
+      "passed": 0,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  {
+    "path": "before-tests/charl_CHARLES_2026-10-26_10_39_41_net10.0.trx",
+    "sha256": "25234a762d2c7c93accd21408c69a5a8d2d190fcac5873465e4053439c8b4dbe",
+    "counters": {
+      "total": 2880,
+      "executed": 2880,
+      "passed": 1656,
+      "failed": 1224,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  {
+    "path": "after-tests/charl_CHARLES_2026-10-26_10_40_43_net10.0.trx",
+    "sha256": "633d190619afe610b48faa14ff5bcd59b2b4616e780e394574e553e5297bf629",
+    "counters": {
+      "total": 2880,
+      "executed": 2880,
+      "passed": 2700,
+      "failed": 180,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  {
+    "path": "corrected-before-tests/charl_CHARLES_2026-10-26_10_41_36_net10.0.trx",
+    "sha256": "8cc884dacf291d18f86a58b3223d8d2f1de3dedf42612e2fc0051f589ad1c266",
+    "counters": {
+      "total": 2880,
+      "executed": 2880,
+      "passed": 1770,
+      "failed": 1110,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  {
+    "path": "corrected-after-tests/charl_CHARLES_2026-10-26_10_41_25_net10.0.trx",
+    "sha256": "05d7f9b618663f6a0d6676424d7ab29f1d117eb3855dbec1b2889015abf9f506",
+    "counters": {
+      "total": 2880,
+      "executed": 2880,
+      "passed": 2844,
+      "failed": 36,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  },
+  {
+    "path": "final-after-tests/charl_CHARLES_2026-10-26_10_42_29_net10.0.trx",
+    "sha256": "9ca51fb1e708eaa558ba85e08d52e2eed3c38c425966c6a7c9b33940319a4aef",
+    "counters": {
+      "total": 2880,
+      "executed": 2880,
+      "passed": 2880,
+      "failed": 0,
+      "error": 0,
+      "timeout": 0,
+      "aborted": 0,
+      "inconclusive": 0,
+      "passedButRunAborted": 0,
+      "notRunnable": 0,
+      "notExecuted": 0,
+      "disconnected": 0,
+      "warning": 0,
+      "completed": 0,
+      "inProgress": 0,
+      "pending": 0
+    }
+  }
+]

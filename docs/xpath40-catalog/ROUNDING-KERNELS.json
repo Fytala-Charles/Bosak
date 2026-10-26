@@ -1,0 +1,63 @@
+{
+  "base": "b75f7172232f2696f0cfdfdae835261bc0f75d84",
+  "sourceVersion": "1.26.2",
+  "publishedVersion": "1.26.1",
+  "publicationPerformed": false,
+  "sources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "localSha256": "61b8a04af33cf3c0d0b5fbfeeb183b7e8cedeafa82a48da3b82fa5aeb60b71af",
+      "gitBlob": "2ff18feb6b0f7592a4572de0b93b53a64f021b72"
+    },
+    "src/Directory.Build.props": {
+      "localSha256": "2589e3e4629b7963b9040b0bb23ac914e0a83f3906d168f19919613409383060",
+      "gitBlob": "b2978a49e30a518a5765542f1cffbdd50696820b"
+    },
+    "tests/Bosak.XPath.Standard.Tests/RoundingKernelTests.cs": {
+      "localSha256": "64a707bce6455be5b3a040c556e88953b6002bade3aa57240cdf17759e070058",
+      "gitBlob": "02f64cb7525cf43395168d29e9351fa62433468b"
+    }
+  },
+  "focusedCases": 2880,
+  "correctedBaseline": {
+    "failed": 1110,
+    "passed": 1770
+  },
+  "solutionPassed": 18737,
+  "languageServerPassed": 84,
+  "qt3": [
+    31142,
+    0,
+    679
+  ],
+  "frozenQt4": [
+    8436,
+    0,
+    1894
+  ],
+  "experimentalFallbackPasses": 11,
+  "diagnostics": {
+    "oracle": {
+      "rows": 1440,
+      "baselineDiscrepancies": 555,
+      "afterDiscrepancies": 0,
+      "corrected": 555,
+      "regressions": 0
+    },
+    "historical-matrix": {
+      "rows": 3036,
+      "baselineDiscrepancies": 600,
+      "afterDiscrepancies": 0,
+      "corrected": 600,
+      "regressions": 0
+    }
+  },
+  "priorMatrixExpectationCorrection": {
+    "observations": 12,
+    "actualBaselineDiscrepancies": 600,
+    "originalReceiptsPreserved": true
+  },
+  "evidenceManifest": "evidence/rounding-kernel/manifest.json",
+  "evidenceManifestSha256": "fda9a60fd835d6f3fc77ac034ce1a146cee29feab81ef2c523c2fc241c19473a",
+  "renderer": "10 HTML pages; unchanged Fytala CSS; no screenshot/PDF acceptance",
+  "scope": "Exact rounding kernels within existing numeric storage; no constructor/storage/publication change"
+}
