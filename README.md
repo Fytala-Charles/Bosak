@@ -4,6 +4,8 @@
   <p>Query XML. Transform documents. Build visual XSLT workflows.</p>
 </div>
 
+Source 1.26.1 remains unpublished. Its latest [atomic function conversion correction](docs/xpath40-catalog/ATOMIC-FUNCTION-CONVERSION.md) makes `abs` handle recursively atomized arrays and enforce singleton cardinality while preserving named-function identity; 366 new regressions and unchanged frozen gates are verified. Public 1.26.0 remains current.
+
 Bosak 1.26.0 is available on NuGet. Visual/source editors can wrap supported output elements in a condition, edit the condition and unwrap them with exact source and graph provenance. [Verified release](docs/RELEASE-1.26.0-PUBLICATION.md) and [authoring API](docs/REQ-138-IMPLEMENTATION.md).
 
 

@@ -1,0 +1,13 @@
+// Generated local diagnostic probe; records observed results, not normative passing assertions.
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using System.Text.Json;
+var records = new List<object>();
+foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+foreach (var expression in JsonSerializer.Deserialize<string[]>(File.ReadAllText(args[1]))!)
+{
+ try { var value = XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(new EvaluationContext()); records.Add(new { profile=profile.ToString(), expression, value=value.ToString(), error=(string?)null }); }
+ catch (Exception exception) { records.Add(new { profile=profile.ToString(), expression, value=(string?)null, error=exception.Message, exceptionType=exception.GetType().FullName }); }
+}
+File.WriteAllText(args[0], JsonSerializer.Serialize(records, new JsonSerializerOptions { WriteIndented=true }));
+Console.WriteLine($"Retained {records.Count} observed diagnostics; no native assertion rewritten.");

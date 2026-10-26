@@ -1,0 +1,9 @@
+{
+  "arrayBeforeDiscrepancies": 36,
+  "arrayAfterDiscrepancies": 0,
+  "flatBeforeDiscrepancies": 12,
+  "flatAfterDiscrepancies": 0,
+  "arrayCorrected": 36,
+  "flatCorrected": 12,
+  "regressions": 0
+}

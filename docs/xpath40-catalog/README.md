@@ -1,3 +1,5 @@
+**Atomic function conversion/cardinality — 25 October 2026:** [Audit, correction and evidence](ATOMIC-FUNCTION-CONVERSION.md) enforce `abs`'s `xs:numeric?` argument contract at its implementation boundary, preserve named-function identity, and retain FOTY0013 for maps/function items in numeric-union conversion. Adds 366 passing cases; all 13,106 solution/LSP tests pass and frozen gates are unchanged. The 576-pair matrix now has zero sampled array/flat-reference discrepancies (36/12 corrected, no regressions). Remaining rounding contracts, metadata/coercion identity and broader conversion remain follow-up scope. Source 1.26.1 stays unpublished; public 1.26.0/Braid acceptance is unchanged; REQ-126 remains partial.
+
 **Publication update - 25 October 2026:** [Bosak 1.26.0 is published and verified](../RELEASE-1.26.0-PUBLICATION.md), including the carried-forward 384 numeric cases. REQ-126 remains partial; D2/D3/D4 and applicable-evidence AC-03 remain open. Earlier candidate/public-version notices below are historical. No fixture/gate promotion or full current-draft conformance is claimed.
 
 <div align="center">

@@ -1,0 +1,794 @@
+[
+  {
+    "profile": "XPath31",
+    "expression": "abs([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "abs#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "floor#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "ceiling#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath31",
+    "expression": "round-half-to-even#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "abs#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "floor#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "ceiling#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40",
+    "expression": "round-half-to-even#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "abs#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "floor#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "ceiling#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round#1([])",
+    "value": "()",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round#1([[],2,[]])",
+    "value": "2",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round#1((1,2))",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Sequence of more than one item not allowed for type xs:numeric?",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even#1([])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even#1([[],2,[]])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even#1((1,2))",
+    "value": "1",
+    "error": null
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  },
+  {
+    "profile": "XPath40Experimental",
+    "expression": "round-half-to-even#1([1,2])",
+    "value": null,
+    "error": "XPTY0004: Numeric function argument must be numeric or xs:untypedAtomic, but got Array",
+    "exceptionType": "System.InvalidOperationException"
+  }
+]

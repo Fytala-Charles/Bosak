@@ -1,0 +1,578 @@
+[
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "empty-member",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "two-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "empty-last",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "singleton-between-empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "two-empty-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "nested-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "empty-sequence-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "nested-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "two-singleton-members",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "multiple-between-empty",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "flat-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "three-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "nested-empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "context": "function-argument",
+    "shape": "flat-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "empty-member",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "two-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "empty-last",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "singleton-between-empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "two-empty-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "nested-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "empty-sequence-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "nested-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "two-singleton-members",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "multiple-between-empty",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "flat-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "three-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "nested-empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "context": "function-argument",
+    "shape": "flat-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "empty-member",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "two-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "empty-last",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "singleton-between-empty",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "two-empty-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "nested-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "empty-sequence-before-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "nested-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "two-singleton-members",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "multiple-between-empty",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "flat-multiple",
+    "side": "flat",
+    "before": {
+      "value": "1|integer"
+    },
+    "after": {
+      "errorCode": "XPTY0004"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "three-empty-arrays",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": ""
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "nested-empty-first",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "context": "function-argument",
+    "shape": "flat-singleton",
+    "side": "array",
+    "before": {
+      "errorCode": "XPTY0004"
+    },
+    "after": {
+      "value": "2|integer"
+    }
+  }
+]

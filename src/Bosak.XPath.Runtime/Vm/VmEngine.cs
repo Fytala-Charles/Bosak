@@ -429,6 +429,7 @@
 //                      | Charles Korthout | 2.202 | 25-10-2026     | Preserve an empty atomized operand before numeric unary negation.                           |
 //                      | Charles Korthout | 2.203 | 25-10-2026     | Count atomic values after recursive array-member atomization for singleton consumers.       |
 //                      | Charles Korthout | 2.204 | 25-10-2026     | Propagate empty atomized numeric binary and modern range operands before conversion.         |
+//                      | Charles Korthout | 2.205 | 25-10-2026     | Report function/map atomization errors for numeric-union function parameters.                |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -14506,6 +14507,10 @@ internal static class VmEngine
             // XPath 3.1 function conversion atomizes argument items. This also covers
             // comment/processing-instruction/namespace nodes, which atomize to xs:string
             // and are therefore not promoted to numeric types (K2-FunctionProlog-18/20).
+            // The numeric union requires atomic input, so function items and maps
+            // must fail atomization rather than reach the generic type mismatch.
+            if (type == "xs:numeric" && (item.IsFunction || item.IsMap))
+                throw new InvalidOperationException("FOTY0013: Cannot atomize a function item or map.");
             var atomic = Atomize(item);
             // Atomizing a schema-validated node whose type is a list type yields a
             // multi-item sequence (e.g. a 3-item xs:decimal sequence from a list-typed
