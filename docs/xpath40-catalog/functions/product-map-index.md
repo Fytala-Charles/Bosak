@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified reference contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Blocked strict filter-predicate contract**. map:filter currently accepts nonboolean truthy predicate results; do not use them. Map enumeration is not portable business order. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Product indexing with maps — Frozen 4.0.** Shipped in [Bosak PR #84](https://github.com/Fytala-Charles/Bosak/pull/84) at immutable revision [`f7f55b4e`](https://github.com/Fytala-Charles/Bosak/commit/f7f55b4e3a6e92da26ac607e34f46aede695cb19).

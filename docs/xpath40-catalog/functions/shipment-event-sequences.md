@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — identities, adjacent processing steps and event boundaries</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Use explicit presence/count guards for missing IDs; no complete carrier-state machine or unverified coercion contract. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
 
 **Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — real-world import text contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited text contract; incomplete grapheme segmentation**. Grapheme segmentation is approximate; missing keywords, implicit trim focus and unknown-option validation are not supported contracts. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Customer text cleanup — Frozen 4.0.** [fn:trim-space](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-trim-space), [fn:pad-string](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-pad-string), [fn:characters](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-characters), [fn:graphemes](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-graphemes) and [fn:char](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-char).

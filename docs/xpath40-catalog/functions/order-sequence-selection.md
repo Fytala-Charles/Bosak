@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified reference contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Integral-decimal tolerance is not the declared integer-position contract; repeat counts must remain bounded. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Order-export sequence selection — Frozen 4.0.** Shipped in [Bosak PR #82](https://github.com/Fytala-Charles/Bosak/pull/82) at immutable revision [`40ebaa79`](https://github.com/Fytala-Charles/Bosak/commit/40ebaa79032b17fc45d6d3bb3e58cb00e2fda742).

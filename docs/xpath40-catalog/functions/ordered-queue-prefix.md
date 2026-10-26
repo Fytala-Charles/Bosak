@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — dispatch the ready prefix and retain the remainder</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Not an arbitrary filter or partition; no operational side effects or general callable-subtyping promise. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Ordered queue prefix — Frozen 4.0.** [fn:take-while](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-take-while) and [fn:drop-while](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-drop-while).

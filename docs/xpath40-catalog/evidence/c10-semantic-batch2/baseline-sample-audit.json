@@ -1,0 +1,1567 @@
+{
+  "functions/customer-text-cleanup.md": {
+    "caseIds": [
+      "customer-text-cleanup-baseline",
+      "customer-text-cleanup-codepoint-split",
+      "customer-text-cleanup-combining-grapheme",
+      "customer-text-cleanup-emoji-zwj",
+      "customer-text-cleanup-empty-characters",
+      "customer-text-cleanup-empty-graphemes",
+      "customer-text-cleanup-empty-pad",
+      "customer-text-cleanup-empty-padding",
+      "customer-text-cleanup-empty-trim",
+      "customer-text-cleanup-entity-name",
+      "customer-text-cleanup-invalid-pad-side",
+      "customer-text-cleanup-invalid-trim-side",
+      "customer-text-cleanup-main",
+      "customer-text-cleanup-multi-codepoint-entity",
+      "customer-text-cleanup-nbsp-preserved",
+      "customer-text-cleanup-never-truncate",
+      "customer-text-cleanup-nonstring-characters",
+      "customer-text-cleanup-pad-both",
+      "customer-text-cleanup-preserve-interior",
+      "customer-text-cleanup-surrogate",
+      "customer-text-cleanup-trim-start",
+      "customer-text-cleanup-unknown-entity"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/customer-text-cleanup/baseline.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/codepoint-split.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/combining-grapheme.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/emoji-zwj.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/empty-characters.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/empty-graphemes.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/empty-pad.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/empty-padding.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/empty-trim.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/entity-name.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/invalid-pad-side.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/invalid-trim-side.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/main.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/multi-codepoint-entity.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/nbsp-preserved.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/never-truncate.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/nonstring-characters.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/pad-both.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/preserve-interior.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/surrogate.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/trim-start.xpath",
+      "docs/xpath40-catalog/examples/customer-text-cleanup/unknown-entity.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<customer><name>  Jose&#x301;  &#x1F69A;  </name></customer>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/customer-text-cleanup/main.xpath",
+          "docs/xpath40-catalog/examples/customer-text-cleanup/baseline.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $name := string(parse-xml('<customer><name>  Jose&#x301;  &#x1F69A;  </name></customer>')/customer/name)\nlet $label := trim-space($name)\nreturn concat('label=[', $label, ']; codepoints=', count(characters($label)), '; graphemes=', count(graphemes($label)), '; export=[', pad-string($label, 10, map {'padding': '.'}), ']; separator=', char(8212))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/customer-text-cleanup/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "label=[José  🚚]; codepoints=8; graphemes=7; export=[José  🚚..]; separator=—",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "customer-text-cleanup-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $name := string(parse-xml('<customer><name>  Jose&#x301;  &#x1F69A;  </name></customer>')/customer/name)\nreturn let $label := replace(replace($name, '^\\s+', ''), '\\s+$', '')\nreturn concat('label=[', $label, ']; codepoints=', count(string-to-codepoints($label)), '; export=[', $label, string-join(for $i in 1 to max((0, 10 - string-length($label))) return '.', ''), ']; separator=', codepoints-to-string(8212))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/customer-text-cleanup/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "label=[José  🚚]; codepoints=8; export=[José  🚚..]; separator=—",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "customer-text-cleanup-baseline"
+        ]
+      }
+    ]
+  },
+  "functions/element-to-map.md": {
+    "caseIds": [
+      "element-to-map-before",
+      "element-to-map-edge",
+      "element-to-map-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/element-to-map/before.xpath",
+      "docs/xpath40-catalog/examples/element-to-map/edge.xpath",
+      "docs/xpath40-catalog/examples/element-to-map/main.xpath"
+    ],
+    "blocks": []
+  },
+  "functions/higher-order-selection.md": {
+    "caseIds": [
+      "higher-order-selection-before",
+      "higher-order-selection-edge",
+      "higher-order-selection-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/higher-order-selection/before.xpath",
+      "docs/xpath40-catalog/examples/higher-order-selection/edge.xpath",
+      "docs/xpath40-catalog/examples/higher-order-selection/main.xpath"
+    ],
+    "blocks": []
+  },
+  "functions/import-array-batches.md": {
+    "caseIds": [
+      "import-array-batches-baseline",
+      "import-array-batches-edge",
+      "import-array-batches-empty-member",
+      "import-array-batches-incompatible-direction",
+      "import-array-batches-main",
+      "import-array-batches-negative-bounds",
+      "import-array-batches-nested-array",
+      "import-array-batches-out-of-range",
+      "import-array-batches-positions",
+      "import-array-batches-reverse",
+      "import-array-batches-step"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/import-array-batches/baseline.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/edge.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/empty-member.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/incompatible-direction.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/main.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/negative-bounds.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/nested-array.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/out-of-range.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/positions.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/reverse.xpath",
+      "docs/xpath40-catalog/examples/import-array-batches/step.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xquery",
+        "code": "(: One array member holds all product codes for one order. :)\nlet $orders := (map{'id':'ORD-101','lines':('FILTER-A','SEAL-B')}, map{'id':'ORD-102','lines':('VALVE-C')}, map{'id':'ORD-103','lines':('HOSE-D','CLIP-E')}),\n    $members := array:build($orders, function($order,$position){$order?lines}),\n    $batch := array:slice($members, 1, 2)\nreturn concat('orders=', array:size($batch), ';lines=', string-join(array:items($batch), ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/import-array-batches/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "text",
+        "code": "orders=2;lines=FILTER-A,SEAL-B,VALVE-C",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "import-array-batches-baseline",
+          "import-array-batches-main"
+        ]
+      },
+      {
+        "index": 2,
+        "language": "xquery",
+        "code": "let $orders := (map{'id':'ORD-101','lines':('FILTER-A','SEAL-B')}, map{'id':'ORD-102','lines':('VALVE-C')}, map{'id':'ORD-103','lines':('HOSE-D','CLIP-E')}),\n    $members := fold-left($orders, [], function($array,$order){array:append($array,$order?lines)}),\n    $batch := array:subarray($members, 1, 2)\nreturn concat('orders=', array:size($batch), ';lines=', string-join($batch?*, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/import-array-batches/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "orders=2;lines=FILTER-A,SEAL-B,VALVE-C",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "import-array-batches-baseline",
+          "import-array-batches-main"
+        ]
+      },
+      {
+        "index": 4,
+        "language": "xquery",
+        "code": "let $batch := array:slice(array:build(()), 1, 2) return concat(array:size($batch), '/', array:empty($batch), '/', count(array:items($batch)))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/import-array-batches/edge.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 5,
+        "language": "text",
+        "code": "0/true/0",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "import-array-batches-edge"
+        ]
+      }
+    ]
+  },
+  "functions/import-file-names.md": {
+    "caseIds": [
+      "import-file-names-baseline",
+      "import-file-names-compound-extension",
+      "import-file-names-empty-both",
+      "import-file-names-empty-delimiter",
+      "import-file-names-empty-search",
+      "import-file-names-empty-source",
+      "import-file-names-explicit-collation",
+      "import-file-names-main",
+      "import-file-names-missing-delimiter",
+      "import-file-names-multi-item-source",
+      "import-file-names-no-matches",
+      "import-file-names-overlapping",
+      "import-file-names-supplementary-position"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/import-file-names/baseline.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/compound-extension.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/empty-both.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/empty-delimiter.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/empty-search.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/empty-source.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/explicit-collation.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/main.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/missing-delimiter.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/multi-item-source.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/no-matches.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/overlapping.xpath",
+      "docs/xpath40-catalog/examples/import-file-names/supplementary-position.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<file path=\"incoming/2026.10/invoice.batch.xml\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/import-file-names/baseline.xpath",
+          "docs/xpath40-catalog/examples/import-file-names/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $path := string(parse-xml('<file path=\"incoming/2026.10/invoice.batch.xml\"/>')/file/@path)\nlet $directory := substring-before-last($path, '/')\nlet $name := substring-after-last($path, '/')\nreturn concat('directory=', $directory, '; file=', $name, '; stem=', substring-before-last($name, '.'), '; extension=', substring-after-last($name, '.'), '; dots=', string-join(index-of-substring($name, '.') ! string(.), ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/import-file-names/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "directory=incoming/2026.10; file=invoice.batch.xml; stem=invoice.batch; extension=xml; dots=8,14",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "import-file-names-baseline",
+          "import-file-names-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $path := string(parse-xml('<file path=\"incoming/2026.10/invoice.batch.xml\"/>')/file/@path)\nreturn let $positions := function($value, $needle) { for $p in 1 to string-length($value) return if (substring($value, $p, string-length($needle)) eq $needle) then $p else () }\nreturn let $slash := $positions($path, '/')[last()]\nreturn let $directory := substring($path, 1, $slash - 1)\nreturn let $name := substring($path, $slash + 1)\nreturn let $dots := $positions($name, '.')\nreturn let $dot := $dots[last()]\nreturn concat('directory=', $directory, '; file=', $name, '; stem=', substring($name, 1, $dot - 1), '; extension=', substring($name, $dot + 1), '; dots=', string-join($dots ! string(.), ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/import-file-names/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "directory=incoming/2026.10; file=invoice.batch.xml; stem=invoice.batch; extension=xml; dots=8,14",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "import-file-names-baseline",
+          "import-file-names-main"
+        ]
+      }
+    ]
+  },
+  "functions/invoice-api-uris.md": {
+    "caseIds": [
+      "invoice-api-uris-baseline",
+      "invoice-api-uris-build-duplicate-query",
+      "invoice-api-uris-build-nonmap",
+      "invoice-api-uris-custom-port",
+      "invoice-api-uris-decode-empty",
+      "invoice-api-uris-decode-form",
+      "invoice-api-uris-decode-plus",
+      "invoice-api-uris-decode-utf8",
+      "invoice-api-uris-default-port",
+      "invoice-api-uris-delimiter-in-id",
+      "invoice-api-uris-duplicate-query",
+      "invoice-api-uris-encode-decode",
+      "invoice-api-uris-fragment-only",
+      "invoice-api-uris-invalid-utf8",
+      "invoice-api-uris-ipv6-host",
+      "invoice-api-uris-literal-plus",
+      "invoice-api-uris-main",
+      "invoice-api-uris-malformed-escape",
+      "invoice-api-uris-nonhierarchical",
+      "invoice-api-uris-normalized-roundtrip",
+      "invoice-api-uris-parse-empty",
+      "invoice-api-uris-port-type",
+      "invoice-api-uris-query-plus",
+      "invoice-api-uris-query-precedence",
+      "invoice-api-uris-relative-reference",
+      "invoice-api-uris-segment-precedence",
+      "invoice-api-uris-space-in-id",
+      "invoice-api-uris-unmatched-ipv6"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/invoice-api-uris/baseline.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/build-duplicate-query.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/build-nonmap.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/custom-port.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/decode-empty.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/decode-form.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/decode-plus.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/decode-utf8.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/default-port.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/delimiter-in-id.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/duplicate-query.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/encode-decode.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/fragment-only.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/invalid-utf8.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/ipv6-host.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/literal-plus.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/main.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/malformed-escape.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/nonhierarchical.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/normalized-roundtrip.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/parse-empty.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/port-type.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/query-plus.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/query-precedence.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/relative-reference.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/segment-precedence.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/space-in-id.xpath",
+      "docs/xpath40-catalog/examples/invoice-api-uris/unmatched-ipv6.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<request endpoint=\"https://api.example.test:443/v1\" invoice=\"INV/2048\" query=\"Ada Lovelace + VAT\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/invoice-api-uris/baseline.xpath",
+          "docs/xpath40-catalog/examples/invoice-api-uris/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $request := parse-xml('<request endpoint=\"https://api.example.test:443/v1\" invoice=\"INV/2048\" query=\"Ada Lovelace + VAT\"/>')/request\nlet $base := parse-uri(string($request/@endpoint), map {'omit-default-ports': true()})\nlet $uri := build-uri(map {'scheme': $base?scheme, 'host': $base?host, 'port': $base?port, 'path-segments': ('', 'v1', 'invoices', string($request/@invoice)), 'query-parameters': map {'q': string($request/@query)}})\nlet $parsed := parse-uri($uri)\nreturn concat('uri=', $uri, '; invoice=', $parsed?path-segments[4], '; query=', $parsed?query-parameters?q)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/invoice-api-uris/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "uri=https://api.example.test/v1/invoices/INV%2F2048?q=Ada%20Lovelace%20%2B%20VAT; invoice=INV/2048; query=Ada Lovelace + VAT",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "invoice-api-uris-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $request := parse-xml('<request endpoint=\"https://api.example.test:443/v1\" invoice=\"INV/2048\" query=\"Ada Lovelace + VAT\"/>')/request\nreturn let $origin := replace(substring-before(string($request/@endpoint), '/v1'), ':443$', '')\nreturn let $uri := concat($origin, '/v1/invoices/', encode-for-uri(string($request/@invoice)), '?q=', encode-for-uri(string($request/@query)))\nreturn $uri",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/invoice-api-uris/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "https://api.example.test/v1/invoices/INV%2F2048?q=Ada%20Lovelace%20%2B%20VAT",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "invoice-api-uris-baseline"
+        ]
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<request endpoint=\"https://api.example.test:443/v1\" invoice=\"INV?2048#A\" query=\"Ada Lovelace + VAT\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/invoice-api-uris/delimiter-in-id.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "uri=https://api.example.test/v1/invoices/INV%3F2048%23A?q=Ada%20Lovelace%20%2B%20VAT; invoice=INV?2048#A; query=Ada Lovelace + VAT",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "invoice-api-uris-delimiter-in-id"
+        ]
+      }
+    ]
+  },
+  "functions/map-to-element.md": {
+    "caseIds": [
+      "map-to-element-before",
+      "map-to-element-edge",
+      "map-to-element-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/map-to-element/before.xsl",
+      "docs/xpath40-catalog/examples/map-to-element/edge.xpath",
+      "docs/xpath40-catalog/examples/map-to-element/main.xml",
+      "docs/xpath40-catalog/examples/map-to-element/main.xpath"
+    ],
+    "blocks": []
+  },
+  "functions/measurement-comparison.md": {
+    "caseIds": [
+      "measurement-comparison-ascii-labels",
+      "measurement-comparison-baseline",
+      "measurement-comparison-binary-octets",
+      "measurement-comparison-booleans",
+      "measurement-comparison-codepoint-labels",
+      "measurement-comparison-double-decimal",
+      "measurement-comparison-empty-collation",
+      "measurement-comparison-empty-left",
+      "measurement-comparison-empty-report",
+      "measurement-comparison-empty-right",
+      "measurement-comparison-equal-numeric",
+      "measurement-comparison-float-decimal",
+      "measurement-comparison-infinity",
+      "measurement-comparison-keyword-31",
+      "measurement-comparison-keyword-draft",
+      "measurement-comparison-keyword-engine",
+      "measurement-comparison-main",
+      "measurement-comparison-map-value",
+      "measurement-comparison-mixed-family",
+      "measurement-comparison-multiple-values",
+      "measurement-comparison-nan-equal",
+      "measurement-comparison-nan-low",
+      "measurement-comparison-negative-zero",
+      "measurement-comparison-promoted-equality",
+      "measurement-comparison-reversed-numeric",
+      "measurement-comparison-unknown-collation",
+      "measurement-comparison-utc-instant"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/measurement-comparison/ascii-labels.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/baseline.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/binary-octets.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/booleans.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/codepoint-labels.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/double-decimal.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/empty-collation.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/empty-left.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/empty-report.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/empty-right.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/equal-numeric.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/float-decimal.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/infinity.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/keyword-31.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/keyword-draft.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/keyword-engine.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/main.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/map-value.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/mixed-family.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/multiple-values.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/nan-equal.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/nan-low.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/negative-zero.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/promoted-equality.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/reversed-numeric.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/unknown-collation.xpath",
+      "docs/xpath40-catalog/examples/measurement-comparison/utc-instant.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<readings><reading id=\"A\" kind=\"decimal\" value=\"2\" limit=\"2\"/><reading id=\"B\" kind=\"double\" value=\"3.1\" limit=\"3.1\"/><reading id=\"C\" kind=\"float\" value=\"3.1\" limit=\"3.1\"/><reading id=\"D\" kind=\"double\" value=\"NaN\" limit=\"3.1\"/><reading id=\"E\" kind=\"double\" value=\"\" limit=\"3.1\"/></readings>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/measurement-comparison/baseline.xpath",
+          "docs/xpath40-catalog/examples/measurement-comparison/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<readings><reading id=\"A\" kind=\"decimal\" value=\"2\" limit=\"2\"/><reading id=\"B\" kind=\"double\" value=\"3.1\" limit=\"3.1\"/><reading id=\"C\" kind=\"float\" value=\"3.1\" limit=\"3.1\"/><reading id=\"D\" kind=\"double\" value=\"NaN\" limit=\"3.1\"/><reading id=\"E\" kind=\"double\" value=\"\" limit=\"3.1\"/></readings>')/readings/reading\nreturn string-join(for $row in $rows return\n  let $value := if (string($row/@value) = '') then () else\n    if ($row/@kind = 'decimal') then xs:decimal($row/@value) else\n    if ($row/@kind = 'float') then xs:float($row/@value) else xs:double($row/@value)\n  return let $limit := xs:decimal($row/@limit)\n  return let $status := if (empty($value) or not($value eq $value)) then 'missing' else\n    let $order := compare($value, $limit)\n    return if ($order lt 0) then 'below' else if ($order eq 0) then 'at-limit' else 'above'\n  return concat($row/@id, '=', $status), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/measurement-comparison/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "A=at-limit;B=above;C=below;D=missing;E=missing",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "measurement-comparison-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<readings><reading id=\"A\" kind=\"decimal\" value=\"2\" limit=\"2\"/><reading id=\"B\" kind=\"double\" value=\"3.1\" limit=\"3.1\"/><reading id=\"C\" kind=\"float\" value=\"3.1\" limit=\"3.1\"/><reading id=\"D\" kind=\"double\" value=\"NaN\" limit=\"3.1\"/><reading id=\"E\" kind=\"double\" value=\"\" limit=\"3.1\"/></readings>')/readings/reading\nreturn string-join(for $row in $rows return\n  let $value := if (string($row/@value) = '') then () else\n    if ($row/@kind = 'decimal') then xs:decimal($row/@value) else\n    if ($row/@kind = 'float') then xs:float($row/@value) else xs:double($row/@value)\n  return let $limit := xs:decimal($row/@limit)\n  return let $status := if (empty($value) or not($value eq $value)) then 'missing' else\n    let $normalized := xs:double($value)\n    return let $boundary := xs:double($limit)\n    return if ($normalized lt $boundary) then 'below' else if ($normalized eq $boundary) then 'at-limit' else 'above'\n  return concat($row/@id, '=', $status), ';')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/measurement-comparison/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "A=at-limit;B=at-limit;C=below;D=missing;E=missing",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "measurement-comparison-baseline"
+        ]
+      }
+    ]
+  },
+  "functions/month-end-cutoffs.md": {
+    "caseIds": [
+      "month-end-cutoffs-baseline",
+      "month-end-cutoffs-century-common",
+      "month-end-cutoffs-century-leap",
+      "month-end-cutoffs-common-year",
+      "month-end-cutoffs-date-only",
+      "month-end-cutoffs-empty-build",
+      "month-end-cutoffs-empty-month",
+      "month-end-cutoffs-fractional-time",
+      "month-end-cutoffs-invalid-day",
+      "month-end-cutoffs-invalid-fields",
+      "month-end-cutoffs-invalid-offset",
+      "month-end-cutoffs-local-month",
+      "month-end-cutoffs-main",
+      "month-end-cutoffs-midnight-24",
+      "month-end-cutoffs-negative-offset",
+      "month-end-cutoffs-stamp-type",
+      "month-end-cutoffs-thirty-day-month",
+      "month-end-cutoffs-without-timezone",
+      "month-end-cutoffs-year-zero-month"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/month-end-cutoffs/baseline.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/century-common.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/century-leap.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/common-year.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/date-only.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/empty-build.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/empty-month.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/fractional-time.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-day.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-fields.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/invalid-offset.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/local-month.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/main.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/midnight-24.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/negative-offset.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/stamp-type.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/thirty-day-month.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/without-timezone.xpath",
+      "docs/xpath40-catalog/examples/month-end-cutoffs/year-zero-month.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<schedule year=\"2024\" month=\"2\" hours=\"17\" minutes=\"30\" timezone=\"PT2H\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/month-end-cutoffs/main.xpath",
+          "docs/xpath40-catalog/examples/month-end-cutoffs/baseline.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $schedule := parse-xml('<schedule year=\"2024\" month=\"2\" hours=\"17\" minutes=\"30\" timezone=\"PT2H\"/>')/schedule\nlet $year := xs:integer($schedule/@year)\nlet $month := xs:integer($schedule/@month)\nlet $days := days-in-month(build-dateTime(map {'year': $year, 'month': $month, 'day': 1}))\nlet $cutoff := build-dateTime(map {'year': $year, 'month': $month, 'day': $days, 'hours': xs:integer($schedule/@hours), 'minutes': xs:integer($schedule/@minutes), 'seconds': 0, 'timezone': xs:dayTimeDuration($schedule/@timezone)})\nreturn concat('days=', $days, '; cutoff=', $cutoff, '; utc=', adjust-dateTime-to-timezone($cutoff, xs:dayTimeDuration('PT0S')))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/month-end-cutoffs/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "days=29; cutoff=2024-02-29T17:30:00+02:00; utc=2024-02-29T15:30:00Z",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "month-end-cutoffs-baseline",
+          "month-end-cutoffs-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $schedule := parse-xml('<schedule year=\"2024\" month=\"2\" hours=\"17\" minutes=\"30\" timezone=\"PT2H\"/>')/schedule\nreturn let $year := xs:integer($schedule/@year)\nreturn let $month := xs:integer($schedule/@month)\nreturn let $first := xs:date(concat(format-integer($year, '0000'), '-', format-integer($month, '00'), '-01'))\nreturn let $last := $first + xs:yearMonthDuration('P1M') - xs:dayTimeDuration('P1D')\nreturn let $local := dateTime($last, xs:time(concat(format-integer(xs:integer($schedule/@hours), '00'), ':', format-integer(xs:integer($schedule/@minutes), '00'), ':00')))\nreturn let $cutoff := adjust-dateTime-to-timezone($local, xs:dayTimeDuration($schedule/@timezone))\nreturn concat('days=', day-from-date($last), '; cutoff=', $cutoff, '; utc=', adjust-dateTime-to-timezone($cutoff, xs:dayTimeDuration('PT0S')))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/month-end-cutoffs/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "days=29; cutoff=2024-02-29T17:30:00+02:00; utc=2024-02-29T15:30:00Z",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "month-end-cutoffs-baseline",
+          "month-end-cutoffs-main"
+        ]
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<schedule year=\"2023\" month=\"2\" hours=\"17\" minutes=\"30\" timezone=\"PT2H\"/>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/month-end-cutoffs/common-year.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "days=28; cutoff=2023-02-28T17:30:00+02:00; utc=2023-02-28T15:30:00Z",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "month-end-cutoffs-common-year"
+        ]
+      }
+    ]
+  },
+  "functions/numeric-import-diagnostics.md": {
+    "caseIds": [
+      "numeric-import-diagnostics-all-invalid",
+      "numeric-import-diagnostics-baseline",
+      "numeric-import-diagnostics-derived-type",
+      "numeric-import-diagnostics-division-zero",
+      "numeric-import-diagnostics-empty",
+      "numeric-import-diagnostics-empty-nan",
+      "numeric-import-diagnostics-main",
+      "numeric-import-diagnostics-map-nan",
+      "numeric-import-diagnostics-nan-number",
+      "numeric-import-diagnostics-nan-string",
+      "numeric-import-diagnostics-operator-arity",
+      "numeric-import-diagnostics-operator-pairs",
+      "numeric-import-diagnostics-ordinary-number",
+      "numeric-import-diagnostics-type-not-validator",
+      "numeric-import-diagnostics-unknown-operator"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/all-invalid.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/baseline.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/derived-type.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/division-zero.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/empty-nan.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/empty.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/main.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/map-nan.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/nan-number.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/nan-string.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/operator-arity.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/operator-pairs.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/ordinary-number.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/type-not-validator.xpath",
+      "docs/xpath40-catalog/examples/numeric-import-diagnostics/unknown-operator.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<readings><reading id=\"A\" value=\"12.5\"/><reading id=\"B\" value=\"invalid\"/><reading id=\"C\" value=\"7.5\"/></readings>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/numeric-import-diagnostics/baseline.xpath",
+          "docs/xpath40-catalog/examples/numeric-import-diagnostics/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<readings><reading id=\"A\" value=\"12.5\"/><reading id=\"B\" value=\"invalid\"/><reading id=\"C\" value=\"7.5\"/></readings>')/readings/reading\nlet $valid := $rows[not(is-NaN(number(@value)))]\nlet $invalid := $rows[is-NaN(number(@value))]\nlet $total := fold-left($valid/@value ! number(.), 0e0, op('+'))\nreturn concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; total=', $total, '; type=', local-name-from-QName(atomic-type-annotation($total)?name))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/numeric-import-diagnostics/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "accepted=A,C; rejected=B; total=20; type=double",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "numeric-import-diagnostics-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $rows := parse-xml('<readings><reading id=\"A\" value=\"12.5\"/><reading id=\"B\" value=\"invalid\"/><reading id=\"C\" value=\"7.5\"/></readings>')/readings/reading\nreturn let $valid := $rows[number(@value) eq number(@value)]\nreturn let $invalid := $rows[not(number(@value) eq number(@value))]\nreturn let $total := fold-left($valid/@value ! number(.), 0e0, function($x, $y) { $x + $y })\nreturn concat('accepted=', string-join($valid/@id, ','), '; rejected=', string-join($invalid/@id, ','), '; total=', $total, '; double=', $total instance of xs:double)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/numeric-import-diagnostics/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "accepted=A,C; rejected=B; total=20; double=true",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "numeric-import-diagnostics-baseline"
+        ]
+      }
+    ]
+  },
+  "functions/order-sequence-selection.md": {
+    "caseIds": [
+      "order-sequence-selection-automatic-direction",
+      "order-sequence-selection-baseline",
+      "order-sequence-selection-edge",
+      "order-sequence-selection-fractional-position",
+      "order-sequence-selection-main",
+      "order-sequence-selection-negative-bounds",
+      "order-sequence-selection-negative-repeat",
+      "order-sequence-selection-requested-baseline",
+      "order-sequence-selection-requested-positions",
+      "order-sequence-selection-reverse",
+      "order-sequence-selection-separator-block",
+      "order-sequence-selection-singleton",
+      "order-sequence-selection-step",
+      "order-sequence-selection-zero-repeat"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/order-sequence-selection/automatic-direction.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/baseline.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/edge.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/fractional-position.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/main.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/negative-bounds.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/negative-repeat.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/requested-baseline.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/requested-positions.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/reverse.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/separator-block.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/singleton.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/step.xpath",
+      "docs/xpath40-catalog/examples/order-sequence-selection/zero-repeat.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xquery",
+        "code": "(: Export positions 2 through 4; repeat the label set for two packing stations. :)\nlet $queue := ('ORD-101','ORD-102','ORD-103','ORD-104','ORD-105'),\n    $page := slice($queue, 2, 4),\n    $labels := replicate($page, 2)\nreturn concat('page=', string-join($page, ','), ';last=', foot($page), ';body=', string-join(trunk($page), ','), ';labels=', string-join(insert-separator($labels, '|'), ''))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/order-sequence-selection/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "text",
+        "code": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "order-sequence-selection-baseline",
+          "order-sequence-selection-main"
+        ]
+      },
+      {
+        "index": 2,
+        "language": "xquery",
+        "code": "let $queue := ('ORD-101','ORD-102','ORD-103','ORD-104','ORD-105'), $page := subsequence($queue, 2, 3),\n    $labels := for $station in 1 to 2 return $page\nreturn concat('page=', string-join($page, ','), ';last=', $page[last()], ';body=', string-join($page[position() lt last()], ','), ';labels=', string-join($labels, '|'))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/order-sequence-selection/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "page=ORD-102,ORD-103,ORD-104;last=ORD-104;body=ORD-102,ORD-103;labels=ORD-102|ORD-103|ORD-104|ORD-102|ORD-103|ORD-104",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "order-sequence-selection-baseline",
+          "order-sequence-selection-main"
+        ]
+      },
+      {
+        "index": 4,
+        "language": "xquery",
+        "code": "concat(count(slice((),2,4)), '/', count(replicate((),2)), '/', count(foot(())), '/', count(trunk(())), '/', count(insert-separator((), '|')), '/', count(items-at((),1)))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/order-sequence-selection/edge.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 5,
+        "language": "text",
+        "code": "0/0/0/0/0/0",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "order-sequence-selection-edge"
+        ]
+      }
+    ]
+  },
+  "functions/ordered-queue-prefix.md": {
+    "caseIds": [
+      "ordered-queue-prefix-all-ready",
+      "ordered-queue-prefix-baseline",
+      "ordered-queue-prefix-drop-early-stop",
+      "ordered-queue-prefix-drop-empty-decision",
+      "ordered-queue-prefix-drop-nonboolean",
+      "ordered-queue-prefix-drop-noncallable",
+      "ordered-queue-prefix-empty",
+      "ordered-queue-prefix-filter-comparison",
+      "ordered-queue-prefix-first-held",
+      "ordered-queue-prefix-main",
+      "ordered-queue-prefix-map-predicate",
+      "ordered-queue-prefix-missing-status",
+      "ordered-queue-prefix-position-cap",
+      "ordered-queue-prefix-reconstruction",
+      "ordered-queue-prefix-take-early-stop",
+      "ordered-queue-prefix-take-empty-decision",
+      "ordered-queue-prefix-take-nonboolean",
+      "ordered-queue-prefix-take-noncallable"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/all-ready.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/baseline.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-early-stop.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-empty-decision.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-nonboolean.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/drop-noncallable.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/empty.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/filter-comparison.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/first-held.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/main.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/map-predicate.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/missing-status.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/position-cap.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/reconstruction.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/take-early-stop.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/take-empty-decision.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/take-nonboolean.xpath",
+      "docs/xpath40-catalog/examples/ordered-queue-prefix/take-noncallable.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<queue>\n  <order id=\"ORD101\" status=\"ready\"/>\n  <order id=\"ORD102\" status=\"ready\"/>\n  <order id=\"ORD103\" status=\"hold\"/>\n  <order id=\"ORD104\" status=\"ready\"/>\n</queue>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/baseline.xpath",
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/filter-comparison.xpath",
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/main.xpath",
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/position-cap.xpath",
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/reconstruction.xpath"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $queue := parse-xml('<queue><order id=\"ORD101\" status=\"ready\"/><order id=\"ORD102\" status=\"ready\"/><order id=\"ORD103\" status=\"hold\"/><order id=\"ORD104\" status=\"ready\"/></queue>')/queue/order\nlet $ready := function($order, $position) { string($order/@status) eq 'ready' }\nlet $dispatch := take-while($queue, $ready)\nlet $retained := drop-while($queue, $ready)\nreturn concat('dispatch=', string-join($dispatch/@id, ','), '; retained=', string-join($retained/@id, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "dispatch=ORD101,ORD102; retained=ORD103,ORD104",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "ordered-queue-prefix-baseline",
+          "ordered-queue-prefix-main",
+          "ordered-queue-prefix-missing-status"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $queue := parse-xml('<queue><order id=\"ORD101\" status=\"ready\"/><order id=\"ORD102\" status=\"ready\"/><order id=\"ORD103\" status=\"hold\"/><order id=\"ORD104\" status=\"ready\"/></queue>')/queue/order\nreturn let $stop := ((for $i in 1 to count($queue) return if (string($queue[$i]/@status) eq 'ready') then () else $i)[1], count($queue) + 1)[1]\nreturn let $dispatch := subsequence($queue, 1, $stop - 1)\nreturn let $retained := subsequence($queue, $stop)\nreturn concat('dispatch=', string-join($dispatch/@id, ','), '; retained=', string-join($retained/@id, ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/ordered-queue-prefix/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      }
+    ]
+  },
+  "functions/payload-fingerprints.md": {
+    "caseIds": [
+      "payload-fingerprints-binary-equivalent",
+      "payload-fingerprints-changed-payload",
+      "payload-fingerprints-default-md5",
+      "payload-fingerprints-empty-sequence",
+      "payload-fingerprints-empty-string",
+      "payload-fingerprints-main",
+      "payload-fingerprints-nonstring",
+      "payload-fingerprints-normalized-algorithm",
+      "payload-fingerprints-unsupported",
+      "payload-fingerprints-whitespace-matters"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/payload-fingerprints/binary-equivalent.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/changed-payload.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/default-md5.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/empty-sequence.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/empty-string.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/main.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/nonstring.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/normalized-algorithm.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/unsupported.xpath",
+      "docs/xpath40-catalog/examples/payload-fingerprints/whitespace-matters.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<payload>INV-2048|EUR|125.00</payload>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/payload-fingerprints/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $payload := string(parse-xml('<payload>INV-2048|EUR|125.00</payload>')/payload)\nlet $digest := hash($payload, 'SHA-256')\nreturn concat('sha256=', $digest, '; hexCharacters=', string-length(string($digest)), '; hexBinary=', $digest instance of xs:hexBinary)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/payload-fingerprints/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "sha256=612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4; hexCharacters=64; hexBinary=true",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "payload-fingerprints-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "python",
+        "code": "import hashlib\nprint(hashlib.sha256(b\"INV-2048|EUR|125.00\").hexdigest().upper())",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "pythonOracle": "python-oracle.json"
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "pythonOracleOutput": "python-oracle.json"
+      }
+    ]
+  },
+  "functions/product-dependency-closure.md": {
+    "caseIds": [
+      "product-dependency-closure-baseline",
+      "product-dependency-closure-cycle",
+      "product-dependency-closure-dangling-reference",
+      "product-dependency-closure-duplicate-edge",
+      "product-dependency-closure-include-start",
+      "product-dependency-closure-leaf",
+      "product-dependency-closure-main",
+      "product-dependency-closure-missing-start",
+      "product-dependency-closure-multiple-starts",
+      "product-dependency-closure-node-identity",
+      "product-dependency-closure-non-node-start",
+      "product-dependency-closure-non-node-step",
+      "product-dependency-closure-noncallable-step",
+      "product-dependency-closure-reference-validation",
+      "product-dependency-closure-self-cycle"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/product-dependency-closure/baseline.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/cycle.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/dangling-reference.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/duplicate-edge.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/include-start.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/leaf.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/main.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/missing-start.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/multiple-starts.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/node-identity.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/non-node-start.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/non-node-step.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/noncallable-step.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/reference-validation.xpath",
+      "docs/xpath40-catalog/examples/product-dependency-closure/self-cycle.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<catalog>\n  <part id=\"KIT\"><needs ref=\"FRAME\"/><needs ref=\"MOTOR\"/></part>\n  <part id=\"BOLT\"/>\n  <part id=\"FRAME\"><needs ref=\"BOLT\"/></part>\n  <part id=\"MOTOR\"><needs ref=\"BOLT\"/></part>\n</catalog>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/product-dependency-closure/baseline.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/include-start.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/leaf.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/main.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/missing-start.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/multiple-starts.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/node-identity.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/non-node-step.xpath",
+          "docs/xpath40-catalog/examples/product-dependency-closure/noncallable-step.xpath"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $parts := parse-xml('<catalog><part id=\"KIT\"><needs ref=\"FRAME\"/><needs ref=\"MOTOR\"/></part><part id=\"BOLT\"/><part id=\"FRAME\"><needs ref=\"BOLT\"/></part><part id=\"MOTOR\"><needs ref=\"BOLT\"/></part></catalog>')/catalog/part\nlet $start := $parts[@id eq 'KIT']\nlet $step := function($part) { $parts[@id = $part/needs/@ref] }\nlet $reachable := transitive-closure($start, $step)\nreturn concat('dependencies=', string-join($reachable/@id, ','), '; count=', count($reachable))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/product-dependency-closure/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "dependencies=BOLT,FRAME,MOTOR; count=3",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "product-dependency-closure-baseline",
+          "product-dependency-closure-duplicate-edge",
+          "product-dependency-closure-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $parts := parse-xml('<catalog><part id=\"KIT\"><needs ref=\"FRAME\"/><needs ref=\"MOTOR\"/></part><part id=\"BOLT\"/><part id=\"FRAME\"><needs ref=\"BOLT\"/></part><part id=\"MOTOR\"><needs ref=\"BOLT\"/></part></catalog>')/catalog/part\nreturn let $start := $parts[@id eq 'KIT']\nreturn let $step := function($part) { $parts[@id = $part/needs/@ref] }\nreturn let $reachable := fold-left(1 to count($parts), $step($start) | (), function($seen, $round) { $seen | ($seen ! $step(.)) })\nreturn concat('dependencies=', string-join($reachable/@id, ','), '; count=', count($reachable))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/product-dependency-closure/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "dependencies=BOLT,FRAME,MOTOR; count=3",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "product-dependency-closure-baseline",
+          "product-dependency-closure-duplicate-edge",
+          "product-dependency-closure-main"
+        ]
+      },
+      {
+        "index": 5,
+        "language": "xml",
+        "code": "<catalog>\n  <part id=\"KIT\"><needs ref=\"FRAME\"/><needs ref=\"MOTOR\"/></part>\n  <part id=\"BOLT\"><needs ref=\"KIT\"/></part>\n  <part id=\"FRAME\"><needs ref=\"BOLT\"/></part>\n  <part id=\"MOTOR\"><needs ref=\"BOLT\"/></part>\n</catalog>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/product-dependency-closure/cycle.xpath"
+        ]
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "dependencies=KIT,BOLT,FRAME,MOTOR; count=4",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "product-dependency-closure-cycle",
+          "product-dependency-closure-self-cycle"
+        ]
+      }
+    ]
+  },
+  "functions/product-map-index.md": {
+    "caseIds": [
+      "product-map-index-baseline",
+      "product-map-index-combine",
+      "product-map-index-combiner",
+      "product-map-index-edge",
+      "product-map-index-empty-key",
+      "product-map-index-empty-predicate",
+      "product-map-index-entries-baseline",
+      "product-map-index-entries-boundary",
+      "product-map-index-invalid-policy",
+      "product-map-index-items-baseline",
+      "product-map-index-items-sequence-boundary",
+      "product-map-index-main",
+      "product-map-index-multi-key",
+      "product-map-index-positions",
+      "product-map-index-reject"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/product-map-index/baseline.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/combine.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/combiner.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/edge.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/empty-key.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/empty-predicate.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/entries-baseline.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/entries-boundary.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/invalid-policy.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/items-baseline.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/items-sequence-boundary.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/main.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/multi-key.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/positions.xpath",
+      "docs/xpath40-catalog/examples/product-map-index/reject.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xquery",
+        "code": "(: A supplier snapshot contains a later correction for FILTER-A. :)\nlet $rows := (map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}),\n    $index := map:build($rows, function($row){$row?sku}, function($row){$row?stock}, map{'duplicates':'use-last'}),\n    $available := map:filter($index, function($sku,$stock,$position){$stock gt 0})\nreturn string-join(map:entries($available) ! (let $entry := . return let $sku := map:keys($entry)[1] return concat($sku, '=', $entry($sku))), '|')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/product-map-index/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "text",
+        "code": "FILTER-A=8",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "product-map-index-baseline",
+          "product-map-index-main"
+        ]
+      },
+      {
+        "index": 2,
+        "language": "xquery",
+        "code": "let $rows := (map{'sku':'FILTER-A','stock':12}, map{'sku':'SEAL-B','stock':0}, map{'sku':'FILTER-A','stock':8}),\n    $index := map:merge($rows ! map:entry(?sku, ?stock), map{'duplicates':'use-last'})\nreturn string-join(for $sku in sort(map:keys($index)) return if ($index($sku) gt 0) then concat($sku, '=', $index($sku)) else (), '|')",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/product-map-index/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 3,
+        "language": "text",
+        "code": "FILTER-A=8",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "product-map-index-baseline",
+          "product-map-index-main"
+        ]
+      },
+      {
+        "index": 4,
+        "language": "xquery",
+        "code": "concat(map:size(map:build((), function($r){$r?sku})), '/', map:size(map:filter(map{'SEAL-B':0}, function($k,$v){$v gt 0})), '/', count(map:items(map{})))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/product-map-index/edge.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 5,
+        "language": "text",
+        "code": "0/0/0",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/cases.json"
+        ],
+        "expectedOutputCases": [
+          "product-map-index-edge"
+        ]
+      }
+    ]
+  },
+  "functions/sequence-distinctness.md": {
+    "caseIds": [
+      "sequence-distinctness-before",
+      "sequence-distinctness-edge",
+      "sequence-distinctness-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/sequence-distinctness/before.xpath",
+      "docs/xpath40-catalog/examples/sequence-distinctness/edge.xpath",
+      "docs/xpath40-catalog/examples/sequence-distinctness/main.xpath"
+    ],
+    "blocks": []
+  },
+  "functions/shipment-event-sequences.md": {
+    "caseIds": [
+      "shipment-event-sequences-baseline",
+      "shipment-event-sequences-case-sensitive-identities",
+      "shipment-event-sequences-comparator-empty-result",
+      "shipment-event-sequences-comparator-nonboolean",
+      "shipment-event-sequences-comparator-not-function",
+      "shipment-event-sequences-comparator-wrong-arity",
+      "shipment-event-sequences-edge",
+      "shipment-event-sequences-empty-comparator-default",
+      "shipment-event-sequences-empty-requirement",
+      "shipment-event-sequences-equal-singleton",
+      "shipment-event-sequences-identity-collation",
+      "shipment-event-sequences-identity-collation-baseline",
+      "shipment-event-sequences-long-pattern",
+      "shipment-event-sequences-main",
+      "shipment-event-sequences-missing-event-code",
+      "shipment-event-sequences-missing-shipment",
+      "shipment-event-sequences-mixed-shipment",
+      "shipment-event-sequences-nan-equality",
+      "shipment-event-sequences-noncontiguous",
+      "shipment-event-sequences-noncontiguous-baseline",
+      "shipment-event-sequences-numeric-equality",
+      "shipment-event-sequences-record-comparator",
+      "shipment-event-sequences-repeated-events",
+      "shipment-event-sequences-unequal-identities",
+      "shipment-event-sequences-unexpected-event",
+      "shipment-event-sequences-unfinished-history",
+      "shipment-event-sequences-wrong-start"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/shipment-event-sequences/baseline.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/case-sensitive-identities.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-empty-result.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-nonboolean.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-not-function.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/comparator-wrong-arity.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/edge.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/empty-comparator-default.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/empty-requirement.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/equal-singleton.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/identity-collation-baseline.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/identity-collation.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/long-pattern.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/main.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/missing-event-code.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/missing-shipment.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/mixed-shipment.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/nan-equality.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/noncontiguous-baseline.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/noncontiguous.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/numeric-equality.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/record-comparator.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/repeated-events.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/unequal-identities.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/unexpected-event.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/unfinished-history.xpath",
+      "docs/xpath40-catalog/examples/shipment-event-sequences/wrong-start.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<history shipment=\"SHIP-42\">\n  <event shipment=\"SHIP-42\" code=\"CREATED\"/>\n  <event shipment=\"SHIP-42\" code=\"PICKED\"/>\n  <event shipment=\"SHIP-42\" code=\"PACKED\"/>\n  <event shipment=\"SHIP-42\" code=\"DISPATCHED\"/>\n  <event shipment=\"SHIP-42\" code=\"IN_TRANSIT\"/>\n  <event shipment=\"SHIP-42\" code=\"DELIVERED\"/>\n</history>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/shipment-event-sequences/baseline.xpath",
+          "docs/xpath40-catalog/examples/shipment-event-sequences/main.xpath"
+        ]
+      },
+      {
+        "index": 1,
+        "language": "xquery",
+        "code": "(: Synthetic carrier history; document order is the agreed event order. :)\nlet $history := parse-xml('<history shipment=\"SHIP-42\"><event shipment=\"SHIP-42\" code=\"CREATED\"/><event shipment=\"SHIP-42\" code=\"PICKED\"/><event shipment=\"SHIP-42\" code=\"PACKED\"/><event shipment=\"SHIP-42\" code=\"DISPATCHED\"/><event shipment=\"SHIP-42\" code=\"IN_TRANSIT\"/><event shipment=\"SHIP-42\" code=\"DELIVERED\"/></history>')/history,\n    $events := $history/event,\n    $codes := $events/@code ! string(.),\n    $ids := $events/@shipment ! string(.),\n    $consistent := exists($events) and count($ids) eq count($events)\n                   and (all-equal($ids)) and $ids[1] eq string($history/@shipment),\n    $known := count($codes) eq count($events) and\n              (every $code in $codes satisfies $code = ('CREATED','PICKED','PACKED','DISPATCHED','IN_TRANSIT','DELIVERED')),\n    $start := starts-with-subsequence($codes,('CREATED','PICKED')),\n    $dispatch := contains-subsequence($codes,('PACKED','DISPATCHED')),\n    $end := ends-with-subsequence($codes,('DELIVERED'))\nreturn concat('shipment=', $history/@shipment, ';events=', count($events),\n              ';consistent=', $consistent, ';known=', $known, ';start=', $start,\n              ';dispatch=', $dispatch, ';end=', $end,\n              ';ready=', $consistent and $known and $start and $dispatch and $end)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/shipment-event-sequences/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "shipment=SHIP-42;events=6;consistent=true;known=true;start=true;dispatch=true;end=true;ready=true",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "shipment-event-sequences-baseline",
+          "shipment-event-sequences-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xquery",
+        "code": "(: Synthetic carrier history; document order is the agreed event order. :)\nlet $history := parse-xml('<history shipment=\"SHIP-42\"><event shipment=\"SHIP-42\" code=\"CREATED\"/><event shipment=\"SHIP-42\" code=\"PICKED\"/><event shipment=\"SHIP-42\" code=\"PACKED\"/><event shipment=\"SHIP-42\" code=\"DISPATCHED\"/><event shipment=\"SHIP-42\" code=\"IN_TRANSIT\"/><event shipment=\"SHIP-42\" code=\"DELIVERED\"/></history>')/history,\n    $events := $history/event,\n    $codes := $events/@code ! string(.),\n    $ids := $events/@shipment ! string(.),\n    $consistent := exists($events) and count($ids) eq count($events)\n                   and (count(distinct-values($ids)) le 1) and $ids[1] eq string($history/@shipment),\n    $known := count($codes) eq count($events) and\n              (every $code in $codes satisfies $code = ('CREATED','PICKED','PACKED','DISPATCHED','IN_TRANSIT','DELIVERED')),\n    $start := deep-equal(subsequence($codes,1,2),('CREATED','PICKED')),\n    $dispatch := some $i in 1 to (count($codes)-1) satisfies deep-equal(subsequence($codes,$i,2),('PACKED','DISPATCHED')),\n    $end := deep-equal(subsequence($codes,count($codes),1),('DELIVERED'))\nreturn concat('shipment=', $history/@shipment, ';events=', count($events),\n              ';consistent=', $consistent, ';known=', $known, ';start=', $start,\n              ';dispatch=', $dispatch, ';end=', $end,\n              ';ready=', $consistent and $known and $start and $dispatch and $end)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/shipment-event-sequences/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "shipment=SHIP-42;events=6;consistent=true;known=true;start=true;dispatch=true;end=true;ready=true",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "shipment-event-sequences-baseline",
+          "shipment-event-sequences-main"
+        ]
+      },
+      {
+        "index": 5,
+        "language": "xquery",
+        "code": "(: Synthetic carrier history; document order is the agreed event order. :)\nlet $history := parse-xml('<history shipment=\"SHIP-42\"></history>')/history,\n    $events := $history/event,\n    $codes := $events/@code ! string(.),\n    $ids := $events/@shipment ! string(.),\n    $consistent := exists($events) and count($ids) eq count($events)\n                   and (all-equal($ids)) and $ids[1] eq string($history/@shipment),\n    $known := count($codes) eq count($events) and\n              (every $code in $codes satisfies $code = ('CREATED','PICKED','PACKED','DISPATCHED','IN_TRANSIT','DELIVERED')),\n    $start := starts-with-subsequence($codes,('CREATED','PICKED')),\n    $dispatch := contains-subsequence($codes,('PACKED','DISPATCHED')),\n    $end := ends-with-subsequence($codes,('DELIVERED'))\nreturn concat('shipment=', $history/@shipment, ';events=', count($events),\n              ';consistent=', $consistent, ';known=', $known, ';start=', $start,\n              ';dispatch=', $dispatch, ';end=', $end,\n              ';ready=', $consistent and $known and $start and $dispatch and $end)",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/shipment-event-sequences/edge.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 6,
+        "language": "text",
+        "code": "shipment=SHIP-42;events=0;consistent=false;known=true;start=false;dispatch=false;end=false;ready=false",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "shipment-event-sequences-edge"
+        ]
+      },
+      {
+        "index": 7,
+        "language": "xml",
+        "code": "<history shipment=\"SHIP-42\">\n  <event shipment=\"SHIP-42\" code=\"CREATED\"/>\n  <event shipment=\"SHIP-42\" code=\"PICKED\"/>\n  <event shipment=\"SHIP-42\" code=\"PACKED\"/>\n  <event shipment=\"SHIP-42\" code=\"CUSTOMS\"/>\n  <event shipment=\"SHIP-42\" code=\"DISPATCHED\"/>\n  <event shipment=\"SHIP-42\" code=\"DELIVERED\"/>\n</history>",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [],
+        "equivalentEmbeddedXmlInputs": [
+          "docs/xpath40-catalog/examples/shipment-event-sequences/unexpected-event.xpath"
+        ]
+      },
+      {
+        "index": 8,
+        "language": "text",
+        "code": "shipment=SHIP-42;events=6;consistent=true;known=false;start=true;dispatch=false;end=true;ready=false",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "shipment-event-sequences-missing-event-code",
+          "shipment-event-sequences-unexpected-event"
+        ]
+      }
+    ]
+  },
+  "functions/sort-with.md": {
+    "caseIds": [
+      "sort-with-before",
+      "sort-with-edge",
+      "sort-with-main"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/cases.json",
+      "docs/xpath40-catalog/examples/sort-with/before.xpath",
+      "docs/xpath40-catalog/examples/sort-with/edge.xpath",
+      "docs/xpath40-catalog/examples/sort-with/main.xpath"
+    ],
+    "blocks": []
+  },
+  "functions/supplier-offer-ranking.md": {
+    "caseIds": [
+      "supplier-offer-ranking-all-boundary-ties",
+      "supplier-offer-ranking-available-ascii",
+      "supplier-offer-ranking-bad-untyped",
+      "supplier-offer-ranking-baseline",
+      "supplier-offer-ranking-computed-key-tie-observed",
+      "supplier-offer-ranking-default-sort",
+      "supplier-offer-ranking-descending",
+      "supplier-offer-ranking-empty-offers",
+      "supplier-offer-ranking-fallback",
+      "supplier-offer-ranking-invalid-order",
+      "supplier-offer-ranking-invalid-record",
+      "supplier-offer-ranking-main",
+      "supplier-offer-ranking-numeric-untyped",
+      "supplier-offer-ranking-stable-ties",
+      "supplier-offer-ranking-string-key",
+      "supplier-offer-ranking-unavailable"
+    ],
+    "fixtures": [
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/all-boundary-ties.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/available-ascii.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/bad-untyped.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/baseline.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/computed-key-tie-observed.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/default-sort.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/descending.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/empty-offers.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/fallback.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/invalid-order.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/invalid-record.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/main.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/numeric-untyped.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/stable-ties.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/string-key.xpath",
+      "docs/xpath40-catalog/examples/supplier-offer-ranking/unavailable.xpath"
+    ],
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<offers><offer id=\"A\" price=\"10\" score=\"90\"/><offer id=\"B\" price=\"8\" score=\"90\"/><offer id=\"C\" price=\"8\" score=\"85\"/><offer id=\"D\" price=\"12\" score=\"92\"/></offers>",
+        "exactFiles": [],
+        "containedInFiles": [
+          "docs/xpath40-catalog/examples/supplier-offer-ranking/baseline.xpath",
+          "docs/xpath40-catalog/examples/supplier-offer-ranking/main.xpath"
+        ],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 1,
+        "language": "xpath",
+        "code": "let $offers := parse-xml('<offers><offer id=\"A\" price=\"10\" score=\"90\"/><offer id=\"B\" price=\"8\" score=\"90\"/><offer id=\"C\" price=\"8\" score=\"85\"/><offer id=\"D\" price=\"12\" score=\"92\"/></offers>')/offers/offer\nlet $price := function($o) { xs:decimal($o/@price) }\nlet $score := function($o) { xs:decimal($o/@score) }\nlet $boundary := lowest($offers, (), $price)\nlet $cheapest := if (empty($boundary)) then () else $offers[$price(.) eq $price($boundary[1])]\nlet $collation := 'http://www.w3.org/2005/xpath-functions/collation/codepoint'\nreturn concat('cheapest=', string-join($cheapest/@id, ','), '; bestScore=', string-join(highest($offers, (), $score)/@id, ','), '; ranked=', string-join(sort-by($offers, (map {'key': $price}, map {'key': $score, 'order': 'descending'})) ! string(@id), ','), '; collationAvailable=', collation-available($collation))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/supplier-offer-ranking/main.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 2,
+        "language": "text",
+        "code": "cheapest=B,C; bestScore=D; ranked=B,C,A,D; collationAvailable=true",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "supplier-offer-ranking-main"
+        ]
+      },
+      {
+        "index": 3,
+        "language": "xpath",
+        "code": "let $offers := parse-xml('<offers><offer id=\"A\" price=\"10\" score=\"90\"/><offer id=\"B\" price=\"8\" score=\"90\"/><offer id=\"C\" price=\"8\" score=\"85\"/><offer id=\"D\" price=\"12\" score=\"92\"/></offers>')/offers/offer\nreturn let $cheap := min($offers/@price ! xs:decimal(.))\nreturn let $best := max($offers/@score ! xs:decimal(.))\nreturn let $byScore := sort($offers, (), function($o) { -xs:decimal($o/@score) })\nreturn let $ranked := sort($byScore, (), function($o) { xs:decimal($o/@price) })\nreturn concat('cheapest=', string-join($offers[xs:decimal(@price) eq $cheap]/@id, ','), '; bestScore=', string-join($offers[xs:decimal(@score) eq $best]/@id, ','), '; ranked=', string-join($ranked ! string(@id), ','))",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/supplier-offer-ranking/baseline.xpath"
+        ],
+        "containedInFiles": [],
+        "expectedOutputCases": []
+      },
+      {
+        "index": 4,
+        "language": "text",
+        "code": "cheapest=B,C; bestScore=D; ranked=B,C,A,D",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "expectedOutputCases": [
+          "supplier-offer-ranking-baseline"
+        ]
+      }
+    ]
+  }
+}

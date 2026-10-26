@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — Gregorian components and explicit timezone offsets</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited Gregorian construction; fractional precision gap**. Millisecond precision loss, permissive malformed/multi-item input and interop calendar bounds remain explicit; arbitrary extended-year operations are not certified. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Month-end cutoffs — Frozen 4.0.** [fn:build-dateTime](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-dateTime) and [fn:days-in-month](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-days-in-month).

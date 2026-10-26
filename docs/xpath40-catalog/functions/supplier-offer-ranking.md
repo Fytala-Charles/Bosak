@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified integration contracts and limitations</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited ranking; unresolved source/example consistency**. Equal keys do not imply all distinct records are extrema; NaN/exact mixed-number ordering and unverified record fields remain limits. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 Functions: [fn:highest](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-highest), [fn:lowest](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-lowest), [fn:sort-by](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-sort-by), [fn:collation-available](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-collation-available). Frozen 4.0.
@@ -32,6 +34,8 @@ Two suppliers can quote the same price but have different scores. A procurement 
 highest/lowest sort by an optional key and return boundary-related input items. Untyped keys are treated numerically unless an explicit string key changes that rule. In Bosak, the final membership comparison is against the whole boundary item (contextual/deep equality), not just its computed key. The observed two-node price-tie case returns B, although B and C share price 8. The report therefore filters all offers by the selected boundary price explicitly.
 
 The pinned draft's input-item contextual-equality rules and its computed-key tie examples need follow-up reconciliation with this engine behavior. This reference records the observed contract, not a certification of all computed-key ties.
+
+**C10 source-consistency review ? 26 October 2026:** At review revision `b4723ff5`, `highest` sorts by the modified key and then selects input items contextually equal to the boundary item. The framework defines atomic contextual equality using `compare(A,B)=0`, while the same source's `highest(1 to 25, (), fn { . idiv 10 })` example lists `20` through `25`. Released Bosak returns only `25`. [The C10 receipt](../SEMANTIC-REVIEW-BATCH-2.md) retains the example expectation and both source texts as an unresolved specification-reading issue; it does not certify all computed-key ties or diagnose an engine correction from that example alone.
 
 sort-by accepts key-definition maps in major-to-minor order, including key, order and collation fields. Equal full sort keys retain input order. collation-available reports whether a URI is recognized; it does not fetch that URI. Numeric comparisons do not require a string collation.
 

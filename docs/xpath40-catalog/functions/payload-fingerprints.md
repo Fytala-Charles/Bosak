@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified integration contracts and limitations</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. BLAKE3 and CRC-32 remain unsupported FOHA0001; opaque hash options do not establish a missing standard named parameter. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 Function: [fn:hash](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-hash). Frozen 4.0.

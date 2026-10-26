@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — a changed existing-function contract</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Exact positional comparison; keyword mismatch remains**. Do not substitute this comparator for engineering tolerance, generalized numeric conversion or automatic unit normalization. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 **Related current review:** [Equality/collation contracts](../EQUALITY-COLLATION-CONTRACT-REVIEW.md) refresh the five-family declarations, complete customer example, keyword boundaries and explicitly separate engine findings without replacing the historical evidence below.
 
 

@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — verified integration contracts and limitations</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Blocked empty-annotation contract**. No complete derived-type reflection/function-conversion audit; C03 owns constructor/type/coercion coverage. atomic-type-annotation(()) incorrectly returns a type record in both 4.0 profiles. Required empty-input refusal is explicitly unsupported; bounded correction F08-atomic-annotation-empty retains the independent XPTY0004 expectation. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 Functions: [fn:is-NaN](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-is-NaN), [fn:atomic-type-annotation](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-atomic-type-annotation), [fn:op](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-op). Frozen 4.0.

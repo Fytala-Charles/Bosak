@@ -4,6 +4,8 @@
   <p>Frozen 4.0</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Callable/subtyping combinations beyond the verified signatures remain unsupported in this consumer reference. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Higher-order selection — Frozen 4.0.** [Bosak PR #88](https://github.com/Fytala-Charles/Bosak/pull/88) / [immutable revision `0a928bb8`](https://github.com/Fytala-Charles/Bosak/commit/0a928bb81b81d0631cc681f86bba83259c0ed790). This is the shipped engine delivery.

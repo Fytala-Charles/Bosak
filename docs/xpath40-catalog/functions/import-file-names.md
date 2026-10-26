@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — real-world import text contracts</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Do not rely on tolerated typed-numeric string arguments; no grapheme-position or path-authorization contract. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Import file names — Frozen 4.0.** [fn:substring-before-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-before-last), [fn:substring-after-last](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-substring-after-last), and [fn:index-of-substring](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-index-of-substring).

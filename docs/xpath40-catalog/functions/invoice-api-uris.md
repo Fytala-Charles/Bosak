@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — parse components, build routes and decode values</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Use validated typed Boolean options and remove raw query when deliberately supplying an empty query map. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Invoice API URIs — Frozen 4.0.** [fn:parse-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-parse-uri), [fn:build-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-build-uri), and [fn:decode-from-uri](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-decode-from-uri).

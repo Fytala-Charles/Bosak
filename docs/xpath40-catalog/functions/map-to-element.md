@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 2 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. The reduced example does not certify the whole conversion-plan/record/namespaces space; supplementary provider Unicode limits belong to the deferred skip queue. Current-draft escape-names encoding is unsupported; use XML-compatible field names and verified conversion options. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Map-to-element conversion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: See the linked REQ dossiers and implementation evidence. [Primary implementation evidence](../../../tests/Bosak.XPath.Standard.Tests/ElementMapTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.

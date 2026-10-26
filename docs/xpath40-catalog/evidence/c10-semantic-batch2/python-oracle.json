@@ -1,0 +1,9 @@
+{
+  "language": "python",
+  "entry": "functions/payload-fingerprints.md",
+  "blockIndex": 3,
+  "code": "import hashlib\nprint(hashlib.sha256(b\"INV-2048|EUR|125.00\").hexdigest().upper())",
+  "exitCode": 0,
+  "stdout": "612D86BAC9C1A9654CA5BFF669CB9B2C4CF8F5C077FB024FF443589AD02D5BF4\r\n",
+  "stderr": ""
+}

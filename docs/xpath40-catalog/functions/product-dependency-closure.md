@@ -4,6 +4,8 @@
   <p>Frozen 4.0 — reachable components, shared dependencies and cycles</p>
 </div>
 
+**C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 3 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. Only XML nodes in one document are covered; no JNode/cross-document ordering, topological installation order or quantity explosion. Review completion is not final owner acceptance; earlier checkpoints remain historical.
+
 ## 1. Name and Classification
 
 **Product dependency closure — Frozen 4.0.** [fn:transitive-closure](https://qt4cg.org/specifications/xpath-functions-40/Overview.html#func-transitive-closure).
