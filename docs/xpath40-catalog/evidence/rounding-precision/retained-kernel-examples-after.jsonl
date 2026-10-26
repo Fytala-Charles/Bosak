@@ -1,0 +1,21 @@
+{"profile":"XPath31","Id":0,"value":null,"error":"FOAR0002: Value was either too large or too small for a Decimal.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath31","Id":1,"value":"NaN","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":2,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":3,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":4,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":5,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath31","Id":6,"value":"NaN","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":0,"value":null,"error":"FOAR0002: Value was either too large or too small for a Decimal.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40","Id":1,"value":"NaN","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":2,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":3,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":4,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":5,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath40","Id":6,"value":"NaN","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":0,"value":null,"error":"FOAR0002: Value was either too large or too small for a Decimal.","exceptionType":"System.InvalidOperationException","status":"Observed"}
+{"profile":"XPath40Experimental","Id":1,"value":"NaN","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":2,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":3,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":4,"value":"false","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":5,"value":"INF","error":null,"status":"Observed"}
+{"profile":"XPath40Experimental","Id":6,"value":"NaN","error":null,"status":"Observed"}

@@ -468,6 +468,7 @@
 //                      | Charles Korthout | 5.148 | 24-10-2026     | Range-check decimal-backed Unix integer epochs before Int64 narrowing.                   |
 //                      | Charles Korthout | 5.149 | 25-10-2026     | Enforce fn:abs numeric optional argument conversion without changing function identity.    |
 //                      | Charles Korthout | 5.150 | 26-10-2026     | Enforce rounding numeric and precision contracts while preserving function coercion types. |
+//                      | Charles Korthout | 5.151 | 26-10-2026     | Bound extreme rounding precision and accept decimal-backed integer precision (1.26.2).     |
 //                      |==================|=======|================|=========================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -15019,7 +15020,46 @@ public static class FunctionLibrary
         => Round(ctx, args[0], 0);
 
     private static XdmValue Round_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => Round(ctx, args[0], args[1].IntegerValue);
+        => Round(ctx, args[0], GetRoundingPrecision(args[1]));
+
+    /// <summary>Reads an already converted integer precision without narrowing a wide payload.</summary>
+    /// <param name="precision">The converted integer value.</param>
+    /// <returns>The precision, with wide decimal-backed values saturated outside the kernel window.</returns>
+    /// <exception cref="InvalidOperationException">The payload is not an integer (XPTY0004).</exception>
+    private static long GetRoundingPrecision(XdmValue precision)
+    {
+        if (precision.Kind == XdmValueKind.Integer)
+            return precision.IntegerValue;
+        if (precision.Kind == XdmValueKind.Decimal)
+        {
+            decimal value = precision.DecimalValue;
+            if (decimal.Truncate(value) == value)
+                return value > 1000m ? 1001L : value < -1000m ? -1001L : (long)value;
+        }
+        throw new InvalidOperationException("XPTY0004: Rounding precision must be an integer.");
+    }
+
+    /// <summary>Rounds beyond the supported numeric magnitudes without constructing a power of ten.</summary>
+    /// <param name="ctx">The evaluation context used to recognize integer-family values.</param>
+    /// <param name="arg">The converted numeric argument.</param>
+    /// <returns>A type-correct zero, or the original floating zero, infinity or NaN.</returns>
+    /// <exception cref="InvalidOperationException">The argument is not numeric (XPTY0004).</exception>
+    private static XdmValue RoundToExtremeZero(EvaluationContext ctx, XdmValue arg)
+    {
+        if (arg.Kind is XdmValueKind.Double or XdmValueKind.Float)
+        {
+            double value = arg.DoubleValue;
+            if (!double.IsFinite(value) || value == 0d)
+                return arg;
+            double zero = Math.CopySign(0d, value);
+            return arg.Kind == XdmValueKind.Float ? XdmValue.FromFloat((float)zero) : XdmValue.FromDouble(zero);
+        }
+        if (arg.Kind == XdmValueKind.Integer)
+            return XdmValue.FromInteger(0);
+        if (arg.Kind == XdmValueKind.Decimal)
+            return VmEngine.ValueMatchesType(arg, "xs:integer", ctx) ? XdmValue.FromInteger(0) : XdmValue.FromDecimal(0m);
+        throw new InvalidOperationException("XPTY0004: Rounding requires a numeric argument.");
+    }
 
     private static XdmValue Round(EvaluationContext ctx, XdmValue arg, long precision)
     {
@@ -15033,6 +15073,11 @@ public static class FunctionLibrary
         // is the identity function (avoids int overflow for huge precisions).
         if (precision > 1000)
             return arg;
+
+        // All supported finite magnitudes are below 10^309. At this precision
+        // they round to zero; preserve floating signs and special values.
+        if (precision < -1000)
+            return RoundToExtremeZero(ctx, arg);
 
         // For non-numeric types (string, untypedAtomic, etc.), convert to double first.
         bool isNumeric = arg.Kind is XdmValueKind.Integer or XdmValueKind.Decimal or XdmValueKind.Double or XdmValueKind.Float;
@@ -15197,7 +15242,7 @@ public static class FunctionLibrary
         => RoundHalfToEven(ctx, args[0], 0);
 
     private static XdmValue RoundHalfToEven_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => RoundHalfToEven(ctx, args[0], args[1].IntegerValue);
+        => RoundHalfToEven(ctx, args[0], GetRoundingPrecision(args[1]));
 
     private static XdmValue RoundHalfToEven(EvaluationContext ctx, XdmValue arg, long precision)
     {
@@ -15209,6 +15254,9 @@ public static class FunctionLibrary
         // is the identity function (avoids int overflow for huge precisions).
         if (precision > 1000)
             return arg;
+
+        if (precision < -1000)
+            return RoundToExtremeZero(ctx, arg);
 
         // For non-numeric types (string, untypedAtomic, etc.), convert to double first:
         // the function conversion rules cast untypedAtomic to xs:double for an xs:numeric

@@ -1,3 +1,5 @@
+26 October 2026: nine extreme-rounding precision audit/correction/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Corrected/draft receipt hashes, pinned baseline source, watchdog and retained-kernel findings, links and diff checked; no screenshot/PDF or Braid acceptance.
+
 26 October 2026: eleven 1.26.1 publication/release-note/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Tag/workflow/signed-public/cache/output/consumer receipt hashes and links verified; original candidate evidence retained. No screenshot/PDF or Braid native acceptance.
 
 26 October 2026: ten 1.26.1 candidate/release-note/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Immutable source, package/cache/output/assembly provenance, raw evidence hashes, consumer sources/receipts, local links and diff checked; no screenshot/PDF or signed/public/native acceptance.

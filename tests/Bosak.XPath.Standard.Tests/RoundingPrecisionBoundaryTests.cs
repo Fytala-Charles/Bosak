@@ -1,0 +1,120 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 26 October 2026
+// PURPOSE              : Verifies extreme rounding precision, numeric identity and signed-zero boundaries.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 26-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using Xunit;
+
+namespace Bosak.XPath.Standard.Tests;
+
+/// <summary>Verifies extreme rounding precision, numeric identity and signed-zero boundaries.</summary>
+public sealed class RoundingPrecisionBoundaryTests
+{
+    /// <summary>Provides mathematically bounded results without depending on rounding kernels.</summary>
+    /// <returns>Profile, expression, expected value or error and error flag.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        string[] precisions = ["-1001", "-2147483648", "-9223372036854775808", "9223372036854775807", "9223372036854775808", "-9223372036854775809", "79228162514264337593543950335", "-79228162514264337593543950335"];
+        var values = new (string Value, string Type, string Shape, bool Negative)[]
+        {
+            ("2", "xs:integer", "finite", false),
+            ("2.5", "xs:decimal", "finite", false),
+            ("2.5e0", "xs:double", "finite", false),
+            ("-2.5e0", "xs:double", "finite", true),
+            ("xs:float('2.5')", "xs:float", "finite", false),
+            ("1e300", "xs:double", "finite", false),
+            ("xs:double('4.9406564584124654e-324')", "xs:double", "finite", false),
+            ("xs:double('-0')", "xs:double", "zero", true),
+            ("xs:float('-0')", "xs:float", "zero", true),
+            ("xs:double('INF')", "xs:double", "special", false),
+            ("xs:double('-INF')", "xs:double", "special", true),
+            ("xs:double('NaN')", "xs:double", "nan", false),
+            ("(9223372036854775808)", "xs:integer", "finite", false),
+        };
+        var controls = new (string Expression, string Expected, bool Error)[]
+        {
+            ("round((),(9223372036854775808))", "()", false),
+            ("round-half-to-even((),(-9223372036854775809))", "()", false),
+            ("round('bad',(9223372036854775808))", "XPTY0004", true),
+            ("round-half-to-even('bad',(-9223372036854775809))", "XPTY0004", true),
+            ("round(xs:untypedAtomic('bad'),(9223372036854775808))", "FORG0001", true),
+            ("round-half-to-even(xs:untypedAtomic('bad'),(-9223372036854775809))", "FORG0001", true),
+            ("round([map{}],(-9223372036854775809))", "FOTY0013", true),
+            ("round-half-to-even([function(){1}],(9223372036854775808))", "FOTY0013", true),
+            ("round(2.5,())", "XPTY0004", true),
+            ("round-half-to-even(2.5,(0,1))", "XPTY0004", true),
+            ("round(2.5,xs:untypedAtomic('bad'))", "FORG0001", true),
+            ("round-half-to-even(2.5,'bad')", "XPTY0004", true),
+            ("round(2.5,xs:unsignedLong('18446744073709551615')) eq 2.5", "true", false),
+            ("round-half-to-even(2.5,[(9223372036854775808)]) eq 2.5", "true", false),
+            ("round(xs:untypedAtomic('2.5'),(9223372036854775808)) instance of xs:double", "true", false),
+        };
+        foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+        {
+            foreach (var name in new[] { "round", "round-half-to-even" })
+                foreach (var precision in precisions)
+                    foreach (var row in values)
+                    {
+                        bool identity = precision[0] != '-' || row.Shape != "finite";
+                        string expected = row.Shape == "nan" ? "not($r eq $r)" : identity ? $"$r eq ({row.Value})" : "$r eq 0";
+                        if (row.Type is "xs:double" or "xs:float" && (row.Shape == "zero" || !identity))
+                            expected += $" and (1 div $r) eq xs:double('{(row.Negative ? "-" : "")}INF')";
+                        foreach (var callee in new[] { name, name + "#2" })
+                        {
+                            string expression = $"let $r := {callee}({row.Value},({precision})) return ($r instance of {row.Type} and {expected})";
+                            yield return new object[] { profile, expression, "true", false };
+                        }
+                    }
+            foreach (var row in controls)
+                yield return new object[] { profile, row.Expression, row.Expected, row.Error };
+            foreach (var name in new[] { "round", "round-half-to-even" })
+                foreach (var precision in new[] { "9223372036854775808", "-9223372036854775809" })
+                    foreach (var callee in new[] { $"function-lookup(QName('http://www.w3.org/2005/xpath-functions','{name}'),2)", $"(function($x,$p){{{name}($x,$p)}})" })
+                    {
+                        string expected = precision[0] == '-' ? "$r eq 0 and (1 div $r) eq xs:double('-INF')" : "$r eq -2.5e0";
+                        yield return new object[] { profile, $"let $r := {callee}(-2.5e0,({precision})) return ($r instance of xs:double and {expected})", "true", false };
+                    }
+        }
+    }
+
+    /// <summary>Checks values, kinds, signed zero and required errors through public calls.</summary>
+    /// <param name="profile">The language profile.</param>
+    /// <param name="expression">The complete predicate or error expression.</param>
+    /// <param name="expected">The expected value or error code.</param>
+    /// <param name="error">Whether evaluation must fail.</param>
+    [Theory, MemberData(nameof(Cases))]
+    public void ExtremePrecision(XPathCompatibility profile, string expression, string expected, bool error)
+    {
+        string Evaluate() => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(new EvaluationContext()).ToString();
+        if (error) Assert.Contains(expected, Assert.ThrowsAny<Exception>(() => Evaluate()).Message);
+        else Assert.Equal(expected, Evaluate());
+    }
+
+    /// <summary>Preserves supported static backwards-compatible conversion and empty behavior.</summary>
+    /// <param name="expression">The static expression.</param>
+    /// <param name="expected">The expected result.</param>
+    [Theory]
+    [InlineData("round((2.5,3.5),-1001)", "0")]
+    [InlineData("round-half-to-even((2.5,3.5),-1001)", "0")]
+    [InlineData("round((),(9223372036854775808))", "NaN")]
+    [InlineData("round-half-to-even((),(-9223372036854775809))", "()")]
+    public void BackwardsCompatibleControls(string expression, string expected)
+    {
+        var options = new CompileOptions { BackwardsCompatible = true };
+        Assert.Equal(expected, XPath31Expression.Compile(expression, options).Evaluate(new EvaluationContext { BackwardsCompatible = true }).ToString());
+    }
+}

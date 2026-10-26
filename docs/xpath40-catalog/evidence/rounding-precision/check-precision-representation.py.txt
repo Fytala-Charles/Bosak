@@ -1,0 +1,6 @@
+from pathlib import Path
+import json,subprocess
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/rounding-precision';expressions=["9223372036854775808 instance of xs:integer","-9223372036854775809 instance of xs:integer","79228162514264337593543950335 instance of xs:integer","xs:integer('9223372036854775808')","xs:unsignedLong('18446744073709551615') instance of xs:integer"]
+rows=[dict(Id=i,Expression=x,BaselineSafe=True) for i,x in enumerate(expressions)];f=e/'representation-inputs.json';f.write_text(json.dumps(rows,indent=2)+'\n',encoding='utf-8')
+subprocess.run(['dotnet',str(r/'.guard-tmp/rounding-precision-probe/bin/Release/net10.0/Probe.dll'),str(f),str(e/'representation-observations.jsonl'),'after'],check=True,timeout=30)
+print((e/'representation-observations.jsonl').read_text(encoding='utf-8')[:2300])

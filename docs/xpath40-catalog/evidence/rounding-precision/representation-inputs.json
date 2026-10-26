@@ -1,0 +1,27 @@
+[
+  {
+    "Id": 0,
+    "Expression": "9223372036854775808 instance of xs:integer",
+    "BaselineSafe": true
+  },
+  {
+    "Id": 1,
+    "Expression": "-9223372036854775809 instance of xs:integer",
+    "BaselineSafe": true
+  },
+  {
+    "Id": 2,
+    "Expression": "79228162514264337593543950335 instance of xs:integer",
+    "BaselineSafe": true
+  },
+  {
+    "Id": 3,
+    "Expression": "xs:integer('9223372036854775808')",
+    "BaselineSafe": true
+  },
+  {
+    "Id": 4,
+    "Expression": "xs:unsignedLong('18446744073709551615') instance of xs:integer",
+    "BaselineSafe": true
+  }
+]

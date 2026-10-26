@@ -1,0 +1,29 @@
+{
+  "rows": 3036,
+  "baselineObserved": 2916,
+  "baselineNotExecutedAllocationHazard": 120,
+  "baselineDiscrepancies": 1536,
+  "afterDiscrepancies": 612,
+  "correctedObserved": 924,
+  "regressions": 0,
+  "perScope": {
+    "retained-kernel": {
+      "rows": 1584,
+      "baselineObserved": 1584,
+      "baselineNotExecutedAllocationHazard": 0,
+      "baselineDiscrepancies": 612,
+      "afterDiscrepancies": 612,
+      "correctedObserved": 0,
+      "regressions": 0
+    },
+    "extreme": {
+      "rows": 1452,
+      "baselineObserved": 1332,
+      "baselineNotExecutedAllocationHazard": 120,
+      "baselineDiscrepancies": 924,
+      "afterDiscrepancies": 0,
+      "correctedObserved": 924,
+      "regressions": 0
+    }
+  }
+}
