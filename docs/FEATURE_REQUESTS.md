@@ -37,6 +37,9 @@
   <p>Living registry of cross-cutting capabilities requested by consuming applications</p>
 </div>
 
+**REQ-126 C13 review prepared — 26 October 2026:** [Final closure review](xpath40-catalog/FINAL-CLOSURE-REVIEW.md) consolidates 76 entries, 235 bounded contract groups and 38 proposed disposition records. All 3,172 fresh documentation tests pass. Six Known Uses sections now state their evidence/gate boundary directly. The [acceptance proposal](xpath40-catalog/C13-ACCEPTANCE-PROPOSAL.md) would close the documentation catalog with explicit limits and open technical follow-ups; it is not approved. All 48 unmet batch observations remain unmet. C13 remains open, AC-01 through AC-04 unchecked and REQ-126 In Progress; no engine, fixture, gate, version or release change. Earlier checkpoints are historical.
+
+
 **REQ-126 C12 complete — 26 October 2026:** [Final semantic/evidence batch](xpath40-catalog/SEMANTIC-REVIEW-BATCH-4.md) reviews 19 entries/57 contract groups with 369 exact catalog cases and six dedicated walkthroughs. All 5,595 fresh tests pass; independent diagnostics retain 167 matching and eight unmet controls. Choice coercion and switch comparison remain explicit blockers. All 76 entries now have C09-C12 bounded reviews. One workpackage remains: C13 blocker disposition and owner acceptance. REQ-126 stays In Progress; no engine, fixture, profile, gate or release change. Earlier checkpoints are historical.
 
 
@@ -5477,7 +5480,7 @@ Provide additive public static-validation and controlled-execution contracts wit
 
 **Requesting Application:** *(internal — engine documentation)*  
 **Submitted:** 2026-10-10  
-**Status:** In Progress (2026-10-26): four worked chapters; 76 entries; 3,148 feature +24 chapter checks (3,172 total). The [closure baseline](xpath40-catalog/CLOSURE-PLAN.md) defines 13 review/closure workpackages: C01-C12 complete and 1 open; C08 legacy policy explicitly approved with all original nulls retained. C09-C12 review all four 19-entry batches (76 entries) with explicit limitations/blockers. Scope includes exact four-by-19 entry batches, the 18 grammar-row mapping and all 28 missing historical adoption pins. AC-01–04 and D2/D3/D4/applicable-evidence validation remain partial; AC-05 is met for current scope. The [separate conformance queue](xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md) has six investigation clusters; it is not a commitment to implement every skipped/deferred feature. Published 1.26.3 numeric corrections and audit evidence remain delivered; this checkpoint changes no engine, gate/filter, expected count or version.
+**Status:** In Progress (2026-10-26): four worked chapters; 76 entries; 3,148 feature +24 chapter checks (3,172 total). The [closure baseline](xpath40-catalog/CLOSURE-PLAN.md) defines 13 review/closure workpackages: C01-C12 complete and 1 open; C13 final review prepared, explicit bounded-catalog acceptance pending; C08 legacy policy explicitly approved with all original nulls retained. C09-C12 review all four 19-entry batches (76 entries) with explicit limitations/blockers. Scope includes exact four-by-19 entry batches, the 18 grammar-row mapping and all 28 missing historical adoption pins. AC-01–04 and D2/D3/D4/applicable-evidence validation remain partial; AC-05 is met for current scope. The [separate conformance queue](xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md) has six investigation clusters; it is not a commitment to implement every skipped/deferred feature. Published 1.26.3 numeric corrections and audit evidence remain delivered; this checkpoint changes no engine, gate/filter, expected count or version.
 **Owner:** Bosak maintainers (Charles Korthout).
 
 #### Problem Statement

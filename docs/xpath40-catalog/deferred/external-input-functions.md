@@ -273,6 +273,8 @@ The checks operate entirely on in-memory literals. No network availability, pars
 
 The examples model partner invoice normalization, attachment transport and business validation. They are not evidence of a named production deployment or of a selected external dependency. No third-party package is recommended or installed by this slice.
 
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [55 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [Binary_HexAndBase64ComparableByOctets](../../../tests/Bosak.XPath.Standard.Tests/AtomicEqualTests.cs); [ParseXml](../../../tests/Bosak.XPath.Standard.Tests/FunctionLibraryTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
+
 ## 16. Related Features
 
 See [Serialization parameter boundaries](serialization-parameters.md), [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md), [completeness audit](../COMPLETENESS-AUDIT.md) and [integration](../../INTEGRATION.md). The separate GNode/JNode and language-boundary dispositions remain to be reviewed.

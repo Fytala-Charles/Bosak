@@ -244,6 +244,8 @@ The examples use in-memory capture. Both alternatives visit each selected invoic
 
 The executable invoice export is a realistic ERP reporting pattern, not evidence of a named production deployment. Other uses include applying normalization rules before building JSON records; those constructions need their own fixtures.
 
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [28 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [Function_ApplyTemplates_Inside_Function_Matches_Name_Pattern](../../../tests/Bosak.Xslt.Tests/StylesheetTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
+
 ## 16. Related Features
 
 See [enclosing modes](enclosing-modes.md), [capturing accumulators](capturing-accumulators.md), [the examples manifest](../examples/cases.json) and [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md). These entries keep ordinary dispatch, deferred enclosure/capture and function composition separate.

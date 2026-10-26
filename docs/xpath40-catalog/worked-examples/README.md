@@ -5,6 +5,9 @@
   <p>Learn XPath and XSLT through practical document-processing tasks</p>
 </div>
 
+**REQ-126 C13 review prepared — 26 October 2026:** [Final closure review](../FINAL-CLOSURE-REVIEW.md) consolidates 76 entries, 235 bounded contract groups and 38 proposed disposition records. All 3,172 fresh documentation tests pass. Six Known Uses sections now state their evidence/gate boundary directly. The [acceptance proposal](../C13-ACCEPTANCE-PROPOSAL.md) would close the documentation catalog with explicit limits and open technical follow-ups; it is not approved. All 48 unmet batch observations remain unmet. C13 remains open, AC-01 through AC-04 unchecked and REQ-126 In Progress; no engine, fixture, gate, version or release change. Earlier checkpoints are historical.
+
+
 ## Reading path
 
 Start with a business problem and follow the transformation from input to expected output. Each chapter has complete runnable files and named verification tests. The [feature catalog](../README.md) supplies detailed syntax and compatibility reference material when you need it.
@@ -16,7 +19,7 @@ Start with a business problem and follow the transformation from input to expect
 | [Order reconciliation report](order-reconciliation/README.md) | Implemented; fixtures and three checks | Customer/product grouping, lookup joins, missing reference data, and report/exception separation. |
 | [Order validation and routing](order-routing/README.md) | Implemented; complete fixtures and eleven checks | Standalone XSLT 4.0 routing in source 1.1.1; explicit XPath40 planning plus XSLT 3.0 remains the 1.1.0 alternative. |
 
-The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 2,636 focused checks, including earlier-version baselines and compatibility refusals.
+The first three chapters cover business mapping, document publishing, and operational reconciliation. Follow them in that order, or start with the task closest to your application. The [catalog examples](../examples/README.md) add 3,148 focused checks, including earlier-version baselines and compatibility refusals.
 
 ## Worked-example contract
 

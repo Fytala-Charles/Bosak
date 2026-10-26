@@ -213,6 +213,8 @@ XQuery and portable XPath materialize parsed XML and sorting input. Streaming in
 
 The invoice report is a realistic ERP task, not a named deployment. No complete language-conformance claim follows from the 28 new fixtures or from a version="4.0" stylesheet executing successfully.
 
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [28 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [XQuery_OrderBy_WithWhere](../../../tests/Bosak.XQuery.Tests/PlaceholderTests.cs); [ApplyTemplates_Parity](../../../tests/Bosak.Xslt.Tests/StreamingTransformTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
+
 ## 16. Related Features
 
 [JNode boundary](../data-model/jnode-template-boundary.md), [capturing accumulators](capturing-accumulators.md), [computed constructors](computed-node-constructors.md), [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md) and [integration](../../INTEGRATION.md).

@@ -4,6 +4,9 @@
   <p>26 October 2026 — plan baseline v1; public Bosak 1.26.3</p>
 </div>
 
+**REQ-126 C13 review prepared — 26 October 2026:** [Final closure review](FINAL-CLOSURE-REVIEW.md) consolidates 76 entries, 235 bounded contract groups and 38 proposed disposition records. All 3,172 fresh documentation tests pass. Six Known Uses sections now state their evidence/gate boundary directly. The [acceptance proposal](C13-ACCEPTANCE-PROPOSAL.md) would close the documentation catalog with explicit limits and open technical follow-ups; it is not approved. All 48 unmet batch observations remain unmet. C13 remains open, AC-01 through AC-04 unchecked and REQ-126 In Progress; no engine, fixture, gate, version or release change. Earlier checkpoints are historical.
+
+
 **REQ-126 C12 complete — 26 October 2026:** [Final semantic/evidence batch](SEMANTIC-REVIEW-BATCH-4.md) reviews 19 entries/57 contract groups with 369 exact catalog cases and six dedicated walkthroughs. All 5,595 fresh tests pass; independent diagnostics retain 167 matching and eight unmet controls. Choice coercion and switch comparison remain explicit blockers. All 76 entries now have C09-C12 bounded reviews. One workpackage remains: C13 blocker disposition and owner acceptance. REQ-126 stays In Progress; no engine, fixture, profile, gate or release change. Earlier checkpoints are historical.
 
 
@@ -66,7 +69,7 @@ The fresh [catalog snapshot](evidence/closure-triage/catalog-inventory.json) rec
 | C10 — complete bounded review | Applicable-evidence/semantic review batch 2 | Second exact 19-entry manifest | AC-03/04 |
 | C11 — complete bounded review | Applicable-evidence/semantic review batch 3 | Third exact 19-entry manifest | AC-03/04 |
 | C12 — complete bounded review | Applicable-evidence/semantic review batch 4 | Fourth exact 19-entry manifest | AC-03/04 |
-| C13 | Final closure and owner acceptance | Resolve blocking receipts, verify examples/counts/links, and record explicit acceptance of AC-01–04; maintain AC-05 | AC-01–05 |
+| C13 — review prepared, owner decision pending | Final closure and owner acceptance | Resolve blocking receipts, verify examples/counts/links, and record explicit acceptance of AC-01–04; maintain AC-05 | AC-01–05 |
 
 C09–C12 partition the current 76 entries exactly once, in stable path order. Their complete file lists are in the JSON; they are review manifests, not accepted-entry lists. Already supplied bounded examples remain evidence. Each package reviews the remaining delta instead of restarting completed work.
 

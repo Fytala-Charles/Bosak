@@ -183,6 +183,8 @@ Both report paths materialize parsed JSON. Wrapper navigation retains parent con
 
 The partner invoice report is a realistic integration example, not evidence of a named deployment. The [order-routing chapter](../worked-examples/order-routing/README.md) already demonstrates ordinary map/array-to-stylesheet integration; that path is not proof of JNode built-in template handling.
 
+**C13 applicable-evidence placement:** A positive XPath gate is not applicable to these deferred/XSLT-only claims. Executable evidence verifies the stated refusals and supported alternatives, not implementation of the deferred shape. [19 exact case receipts](../SEMANTIC-REVIEW-BATCH-1.json) retain input, mode/host, expected output/error and alternatives. Named evidence: [InstanceOf_Bare_MatchesAnyJNode](../../../tests/Bosak.XPath.Standard.Tests/JNodeTests.cs). The public [CatalogExampleTests.PublishedExample_MatchesDeclaredOutcome](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs) executes the linked published fixtures.
+
 ## 16. Related Features
 
 [JNode navigation](jnode-navigation.md), [external-input boundaries](../deferred/external-input-functions.md), [catalog index](../README.md), [supplementary audit](../SUPPLEMENTARY-COVERAGE-AUDIT.md) and [completeness audit](../COMPLETENESS-AUDIT.md).
