@@ -1,0 +1,126 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/c04-render/README.md.html",
+      "sha256": "e1f878c02cbc477aa953e141439bdf4ce5e7ab5ae7b14ccd289af51df1e371ef"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/c04-render/docs_ARCHITECTURE.md.html",
+      "sha256": "fa7c577d143172ac7497123bf69287114cbc1316601873d72b50ad3141a2bbcf"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/c04-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "33ba370880e928e8556bc1af70cf5c9a2ffaa043f680eed205281aaf374ba8b1"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/c04-render/docs_INTEGRATION.md.html",
+      "sha256": "58510641fde815070c5576cf2c74300e8caef69eb170e0a62a05758086f66a8d"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/c04-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "7eae6a8a9895c498af242a256042e0769bb3b1f88421bd670578d07d46f31db6"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/c04-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "47f0e41b24b282f118bfa7c779379a6a2c8fa69a1f0e4075e049edbfa12bbdd5"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "c08ba63335a1a46d209199f2c1ebe1799743d54c2f165bf501c50f5b033bf4b2"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "bb876e2d01ca56dfbf222978fc8376c4412ae526a8ae6284bac5cfc65df4412e"
+    },
+    {
+      "source": "docs/xpath40-catalog/CLOSURE-PLAN.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_CLOSURE-PLAN.md.html",
+      "sha256": "9a6c669ca5cdde927e08f90959a9406d15d8d84397308d154dd98d0121c76e98"
+    },
+    {
+      "source": "docs/xpath40-catalog/SUPPLEMENTARY-COVERAGE-AUDIT.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_SUPPLEMENTARY-COVERAGE-AUDIT.md.html",
+      "sha256": "35f2e267b57e47426c1a929dd79547cafb4c4d291d737fbf07a4bc13fed29794"
+    },
+    {
+      "source": "docs/xpath40-catalog/FOCUS-FUNCTION-SYNTAX.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_FOCUS-FUNCTION-SYNTAX.md.html",
+      "sha256": "f9a924e4b9aa109d4855cadf0c5695602cd3d4456fa6bb89826ea03825822100"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONSTRUCTOR-TYPE-RECONCILIATION.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_CONSTRUCTOR-TYPE-RECONCILIATION.md.html",
+      "sha256": "00fdeb20ad30b97cbae32bf15644fe49ef6eb67ceb1a8adc37759b7aa6a17f45"
+    },
+    {
+      "source": "docs/xpath40-catalog/EXPRESSION-CALL-FOCUS-RECONCILIATION.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_EXPRESSION-CALL-FOCUS-RECONCILIATION.md.html",
+      "sha256": "1438c9364b98b6801e442b8f846fed72adb5ece88f491bfba1a2dcc921508351"
+    },
+    {
+      "source": "docs/xpath40-catalog/SIGNATURE-CONTRACT-AUDIT.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_SIGNATURE-CONTRACT-AUDIT.md.html",
+      "sha256": "5110afeb032b1e9de5f5e809e2cd6c243906009d6371a29d33cb2cc603e83437"
+    },
+    {
+      "source": "docs/xpath40-catalog/CHANGED-31-CONTRACT-INVENTORY.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_CHANGED-31-CONTRACT-INVENTORY.md.html",
+      "sha256": "e2337a5f829f57624932371940f4aed9a33d127486614d535c0f6258c6f6b7de"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/otherwise-operator.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_otherwise-operator.md.html",
+      "sha256": "990ebcdb1de335ec33627fa94943f8acb0072240aabd2d92135e951e51ce9f0c"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/keyword-arguments.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_keyword-arguments.md.html",
+      "sha256": "fae2d3d9362074ea38ea0c14851481a924415851be4dc7ecb46fc6944e2bb69f"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/string-templates.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_string-templates.md.html",
+      "sha256": "b0309bc32e9668e0db5a665d6e12b5635e2cdc5c3da49d8384dbee3bd9005477"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/numeric-literals.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_numeric-literals.md.html",
+      "sha256": "eb981c1234f35f8ba0699aacfedb9904fbfe7111ae2a4e9ba4c635a29423d363"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/pipeline-operator.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_pipeline-operator.md.html",
+      "sha256": "8cc17bd584fb2add9bedb73c2bcff0a8d49d5c7905cd741210cbab772440a138"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/mapping-arrow.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_mapping-arrow.md.html",
+      "sha256": "a94211cfd2348228e637e9f45822b8e5ac9000939ac65a0144c9bbb3fe99a5c3"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/focus-functions.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_focus-functions.md.html",
+      "sha256": "c0bcde95a4583333c3fe6a5d5861571fbe461a416396e764ceaa35da00727ee9"
+    },
+    {
+      "source": "docs/xpath40-catalog/operators-and-syntax/focus-function-syntax.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_operators-and-syntax_focus-function-syntax.md.html",
+      "sha256": "042ee05335458942002327f282cbed58c93ffe44047e2bc57378b5c2f00ec1ae"
+    },
+    {
+      "source": "docs/xpath40-catalog/experimental/fn-scan.md",
+      "html": ".guard-tmp/c04-render/docs_xpath40-catalog_experimental_fn-scan.md.html",
+      "sha256": "95eeca9f1093ff542aa4aff985644286b1969c2ba119e70b95813cffaf916140"
+    }
+  ]
+}

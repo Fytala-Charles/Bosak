@@ -1,0 +1,154 @@
+{
+  "rows": {
+    "S1-S2-S5": {
+      "productions": [
+        "FunctionCall",
+        "FunctionItemExpr",
+        "NamedFunctionRef",
+        "DynamicFunctionCall",
+        "Argument",
+        "ArgumentPlaceholder"
+      ],
+      "sections": [
+        "id-function-calls",
+        "id-inline-func"
+      ],
+      "assessment": "Function-call/ref/dynamic forms and HOF/profile controls are mapped. C01-C03 remain the signature/default/option/type evidence, not a new grammar-completeness proof.",
+      "remaining": "C02 F01-F14 and C03 T01-T05 retain function-specific conversion/options/host limits. Registration count and a passing HOF example do not accept every call contract.",
+      "tickets": []
+    },
+    "S3-otherwise": {
+      "productions": [
+        "OtherwiseExpr"
+      ],
+      "sections": [
+        "id-otherwise",
+        "id-guarded-expressions"
+      ],
+      "assessment": "Released ?? preserves empty-versus-present, whole-sequence value, precedence, containing focus and guarded dynamic-error controls. Current draft spells the operator otherwise and is not accepted by either 4.0 profile.",
+      "remaining": "Do not advertise ?? as the pinned normative spelling. Closed-host static binding needs its own review; the public API accepts runtime variable/function context.",
+      "tickets": [
+        "G01-otherwise-spelling",
+        "G04-late-binding-boundary"
+      ]
+    },
+    "S3-keywords": {
+      "productions": [
+        "ArgumentList",
+        "PositionalArgumentList",
+        "PositionalArguments",
+        "KeywordArguments",
+        "KeywordArgument",
+        "Argument",
+        "ArgumentPlaceholder"
+      ],
+      "sections": [
+        "id-function-calls",
+        "id-partial-function-application"
+      ],
+      "assessment": "Reordered/mixed keywords, empty/default, Q{} EQNames and static rejection controls pass. Keyword partial application with ? fails parsing; positional partial application is a working alternative.",
+      "remaining": "Per-function metadata and spelling drift remain C02 F01. Dynamic calls have positional argument grammar; their rejection is not evidence of a missing universal keyword facility.",
+      "tickets": [
+        "G03-keyword-placeholders"
+      ]
+    },
+    "S3-lexical": {
+      "productions": [
+        "NumericLiteral",
+        "IntegerLiteral",
+        "HexIntegerLiteral",
+        "BinaryIntegerLiteral",
+        "DecimalLiteral",
+        "DoubleLiteral",
+        "Digits",
+        "HexDigits",
+        "BinaryDigits",
+        "StringTemplate",
+        "StringTemplateFixedPart",
+        "StringTemplateVariablePart"
+      ],
+      "sections": [
+        "id-literals",
+        "id-string-templates"
+      ],
+      "assessment": "Radix/separator token boundaries, template escaping/nesting/comment/atomization and old-profile/static-error cases are mapped. C03 retains numeric representation limits.",
+      "remaining": "Do not infer arbitrary precision, every adjacency/Unicode digit case, XML/XQuery string constructors or AVT/host behavior from these lexical probes.",
+      "tickets": [
+        "G05-remaining-combinations"
+      ]
+    },
+    "S4-focus": {
+      "productions": [
+        "PipelineExpr",
+        "ArrowExpr",
+        "SequenceArrowTarget",
+        "MappingArrowTarget",
+        "ArrowTarget",
+        "RestrictedDynamicCall",
+        "InlineFunctionExpr",
+        "FunctionSignature",
+        "FunctionBody"
+      ],
+      "sections": [
+        "id-pipeline-operator",
+        "id-mapping-arrow-expression",
+        "id-focus-functions",
+        "id-inline-func"
+      ],
+      "assessment": "Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus.",
+      "remaining": "Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06.",
+      "tickets": [
+        "G02-mapping-containing-focus",
+        "G05-remaining-combinations"
+      ]
+    },
+    "REQ123-scan": {
+      "productions": [
+        "FunctionCall",
+        "NamedFunctionRef",
+        "DynamicFunctionCall"
+      ],
+      "sections": [],
+      "assessment": "scan is Experimental-only in calls and lookup, with N+1 single-member-array states and empty input retaining the seed. Its existing gate retry is not frozen API promotion.",
+      "remaining": "No new function syntax or frozen promotion. C02 callback semantics and C06 host/profile ownership remain distinct from membership in GatedSets.",
+      "tickets": []
+    }
+  },
+  "tickets": {
+    "G01-otherwise-spelling": {
+      "status": "Unsupported current-draft spelling; explicit adoption decision remains",
+      "owner": "Bosak parser/catalog maintainer and C13 owner disposition",
+      "required": "Current OtherwiseExpr/id-otherwise uses otherwise.",
+      "observed": "Bosak accepts ?? and rejects otherwise with XPST0003 in both 4.0 profiles.",
+      "exitCriteria": "Decide retained ?? compatibility/extension policy and contextual otherwise spelling; preserve element-name use, precedence, guarded errors and lower-profile refusals. Do not claim recovered historical adoption."
+    },
+    "G02-mapping-containing-focus": {
+      "status": "Reproduced contextual semantics defect; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "required": "U =!> F(A...) is defined by for $u in U return F($u,A...), preserving containing focus for extra arguments.",
+      "observed": "Parser lowers to simple-map U ! F(.,A...), changing dot/position/size in extra arguments.",
+      "exitCriteria": "Preserve containing focus while prepending each item, without losing order/multiplicity/empty guards. Add independent named/dynamic/inline target and argument controls plus both engine gates before merging an engine fix."
+    },
+    "G03-keyword-placeholders": {
+      "status": "Reproduced unsupported current-draft argument production; not fixed",
+      "owner": "Bosak parser/compiler maintainer",
+      "required": "KeywordArgument uses Argument, which includes ArgumentPlaceholder.",
+      "observed": "substring(value := ?,start := 2,length := 2) fails XPST0003; positional substring(?,2,2) works.",
+      "exitCriteria": "Recognize placeholders in keyword argument positions and verify resulting arity/default/collision/partial binding semantics in both 4.0 profiles; retain old-profile refusal and run engine gates for an engine correction."
+    },
+    "G04-late-binding-boundary": {
+      "status": "Host/static-context review, not a proved closed-context defect",
+      "owner": "C06 host review and C13 owner disposition",
+      "required": "Guarding does not waive static errors in a closed static context.",
+      "observed": "Public API can compile before runtime variables/functions are supplied; standalone unresolved calls/variables error during evaluation, while guarded unselected branches are omitted.",
+      "exitCriteria": "Review closed XSLT/XQuery/strict-host binding separately. Do not misclassify open API runtime registration as an unknown-static-name failure or assume one error phase across all contexts."
+    },
+    "G05-remaining-combinations": {
+      "status": "Explicit unaccepted remainder",
+      "owner": "C05/C06 and C09-C12 final applicable-evidence review",
+      "required": "Production/semantic/context evidence must match claimed support.",
+      "observed": "Bounded lexical/focus/callback examples do not establish all type, adjacency, Unicode, host or error-eagerness combinations.",
+      "exitCriteria": "Retain existing evidence and accurately bound claims; final entry review and owner acceptance remain required, rather than automatically implementing every draft addition."
+    }
+  }
+}

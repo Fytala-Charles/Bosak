@@ -69,7 +69,15 @@
       "source": [
         "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Function-call/ref/dynamic forms and HOF/profile controls are mapped. C01-C03 remain the signature/default/option/type evidence, not a new grammar-completeness proof.",
+        "remaining": "C02 F01-F14 and C03 T01-T05 retain function-specific conversion/options/host limits. Registration count and a passing HOF example do not accept every call contract.",
+        "tickets": []
+      }
     },
     {
       "key": "S3-otherwise",
@@ -93,7 +101,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Released ?? preserves empty-versus-present, whole-sequence value, precedence, containing focus and guarded dynamic-error controls. Current draft spells the operator otherwise and is not accepted by either 4.0 profile.",
+        "remaining": "Do not advertise ?? as the pinned normative spelling. Closed-host static binding needs its own review; the public API accepts runtime variable/function context.",
+        "tickets": [
+          "G01-otherwise-spelling",
+          "G04-late-binding-boundary"
+        ]
+      }
     },
     {
       "key": "S3-keywords",
@@ -117,7 +136,17 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Reordered/mixed keywords, empty/default, Q{} EQNames and static rejection controls pass. Keyword partial application with ? fails parsing; positional partial application is a working alternative.",
+        "remaining": "Per-function metadata and spelling drift remain C02 F01. Dynamic calls have positional argument grammar; their rejection is not evidence of a missing universal keyword facility.",
+        "tickets": [
+          "G03-keyword-placeholders"
+        ]
+      }
     },
     {
       "key": "S3-lexical",
@@ -145,7 +174,17 @@
         "src/Bosak.XPath.Parser/Lexer/XPathLexer.cs",
         "src/Bosak.XPath.Parser/Ast/XPathParser.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Radix/separator token boundaries, template escaping/nesting/comment/atomization and old-profile/static-error cases are mapped. C03 retains numeric representation limits.",
+        "remaining": "Do not infer arbitrary precision, every adjacency/Unicode digit case, XML/XQuery string constructors or AVT/host behavior from these lexical probes.",
+        "tickets": [
+          "G05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S4-focus",
@@ -180,7 +219,18 @@
         "src/Bosak.XPath.Compiler/Ir/IrLowerer.cs",
         "src/Bosak.XPath.Runtime/Vm/VmEngine.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus.",
+        "remaining": "Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06.",
+        "tickets": [
+          "G02-mapping-containing-focus",
+          "G05-remaining-combinations"
+        ]
+      }
     },
     {
       "key": "S4-iteration",
@@ -473,7 +523,30 @@
       "source": [
         "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs"
       ],
-      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial"
+      "status": "Bounded mapping supplied; full production/behavior acceptance remains partial",
+      "currentReview": {
+        "date": "2026-10-26",
+        "status": "C04 bounded review complete; not accepted",
+        "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.json",
+        "assessment": "scan is Experimental-only in calls and lookup, with N+1 single-member-array states and empty input retaining the seed. Its existing gate retry is not frozen API promotion.",
+        "remaining": "No new function syntax or frozen promotion. C02 callback semantics and C06 host/profile ownership remain distinct from membership in GatedSets.",
+        "tickets": []
+      }
     }
-  ]
+  ],
+  "currentReview": {
+    "date": "2026-10-26",
+    "report": "EXPRESSION-CALL-FOCUS-RECONCILIATION.md",
+    "reviewedRows": [
+      "S1-S2-S5",
+      "S3-otherwise",
+      "S3-keywords",
+      "S3-lexical",
+      "S4-focus",
+      "REQ123-scan"
+    ],
+    "reviewedRowCount": 6,
+    "otherRows": 12,
+    "policy": "Only C04 bounded reconciliation is complete. Original row/base fields remain historical; all acceptance remains partial."
+  }
 }

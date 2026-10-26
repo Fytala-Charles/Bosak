@@ -56,6 +56,9 @@ A callback argument containing two items is not two calls. A callback invoked fr
 
 ## 12. Implementation
 
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S4-focus. Pipeline whole-value/fixed-focus, focus-function implicit/explicit signatures, lexical capture/restoration and accepted mapping syntax are mapped. Mapping arrow extra arguments incorrectly see mapped-item focus rather than the containing focus. Use for $u in ... return F($u,A...) when extra arguments depend on outer dot/position/size. C03 constructor capture/type coverage remains distinct. Host/profile propagation belongs to C06. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
 Thirty new manifest cases use the existing CatalogExampleTests public execution path: 18 focused values/grammar/focus probes, four explicit 3.1 refusals and eight complete stylesheet reports. Sixteen successful XPath cases also assert a 3.1 refusal; two compatible forms retain baseline results. No engine, test runner, compatibility level or gate is changed. The reports use the default Legacy host with effective stylesheet versions 3.0/4.0, not an exhaustive host/module/package matrix.
 
 ## 13. Sample Code

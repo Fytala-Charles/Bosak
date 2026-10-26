@@ -58,6 +58,9 @@ The supplied checks cover integer/decimal/double identity, a value above Int64 r
 
 ## 12. Implementation
 
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S3-lexical. Radix/separator token boundaries, template escaping/nesting/comment/atomization and old-profile/static-error cases are mapped. C03 retains numeric representation limits. Do not infer arbitrary precision, every adjacency/Unicode digit case, XML/XQuery string constructors or AVT/host behavior from these lexical probes. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
 **C03 review — 26 October 2026, published 1.26.3:** [Constructor/type reconciliation](../CONSTRUCTOR-TYPE-RECONCILIATION.md) verifies 4.0 radix/separator syntax and lower-profile refusal; Above-Int64 integer literals versus generic constructors/casts; Delivered floating thresholds, unsigned truncation and preserved integer identity. **Boundary:** A decimal-backed wide literal does not establish arbitrary precision or a matching generic constructor range. Generic wide xs:integer casts still narrow; .NET decimal precision remains bounded. Ownership: T01, T02. Per-path controls and named schema/API/host evidence are retained in the [review matrix](../CONSTRUCTOR-TYPE-RECONCILIATION.json); no whole-type or AC-04 acceptance follows.
 
 Fifty new catalog cases use the existing public CatalogExampleTests execution path. Initial38 probes produced30 passes and8 failures: malformed fractional/exponent underscore groups were accepted. Source1.23.7 rejects those groups only in the 4.0 lexer path. Thirty-four dedicated API cases cover those eight shapes in all four compatibility levels and valid-group controls in both4.0 profiles. Expected outcomes were not weakened. [Audit and retained evidence](../NUMERIC-LITERALS.md).

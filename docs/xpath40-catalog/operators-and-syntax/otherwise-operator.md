@@ -60,6 +60,9 @@ Benefit: Select the fallback for empty-sequence input. Tradeoff: the declared co
 
 ## 12. Implementation
 
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers S3-otherwise. Released ?? preserves empty-versus-present, whole-sequence value, precedence, containing focus and guarded dynamic-error controls. Current draft spells the operator otherwise and is not accepted by either 4.0 profile. Do not advertise ?? as the pinned normative spelling. Closed-host static binding needs its own review; the public API accepts runtime variable/function context. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
 Compile the after/edge expressions at XPathCompatibility.XPath40. The baseline uses XPath31. The example harness checks default-mode refusal for successful 4.0 cases; negative cases pin the declared error. See [CatalogExampleTests](../../../tests/Bosak.Xslt.Tests/Documentation/CatalogExampleTests.cs): it executes the published files from the [case manifest](../examples/cases.json). This documentation slice changes no engine source.
 
 ## 13. Sample Code

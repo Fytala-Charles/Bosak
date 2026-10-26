@@ -1,8 +1,10 @@
 <div align="center">
   <img src="../../assets/logos/fytala-logo-color-dark.svg" width="100" alt="Fytala Bosak constructor type and coercion reconciliation">
-  <h1>Constructor, type and coercion reconciliation â€” C03</h1>
-  <p>26 October 2026 Â· published Bosak 1.26.3</p>
+  <h1>Constructor, type and coercion reconciliation — C03</h1>
+  <p>26 October 2026 · published Bosak 1.26.3</p>
 </div>
+
+**REQ-126 C04 complete — 26 October 2026:** [Expression/call/focus review](EXPRESSION-CALL-FOCUS-RECONCILIATION.md) reconciles six expression/call/focus rows and 33 selected production/token names. All 880 focused tests pass; 209 controls match, ten retain current-draft spelling/placeholder/mapping-focus gaps, and eight late-binding observations remain separate. Nine closure workpackages remain; C05 is next. No engine or executable example changes, gate/profile promotion, acceptance waiver or release. C02's atomic-annotation defect remains open. Skips, Braid and extension work stay deferred; earlier checkpoint counts are historical.
 
 **C03 completes the bounded review of eight entries and all 49 registered focus-constructor names. Ten closure workpackages remain open.** This is reconciliation of supported forms, evidence and remaining boundaries; no acceptance criterion closes. [The machine-readable report](CONSTRUCTOR-TYPE-RECONCILIATION.json) and [explicit decisions](C03-REVIEW-DECISIONS.json) preserve that distinction. C02's `atomic-type-annotation(())` defect remains open with its independent failing expectations.
 
@@ -36,14 +38,14 @@ Review uses pinned qtspecs **b4723ff52fd9d4fabf2b4cd33bd44f21939c512c**: [expres
 
 | Record | Owner and disposition |
 |---|---|
-| T01 â€” generic integer range/error policy | Core/runtime maintainer and C13 owner disposition; distinguish storage, lexical, overflow and facet boundaries rather than replacing errors globally. |
-| T02 â€” decimal precision | Documented numeric-storage boundary; arbitrary precision is not delivered. |
-| T03 â€” schema/type/namespace context | Named evidence retained; C06 owns host/context integration and C09â€“C12 final applicable evidence. No skip is removed. |
-| T04 â€” composite/nominal record context | Bounded defaults/static forms are supported; C05/C06 and final entry review retain package, recursion and remaining combination coverage. |
-| T05 â€” generic signature/focus/BC propagation | C04/C06 and final entry review; selected passing paths do not certify all contexts or conversions. |
+| T01 — generic integer range/error policy | Core/runtime maintainer and C13 owner disposition; distinguish storage, lexical, overflow and facet boundaries rather than replacing errors globally. |
+| T02 — decimal precision | Documented numeric-storage boundary; arbitrary precision is not delivered. |
+| T03 — schema/type/namespace context | Named evidence retained; C06 owns host/context integration and C09–C12 final applicable evidence. No skip is removed. |
+| T04 — composite/nominal record context | Bounded defaults/static forms are supported; C05/C06 and final entry review retain package, recursion and remaining combination coverage. |
+| T05 — generic signature/focus/BC propagation | C04/C06 and final entry review; selected passing paths do not certify all contexts or conversions. |
 | C02 F08-atomic-annotation-empty | Still an unfixed, unaccepted correction ticket. No C03 result changes its required-input failure expectations. |
 
-These records are limits and review ownership, not a promise to implement every proposal or an automatic waiver. C09â€“C12 retain per-entry semantic/applicable-evidence review and C13 retains explicit owner acceptance. No new engine defect was reproduced by the C03 asserted controls.
+These records are limits and review ownership, not a promise to implement every proposal or an automatic waiver. C09–C12 retain per-entry semantic/applicable-evidence review and C13 retains explicit owner acceptance. No new engine defect was reproduced by the C03 asserted controls.
 
 ## Reproduction and preservation
 

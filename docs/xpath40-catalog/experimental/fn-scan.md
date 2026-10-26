@@ -82,6 +82,9 @@ Liabilities: **experimental-tier semantics may change as the draft moves** — t
 
 ## 12. Implementation
 
+**C04 grammar review — 26 October 2026, published 1.26.3:** [Expression/call/focus reconciliation](../EXPRESSION-CALL-FOCUS-RECONCILIATION.md) covers REQ123-scan. scan is Experimental-only in calls and lookup, with N+1 single-member-array states and empty input retaining the seed. Its existing gate retry is not frozen API promotion. No new function syntax or frozen promotion. C02 callback semantics and C06 host/profile ownership remain distinct from membership in GatedSets. This is bounded production/profile evidence, not full grammar or AC-04 acceptance.
+
+
 **C02 reconciliation — 26 October 2026, published 1.26.3:** [Function/options review](../FUNCTION-OPTIONS-RECONCILIATION.md) reconciles N+1 accumulator states retain single-member array boundaries; Empty input retains the initial state; Position-aware callback; Experimental-only availability. **Boundaries:** No frozen-profile adoption or constant-memory guarantee; generic function coercion beyond verified callbacks is not certified. Normal/empty/error evidence and unsupported remainder are recorded per function in the [review matrix](../FUNCTION-OPTIONS-RECONCILIATION.json). This is bounded documentation reconciliation, not whole-signature or AC-04 acceptance.
 
 Files: `src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs` (experimental signature + implementation), `src/Bosak.XPath.Api/XPath31Expression.cs` (experimental-aware static gate), `src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs` (`IsXPath40Experimental`). Version gate: XPST0017 at `XPath31` **and** `XPath40`; legal only at `XPath40Experimental`. Unit evidence: experimental-level tests in `Bosak.XPath.Standard.Tests` (see REQ-123 S1).

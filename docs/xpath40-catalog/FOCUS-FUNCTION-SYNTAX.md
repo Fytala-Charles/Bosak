@@ -4,6 +4,8 @@
   <p>22 October 2026 - documentation and executable examples</p>
 </div>
 
+**REQ-126 C04 complete — 26 October 2026:** [Expression/call/focus review](EXPRESSION-CALL-FOCUS-RECONCILIATION.md) reconciles six expression/call/focus rows and 33 selected production/token names. All 880 focused tests pass; 209 controls match, ten retain current-draft spelling/placeholder/mapping-focus gaps, and eight late-binding observations remain separate. Nine closure workpackages remain; C05 is next. No engine or executable example changes, gate/profile promotion, acceptance waiver or release. C02's atomic-annotation defect remains open. Skips, Braid and extension work stay deferred; earlier checkpoint counts are historical.
+
 The [dedicated 16-field entry](operators-and-syntax/focus-function-syntax.md) separates `fn { ... }` / `function { ... }` focus callbacks from explicit-signature `fn(...)` abbreviation and zero-argument constructors. The [complete order-line task](examples/focus-function-syntax/README.md) compares 3.0/4.0 source, exact normal/empty/reordered results and invalid decimal input. It supplies 30 manifest checks without an engine, runner, version or gate change. Existing pipeline prose is corrected: `->` binds the whole value as context; it does not insert a first argument.
 
 ## Contract and provenance
