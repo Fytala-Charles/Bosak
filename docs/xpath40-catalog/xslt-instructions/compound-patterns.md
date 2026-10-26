@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded pattern sets and priorities**. The delivered minimum-priority correction remains closed. Complete current pattern/model combinations, schema and generic JNode semantics remain outside this bounded review. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **C07 lifecycle review — 26 October 2026:** [Current disposition and correction receipts](../LIFECYCLE-RECONCILIATION.md) distinguish delivered scope, retained history and pending acceptance. Six closure workpackages remain; no feature or profile promotion.
 
 **Public1.23.4 — 22 October 2026:** Union-minimum and EQName URI-punctuation priority corrections are [published and verified](../../RELEASE-1.23.4-PUBLICATION.md). Opening-bracket URI parsing remains separately limited. Earlier unpublished delivery records below are historical.

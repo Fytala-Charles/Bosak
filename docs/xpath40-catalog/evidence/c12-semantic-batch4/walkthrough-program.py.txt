@@ -1,0 +1,25 @@
+from pathlib import Path
+import re,json,xml.etree.ElementTree as ET,hashlib
+C=Path('docs/xpath40-catalog');E=C/'evidence/c12-semantic-batch4';a=json.loads((E/'sample-audit.json').read_text(encoding='utf-8'));s=json.loads((E/'entry-sources.json').read_text(encoding='utf-8'));out={}
+def shape(e):return(e.tag,sorted(e.attrib.items()),None if not (e.text or '').strip() else e.text,[(shape(c),None if not (c.tail or '').strip() else c.tail) for c in e])
+for n,row in s.items():
+ for target in re.findall(r'\]\(([^)]+README.md)\)',row['sections']['13']):
+  p=(C/n).parent/target;p=p.resolve()
+  if p.parent==(C/'examples').resolve():continue
+  key=p.relative_to(Path.cwd()).as_posix()
+  if key in out:out[key]['entries'].append(n);continue
+  t=p.read_text(encoding='utf-8');files=[Path(f) for f in a[n]['fixtures']];bs=[]
+  for i,m in enumerate(re.finditer(r'^(?P<f>`{3,}|~{3,})(?P<lang>[^\n]*)\n(?P<code>.*?)(?:\n)(?P=f)[ \t]*$',t,re.M|re.S)):
+   code=m['code'].strip();exact=[];contained=[];xml=[]
+   for f in files:
+    ft=f.read_text(encoding='utf-8-sig').strip()
+    if code==ft:exact.append(f.as_posix())
+    elif code in ft:contained.append(f.as_posix())
+    elif m['lang']=='xml' and f.suffix=='.xml':
+     try:
+      if shape(ET.fromstring(code))==shape(ET.fromstring(ft)):xml.append(f.as_posix())
+     except ET.ParseError:pass
+   b=dict(index=i,language=m['lang'],code=code,exactFiles=exact,containedInFiles=contained,equivalentXmlFiles=xml);bs.append(b)
+   if not(exact or contained or xml):print(key,i,m['lang'],repr(code[:220]))
+  out[key]=dict(entries=[n],sha256=hashlib.sha256(p.read_bytes()).hexdigest(),text=t,blocks=bs)
+(E/'walkthrough-audit.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8');print('Walkthroughs',len(out),'blocks',sum(len(v['blocks']) for v in out.values()))

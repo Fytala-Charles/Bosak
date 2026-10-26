@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited typed binding; choice blocker retained**. C05-K02 remains for choice-typed let/argument/return; passing scalar examples do not certify all declared types or error precedence. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **Typed let coercion** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-123 destructuring/typed-let cluster; local coercion tests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.

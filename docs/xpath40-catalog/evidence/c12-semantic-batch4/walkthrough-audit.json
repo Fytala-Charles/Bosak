@@ -1,0 +1,316 @@
+{
+  "docs/xpath40-catalog/examples/record-contracts/README.md": {
+    "entries": [
+      "type-system/record-updates.md"
+    ],
+    "sha256": "0e4c54b2a811eeeeb7b5940e1219bbfb062f5e4c1301f515e03f93fd3d240cb3",
+    "text": "# Stock adjustment: cast, then construct a new typed record\n\nThis synthetic inventory vocabulary is simplified: quantities/deltas are integers, SKUs contain no report delimiters, source order matters, and negative deltas are permitted. It performs no persistence, concurrent stock update, unit conversion or business nonnegative-stock validation. `but with` constructs a value; it is not a database update.\n\nThe complete [3.0 baseline](report-3.xsl) explicitly selects map fields, casts quantity and uses map:merge with use-last. [The 4.0 report](report-4.xsl) casts to a structural record and uses `but with` to construct the amended record. The baseline reproduces this business report, not general record annotation/type safety.\n\n| Step | Contract |\n|---|---|\n| xsl:stylesheet / namespaces | Bind the XSLT, Schema, map and source-stock vocabularies; select effective3.0/4.0. |\n| xsl:output | Emit text. |\n| Template / | Consume one complete stock document and produce all rows plus count/total. |\n| xsl:variable rows as map(*)* | Retain maps/records as values instead of wrapping sequence-constructor content in a temporary document. |\n| xsl:for-each / raw map | Process source items in order and declare SKU, string quantity and import-only trace. |\n| Cast adapter | Select sku/qty/note, cast quantity, discard trace and create the missing note as a present empty entry. |\n| but with | Copy the annotated record with replacement qty, recoercing fields under that same annotation. |\n| xsl:sequence | Retain original quantity alongside the adjusted value; input/before value is not mutated. |\n| xsl:value-of / string-join | Emit exact before/after rows and the final count/quantity total. |\n\n## Complete fixtures and expected results\n\n### normal\n\n```xml\n<stock xmlns=\"urn:fytala:stock\"><item sku=\"BOLT\" qty=\"10\" delta=\"2\"/><item sku=\"NUT\" qty=\"4\" delta=\"-1\"/></stock>\n```\n\nBoth versions expect `BOLT:10->12|NUT:4->3|items=2;total=15`.\n\n### empty\n\n```xml\n<stock xmlns=\"urn:fytala:stock\"/>\n```\n\nBoth versions expect `items=0;total=0`.\n\n### reordered\n\n```xml\n<stock xmlns=\"urn:fytala:stock\"><item sku=\"NUT\" qty=\"4\" delta=\"-1\"/><item sku=\"BOLT\" qty=\"10\" delta=\"2\"/></stock>\n```\n\nBoth versions expect `NUT:4->3|BOLT:10->12|items=2;total=15`.\n\n### invalid\n\n```xml\n<stock xmlns=\"urn:fytala:stock\"><item sku=\"BAD\" qty=\"10\" delta=\"oops\"/></stock>\n```\n\nBoth versions expect `FORG0001 for invalid delta; no successful report`.\n\nReordering changes row order, not total. An invalid lexical number is not silently dropped; repair it and rerun. Field filtering is deliberate at the adapter boundary: the cast discards the raw trace field. Coercion would reject that extra field rather than silently adapt it. The probes independently check optional-field presence, missing required fields, nested conversion, field order and original-record preservation.\n\n## Runnable checks\n\nRun `dotnet test tests/Bosak.Xslt.Tests -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~record-contract\"`. All 46 cases are in [the manifest](../cases.json): eight complete stylesheet reports,35 inline XPath value/error probes and three explicit 3.1 refusals. Successful4.0 XPath probes also assert3.1 refusal where declared. XPath probes supply their entire input inline and need no external context.\n\nThe stylesheets use Bosak's default Legacy host with effective stylesheet versions3.0/4.0. This is not an exhaustive Draft-host, named-declaration, schema, module or package matrix. The baseline uses ordinary maps; it does not claim a 3.1 annotated record type. Source 1.23.6 fixes a signature version-gate leak exposed by these probes; [finding and regression](../../INLINE-RECORD-TYPE-GATE.md) retain the original failures. No feature-specific qt4 gated-set assignment is claimed; named engine tests and executable cases are the applicable evidence.\n\n[Record update entry](../../type-system/record-updates.md), [cast/coercion reference](../../type-system/structural-records.md) and [slice audit](../../RECORD-CONTRACTS.json) state supported scope and remaining gaps.\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<stock xmlns=\"urn:fytala:stock\"><item sku=\"BOLT\" qty=\"10\" delta=\"2\"/><item sku=\"NUT\" qty=\"4\" delta=\"-1\"/></stock>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/record-contracts/normal.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<stock xmlns=\"urn:fytala:stock\"/>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/record-contracts/empty.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 2,
+        "language": "xml",
+        "code": "<stock xmlns=\"urn:fytala:stock\"><item sku=\"NUT\" qty=\"4\" delta=\"-1\"/><item sku=\"BOLT\" qty=\"10\" delta=\"2\"/></stock>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/record-contracts/reordered.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 3,
+        "language": "xml",
+        "code": "<stock xmlns=\"urn:fytala:stock\"><item sku=\"BAD\" qty=\"10\" delta=\"oops\"/></stock>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/record-contracts/invalid.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      }
+    ]
+  },
+  "docs/xpath40-catalog/examples/manual-patterns/README.md": {
+    "entries": [
+      "xslt-instructions/compound-patterns.md"
+    ],
+    "sha256": "c81716e0a2e08a6053c65c29eff21de7a94bd3e2bd7449a9522cf173eaa293b8",
+    "text": "<div align=\"center\">\n  <img src=\"../../../../assets/logos/fytala-logo-color-dark.svg\" width=\"100\" alt=\"Fytala Manual publication: explicit pattern policy\">\n  <h1>Manual publication: explicit pattern policy</h1>\n  <p>21 October 2026</p>\n</div>\n\n**22 October 2026 — source 1.23.3:** 4.0 node unions now use the minimum alternative default priority, aligned with the pinned current draft. The two catalog reproducers now expect `competitor`; their prior 1.23.2 observations remain recorded. 3.0 dispatch, explicit priorities and single-rule 4.0 `next-match` are preserved. [Correction and validation](../../UNION-MINIMUM-PRIORITY.md). Public release remains 1.23.2; REQ-126 stays In Progress. Earlier delivery snapshots below are historical.\n\nA synthetic namespaced manual contains uniquely identified articles. Publish only ready/public articles that are not blocked; hold blocked or draft articles; visibly review everything else. State/audience/blocked values use exact case-sensitive tokens; this is not schema validation, permission enforcement or a production content-management policy.\n\nCompare the [portable3.0 report](report-3.xsl) with the [4.0 report](report-4.xsl). The latter groups intersect/except operands and uses a node union, while both assign explicit routing priorities20/10/-10. Sorting by article ID gives stable output when input article order changes. The report uses ordinary text output and no external variables/resources.\n\n| Fixture | Expected result from both reports |\n|---|---|\n| [normal](normal.xml) | `articles=4\\|A-100:publish\\|A-200:hold\\|A-300:hold\\|A-400:review` |\n| [reordered](reordered.xml) | Same report, sorted by unique article ID. |\n| [empty](empty.xml) | `articles=0` |\n\n```powershell\ndotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~manual-patterns\"\n```\n\nThere are30 checks: six complete reports, four mixed-set/grouping checks, four union-priority observations/controls, four next-match/version controls, four set-priority controls, six axis/grouping/lexical controls and two invalid-pattern controls. Technical cases use [probe.xml](probe.xml). The runner uses default Legacy host; version labels do not select a different processor profile.\n\n**Two checks now verify the corrected source contract.** union-max40 and union-word40 return `competitor` in source1.23.3, aligned with the pinned minimum-priority rule. Their manifest metadata retains public1.23.2's previous `pattern` observations. Use explicit application priorities, as the complete report does. See the [engine finding](../../UNION-PRIORITY-ENGINE-FINDING.md).\n\nThe3.0 technical outcomes are bounded compatibility observations; use the explicit-predicate3.0 report for the portable task comparison. Parentheses around item/type patterns are not universally interchangeable with unparenthesized patterns: the paired atomic/node probes show the tested boundary. [Full grammar mapping](../../COMPOUND-PATTERN-GRAMMAR.md).\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "powershell",
+        "code": "dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~manual-patterns\"",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "equivalentXmlFiles": [],
+        "commandCaseIds": [
+          "manual-patterns-axis30",
+          "manual-patterns-axis40",
+          "manual-patterns-direct-atomic",
+          "manual-patterns-invalid-item-set",
+          "manual-patterns-missing-operand",
+          "manual-patterns-next-local30",
+          "manual-patterns-next-local40",
+          "manual-patterns-next30",
+          "manual-patterns-next40",
+          "manual-patterns-parenthesized-atomic",
+          "manual-patterns-parenthesized-node",
+          "manual-patterns-quoted-operators",
+          "manual-patterns-report-3-empty",
+          "manual-patterns-report-3-normal",
+          "manual-patterns-report-3-reordered",
+          "manual-patterns-report-4-empty",
+          "manual-patterns-report-4-normal",
+          "manual-patterns-report-4-reordered",
+          "manual-patterns-set-earlier30",
+          "manual-patterns-set-explicit-left40",
+          "manual-patterns-set-grouped40",
+          "manual-patterns-set-left40",
+          "manual-patterns-set-priority-first",
+          "manual-patterns-set-priority-high",
+          "manual-patterns-set-priority-low",
+          "manual-patterns-set-priority-predicate",
+          "manual-patterns-union-earlier30",
+          "manual-patterns-union-explicit40",
+          "manual-patterns-union-max40",
+          "manual-patterns-union-word40"
+        ],
+        "verification": "Fresh complete catalog run subsumes this exact displayed family selector; no separate command execution claimed."
+      }
+    ]
+  },
+  "docs/xpath40-catalog/examples/module-profiles/README.md": {
+    "entries": [
+      "xslt-instructions/module-profiles.md"
+    ],
+    "sha256": "43f70c5d2166eefe43945e892fbfadde0202f01dac4d6d82d3143e0d5194c625",
+    "text": "# Order quantity libraries across module boundaries\n\nThis synthetic orders vocabulary has namespaced line elements, delimiter-free IDs and optional integer qty attributes. Missing quantity defaults to1; explicit0 remains0. The reports do not validate business constraints, contact external services, persist data or stream input.\n\nAll principals declare version 3.0. A baseline library declares 3.0 and spells the default as if/then/else. Its mixed-version partner declares 4.0 and uses `(xs:integer($line/@qty) ?? 1)`. The public host is selected independently through XsltCompiler.ProcessorProfile. Both variants produce the same report under Legacy and Xslt40Draft after the isolated source 1.23.8 default-mode correction; public 1.23.7 remains unchanged.\n\n## Complete principal/library pairs\n\n### include\n\n- baseline: [principal](include/report-baseline/app/main.xsl), [library](include/report-baseline/library/module.xsl).\n- module40: [principal](include/report-module40/app/main.xsl), [library](include/report-module40/library/module.xsl).\n\nThe principal loads `../library/module.xsl` relative to its own app/main.xsl file URI, using the normal file resolver. Pass that principal URI to Compile; a source string without its base URI does not establish this relative-path contract.\n\n### import\n\n- baseline: [principal](import/report-baseline/app/main.xsl), [library](import/report-baseline/library/module.xsl).\n- module40: [principal](import/report-module40/app/main.xsl), [library](import/report-module40/library/module.xsl).\n\nThe principal loads `../library/module.xsl` relative to its own app/main.xsl file URI, using the normal file resolver. Pass that principal URI to Compile; a source string without its base URI does not establish this relative-path contract.\n\n### package\n\n- baseline: [principal](package/report-baseline/app/main.xsl), [library](package/report-baseline/library/module.xsl).\n- module40: [principal](package/report-module40/app/main.xsl), [library](package/report-module40/library/module.xsl).\n\nBefore Compile, register the name `urn:fytala:module-profile:package:report-baseline` or `urn:fytala:module-profile:package:report-module40`, version 1.0, using XsltFunctionLibrary.RegisterPackage and the corresponding absolute library file URI. The manifest supplies these exact names/versions/paths; the runner registers before compilation and clears in finally on success or failure. Tests share the existing XSLT package-registry collection. RegisterPackage is an existing public API, not a new per-compiler registry.\n\n| Instruction/context | Responsibility |\n|---|---|\n| Principal stylesheet | Bind XSLT/Schema, order and function namespaces; retain principal 3.0. |\n| include/import/use-package | Load one library; package names are XSLT package identities, not NuGet package versions. |\n| Library stylesheet/package | Declare its own 3.0/4.0 version; packages expose the quantity function as public. |\n| Function and line parameter | Parse/default quantity for the supplied line; no caller focus is assumed. |\n| Principal lines variable and for-each | Select namespaced rows and emit ID/quantity in source order. |\n| Final value-of / sum | Emit row count/total; empty input has a zero total. |\n| Output | Produce exact text. |\n\n## Fixtures and exact outcomes\n\n### normal\n\n[normal.xml](normal.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"2\"/><line id=\"B\"/><line id=\"C\" qty=\"0\"/></orders>\n```\n\nAll six principal/library pairs under both hosts emit `A=2|B=1|C=0|lines=3;total=3`.\n\n### empty\n\n[empty.xml](empty.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"></orders>\n```\n\nAll six principal/library pairs under both hosts emit `lines=0;total=0`.\n\n### reordered\n\n[reordered.xml](reordered.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"C\" qty=\"0\"/><line id=\"B\"/><line id=\"A\" qty=\"2\"/></orders>\n```\n\nAll six principal/library pairs under both hosts emit `C=0|B=1|A=2|lines=3;total=3`.\n\n### invalid\n\n[invalid.xml](invalid.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"oops\"/></orders>\n```\n\nAll six principal/library pairs under both hosts raise `FORG0001` for invalid integer text.\n\n## Execution and limits\n\nCatalogExampleTests.PublishedExample_MatchesDeclaredOutcome executes the real files with the selected processorProfile and principal file URI. Optional packages metadata contains name/version/file fields; omitted metadata preserves prior case setup. Input rows need no external parameters. The manifest mode field does not override XSLT host/effective-version selection for these nonstreaming cases.\n\nThe48 report runs are three relationships times two variants times four fixtures times two hosts. Another66 controls cover dependency/root/local versions, bounded future-attribute validation, static use-when and frozen scan refusal. [The audit](../../MODULE-PROFILE-BOUNDARIES.json) and [manifest](../cases.json) list every ID, file, host, registration and expected output/error. Run the root AGENTS.md build/test commands, using its temporary-copy XSLT workaround if required.\n\nThis is one direct dependency edge, with local file resolution and exact package-version 1.0. It does not certify import precedence, overrides/visibility, package version ranges, multi-hop graphs, schema/static parameters, authoring, resource policies, streaming or all default-mode contexts. [The entry](../../xslt-instructions/module-profiles.md) states the bounded contract and separate runtime-fix dependency.\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"2\"/><line id=\"B\"/><line id=\"C\" qty=\"0\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/module-profiles/normal.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/module-profiles/empty.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 2,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"C\" qty=\"0\"/><line id=\"B\"/><line id=\"A\" qty=\"2\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/module-profiles/reordered.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 3,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"oops\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/module-profiles/invalid.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      }
+    ]
+  },
+  "docs/xpath40-catalog/examples/host-profiles/README.md": {
+    "entries": [
+      "xslt-instructions/processor-profiles.md"
+    ],
+    "sha256": "775597b66a8631787ba53adf7e9f08a44d21289f09dad70f295d91e7ec21f1ae",
+    "text": "# Order quantity report across host profiles\n\nThis synthetic orders vocabulary contains namespaced line elements, delimiter-free IDs and optional integer qty attributes. Missing quantity defaults to1; explicit0 remains0. Negative quantities are not independently validated. There is no external I/O, persistence or streaming claim.\n\nThe [baseline](report-baseline.xsl) uses a 3.0 root and explicit if/then/else. The [mixed-version stylesheet](report-local40.xsl) also has a 3.0 root but declares version 4.0 on its template and uses otherwise. Both report the same rows and total under both Bosak hosts. This pair demonstrates a local migration in Bosak; an arbitrary3.0 processor is not promised to support the mixed template.\n\n| Instruction/context | Responsibility |\n|---|---|\n| stylesheet and namespace bindings | Declare root 3.0, XSLT/Schema and urn:fytala:dispatch vocabularies. |\n| output method=text | Produce exact text; serializer version does not select expression syntax. |\n| template match=/ | Process one complete input; the mixed template explicitly selects local 4.0. |\n| variable lines | Select namespaced lines in source order. |\n| for-each / value-of | Emit ID and parsed/defaulted quantity for each line, preserving explicit zero. |\n| final value-of / sum | Emit row count and total, with empty input producing zero. |\n\n## Inputs and exact results\n\n### normal\n\n[normal.xml](normal.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"2\"/><line id=\"B\"/><line id=\"C\" qty=\"0\"/></orders>\n```\n\nBoth stylesheets under both profiles emit `A=2|B=1|C=0|lines=3;total=3`.\n\n### empty\n\n[empty.xml](empty.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"></orders>\n```\n\nBoth stylesheets under both profiles emit `lines=0;total=0`.\n\n### reordered\n\n[reordered.xml](reordered.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"C\" qty=\"0\"/><line id=\"B\"/><line id=\"A\" qty=\"2\"/></orders>\n```\n\nBoth stylesheets under both profiles emit `C=0|B=1|A=2|lines=3;total=3`.\n\n### invalid\n\n[invalid.xml](invalid.xml):\n\n```xml\n<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"oops\"/></orders>\n```\n\nBoth stylesheets under both profiles raise `FORG0001` for invalid integer text.\n\n## Execution and profile metadata\n\nCatalogExampleTests.PublishedExample_MatchesDeclaredOutcome compiles the actual file with a public XsltCompiler, sets ProcessorProfile from `processorProfile` (`legacy` or `draft40`), and captures the result. Existing rows without that field retain Legacy. The manifest's `mode` field does not select XPath compatibility for these nonstreaming XSLT runs: the compiler profile and effective stylesheet version do. No external variables are required. `probe.xml` is the minimal root fixture for the50 focused cases.\n\nAll66 case IDs, exact input paths and expected output/error strings are in [the audit](../../HOST-PROFILE-BOUNDARIES.json) and [cases.json](../cases.json). The16 report runs are two stylesheets times four fixtures times two hosts. Run the root AGENTS.md build/test commands; use its documented temporary-copy XSLT workaround if Application Control requires it. [The feature entry](../../xslt-instructions/processor-profiles.md) states the capability, effective-version and forwards-compatibility boundaries. Includes/imports/packages, authoring and other hosts are separate follow-ups.\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"2\"/><line id=\"B\"/><line id=\"C\" qty=\"0\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/host-profiles/normal.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 1,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/host-profiles/empty.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 2,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"C\" qty=\"0\"/><line id=\"B\"/><line id=\"A\" qty=\"2\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/host-profiles/reordered.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      },
+      {
+        "index": 3,
+        "language": "xml",
+        "code": "<orders xmlns=\"urn:fytala:dispatch\"><line id=\"A\" qty=\"oops\"/></orders>",
+        "exactFiles": [
+          "docs/xpath40-catalog/examples/host-profiles/invalid.xml"
+        ],
+        "containedInFiles": [],
+        "equivalentXmlFiles": []
+      }
+    ]
+  },
+  "docs/xpath40-catalog/examples/intake-types/README.md": {
+    "entries": [
+      "xslt-instructions/structured-value-patterns.md"
+    ],
+    "sha256": "c5cc8c6d1b19ce38981c3040ada677c4e5c5f5f5e118fec2222ef15b1d1ab4e4",
+    "text": "<div align=\"center\">\n  <img src=\"../../../../assets/logos/fytala-logo-color-dark.svg\" width=\"100\" alt=\"Fytala Intake orders: type and pattern contracts\">\n  <h1>Intake orders: type and pattern contracts</h1>\n  <p>21 October 2026</p>\n</div>\n\nA synthetic namespaced intake feed contains unique-ID line orders and bundles. Line quantities are assumed integer-parseable; this example is not schema validation. Normal input includes a positive line, a zero-quantity line, a nonempty bundle and an empty bundle. Keep order IDs explicit so no rejected item disappears silently.\n\nThe [portable3.0 report](report-3.xsl) uses maps/arrays, a named template and explicit predicates. The [4.0 report](report-4.xsl) uses an integer alias, closed map-entry patterns and array-member patterns. Both produce identical output for normal and reordered input. String SKU member order is preserved; sorting only normalizes order IDs.\n\n| Fixture | Expected exact result |\n|---|---|\n| [normal](normal.xml) | `orders=4\\|O-100:ship\\|O-200:bundle\\|O-300:review\\|O-400:review` |\n| [reordered](reordered.xml) | Same report, ordered by unique ID. |\n| [empty](empty.xml) | `orders=0` |\n\n```powershell\ndotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~intake-types\"\n```\n\nAll40 cases are complete standalone files: six reports, six alias controls, four nominal identity controls, four type/record pattern controls, eight map controls, eight array controls, two malformed-declaration controls and two3.0 pattern refusals. The runner uses default Legacy host; stylesheet mode labels do not select a host profile. Negative files intentionally fail with their manifest diagnostic.\n\nRead the [grammar review](../../TYPE-PATTERN-GRAMMAR.md) before substituting types or patterns. Binding may convert a map while instance-of/pattern matching does not. Missing map key is different from a present empty value. An empty array satisfies a universal member constraint, so the report separately requires array:size greater than zero for a bundle. A '+' inside an array pattern does not impose a minimum array size. These distinctions are business-significant, not interchangeable syntax shortcuts.\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "powershell",
+        "code": "dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~intake-types\"",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "equivalentXmlFiles": [],
+        "commandCaseIds": [
+          "intake-types-alias-duplicate",
+          "intake-types-alias-expanded-name",
+          "intake-types-alias-missing-as",
+          "intake-types-alias-version30",
+          "intake-types-array-empty-member",
+          "intake-types-array-member-plus",
+          "intake-types-array-member-star",
+          "intake-types-array-not-map",
+          "intake-types-array-pattern-version30",
+          "intake-types-array-singletons",
+          "intake-types-array-vacuous",
+          "intake-types-array-whole-sequence",
+          "intake-types-array-wrong-type",
+          "intake-types-enum-allowed",
+          "intake-types-enum-rejected",
+          "intake-types-enum-treat-error",
+          "intake-types-map-closed",
+          "intake-types-map-empty-missing",
+          "intake-types-map-empty-present",
+          "intake-types-map-extra-closed",
+          "intake-types-map-extra-open",
+          "intake-types-map-numeric-key",
+          "intake-types-map-pattern-version30",
+          "intake-types-map-sequence-allowed",
+          "intake-types-map-singleton-required",
+          "intake-types-nominal-no-constructor",
+          "intake-types-nominal-other",
+          "intake-types-nominal-own",
+          "intake-types-nominal-plain-map",
+          "intake-types-report-3-empty",
+          "intake-types-report-3-normal",
+          "intake-types-report-3-reordered",
+          "intake-types-report-4-empty",
+          "intake-types-report-4-normal",
+          "intake-types-report-4-reordered",
+          "intake-types-structural-binding",
+          "intake-types-type-nominal-other",
+          "intake-types-type-nominal-own",
+          "intake-types-type-structural-annotated",
+          "intake-types-type-structural-map"
+        ],
+        "verification": "Fresh complete catalog run subsumes this exact displayed family selector; no separate command execution claimed."
+      }
+    ]
+  },
+  "docs/xpath40-catalog/examples/dispatch-grammar/README.md": {
+    "entries": [
+      "xslt-instructions/xsl-select.md"
+    ],
+    "sha256": "01afe95e8b58896bcdf8d373497e214964b4c807a4820a606e6fa6df0628d49c",
+    "text": "<div align=\"center\">\n  <img src=\"../../../../assets/logos/fytala-logo-color-dark.svg\" width=\"100\" alt=\"Fytala Dispatch batches: grammar and version boundaries\">\n  <h1>Dispatch batches: grammar and version boundaries</h1>\n  <p>21 October 2026</p>\n</div>\n\nA warehouse receives namespaced batches with a priority and SKU lines. It needs a stable routing report that retains empty batches for review. Inputs are synthetic; IDs are assumed unique, SKU order is significant, and no logistics standard or schema validation is claimed.\n\nCompare [portable XSLT3.0](report-3.xsl) with the [implemented4.0 forms](report-4.xsl). Both sort batch IDs, distinguish flattened SKU items from grouped SKU sequences, route urgent/rush to expedite, normal to standard and unknown priorities to review. Empty SKU groups appear as `-` rather than disappearing. The4.0 report combines xsl:array for-each/select, switch and text-body select; the3.0 report uses XPath arrays, choose and value-of. No external variables or resources are needed.\n\n| Input | Expected exact text from either version |\n|---|---|\n| [normal.xml](normal.xml) | `batches=3;flat=3;groups=3\\|B-100:expedite:A+B\\|B-200:review:-\\|B-300:standard:C` |\n| [reordered.xml](reordered.xml) | Same report; batch IDs determine the order. |\n| [empty.xml](empty.xml) | `batches=0;flat=0;groups=0` |\n\nRun the exact published files through the existing runner:\n\n```powershell\ndotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~dispatch-grammar\"\n```\n\nThere are37 checks: six complete reports, six recognition probes, four expression-version gates, ten static/result-error controls and eleven member/type/focus/identity controls. Mode labels xslt31/xslt40 describe stylesheet version; the runner uses Bosak's default Legacy host. Bosak recognizing a draft instruction under version3.0 does not make that instruction portable XSLT3.0. The explicit draft host has separate existing tests.\n\n`select-focus` returns adjacent atomic strings and verifies their separator. `select-focus-text` and the report use value-of to create text explicitly. CDATA braces are XPath expression syntax, not an AVT. `array-empty-member` distinguishes one empty member from the zero-member `array-empty` case. `switch-node-identity` verifies the selected source node without copying it.\n\nThe [grammar review](../../SWITCH-ARRAY-SELECT-GRAMMAR.md) maps every contract to source, primary specification sections and existing tests. Negative files are intentionally malformed or ill-typed and should fail with their manifest error codes; do not use them as application templates. The runner checks error text through public capture and does not prove static detection timing. No new gate, processor profile or upstream acceptance is claimed.\n",
+    "blocks": [
+      {
+        "index": 0,
+        "language": "powershell",
+        "code": "dotnet test tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj -c Release --filter \"FullyQualifiedName~CatalogExampleTests&DisplayName~dispatch-grammar\"",
+        "exactFiles": [],
+        "containedInFiles": [],
+        "equivalentXmlFiles": [],
+        "commandCaseIds": [
+          "dispatch-grammar-array-empty",
+          "dispatch-grammar-array-empty-member",
+          "dispatch-grammar-array-per-item",
+          "dispatch-grammar-array-per-sequence",
+          "dispatch-grammar-array-select-content",
+          "dispatch-grammar-expression-local30",
+          "dispatch-grammar-expression-local40",
+          "dispatch-grammar-expression-root30",
+          "dispatch-grammar-expression-root40",
+          "dispatch-grammar-member-select-content",
+          "dispatch-grammar-recognized-array-3",
+          "dispatch-grammar-recognized-array-4",
+          "dispatch-grammar-recognized-select-3",
+          "dispatch-grammar-recognized-select-4",
+          "dispatch-grammar-recognized-switch-3",
+          "dispatch-grammar-recognized-switch-4",
+          "dispatch-grammar-report-3-empty",
+          "dispatch-grammar-report-3-normal",
+          "dispatch-grammar-report-3-reordered",
+          "dispatch-grammar-report-4-empty",
+          "dispatch-grammar-report-4-normal",
+          "dispatch-grammar-report-4-reordered",
+          "dispatch-grammar-select-cdata",
+          "dispatch-grammar-select-child",
+          "dispatch-grammar-select-coercion",
+          "dispatch-grammar-select-focus",
+          "dispatch-grammar-select-focus-text",
+          "dispatch-grammar-select-late-fallback",
+          "dispatch-grammar-select-required-empty",
+          "dispatch-grammar-select-type-error",
+          "dispatch-grammar-switch-duplicate-otherwise",
+          "dispatch-grammar-switch-empty-selector",
+          "dispatch-grammar-switch-late-when",
+          "dispatch-grammar-switch-no-selector",
+          "dispatch-grammar-switch-no-when",
+          "dispatch-grammar-switch-node-identity",
+          "dispatch-grammar-switch-select-content"
+        ],
+        "verification": "Fresh complete catalog run subsumes this exact displayed family selector; no separate command execution claimed."
+      }
+    ]
+  }
+}

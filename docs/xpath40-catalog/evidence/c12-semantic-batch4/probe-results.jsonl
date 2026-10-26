@@ -1,0 +1,91 @@
+{"id":"enum-cast","profile":"XPath40","phase":"success","result":"ready","error":null,"errorCode":null}
+{"id":"enum-cast","profile":"XPath40Experimental","phase":"success","result":"ready","error":null,"errorCode":null}
+{"id":"enum-castable","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"enum-castable","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-cast-first","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-cast-first","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-cast-reverse","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-cast-reverse","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-coerce-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-coerce-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"choice-cardinality","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type (xs:integer|xs:string)","errorCode":null}
+{"id":"choice-cardinality","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Sequence of more than one item not allowed for type (xs:integer|xs:string)","errorCode":null}
+{"id":"retained-record-contract-cast-extra","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-cast-extra","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-cast-lexical","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-cast-lexical","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-cast-invalid","profile":"XPath40","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-cast-invalid","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"FORG0001: Cannot cast \u0027(map)\u0027 to record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-coerce-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null}
+{"id":"retained-record-contract-coerce-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null}
+{"id":"retained-record-contract-coerce-string","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-coerce-string","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-coerce-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-missing-empty","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-missing-empty","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-missing-required","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null}
+{"id":"retained-record-contract-missing-required","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(a as xs:integer): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null}
+{"id":"retained-record-contract-coerce-missing","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-missing","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-order","profile":"XPath40","phase":"success","result":"b|a","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-order","profile":"XPath40Experimental","phase":"success","result":"b|a","error":null,"errorCode":null}
+{"id":"retained-record-contract-plain-map","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-plain-map","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-record-star-plain","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null}
+{"id":"retained-record-contract-record-star-plain","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The value \u0027(map)\u0027 cannot be cast to record(*): the cast combination is not permitted (XPath 3.1 \u00A719.3).","errorCode":null}
+{"id":"retained-record-contract-record-star-assert","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-record-star-assert","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-castable-plain","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-castable-plain","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-castable-invalid","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-castable-invalid","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"retained-record-contract-lookup-unknown","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-lookup-unknown","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The key \u0027missing\u0027 is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-map-get-unknown","profile":"XPath40","phase":"success","result":"0","error":null,"errorCode":null}
+{"id":"retained-record-contract-map-get-unknown","profile":"XPath40Experimental","phase":"success","result":"0","error":null,"errorCode":null}
+{"id":"retained-record-contract-typed-let-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-typed-let-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-typed-let-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null}
+{"id":"retained-record-contract-typed-let-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a).","errorCode":null}
+{"id":"retained-record-contract-coerce-original","profile":"XPath40","phase":"success","result":"true:true","error":null,"errorCode":null}
+{"id":"retained-record-contract-coerce-original","profile":"XPath40Experimental","phase":"success","result":"true:true","error":null,"errorCode":null}
+{"id":"retained-record-contract-refuse31-cast-lexical","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 128: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null}
+{"id":"retained-record-contract-refuse31-coerce-promote","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 99: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null}
+{"id":"retained-record-contract-update-value","profile":"XPath40","phase":"success","result":"2","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-value","profile":"XPath40Experimental","phase":"success","result":"2","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-annotation","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-annotation","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-original","profile":"XPath40","phase":"success","result":"1|2","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-original","profile":"XPath40Experimental","phase":"success","result":"1|2","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-extra","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-update-extra","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u0027extra\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-update-plain","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","errorCode":null}
+{"id":"retained-record-contract-update-plain","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The left operand of \u0027but with\u0027 must be a record (a map with a record annotation); got a plain map.","errorCode":null}
+{"id":"retained-record-contract-update-nonmap","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","errorCode":null}
+{"id":"retained-record-contract-update-nonmap","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The right operand of \u0027but with\u0027 must be a map.","errorCode":null}
+{"id":"retained-record-contract-update-promote","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-promote","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-string","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-string","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-decimal","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-decimal","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Cannot convert value to type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-empty-optional","profile":"XPath40","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-empty-optional","profile":"XPath40Experimental","phase":"success","result":"true:0","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-empty-required","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-empty-required","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: Empty sequence not allowed for type xs:integer","errorCode":null}
+{"id":"retained-record-contract-update-order","profile":"XPath40","phase":"success","result":"b|a","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-order","profile":"XPath40Experimental","phase":"success","result":"b|a","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-nested","profile":"XPath40","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-nested","profile":"XPath40Experimental","phase":"success","result":"true","error":null,"errorCode":null}
+{"id":"retained-record-contract-update-key-type","profile":"XPath40","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-update-key-type","profile":"XPath40Experimental","phase":"evaluate","result":null,"error":"XPTY0004: The map contains an entry \u00271\u0027 that is not a declared field of the record type record(a as xs:integer).","errorCode":null}
+{"id":"retained-record-contract-refuse31-update-value","profile":"XPath31","phase":"compile","result":null,"error":"Parse error at position 126: XPST0003: A record type (\u0027record(...)\u0027) requires XPath 4.0.","errorCode":null}
+{"id":"choice-argument-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-argument-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-return-matches-first","profile":"XPath40","phase":"success","result":"false","error":null,"errorCode":null}
+{"id":"choice-return-matches-first","profile":"XPath40Experimental","phase":"success","result":"false","error":null,"errorCode":null}

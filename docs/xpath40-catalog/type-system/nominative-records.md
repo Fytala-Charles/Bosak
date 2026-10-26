@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded XSLT nominal identity**. Package visibility, transitive imports, complete static/default field combinations and arbitrary host registration remain bounded by C03/C05/C06. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **Bounded XSLT-defined identity is implemented in public1.23.2; this is not a standalone XPath declaration facility or a complete promotion of the historical deferred proposal.** [Current mapping](../TYPE-PATTERN-GRAMMAR.md).

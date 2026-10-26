@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded enumeration**. Not complete schema-union, collation, nested function/record or error-precedence acceptance. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **XSLT host/type review — 21 October 2026:** [Current mapping](../TYPE-PATTERN-GRAMMAR.md) distinguishes stylesheet aliases, conversion in bindings and noncoercing type/pattern tests. Named XSLT record identity is a separate bounded published contract; this does not add standalone XPath declarations.
 
 

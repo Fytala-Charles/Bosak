@@ -4,6 +4,8 @@
   <p>21 October 2026</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded structured matching**. C05-K01 generic model/JNode and complete nested schema/nominal pattern combinations remain limited; no universal generic-node promotion. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **Compound-pattern follow-up supplied — 21 October 2026:** [New bounded mapping](../COMPOUND-PATTERN-GRAMMAR.md) now covers set/union grouping, priority and rule identity, with a separately labelled current-draft union-priority gap. Original counts/queues below describe their earlier checkpoint.
 
 

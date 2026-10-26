@@ -4,6 +4,8 @@
   <p>Bosak host policy - bounded executable reference</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded frozen host policy**. Neither profile implements all current draft syntax or enables Experimental scan. C06-H01 requires a complete static-detection mode; lazy timing alone is not classified as a defect. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
 
 ## 1. Name and Classification

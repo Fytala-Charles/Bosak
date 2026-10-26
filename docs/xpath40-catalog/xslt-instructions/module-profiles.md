@@ -4,6 +4,8 @@
   <p>Bosak host policy - bounded executable reference</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Verified bounded direct module policy**. Direct nonconflicting examples do not establish arbitrary transitive graphs, import precedence, package versions, override/accept/expose or full lexical defaults. C06 complete static-detection mode remains unproved. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 **C06 host/profile review — 26 October 2026:** [Bounded reconciliation](../HOST-PROFILE-RECONCILIATION.md) maps this entry to current pinned instruction/host rules and named tests. Seven workpackages remain; instruction comparison, complete static-mode evidence and host/adoption limits remain explicit. No acceptance or profile promotion. Earlier notices remain historical.
 
 **Public 1.23.8 - 23 October 2026:** The function default-mode fix and host/module profile coverage are [published and verified](../../RELEASE-1.23.8-PUBLICATION.md). Current catalog:76 entries/3,073 documentation checks. REQ-126/AC-03 remain partial; Braid smoke/acceptance is separate. Earlier source/unpublished/PR checkpoints below are historical.

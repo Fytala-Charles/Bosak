@@ -4,6 +4,8 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**C12 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-4.md) records three contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited membership/cast; matching-coercion blocker**. C05-K02: six fresh controls still convert an already-matching string to an earlier integer alternative; explicit-cast success does not resolve this. Final owner acceptance remains C13; earlier checkpoints are historical.
+
 ## 1. Name and Classification
 
 **Choice item types** - **Frozen 4.0**. Delivery family: [REQ-118](../../REQ-118-xpath-xslt-40.md) / [REQ-123 registry](../../FEATURE_REQUESTS.md). Section provenance: REQ-118 S6a; choice item type evidence in VersionGateTests. [Primary implementation evidence](../../../tests/Bosak.XPath.Api.Tests/VersionGateTests.cs) records the shipped behavior; this entry adds executable user-facing examples under REQ-126, rather than announcing a new engine feature.
@@ -32,11 +34,11 @@ A legacy order identifier can be an integer or a string, but not a fractional am
 
 ## 6. Language Alignment
 
-Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Read the behavior as XPath/XSLT semantics. Similar vocabulary in another programming language is not a compatibility promise. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 7. Applicability
 
-Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Use this form when solving the stated task and the consumer permits the declared compatibility level. Keep the earlier baseline when the application requires 3.1 expressions or portable 3.0 stylesheets. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 8. Structure
 
@@ -56,7 +58,7 @@ The case combines source values, the named feature, and explicit output formatti
 
 ## 11. Consequences
 
-Benefit: Express the permitted alternatives in one item type. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Alternative order affects coercion; the instance-of examples here only test membership and do not perform conversion.
+Benefit: Express the permitted alternatives in one item type. Tradeoff: the declared compatibility level and edge rules become part of the consumer contract. Explicit cast tries alternatives in order. Coercion must preserve an already-matching alternative, but Bosak currently converts matching strings to an earlier integer alternative (C05-K02). The instance-of examples only test membership and do not perform conversion.
 
 ## 12. Implementation
 
