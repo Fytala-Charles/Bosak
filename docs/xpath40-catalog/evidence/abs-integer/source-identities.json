@@ -1,0 +1,23 @@
+{
+  "base": "06abb7c794f0f572675bf359130f5e8b98b37311",
+  "baselineSources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "2ff18feb6b0f7592a4572de0b93b53a64f021b72",
+    "src/Directory.Build.props": "b2978a49e30a518a5765542f1cffbdd50696820b"
+  },
+  "correctedSources": {
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": {
+      "localSha256": "a1ed5242841d6057f1c0d96dc5997900b79ca7d0569fbc350bb42ccb7668cb44",
+      "gitBlob": "c0c3c3517b1636c14b591e9b5509a29efc769d6b"
+    },
+    "src/Directory.Build.props": {
+      "localSha256": "bc8ae9c1baf0a9919257c42a388dc7c0bc44fb7d2b9bafdb860c3c712192aea3",
+      "gitBlob": "4bbd3394519d40282be0d97700cd9416bde8a400"
+    },
+    "tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs": {
+      "localSha256": "220bee4eba50933b0cd3285894c612ba683f90a9ecf5c9fd07b5fb0dffff35a6",
+      "gitBlob": "bf14bbd7f6d6718b6c3548fde9eab4d0509ab2cd"
+    }
+  },
+  "identicalTestSha256": "220bee4eba50933b0cd3285894c612ba683f90a9ecf5c9fd07b5fb0dffff35a6",
+  "baseline": "Executed against unchanged tracked working source before modification; no isolated checkout claimed."
+}

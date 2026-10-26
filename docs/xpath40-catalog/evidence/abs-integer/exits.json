@@ -1,0 +1,72 @@
+[
+  {
+    "label": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Bosak.sln",
+      "-c",
+      "Release"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "lsp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Bosak.LanguageServer.Tests",
+      "-c",
+      "Release",
+      "--logger",
+      "trx",
+      "--results-directory",
+      "D:\\Development\\Bosak\\.guard-tmp\\abs-integer-validation\\lsp"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "qt4",
+    "command": [
+      "dotnet",
+      "run",
+      "--project",
+      "tests/Bosak.XPath.Conformance40",
+      "-c",
+      "Release",
+      "--no-build",
+      "--",
+      "tests/qt4tests"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "qt3",
+    "command": [
+      "dotnet",
+      "run",
+      "--project",
+      "tests/Bosak.XPath.Conformance",
+      "-c",
+      "Release",
+      "--no-build"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "solution",
+    "command": [
+      "dotnet",
+      "test",
+      "Bosak.sln",
+      "-c",
+      "Release",
+      "--no-build",
+      "--logger",
+      "trx",
+      "--results-directory",
+      "D:\\Development\\Bosak\\.guard-tmp\\abs-integer-validation\\solution"
+    ],
+    "exitCode": 0
+  }
+]

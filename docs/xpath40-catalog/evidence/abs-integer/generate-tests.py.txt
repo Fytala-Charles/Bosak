@@ -1,0 +1,70 @@
+from pathlib import Path
+import json,hashlib,subprocess,shutil
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/abs-integer';e.mkdir(parents=True,exist_ok=True)
+rows=[]
+for value in [-79228162514264337593543950335,-9223372036854775809,-9223372036854775808,-9223372036854775807,-1,0,1,9223372036854775807,9223372036854775808,9223372036854775809,79228162514264337593543950335]:
+ rows.append((f'({value})',f'$r instance of xs:integer and $r eq ({abs(value)})',False))
+for arg,value in [("xs:long('-9223372036854775808')",9223372036854775808),("xs:int('-2147483648')",2147483648),("xs:byte('-128')",128),("xs:unsignedLong('18446744073709551615')",18446744073709551615),("xs:positiveInteger('2')",2),("xs:negativeInteger('-2')",2)]:
+ rows.append((arg,f'$r instance of xs:integer and $r eq ({value})',False))
+for lex in ['-9223372036854775808','-79228162514264337593543950335','-2.5','-0.0']:
+ rows.append((f"xs:decimal('{lex}')",f"$r instance of xs:decimal and not($r instance of xs:integer) and $r eq xs:decimal('{lex.removeprefix('-')}')",False))
+for kind in ['double','float']:
+ for lex in ['-2.5','-0','0','INF','-INF','NaN']:
+  expected='not($r eq $r)' if lex=='NaN' else f"$r eq xs:{kind}('{lex.removeprefix('-')}')"
+  if lex in ['-0','0']:expected+=" and (1 div $r) eq xs:double('INF')"
+  rows.append((f"xs:{kind}('{lex}')",f'$r instance of xs:{kind} and {expected}',False))
+rows += [('()','empty($r)',False),("xs:untypedAtomic('-2.5')",'$r instance of xs:double and $r eq 2.5',False)]
+errors=[("'bad'",'XPTY0004'),("xs:untypedAtomic('bad')",'FORG0001'),('(1,2)','XPTY0004'),('[map{}]','FOTY0013'),('[function(){1}]','FOTY0013')]
+calls=['abs','abs#1',"function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)",'(function($x){abs($x)})']
+cases=[]
+for arg,predicate,_ in rows:
+ for wrapper in ['{}','[{}]','[[{},()]]']:
+  wrapped=wrapper.format(arg) if wrapper!='{}' else arg
+  for call in calls:cases.append(dict(Expression=f'let $r := {call}({wrapped}) return ({predicate})',Expected='true',Error=False))
+for arg,error in errors:
+ for call in calls:cases.append(dict(Expression=f'{call}({arg})',Expected=error,Error=True))
+cases.append(dict(Expression="local-name-from-QName(function-name((function($f as function(item()*) as item()*){ $f })(abs#1)))",Expected='abs',Error=False))
+for i,row in enumerate(cases):row['Id']=i;row['BaselineSafe']=True
+(e/'inputs.json').write_text(json.dumps(cases,indent=2)+'\n',encoding='utf-8')
+header=(r/'tests/Bosak.XPath.Standard.Tests/RoundingKernelTests.cs').read_text(encoding='utf-8').split('using Bosak.XPath.Api;')[0].replace('Verifies exact rounding kernels, numeric identity and signed-zero boundaries.','Verifies abs integer result preservation and numeric edge cases.')
+body='''using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using Xunit;
+
+namespace Bosak.XPath.Standard.Tests;
+
+/// <summary>Verifies abs integer result preservation and numeric edge cases.</summary>
+public sealed class AbsIntegerPreservationTests
+{
+    /// <summary>Provides independently expected abs results and existing conversion controls.</summary>
+    /// <returns>Profile, expression, expected value or error, and error flag.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        var cases = new (string Expression, string Expected, bool Error)[]
+        {
+'''
+for row in cases:body+='            ('+json.dumps(row['Expression'])+', '+json.dumps(row['Expected'])+', '+str(row['Error']).lower()+'),\n'
+body+='''        };
+        foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+            foreach (var row in cases)
+                yield return new object[] { profile, row.Expression, row.Expected, row.Error };
+    }
+
+    /// <summary>Checks public-call values, primitive types, signs, and required errors.</summary>
+    /// <param name="profile">The XPath compatibility profile.</param>
+    /// <param name="expression">The complete predicate or error expression.</param>
+    /// <param name="expected">The expected value or error code.</param>
+    /// <param name="error">Whether evaluation must fail.</param>
+    [Theory, MemberData(nameof(Cases))]
+    public void PreservesIntegerResults(XPathCompatibility profile, string expression, string expected, bool error)
+    {
+        string Evaluate() => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(new EvaluationContext()).ToString();
+        if (error) Assert.Contains(expected, Assert.ThrowsAny<Exception>(() => Evaluate()).Message);
+        else Assert.Equal(expected, Evaluate());
+    }
+}
+'''
+(r/'tests/Bosak.XPath.Standard.Tests/AbsIntegerPreservationTests.cs').write_text(header+body,encoding='utf-8')
+source=Path('D:/Development/Bosak.Braid/docs/BOSAK-1.26.2-ADOPTION.md');shutil.copyfile(source,e/'braid-1.26.2-adoption-report.md')
+(e/'braid-report-provenance.json').write_text(json.dumps(dict(source=str(source),sha256=hashlib.sha256(source.read_bytes()).hexdigest(),repositoryHead=subprocess.check_output(['git','rev-parse','HEAD'],cwd=source.parents[1]).decode().strip(),documentStatus=subprocess.check_output(['git','status','--short','--','docs/BOSAK-1.26.2-ADOPTION.md'],cwd=source.parents[1]).decode().strip(),scope='Owner-supplied local adoption report; adoption is uncommitted in report; no current-adoption CI or new native UI acceptance inferred; no Braid writes.'),indent=2)+'\n',encoding='utf-8')
+print(f'{len(cases)} cases x3 profiles = {len(cases)*3} tests.')

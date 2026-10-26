@@ -1,0 +1,6374 @@
+[
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 0,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 0,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 0,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 1,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 1,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 1,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 2,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 2,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 2,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 3,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 3,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 3,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 4,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 4,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 4,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 5,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 5,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 5,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 6,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 6,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 6,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 7,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 7,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 7,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 8,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 8,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 8,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 9,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 9,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 9,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 10,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 10,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 10,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 11,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 11,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 11,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 12,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 12,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 12,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 13,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 13,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 13,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 14,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 14,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 14,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 15,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 15,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 15,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 16,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 16,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 16,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 17,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 17,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 17,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 18,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 18,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 18,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 19,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 19,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 19,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 20,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 20,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 20,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 21,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 21,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 21,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 22,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 22,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 22,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 23,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 23,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 23,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 24,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 24,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 24,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 25,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 25,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 25,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 26,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 26,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 26,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 27,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 27,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 27,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 28,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 28,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 28,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 29,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 29,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 29,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 30,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 30,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 30,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 31,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 31,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 31,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 32,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 32,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 32,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 33,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 33,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 33,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 34,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 34,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 34,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 35,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 35,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 35,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 96,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 96,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 96,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 97,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 97,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 97,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 98,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 98,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 98,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 99,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 99,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 99,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 100,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 100,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 100,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 101,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 101,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 101,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 102,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 102,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 102,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 103,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 103,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 103,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 104,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 104,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 104,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 105,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 105,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 105,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 106,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 106,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 106,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 107,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 107,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 107,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 108,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 108,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 108,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 109,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 109,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 109,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 110,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 110,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 110,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 111,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 111,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 111,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 112,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 112,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 112,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 113,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 113,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 113,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 114,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 114,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 114,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 115,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 115,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 115,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 116,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 116,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 116,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 117,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 117,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 117,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 118,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 118,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 118,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 119,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 119,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 119,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 120,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 120,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 120,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 121,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 121,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 121,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 122,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 122,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 122,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 123,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 123,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 123,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 124,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 124,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 124,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 125,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 125,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 125,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 126,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 126,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 126,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 127,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 127,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 127,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 128,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 128,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 128,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 129,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 129,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 129,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 130,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 130,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 130,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 131,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 131,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 131,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 132,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 132,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 132,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 133,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 133,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 133,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 134,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 134,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 134,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 135,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 135,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 135,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 136,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 136,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 136,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 137,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 137,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 137,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 138,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 138,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 138,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 139,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 139,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 139,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 140,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 140,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 140,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 141,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 141,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 141,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 142,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 142,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 142,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 143,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 143,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 143,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 168,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 168,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 168,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 169,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 169,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 169,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 170,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 170,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 170,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 171,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 171,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 171,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 172,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 172,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 172,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 173,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 173,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 173,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 174,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 174,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 174,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 175,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 175,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 175,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 176,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 176,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 176,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := abs#1([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 177,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 177,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 177,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 178,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 178,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 178,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath31",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 179,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath31",
+      "Id": 179,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath31",
+      "Id": 179,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 0,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 0,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 0,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 1,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 1,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 1,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 2,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 2,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 2,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 3,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 3,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 3,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 4,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 4,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 4,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 5,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 5,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 5,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 6,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 6,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 6,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 7,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 7,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 7,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 8,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 8,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 8,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 9,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 9,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 9,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 10,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 10,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 10,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 11,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 11,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 11,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 12,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 12,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 12,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 13,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 13,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 13,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 14,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 14,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 14,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 15,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 15,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 15,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 16,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 16,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 16,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 17,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 17,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 17,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 18,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 18,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 18,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 19,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 19,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 19,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 20,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 20,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 20,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 21,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 21,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 21,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 22,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 22,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 22,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 23,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 23,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 23,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 24,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 24,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 24,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 25,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 25,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 25,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 26,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 26,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 26,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 27,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 27,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 27,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 28,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 28,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 28,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 29,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 29,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 29,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 30,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 30,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 30,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 31,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 31,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 31,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 32,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 32,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 32,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 33,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 33,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 33,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 34,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 34,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 34,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 35,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 35,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 35,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 96,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 96,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 96,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 97,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 97,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 97,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 98,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 98,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 98,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 99,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 99,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 99,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 100,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 100,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 100,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 101,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 101,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 101,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 102,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 102,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 102,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 103,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 103,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 103,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 104,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 104,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 104,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 105,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 105,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 105,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 106,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 106,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 106,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 107,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 107,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 107,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 108,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 108,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 108,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 109,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 109,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 109,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 110,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 110,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 110,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 111,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 111,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 111,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 112,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 112,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 112,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 113,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 113,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 113,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 114,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 114,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 114,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 115,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 115,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 115,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 116,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 116,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 116,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 117,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 117,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 117,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 118,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 118,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 118,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 119,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 119,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 119,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 120,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 120,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 120,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 121,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 121,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 121,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 122,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 122,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 122,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 123,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 123,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 123,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 124,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 124,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 124,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 125,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 125,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 125,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 126,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 126,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 126,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 127,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 127,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 127,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 128,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 128,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 128,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 129,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 129,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 129,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 130,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 130,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 130,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 131,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 131,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 131,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 132,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 132,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 132,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 133,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 133,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 133,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 134,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 134,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 134,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 135,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 135,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 135,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 136,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 136,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 136,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 137,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 137,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 137,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 138,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 138,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 138,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 139,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 139,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 139,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 140,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 140,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 140,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 141,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 141,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 141,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 142,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 142,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 142,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 143,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 143,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 143,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 168,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 168,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 168,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 169,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 169,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 169,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 170,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 170,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 170,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 171,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 171,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 171,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 172,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 172,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 172,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 173,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 173,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 173,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 174,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 174,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 174,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 175,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 175,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 175,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 176,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 176,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 176,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := abs#1([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 177,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 177,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 177,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 178,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 178,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 178,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 179,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40",
+      "Id": 179,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40",
+      "Id": 179,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 0,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 0,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 0,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 1,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 1,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 1,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 2,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 2,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 2,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((-79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 3,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 3,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 3,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 4,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 4,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 4,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 5,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 5,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 5,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 6,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 6,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 6,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(-79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 7,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 7,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 7,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 8,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 8,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 8,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 9,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 9,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 9,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 10,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 10,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 10,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(-79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 11,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 11,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 11,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 12,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 12,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 12,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 13,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 13,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 13,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 14,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 14,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 14,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 15,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 15,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 15,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 16,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 16,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 16,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 17,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 17,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 17,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 18,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 18,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 18,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 19,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 19,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 19,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 20,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 20,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 20,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 21,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 21,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 21,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 22,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 22,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 22,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 23,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 23,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 23,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 24,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 24,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 24,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 25,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 25,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 25,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 26,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 26,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 26,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((-9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 27,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 27,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 27,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 28,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 28,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 28,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 29,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 29,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 29,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 30,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 30,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 30,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(-9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 31,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 31,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 31,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 32,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 32,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 32,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 33,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 33,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 33,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 34,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 34,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 34,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(-9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 35,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 35,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 35,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 96,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 96,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 96,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 97,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 97,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 97,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 98,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 98,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 98,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775808)) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 99,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 99,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 99,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 100,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 100,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 100,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 101,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 101,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 101,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 102,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 102,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 102,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775808)]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 103,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 103,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 103,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 104,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 104,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 104,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 105,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 105,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 105,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 106,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 106,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 106,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775808),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 107,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 107,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 107,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 108,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 108,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 108,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 109,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 109,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 109,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 110,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 110,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 110,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((9223372036854775809)) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 111,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 111,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 111,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 112,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 112,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 112,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 113,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 113,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 113,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 114,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 114,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 114,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(9223372036854775809)]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 115,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 115,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 115,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 116,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 116,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 116,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 117,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 117,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 117,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 118,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 118,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 118,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(9223372036854775809),()]]) return ($r instance of xs:integer and $r eq (9223372036854775809))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 119,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 119,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 119,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 120,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 120,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 120,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 121,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 121,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 121,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 122,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 122,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 122,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})((79228162514264337593543950335)) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 123,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 123,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 123,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 124,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 124,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 124,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 125,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 125,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 125,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 126,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 126,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 126,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([(79228162514264337593543950335)]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 127,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 127,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 127,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 128,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 128,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 128,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 129,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 129,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 129,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 130,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 130,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 130,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[(79228162514264337593543950335),()]]) return ($r instance of xs:integer and $r eq (79228162514264337593543950335))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 131,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 131,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 131,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 132,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 132,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 132,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 133,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 133,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 133,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 134,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 134,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 134,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})(xs:long('-9223372036854775808')) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 135,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 135,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 135,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 136,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 136,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 136,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 137,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 137,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 137,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 138,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 138,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 138,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([xs:long('-9223372036854775808')]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 139,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 139,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 139,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 140,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 140,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 140,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 141,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 141,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 141,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 142,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 142,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 142,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:long('-9223372036854775808'),()]]) return ($r instance of xs:integer and $r eq (9223372036854775808))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 143,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 143,
+      "value": null,
+      "error": "FOAR0002: Negating the minimum value of a twos complement number is invalid.",
+      "exceptionType": "System.InvalidOperationException",
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 143,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 168,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 168,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 168,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 169,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 169,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 169,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 170,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 170,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 170,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})(xs:unsignedLong('18446744073709551615')) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 171,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 171,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 171,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 172,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 172,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 172,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 173,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 173,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 173,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 174,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 174,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 174,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([xs:unsignedLong('18446744073709551615')]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 175,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 175,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 175,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 176,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 176,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 176,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := abs#1([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 177,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 177,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 177,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := function-lookup(QName('http://www.w3.org/2005/xpath-functions','abs'),1)([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 178,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 178,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 178,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  },
+  {
+    "profile": "XPath40Experimental",
+    "Expression": "let $r := (function($x){abs($x)})([[xs:unsignedLong('18446744073709551615'),()]]) return ($r instance of xs:integer and $r eq (18446744073709551615))",
+    "Expected": "true",
+    "Error": false,
+    "Id": 179,
+    "BaselineSafe": true,
+    "before": {
+      "profile": "XPath40Experimental",
+      "Id": 179,
+      "value": "false",
+      "error": null,
+      "status": "Observed"
+    },
+    "after": {
+      "profile": "XPath40Experimental",
+      "Id": 179,
+      "value": "true",
+      "error": null,
+      "status": "Observed"
+    }
+  }
+]

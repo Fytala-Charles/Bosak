@@ -1,0 +1,51 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/abs-integer-render/README.md.html",
+      "sha256": "e8d1a98462328b004d7c48fc4d05bcdacdd6f951e9cace34467f8615d548c3c3"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/abs-integer-render/docs_ARCHITECTURE.md.html",
+      "sha256": "69dc1cf48e6f263d4e1ef85a86cd9ea7020c5944cc741ff6a8608f66cfd9e849"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/abs-integer-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "ee0cc966ce90732aec7dcba2cefec567360da764b155f298681703516b6bf9cb"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/abs-integer-render/docs_INTEGRATION.md.html",
+      "sha256": "d1410a99bb0414266e720aeadb9a9da31d4be93acd016484f7d4eba77d203e38"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/abs-integer-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "a93e9564d120719f26dd7199aeab010f1d378561a7109cd142755f987c3e94bd"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/abs-integer-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "a474f3bee68742f3c341dfeedee8aadc9b3698a72cfcdf230bc222583f433cb4"
+    },
+    {
+      "source": "docs/xpath40-catalog/README.md",
+      "html": ".guard-tmp/abs-integer-render/docs_xpath40-catalog_README.md.html",
+      "sha256": "c523e71d939ae380549335f134ca5c610a84b3f7bbdaf8e476ca0f93eb2a3382"
+    },
+    {
+      "source": "docs/xpath40-catalog/COVERAGE-RECONCILIATION.md",
+      "html": ".guard-tmp/abs-integer-render/docs_xpath40-catalog_COVERAGE-RECONCILIATION.md.html",
+      "sha256": "e995cf1fd7b3cce299f39ec81211cbff46176236b3659d31a29f896445f4650f"
+    },
+    {
+      "source": "docs/xpath40-catalog/ABS-INTEGER-PRESERVATION.md",
+      "html": ".guard-tmp/abs-integer-render/docs_xpath40-catalog_ABS-INTEGER-PRESERVATION.md.html",
+      "sha256": "e61dca951bf64c6318d965ad1fd8f6df4c85412feea3b82fafa2f9c06b555274"
+    }
+  ]
+}
