@@ -1,0 +1,39 @@
+{
+  "directory": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20",
+  "status": "BOTH_PUBLIC_CONSUMERS_PASS_AUDITS_COMPLETE",
+  "checks": [
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\broad-public-restore.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\broad-public-run.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\broad-public-metadata.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\broad-public-audit.json",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\focused-public-restore.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\focused-public-tests.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\focused-public-metadata.log",
+      "exitCode": 0
+    },
+    {
+      "log": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\20261026T124435565210Z-13a88e20\\focused-public-audit.json",
+      "exitCode": 0
+    }
+  ],
+  "nugetOrgOnly": true
+}

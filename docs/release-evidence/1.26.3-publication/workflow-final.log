@@ -1,0 +1,412 @@
+publish	Set up job	﻿2026-10-26T12:24:45.6844606Z Current runner version: '2.338.0'
+publish	Set up job	2026-10-26T12:24:45.6875605Z ##[group]Runner Image Provisioner
+publish	Set up job	2026-10-26T12:24:45.6877398Z Hosted Compute Agent
+publish	Set up job	2026-10-26T12:24:45.6878256Z Version: 20261021.618
+publish	Set up job	2026-10-26T12:24:45.6879177Z Commit: 21505ad2541d5be6135ed84fc33697146cf75b8e
+publish	Set up job	2026-10-26T12:24:45.6880111Z Build Date: 2026-10-21T00:45:21Z
+publish	Set up job	2026-10-26T12:24:45.6880778Z Worker ID: {5143f1e2-f1a8-4d25-9982-0f628888846a}
+publish	Set up job	2026-10-26T12:24:45.6881488Z Region: centralus
+publish	Set up job	2026-10-26T12:24:45.6882027Z Cloud: Azure
+publish	Set up job	2026-10-26T12:24:45.6882546Z ##[endgroup]
+publish	Set up job	2026-10-26T12:24:45.6884139Z ##[group]Operating System
+publish	Set up job	2026-10-26T12:24:45.6884761Z Ubuntu
+publish	Set up job	2026-10-26T12:24:45.6885319Z 24.04.5
+publish	Set up job	2026-10-26T12:24:45.6885830Z LTS
+publish	Set up job	2026-10-26T12:24:45.6886329Z ##[endgroup]
+publish	Set up job	2026-10-26T12:24:45.6887374Z ##[group]Runner Image
+publish	Set up job	2026-10-26T12:24:45.6888495Z Image: ubuntu-24.04
+publish	Set up job	2026-10-26T12:24:45.6889312Z Version: 20261012.334.1
+publish	Set up job	2026-10-26T12:24:45.6890380Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20261012.334/images/ubuntu/Ubuntu2404-Readme.md
+publish	Set up job	2026-10-26T12:24:45.6892183Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20261012.334
+publish	Set up job	2026-10-26T12:24:45.6893170Z ##[endgroup]
+publish	Set up job	2026-10-26T12:24:45.6894422Z ##[group]GITHUB_TOKEN Permissions
+publish	Set up job	2026-10-26T12:24:45.6896979Z Contents: read
+publish	Set up job	2026-10-26T12:24:45.6897618Z Metadata: read
+publish	Set up job	2026-10-26T12:24:45.6898252Z ##[endgroup]
+publish	Set up job	2026-10-26T12:24:45.6900989Z Secret source: Actions
+publish	Set up job	2026-10-26T12:24:45.6901908Z Cache mode: write
+publish	Set up job	2026-10-26T12:24:45.6902932Z Prepare workflow directory
+publish	Set up job	2026-10-26T12:24:45.7237741Z Prepare all required actions
+publish	Set up job	2026-10-26T12:24:45.7293900Z Getting action download info
+publish	Set up job	2026-10-26T12:24:46.0207608Z Download action repository 'actions/checkout@v4' (SHA:11d5960a326750d5838078e36cf38b85af677262)
+publish	Set up job	2026-10-26T12:24:46.1293342Z Download action repository 'actions/setup-dotnet@v4' (SHA:67a3573c9a986a3f9c594539f4ab511d57bb3ce9)
+publish	Set up job	2026-10-26T12:24:46.7100787Z Download action repository 'NuGet/login@v1' (SHA:8d196754b4036150537f80ac539e15c2f1028841)
+publish	Set up job	2026-10-26T12:24:47.1227056Z Complete job name: publish
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	﻿2026-10-26T12:24:47.2277638Z ##[group]Run actions/checkout@v4
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2279653Z with:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2280689Z   submodules: recursive
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2281984Z   repository: Fytala-Charles/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2291151Z   token: ***
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2292269Z   ssh-strict: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2293347Z   ssh-user: git
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2294423Z   persist-credentials: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2295614Z   clean: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2296666Z   sparse-checkout-cone-mode: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2297867Z   fetch-depth: 1
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2298968Z   fetch-tags: false
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2300066Z   show-progress: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2301199Z   lfs: false
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2302355Z   set-safe-directory: true
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2303533Z   allow-unsafe-pr-checkout: false
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.2305066Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3439049Z Syncing repository: Fytala-Charles/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3443325Z ##[group]Getting Git version info
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3444942Z Working directory is '/home/runner/work/Bosak/Bosak'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3447723Z [command]/usr/bin/git version
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3491035Z git version 2.55.0
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3521713Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3541173Z Temporarily overriding HOME='/home/runner/work/_temp/2b49d0c1-f57c-421f-b85d-dff16fda4333' before making global git config changes
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3544158Z Adding repository directory to the temporary git global config as a safe directory
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3547898Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3611677Z Deleting the contents of '/home/runner/work/Bosak/Bosak'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3619864Z ##[group]Initializing the repository
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3625535Z [command]/usr/bin/git init /home/runner/work/Bosak/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3736114Z hint: Using 'master' as the name for the initial branch. This default branch name
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3739789Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3742618Z hint: to use in all of your new repositories, which will suppress this warning,
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3744461Z hint: call:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3745942Z hint:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3747277Z hint: 	git config --global init.defaultBranch <name>
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3749251Z hint:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3750930Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3753129Z hint: 'development'. The just-created branch can be renamed via this command:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3754997Z hint:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3756688Z hint: 	git branch -m <name>
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3758595Z hint:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3760994Z hint: Disable this message with "git config set advice.defaultBranchName false"
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3763933Z Initialized empty Git repository in /home/runner/work/Bosak/Bosak/.git/
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3767969Z [command]/usr/bin/git remote add origin https://github.com/Fytala-Charles/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3819969Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3822327Z ##[group]Disabling automatic garbage collection
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3824491Z [command]/usr/bin/git config --local gc.auto 0
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3891125Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3893803Z ##[group]Setting up auth
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3902958Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.3952994Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4309772Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4343289Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4540165Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4573342Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4772524Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4817449Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4819645Z ##[group]Fetching the repository
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:47.4828165Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +08fbdc31ac79baac04cf00f4773ec6d0b2dd247f:refs/tags/v1.26.3
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4708332Z From https://github.com/Fytala-Charles/Bosak
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4710301Z  * [new ref]         08fbdc31ac79baac04cf00f4773ec6d0b2dd247f -> v1.26.3
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4713592Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4714464Z ##[group]Determining the checkout info
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4715659Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4722695Z [command]/usr/bin/git sparse-checkout disable
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4792416Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4825348Z ##[group]Checking out the ref
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.4830104Z [command]/usr/bin/git checkout --progress --force refs/tags/v1.26.3
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9996198Z Note: switching to 'refs/tags/v1.26.3'.
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9997060Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9997353Z You are in 'detached HEAD' state. You can look around, make experimental
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9998007Z changes and commit them, and you can discard any commits you make in this
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9998621Z state without impacting any branches by switching back to a branch.
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9999318Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:51.9999629Z If you want to create a new branch to retain commits you create, you may
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0000211Z do so (now or later) by using -c with the switch command. Example:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0000557Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0000772Z   git switch -c <new-branch-name>
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0001364Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0001574Z Or undo this operation with:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0001808Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0002027Z   git switch -
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0002283Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0002542Z Turn off this advice by setting config variable advice.detachedHead to false
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0002963Z 
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0003215Z HEAD is now at 08fbdc3 test: audit floor and ceiling numeric argument contracts
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0315248Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0316256Z ##[group]Setting up auth for fetching submodules
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0322566Z [command]/usr/bin/git config --global http.https://github.com/.extraheader AUTHORIZATION: basic ***
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0411182Z [command]/usr/bin/git config --global --unset-all url.https://github.com/.insteadOf
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0442541Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0501424Z [command]/usr/bin/git config --global --add url.https://github.com/.insteadOf org-225543477@github.com:
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0598668Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0600226Z ##[group]Fetching submodules
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0603546Z [command]/usr/bin/git submodule sync --recursive
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.0830736Z [command]/usr/bin/git -c protocol.version=2 submodule update --init --force --depth=1 --recursive
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.1133832Z Submodule 'tests/qt3tests' (https://github.com/w3c/qt3tests.git) registered for path 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.1143471Z Submodule 'tests/qt4tests' (https://github.com/qt4cg/qt4tests) registered for path 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:52.1170086Z Cloning into '/home/runner/work/Bosak/Bosak/tests/qt3tests'...
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:53.7690291Z Cloning into '/home/runner/work/Bosak/Bosak/tests/qt4tests'...
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:55.8486320Z Submodule path 'tests/qt3tests': checked out '201a6e466940cdfc727f4babfedcde5332b9f578'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.1087630Z From https://github.com/qt4cg/qt4tests
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.1088707Z  * branch            68910080d2d4d4092a1c6a908998ceec64ffc6d4 -> FETCH_HEAD
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.3739999Z Submodule path 'tests/qt4tests': checked out '68910080d2d4d4092a1c6a908998ceec64ffc6d4'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.3777683Z [command]/usr/bin/git submodule foreach --recursive git config --local gc.auto 0
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.3981688Z Entering 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4124333Z Entering 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4357626Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4358363Z ##[group]Persisting credentials for submodules
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4364378Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'url\.https\:\/\/github\.com\/\.insteadOf' && git config --local --unset-all 'url.https://github.com/.insteadOf' || :"
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4571072Z Entering 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4612181Z Entering 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4668357Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local 'http.https://github.com/.extraheader' 'AUTHORIZATION: basic ***' && git config --local --show-origin --name-only --get-regexp remote.origin.url"
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.4880088Z Entering 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5027428Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config	remote.origin.url
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5046515Z Entering 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5319833Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config	remote.origin.url
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5429714Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'git@github.com:'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5628576Z Entering 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.5847079Z Entering 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.6143868Z [command]/usr/bin/git submodule foreach --recursive git config --local --add 'url.https://github.com/.insteadOf' 'org-225543477@github.com:'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.6349914Z Entering 'tests/qt3tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.7143686Z Entering 'tests/qt4tests'
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.7640701Z ##[endgroup]
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.7688068Z [command]/usr/bin/git log -1 --format=%H
+publish	Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:24:57.7714291Z 08fbdc31ac79baac04cf00f4773ec6d0b2dd247f
+publish	Setup .NET 10	﻿2026-10-26T12:24:57.9323942Z ##[group]Run actions/setup-dotnet@v4
+publish	Setup .NET 10	2026-10-26T12:24:57.9324363Z with:
+publish	Setup .NET 10	2026-10-26T12:24:57.9324681Z   dotnet-version: 10.0.x
+publish	Setup .NET 10	2026-10-26T12:24:57.9325060Z   cache: false
+publish	Setup .NET 10	2026-10-26T12:24:57.9325354Z ##[endgroup]
+publish	Setup .NET 10	2026-10-26T12:24:58.0750800Z (node:2546) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+publish	Setup .NET 10	2026-10-26T12:24:58.0752044Z (Use `node --trace-deprecation ...` to show where the warning was created)
+publish	Setup .NET 10	2026-10-26T12:24:58.0776169Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+publish	Setup .NET 10	2026-10-26T12:24:58.7453087Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz
+publish	Setup .NET 10	2026-10-26T12:24:59.5957391Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz size is 36673986 bytes.
+publish	Setup .NET 10	2026-10-26T12:24:59.5959570Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Runtime/10.0.14/dotnet-runtime-10.0.14-linux-x64.tar.gz
+publish	Setup .NET 10	2026-10-26T12:25:00.5020705Z dotnet-install: Downloaded file size is 36673986 bytes.
+publish	Setup .NET 10	2026-10-26T12:25:00.5022083Z dotnet-install: The remote and local file sizes are equal.
+publish	Setup .NET 10	2026-10-26T12:25:00.5676637Z dotnet-install: Installed version is 10.0.14
+publish	Setup .NET 10	2026-10-26T12:25:00.5737262Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+publish	Setup .NET 10	2026-10-26T12:25:00.5738511Z dotnet-install: Note that the script does not resolve dependencies during installation.
+publish	Setup .NET 10	2026-10-26T12:25:00.5740141Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+publish	Setup .NET 10	2026-10-26T12:25:00.5741405Z dotnet-install: Installation finished successfully.
+publish	Setup .NET 10	2026-10-26T12:25:00.5762320Z [command]/home/runner/work/_actions/actions/setup-dotnet/v4/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0
+publish	Setup .NET 10	2026-10-26T12:25:01.0040619Z dotnet-install: Attempting to download using aka.ms link https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz
+publish	Setup .NET 10	2026-10-26T12:25:04.9378509Z dotnet-install: Remote file https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz size is 240199984 bytes.
+publish	Setup .NET 10	2026-10-26T12:25:04.9380568Z dotnet-install: Extracting archive from https://builds.dotnet.microsoft.com/dotnet/Sdk/10.0.403/dotnet-sdk-10.0.403-linux-x64.tar.gz
+publish	Setup .NET 10	2026-10-26T12:25:10.2925430Z dotnet-install: Downloaded file size is 240199984 bytes.
+publish	Setup .NET 10	2026-10-26T12:25:10.2926300Z dotnet-install: The remote and local file sizes are equal.
+publish	Setup .NET 10	2026-10-26T12:25:10.4523201Z dotnet-install: Installed version is 10.0.403
+publish	Setup .NET 10	2026-10-26T12:25:10.4582573Z dotnet-install: Adding to current process PATH: `/usr/share/dotnet`. Note: This change will be visible only when sourcing script.
+publish	Setup .NET 10	2026-10-26T12:25:10.4584025Z dotnet-install: Note that the script does not resolve dependencies during installation.
+publish	Setup .NET 10	2026-10-26T12:25:10.4585616Z dotnet-install: To check the list of dependencies, go to https://learn.microsoft.com/dotnet/core/install, select your operating system and check the "Dependencies" section.
+publish	Setup .NET 10	2026-10-26T12:25:10.4586859Z dotnet-install: Installation finished successfully.
+publish	Restore & build	﻿2026-10-26T12:25:10.4749550Z ##[group]Run dotnet restore Bosak.sln
+publish	Restore & build	2026-10-26T12:25:10.4750097Z ^[[36;1mdotnet restore Bosak.sln^[[0m
+publish	Restore & build	2026-10-26T12:25:10.4750642Z ^[[36;1mdotnet build Bosak.sln -c Release --no-restore^[[0m
+publish	Restore & build	2026-10-26T12:25:10.4944348Z shell: /usr/bin/bash -e {0}
+publish	Restore & build	2026-10-26T12:25:10.4944933Z env:
+publish	Restore & build	2026-10-26T12:25:10.4945250Z   DOTNET_ROOT: /usr/share/dotnet
+publish	Restore & build	2026-10-26T12:25:10.4945588Z ##[endgroup]
+publish	Restore & build	2026-10-26T12:25:12.0618459Z   Determining projects to restore...
+publish	Restore & build	2026-10-26T12:25:13.2012424Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.Xslt/Bosak.Xslt.csproj (in 140 ms).
+publish	Restore & build	2026-10-26T12:25:13.2080944Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj (in 139 ms).
+publish	Restore & build	2026-10-26T12:25:13.2150989Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Standard/Bosak.XPath.Standard.csproj (in 4 ms).
+publish	Restore & build	2026-10-26T12:25:13.2201382Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XQuery/Bosak.XQuery.csproj (in 5 ms).
+publish	Restore & build	2026-10-26T12:25:13.2229338Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Runtime/Bosak.XPath.Runtime.csproj (in 3 ms).
+publish	Restore & build	2026-10-26T12:25:13.2260534Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj (in 2 ms).
+publish	Restore & build	2026-10-26T12:25:13.2336327Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance40/Bosak.XPath.Conformance40.csproj (in 5 ms).
+publish	Restore & build	2026-10-26T12:25:13.2382854Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers.Database/Bosak.XPath.Providers.Database.csproj (in 2 ms).
+publish	Restore & build	2026-10-26T12:25:13.2430749Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Parser/Bosak.XPath.Parser.csproj (in 2 ms).
+publish	Restore & build	2026-10-26T12:25:13.2454866Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Core/Bosak.XPath.Core.csproj (in 1 ms).
+publish	Restore & build	2026-10-26T12:25:13.2501348Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Compiler/Bosak.XPath.Compiler.csproj (in 2 ms).
+publish	Restore & build	2026-10-26T12:25:13.2572661Z   Restored /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj (in 3 ms).
+publish	Restore & build	2026-10-26T12:25:13.2658442Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance/Bosak.XPath.Conformance.csproj (in 4 ms).
+publish	Restore & build	2026-10-26T12:25:15.1221179Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/Bosak.XPath.Compiler.Tests.csproj (in 1.84 sec).
+publish	Restore & build	2026-10-26T12:25:15.1226296Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/Bosak.XPath.Core.Tests.csproj (in 1.89 sec).
+publish	Restore & build	2026-10-26T12:25:15.1250189Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/Bosak.XQuery.Tests.csproj (in 2.08 sec).
+publish	Restore & build	2026-10-26T12:25:15.1280069Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/Bosak.Xslt.Tests.csproj (in 2.08 sec).
+publish	Restore & build	2026-10-26T12:25:15.1369673Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/Bosak.XPath.Standard.Tests.csproj (in 9 ms).
+publish	Restore & build	2026-10-26T12:25:15.1371044Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/Bosak.XPath.Api.Tests.csproj (in 10 ms).
+publish	Restore & build	2026-10-26T12:25:15.1401233Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/Bosak.XPath.Runtime.Tests.csproj (in 7 ms).
+publish	Restore & build	2026-10-26T12:25:15.1402625Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/Bosak.XPath.Providers.Tests.csproj (in 8 ms).
+publish	Restore & build	2026-10-26T12:25:15.1448386Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/Bosak.XPath.Parser.Tests.csproj (in 4 ms).
+publish	Restore & build	2026-10-26T12:25:15.1454632Z   Restored /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/Bosak.XPath.Providers.Database.Tests.csproj (in 6 ms).
+publish	Restore & build	2026-10-26T12:25:20.1608554Z   Bosak.XPath.Core -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Core/bin/Release/net10.0/Bosak.XPath.Core.dll
+publish	Restore & build	2026-10-26T12:25:22.8141354Z   Bosak.XPath.Providers -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers/bin/Release/net10.0/Bosak.XPath.Providers.dll
+publish	Restore & build	2026-10-26T12:25:23.3650618Z   Bosak.XPath.Providers.Database -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Providers.Database/bin/Release/net10.0/Bosak.XPath.Providers.Database.dll
+publish	Restore & build	2026-10-26T12:25:24.2941168Z   Bosak.XPath.Parser -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Parser/bin/Release/net10.0/Bosak.XPath.Parser.dll
+publish	Restore & build	2026-10-26T12:25:25.4433972Z   Bosak.XPath.Parser.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/bin/Release/net10.0/Bosak.XPath.Parser.Tests.dll
+publish	Restore & build	2026-10-26T12:25:25.5404984Z   Bosak.XPath.Compiler -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Compiler/bin/Release/net10.0/Bosak.XPath.Compiler.dll
+publish	Restore & build	2026-10-26T12:25:26.2943167Z   Bosak.XPath.Compiler.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/bin/Release/net10.0/Bosak.XPath.Compiler.Tests.dll
+publish	Restore & build	2026-10-26T12:25:29.9439203Z   Bosak.XPath.Runtime -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Runtime/bin/Release/net10.0/Bosak.XPath.Runtime.dll
+publish	Restore & build	2026-10-26T12:25:34.9330454Z   Bosak.XPath.Standard -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Standard/bin/Release/net10.0/Bosak.XPath.Standard.dll
+publish	Restore & build	2026-10-26T12:25:35.7783809Z   Bosak.XPath.Api -> /home/runner/work/Bosak/Bosak/src/Bosak.XPath.Api/bin/Release/net10.0/Bosak.XPath.Api.dll
+publish	Restore & build	2026-10-26T12:25:35.8096187Z   Bosak.XPath.Providers.Database.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Database.Tests.dll
+publish	Restore & build	2026-10-26T12:25:38.0619814Z   Bosak.XPath.Core.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/bin/Release/net10.0/Bosak.XPath.Core.Tests.dll
+publish	Restore & build	2026-10-26T12:25:38.2034718Z   Bosak.XQuery -> /home/runner/work/Bosak/Bosak/src/Bosak.XQuery/bin/Release/net10.0/Bosak.XQuery.dll
+publish	Restore & build	2026-10-26T12:25:40.1830040Z   Bosak.XQuery.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/bin/Release/net10.0/Bosak.XQuery.Tests.dll
+publish	Restore & build	2026-10-26T12:25:47.7764233Z   Bosak.Xslt -> /home/runner/work/Bosak/Bosak/src/Bosak.Xslt/bin/Release/net10.0/Bosak.Xslt.dll
+publish	Restore & build	2026-10-26T12:25:48.5856207Z   Bosak.XPath.Conformance40 -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll
+publish	Restore & build	2026-10-26T12:25:49.3224481Z ##[warning]/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj]
+publish	Restore & build	2026-10-26T12:25:49.4341046Z   Bosak.XPath.Runtime.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/bin/Release/net10.0/Bosak.XPath.Runtime.Tests.dll
+publish	Restore & build	2026-10-26T12:25:50.1055920Z   Bosak.XPath.Providers.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Tests.dll
+publish	Restore & build	2026-10-26T12:25:50.1220367Z   Bosak.Xslt.Conformance -> /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/bin/Release/net10.0/Bosak.Xslt.Conformance.dll
+publish	Restore & build	2026-10-26T12:25:55.1500900Z   Bosak.XPath.Api.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/bin/Release/net10.0/Bosak.XPath.Api.Tests.dll
+publish	Restore & build	2026-10-26T12:25:56.6101192Z   Bosak.XPath.Conformance -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Conformance.dll
+publish	Restore & build	2026-10-26T12:25:58.0286770Z   Bosak.Xslt.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/bin/Release/net10.0/Bosak.Xslt.Tests.dll
+publish	Restore & build	2026-10-26T12:26:01.2759072Z   Bosak.XPath.Standard.Tests -> /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/bin/Release/net10.0/Bosak.XPath.Standard.Tests.dll
+publish	Restore & build	2026-10-26T12:26:01.3050361Z 
+publish	Restore & build	2026-10-26T12:26:01.3061498Z Build succeeded.
+publish	Restore & build	2026-10-26T12:26:01.3062018Z 
+publish	Restore & build	2026-10-26T12:26:01.3067689Z ##[warning]/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [/home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Conformance/Bosak.Xslt.Conformance.csproj]
+publish	Restore & build	2026-10-26T12:26:01.3070794Z     1 Warning(s)
+publish	Restore & build	2026-10-26T12:26:01.3071719Z     0 Error(s)
+publish	Restore & build	2026-10-26T12:26:01.3072401Z 
+publish	Restore & build	2026-10-26T12:26:01.3072811Z Time Elapsed 00:00:45.88
+publish	Test	﻿2026-10-26T12:26:01.3365479Z ##[group]Run dotnet test Bosak.sln -c Release --no-build --nologo
+publish	Test	2026-10-26T12:26:01.3366125Z ^[[36;1mdotnet test Bosak.sln -c Release --no-build --nologo^[[0m
+publish	Test	2026-10-26T12:26:01.3409849Z shell: /usr/bin/bash -e {0}
+publish	Test	2026-10-26T12:26:01.3410459Z env:
+publish	Test	2026-10-26T12:26:01.3410820Z   DOTNET_ROOT: /usr/share/dotnet
+publish	Test	2026-10-26T12:26:01.3411427Z ##[endgroup]
+publish	Test	2026-10-26T12:26:02.5900307Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Core.Tests/bin/Release/net10.0/Bosak.XPath.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:02.8293873Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Parser.Tests/bin/Release/net10.0/Bosak.XPath.Parser.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:02.9039065Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Runtime.Tests/bin/Release/net10.0/Bosak.XPath.Runtime.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:02.9110381Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Api.Tests/bin/Release/net10.0/Bosak.XPath.Api.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:03.0210634Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:03.1860568Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:03.2000656Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:03.3590410Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:05.5279844Z 
+publish	Test	2026-10-26T12:26:05.5380714Z Passed!  - Failed:     0, Passed:   202, Skipped:     0, Total:   202, Duration: 288 ms - Bosak.XPath.Parser.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:05.7229897Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Standard.Tests/bin/Release/net10.0/Bosak.XPath.Standard.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:05.9259505Z 
+publish	Test	2026-10-26T12:26:05.9352329Z Passed!  - Failed:     0, Passed:   132, Skipped:     0, Total:   132, Duration: 1 s - Bosak.XPath.Core.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:06.0309404Z 
+publish	Test	2026-10-26T12:26:06.0500605Z Passed!  - Failed:     0, Passed:   269, Skipped:     0, Total:   269, Duration: 1 s - Bosak.XPath.Runtime.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:06.0851175Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Compiler.Tests/bin/Release/net10.0/Bosak.XPath.Compiler.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:06.2699583Z 
+publish	Test	2026-10-26T12:26:06.2920805Z Passed!  - Failed:     0, Passed:   489, Skipped:     0, Total:   489, Duration: 1 s - Bosak.XPath.Api.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:06.3060253Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:06.5900931Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.Xslt.Tests/bin/Release/net10.0/Bosak.Xslt.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:06.6882455Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:06.7410940Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XQuery.Tests/bin/Release/net10.0/Bosak.XQuery.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:07.1672843Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:07.3220303Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:09.5649566Z 
+publish	Test	2026-10-26T12:26:09.5741039Z Passed!  - Failed:     0, Passed:    66, Skipped:     0, Total:    66, Duration: 379 ms - Bosak.XPath.Compiler.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:09.7750982Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:10.2500399Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:12.7359980Z 
+publish	Test	2026-10-26T12:26:12.7473802Z Passed!  - Failed:     0, Passed:   303, Skipped:     0, Total:   303, Duration: 2 s - Bosak.XQuery.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:12.9151601Z Test run for /home/runner/work/Bosak/Bosak/tests/Bosak.XPath.Providers.Database.Tests/bin/Release/net10.0/Bosak.XPath.Providers.Database.Tests.dll (.NETCoreApp,Version=v10.0)
+publish	Test	2026-10-26T12:26:13.4181666Z A total of 1 test files matched the specified pattern.
+publish	Test	2026-10-26T12:26:17.2899448Z 
+publish	Test	2026-10-26T12:26:17.3141126Z Passed!  - Failed:     0, Passed:    47, Skipped:     0, Total:    47, Duration: 973 ms - Bosak.XPath.Providers.Database.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:21.2369420Z 
+publish	Test	2026-10-26T12:26:21.2790759Z Passed!  - Failed:     0, Passed: 11941, Skipped:     0, Total: 11941, Duration: 7 s - Bosak.XPath.Standard.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:26:24.8873997Z 
+publish	Test	2026-10-26T12:26:24.8981054Z Passed!  - Failed:     0, Passed:   153, Skipped:     0, Total:   153, Duration: 12 s - Bosak.XPath.Providers.Tests.dll (net10.0)
+publish	Test	2026-10-26T12:28:52.4969003Z 
+publish	Test	2026-10-26T12:28:52.5095065Z Passed!  - Failed:     0, Passed:  8196, Skipped:     0, Total:  8196, Duration: 2 m 31 s - Bosak.Xslt.Tests.dll (net10.0)
+publish	Pack	﻿2026-10-26T12:28:52.5802814Z ##[group]Run dotnet pack Bosak.sln -c Release --no-build -o nupkgs
+publish	Pack	2026-10-26T12:28:52.5803446Z ^[[36;1mdotnet pack Bosak.sln -c Release --no-build -o nupkgs^[[0m
+publish	Pack	2026-10-26T12:28:52.5845357Z shell: /usr/bin/bash -e {0}
+publish	Pack	2026-10-26T12:28:52.5845750Z env:
+publish	Pack	2026-10-26T12:28:52.5846055Z   DOTNET_ROOT: /usr/share/dotnet
+publish	Pack	2026-10-26T12:28:52.5846421Z ##[endgroup]
+publish	Pack	2026-10-26T12:28:53.6328102Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Parser.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:53.6394195Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Compiler.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:53.7411770Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Runtime.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.0600482Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Standard.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.0829909Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Providers.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.0880603Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Core.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.1232282Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Api.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.5980536Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XQuery.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.6755492Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.Xslt.1.26.3.nupkg'.
+publish	Pack	2026-10-26T12:28:54.7055381Z   Successfully created package '/home/runner/work/Bosak/Bosak/nupkgs/Bosak.XPath.Providers.Database.1.26.3.nupkg'.
+publish	NuGet login (OIDC)	﻿2026-10-26T12:28:54.7704181Z ##[group]Run NuGet/login@v1
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7704751Z with:
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7705517Z   user: ***
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7706122Z   token-service-url: https://www.nuget.org/api/v2/token
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7706822Z   audience: https://www.nuget.org
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7707307Z env:
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7707745Z   DOTNET_ROOT: /usr/share/dotnet
+publish	NuGet login (OIDC)	2026-10-26T12:28:54.7708248Z ##[endgroup]
+publish	NuGet login (OIDC)	2026-10-26T12:28:57.1882483Z Successfully exchanged OIDC token for NuGet API key.
+publish	NuGet push	﻿2026-10-26T12:28:57.2021231Z ##[group]Run for pkg in nupkgs/*.nupkg; do
+publish	NuGet push	2026-10-26T12:28:57.2021691Z ^[[36;1mfor pkg in nupkgs/*.nupkg; do^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2022065Z ^[[36;1m  case "$pkg" in^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2022465Z ^[[36;1m    *LanguageServer*) continue ;;^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2022804Z ^[[36;1m  esac^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2023190Z ^[[36;1m  dotnet nuget push "$pkg" \^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2024342Z ^[[36;1m    --api-key *** \^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2024786Z ^[[36;1m    --source https://api.nuget.org/v3/index.json \^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2025202Z ^[[36;1m    --skip-duplicate^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2025589Z ^[[36;1mdone^[[0m
+publish	NuGet push	2026-10-26T12:28:57.2066569Z shell: /usr/bin/bash -e {0}
+publish	NuGet push	2026-10-26T12:28:57.2066955Z env:
+publish	NuGet push	2026-10-26T12:28:57.2067322Z   DOTNET_ROOT: /usr/share/dotnet
+publish	NuGet push	2026-10-26T12:28:57.2067715Z ##[endgroup]
+publish	NuGet push	2026-10-26T12:28:57.4924305Z Pushing Bosak.XPath.Api.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:28:57.5024109Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:28:57.9026861Z   Created https://www.nuget.org/api/v2/package/ 399ms
+publish	NuGet push	2026-10-26T12:28:57.9043020Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:28:58.1859223Z Pushing Bosak.XPath.Compiler.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:28:58.1962707Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:28:58.6058095Z   Created https://www.nuget.org/api/v2/package/ 408ms
+publish	NuGet push	2026-10-26T12:28:58.6074263Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:28:58.8921796Z Pushing Bosak.XPath.Core.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:28:58.9028233Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:28:59.3125582Z   Created https://www.nuget.org/api/v2/package/ 408ms
+publish	NuGet push	2026-10-26T12:28:59.3141412Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:28:59.5874139Z Pushing Bosak.XPath.Parser.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:28:59.5978005Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:28:59.9980947Z   Created https://www.nuget.org/api/v2/package/ 399ms
+publish	NuGet push	2026-10-26T12:28:59.9997796Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:00.2764455Z Pushing Bosak.XPath.Providers.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:00.2865425Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:00.6917757Z   Created https://www.nuget.org/api/v2/package/ 403ms
+publish	NuGet push	2026-10-26T12:29:00.6936908Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:00.9664661Z Pushing Bosak.XPath.Providers.Database.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:00.9766092Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:01.3856135Z   Created https://www.nuget.org/api/v2/package/ 407ms
+publish	NuGet push	2026-10-26T12:29:01.3874170Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:01.6742967Z Pushing Bosak.XPath.Runtime.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:01.6884879Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:02.1279597Z   Created https://www.nuget.org/api/v2/package/ 437ms
+publish	NuGet push	2026-10-26T12:29:02.1295953Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:02.4031412Z Pushing Bosak.XPath.Standard.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:02.4129623Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:02.8487187Z   Created https://www.nuget.org/api/v2/package/ 434ms
+publish	NuGet push	2026-10-26T12:29:02.8503800Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:03.1182481Z Pushing Bosak.XQuery.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:03.1282564Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:03.4890483Z   Created https://www.nuget.org/api/v2/package/ 359ms
+publish	NuGet push	2026-10-26T12:29:03.4905981Z Your package was pushed.
+publish	NuGet push	2026-10-26T12:29:03.7724380Z Pushing Bosak.Xslt.1.26.3.nupkg to 'https://www.nuget.org/api/v2/package'...
+publish	NuGet push	2026-10-26T12:29:03.7829698Z   PUT https://www.nuget.org/api/v2/package/
+publish	NuGet push	2026-10-26T12:29:04.2203024Z   Created https://www.nuget.org/api/v2/package/ 436ms
+publish	NuGet push	2026-10-26T12:29:04.2219898Z Your package was pushed.
+publish	Post Setup .NET 10	﻿2026-10-26T12:29:04.2481440Z Post job cleanup.
+publish	Post Setup .NET 10	2026-10-26T12:29:04.3696421Z (node:8702) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+publish	Post Setup .NET 10	2026-10-26T12:29:04.3697366Z (Use `node --trace-deprecation ...` to show where the warning was created)
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	﻿2026-10-26T12:29:04.3838163Z Post job cleanup.
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4765278Z [command]/usr/bin/git version
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4806197Z git version 2.55.0
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4840618Z Temporarily overriding HOME='/home/runner/work/_temp/9c196998-4e56-43c8-8ffa-4386e820c478' before making global git config changes
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4842490Z Adding repository directory to the temporary git global config as a safe directory
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4846493Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Bosak/Bosak
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4893886Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.4932894Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5163747Z Entering 'tests/qt3tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5205324Z Entering 'tests/qt4tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5279965Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5304366Z http.https://github.com/.extraheader
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5317133Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5362342Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5658359Z Entering 'tests/qt3tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5709591Z http.https://github.com/.extraheader
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5736713Z Entering 'tests/qt4tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5768220Z http.https://github.com/.extraheader
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5847039Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.5883773Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6096788Z Entering 'tests/qt3tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6116036Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config	remote.origin.url
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6135039Z Entering 'tests/qt4tests'
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6152531Z file:/home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config	remote.origin.url
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6189466Z [command]/usr/bin/git config --file /home/runner/work/Bosak/Bosak/.git/modules/tests/qt3tests/config --name-only --get-regexp ^includeIf\.gitdir:
+publish	Post Checkout (with test-suite submodules — unit tests read qt3tests schema fixtures)	2026-10-26T12:29:04.6223474Z [command]/usr/bin/git config --file /home/runner/work/Bosak/Bosak/.git/modules/tests/qt4tests/config --name-only --get-regexp ^includeIf\.gitdir:
+publish	Complete job	﻿2026-10-26T12:29:04.6397348Z Cleaning up orphan processes
+publish	Complete job	2026-10-26T12:29:04.6860414Z Terminate orphan process: pid (3053) (dotnet)
+publish	Complete job	2026-10-26T12:29:04.7092038Z Terminate orphan process: pid (3054) (dotnet)
+publish	Complete job	2026-10-26T12:29:04.7297906Z Terminate orphan process: pid (3055) (dotnet)
+publish	Complete job	2026-10-26T12:29:04.7502957Z Terminate orphan process: pid (3190) (VBCSCompiler)
+publish	Complete job	2026-10-26T12:29:04.7566587Z ##[warning]Node.js 20 is deprecated. The following actions target Node.js 20 but are being forced to run on Node.js 24: actions/checkout@v4, actions/setup-dotnet@v4. For more information see: https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/

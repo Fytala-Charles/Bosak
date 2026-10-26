@@ -1,0 +1,54 @@
+{
+  "version": "1.26.3",
+  "revision": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+  "ownerAuthorization": "Merge, tag and publish is approved",
+  "recommendation": "Proceed to release review and publication of the verified candidate.",
+  "checkedAtUtc": "2026-10-26T12:24:40.728240+00:00",
+  "integrationPR": 465,
+  "integrationMerge": "f0e6e40b91fb291db1c56b91eb417632ca75c447",
+  "ciRun": 40321479231,
+  "indexes": [
+    {
+      "id": "Bosak.XPath.Api",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Compiler",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Core",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Parser",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Providers.Database",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Runtime",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XPath.Standard",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.XQuery",
+      "candidatePresent": false
+    },
+    {
+      "id": "Bosak.Xslt",
+      "candidatePresent": false
+    }
+  ],
+  "duplicateDispatchPerformed": false,
+  "status": "PREFLIGHT_PASSED"
+}

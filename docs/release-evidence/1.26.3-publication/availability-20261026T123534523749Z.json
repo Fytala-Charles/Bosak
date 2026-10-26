@@ -1,0 +1,87 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Providers.Database",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XQuery",
+    "available": true,
+    "indexListed": true,
+    "url": "https://api.nuget.org/v3-flatcontainer/bosak.xquery/1.26.3/bosak.xquery.1.26.3.nupkg",
+    "archive": "D:\\Development\\Bosak\\.guard-tmp\\release1263-publication\\public-packages\\Bosak.XQuery.1.26.3.nupkg",
+    "sha256": "d5d2d35cd5db98c82a28417bd5599cf950ee12aae272800bb231a92dc71ab16a",
+    "bytes": 137773,
+    "assemblySha256": "3ef53a37096651d941f3f6803b591d2115a646aa35dfb11618789bc0c4b5a5fd",
+    "revision": "08fbdc31ac79baac04cf00f4773ec6d0b2dd247f",
+    "repositorySignaturePresent": true,
+    "approvedGitAssetBytesMatch": true,
+    "dependencies": [
+      {
+        "id": "Bosak.XPath.Api",
+        "version": "1.26.3",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Core",
+        "version": "1.26.3",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Providers",
+        "version": "1.26.3",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Runtime",
+        "version": "1.26.3",
+        "exclude": "Build,Analyzers"
+      },
+      {
+        "id": "Bosak.XPath.Standard",
+        "version": "1.26.3",
+        "exclude": "Build,Analyzers"
+      }
+    ]
+  },
+  {
+    "id": "Bosak.Xslt",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  }
+]

@@ -4,6 +4,9 @@
   <p>26 October 2026 — unsigned local candidate; unpublished</p>
 </div>
 
+**Publication completed:** [Verified 1.26.3 publication](RELEASE-1.26.3-PUBLICATION.md). Candidate/unpublished statements below retain the pre-publication checkpoint; original candidate JSON and evidence remain unchanged.
+
+
 **Pinned package source: `08fbdc31ac79baac04cf00f4773ec6d0b2dd247f`.** This candidate consolidates abs integer preservation, floor/ceiling integer preservation and the completed floor/ceiling argument audit. A clean isolated checkout supplies all builds, tests and ten packages. [Machine-readable proof](RELEASE-1.26.3-CANDIDATE.json) records its complete tree, RepositoryCommit and assembly informational revisions. Later candidate documentation is separate from package source. Remote CI is not verified by this preparation.
 
 [Candidate release notes](RELEASE-NOTES-1.26.3.md) summarize the patch. Public installation remains **1.26.2**. This step creates no tag, release, upload or signed public verification, and does not establish Braid adoption of 1.26.3.

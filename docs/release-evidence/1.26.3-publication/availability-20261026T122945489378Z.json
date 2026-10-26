@@ -1,0 +1,52 @@
+[
+  {
+    "id": "Bosak.XPath.Api",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Compiler",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Core",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Parser",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Providers",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Providers.Database",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Runtime",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XPath.Standard",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.XQuery",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  },
+  {
+    "id": "Bosak.Xslt",
+    "available": false,
+    "reason": "HTTP404 propagation"
+  }
+]
