@@ -150,3 +150,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/release-evidence/1.26.3/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
 
 /docs/release-evidence/1.26.3-publication/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol
+
+/docs/xpath40-catalog/evidence/closure-triage/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol

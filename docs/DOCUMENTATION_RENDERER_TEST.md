@@ -1,3 +1,5 @@
+26 October 2026: ten REQ-126 closure-plan/skip-triage/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Thirteen workpackage scopes, four exact 19-entry batches, 18 grammar rows, 28 historical-pin gaps, 2,573 skip cases, actual filters, 26 diagnostic receipts, raw/source/index hashes and links verified. Gate counts/policy unchanged; no fresh full-unit, semantic acceptance, screenshot/PDF, Braid or publication claim.
+
 26 October 2026: eleven 1.26.3 publication/release-note/canonical/catalog pages rendered as HTML with markdown-it and unchanged Fytala CSS. Tag/workflow/public signatures/cache/output/consumer hashes and links verified; original candidate evidence retained. No screenshot/PDF or new Braid acceptance inferred.
 
 26 October 2026: eleven 1.26.3 candidate/release-note/canonical/catalog/audit pages rendered as HTML with markdown-it and unchanged Fytala CSS. Pinned source/tree, package/cache/output/assembly identities, raw receipt/consumer-source hashes, counts, links and diff verified. Original Braid/earlier evidence retained; no screenshot/PDF, signed-public verification or 1.26.3 Braid adoption inferred.

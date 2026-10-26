@@ -1,0 +1,921 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "substitution-020",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-021",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-022",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-023",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-024",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-025",
+    "Set": "prod-SchemaImport",
+    "SetFile": "tests/qt3tests/prod/SchemaImport.xml",
+    "SetSha256": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "xsd-version",
+        "Value": "1.1",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "substitution11",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "CastAs-ListType-20",
+    "Set": "prod-CastExpr.schema",
+    "SetFile": "tests/qt3tests/prod/CastExpr.schema.xml",
+    "SetSha256": "e6026600a71657bd2dda67a8d64834ff2be594dbf82566811272941aa503bdd4",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n         let $v as xs:NMTOKENS := xs:NMTOKENS(\"a b c\")\n         return count($v)\n       ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Engine gap: cast to XSD list type raises XPTY0004 instead of XPST0051 (schema path)"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "CastAs-ListType-28",
+    "Set": "prod-CastExpr.schema",
+    "SetFile": "tests/qt3tests/prod/CastExpr.schema.xml",
+    "SetSha256": "e6026600a71657bd2dda67a8d64834ff2be594dbf82566811272941aa503bdd4",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n         \"a b c\" castable as xs:NMTOKENS\n       ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Engine gap: 'castable as' against an XSD list type does not tokenize the value"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "validateexpr-28",
+    "Set": "prod-ValidateExpr",
+    "SetFile": "tests/qt3tests/prod/ValidateExpr.xml",
+    "SetSha256": "f2d9e0ca40e3208c24fd4fd04bc0beb7070be31823a38f87f40439acc6662984",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        import schema namespace t=\"http://www.example.com/ns/test/xq-e18\";\n        let $doc := validate strict { document { <doc xmlns=\"http://www.example.com/ns/test/xq-e18\"> <para1>PT3H21M</para1> <para2>P3M</para2> </doc> } } let $p1 := data($doc/t:doc/t:para1) let $p2 := data($doc/t:doc/t:para2) let $t1 := xs:dayTimeDuration(\"PT3H21M\") let $t2 := xs:yearMonthDuration(\"P3M\") return <results> <case1>{if ($p1 = $t1) then \"pass\" else \"fail\"}</case1> <case2>{if ($p2 = $t2) then \"pass\" else \"fail\"}</case2> </results>\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaImport",
+        "Satisfied": true
+      },
+      {
+        "Type": "feature",
+        "Value": "schemaValidation",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "xq-e18xsd",
+    "Gated": true,
+    "SkipReason": "Harness error: XmlSchemaException: Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type."
+  },
+  {
+    "Suite": "qt4",
+    "Name": "map-to-element-053",
+    "Set": "fn-map-to-element",
+    "SetFile": "tests/qt4tests/fn/map-to-element.xml",
+    "SetSha256": "618d1654be15cb0e461412bc666f21d8f1a65881bba7d2527291b8cd3e637601",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt4tests",
+    "Expression": "string-to-codepoints(name(map-to-element({ codepoints-to-string(119070): 'x' })))",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XP40+ XQ40+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unexpected error: XmlException: Name cannot begin with the '\ud834\udd1e' character, hexadecimal value 0x1D11E."
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemAttr-8",
+    "Set": "prod-DirAttributeList",
+    "SetFile": "tests/qt3tests/prod/DirAttributeList.xml",
+    "SetSha256": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "<foo attr=\"\"\"/>",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ExtensionExpression-4a",
+    "Set": "prod-ExtensionExpr",
+    "SetFile": "tests/qt3tests/prod/ExtensionExpr.xml",
+    "SetSha256": "2dd70788ba06995545a1c94c2466424bdddac84ae038917eb01a33f8fb0c3b82",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "(#name content #) {1}",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      },
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        },
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "contextDecl-028",
+    "Set": "prod-ContextItemDecl",
+    "SetFile": "tests/qt3tests/prod/ContextItemDecl.xml",
+    "SetSha256": "98b1d2ede825fb9fe8ed5cfd974d90b528e3853c0f8b31036d2f3e0199db362f",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": " declare context item := 3; . + 4 ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ30+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Literals069",
+    "Set": "prod-Literal",
+    "SetFile": "tests/qt3tests/prod/Literal.xml",
+    "SetSha256": "28eb18bd67db3b2bc956fc7175fba63440b9560e759fd9ff935be59bbe2d9a9a",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "text{ \"He said, \"\"I don't like it.\"\"\" }",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "string-constructor-021",
+    "Set": "prod-StringConstructor",
+    "SetFile": "tests/qt3tests/prod/StringConstructor.xml",
+    "SetSha256": "80a2e4758284cd0d4cdf105dc56607071e6a171e2b8e8a0b773342418d7a309c",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "\n        matches(\"\"\"\", ``[[\"']]``)\n      ",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ31+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "string-constructor-021",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ31+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ConstructionProlog-3",
+    "Set": "prod-ConstructionDecl",
+    "SetFile": "tests/qt3tests/prod/ConstructionDecl.xml",
+    "SetSha256": "d7a1b7bccd7e3d8abd04264e5cd256111a316fe7c7ca45231baf5db8cf9c4272",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "declare(::)construction(::)strip;(::)1(::)eq(::)1",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K-ConstructionProlog-3",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-3",
+    "Set": "prod-CopyNamespacesDecl",
+    "SetFile": "tests/qt3tests/prod/CopyNamespacesDecl.xml",
+    "SetSha256": "68523ac65a84f519e39b566ad787518f37f8a178dea7e184dc253f8b8f311e3f",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "declare copy-namespaces preserve, inherit; 1 eq 1",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ10+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ10+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "eqname-006",
+    "Set": "prod-EQName",
+    "SetFile": "tests/qt3tests/prod/EQName.xml",
+    "SetSha256": "b8e3f2f6077a0c4b190a521db2685d0a82bd90df396af7d7ffaa79eaa3855aed",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "(# Q{http://www.example.com/ns}pragma ignore me #) {<a/>}",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XQ30+",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "eqname-006",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": true,
+      "canRouteXquery": false,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XQ30+",
+          "Satisfied": true
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "XQuery syntax/routing restriction"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-fn-normalize-unicode-001a",
+    "Set": "fn-normalize-unicode",
+    "SetFile": "tests/qt3tests/fn/normalize-unicode.xml",
+    "SetSha256": "60ff5569967868700973c8682db21be7f0e0e858ac658106b723aa407c2fa081",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")",
+    "Dependencies": [
+      {
+        "Type": "unicode-normalization-form",
+        "Value": "FULLY-NORMALIZED",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "unicode-normalization-form",
+          "Value": "FULLY-NORMALIZED",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "unicode-normalization-form:FULLY-NORMALIZED [negative]"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-fn-normalize-unicode-006a",
+    "Set": "fn-normalize-unicode",
+    "SetFile": "tests/qt3tests/fn/normalize-unicode.xml",
+    "SetSha256": "60ff5569967868700973c8682db21be7f0e0e858ac658106b723aa407c2fa081",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "normalize-unicode(codepoints-to-string(2494),\"FULLY-NORMALIZED\")",
+    "Dependencies": [
+      {
+        "Type": "unicode-normalization-form",
+        "Value": "FULLY-NORMALIZED",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "unicode-normalization-form",
+          "Value": "FULLY-NORMALIZED",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "unicode-normalization-form:FULLY-NORMALIZED [negative]"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "collection-004",
+    "Set": "fn-collection",
+    "SetFile": "tests/qt3tests/fn/collection.xml",
+    "SetSha256": "d33269ebfd8b59f3e9edffad174744bd147120384759c78067b3e4032cbd8020",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "collection() | collection(())",
+    "Dependencies": [
+      {
+        "Type": "feature",
+        "Value": "collection-stability",
+        "Satisfied": false
+      },
+      {
+        "Type": "feature",
+        "Value": "non_empty_sequence_collection",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "default-collection-1",
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "collection-004",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "feature",
+          "Value": "collection-stability",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "feature:collection-stability [negative]"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "collection-008",
+    "Set": "fn-collection",
+    "SetFile": "tests/qt3tests/fn/collection.xml",
+    "SetSha256": "d33269ebfd8b59f3e9edffad174744bd147120384759c78067b3e4032cbd8020",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "collection(\"http://www.w3.org/2010/09/qt-fots-catalog/collection1\") |\n         collection(\"collection1\")",
+    "Dependencies": [
+      {
+        "Type": "feature",
+        "Value": "collection-stability",
+        "Satisfied": false
+      },
+      {
+        "Type": "feature",
+        "Value": "non_empty_sequence_collection",
+        "Satisfied": true
+      }
+    ],
+    "EnvironmentRef": "simple-collection-1",
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "collection-008",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "feature",
+          "Value": "collection-stability",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "feature:collection-stability [negative]"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "format-date-en151",
+    "Set": "fn-format-date",
+    "SetFile": "tests/qt3tests/fn/format-date.xml",
+    "SetSha256": "e7309f69b810213237e515f89fd00128cb6db61e7de06a167ff394f9f026c955",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "format-date($b, '[MNn]', 'xib', (), ())",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XP30+ XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "language",
+        "Value": "xib",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "format-date-en151",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XP30+ XQ30+",
+          "Satisfied": true
+        },
+        {
+          "Type": "language",
+          "Value": "xib",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "spec:XP30+ XQ30+"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "format-date-en152",
+    "Set": "fn-format-date",
+    "SetFile": "tests/qt3tests/fn/format-date.xml",
+    "SetSha256": "e7309f69b810213237e515f89fd00128cb6db61e7de06a167ff394f9f026c955",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "format-date($b, '[M01]', 'en', 'CB', ())",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XP30+ XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "calendar",
+        "Value": "CB",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "format-date-en152",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XP30+ XQ30+",
+          "Satisfied": true
+        },
+        {
+          "Type": "calendar",
+          "Value": "CB",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "spec:XP30+ XQ30+"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "format-dateTime-en151",
+    "Set": "fn-format-dateTime",
+    "SetFile": "tests/qt3tests/fn/format-dateTime.xml",
+    "SetSha256": "710f2408c23d41aead57c12e17b6eabb76f3c3eb955d53ecf64b2ce8992f7b60",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "format-dateTime($b, '[MNn]', 'xib', (), ())",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XP30+ XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "language",
+        "Value": "xib",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en151",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XP30+ XQ30+",
+          "Satisfied": true
+        },
+        {
+          "Type": "language",
+          "Value": "xib",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "spec:XP30+ XQ30+"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "format-dateTime-en152",
+    "Set": "fn-format-dateTime",
+    "SetFile": "tests/qt3tests/fn/format-dateTime.xml",
+    "SetSha256": "710f2408c23d41aead57c12e17b6eabb76f3c3eb955d53ecf64b2ce8992f7b60",
+    "SuiteRoot": "D:/Development/Bosak/tests/qt3tests",
+    "Expression": "format-dateTime($b, '[M01]', 'en', 'CB', ())",
+    "Dependencies": [
+      {
+        "Type": "spec",
+        "Value": "XP30+ XQ30+",
+        "Satisfied": true
+      },
+      {
+        "Type": "calendar",
+        "Value": "CB",
+        "Satisfied": false
+      }
+    ],
+    "EnvironmentRef": null,
+    "Gated": true,
+    "SkipReason": "Unsupported dependency",
+    "FilterAssessment": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en152",
+      "xpathSupported": false,
+      "xqueryDependenciesSupported": false,
+      "canRouteXquery": true,
+      "rejectedDependencies": [
+        {
+          "Type": "spec",
+          "Value": "XP30+ XQ30+",
+          "Satisfied": true
+        },
+        {
+          "Type": "calendar",
+          "Value": "CB",
+          "Satisfied": false
+        }
+      ]
+    },
+    "PrimaryInventoryBlocker": "spec:XP30+ XQ30+"
+  }
+]

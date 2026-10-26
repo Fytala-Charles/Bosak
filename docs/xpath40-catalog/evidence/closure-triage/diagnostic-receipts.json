@@ -1,0 +1,555 @@
+[
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-020",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-020-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19448550000379328,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-020",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-021",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-021-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19000509999750648,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-021",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-022",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-022-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1929015000059735,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-022",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-023",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-023-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19196340000780765,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-023",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-024",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-024-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19502970000030473,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-024",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "substitution-025",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-substitution-025-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1905592999974033,
+    "result": {
+      "Suite": "qt3",
+      "Name": "substitution-025",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "CastAs-ListType-20",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-CastAs-ListType-20-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30075249999936204,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-20",
+      "kind": "Failed",
+      "message": "Expected error XPST0051, got: XPTY0004: Value does not match the declared type 'xs:NMTOKENS'."
+    },
+    "originalSkipReason": "Engine gap: cast to XSD list type raises XPTY0004 instead of XPST0051 (schema path)"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "CastAs-ListType-28",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-CastAs-ListType-28-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2686427000007825,
+    "result": {
+      "Suite": "qt3",
+      "Name": "CastAs-ListType-28",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Engine gap: 'castable as' against an XSD list type does not tokenize the value"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "validateexpr-28",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-validateexpr-28-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1913356000004569,
+    "result": {
+      "Suite": "qt3",
+      "Name": "validateexpr-28",
+      "kind": "HarnessException",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "message": "Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type."
+    },
+    "originalSkipReason": "Harness error: XmlSchemaException: Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt4",
+    "name": "map-to-element-053",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt4-map-to-element-053-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28150270000332966,
+    "result": {
+      "Suite": "qt4",
+      "Name": "map-to-element-053",
+      "kind": "Skipped",
+      "message": "Unexpected error: XmlException: Name cannot begin with the '\ud834\udd1e' character, hexadecimal value 0x1D11E."
+    },
+    "originalSkipReason": "Unexpected error: XmlException: Name cannot begin with the '\ud834\udd1e' character, hexadecimal value 0x1D11E."
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "K2-DirectConElemAttr-8",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-K2-DirectConElemAttr-8-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2198424999951385,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-DirectConElemAttr-8",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "K-ExtensionExpression-4a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-K-ExtensionExpression-4a-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23294280000845902,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "contextDecl-028",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-contextDecl-028-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17639940000663046,
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "Literals069",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-Literals069-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18917329999385402,
+    "result": {
+      "Suite": "qt3",
+      "Name": "Literals069",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "string-constructor-021",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-string-constructor-021-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20535479999671225,
+    "result": {
+      "Suite": "qt3",
+      "Name": "string-constructor-021",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 14: XPST0003: Unexpected token Invalid in primary expression"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "K-ConstructionProlog-3",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-K-ConstructionProlog-3-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1802614999905927,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ConstructionProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "K-CopyNamespacesProlog-3",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-K-CopyNamespacesProlog-3-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17740849999245256,
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "eqname-006",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-eqname-006-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19766240000899415,
+    "result": {
+      "Suite": "qt3",
+      "Name": "eqname-006",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "cbcl-fn-normalize-unicode-001a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-cbcl-fn-normalize-unicode-001a-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24955290000070818,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "cbcl-fn-normalize-unicode-006a",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-cbcl-fn-normalize-unicode-006a-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26488860000972636,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "collection-004",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-collection-004-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28369180001027416,
+    "result": {
+      "Suite": "qt3",
+      "Name": "collection-004",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "collection-008",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-collection-008-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28167240000038873,
+    "result": {
+      "Suite": "qt3",
+      "Name": "collection-008",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "format-date-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-format-date-en151-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2987043999892194,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "format-date-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-format-date-en152-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2905807999923127,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "format-dateTime-en151",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-format-dateTime-en151-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30085060000419617,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "originalSkipReason": "Unsupported dependency"
+  },
+  {
+    "exitCode": 0,
+    "timeout": false,
+    "suite": "qt3",
+    "name": "format-dateTime-en152",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\closure-reflection\\bin\\Release\\net10.0\\Probe.dll",
+      "probe",
+      "D:\\Development\\Bosak\\docs\\xpath40-catalog\\evidence\\closure-triage\\qt3-format-dateTime-en152-request.json"
+    ],
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3024938000016846,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en152",
+      "kind": "Failed",
+      "message": "Unexpected error: FOFD1340"
+    },
+    "originalSkipReason": "Unsupported dependency"
+  }
+]

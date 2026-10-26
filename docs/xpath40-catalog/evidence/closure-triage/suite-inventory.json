@@ -1,0 +1,7282 @@
+{
+  "qt3": {
+    "fixtureRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+    "fixtureTrackedStatus": "",
+    "catalogSha256": "a384d7273dcf38f66b9d93dc1778ec9a67371017489308abfd13c1ef802313d2",
+    "allCatalogSets": 428,
+    "allCatalogCases": 31821,
+    "frozenScopeSets": 428,
+    "frozenScopeCases": 31821,
+    "skipped": 679,
+    "reasons": {
+      "Unsupported dependency": 619,
+      "XMark benchmark set is skipped during unattended sweeps": 21,
+      "Catalog consistency checks load the full QT3 corpus per test; skipped to avoid hang": 14,
+      "Harness error: XmlSchemaException: The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.": 6,
+      "Demo applications are skipped during unattended sweeps": 5,
+      "Platform limitation: .NET decimal cannot preserve the precision of this decimal literal": 2,
+      "Implementation-defined range limit: 10^27-year duration component rejected lexically before range detection": 2,
+      "Implementation-defined range limit: 10^26-digit year rejected lexically before range detection": 2,
+      "Platform limitation: DateTimeOffset does not support year -2": 2,
+      "Implementation-defined range limit: 65 to 2^32+10 is not detected and would enumerate billions of integers": 1,
+      "Upstream defect: expected value has an artifactual leading space": 1,
+      "External resource blocked: timeanddate.com answers .NET HttpClient with a Cloudflare JS challenge (HTTP 403); not an engine gap": 1,
+      "Engine gap: cast to XSD list type raises XPTY0004 instead of XPST0051 (schema path)": 1,
+      "Engine gap: 'castable as' against an XSD list type does not tokenize the value": 1,
+      "Harness error: XmlSchemaException: Type 'http://www.w3.org/2001/XMLSchema:dayTimeDuration' is not declared, or is not a simple type.": 1
+    },
+    "sets": [
+      {
+        "name": "fn-abs",
+        "file": "fn/abs.xml",
+        "tests": 188,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-date-to-timezone",
+        "file": "fn/adjust-date-to-timezone.xml",
+        "tests": 41,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-dateTime-to-timezone",
+        "file": "fn/adjust-dateTime-to-timezone.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-time-to-timezone",
+        "file": "fn/adjust-time-to-timezone.xml",
+        "tests": 42,
+        "gated": true
+      },
+      {
+        "name": "fn-analyze-string",
+        "file": "fn/analyze-string.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-apply",
+        "file": "fn/apply.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "fn-available-environment-variables",
+        "file": "fn/available-environment-variables.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "fn-avg",
+        "file": "fn/avg.xml",
+        "tests": 239,
+        "gated": true
+      },
+      {
+        "name": "fn-base-uri",
+        "file": "fn/base-uri.xml",
+        "tests": 82,
+        "gated": true
+      },
+      {
+        "name": "fn-boolean",
+        "file": "fn/boolean.xml",
+        "tests": 143,
+        "gated": true
+      },
+      {
+        "name": "fn-ceiling",
+        "file": "fn/ceiling.xml",
+        "tests": 94,
+        "gated": true
+      },
+      {
+        "name": "fn-codepoint-equal",
+        "file": "fn/codepoint-equal.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "fn-codepoints-to-string",
+        "file": "fn/codepoints-to-string.xml",
+        "tests": 79,
+        "gated": true
+      },
+      {
+        "name": "fn-collation-key",
+        "file": "fn/collation-key.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-collection",
+        "file": "fn/collection.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "fn-compare",
+        "file": "fn/compare.xml",
+        "tests": 96,
+        "gated": true
+      },
+      {
+        "name": "fn-concat",
+        "file": "fn/concat.xml",
+        "tests": 96,
+        "gated": true
+      },
+      {
+        "name": "fn-contains",
+        "file": "fn/contains.xml",
+        "tests": 75,
+        "gated": true
+      },
+      {
+        "name": "fn-contains-token",
+        "file": "fn/contains-token.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "fn-count",
+        "file": "fn/count.xml",
+        "tests": 316,
+        "gated": true
+      },
+      {
+        "name": "fn-current-date",
+        "file": "fn/current-date.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "fn-current-dateTime",
+        "file": "fn/current-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-current-time",
+        "file": "fn/current-time.xml",
+        "tests": 24,
+        "gated": true
+      },
+      {
+        "name": "fn-data",
+        "file": "fn/data.xml",
+        "tests": 65,
+        "gated": true
+      },
+      {
+        "name": "fn-dateTime",
+        "file": "fn/dateTime.xml",
+        "tests": 52,
+        "gated": true
+      },
+      {
+        "name": "fn-day-from-date",
+        "file": "fn/day-from-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-day-from-dateTime",
+        "file": "fn/day-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-days-from-duration",
+        "file": "fn/days-from-duration.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-deep-equal",
+        "file": "fn/deep-equal.xml",
+        "tests": 263,
+        "gated": true
+      },
+      {
+        "name": "fn-default-collation",
+        "file": "fn/default-collation.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "fn-default-language",
+        "file": "fn/default-language.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "fn-distinct-values",
+        "file": "fn/distinct-values.xml",
+        "tests": 106,
+        "gated": true
+      },
+      {
+        "name": "fn-doc",
+        "file": "fn/doc.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "fn-doc-available",
+        "file": "fn/doc-available.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "fn-document-uri",
+        "file": "fn/document-uri.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-element-with-id",
+        "file": "fn/element-with-id.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "fn-empty",
+        "file": "fn/empty.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-encode-for-uri",
+        "file": "fn/encode-for-uri.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-ends-with",
+        "file": "fn/ends-with.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "fn-environment-variable",
+        "file": "fn/environment-variable.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "fn-error",
+        "file": "fn/error.xml",
+        "tests": 98,
+        "gated": true
+      },
+      {
+        "name": "fn-escape-html-uri",
+        "file": "fn/escape-html-uri.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-exactly-one",
+        "file": "fn/exactly-one.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-exists",
+        "file": "fn/exists.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "fn-false",
+        "file": "fn/false.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-filter",
+        "file": "fn/filter.xml",
+        "tests": 35,
+        "gated": true
+      },
+      {
+        "name": "fn-floor",
+        "file": "fn/floor.xml",
+        "tests": 88,
+        "gated": true
+      },
+      {
+        "name": "fn-fold-left",
+        "file": "fn/fold-left.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "fn-fold-right",
+        "file": "fn/fold-right.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-for-each",
+        "file": "fn/for-each.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "fn-for-each-pair",
+        "file": "fn/for-each-pair.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "fn-format-date",
+        "file": "fn/format-date.xml",
+        "tests": 132,
+        "gated": true
+      },
+      {
+        "name": "fn-format-dateTime",
+        "file": "fn/format-dateTime.xml",
+        "tests": 92,
+        "gated": true
+      },
+      {
+        "name": "fn-format-integer",
+        "file": "fn/format-integer.xml",
+        "tests": 77,
+        "gated": true
+      },
+      {
+        "name": "fn-format-number",
+        "file": "fn/format-number.xml",
+        "tests": 269,
+        "gated": true
+      },
+      {
+        "name": "fn-format-time",
+        "file": "fn/format-time.xml",
+        "tests": 91,
+        "gated": true
+      },
+      {
+        "name": "fn-function-lookup",
+        "file": "fn/function-lookup.xml",
+        "tests": 674,
+        "gated": true
+      },
+      {
+        "name": "fn-function-arity",
+        "file": "fn/function-arity.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "fn-function-name",
+        "file": "fn/function-name.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "fn-generate-id",
+        "file": "fn/generate-id.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-has-children",
+        "file": "fn/has-children.xml",
+        "tests": 37,
+        "gated": true
+      },
+      {
+        "name": "fn-head",
+        "file": "fn/head.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "fn-hours-from-dateTime",
+        "file": "fn/hours-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-hours-from-duration",
+        "file": "fn/hours-from-duration.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-hours-from-time",
+        "file": "fn/hours-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-id",
+        "file": "fn/id.xml",
+        "tests": 61,
+        "gated": true
+      },
+      {
+        "name": "fn-idref",
+        "file": "fn/idref.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-implicit-timezone",
+        "file": "fn/implicit-timezone.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-innermost",
+        "file": "fn/innermost.xml",
+        "tests": 59,
+        "gated": true
+      },
+      {
+        "name": "fn-index-of",
+        "file": "fn/index-of.xml",
+        "tests": 53,
+        "gated": true
+      },
+      {
+        "name": "fn-insert-before",
+        "file": "fn/insert-before.xml",
+        "tests": 43,
+        "gated": true
+      },
+      {
+        "name": "fn-in-scope-prefixes",
+        "file": "fn/in-scope-prefixes.xml",
+        "tests": 62,
+        "gated": true
+      },
+      {
+        "name": "fn-iri-to-uri",
+        "file": "fn/iri-to-uri.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "fn-json-doc",
+        "file": "fn/json-doc.xml",
+        "tests": 68,
+        "gated": true
+      },
+      {
+        "name": "fn-json-to-xml",
+        "file": "fn/json-to-xml.xml",
+        "tests": 94,
+        "gated": true
+      },
+      {
+        "name": "fn-lang",
+        "file": "fn/lang.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "fn-last",
+        "file": "fn/last.xml",
+        "tests": 69,
+        "gated": true
+      },
+      {
+        "name": "fn-load-xquery-module",
+        "file": "fn/load-xquery-module.xml",
+        "tests": 83,
+        "gated": true
+      },
+      {
+        "name": "fn-local-name",
+        "file": "fn/local-name.xml",
+        "tests": 60,
+        "gated": true
+      },
+      {
+        "name": "fn-local-name-from-QName",
+        "file": "fn/local-name-from-QName.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-lower-case",
+        "file": "fn/lower-case.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-max",
+        "file": "fn/max.xml",
+        "tests": 208,
+        "gated": true
+      },
+      {
+        "name": "fn-matches",
+        "file": "fn/matches.xml",
+        "tests": 166,
+        "gated": true
+      },
+      {
+        "name": "fn-matches.re",
+        "file": "fn/matches.re.xml",
+        "tests": 1009,
+        "gated": true
+      },
+      {
+        "name": "fn-min",
+        "file": "fn/min.xml",
+        "tests": 207,
+        "gated": true
+      },
+      {
+        "name": "fn-minutes-from-dateTime",
+        "file": "fn/minutes-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-minutes-from-duration",
+        "file": "fn/minutes-from-duration.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "fn-minutes-from-time",
+        "file": "fn/minutes-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-month-from-date",
+        "file": "fn/month-from-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-months-from-duration",
+        "file": "fn/months-from-duration.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-month-from-dateTime",
+        "file": "fn/month-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-name",
+        "file": "fn/name.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-namespace-uri",
+        "file": "fn/namespace-uri.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "fn-namespace-uri-for-prefix",
+        "file": "fn/namespace-uri-for-prefix.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-namespace-uri-from-QName",
+        "file": "fn/namespace-uri-from-QName.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-nilled",
+        "file": "fn/nilled.xml",
+        "tests": 64,
+        "gated": true
+      },
+      {
+        "name": "fn-node-name",
+        "file": "fn/node-name.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-normalize-space",
+        "file": "fn/normalize-space.xml",
+        "tests": 39,
+        "gated": true
+      },
+      {
+        "name": "fn-normalize-unicode",
+        "file": "fn/normalize-unicode.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "fn-not",
+        "file": "fn/not.xml",
+        "tests": 83,
+        "gated": true
+      },
+      {
+        "name": "fn-number",
+        "file": "fn/number.xml",
+        "tests": 66,
+        "gated": true
+      },
+      {
+        "name": "fn-one-or-more",
+        "file": "fn/one-or-more.xml",
+        "tests": 56,
+        "gated": true
+      },
+      {
+        "name": "fn-outermost",
+        "file": "fn/outermost.xml",
+        "tests": 59,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-ietf-date",
+        "file": "fn/parse-ietf-date.xml",
+        "tests": 105,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-json",
+        "file": "fn/parse-json.xml",
+        "tests": 154,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-xml",
+        "file": "fn/parse-xml.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-xml-fragment",
+        "file": "fn/parse-xml-fragment.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "fn-path",
+        "file": "fn/path.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "fn-position",
+        "file": "fn/position.xml",
+        "tests": 67,
+        "gated": true
+      },
+      {
+        "name": "fn-prefix-from-QName",
+        "file": "fn/prefix-from-QName.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-QName",
+        "file": "fn/QName.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-random-number-generator",
+        "file": "fn/random-number-generator.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-remove",
+        "file": "fn/remove.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "fn-replace",
+        "file": "fn/replace.xml",
+        "tests": 91,
+        "gated": true
+      },
+      {
+        "name": "fn-resolve-QName",
+        "file": "fn/resolve-QName.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-resolve-uri",
+        "file": "fn/resolve-uri.xml",
+        "tests": 39,
+        "gated": true
+      },
+      {
+        "name": "fn-reverse",
+        "file": "fn/reverse.xml",
+        "tests": 70,
+        "gated": true
+      },
+      {
+        "name": "fn-root",
+        "file": "fn/root.xml",
+        "tests": 38,
+        "gated": true
+      },
+      {
+        "name": "fn-round",
+        "file": "fn/round.xml",
+        "tests": 263,
+        "gated": true
+      },
+      {
+        "name": "fn-round-half-to-even",
+        "file": "fn/round-half-to-even.xml",
+        "tests": 128,
+        "gated": true
+      },
+      {
+        "name": "fn-seconds-from-dateTime",
+        "file": "fn/seconds-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-seconds-from-duration",
+        "file": "fn/seconds-from-duration.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "fn-seconds-from-time",
+        "file": "fn/seconds-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-serialize",
+        "file": "fn/serialize.xml",
+        "tests": 168,
+        "gated": true
+      },
+      {
+        "name": "fn-sort",
+        "file": "fn/sort.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "fn-starts-with",
+        "file": "fn/starts-with.xml",
+        "tests": 64,
+        "gated": true
+      },
+      {
+        "name": "fn-static-base-uri",
+        "file": "fn/static-base-uri.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "fn-string",
+        "file": "fn/string.xml",
+        "tests": 71,
+        "gated": true
+      },
+      {
+        "name": "fn-string-join",
+        "file": "fn/string-join.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "fn-string-length",
+        "file": "fn/string-length.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "fn-string-to-codepoints",
+        "file": "fn/string-to-codepoints.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-subsequence",
+        "file": "fn/subsequence.xml",
+        "tests": 107,
+        "gated": true
+      },
+      {
+        "name": "fn-substring",
+        "file": "fn/substring.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "fn-substring-after",
+        "file": "fn/substring-after.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "fn-substring-before",
+        "file": "fn/substring-before.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-sum",
+        "file": "fn/sum.xml",
+        "tests": 222,
+        "gated": true
+      },
+      {
+        "name": "fn-tail",
+        "file": "fn/tail.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "fn-timezone-from-date",
+        "file": "fn/timezone-from-date.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-timezone-from-dateTime",
+        "file": "fn/timezone-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-timezone-from-time",
+        "file": "fn/timezone-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-tokenize",
+        "file": "fn/tokenize.xml",
+        "tests": 67,
+        "gated": true
+      },
+      {
+        "name": "fn-trace",
+        "file": "fn/trace.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-transform",
+        "file": "fn/transform.xml",
+        "tests": 124,
+        "gated": true
+      },
+      {
+        "name": "fn-translate",
+        "file": "fn/translate.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-true",
+        "file": "fn/true.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-unordered",
+        "file": "fn/unordered.xml",
+        "tests": 43,
+        "gated": true
+      },
+      {
+        "name": "fn-unparsed-text",
+        "file": "fn/unparsed-text.xml",
+        "tests": 57,
+        "gated": true
+      },
+      {
+        "name": "fn-unparsed-text-available",
+        "file": "fn/unparsed-text-available.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-unparsed-text-lines",
+        "file": "fn/unparsed-text-lines.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "fn-upper-case",
+        "file": "fn/upper-case.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-uri-collection",
+        "file": "fn/uri-collection.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "fn-xml-to-json",
+        "file": "fn/xml-to-json.xml",
+        "tests": 144,
+        "gated": true
+      },
+      {
+        "name": "fn-year-from-date",
+        "file": "fn/year-from-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-years-from-duration",
+        "file": "fn/years-from-duration.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-year-from-dateTime",
+        "file": "fn/year-from-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-zero-or-one",
+        "file": "fn/zero-or-one.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "math-acos",
+        "file": "math/math-acos.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-asin",
+        "file": "math/math-asin.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-atan",
+        "file": "math/math-atan.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-atan2",
+        "file": "math/math-atan2.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "math-cos",
+        "file": "math/math-cos.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-exp",
+        "file": "math/math-exp.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-exp10",
+        "file": "math/math-exp10.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "math-log",
+        "file": "math/math-log.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-log10",
+        "file": "math/math-log10.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-pi",
+        "file": "math/math-pi.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "math-pow",
+        "file": "math/math-pow.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "math-sin",
+        "file": "math/math-sin.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-sqrt",
+        "file": "math/math-sqrt.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-tan",
+        "file": "math/math-tan.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "map-merge",
+        "file": "map/merge.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "map-contains",
+        "file": "map/contains.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "map-find",
+        "file": "map/find.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "map-get",
+        "file": "map/get.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "map-entry",
+        "file": "map/entry.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "map-size",
+        "file": "map/size.xml",
+        "tests": 15,
+        "gated": true
+      },
+      {
+        "name": "map-keys",
+        "file": "map/keys.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "map-put",
+        "file": "map/put.xml",
+        "tests": 19,
+        "gated": true
+      },
+      {
+        "name": "map-remove",
+        "file": "map/remove.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "map-for-each",
+        "file": "map/for-each.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "map-call",
+        "file": "map/call.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "array-append",
+        "file": "array/append.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "array-filter",
+        "file": "array/filter.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "array-flatten",
+        "file": "array/flatten.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "array-fold-left",
+        "file": "array/fold-left.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "array-fold-right",
+        "file": "array/fold-right.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "array-for-each",
+        "file": "array/for-each.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "array-for-each-pair",
+        "file": "array/for-each-pair.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "array-get",
+        "file": "array/get.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "array-head",
+        "file": "array/head.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "array-insert-before",
+        "file": "array/insert-before.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "array-join",
+        "file": "array/join.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "array-put",
+        "file": "array/put.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "array-remove",
+        "file": "array/remove.xml",
+        "tests": 16,
+        "gated": true
+      },
+      {
+        "name": "array-reverse",
+        "file": "array/reverse.xml",
+        "tests": 4,
+        "gated": true
+      },
+      {
+        "name": "array-size",
+        "file": "array/size.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "array-sort",
+        "file": "array/sort.xml",
+        "tests": 37,
+        "gated": true
+      },
+      {
+        "name": "array-subarray",
+        "file": "array/subarray.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "array-tail",
+        "file": "array/tail.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "xs-anyURI",
+        "file": "xs/anyURI.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "xs-base64Binary",
+        "file": "xs/base64Binary.xml",
+        "tests": 39,
+        "gated": true
+      },
+      {
+        "name": "xs-dateTimeStamp",
+        "file": "xs/dateTimeStamp.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "xs-double",
+        "file": "xs/double.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "xs-error",
+        "file": "xs/error.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "xs-float",
+        "file": "xs/float.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "xs-hexBinary",
+        "file": "xs/hexBinary.xml",
+        "tests": 1,
+        "gated": true
+      },
+      {
+        "name": "xs-normalizedString",
+        "file": "xs/normalizedString.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "xs-numeric",
+        "file": "xs/numeric.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "xs-token",
+        "file": "xs/token.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDurations",
+        "file": "op/add-dayTimeDurations.xml",
+        "tests": 61,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-date",
+        "file": "op/add-dayTimeDuration-to-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-dateTime",
+        "file": "op/add-dayTimeDuration-to-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-time",
+        "file": "op/add-dayTimeDuration-to-time.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDurations",
+        "file": "op/add-yearMonthDurations.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDuration-to-date",
+        "file": "op/add-yearMonthDuration-to-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDuration-to-dateTime",
+        "file": "op/add-yearMonthDuration-to-dateTime.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-equal",
+        "file": "op/anyURI-equal.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-greater-than",
+        "file": "op/anyURI-greater-than.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-less-than",
+        "file": "op/anyURI-less-than.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "op-bang",
+        "file": "op/bang.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "op-base64Binary-equal",
+        "file": "op/base64Binary-equal.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "op-base64Binary-less-than",
+        "file": "op/base64Binary-less-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-base64Binary-greater-than",
+        "file": "op/base64Binary-greater-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-boolean-equal",
+        "file": "op/boolean-equal.xml",
+        "tests": 57,
+        "gated": true
+      },
+      {
+        "name": "op-boolean-greater-than",
+        "file": "op/boolean-greater-than.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "op-boolean-less-than",
+        "file": "op/boolean-less-than.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "op-concat",
+        "file": "op/concat.xml",
+        "tests": 92,
+        "gated": true
+      },
+      {
+        "name": "op-concatenate",
+        "file": "op/concatenate.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "op-date-equal",
+        "file": "op/date-equal.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "op-date-greater-than",
+        "file": "op/date-greater-than.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "op-date-less-than",
+        "file": "op/date-less-than.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-equal",
+        "file": "op/dateTime-equal.xml",
+        "tests": 73,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-greater-than",
+        "file": "op/dateTime-greater-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-less-than",
+        "file": "op/dateTime-less-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-dayTimeDuration-greater-than",
+        "file": "op/dayTimeDuration-greater-than.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "op-dayTimeDuration-less-than",
+        "file": "op/dayTimeDuration-less-than.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "op-divide-dayTimeDuration",
+        "file": "op/divide-dayTimeDuration.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "op-divide-dayTimeDuration-by-dayTimeDuration",
+        "file": "op/divide-dayTimeDuration-by-dayTimeDuration.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "op-divide-yearMonthDuration",
+        "file": "op/divide-yearMonthDuration.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "op-divide-yearMonthDuration-by-yearMonthDuration",
+        "file": "op/divide-yearMonthDuration-by-yearMonthDuration.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "op-duration-equal",
+        "file": "op/duration-equal.xml",
+        "tests": 158,
+        "gated": true
+      },
+      {
+        "name": "op-except",
+        "file": "op/except.xml",
+        "tests": 72,
+        "gated": true
+      },
+      {
+        "name": "op-gDay-equal",
+        "file": "op/gDay-equal.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "op-gMonth-equal",
+        "file": "op/gMonth-equal.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "op-gMonthDay-equal",
+        "file": "op/gMonthDay-equal.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "op-gYear-equal",
+        "file": "op/gYear-equal.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "op-gYearMonth-equal",
+        "file": "op/gYearMonth-equal.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "op-hexBinary-equal",
+        "file": "op/hexBinary-equal.xml",
+        "tests": 35,
+        "gated": true
+      },
+      {
+        "name": "op-hexBinary-greater-than",
+        "file": "op/hexBinary-greater-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-hexBinary-less-than",
+        "file": "op/hexBinary-less-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-intersect",
+        "file": "op/intersect.xml",
+        "tests": 75,
+        "gated": true
+      },
+      {
+        "name": "op-is-same-node",
+        "file": "op/is-same-node.xml",
+        "tests": 38,
+        "gated": true
+      },
+      {
+        "name": "op-multiply-dayTimeDuration",
+        "file": "op/multiply-dayTimeDuration.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "op-multiply-yearMonthDuration",
+        "file": "op/multiply-yearMonthDuration.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-node-after",
+        "file": "op/node-after.xml",
+        "tests": 35,
+        "gated": true
+      },
+      {
+        "name": "op-node-before",
+        "file": "op/node-before.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "op-NOTATION-equal",
+        "file": "op/NOTATION-equal.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-add",
+        "file": "op/numeric-add.xml",
+        "tests": 155,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-equal",
+        "file": "op/numeric-equal.xml",
+        "tests": 202,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-divide",
+        "file": "op/numeric-divide.xml",
+        "tests": 140,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-greater-than",
+        "file": "op/numeric-greater-than.xml",
+        "tests": 118,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-integer-divide",
+        "file": "op/numeric-integer-divide.xml",
+        "tests": 136,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-less-than",
+        "file": "op/numeric-less-than.xml",
+        "tests": 183,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-mod",
+        "file": "op/numeric-mod.xml",
+        "tests": 124,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-multiply",
+        "file": "op/numeric-multiply.xml",
+        "tests": 109,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-subtract",
+        "file": "op/numeric-subtract.xml",
+        "tests": 119,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-unary-minus",
+        "file": "op/numeric-unary-minus.xml",
+        "tests": 66,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-unary-plus",
+        "file": "op/numeric-unary-plus.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "op-QName-equal",
+        "file": "op/QName-equal.xml",
+        "tests": 38,
+        "gated": true
+      },
+      {
+        "name": "op-string-equal",
+        "file": "op/string-equal.xml",
+        "tests": 15,
+        "gated": true
+      },
+      {
+        "name": "op-string-greater-than",
+        "file": "op/string-greater-than.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "op-string-less-than",
+        "file": "op/string-less-than.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dates",
+        "file": "op/subtract-dates.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dateTimes",
+        "file": "op/subtract-dateTimes.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-date",
+        "file": "op/subtract-dayTimeDuration-from-date.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-dateTime",
+        "file": "op/subtract-dayTimeDuration-from-dateTime.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-time",
+        "file": "op/subtract-dayTimeDuration-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDurations",
+        "file": "op/subtract-dayTimeDurations.xml",
+        "tests": 69,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-times",
+        "file": "op/subtract-times.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDuration-from-date",
+        "file": "op/subtract-yearMonthDuration-from-date.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDuration-from-dateTime",
+        "file": "op/subtract-yearMonthDuration-from-dateTime.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDurations",
+        "file": "op/subtract-yearMonthDurations.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "op-time-equal",
+        "file": "op/time-equal.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "op-time-greater-than",
+        "file": "op/time-greater-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-time-less-than",
+        "file": "op/time-less-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-to",
+        "file": "op/to.xml",
+        "tests": 168,
+        "gated": true
+      },
+      {
+        "name": "op-union",
+        "file": "op/union.xml",
+        "tests": 82,
+        "gated": true
+      },
+      {
+        "name": "op-yearMonthDuration-greater-than",
+        "file": "op/yearMonthDuration-greater-than.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "op-yearMonthDuration-less-than",
+        "file": "op/yearMonthDuration-less-than.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "op-same-key",
+        "file": "op/same-key.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-AllowingEmpty",
+        "file": "prod/AllowingEmpty.xml",
+        "tests": 19,
+        "gated": true
+      },
+      {
+        "name": "prod-Annotation",
+        "file": "prod/Annotation.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "prod-ArrayTest",
+        "file": "prod/ArrayTest.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "prod-ArrowPostfix",
+        "file": "prod/ArrowPostfix.xml",
+        "tests": 42,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep",
+        "file": "prod/AxisStep.xml",
+        "tests": 349,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.abbr",
+        "file": "prod/AxisStep.abbr.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.ancestor",
+        "file": "prod/AxisStep.ancestor.xml",
+        "tests": 43,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.ancestor-or-self",
+        "file": "prod/AxisStep.ancestor-or-self.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.following",
+        "file": "prod/AxisStep.following.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.following-sibling",
+        "file": "prod/AxisStep.following-sibling.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.preceding",
+        "file": "prod/AxisStep.preceding.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.preceding-sibling",
+        "file": "prod/AxisStep.preceding-sibling.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.static-typing",
+        "file": "prod/AxisStep.static-typing.xml",
+        "tests": 15,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.unabbr",
+        "file": "prod/AxisStep.unabbr.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "prod-BaseURIDecl",
+        "file": "prod/BaseURIDecl.xml",
+        "tests": 38,
+        "gated": true
+      },
+      {
+        "name": "prod-BoundarySpaceDecl",
+        "file": "prod/BoundarySpaceDecl.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-CastableExpr",
+        "file": "prod/CastableExpr.xml",
+        "tests": 959,
+        "gated": true
+      },
+      {
+        "name": "prod-CastExpr",
+        "file": "prod/CastExpr.xml",
+        "tests": 2778,
+        "gated": true
+      },
+      {
+        "name": "prod-CastExpr.derived",
+        "file": "prod/CastExpr.derived.xml",
+        "tests": 159,
+        "gated": true
+      },
+      {
+        "name": "prod-CastExpr.schema",
+        "file": "prod/CastExpr.schema.xml",
+        "tests": 130,
+        "gated": true
+      },
+      {
+        "name": "prod-Comment",
+        "file": "prod/Comment.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "prod-CompAttrConstructor",
+        "file": "prod/CompAttrConstructor.xml",
+        "tests": 132,
+        "gated": true
+      },
+      {
+        "name": "prod-CompDocConstructor",
+        "file": "prod/CompDocConstructor.xml",
+        "tests": 59,
+        "gated": true
+      },
+      {
+        "name": "prod-CompCommentConstructor",
+        "file": "prod/CompCommentConstructor.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "prod-CompElemConstructor",
+        "file": "prod/CompElemConstructor.xml",
+        "tests": 96,
+        "gated": true
+      },
+      {
+        "name": "prod-CompNamespaceConstructor",
+        "file": "prod/CompNamespaceConstructor.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "prod-CompPIConstructor",
+        "file": "prod/CompPIConstructor.xml",
+        "tests": 57,
+        "gated": true
+      },
+      {
+        "name": "prod-CompTextConstructor",
+        "file": "prod/CompTextConstructor.xml",
+        "tests": 39,
+        "gated": true
+      },
+      {
+        "name": "prod-ConstructionDecl",
+        "file": "prod/ConstructionDecl.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "prod-ConstructionDecl.schema",
+        "file": "prod/ConstructionDecl.schema.xml",
+        "tests": 4,
+        "gated": true
+      },
+      {
+        "name": "prod-ContextItemDecl",
+        "file": "prod/ContextItemDecl.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "prod-ContextItemExpr",
+        "file": "prod/ContextItemExpr.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "prod-CopyNamespacesDecl",
+        "file": "prod/CopyNamespacesDecl.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "prod-CountClause",
+        "file": "prod/CountClause.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "prod-CurlyArrayConstructor",
+        "file": "prod/CurlyArrayConstructor.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "prod-DecimalFormatDecl",
+        "file": "prod/DecimalFormatDecl.xml",
+        "tests": 41,
+        "gated": true
+      },
+      {
+        "name": "prod-DefaultCollationDecl",
+        "file": "prod/DefaultCollationDecl.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "prod-DefaultNamespaceDecl",
+        "file": "prod/DefaultNamespaceDecl.xml",
+        "tests": 60,
+        "gated": true
+      },
+      {
+        "name": "prod-DirAttributeList",
+        "file": "prod/DirAttributeList.xml",
+        "tests": 136,
+        "gated": true
+      },
+      {
+        "name": "prod-DirectConstructor",
+        "file": "prod/DirectConstructor.xml",
+        "tests": 91,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemConstructor",
+        "file": "prod/DirElemConstructor.xml",
+        "tests": 71,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemContent",
+        "file": "prod/DirElemContent.xml",
+        "tests": 135,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemContent.namespace",
+        "file": "prod/DirElemContent.namespace.xml",
+        "tests": 133,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemContent.whitespace",
+        "file": "prod/DirElemContent.whitespace.xml",
+        "tests": 83,
+        "gated": true
+      },
+      {
+        "name": "prod-EmptyOrderDecl",
+        "file": "prod/EmptyOrderDecl.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "prod-EQName",
+        "file": "prod/EQName.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "prod-ExtensionExpr",
+        "file": "prod/ExtensionExpr.xml",
+        "tests": 57,
+        "gated": true
+      },
+      {
+        "name": "prod-FLWORExpr",
+        "file": "prod/FLWORExpr.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "prod-FLWORExpr.static-typing",
+        "file": "prod/FLWORExpr.static-typing.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-ForClause",
+        "file": "prod/ForClause.xml",
+        "tests": 189,
+        "gated": true
+      },
+      {
+        "name": "prod-FunctionCall",
+        "file": "prod/FunctionCall.xml",
+        "tests": 152,
+        "gated": true
+      },
+      {
+        "name": "prod-FunctionDecl",
+        "file": "prod/FunctionDecl.xml",
+        "tests": 173,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.eq",
+        "file": "prod/GeneralComp.eq.xml",
+        "tests": 193,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.ge",
+        "file": "prod/GeneralComp.ge.xml",
+        "tests": 112,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.gt",
+        "file": "prod/GeneralComp.gt.xml",
+        "tests": 118,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.le",
+        "file": "prod/GeneralComp.le.xml",
+        "tests": 108,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.lt",
+        "file": "prod/GeneralComp.lt.xml",
+        "tests": 133,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.ne",
+        "file": "prod/GeneralComp.ne.xml",
+        "tests": 140,
+        "gated": true
+      },
+      {
+        "name": "prod-GroupByClause",
+        "file": "prod/GroupByClause.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "prod-IfExpr",
+        "file": "prod/IfExpr.xml",
+        "tests": 42,
+        "gated": true
+      },
+      {
+        "name": "prod-InlineFunctionExpr",
+        "file": "prod/InlineFunctionExpr.xml",
+        "tests": 38,
+        "gated": true
+      },
+      {
+        "name": "prod-InstanceofExpr",
+        "file": "prod/InstanceofExpr.xml",
+        "tests": 309,
+        "gated": true
+      },
+      {
+        "name": "prod-LetClause",
+        "file": "prod/LetClause.xml",
+        "tests": 89,
+        "gated": true
+      },
+      {
+        "name": "prod-Literal",
+        "file": "prod/Literal.xml",
+        "tests": 174,
+        "gated": true
+      },
+      {
+        "name": "prod-Lookup",
+        "file": "prod/Lookup.xml",
+        "tests": 108,
+        "gated": true
+      },
+      {
+        "name": "prod-MapConstructor",
+        "file": "prod/MapConstructor.xml",
+        "tests": 42,
+        "gated": true
+      },
+      {
+        "name": "prod-MapTest",
+        "file": "prod/MapTest.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "prod-ModuleImport",
+        "file": "prod/ModuleImport.xml",
+        "tests": 128,
+        "gated": true
+      },
+      {
+        "name": "prod-NamedFunctionRef",
+        "file": "prod/NamedFunctionRef.xml",
+        "tests": 556,
+        "gated": true
+      },
+      {
+        "name": "prod-NamespaceDecl",
+        "file": "prod/NamespaceDecl.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "prod-NameTest",
+        "file": "prod/NameTest.xml",
+        "tests": 127,
+        "gated": true
+      },
+      {
+        "name": "prod-NodeTest",
+        "file": "prod/NodeTest.xml",
+        "tests": 68,
+        "gated": true
+      },
+      {
+        "name": "prod-OptionDecl",
+        "file": "prod/OptionDecl.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "prod-OptionDecl.serialization",
+        "file": "prod/OptionDecl.serialization.xml",
+        "tests": 39,
+        "gated": true
+      },
+      {
+        "name": "prod-OrExpr",
+        "file": "prod/OrExpr.xml",
+        "tests": 371,
+        "gated": true
+      },
+      {
+        "name": "prod-OrderByClause",
+        "file": "prod/OrderByClause.xml",
+        "tests": 205,
+        "gated": true
+      },
+      {
+        "name": "prod-OrderingModeDecl",
+        "file": "prod/OrderingModeDecl.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "prod-PathExpr",
+        "file": "prod/PathExpr.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-ParenthesizedExpr",
+        "file": "prod/ParenthesizedExpr.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "prod-PositionalVar",
+        "file": "prod/PositionalVar.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "prod-Predicate",
+        "file": "prod/Predicate.xml",
+        "tests": 207,
+        "gated": true
+      },
+      {
+        "name": "prod-QuantifiedExpr",
+        "file": "prod/QuantifiedExpr.xml",
+        "tests": 203,
+        "gated": true
+      },
+      {
+        "name": "prod-ReturnClause",
+        "file": "prod/ReturnClause.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "prod-SchemaImport",
+        "file": "prod/SchemaImport.xml",
+        "tests": 140,
+        "gated": true
+      },
+      {
+        "name": "prod-SequenceType",
+        "file": "prod/SequenceType.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "prod-SquareArrayConstructor",
+        "file": "prod/SquareArrayConstructor.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "prod-StepExpr",
+        "file": "prod/StepExpr.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "prod-StringConstructor",
+        "file": "prod/StringConstructor.xml",
+        "tests": 52,
+        "gated": true
+      },
+      {
+        "name": "prod-SwitchExpr",
+        "file": "prod/SwitchExpr.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "prod-TreatExpr",
+        "file": "prod/TreatExpr.xml",
+        "tests": 71,
+        "gated": true
+      },
+      {
+        "name": "prod-TryCatchExpr",
+        "file": "prod/TryCatchExpr.xml",
+        "tests": 173,
+        "gated": true
+      },
+      {
+        "name": "prod-TypeswitchExpr",
+        "file": "prod/TypeswitchExpr.xml",
+        "tests": 73,
+        "gated": true
+      },
+      {
+        "name": "prod-UnorderedExpr",
+        "file": "prod/UnorderedExpr.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "prod-UnaryLookup",
+        "file": "prod/UnaryLookup.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "prod-ValidateExpr",
+        "file": "prod/ValidateExpr.xml",
+        "tests": 86,
+        "gated": true
+      },
+      {
+        "name": "prod-ValueComp",
+        "file": "prod/ValueComp.xml",
+        "tests": 101,
+        "gated": true
+      },
+      {
+        "name": "prod-VarDecl",
+        "file": "prod/VarDecl.xml",
+        "tests": 147,
+        "gated": true
+      },
+      {
+        "name": "prod-VarDecl.external",
+        "file": "prod/VarDecl.external.xml",
+        "tests": 99,
+        "gated": true
+      },
+      {
+        "name": "prod-VarDefaultValue",
+        "file": "prod/VarDefaultValue.xml",
+        "tests": 37,
+        "gated": true
+      },
+      {
+        "name": "prod-VersionDecl",
+        "file": "prod/VersionDecl.xml",
+        "tests": 50,
+        "gated": true
+      },
+      {
+        "name": "prod-WhereClause",
+        "file": "prod/WhereClause.xml",
+        "tests": 85,
+        "gated": true
+      },
+      {
+        "name": "prod-WindowClause",
+        "file": "prod/WindowClause.xml",
+        "tests": 135,
+        "gated": true
+      },
+      {
+        "name": "misc-CombinedErrorCodes",
+        "file": "misc/CombinedErrorCodes.xml",
+        "tests": 259,
+        "gated": true
+      },
+      {
+        "name": "misc-AnnexE",
+        "file": "misc/AnnexE.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "misc-AppendixA4",
+        "file": "misc/AppendixA4.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "misc-ErrorsAndOptimization",
+        "file": "misc/ErrorsAndOptimization.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "misc-HigherOrderFunctions",
+        "file": "misc/HigherOrderFunctions.xml",
+        "tests": 129,
+        "gated": true
+      },
+      {
+        "name": "misc-JsonTestSuite",
+        "file": "misc/JsonTestSuite.xml",
+        "tests": 318,
+        "gated": true
+      },
+      {
+        "name": "misc-StaticContext",
+        "file": "misc/StaticContext.xml",
+        "tests": 1,
+        "gated": true
+      },
+      {
+        "name": "misc-Surrogates",
+        "file": "misc/Surrogates.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "misc-UCACollation",
+        "file": "misc/UCACollation.xml",
+        "tests": 89,
+        "gated": true
+      },
+      {
+        "name": "misc-XMLEdition",
+        "file": "misc/XMLEdition.xml",
+        "tests": 19,
+        "gated": true
+      },
+      {
+        "name": "method-adaptive",
+        "file": "ser/method-adaptive.xml",
+        "tests": 89,
+        "gated": true
+      },
+      {
+        "name": "method-html",
+        "file": "ser/method-html.xml",
+        "tests": 64,
+        "gated": true
+      },
+      {
+        "name": "method-json",
+        "file": "ser/method-json.xml",
+        "tests": 74,
+        "gated": true
+      },
+      {
+        "name": "method-text",
+        "file": "ser/method-text.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "method-xhtml",
+        "file": "ser/method-xhtml.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "method-xml",
+        "file": "ser/method-xml.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "app-CatalogCheck",
+        "file": "app/CatalogCheck.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "app-Demos",
+        "file": "app/Demos.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "app-Duplicates",
+        "file": "app/Duplicates.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "app-FunctxFn",
+        "file": "app/FunctxFn.xml",
+        "tests": 502,
+        "gated": true
+      },
+      {
+        "name": "app-FunctxFunctx",
+        "file": "app/FunctxFunctx.xml",
+        "tests": 627,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseCompoundValues",
+        "file": "app/UseCaseCompoundValues.xml",
+        "tests": 1,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseJSON",
+        "file": "app/UseCaseJSON.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseNLP",
+        "file": "app/UseCaseNLP.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseNS",
+        "file": "app/UseCaseNS.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "app-UseCasePARTS",
+        "file": "app/UseCasePARTS.xml",
+        "tests": 1,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseR",
+        "file": "app/UseCaseR.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseR31",
+        "file": "app/UseCaseR31.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseSEQ",
+        "file": "app/UseCaseSEQ.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseSGML",
+        "file": "app/UseCaseSGML.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseSTRING",
+        "file": "app/UseCaseSTRING.xml",
+        "tests": 4,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseTREE",
+        "file": "app/UseCaseTREE.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseXMP",
+        "file": "app/UseCaseXMP.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "app-Walmsley",
+        "file": "app/Walmsley.xml",
+        "tests": 222,
+        "gated": true
+      },
+      {
+        "name": "app-XMark",
+        "file": "app/XMark.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "app-spec-examples",
+        "file": "app/fo-spec-examples.xml",
+        "tests": 641,
+        "gated": true
+      }
+    ],
+    "inputSetHashes": {
+      "tests/qt3tests/prod/AxisStep.xml": "1dcbe4862d69bcae522943159946848f5bd6b41bbb9fa3533e947e5a39f5b2e3",
+      "tests/qt3tests/prod/BaseURIDecl.xml": "bd63ce79511fda553f98e25d967a0f8f00f6d2a64718a5cd268d59356de506aa",
+      "tests/qt3tests/prod/CastableExpr.xml": "10f5c86cf55b132c883d7929598a295ab0ec443bd11e41a5b711fafcbf6e7f08",
+      "tests/qt3tests/prod/CastExpr.xml": "f78d4b0ce97b267614141d9f2812d8fadd1f5eda89c2c1b4e70a0a77ee6cfdf3",
+      "tests/qt3tests/prod/CastExpr.derived.xml": "a0f68c1e3ed3fcbf18fbbbb7a230d702b3b32a2608042f95be37120d48f84d77",
+      "tests/qt3tests/fn/codepoints-to-string.xml": "8abe7f518cf19501eaf7e45ba149bb8ecd4420c394d9ecc435ae44aeaf864aee",
+      "tests/qt3tests/prod/DirElemConstructor.xml": "bfec6c33916858fadce56e0e03a8c2865824f4e7b0181228c849435bee943889",
+      "tests/qt3tests/fn/distinct-values.xml": "4ccc221c3322508ec81037313d8f0b27838357cabf33ae44160610f02946879e",
+      "tests/qt3tests/fn/doc-available.xml": "fb8dff6f3862e538d2bad080a68e4563052a5f61f3c458a9247cec2dcaea32ff",
+      "tests/qt3tests/fn/normalize-unicode.xml": "60ff5569967868700973c8682db21be7f0e0e858ac658106b723aa407c2fa081",
+      "tests/qt3tests/prod/SchemaImport.xml": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+      "tests/qt3tests/fn/collection.xml": "d33269ebfd8b59f3e9edffad174744bd147120384759c78067b3e4032cbd8020",
+      "tests/qt3tests/prod/ConstructionDecl.xml": "d7a1b7bccd7e3d8abd04264e5cd256111a316fe7c7ca45231baf5db8cf9c4272",
+      "tests/qt3tests/prod/DirAttributeList.xml": "a85bfa3a6020ac6b1a512d31383770f5357a1446be44d7fe86ee7d1edfc37c54",
+      "tests/qt3tests/prod/ConstructionDecl.schema.xml": "bdd4d0e88e8431ea21f44f9c73b9292934ca738b3f0b67e66d5b2bbc8845849b",
+      "tests/qt3tests/prod/CompElemConstructor.xml": "aae33d9236f9c313a418fd7a5fe4910216da070e22357e0dea16cc99950ce433",
+      "tests/qt3tests/prod/DirElemContent.xml": "25dd6f0c63d83a996ef319d94e2c59765a000387ba0ac2a62ebd5aa07826c8a6",
+      "tests/qt3tests/prod/CompDocConstructor.xml": "12495e56ca8ee78a6f07685daf862f328a50aeba72eb99763548e1474d8e618f",
+      "tests/qt3tests/prod/ContextItemDecl.xml": "98b1d2ede825fb9fe8ed5cfd974d90b528e3853c0f8b31036d2f3e0199db362f",
+      "tests/qt3tests/prod/CopyNamespacesDecl.xml": "68523ac65a84f519e39b566ad787518f37f8a178dea7e184dc253f8b8f311e3f",
+      "tests/qt3tests/fn/default-language.xml": "29317e424bd9c37f4e64ad3119da6d7792ef6f0f375327868e14ef8eed8cdcc1",
+      "tests/qt3tests/prod/DirElemContent.namespace.xml": "b7492ed36f079565c1db83ea078bbdefc9f6a7ef4fc50aa96e650434f45350d2",
+      "tests/qt3tests/prod/EQName.xml": "b8e3f2f6077a0c4b190a521db2685d0a82bd90df396af7d7ffaa79eaa3855aed",
+      "tests/qt3tests/prod/ModuleImport.xml": "ec577bf7b27413f8700a2560164cc09d08545d3f2567964b7098e216d9d290fc",
+      "tests/qt3tests/prod/ExtensionExpr.xml": "2dd70788ba06995545a1c94c2466424bdddac84ae038917eb01a33f8fb0c3b82",
+      "tests/qt3tests/prod/VarDefaultValue.xml": "56c0237e18a746f355cb22a82c9a6cb688d71f096a5d9686614d2c2e2dd0cc53",
+      "tests/qt3tests/fn/filter.xml": "5f945f5ec6127413b4433fe87eede92ee0d9c6fb1fbbbe0d4e437ccebd759efd",
+      "tests/qt3tests/fn/for-each-pair.xml": "08d24b11cd982c1910f9ebcabe2bc8075cb85b037548d284dbde1210d9397558",
+      "tests/qt3tests/fn/function-arity.xml": "d3f165c15009fb5a4e504fcd4a75ef5d32702d8fe1bc197dce4ad8f6e0ce996d",
+      "tests/qt3tests/fn/function-lookup.xml": "734856d9650c789619fde5358e6a4c242be50738080f176f56677031c2c7211f",
+      "tests/qt3tests/fn/function-name.xml": "312992d5bcfb7707a885bdd756aed678a343d45f104f7c6618511da5fc9ae81b",
+      "tests/qt3tests/fn/has-children.xml": "70cfd629bcf29d8ddb0be70134e14f758d2e35db886c70d3cc435a383b338130",
+      "tests/qt3tests/fn/innermost.xml": "1b3003135a07c0f1e3ed7f5a35526cf0c651ff068a5cf30d7d2988ab45a35180",
+      "tests/qt3tests/fn/load-xquery-module.xml": "5fb9939a55c097a53333ba5673e5b86796f66ed52b21376a5eaf9d1cb8ab2051",
+      "tests/qt3tests/fn/lower-case.xml": "b4e41b4b64d3d73a1745a4c81bea38f45728aa858f1ad4e3d5212cb4225eede8",
+      "tests/qt3tests/fn/matches.xml": "ae09216ebce5a3e968d22f416c83b0ecca685fa579edded00965625d4cd63ea2",
+      "tests/qt3tests/fn/outermost.xml": "f7a4da132d18ead0e1f5996eeef46f5bf2c80d267ae65048f88089d89e52a1bb",
+      "tests/qt3tests/fn/parse-json.xml": "6e4628d0ca96a02f40269c5f6bc2e1a987040f9c0b317e0385748ae8c3eb98c9",
+      "tests/qt3tests/fn/string-join.xml": "c4cf4292549d55ff2b9b5a40dde24483ae3e9627a30a3a67e40a64a1600aad76",
+      "tests/qt3tests/fn/transform.xml": "eb19d9f854ba44509a8f7c36d72da950d519f2e261f29668d0015d2cb8b6f7d4",
+      "tests/qt3tests/fn/unparsed-text.xml": "9ea15c1a84d984147b0c7e23713d1b36a8510fd9f104cd112988f91f736b114a",
+      "tests/qt3tests/fn/unparsed-text-available.xml": "9c35f32e39cc8d3bed93ccfe1ae7ec0af58f57b927347d7642c6ef3005846637",
+      "tests/qt3tests/fn/unparsed-text-lines.xml": "0757b88c8c8ee86ea987c480d0802e0044045e431bd2461269be9d8a7eaba151",
+      "tests/qt3tests/fn/upper-case.xml": "2342bb7572f90d2fe4d268903a8bd4e984fd5b23105d63521f948a36538b89cc",
+      "tests/qt3tests/fn/format-date.xml": "e7309f69b810213237e515f89fd00128cb6db61e7de06a167ff394f9f026c955",
+      "tests/qt3tests/fn/format-dateTime.xml": "710f2408c23d41aead57c12e17b6eabb76f3c3eb955d53ecf64b2ce8992f7b60",
+      "tests/qt3tests/fn/format-integer.xml": "260d054a53eef34eb9fd9adbdcefaacd88745708edd742688b34f87e778288f8",
+      "tests/qt3tests/prod/FunctionCall.xml": "28c6eb1bac259e66ffce20c1e1326cc5b3fa310885941cbc6aebc84ead7eeea6",
+      "tests/qt3tests/prod/FunctionDecl.xml": "183b008f51c4ac4a3bcf3a68695f6954558c9271b45c13fe689370ac7cdc9183",
+      "tests/qt3tests/fn/generate-id.xml": "5e51cc4b652545a5a742b4574d44c22c29339e35b238915d1b7b02f466daa217",
+      "tests/qt3tests/prod/InlineFunctionExpr.xml": "8424a71d34a91ff39216ba788177e24eca7d0d3f109ccad1910bd07d3b5aec2b",
+      "tests/qt3tests/fn/json-doc.xml": "e8c3eb7d73d84c13b4c5fe938d85a641454e35282be2437e15563de7fff199f1",
+      "tests/qt3tests/fn/json-to-xml.xml": "2a000a2dbf2f2068c8718a8709b92be4cdc9a9b61b432c40a4053b5e51f49d31",
+      "tests/qt3tests/fn/data.xml": "3722c5060b777abebdb0dbcb0a7a7e9b9361733b2b03c5ddf91c71465ccab03f",
+      "tests/qt3tests/fn/document-uri.xml": "ed38d0e5067be781ead5b2cc8b704409caff6dcdb810525290ea7fcc9e5e748f",
+      "tests/qt3tests/fn/error.xml": "5a43b37a618680bd1bdc83192b2769a986403af1ad08f7792622a2b8d2e2e3c8",
+      "tests/qt3tests/prod/Predicate.xml": "b533fab5835e664dfd5a66764d4554e46b63bcda15a1fdd9287132925b3f1724",
+      "tests/qt3tests/prod/VarDecl.xml": "634fb38f0073faffe4029f71ab25635416f9b21b1e737e0913f3952a53c1292b",
+      "tests/qt3tests/fn/nilled.xml": "765798f914dcd384868a9b12a5a1478d41c5e1b564b2055b1b786c940def641b",
+      "tests/qt3tests/fn/node-name.xml": "93e9d1a3a3395248d3c2609ecd2e084d0480bc97f8dfa8aee8cf42b25ad7dac2",
+      "tests/qt3tests/prod/OptionDecl.xml": "aa2a89b20df007ef5dafeac9b42f27294b8d8ebb377adb05afd9be982f174db8",
+      "tests/qt3tests/prod/UnorderedExpr.xml": "d8e67a6077171b87ca96dd5eb1d5855b3385be09b808bdaafeeab7380eb2ea7a",
+      "tests/qt3tests/fn/round.xml": "175837fe35bf4defeaf5eeccc5b292e12282a7370cd54a3304da9e13945b8aff",
+      "tests/qt3tests/fn/tokenize.xml": "ebb26aa8df5b6c2c161508e0f2fe31f836f87450fb2a60513e269200f1961216",
+      "tests/qt3tests/fn/trace.xml": "32c2c1c088e3dface0148ee87f0ed20df32883a5729e4cfa7f0566a5ee6229ee",
+      "tests/qt3tests/prod/VersionDecl.xml": "a3a00fe21daba1cd3d8292e8615151441c489183bc9de7e33cdd2f312492e8e7",
+      "tests/qt3tests/prod/CompCommentConstructor.xml": "441222b8fe361f543c58f2a4ab5951bd438e88c80e393e9359f2e7f03194d867",
+      "tests/qt3tests/prod/CompTextConstructor.xml": "81c09eb8d4e27aa0a57f55d79ca0b4672959bf361b5facbcbdf7b814e8633703",
+      "tests/qt3tests/prod/DefaultNamespaceDecl.xml": "63b2733ef0edaf854da476a1a0983ab2bde05aaeabc49a28ee4ce755f809393c",
+      "tests/qt3tests/prod/DirElemContent.whitespace.xml": "fd31da2ef914f7d738a27fc872170cbdc607c93516aeee1072abc3725b487dfb",
+      "tests/qt3tests/prod/DirectConstructor.xml": "65610546096d5115c2bc4c25be066e19d1c150fa3b7b2ad441651d6de355de99",
+      "tests/qt3tests/prod/VarDecl.external.xml": "e0b27f55aacd64c2a40787015a993d65d7902aee12030e42fe8c06c1953cc79a",
+      "tests/qt3tests/ser/method-xml.xml": "19675f85f7002db1b472d8a2d1b5e60e41679f5e9acace9d35ff253762a795e7",
+      "tests/qt3tests/prod/WhereClause.xml": "6fcff4741eb37c7ba205cad55cac5e35c90dc4724290caa075415e91de06f2b2",
+      "tests/qt3tests/misc/XMLEdition.xml": "82f7966c36c9b1b035dab258f8f9f9a71b0e4a82a849e1136c722ace6146af3d",
+      "tests/qt3tests/prod/Literal.xml": "28eb18bd67db3b2bc956fc7175fba63440b9560e759fd9ff935be59bbe2d9a9a",
+      "tests/qt3tests/fn/local-name-from-QName.xml": "f257a007979f747b34a77ed4fa7746eb2224ecd7f2ac502233bd93d1e7221b66",
+      "tests/qt3tests/fn/namespace-uri-from-QName.xml": "e579903dc55f4d3ba683161900cd25cc35ec213b831cad0250777597ee6384e0",
+      "tests/qt3tests/prod/CompNamespaceConstructor.xml": "9c003712786b0d5b9234c8ea4ab0c5807c3e053846bb522bab20cca02b685e89",
+      "tests/qt3tests/fn/format-number.xml": "fd4af9301053738dd8b5493297f5f4f91e02045a99d579b430e446f6e6c561cf",
+      "tests/qt3tests/fn/parse-xml-fragment.xml": "c29c0c520c82985fc68a71d754a96e62be45a6e6f2e26ff1f27734315a61eba0",
+      "tests/qt3tests/fn/matches.re.xml": "651af0a7a4d1718de74716ed178376969e318ae2dc5bd7672cd52d14d5bea457",
+      "tests/qt3tests/op/same-key.xml": "cd38624889cab754bd8613556b1001cd4a92a022f09e19b82853b10071ecb0ee",
+      "tests/qt3tests/prod/OptionDecl.serialization.xml": "49e19d8f3046a368a39426f25226b4ffa936f1d516bbc606ba4ba19a1959e436",
+      "tests/qt3tests/ser/method-adaptive.xml": "325e79f570e070dc10a481c6fb8b922f91955d03dfac4dd57366cce0d9d6255c",
+      "tests/qt3tests/ser/method-json.xml": "942498ee793b42e9f3952522b20f8629138c913029cacbeb68ccf49397788158",
+      "tests/qt3tests/ser/method-text.xml": "118d2c60c683a6e8e94f8750f4fc99325e20465cd2132cde905961c6ba0a97ba",
+      "tests/qt3tests/prod/AxisStep.static-typing.xml": "07ce529653ef67de23063cd0e04be7c222d5b453129028ccc96c0cd585f6768a",
+      "tests/qt3tests/prod/FLWORExpr.static-typing.xml": "b10d74d4b3001767f7d3b69fdc90ffcc84d1dcb67c55c5b112cac4cefcf0c98b",
+      "tests/qt3tests/prod/StringConstructor.xml": "80a2e4758284cd0d4cdf105dc56607071e6a171e2b8e8a0b773342418d7a309c",
+      "tests/qt3tests/prod/TypeswitchExpr.xml": "5a5812729893d280d0187c13339c3e7beabb5f416c943cf5b48bb4e1befd004d",
+      "tests/qt3tests/prod/ValidateExpr.xml": "f2d9e0ca40e3208c24fd4fd04bc0beb7070be31823a38f87f40439acc6662984",
+      "tests/qt3tests/misc/CombinedErrorCodes.xml": "33ad8730c615b917820bb4a8cd83485760d7fa57fcf3cda0a091293f02dbfe61",
+      "tests/qt3tests/xs/double.xml": "016b73d4e93194b485b229922b0ec3083a510d417d7e897417a30c6ae18f3e86",
+      "tests/qt3tests/xs/float.xml": "1e570f7d6ce93f081fecb7b0f2e05c73ded126d8098d916990d6a639c50d54d7",
+      "tests/qt3tests/app/XMark.xml": "a2cb09905d8dbab65be0455e438b9caabccf04f94d6b338695f8e79b7fa3b844",
+      "tests/qt3tests/app/CatalogCheck.xml": "93b09ff14e11e964b2996c70e8134e0d052365215145fe609dd581a3577128a3",
+      "tests/qt3tests/app/Demos.xml": "5177928ae3d62e30818057300871b74efe88c739d612482ef2d93954687a19cb",
+      "tests/qt3tests/app/fo-spec-examples.xml": "67077962cd20325a52ff6d1c199a00e272a61cf77fc1932bf735f6969a89afe2",
+      "tests/qt3tests/prod/CastExpr.schema.xml": "e6026600a71657bd2dda67a8d64834ff2be594dbf82566811272941aa503bdd4"
+    }
+  },
+  "qt4": {
+    "fixtureRevision": "68910080d2d4d4092a1c6a908998ceec64ffc6d4",
+    "fixtureTrackedStatus": "",
+    "catalogSha256": "eb5978513539ec0c5416994c0de2cd5239734cd13018508a6d2d463f4aeca7e8",
+    "allCatalogSets": 738,
+    "allCatalogCases": 46985,
+    "frozenScopeSets": 224,
+    "frozenScopeCases": 10330,
+    "skipped": 1894,
+    "reasons": {
+      "Unsupported dependency": 1893,
+      "Unexpected error: XmlException: Name cannot begin with the '\ud834\udd1e' character, hexadecimal value 0x1D11E.": 1
+    },
+    "sets": [
+      {
+        "name": "fn-abs",
+        "file": "fn/abs.xml",
+        "tests": 192,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-date-to-timezone",
+        "file": "fn/adjust-date-to-timezone.xml",
+        "tests": 41,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-dateTime-to-timezone",
+        "file": "fn/adjust-dateTime-to-timezone.xml",
+        "tests": 50,
+        "gated": true
+      },
+      {
+        "name": "fn-adjust-time-to-timezone",
+        "file": "fn/adjust-time-to-timezone.xml",
+        "tests": 42,
+        "gated": true
+      },
+      {
+        "name": "fn-all-different",
+        "file": "fn/all-different.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "fn-all-equal",
+        "file": "fn/all-equal.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "fn-analyze-string",
+        "file": "fn/analyze-string.xml",
+        "tests": 49,
+        "gated": false
+      },
+      {
+        "name": "fn-apply",
+        "file": "fn/apply.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "fn-atomic-equal",
+        "file": "fn/atomic-equal.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-atomic-type-annotation",
+        "file": "fn/atomic-type-annotation.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "fn-available-environment-variables",
+        "file": "fn/available-environment-variables.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "fn-avg",
+        "file": "fn/avg.xml",
+        "tests": 242,
+        "gated": false
+      },
+      {
+        "name": "fn-base-uri",
+        "file": "fn/base-uri.xml",
+        "tests": 83,
+        "gated": false
+      },
+      {
+        "name": "fn-boolean",
+        "file": "fn/boolean.xml",
+        "tests": 143,
+        "gated": true
+      },
+      {
+        "name": "fn-build-dateTime",
+        "file": "fn/build-dateTime.xml",
+        "tests": 91,
+        "gated": false
+      },
+      {
+        "name": "fn-build-uri",
+        "file": "fn/build-uri.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-ceiling",
+        "file": "fn/ceiling.xml",
+        "tests": 94,
+        "gated": true
+      },
+      {
+        "name": "fn-char",
+        "file": "fn/char.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-characters",
+        "file": "fn/characters.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "fn-civil-timezone",
+        "file": "fn/civil-timezone.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "fn-codepoint-equal",
+        "file": "fn/codepoint-equal.xml",
+        "tests": 36,
+        "gated": true
+      },
+      {
+        "name": "fn-codepoints-to-string",
+        "file": "fn/codepoints-to-string.xml",
+        "tests": 110,
+        "gated": false
+      },
+      {
+        "name": "fn-collation",
+        "file": "fn/collation.xml",
+        "tests": 89,
+        "gated": false
+      },
+      {
+        "name": "fn-collation-available",
+        "file": "fn/collation-available.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "fn-collation-key",
+        "file": "fn/collation-key.xml",
+        "tests": 37,
+        "gated": true
+      },
+      {
+        "name": "fn-collection",
+        "file": "fn/collection.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "fn-compare",
+        "file": "fn/compare.xml",
+        "tests": 235,
+        "gated": true
+      },
+      {
+        "name": "fn-concat",
+        "file": "fn/concat.xml",
+        "tests": 111,
+        "gated": false
+      },
+      {
+        "name": "fn-contains",
+        "file": "fn/contains.xml",
+        "tests": 82,
+        "gated": false
+      },
+      {
+        "name": "fn-contains-subsequence",
+        "file": "fn/contains-subsequence.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "fn-contains-token",
+        "file": "fn/contains-token.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "fn-count",
+        "file": "fn/count.xml",
+        "tests": 316,
+        "gated": true
+      },
+      {
+        "name": "fn-csv-doc",
+        "file": "fn/csv-doc.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "fn-csv-to-xml",
+        "file": "fn/csv-to-xml.xml",
+        "tests": 70,
+        "gated": true
+      },
+      {
+        "name": "fn-current",
+        "file": "fn/current.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "fn-current-date",
+        "file": "fn/current-date.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "fn-current-dateTime",
+        "file": "fn/current-dateTime.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-current-time",
+        "file": "fn/current-time.xml",
+        "tests": 24,
+        "gated": true
+      },
+      {
+        "name": "fn-data",
+        "file": "fn/data.xml",
+        "tests": 65,
+        "gated": true
+      },
+      {
+        "name": "fn-dateTime",
+        "file": "fn/dateTime.xml",
+        "tests": 52,
+        "gated": true
+      },
+      {
+        "name": "fn-day-from-date",
+        "file": "fn/day-from-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-day-from-dateTime",
+        "file": "fn/day-from-dateTime.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "fn-days-from-duration",
+        "file": "fn/days-from-duration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-days-in-month",
+        "file": "fn/days-in-month.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "fn-decode-from-uri",
+        "file": "fn/decode-from-uri.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "fn-deep-equal",
+        "file": "fn/deep-equal.xml",
+        "tests": 587,
+        "gated": false
+      },
+      {
+        "name": "fn-default-collation",
+        "file": "fn/default-collation.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "fn-default-language",
+        "file": "fn/default-language.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "fn-distinct-ordered-nodes",
+        "file": "fn/distinct-ordered-nodes.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "fn-distinct-values",
+        "file": "fn/distinct-values.xml",
+        "tests": 125,
+        "gated": false
+      },
+      {
+        "name": "fn-divide-decimals",
+        "file": "fn/divide-decimals.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "fn-doc",
+        "file": "fn/doc.xml",
+        "tests": 75,
+        "gated": false
+      },
+      {
+        "name": "fn-doc-available",
+        "file": "fn/doc-available.xml",
+        "tests": 47,
+        "gated": false
+      },
+      {
+        "name": "fn-document-uri",
+        "file": "fn/document-uri.xml",
+        "tests": 55,
+        "gated": false
+      },
+      {
+        "name": "fn-do-until",
+        "file": "fn/do-until.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-drop-while",
+        "file": "fn/drop-while.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "fn-duplicate-values",
+        "file": "fn/duplicate-values.xml",
+        "tests": 128,
+        "gated": false
+      },
+      {
+        "name": "fn-duration-to-seconds",
+        "file": "fn/duration-to-seconds.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "fn-element-with-id",
+        "file": "fn/element-with-id.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "fn-element-to-map",
+        "file": "fn/element-to-map.xml",
+        "tests": 193,
+        "gated": true
+      },
+      {
+        "name": "fn-element-to-map-plan",
+        "file": "fn/element-to-map-plan.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "fn-empty",
+        "file": "fn/empty.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-encode-for-uri",
+        "file": "fn/encode-for-uri.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-ends-with",
+        "file": "fn/ends-with.xml",
+        "tests": 68,
+        "gated": true
+      },
+      {
+        "name": "fn-ends-with-subsequence",
+        "file": "fn/ends-with-subsequence.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-environment-variable",
+        "file": "fn/environment-variable.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "fn-error",
+        "file": "fn/error.xml",
+        "tests": 104,
+        "gated": false
+      },
+      {
+        "name": "fn-escape-html-uri",
+        "file": "fn/escape-html-uri.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-every",
+        "file": "fn/every.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-exactly-one",
+        "file": "fn/exactly-one.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-exists",
+        "file": "fn/exists.xml",
+        "tests": 59,
+        "gated": true
+      },
+      {
+        "name": "fn-expanded-QName",
+        "file": "fn/expanded-QName.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "fn-false",
+        "file": "fn/false.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-filter",
+        "file": "fn/filter.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-floor",
+        "file": "fn/floor.xml",
+        "tests": 88,
+        "gated": true
+      },
+      {
+        "name": "fn-fold-left",
+        "file": "fn/fold-left.xml",
+        "tests": 31,
+        "gated": false
+      },
+      {
+        "name": "fn-fold-right",
+        "file": "fn/fold-right.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "fn-foot",
+        "file": "fn/foot.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "fn-for-each",
+        "file": "fn/for-each.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "fn-for-each-pair",
+        "file": "fn/for-each-pair.xml",
+        "tests": 55,
+        "gated": false
+      },
+      {
+        "name": "fn-format-date",
+        "file": "fn/format-date.xml",
+        "tests": 138,
+        "gated": false
+      },
+      {
+        "name": "fn-format-dateTime",
+        "file": "fn/format-dateTime.xml",
+        "tests": 94,
+        "gated": false
+      },
+      {
+        "name": "fn-format-integer",
+        "file": "fn/format-integer.xml",
+        "tests": 102,
+        "gated": false
+      },
+      {
+        "name": "fn-format-number",
+        "file": "fn/format-number.xml",
+        "tests": 308,
+        "gated": false
+      },
+      {
+        "name": "fn-format-time",
+        "file": "fn/format-time.xml",
+        "tests": 98,
+        "gated": false
+      },
+      {
+        "name": "fn-function-annotations",
+        "file": "fn/function-annotations.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "fn-function-arity",
+        "file": "fn/function-arity.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "fn-function-lookup",
+        "file": "fn/function-lookup.xml",
+        "tests": 684,
+        "gated": false
+      },
+      {
+        "name": "fn-function-name",
+        "file": "fn/function-name.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "fn-generate-id",
+        "file": "fn/generate-id.xml",
+        "tests": 41,
+        "gated": false
+      },
+      {
+        "name": "fn-graphemes",
+        "file": "fn/graphemes.xml",
+        "tests": 1189,
+        "gated": false
+      },
+      {
+        "name": "fn-has-children",
+        "file": "fn/has-children.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-hash",
+        "file": "fn/hash.xml",
+        "tests": 54,
+        "gated": false
+      },
+      {
+        "name": "fn-head",
+        "file": "fn/head.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "fn-highest",
+        "file": "fn/highest.xml",
+        "tests": 36,
+        "gated": false
+      },
+      {
+        "name": "fn-hours-from-dateTime",
+        "file": "fn/hours-from-dateTime.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "fn-hours-from-duration",
+        "file": "fn/hours-from-duration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-hours-from-time",
+        "file": "fn/hours-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-html-doc",
+        "file": "fn/html-doc.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "fn-id",
+        "file": "fn/id.xml",
+        "tests": 61,
+        "gated": true
+      },
+      {
+        "name": "fn-identity",
+        "file": "fn/identity.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "fn-idref",
+        "file": "fn/idref.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "fn-implicit-timezone",
+        "file": "fn/implicit-timezone.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-index-of",
+        "file": "fn/index-of.xml",
+        "tests": 68,
+        "gated": false
+      },
+      {
+        "name": "fn-index-of-substring",
+        "file": "fn/index-of-substring.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "fn-index-where",
+        "file": "fn/index-where.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "fn-innermost",
+        "file": "fn/innermost.xml",
+        "tests": 62,
+        "gated": false
+      },
+      {
+        "name": "fn-insert-before",
+        "file": "fn/insert-before.xml",
+        "tests": 51,
+        "gated": false
+      },
+      {
+        "name": "fn-insert-separator",
+        "file": "fn/insert-separator.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "fn-in-scope-namespaces",
+        "file": "fn/in-scope-namespaces.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "fn-in-scope-prefixes",
+        "file": "fn/in-scope-prefixes.xml",
+        "tests": 62,
+        "gated": true
+      },
+      {
+        "name": "fn-invisible-xml",
+        "file": "fn/invisible-xml.xml",
+        "tests": 16,
+        "gated": false
+      },
+      {
+        "name": "fn-iri-to-uri",
+        "file": "fn/iri-to-uri.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "fn-is-NaN",
+        "file": "fn/is-NaN.xml",
+        "tests": 16,
+        "gated": false
+      },
+      {
+        "name": "fn-items-at",
+        "file": "fn/items-at.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-jkey",
+        "file": "fn/jkey.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "fn-json-doc",
+        "file": "fn/json-doc.xml",
+        "tests": 80,
+        "gated": false
+      },
+      {
+        "name": "fn-json-to-xml",
+        "file": "fn/json-to-xml.xml",
+        "tests": 104,
+        "gated": false
+      },
+      {
+        "name": "fn-jtree",
+        "file": "fn/jtree.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-jvalue",
+        "file": "fn/jvalue.xml",
+        "tests": 14,
+        "gated": true
+      },
+      {
+        "name": "fn-lang",
+        "file": "fn/lang.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "fn-last",
+        "file": "fn/last.xml",
+        "tests": 69,
+        "gated": true
+      },
+      {
+        "name": "fn-load-xquery-module",
+        "file": "fn/load-xquery-module.xml",
+        "tests": 144,
+        "gated": false
+      },
+      {
+        "name": "fn-local-name",
+        "file": "fn/local-name.xml",
+        "tests": 61,
+        "gated": false
+      },
+      {
+        "name": "fn-local-name-from-QName",
+        "file": "fn/local-name-from-QName.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-location",
+        "file": "fn/location.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "fn-lower-case",
+        "file": "fn/lower-case.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-lowest",
+        "file": "fn/lowest.xml",
+        "tests": 36,
+        "gated": false
+      },
+      {
+        "name": "fn-map-to-element",
+        "file": "fn/map-to-element.xml",
+        "tests": 158,
+        "gated": true
+      },
+      {
+        "name": "fn-max",
+        "file": "fn/max.xml",
+        "tests": 232,
+        "gated": false
+      },
+      {
+        "name": "fn-matches",
+        "file": "fn/matches.xml",
+        "tests": 206,
+        "gated": false
+      },
+      {
+        "name": "fn-matches.re",
+        "file": "fn/matches.re.xml",
+        "tests": 1113,
+        "gated": false
+      },
+      {
+        "name": "fn-matching-segments",
+        "file": "fn/matching-segments.xml",
+        "tests": 39,
+        "gated": false
+      },
+      {
+        "name": "fn-message",
+        "file": "fn/message.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "fn-min",
+        "file": "fn/min.xml",
+        "tests": 232,
+        "gated": false
+      },
+      {
+        "name": "fn-minutes-from-dateTime",
+        "file": "fn/minutes-from-dateTime.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "fn-minutes-from-duration",
+        "file": "fn/minutes-from-duration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-minutes-from-time",
+        "file": "fn/minutes-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-month-from-date",
+        "file": "fn/month-from-date.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-months-from-duration",
+        "file": "fn/months-from-duration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-month-from-dateTime",
+        "file": "fn/month-from-dateTime.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "fn-name",
+        "file": "fn/name.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "fn-namespace-uri",
+        "file": "fn/namespace-uri.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "fn-namespace-uri-for-prefix",
+        "file": "fn/namespace-uri-for-prefix.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-namespace-uri-from-QName",
+        "file": "fn/namespace-uri-from-QName.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-nilled",
+        "file": "fn/nilled.xml",
+        "tests": 65,
+        "gated": false
+      },
+      {
+        "name": "fn-node-name",
+        "file": "fn/node-name.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-node-type-annotation",
+        "file": "fn/node-type-annotation.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "fn-normalize-space",
+        "file": "fn/normalize-space.xml",
+        "tests": 47,
+        "gated": false
+      },
+      {
+        "name": "fn-normalize-unicode",
+        "file": "fn/normalize-unicode.xml",
+        "tests": 50,
+        "gated": false
+      },
+      {
+        "name": "fn-not",
+        "file": "fn/not.xml",
+        "tests": 83,
+        "gated": true
+      },
+      {
+        "name": "fn-number",
+        "file": "fn/number.xml",
+        "tests": 80,
+        "gated": false
+      },
+      {
+        "name": "fn-one-or-more",
+        "file": "fn/one-or-more.xml",
+        "tests": 56,
+        "gated": true
+      },
+      {
+        "name": "fn-op",
+        "file": "fn/op.xml",
+        "tests": 35,
+        "gated": true
+      },
+      {
+        "name": "fn-outermost",
+        "file": "fn/outermost.xml",
+        "tests": 62,
+        "gated": false
+      },
+      {
+        "name": "fn-pad-string",
+        "file": "fn/pad-string.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-csv",
+        "file": "fn/parse-csv.xml",
+        "tests": 124,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-html",
+        "file": "fn/parse-html.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-ietf-date",
+        "file": "fn/parse-ietf-date.xml",
+        "tests": 105,
+        "gated": true
+      },
+      {
+        "name": "fn-parse-integer",
+        "file": "fn/parse-integer.xml",
+        "tests": 47,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-json",
+        "file": "fn/parse-json.xml",
+        "tests": 203,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-QName",
+        "file": "fn/parse-QName.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-xml",
+        "file": "fn/parse-xml.xml",
+        "tests": 57,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-xml-fragment",
+        "file": "fn/parse-xml-fragment.xml",
+        "tests": 41,
+        "gated": false
+      },
+      {
+        "name": "fn-parse-uri",
+        "file": "fn/parse-uri.xml",
+        "tests": 74,
+        "gated": false
+      },
+      {
+        "name": "fn-partial-apply",
+        "file": "fn/partial-apply.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "fn-partition",
+        "file": "fn/partition.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-parts-of-dateTime",
+        "file": "fn/parts-of-dateTime.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "fn-path",
+        "file": "fn/path.xml",
+        "tests": 67,
+        "gated": false
+      },
+      {
+        "name": "fn-position",
+        "file": "fn/position.xml",
+        "tests": 67,
+        "gated": true
+      },
+      {
+        "name": "fn-prefix-from-QName",
+        "file": "fn/prefix-from-QName.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-QName",
+        "file": "fn/QName.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-random-number-generator",
+        "file": "fn/random-number-generator.xml",
+        "tests": 61,
+        "gated": false
+      },
+      {
+        "name": "fn-regex",
+        "file": "fn/regex.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "fn-remove",
+        "file": "fn/remove.xml",
+        "tests": 63,
+        "gated": false
+      },
+      {
+        "name": "fn-replace",
+        "file": "fn/replace.xml",
+        "tests": 198,
+        "gated": false
+      },
+      {
+        "name": "fn-replicate",
+        "file": "fn/replicate.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "fn-resolve-QName",
+        "file": "fn/resolve-QName.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "fn-resolve-uri",
+        "file": "fn/resolve-uri.xml",
+        "tests": 50,
+        "gated": false
+      },
+      {
+        "name": "fn-reverse",
+        "file": "fn/reverse.xml",
+        "tests": 70,
+        "gated": true
+      },
+      {
+        "name": "fn-root",
+        "file": "fn/root.xml",
+        "tests": 43,
+        "gated": false
+      },
+      {
+        "name": "fn-round",
+        "file": "fn/round.xml",
+        "tests": 381,
+        "gated": false
+      },
+      {
+        "name": "fn-round-half-to-even",
+        "file": "fn/round-half-to-even.xml",
+        "tests": 145,
+        "gated": false
+      },
+      {
+        "name": "fn-scan",
+        "file": "fn/scan.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "fn-schema-type",
+        "file": "fn/schema-type.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "fn-seconds",
+        "file": "fn/seconds.xml",
+        "tests": 24,
+        "gated": false
+      },
+      {
+        "name": "fn-seconds-from-dateTime",
+        "file": "fn/seconds-from-dateTime.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "fn-seconds-from-duration",
+        "file": "fn/seconds-from-duration.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "fn-seconds-from-time",
+        "file": "fn/seconds-from-time.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "fn-serialize",
+        "file": "fn/serialize.xml",
+        "tests": 292,
+        "gated": false
+      },
+      {
+        "name": "fn-siblings",
+        "file": "fn/siblings.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "fn-slice",
+        "file": "fn/slice.xml",
+        "tests": 101,
+        "gated": false
+      },
+      {
+        "name": "fn-some",
+        "file": "fn/some.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-sort",
+        "file": "fn/sort.xml",
+        "tests": 50,
+        "gated": true
+      },
+      {
+        "name": "fn-sort-by",
+        "file": "fn/sort-by.xml",
+        "tests": 66,
+        "gated": false
+      },
+      {
+        "name": "fn-sort-with",
+        "file": "fn/sort-with.xml",
+        "tests": 24,
+        "gated": true
+      },
+      {
+        "name": "fn-starts-with",
+        "file": "fn/starts-with.xml",
+        "tests": 67,
+        "gated": true
+      },
+      {
+        "name": "fn-starts-with-subsequence",
+        "file": "fn/starts-with-subsequence.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-static-base-uri",
+        "file": "fn/static-base-uri.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "fn-string",
+        "file": "fn/string.xml",
+        "tests": 75,
+        "gated": false
+      },
+      {
+        "name": "fn-string-join",
+        "file": "fn/string-join.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "fn-string-length",
+        "file": "fn/string-length.xml",
+        "tests": 44,
+        "gated": false
+      },
+      {
+        "name": "fn-string-to-codepoints",
+        "file": "fn/string-to-codepoints.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-subsequence",
+        "file": "fn/subsequence.xml",
+        "tests": 122,
+        "gated": false
+      },
+      {
+        "name": "fn-substring",
+        "file": "fn/substring.xml",
+        "tests": 73,
+        "gated": false
+      },
+      {
+        "name": "fn-substring-after",
+        "file": "fn/substring-after.xml",
+        "tests": 57,
+        "gated": false
+      },
+      {
+        "name": "fn-substring-after-last",
+        "file": "fn/substring-after-last.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "fn-substring-before",
+        "file": "fn/substring-before.xml",
+        "tests": 56,
+        "gated": false
+      },
+      {
+        "name": "fn-substring-before-last",
+        "file": "fn/substring-before-last.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "fn-sum",
+        "file": "fn/sum.xml",
+        "tests": 229,
+        "gated": false
+      },
+      {
+        "name": "fn-system-properties",
+        "file": "fn/system-properties.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "fn-tail",
+        "file": "fn/tail.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "fn-take-while",
+        "file": "fn/take-while.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "fn-timezone-from-date",
+        "file": "fn/timezone-from-date.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "fn-timezone-from-dateTime",
+        "file": "fn/timezone-from-dateTime.xml",
+        "tests": 41,
+        "gated": false
+      },
+      {
+        "name": "fn-timezone-from-time",
+        "file": "fn/timezone-from-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "fn-tokenize",
+        "file": "fn/tokenize.xml",
+        "tests": 79,
+        "gated": false
+      },
+      {
+        "name": "fn-trace",
+        "file": "fn/trace.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "fn-transform",
+        "file": "fn/transform.xml",
+        "tests": 137,
+        "gated": false
+      },
+      {
+        "name": "fn-transitive-closure",
+        "file": "fn/transitive-closure.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "fn-translate",
+        "file": "fn/translate.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "fn-trim-space",
+        "file": "fn/trim-space.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "fn-true",
+        "file": "fn/true.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "fn-trunk",
+        "file": "fn/trunk.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "fn-type-of",
+        "file": "fn/type-of.xml",
+        "tests": 36,
+        "gated": false
+      },
+      {
+        "name": "fn-unix-dateTime",
+        "file": "fn/unix-dateTime.xml",
+        "tests": 16,
+        "gated": true
+      },
+      {
+        "name": "fn-unordered",
+        "file": "fn/unordered.xml",
+        "tests": 43,
+        "gated": true
+      },
+      {
+        "name": "fn-unparsed-binary",
+        "file": "fn/unparsed-binary.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "fn-unparsed-text",
+        "file": "fn/unparsed-text.xml",
+        "tests": 105,
+        "gated": false
+      },
+      {
+        "name": "fn-unparsed-text-available",
+        "file": "fn/unparsed-text-available.xml",
+        "tests": 61,
+        "gated": false
+      },
+      {
+        "name": "fn-unparsed-text-lines",
+        "file": "fn/unparsed-text-lines.xml",
+        "tests": 62,
+        "gated": false
+      },
+      {
+        "name": "fn-upper-case",
+        "file": "fn/upper-case.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-uri-collection",
+        "file": "fn/uri-collection.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "fn-void",
+        "file": "fn/void.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "fn-while-do",
+        "file": "fn/while-do.xml",
+        "tests": 30,
+        "gated": true
+      },
+      {
+        "name": "fn-xml-to-json",
+        "file": "fn/xml-to-json.xml",
+        "tests": 170,
+        "gated": false
+      },
+      {
+        "name": "fn-xsd-validator",
+        "file": "fn/xsd-validator.xml",
+        "tests": 76,
+        "gated": false
+      },
+      {
+        "name": "fn-year-from-date",
+        "file": "fn/year-from-date.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "fn-years-from-duration",
+        "file": "fn/years-from-duration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "fn-year-from-dateTime",
+        "file": "fn/year-from-dateTime.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "fn-zero-or-one",
+        "file": "fn/zero-or-one.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "math-acos",
+        "file": "math/math-acos.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-asin",
+        "file": "math/math-asin.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-atan",
+        "file": "math/math-atan.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-atan2",
+        "file": "math/math-atan2.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "math-cos",
+        "file": "math/math-cos.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-cosh",
+        "file": "math/math-cosh.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "math-e",
+        "file": "math/math-e.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "math-exp",
+        "file": "math/math-exp.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-exp10",
+        "file": "math/math-exp10.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "math-log",
+        "file": "math/math-log.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-log10",
+        "file": "math/math-log10.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-pi",
+        "file": "math/math-pi.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "math-pow",
+        "file": "math/math-pow.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "math-sin",
+        "file": "math/math-sin.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-sinh",
+        "file": "math/math-sinh.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "math-sqrt",
+        "file": "math/math-sqrt.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "math-tan",
+        "file": "math/math-tan.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "math-tanh",
+        "file": "math/math-tanh.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "map-build",
+        "file": "map/build.xml",
+        "tests": 60,
+        "gated": false
+      },
+      {
+        "name": "map-contains",
+        "file": "map/contains.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "map-empty",
+        "file": "map/empty.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "map-entries",
+        "file": "map/entries.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "map-entry",
+        "file": "map/entry.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "map-filter",
+        "file": "map/filter.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "map-find",
+        "file": "map/find.xml",
+        "tests": 12,
+        "gated": true
+      },
+      {
+        "name": "map-for-each",
+        "file": "map/for-each.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "map-get",
+        "file": "map/get.xml",
+        "tests": 43,
+        "gated": false
+      },
+      {
+        "name": "map-items",
+        "file": "map/items.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "map-merge",
+        "file": "map/merge.xml",
+        "tests": 47,
+        "gated": false
+      },
+      {
+        "name": "map-keys",
+        "file": "map/keys.xml",
+        "tests": 16,
+        "gated": false
+      },
+      {
+        "name": "map-put",
+        "file": "map/put.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "map-remove",
+        "file": "map/remove.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "map-size",
+        "file": "map/size.xml",
+        "tests": 18,
+        "gated": true
+      },
+      {
+        "name": "array-append",
+        "file": "array/append.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "array-build",
+        "file": "array/build.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "array-empty",
+        "file": "array/empty.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "array-filter",
+        "file": "array/filter.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "array-flatten",
+        "file": "array/flatten.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "array-fold-left",
+        "file": "array/fold-left.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "array-fold-right",
+        "file": "array/fold-right.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "array-foot",
+        "file": "array/foot.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "array-for-each",
+        "file": "array/for-each.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "array-for-each-pair",
+        "file": "array/for-each-pair.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "array-get",
+        "file": "array/get.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "array-head",
+        "file": "array/head.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "array-of-members",
+        "file": "array/of-members.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "array-index-of",
+        "file": "array/index-of.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "array-index-where",
+        "file": "array/index-where.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "array-insert-before",
+        "file": "array/insert-before.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "array-items",
+        "file": "array/items.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "array-join",
+        "file": "array/join.xml",
+        "tests": 11,
+        "gated": true
+      },
+      {
+        "name": "array-members",
+        "file": "array/members.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "array-put",
+        "file": "array/put.xml",
+        "tests": 15,
+        "gated": true
+      },
+      {
+        "name": "array-remove",
+        "file": "array/remove.xml",
+        "tests": 17,
+        "gated": true
+      },
+      {
+        "name": "array-reverse",
+        "file": "array/reverse.xml",
+        "tests": 19,
+        "gated": true
+      },
+      {
+        "name": "array-size",
+        "file": "array/size.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "array-slice",
+        "file": "array/slice.xml",
+        "tests": 88,
+        "gated": true
+      },
+      {
+        "name": "array-sort",
+        "file": "array/sort.xml",
+        "tests": 37,
+        "gated": true
+      },
+      {
+        "name": "array-sort-by",
+        "file": "array/sort-by.xml",
+        "tests": 56,
+        "gated": false
+      },
+      {
+        "name": "array-sort-with",
+        "file": "array/sort-with.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "array-split",
+        "file": "array/split.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "array-subarray",
+        "file": "array/subarray.xml",
+        "tests": 24,
+        "gated": false
+      },
+      {
+        "name": "array-tail",
+        "file": "array/tail.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "array-trunk",
+        "file": "array/trunk.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "xs-anyAtomicType",
+        "file": "xs/anyAtomicType.xml",
+        "tests": 2,
+        "gated": true
+      },
+      {
+        "name": "xs-anySimpleType",
+        "file": "xs/anySimpleType.xml",
+        "tests": 6,
+        "gated": true
+      },
+      {
+        "name": "xs-anyURI",
+        "file": "xs/anyURI.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "xs-base64Binary",
+        "file": "xs/base64Binary.xml",
+        "tests": 40,
+        "gated": false
+      },
+      {
+        "name": "xs-dateTimeStamp",
+        "file": "xs/dateTimeStamp.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "xs-double",
+        "file": "xs/double.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "xs-duration",
+        "file": "xs/duration.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "xs-error",
+        "file": "xs/error.xml",
+        "tests": 63,
+        "gated": false
+      },
+      {
+        "name": "xs-float",
+        "file": "xs/float.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "xs-hexBinary",
+        "file": "xs/hexBinary.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "xs-normalizedString",
+        "file": "xs/normalizedString.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "xs-notation",
+        "file": "xs/notation.xml",
+        "tests": 2,
+        "gated": true
+      },
+      {
+        "name": "xs-numeric",
+        "file": "xs/numeric.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "xs-token",
+        "file": "xs/token.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDurations",
+        "file": "op/add-dayTimeDurations.xml",
+        "tests": 64,
+        "gated": false
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-date",
+        "file": "op/add-dayTimeDuration-to-date.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-dateTime",
+        "file": "op/add-dayTimeDuration-to-dateTime.xml",
+        "tests": 32,
+        "gated": false
+      },
+      {
+        "name": "op-add-dayTimeDuration-to-time",
+        "file": "op/add-dayTimeDuration-to-time.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDurations",
+        "file": "op/add-yearMonthDurations.xml",
+        "tests": 27,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDuration-to-date",
+        "file": "op/add-yearMonthDuration-to-date.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "op-add-yearMonthDuration-to-dateTime",
+        "file": "op/add-yearMonthDuration-to-dateTime.xml",
+        "tests": 29,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-equal",
+        "file": "op/anyURI-equal.xml",
+        "tests": 22,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-greater-than",
+        "file": "op/anyURI-greater-than.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "op-anyURI-less-than",
+        "file": "op/anyURI-less-than.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "op-bang",
+        "file": "op/bang.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "op-base64Binary-equal",
+        "file": "op/base64Binary-equal.xml",
+        "tests": 53,
+        "gated": false
+      },
+      {
+        "name": "op-base64Binary-less-than",
+        "file": "op/base64Binary-less-than.xml",
+        "tests": 42,
+        "gated": false
+      },
+      {
+        "name": "op-base64Binary-greater-than",
+        "file": "op/base64Binary-greater-than.xml",
+        "tests": 36,
+        "gated": false
+      },
+      {
+        "name": "op-boolean-equal",
+        "file": "op/boolean-equal.xml",
+        "tests": 57,
+        "gated": true
+      },
+      {
+        "name": "op-boolean-greater-than",
+        "file": "op/boolean-greater-than.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "op-boolean-less-than",
+        "file": "op/boolean-less-than.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "op-concat",
+        "file": "op/concat.xml",
+        "tests": 98,
+        "gated": false
+      },
+      {
+        "name": "op-concatenate",
+        "file": "op/concatenate.xml",
+        "tests": 54,
+        "gated": true
+      },
+      {
+        "name": "op-date-equal",
+        "file": "op/date-equal.xml",
+        "tests": 47,
+        "gated": true
+      },
+      {
+        "name": "op-date-greater-than",
+        "file": "op/date-greater-than.xml",
+        "tests": 49,
+        "gated": true
+      },
+      {
+        "name": "op-date-less-than",
+        "file": "op/date-less-than.xml",
+        "tests": 48,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-equal",
+        "file": "op/dateTime-equal.xml",
+        "tests": 74,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-greater-than",
+        "file": "op/dateTime-greater-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-dateTime-less-than",
+        "file": "op/dateTime-less-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-dayTimeDuration-greater-than",
+        "file": "op/dayTimeDuration-greater-than.xml",
+        "tests": 71,
+        "gated": true
+      },
+      {
+        "name": "op-dayTimeDuration-less-than",
+        "file": "op/dayTimeDuration-less-than.xml",
+        "tests": 52,
+        "gated": true
+      },
+      {
+        "name": "op-divide-dayTimeDuration",
+        "file": "op/divide-dayTimeDuration.xml",
+        "tests": 65,
+        "gated": false
+      },
+      {
+        "name": "op-divide-dayTimeDuration-by-dayTimeDuration",
+        "file": "op/divide-dayTimeDuration-by-dayTimeDuration.xml",
+        "tests": 28,
+        "gated": false
+      },
+      {
+        "name": "op-divide-yearMonthDuration",
+        "file": "op/divide-yearMonthDuration.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "op-divide-yearMonthDuration-by-yearMonthDuration",
+        "file": "op/divide-yearMonthDuration-by-yearMonthDuration.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "op-duration-equal",
+        "file": "op/duration-equal.xml",
+        "tests": 190,
+        "gated": false
+      },
+      {
+        "name": "op-except",
+        "file": "op/except.xml",
+        "tests": 83,
+        "gated": false
+      },
+      {
+        "name": "op-gDay-equal",
+        "file": "op/gDay-equal.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "op-gMonth-equal",
+        "file": "op/gMonth-equal.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "op-gMonthDay-equal",
+        "file": "op/gMonthDay-equal.xml",
+        "tests": 51,
+        "gated": true
+      },
+      {
+        "name": "op-gYear-equal",
+        "file": "op/gYear-equal.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "op-gYearMonth-equal",
+        "file": "op/gYearMonth-equal.xml",
+        "tests": 46,
+        "gated": true
+      },
+      {
+        "name": "op-hexBinary-equal",
+        "file": "op/hexBinary-equal.xml",
+        "tests": 37,
+        "gated": false
+      },
+      {
+        "name": "op-hexBinary-greater-than",
+        "file": "op/hexBinary-greater-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-hexBinary-less-than",
+        "file": "op/hexBinary-less-than.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "op-intersect",
+        "file": "op/intersect.xml",
+        "tests": 86,
+        "gated": false
+      },
+      {
+        "name": "op-is-not-same-node",
+        "file": "op/is-not-same-node.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "op-is-same-node",
+        "file": "op/is-same-node.xml",
+        "tests": 49,
+        "gated": false
+      },
+      {
+        "name": "op-multiply-dayTimeDuration",
+        "file": "op/multiply-dayTimeDuration.xml",
+        "tests": 57,
+        "gated": false
+      },
+      {
+        "name": "op-multiply-yearMonthDuration",
+        "file": "op/multiply-yearMonthDuration.xml",
+        "tests": 46,
+        "gated": false
+      },
+      {
+        "name": "op-node-after",
+        "file": "op/node-after.xml",
+        "tests": 40,
+        "gated": false
+      },
+      {
+        "name": "op-node-before",
+        "file": "op/node-before.xml",
+        "tests": 43,
+        "gated": false
+      },
+      {
+        "name": "op-node-follows-or-is",
+        "file": "op/node-follows-or-is.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "op-node-precedes-or-is",
+        "file": "op/node-precedes-or-is.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "op-NOTATION-equal",
+        "file": "op/NOTATION-equal.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-add",
+        "file": "op/numeric-add.xml",
+        "tests": 163,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-equal",
+        "file": "op/numeric-equal.xml",
+        "tests": 209,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-divide",
+        "file": "op/numeric-divide.xml",
+        "tests": 142,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-greater-than",
+        "file": "op/numeric-greater-than.xml",
+        "tests": 122,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-integer-divide",
+        "file": "op/numeric-integer-divide.xml",
+        "tests": 140,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-less-than",
+        "file": "op/numeric-less-than.xml",
+        "tests": 187,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-mod",
+        "file": "op/numeric-mod.xml",
+        "tests": 131,
+        "gated": true
+      },
+      {
+        "name": "op-numeric-multiply",
+        "file": "op/numeric-multiply.xml",
+        "tests": 119,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-subtract",
+        "file": "op/numeric-subtract.xml",
+        "tests": 125,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-unary-minus",
+        "file": "op/numeric-unary-minus.xml",
+        "tests": 70,
+        "gated": false
+      },
+      {
+        "name": "op-numeric-unary-plus",
+        "file": "op/numeric-unary-plus.xml",
+        "tests": 55,
+        "gated": true
+      },
+      {
+        "name": "op-pipeline",
+        "file": "op/pipeline.xml",
+        "tests": 25,
+        "gated": true
+      },
+      {
+        "name": "op-QName-equal",
+        "file": "op/QName-equal.xml",
+        "tests": 42,
+        "gated": false
+      },
+      {
+        "name": "op-string-equal",
+        "file": "op/string-equal.xml",
+        "tests": 15,
+        "gated": true
+      },
+      {
+        "name": "op-string-greater-than",
+        "file": "op/string-greater-than.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "op-string-less-than",
+        "file": "op/string-less-than.xml",
+        "tests": 10,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dates",
+        "file": "op/subtract-dates.xml",
+        "tests": 31,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dateTimes",
+        "file": "op/subtract-dateTimes.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-date",
+        "file": "op/subtract-dayTimeDuration-from-date.xml",
+        "tests": 24,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-dateTime",
+        "file": "op/subtract-dayTimeDuration-from-dateTime.xml",
+        "tests": 24,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDuration-from-time",
+        "file": "op/subtract-dayTimeDuration-from-time.xml",
+        "tests": 28,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-dayTimeDurations",
+        "file": "op/subtract-dayTimeDurations.xml",
+        "tests": 69,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-times",
+        "file": "op/subtract-times.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDuration-from-date",
+        "file": "op/subtract-yearMonthDuration-from-date.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDuration-from-dateTime",
+        "file": "op/subtract-yearMonthDuration-from-dateTime.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "op-subtract-yearMonthDurations",
+        "file": "op/subtract-yearMonthDurations.xml",
+        "tests": 33,
+        "gated": true
+      },
+      {
+        "name": "op-time-equal",
+        "file": "op/time-equal.xml",
+        "tests": 58,
+        "gated": true
+      },
+      {
+        "name": "op-time-greater-than",
+        "file": "op/time-greater-than.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "op-time-less-than",
+        "file": "op/time-less-than.xml",
+        "tests": 44,
+        "gated": true
+      },
+      {
+        "name": "op-to",
+        "file": "op/to.xml",
+        "tests": 185,
+        "gated": false
+      },
+      {
+        "name": "op-union",
+        "file": "op/union.xml",
+        "tests": 93,
+        "gated": false
+      },
+      {
+        "name": "op-yearMonthDuration-greater-than",
+        "file": "op/yearMonthDuration-greater-than.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "op-yearMonthDuration-less-than",
+        "file": "op/yearMonthDuration-less-than.xml",
+        "tests": 34,
+        "gated": true
+      },
+      {
+        "name": "op-same-key",
+        "file": "op/same-key.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "prod-AllowingEmpty",
+        "file": "prod/AllowingEmpty.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "prod-Annotation",
+        "file": "prod/Annotation.xml",
+        "tests": 90,
+        "gated": false
+      },
+      {
+        "name": "prod-ArrayType",
+        "file": "prod/ArrayType.xml",
+        "tests": 75,
+        "gated": false
+      },
+      {
+        "name": "prod-ArrowExpr",
+        "file": "prod/ArrowExpr.xml",
+        "tests": 70,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep",
+        "file": "prod/AxisStep.xml",
+        "tests": 362,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.abbr",
+        "file": "prod/AxisStep.abbr.xml",
+        "tests": 23,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.ancestor",
+        "file": "prod/AxisStep.ancestor.xml",
+        "tests": 44,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.ancestor-or-self",
+        "file": "prod/AxisStep.ancestor-or-self.xml",
+        "tests": 32,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.following",
+        "file": "prod/AxisStep.following.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.following-or-self",
+        "file": "prod/AxisStep.following-or-self.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.following-sibling",
+        "file": "prod/AxisStep.following-sibling.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.following-sibling-or-self",
+        "file": "prod/AxisStep.following-sibling-or-self.xml",
+        "tests": 37,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.preceding",
+        "file": "prod/AxisStep.preceding.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.preceding-or-self",
+        "file": "prod/AxisStep.preceding-or-self.xml",
+        "tests": 32,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.preceding-sibling",
+        "file": "prod/AxisStep.preceding-sibling.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.preceding-sibling-or-self",
+        "file": "prod/AxisStep.preceding-sibling-or-self.xml",
+        "tests": 32,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.static-typing",
+        "file": "prod/AxisStep.static-typing.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "prod-AxisStep.unabbr",
+        "file": "prod/AxisStep.unabbr.xml",
+        "tests": 26,
+        "gated": true
+      },
+      {
+        "name": "prod-AxisStep.J",
+        "file": "prod/AxisStep.J.xml",
+        "tests": 111,
+        "gated": false
+      },
+      {
+        "name": "prod-BaseURIDecl",
+        "file": "prod/BaseURIDecl.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "prod-BoundarySpaceDecl",
+        "file": "prod/BoundarySpaceDecl.xml",
+        "tests": 28,
+        "gated": false
+      },
+      {
+        "name": "prod-BracedActions",
+        "file": "prod/BracedActions.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "prod-ButWithExpr",
+        "file": "prod/ButWithExpr.xml",
+        "tests": 26,
+        "gated": false
+      },
+      {
+        "name": "prod-CastableExpr",
+        "file": "prod/CastableExpr.xml",
+        "tests": 969,
+        "gated": false
+      },
+      {
+        "name": "prod-CastableExpr.composite",
+        "file": "prod/CastableExpr.composite.xml",
+        "tests": 67,
+        "gated": false
+      },
+      {
+        "name": "prod-CastExpr",
+        "file": "prod/CastExpr.xml",
+        "tests": 2836,
+        "gated": false
+      },
+      {
+        "name": "prod-CastExpr.composite",
+        "file": "prod/CastExpr.composite.xml",
+        "tests": 67,
+        "gated": false
+      },
+      {
+        "name": "prod-CastExpr.derived",
+        "file": "prod/CastExpr.derived.xml",
+        "tests": 169,
+        "gated": false
+      },
+      {
+        "name": "prod-CastExpr.schema",
+        "file": "prod/CastExpr.schema.xml",
+        "tests": 130,
+        "gated": false
+      },
+      {
+        "name": "prod-ChoiceItemType",
+        "file": "prod/ChoiceItemType.xml",
+        "tests": 50,
+        "gated": false
+      },
+      {
+        "name": "prod-Comment",
+        "file": "prod/Comment.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "prod-CompAttrConstructor",
+        "file": "prod/CompAttrConstructor.xml",
+        "tests": 148,
+        "gated": false
+      },
+      {
+        "name": "prod-CompDocConstructor",
+        "file": "prod/CompDocConstructor.xml",
+        "tests": 59,
+        "gated": false
+      },
+      {
+        "name": "prod-CompCommentConstructor",
+        "file": "prod/CompCommentConstructor.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "prod-CompElemConstructor",
+        "file": "prod/CompElemConstructor.xml",
+        "tests": 114,
+        "gated": false
+      },
+      {
+        "name": "prod-CompNamespaceConstructor",
+        "file": "prod/CompNamespaceConstructor.xml",
+        "tests": 52,
+        "gated": false
+      },
+      {
+        "name": "prod-CompPIConstructor",
+        "file": "prod/CompPIConstructor.xml",
+        "tests": 66,
+        "gated": false
+      },
+      {
+        "name": "prod-CompTextConstructor",
+        "file": "prod/CompTextConstructor.xml",
+        "tests": 39,
+        "gated": false
+      },
+      {
+        "name": "prod-ConstructionDecl",
+        "file": "prod/ConstructionDecl.xml",
+        "tests": 26,
+        "gated": false
+      },
+      {
+        "name": "prod-ConstructionDecl.schema",
+        "file": "prod/ConstructionDecl.schema.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "prod-ContextItemDecl",
+        "file": "prod/ContextItemDecl.xml",
+        "tests": 53,
+        "gated": false
+      },
+      {
+        "name": "prod-ContextValueDecl",
+        "file": "prod/ContextValueDecl.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "prod-ContextItemExpr",
+        "file": "prod/ContextItemExpr.xml",
+        "tests": 45,
+        "gated": true
+      },
+      {
+        "name": "prod-CopyNamespacesDecl",
+        "file": "prod/CopyNamespacesDecl.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "prod-CountClause",
+        "file": "prod/CountClause.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "prod-CurlyArrayConstructor",
+        "file": "prod/CurlyArrayConstructor.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "prod-DecimalFormatDecl",
+        "file": "prod/DecimalFormatDecl.xml",
+        "tests": 47,
+        "gated": false
+      },
+      {
+        "name": "prod-DefaultCollationDecl",
+        "file": "prod/DefaultCollationDecl.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "prod-DefaultNamespaceDecl",
+        "file": "prod/DefaultNamespaceDecl.xml",
+        "tests": 82,
+        "gated": false
+      },
+      {
+        "name": "prod-DirAttributeList",
+        "file": "prod/DirAttributeList.xml",
+        "tests": 136,
+        "gated": false
+      },
+      {
+        "name": "prod-DirectConstructor",
+        "file": "prod/DirectConstructor.xml",
+        "tests": 93,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemConstructor",
+        "file": "prod/DirElemConstructor.xml",
+        "tests": 73,
+        "gated": false
+      },
+      {
+        "name": "prod-DirElemContent",
+        "file": "prod/DirElemContent.xml",
+        "tests": 135,
+        "gated": true
+      },
+      {
+        "name": "prod-DirElemContent.namespace",
+        "file": "prod/DirElemContent.namespace.xml",
+        "tests": 138,
+        "gated": false
+      },
+      {
+        "name": "prod-DirElemContent.whitespace",
+        "file": "prod/DirElemContent.whitespace.xml",
+        "tests": 83,
+        "gated": false
+      },
+      {
+        "name": "prod-DynamicFunctionCall",
+        "file": "prod/DynamicFunctionCall.xml",
+        "tests": 93,
+        "gated": false
+      },
+      {
+        "name": "prod-EmptyOrderDecl",
+        "file": "prod/EmptyOrderDecl.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "prod-EQName",
+        "file": "prod/EQName.xml",
+        "tests": 54,
+        "gated": false
+      },
+      {
+        "name": "prod-EnumerationType",
+        "file": "prod/EnumerationType.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "prod-ExtensionExpr",
+        "file": "prod/ExtensionExpr.xml",
+        "tests": 81,
+        "gated": false
+      },
+      {
+        "name": "prod-FLWORExpr",
+        "file": "prod/FLWORExpr.xml",
+        "tests": 26,
+        "gated": false
+      },
+      {
+        "name": "prod-FLWORExpr.static-typing",
+        "file": "prod/FLWORExpr.static-typing.xml",
+        "tests": 28,
+        "gated": false
+      },
+      {
+        "name": "prod-ForClause",
+        "file": "prod/ForClause.xml",
+        "tests": 212,
+        "gated": false
+      },
+      {
+        "name": "prod-ForClause.map",
+        "file": "prod/ForClause.map.xml",
+        "tests": 65,
+        "gated": false
+      },
+      {
+        "name": "prod-ForClause.member",
+        "file": "prod/ForClause.member.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "prod-FunctionCall",
+        "file": "prod/FunctionCall.xml",
+        "tests": 228,
+        "gated": false
+      },
+      {
+        "name": "prod-FunctionDecl",
+        "file": "prod/FunctionDecl.xml",
+        "tests": 248,
+        "gated": false
+      },
+      {
+        "name": "prod-GeneralComp.eq",
+        "file": "prod/GeneralComp.eq.xml",
+        "tests": 205,
+        "gated": false
+      },
+      {
+        "name": "prod-GeneralComp.ge",
+        "file": "prod/GeneralComp.ge.xml",
+        "tests": 112,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.gt",
+        "file": "prod/GeneralComp.gt.xml",
+        "tests": 150,
+        "gated": false
+      },
+      {
+        "name": "prod-GeneralComp.le",
+        "file": "prod/GeneralComp.le.xml",
+        "tests": 108,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.lt",
+        "file": "prod/GeneralComp.lt.xml",
+        "tests": 133,
+        "gated": true
+      },
+      {
+        "name": "prod-GeneralComp.ne",
+        "file": "prod/GeneralComp.ne.xml",
+        "tests": 140,
+        "gated": true
+      },
+      {
+        "name": "prod-GroupByClause",
+        "file": "prod/GroupByClause.xml",
+        "tests": 40,
+        "gated": false
+      },
+      {
+        "name": "prod-IfExpr",
+        "file": "prod/IfExpr.xml",
+        "tests": 43,
+        "gated": true
+      },
+      {
+        "name": "prod-InlineFunctionExpr",
+        "file": "prod/InlineFunctionExpr.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "prod-InlineFunctionExpr.focus",
+        "file": "prod/InlineFunctionExpr.focus.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "prod-InstanceofExpr",
+        "file": "prod/InstanceofExpr.xml",
+        "tests": 327,
+        "gated": false
+      },
+      {
+        "name": "prod-ItemTypeDecl",
+        "file": "prod/ItemTypeDecl.xml",
+        "tests": 80,
+        "gated": false
+      },
+      {
+        "name": "prod-KeywordArguments",
+        "file": "prod/KeywordArguments.xml",
+        "tests": 1,
+        "gated": true
+      },
+      {
+        "name": "prod-LambdaExpr",
+        "file": "prod/LambdaExpr.xml",
+        "tests": 8,
+        "gated": true
+      },
+      {
+        "name": "prod-LetClause",
+        "file": "prod/LetClause.xml",
+        "tests": 189,
+        "gated": true
+      },
+      {
+        "name": "prod-Literal",
+        "file": "prod/Literal.xml",
+        "tests": 242,
+        "gated": false
+      },
+      {
+        "name": "prod-Lookup",
+        "file": "prod/Lookup.xml",
+        "tests": 134,
+        "gated": false
+      },
+      {
+        "name": "prod-MapConstructor",
+        "file": "prod/MapConstructor.xml",
+        "tests": 83,
+        "gated": false
+      },
+      {
+        "name": "prod-MappingArrow",
+        "file": "prod/MappingArrow.xml",
+        "tests": 67,
+        "gated": false
+      },
+      {
+        "name": "prod-MapType",
+        "file": "prod/MapType.xml",
+        "tests": 82,
+        "gated": false
+      },
+      {
+        "name": "prod-MethodCall",
+        "file": "prod/MethodCall.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "prod-ModuleImport",
+        "file": "prod/ModuleImport.xml",
+        "tests": 141,
+        "gated": false
+      },
+      {
+        "name": "prod-NamedFunctionRef",
+        "file": "prod/NamedFunctionRef.xml",
+        "tests": 565,
+        "gated": false
+      },
+      {
+        "name": "prod-NamedRecordTypeDecl",
+        "file": "prod/NamedRecordTypeDecl.xml",
+        "tests": 94,
+        "gated": false
+      },
+      {
+        "name": "prod-NamespaceDecl",
+        "file": "prod/NamespaceDecl.xml",
+        "tests": 55,
+        "gated": false
+      },
+      {
+        "name": "prod-NameTest",
+        "file": "prod/NameTest.xml",
+        "tests": 127,
+        "gated": true
+      },
+      {
+        "name": "prod-NameTestUnion",
+        "file": "prod/NameTestUnion.xml",
+        "tests": 37,
+        "gated": false
+      },
+      {
+        "name": "prod-NodeTest",
+        "file": "prod/NodeTest.xml",
+        "tests": 84,
+        "gated": false
+      },
+      {
+        "name": "prod-OptionDecl",
+        "file": "prod/OptionDecl.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "prod-OptionDecl.serialization",
+        "file": "prod/OptionDecl.serialization.xml",
+        "tests": 40,
+        "gated": false
+      },
+      {
+        "name": "prod-OrExpr",
+        "file": "prod/OrExpr.xml",
+        "tests": 376,
+        "gated": true
+      },
+      {
+        "name": "prod-OrderByClause",
+        "file": "prod/OrderByClause.xml",
+        "tests": 210,
+        "gated": false
+      },
+      {
+        "name": "prod-OrderingModeDecl",
+        "file": "prod/OrderingModeDecl.xml",
+        "tests": 29,
+        "gated": false
+      },
+      {
+        "name": "prod-OtherwiseExpr",
+        "file": "prod/OtherwiseExpr.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "prod-PathExpr",
+        "file": "prod/PathExpr.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "prod-PathExpr.J",
+        "file": "prod/PathExpr.J.xml",
+        "tests": 147,
+        "gated": false
+      },
+      {
+        "name": "prod-ParenthesizedExpr",
+        "file": "prod/ParenthesizedExpr.xml",
+        "tests": 20,
+        "gated": true
+      },
+      {
+        "name": "prod-PositionalVar",
+        "file": "prod/PositionalVar.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "prod-PipelineExpr",
+        "file": "prod/PipelineExpr.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "prod-Predicate",
+        "file": "prod/Predicate.xml",
+        "tests": 242,
+        "gated": false
+      },
+      {
+        "name": "prod-QuantifiedExpr",
+        "file": "prod/QuantifiedExpr.xml",
+        "tests": 223,
+        "gated": false
+      },
+      {
+        "name": "prod-RecordType",
+        "file": "prod/RecordType.xml",
+        "tests": 23,
+        "gated": false
+      },
+      {
+        "name": "prod-ReturnClause",
+        "file": "prod/ReturnClause.xml",
+        "tests": 21,
+        "gated": true
+      },
+      {
+        "name": "prod-SchemaImport",
+        "file": "prod/SchemaImport.xml",
+        "tests": 145,
+        "gated": false
+      },
+      {
+        "name": "prod-SequenceType",
+        "file": "prod/SequenceType.xml",
+        "tests": 56,
+        "gated": false
+      },
+      {
+        "name": "prod-SquareArrayConstructor",
+        "file": "prod/SquareArrayConstructor.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "prod-StepExpr",
+        "file": "prod/StepExpr.xml",
+        "tests": 70,
+        "gated": false
+      },
+      {
+        "name": "prod-StringConstructor",
+        "file": "prod/StringConstructor.xml",
+        "tests": 55,
+        "gated": false
+      },
+      {
+        "name": "prod-StringTemplate",
+        "file": "prod/StringTemplate.xml",
+        "tests": 53,
+        "gated": true
+      },
+      {
+        "name": "prod-SwitchExpr",
+        "file": "prod/SwitchExpr.xml",
+        "tests": 58,
+        "gated": false
+      },
+      {
+        "name": "prod-TraceClause",
+        "file": "prod/TraceClause.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "prod-TreatExpr",
+        "file": "prod/TreatExpr.xml",
+        "tests": 73,
+        "gated": true
+      },
+      {
+        "name": "prod-TryCatchExpr",
+        "file": "prod/TryCatchExpr.xml",
+        "tests": 212,
+        "gated": false
+      },
+      {
+        "name": "prod-TypeswitchExpr",
+        "file": "prod/TypeswitchExpr.xml",
+        "tests": 88,
+        "gated": false
+      },
+      {
+        "name": "prod-UnorderedExpr",
+        "file": "prod/UnorderedExpr.xml",
+        "tests": 31,
+        "gated": false
+      },
+      {
+        "name": "prod-UnaryLookup",
+        "file": "prod/UnaryLookup.xml",
+        "tests": 37,
+        "gated": false
+      },
+      {
+        "name": "prod-UnionNodeTest",
+        "file": "prod/UnionNodeTest.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "prod-ValidateExpr",
+        "file": "prod/ValidateExpr.xml",
+        "tests": 92,
+        "gated": false
+      },
+      {
+        "name": "prod-ValueComp",
+        "file": "prod/ValueComp.xml",
+        "tests": 125,
+        "gated": false
+      },
+      {
+        "name": "prod-VarDecl",
+        "file": "prod/VarDecl.xml",
+        "tests": 167,
+        "gated": false
+      },
+      {
+        "name": "prod-VarDecl.external",
+        "file": "prod/VarDecl.external.xml",
+        "tests": 107,
+        "gated": false
+      },
+      {
+        "name": "prod-VarDefaultValue",
+        "file": "prod/VarDefaultValue.xml",
+        "tests": 43,
+        "gated": false
+      },
+      {
+        "name": "prod-VersionDecl",
+        "file": "prod/VersionDecl.xml",
+        "tests": 52,
+        "gated": false
+      },
+      {
+        "name": "prod-WhereClause",
+        "file": "prod/WhereClause.xml",
+        "tests": 85,
+        "gated": false
+      },
+      {
+        "name": "prod-WhileClause",
+        "file": "prod/WhileClause.xml",
+        "tests": 83,
+        "gated": false
+      },
+      {
+        "name": "prod-WindowClause",
+        "file": "prod/WindowClause.xml",
+        "tests": 158,
+        "gated": false
+      },
+      {
+        "name": "misc-BuiltInKeywords",
+        "file": "misc/BuiltInKeywords.xml",
+        "tests": 305,
+        "gated": false
+      },
+      {
+        "name": "misc-CombinedErrorCodes",
+        "file": "misc/CombinedErrorCodes.xml",
+        "tests": 264,
+        "gated": false
+      },
+      {
+        "name": "misc-AnnexE",
+        "file": "misc/AnnexE.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "misc-AppendixA4",
+        "file": "misc/AppendixA4.xml",
+        "tests": 9,
+        "gated": true
+      },
+      {
+        "name": "misc-ConstructorKeywords",
+        "file": "misc/ConstructorKeywords.xml",
+        "tests": 153,
+        "gated": false
+      },
+      {
+        "name": "misc-ErrorsAndOptimization",
+        "file": "misc/ErrorsAndOptimization.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "misc-FocusConstructors",
+        "file": "misc/FocusConstructors.xml",
+        "tests": 153,
+        "gated": true
+      },
+      {
+        "name": "misc-HigherOrderFunctions",
+        "file": "misc/HigherOrderFunctions.xml",
+        "tests": 148,
+        "gated": false
+      },
+      {
+        "name": "misc-HtmlTestSuite",
+        "file": "misc/HtmlTestSuite.xml",
+        "tests": 1379,
+        "gated": false
+      },
+      {
+        "name": "misc-JsonTestSuite",
+        "file": "misc/JsonTestSuite.xml",
+        "tests": 319,
+        "gated": false
+      },
+      {
+        "name": "misc-StaticContext",
+        "file": "misc/StaticContext.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "misc-Subtyping",
+        "file": "misc/Subtyping.xml",
+        "tests": 159,
+        "gated": false
+      },
+      {
+        "name": "misc-Surrogates",
+        "file": "misc/Surrogates.xml",
+        "tests": 32,
+        "gated": true
+      },
+      {
+        "name": "misc-UCACollation",
+        "file": "misc/UCACollation.xml",
+        "tests": 87,
+        "gated": true
+      },
+      {
+        "name": "misc-XMLEdition",
+        "file": "misc/XMLEdition.xml",
+        "tests": 19,
+        "gated": true
+      },
+      {
+        "name": "method-adaptive",
+        "file": "ser/method-adaptive.xml",
+        "tests": 137,
+        "gated": false
+      },
+      {
+        "name": "method-csv",
+        "file": "ser/method-csv.xml",
+        "tests": 48,
+        "gated": false
+      },
+      {
+        "name": "method-html",
+        "file": "ser/method-html.xml",
+        "tests": 73,
+        "gated": false
+      },
+      {
+        "name": "method-json",
+        "file": "ser/method-json.xml",
+        "tests": 89,
+        "gated": false
+      },
+      {
+        "name": "method-text",
+        "file": "ser/method-text.xml",
+        "tests": 23,
+        "gated": false
+      },
+      {
+        "name": "method-xhtml",
+        "file": "ser/method-xhtml.xml",
+        "tests": 61,
+        "gated": false
+      },
+      {
+        "name": "method-xml",
+        "file": "ser/method-xml.xml",
+        "tests": 74,
+        "gated": false
+      },
+      {
+        "name": "app-CatalogCheck",
+        "file": "app/CatalogCheck.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "app-Demos",
+        "file": "app/Demos.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "app-Duplicates",
+        "file": "app/Duplicates.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "app-FunctxFn",
+        "file": "app/FunctxFn.xml",
+        "tests": 502,
+        "gated": true
+      },
+      {
+        "name": "app-FunctxFunctx",
+        "file": "app/FunctxFunctx.xml",
+        "tests": 627,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseCompoundValues",
+        "file": "app/UseCaseCompoundValues.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseJSON",
+        "file": "app/UseCaseJSON.xml",
+        "tests": 13,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseJSONiq",
+        "file": "app/UseCaseJSONiq.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseNLP",
+        "file": "app/UseCaseNLP.xml",
+        "tests": 7,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseNS",
+        "file": "app/UseCaseNS.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "app-UseCasePARTS",
+        "file": "app/UseCasePARTS.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseR",
+        "file": "app/UseCaseR.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseR31",
+        "file": "app/UseCaseR31.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseSEQ",
+        "file": "app/UseCaseSEQ.xml",
+        "tests": 5,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseSGML",
+        "file": "app/UseCaseSGML.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseSTRING",
+        "file": "app/UseCaseSTRING.xml",
+        "tests": 4,
+        "gated": true
+      },
+      {
+        "name": "app-UseCaseTREE",
+        "file": "app/UseCaseTREE.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "app-UseCaseXMP",
+        "file": "app/UseCaseXMP.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "app-Walmsley",
+        "file": "app/Walmsley.xml",
+        "tests": 223,
+        "gated": false
+      },
+      {
+        "name": "app-XMark",
+        "file": "app/XMark.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "app-spec-examples",
+        "file": "app/fo-spec-examples.xml",
+        "tests": 1477,
+        "gated": false
+      },
+      {
+        "name": "bin-and",
+        "file": "bin/and.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "bin-bin",
+        "file": "bin/bin.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "bin-count-bits-set",
+        "file": "bin/count-bits-set.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "bin-decode-string",
+        "file": "bin/decode-string.xml",
+        "tests": 79,
+        "gated": false
+      },
+      {
+        "name": "bin-encode-string",
+        "file": "bin/encode-string.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "bin-find",
+        "file": "bin/find.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "bin-from-base64url",
+        "file": "bin/from-base64url.xml",
+        "tests": 16,
+        "gated": false
+      },
+      {
+        "name": "bin-from-octets",
+        "file": "bin/from-octets.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "bin-hex",
+        "file": "bin/hex.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "bin-infer-encoding",
+        "file": "bin/infer-encoding.xml",
+        "tests": 37,
+        "gated": false
+      },
+      {
+        "name": "bin-insert-before",
+        "file": "bin/insert-before.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "bin-is-bit-set",
+        "file": "bin/is-bit-set.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "bin-join",
+        "file": "bin/join.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "bin-length",
+        "file": "bin/length.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "bin-not",
+        "file": "bin/not.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "bin-octal",
+        "file": "bin/octal.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "bin-or",
+        "file": "bin/or.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "bin-pack-double",
+        "file": "bin/pack-double.xml",
+        "tests": 26,
+        "gated": false
+      },
+      {
+        "name": "bin-pack-float",
+        "file": "bin/pack-float.xml",
+        "tests": 24,
+        "gated": false
+      },
+      {
+        "name": "bin-pack-integer",
+        "file": "bin/pack-integer.xml",
+        "tests": 56,
+        "gated": false
+      },
+      {
+        "name": "bin-pad-left",
+        "file": "bin/pad-left.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "bin-pad-right",
+        "file": "bin/pad-right.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "bin-part",
+        "file": "bin/part.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "bin-rotate",
+        "file": "bin/rotate.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "bin-set-bits",
+        "file": "bin/set-bits.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "bin-shift",
+        "file": "bin/shift.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "bin-to-base64url",
+        "file": "bin/to-base64url.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "bin-to-octets",
+        "file": "bin/to-octets.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "bin-unpack-double",
+        "file": "bin/unpack-double.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "bin-unpack-float",
+        "file": "bin/unpack-float.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "bin-unpack-integer",
+        "file": "bin/unpack-integer.xml",
+        "tests": 36,
+        "gated": false
+      },
+      {
+        "name": "bin-unpack-unsigned-integer",
+        "file": "bin/unpack-unsigned-integer.xml",
+        "tests": 35,
+        "gated": false
+      },
+      {
+        "name": "bin-xor",
+        "file": "bin/xor.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "expath-file",
+        "file": "file/file.xml",
+        "tests": 270,
+        "gated": false
+      },
+      {
+        "name": "upd-VariableDeclaration",
+        "file": "upd/VariableDeclaration.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "upd-FunctionDeclaration",
+        "file": "upd/FunctionDeclaration.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "upd-InsertExpressions",
+        "file": "upd/InsertExpressions.xml",
+        "tests": 100,
+        "gated": false
+      },
+      {
+        "name": "upd-DeleteExpressions",
+        "file": "upd/DeleteExpressions.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "upd-ReplaceNode",
+        "file": "upd/ReplaceNode.xml",
+        "tests": 22,
+        "gated": false
+      },
+      {
+        "name": "upd-ReplaceValue",
+        "file": "upd/ReplaceValue.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "upd-RenameExpressions",
+        "file": "upd/RenameExpressions.xml",
+        "tests": 45,
+        "gated": false
+      },
+      {
+        "name": "upd-TransformExpressions",
+        "file": "upd/TransformExpressions.xml",
+        "tests": 71,
+        "gated": false
+      },
+      {
+        "name": "upd-Compatibility",
+        "file": "upd/Compatibility.xml",
+        "tests": 30,
+        "gated": false
+      },
+      {
+        "name": "upd-FLWORExpression",
+        "file": "upd/FLWORExpression.xml",
+        "tests": 25,
+        "gated": false
+      },
+      {
+        "name": "upd-TypeswitchExpression",
+        "file": "upd/TypeswitchExpression.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "upd-ConditionalExpression",
+        "file": "upd/ConditionalExpression.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "upd-CommaExpression",
+        "file": "upd/CommaExpression.xml",
+        "tests": 38,
+        "gated": false
+      },
+      {
+        "name": "upd-ParenthesizedExpressions",
+        "file": "upd/ParenthesizedExpressions.xml",
+        "tests": 3,
+        "gated": false
+      },
+      {
+        "name": "upd-FunctionCall",
+        "file": "upd/FunctionCall.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "upd-OtherExpressions",
+        "file": "upd/OtherExpressions.xml",
+        "tests": 32,
+        "gated": false
+      },
+      {
+        "name": "upd-fn-put",
+        "file": "upd/fnput-document.xml",
+        "tests": 13,
+        "gated": false
+      },
+      {
+        "name": "upd-AttrDataModelErrs",
+        "file": "upd/AttrDataModelErrs.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "upd-NSBindingConflictErrs",
+        "file": "upd/NSBindingConflictErrs.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "upd-mergeUpdates",
+        "file": "upd/mergeUpdates.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "upd-applyUpdates",
+        "file": "upd/applyUpdates.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "upd-setToUntyped",
+        "file": "upd/setToUntyped.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "upd-propagateNamespace",
+        "file": "upd/propagateNamespace.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "upd-AdditionalTyping",
+        "file": "upd/AdditionalTyping.xml",
+        "tests": 60,
+        "gated": false
+      },
+      {
+        "name": "upd-MinOther",
+        "file": "upd/MinOther.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationStrict",
+        "file": "upd/RevalidationDeclarationStrict.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationStrictUnsupported",
+        "file": "upd/RevalidationDeclarationStrictUnsupported.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationLax",
+        "file": "upd/RevalidationDeclarationLax.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationLaxUnsupported",
+        "file": "upd/RevalidationDeclarationLaxUnsupported.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationSkip",
+        "file": "upd/RevalidationDeclarationSkip.xml",
+        "tests": 34,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationSkipUnsupported",
+        "file": "upd/RevalidationDeclarationSkipUnsupported.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-RevalidationDeclarationStrictandSkip",
+        "file": "upd/RevalidationDeclarationStrictandSkip.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-StaticTyping",
+        "file": "upd/StaticTyping.xml",
+        "tests": 27,
+        "gated": false
+      },
+      {
+        "name": "upd-FullAxis",
+        "file": "upd/FullAxis.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "upd-RelationalDataUpdates",
+        "file": "upd/RelationalDataUpdates.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "upd-AddressBookUpdates",
+        "file": "upd/AddressBookUpdates.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-SoapUpdates",
+        "file": "upd/SoapUpdates.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-NamespacesUpdates",
+        "file": "upd/NamespacesUpdates.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "upd-PartsUpdates",
+        "file": "upd/PartsUpdates.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "upd-NilUpdates",
+        "file": "upd/NilUpdates.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples2.2.2",
+        "file": "ft/Examples2.2.2.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples2.3",
+        "file": "ft/Examples2.3.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples2.3.1",
+        "file": "ft/Examples2.3.1.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.2",
+        "file": "ft/Examples3.2.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.3",
+        "file": "ft/Examples3.3.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4",
+        "file": "ft/Examples3.4.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.1",
+        "file": "ft/Examples3.4.1.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.2",
+        "file": "ft/Examples3.4.2.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.3",
+        "file": "ft/Examples3.4.3.xml",
+        "tests": 3,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.4",
+        "file": "ft/Examples3.4.4.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.5",
+        "file": "ft/Examples3.4.5.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.6",
+        "file": "ft/Examples3.4.6.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.7",
+        "file": "ft/Examples3.4.7.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.4.8",
+        "file": "ft/Examples3.4.8.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.5.1",
+        "file": "ft/Examples3.5.1.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.5.2",
+        "file": "ft/Examples3.5.2.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.5.3",
+        "file": "ft/Examples3.5.3.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.5.4",
+        "file": "ft/Examples3.5.4.xml",
+        "tests": 3,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.6.1",
+        "file": "ft/Examples3.6.1.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.6.2",
+        "file": "ft/Examples3.6.2.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.6.3",
+        "file": "ft/Examples3.6.3.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.6.4",
+        "file": "ft/Examples3.6.4.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.6.5",
+        "file": "ft/Examples3.6.5.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-Examples3.7",
+        "file": "ft/Examples3.7.xml",
+        "tests": 1,
+        "gated": false
+      },
+      {
+        "name": "ft-ForScoreExpr",
+        "file": "ft/ForScoreExpr.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "ft-LetScoreExpr",
+        "file": "ft/LetScoreExpr.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTContains",
+        "file": "ft/FTContains.xml",
+        "tests": 17,
+        "gated": false
+      },
+      {
+        "name": "ft-FTSelection",
+        "file": "ft/FTSelection.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTWords",
+        "file": "ft/FTWords.xml",
+        "tests": 68,
+        "gated": false
+      },
+      {
+        "name": "ft-FTTimes",
+        "file": "ft/FTTimes.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "ft-FTOr",
+        "file": "ft/FTOr.xml",
+        "tests": 15,
+        "gated": false
+      },
+      {
+        "name": "ft-FTAnd",
+        "file": "ft/FTAnd.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "ft-FTUnaryNot",
+        "file": "ft/FTUnaryNot.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "ft-FTMildNot",
+        "file": "ft/FTMildNot.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "ft-MatchOptions",
+        "file": "ft/MatchOptions.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTLanguage",
+        "file": "ft/FTLanguage.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTWildcard",
+        "file": "ft/FTWildcard.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "ft-FTThesaurus",
+        "file": "ft/FTThesaurus.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-FTStemming",
+        "file": "ft/FTStemming.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTCase",
+        "file": "ft/FTCase.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-FTDiacritics",
+        "file": "ft/FTDiacritics.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTStopWord",
+        "file": "ft/FTStopWord.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "ft-ExtensionOption",
+        "file": "ft/ExtensionOption.xml",
+        "tests": 3,
+        "gated": false
+      },
+      {
+        "name": "ft-PositionalFilters",
+        "file": "ft/PositionalFilters.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "ft-FTOrder",
+        "file": "ft/FTOrder.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-FTWindow",
+        "file": "ft/FTWindow.xml",
+        "tests": 21,
+        "gated": false
+      },
+      {
+        "name": "ft-FTDistance",
+        "file": "ft/FTDistance.xml",
+        "tests": 33,
+        "gated": false
+      },
+      {
+        "name": "ft-FTScope",
+        "file": "ft/FTScope.xml",
+        "tests": 19,
+        "gated": false
+      },
+      {
+        "name": "ft-FTContent",
+        "file": "ft/FTContent.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "ft-Weight",
+        "file": "ft/Weight.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "ft-FTIgnoreOption",
+        "file": "ft/FTIgnoreOption.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTExtensionSelections",
+        "file": "ft/FTExtensionSelections.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-FTMildNotUnconstrained",
+        "file": "ft/FTMildNotUnconstrained.xml",
+        "tests": 9,
+        "gated": false
+      },
+      {
+        "name": "ft-FTUnaryNotUnconstrained",
+        "file": "ft/FTUnaryNotUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTUnitandFTBigUnit",
+        "file": "ft/FTUnitandFTBigUnit.xml",
+        "tests": 18,
+        "gated": false
+      },
+      {
+        "name": "ft-FTOrderUnconstrained",
+        "file": "ft/FTOrderUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTScopeUnconstrained",
+        "file": "ft/FTScopeUnconstrained.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "ft-FTWindowUnconstrained",
+        "file": "ft/FTWindowUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTDistanceUnconstrained",
+        "file": "ft/FTDistanceUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTTimesUnconstrained",
+        "file": "ft/FTTimesUnconstrained.xml",
+        "tests": 20,
+        "gated": false
+      },
+      {
+        "name": "ft-FTContentUnconstrained",
+        "file": "ft/FTContentUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-FTCaseUnconstrained",
+        "file": "ft/FTCaseUnconstrained.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-FTStopWordUnconstrained",
+        "file": "ft/FTStopWordUnconstrained.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "ft-FTLanguageUnconstrained",
+        "file": "ft/FTLanguageUnconstrained.xml",
+        "tests": 2,
+        "gated": false
+      },
+      {
+        "name": "ft-IgnoreUnconstrained",
+        "file": "ft/IgnoreUnconstrained.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-ScoringUnconstrained",
+        "file": "ft/ScoringUnconstrained.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "ft-NegativeWeights",
+        "file": "ft/NegativeWeights.xml",
+        "tests": 5,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-ELEMENT",
+        "file": "ft/UseCase-ELEMENT.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-ACROSS",
+        "file": "ft/UseCase-ACROSS.xml",
+        "tests": 11,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-OTHER",
+        "file": "ft/UseCase-OTHER.xml",
+        "tests": 3,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-WILDCARD",
+        "file": "ft/UseCase-WILDCARD.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-STEMMING",
+        "file": "ft/UseCase-STEMMING.xml",
+        "tests": 4,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-THESAURUS",
+        "file": "ft/UseCase-THESAURUS.xml",
+        "tests": 12,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-STOP-WORD",
+        "file": "ft/UseCase-STOP-WORD.xml",
+        "tests": 6,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-CHARACTER",
+        "file": "ft/UseCase-CHARACTER.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-LOGICAL",
+        "file": "ft/UseCase-LOGICAL.xml",
+        "tests": 14,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-CARDINALITY",
+        "file": "ft/UseCase-CARDINALITY.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-PROXIMITY",
+        "file": "ft/UseCase-PROXIMITY.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-AXES",
+        "file": "ft/UseCase-AXES.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-IGNORE",
+        "file": "ft/UseCase-IGNORE.xml",
+        "tests": 8,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-FULL-TEXT-COMPOSABILITY",
+        "file": "ft/UseCase-FULL-TEXT-COMPOSABILITY.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-XQUERY-XPATH-COMPOSABILITY",
+        "file": "ft/UseCase-XQUERY-XPATH-COMPOSABILITY.xml",
+        "tests": 10,
+        "gated": false
+      },
+      {
+        "name": "ft-UseCase-SCORE",
+        "file": "ft/UseCase-SCORE.xml",
+        "tests": 7,
+        "gated": false
+      },
+      {
+        "name": "ft-Catalog",
+        "file": "ft/Catalog.xml",
+        "tests": 3,
+        "gated": false
+      }
+    ],
+    "inputSetHashes": {
+      "tests/qt4tests/prod/AxisStep.abbr.xml": "90bacdb33712d8732434ffc99866968dfda970771fd144064c8e1ac0911da181",
+      "tests/qt4tests/op/add-dayTimeDuration-to-date.xml": "4f3d8eee04facf46148fb46e9a07a0d84b5a85b56037c221d7671166bc39e424",
+      "tests/qt4tests/array/flatten.xml": "2af545758fdd452ddfeaf208b9f1db0773c10f35859017e831ba0e8d7c749b4d",
+      "tests/qt4tests/array/head.xml": "199da519148ac088df584b9f8894ebcab773db74aa9cac86e776892eb7a83368",
+      "tests/qt4tests/array/insert-before.xml": "a7aa0f8e19cd28bac7590ecd70a0ddac09a20994fc596183aaab2bcecb3c85fb",
+      "tests/qt4tests/array/join.xml": "fa92bc48c6beb535d52932c9e4d93eef33cfbb8605ef96e13dbf2823b943f241",
+      "tests/qt4tests/array/put.xml": "f0e46c348f17812eb7b1373c3e4c444aa66b16834073dd9015474dba1ec28f1b",
+      "tests/qt4tests/array/remove.xml": "922751c246b7c69fbb2a0c16230bd8e45d2468394fa02256c0a1dac200824ae0",
+      "tests/qt4tests/array/slice.xml": "6b722119a267b13ca037d8f49feb638c45b9c1f28d5e2625c80174bc93201064",
+      "tests/qt4tests/array/sort.xml": "2e1baf86377d9948b4b26cac0783732f99d2ab26df21b033735670e9947575a1",
+      "tests/qt4tests/array/tail.xml": "69ebb445c40a16e1f91b9968f4181745330d1c8fcf535659fd429c2e6fc92a11",
+      "tests/qt4tests/fn/atomic-equal.xml": "4ba524bd60041f6aa642ac6351f321720e5d89bfca8c9a6ae0ff4a0740e629b4",
+      "tests/qt4tests/op/add-dayTimeDuration-to-time.xml": "8f51548894e7aeaf8c3169ca4954cb6100b4d0fd27300b10e353e8a0d300aa58",
+      "tests/qt4tests/op/add-yearMonthDuration-to-date.xml": "3bbf623e912bae2ab928a3f8f8a6087a1da0c9144b70e28f98c9f5257265d78b",
+      "tests/qt4tests/op/add-yearMonthDuration-to-dateTime.xml": "31b15f381100877721605acfae68a27c74140efe5820a2fa1949e35d47996478",
+      "tests/qt4tests/op/add-yearMonthDurations.xml": "f61da17575b62680eeaf0247178be72f0707ce985d761d000e198baa1b98b653",
+      "tests/qt4tests/fn/boolean.xml": "e16d25c23b86b6123f468762e3efa9f5a1eec996ebbe7ba3a1e791fc4d967833",
+      "tests/qt4tests/op/boolean-equal.xml": "886bfe9081b5929719ab5638a6624fdfa4a3d1ab042a5f5ce03509669148153e",
+      "tests/qt4tests/op/boolean-greater-than.xml": "2a29e4a5181216f9d778ad86e17f9828d0661a62bd57485a3b1d46a164afbc06",
+      "tests/qt4tests/op/boolean-less-than.xml": "f93c5a7f3c80de10b84ce7ff7177a9ece6614f31b51e906f4af4aede488ad056",
+      "tests/qt4tests/fn/codepoint-equal.xml": "193c848fb1602a30336bb24d29d9ee8060dc4671a82022e11fac484033e20a81",
+      "tests/qt4tests/fn/collection.xml": "d33269ebfd8b59f3e9edffad174744bd147120384759c78067b3e4032cbd8020",
+      "tests/qt4tests/fn/count.xml": "01151357fe8248ec4bae94daa7d7b36a4dca05f7518abc0f2fc5ce4b1771ddd6",
+      "tests/qt4tests/fn/data.xml": "9e527862c9d10bd241bcabdd0fce65dbf4ab1a2a6c401455d7fa8e5f6b356c47",
+      "tests/qt4tests/op/date-equal.xml": "15faf06d05ead234e7800ab1feaf3d25ecd9360d990396dcc20e04e16b5f2490",
+      "tests/qt4tests/op/date-greater-than.xml": "93e09d381e4782249b64e90b57b2befac1227dfb23e4a332d3e71024348b95dd",
+      "tests/qt4tests/op/date-less-than.xml": "eed5d1d835fd29db3a7d267b6ba982bb9ef1677e9af285e5b31b6581ec42851e",
+      "tests/qt4tests/op/dateTime-equal.xml": "c7c2de1df44289478e948a15f1b6a0370c5dcffbdf8594908f96389961915341",
+      "tests/qt4tests/op/dateTime-greater-than.xml": "171ba83b91d666bba549b7878abcbac981938da1f2d89fbc3f70499df5daad51",
+      "tests/qt4tests/op/dateTime-less-than.xml": "a3b9d24f6e85c2684c401c8fe4815415e04d1f704e2c6bd3693cd954b9ac2f40",
+      "tests/qt4tests/op/dayTimeDuration-greater-than.xml": "a5dd56e4a31cf0aac9624ed37c3f35ec5fa04d8fbcd4d773d4981896cf754d01",
+      "tests/qt4tests/op/dayTimeDuration-less-than.xml": "e8fdeca3203bff07906468c1c8b2f21d1d7cf13413b3e24198eb5774295745f7",
+      "tests/qt4tests/fn/empty.xml": "57f24b3616780a18143c9cfabfa914db10b1be9207494da0bc769952d8894ccf",
+      "tests/qt4tests/fn/exactly-one.xml": "6f72b25ee6ef734aaec0dbc165f5ef07301edea171435468f49451fb738d6bc5",
+      "tests/qt4tests/fn/exists.xml": "0edcd5c16bdf0b2836054174c76607909bc9e341c1b2fd95933fd5f2f7fb1255",
+      "tests/qt4tests/fn/lang.xml": "2d60d0287a25cbe50091582466782a121686699cd0392ad5725e388cf8f43bd3",
+      "tests/qt4tests/fn/resolve-QName.xml": "5e95e3bbd82bb23ebf7af4e931bf6f4749f6aae5b01e28a6872243ac7ca2cb63",
+      "tests/qt4tests/fn/unordered.xml": "82436bf2d92f0f29728de2f14e30914e5c130ca7f744a707744d30f0149697e3",
+      "tests/qt4tests/op/gDay-equal.xml": "7c74f3f76fb8edb25f1f0bd546912a56dfa49b5fb3f7f6ed728f77295ee672d4",
+      "tests/qt4tests/op/gMonth-equal.xml": "994396a4a9b07757e659e724388f35766f411f436e440fc069fb691ea2a0fcbd",
+      "tests/qt4tests/op/gMonthDay-equal.xml": "dabcc15183a25e67d6dbd36f3bc058d739612a288e8fbc3a07d89524096fc30b",
+      "tests/qt4tests/op/gYear-equal.xml": "4c9916434334cd5ca9294189ae1bccc02fdb5be59c1361be79a3f4d71dce1178",
+      "tests/qt4tests/op/gYearMonth-equal.xml": "ab6a7daa4fd09b447e90db741f72bf2c1e37268427b89c18b8602e83aa18c59e",
+      "tests/qt4tests/fn/id.xml": "729c0ba6646c08a20109783bab67f13b15f4771875677d29335ab68d80f8251f",
+      "tests/qt4tests/fn/idref.xml": "b73b66fcbf5edd1b81499e62684b52808df715afb094574d0a528849d1473b86",
+      "tests/qt4tests/fn/last.xml": "a0de0c3bf31184cde114a1ddbe5a9ad773858f1d424caf720986f618bb6c4e23",
+      "tests/qt4tests/prod/OrExpr.xml": "396b8f9c777217962249028c86d94d180299b78ce70bea90d8fd2caaa04ab761",
+      "tests/qt4tests/op/subtract-dayTimeDurations.xml": "7ce38b8c97af7402bb27b59185a7380ebfa4b8b66f68705371ef3c7c8520f4ec",
+      "tests/qt4tests/fn/namespace-uri-for-prefix.xml": "15e09648df332461f2ce8df75b8ec6da152c58e1b823fb9fcbdd5f64a89037ae",
+      "tests/qt4tests/xs/normalizedString.xml": "23765d04db65e9d30513945fce2eb6297132f2f102acb0aa048435dabc3d5eba",
+      "tests/qt4tests/fn/not.xml": "cd3d360d257a4cca545b80f4f8791db4a164ea21004f8fae76b334fb21060204",
+      "tests/qt4tests/prod/DirElemContent.xml": "16f89b31daf6c35ca498167c8b599ae01961d6de3bf28d126e9869574263f317",
+      "tests/qt4tests/op/numeric-equal.xml": "a337fa79f32a97a43e7a821ec98194d582826abb2da7536963ff384da788cc83",
+      "tests/qt4tests/op/numeric-greater-than.xml": "6e33962551434762ca911326d9d3da5703a5dd2eec84e1b47eb3f7a23fec58e9",
+      "tests/qt4tests/op/numeric-integer-divide.xml": "d7b6ad1efef36b969ec1d790fd4dfd131ad9448a10b9c09f93fbc7a6dbeaf5a3",
+      "tests/qt4tests/op/numeric-less-than.xml": "31f1641cdcedaf0e3132151987ba791b5c387145f107ab2f932c1f519261d126",
+      "tests/qt4tests/op/numeric-mod.xml": "26ecb13e89506d80e4907264148f830e9cb3776b6ae5252b9527ef52ab4be141",
+      "tests/qt4tests/op/numeric-unary-plus.xml": "e2e7f9708cb1f0976f0efebef77062f234ebc3ad65da2099f48dce587953c955",
+      "tests/qt4tests/fn/one-or-more.xml": "803a9d06923169002b677dda5e0ebc4315dece9e891cdd2e30ae1dfe3f67078e",
+      "tests/qt4tests/op/subtract-dayTimeDuration-from-date.xml": "bae6a21d1f192243fd68537f2c79825cbdc45d10a5fa4045673631a38e135fd4",
+      "tests/qt4tests/op/subtract-dayTimeDuration-from-dateTime.xml": "3cc9c9edf1141085d8106ed89829bf094dd7a5e8c382ec676c3eafb94336e488",
+      "tests/qt4tests/op/subtract-dayTimeDuration-from-time.xml": "2f747320da2eabde80c97b6212137702efd9ef36253f6db33c1c04df17d18329",
+      "tests/qt4tests/op/subtract-yearMonthDuration-from-date.xml": "c4943c07a74d6ef6b59900811686aaabac2cdbe1d3fc4ac1c93a0213e83ef2f0",
+      "tests/qt4tests/op/subtract-yearMonthDuration-from-dateTime.xml": "92a6dd9a3c44fec7156290ffb03eb8498d42ec77f25859c2f2eb4a0542c43c97",
+      "tests/qt4tests/op/subtract-yearMonthDurations.xml": "20d4949fe2f428203c0ac8339fb19e2fb44651808325cd36c97871e88b813aa4",
+      "tests/qt4tests/op/time-equal.xml": "6d3f5184aab48aff4caf9f5068a861323642ef54c846a9c43751bccd5e4a6dfc",
+      "tests/qt4tests/op/time-greater-than.xml": "fd6020faeb4ba0446b5cfdec5701b2ec622e5b8ba9734f2f50fdba9cc6dcd726",
+      "tests/qt4tests/op/time-less-than.xml": "18f95fcdd44309d2787a47d32a7fe511318628d34c19bbbc1baa016737157fb8",
+      "tests/qt4tests/fn/timezone-from-date.xml": "feccbed4a0c6e123324680a22f0c0cbee99e7e1c9c0be38a0bc5edd49dacf0f9",
+      "tests/qt4tests/xs/token.xml": "d4853fc75feb93ad8bd19a98ca7c95b2b9b7fecdb23e3f3fd3898cf8544babaf",
+      "tests/qt4tests/prod/TreatExpr.xml": "f7e69e32b78e1cf4c66d7d48f7649bf49cbf4387fe4d9455b7a31780dd4918fa",
+      "tests/qt4tests/op/yearMonthDuration-greater-than.xml": "1e64f442561ea6867627cf717f276d513ebcb527f859cac92b43252800562e0c",
+      "tests/qt4tests/op/yearMonthDuration-less-than.xml": "f8af2a3447f41c74cfd7eb7da9167a54107e92473903ca725401f65907705426",
+      "tests/qt4tests/fn/zero-or-one.xml": "7b621d8ad66a1af794e9116fd43696db0469d82450246442f888ba257b020cf7",
+      "tests/qt4tests/fn/characters.xml": "93ee9d0449999cd2dc8e6f6157a71dc1d6c00f60f62098ac78f3ff903d201583",
+      "tests/qt4tests/fn/compare.xml": "83cc37c3ac171bc5e83cad51be0c4385fa9098998da1c9ec765c8a31828cfb6b",
+      "tests/qt4tests/prod/IfExpr.xml": "cc2be839fcc8b4e05b3f7e6e1e8517c4c26a6d6bea5602a6771d76dfe3f2b15d",
+      "tests/qt4tests/prod/DirectConstructor.xml": "7a1d6c10df92acd9d71fd9da75f7cbac82b39822bd57cce4d652590e06c712d6",
+      "tests/qt4tests/fn/contains-subsequence.xml": "1f6eb6979aaa7f4c38058f83f92635b4c1c92f9c9da6e13a6e4e8610ee7cd26d",
+      "tests/qt4tests/fn/csv-to-xml.xml": "c5b413f365f064e9c6b98b9192d3f887cc86c38c526d3cc58f2847c965ab3d99",
+      "tests/qt4tests/prod/CurlyArrayConstructor.xml": "8aed4a57bb1a1387cf5139a0c28746d67ac9ceb0b52f0fc2c2c4520c748a91a8",
+      "tests/qt4tests/fn/default-language.xml": "29317e424bd9c37f4e64ad3119da6d7792ef6f0f375327868e14ef8eed8cdcc1",
+      "tests/qt4tests/fn/element-to-map.xml": "22e78c49240f48e42eec67525b594703f3d2e0bc3621de0f4603765d1bb46f2b",
+      "tests/qt4tests/fn/element-to-map-plan.xml": "c484822fd0651cc33478b39d8f9c4f0ccb2282389bd16d41058e39e2aad72aca",
+      "tests/qt4tests/fn/QName.xml": "44a36c831aad55a1399e4aa9bf5d88d4ac3a11df62926ec718cca07b985d16ef",
+      "tests/qt4tests/prod/ContextItemExpr.xml": "9be73b9af53fdb8072b952b3b6717cc867a514cadbd31a66e14c4bd06de88a9d",
+      "tests/qt4tests/fn/abs.xml": "114e942f93ed3c52d886765d05838d9baf16b5b4f4ba2a7e0029a0ca7e73eb43",
+      "tests/qt4tests/fn/available-environment-variables.xml": "888eea156199f9f7048c571ccb8ba369621efad084ede1f5c565b8437bc70fad",
+      "tests/qt4tests/fn/ceiling.xml": "0050164999b83907977496ce07316fe20aa93406f5202ecc2ad9422bbb8dd610",
+      "tests/qt4tests/fn/contains-token.xml": "b394526a1cb15ada4ebac7b2440746ba64498b6b3155fdcb904f2eafb5be2274",
+      "tests/qt4tests/fn/ends-with.xml": "1d54727ac9c2660feef31dc3e513b26dbd7ee509d4bfec8811be442b5c9ade0d",
+      "tests/qt4tests/fn/function-arity.xml": "d3f165c15009fb5a4e504fcd4a75ef5d32702d8fe1bc197dce4ad8f6e0ce996d",
+      "tests/qt4tests/fn/in-scope-prefixes.xml": "7223bce4176466c52d291af4b9f819db39fe6b76bcd200e6dd2c4464ad032354",
+      "tests/qt4tests/fn/iri-to-uri.xml": "4a67ced774feb9e444bde3a97a19adf2744114ff2c7c432b8c1fc419ebb5e77b",
+      "tests/qt4tests/fn/lower-case.xml": "2166a520f3798d4cb1f5cc62bccf6c61cf5ade72fd1f7d7dc8451c64cbf8fd29",
+      "tests/qt4tests/fn/op.xml": "89e2b63453b46c51492bb08503e0f676e6e105605012ca79be974dbe963b7122",
+      "tests/qt4tests/fn/sort.xml": "bae7d850fa7611754f12e7920d5da837b6cc53c1b284ecac7c84d3c0f128b014",
+      "tests/qt4tests/fn/static-base-uri.xml": "8c612a04d6b0b74e1c4694c10f7c53f3c98fb124a962dd9f060c038218e4b4fe",
+      "tests/qt4tests/fn/upper-case.xml": "63b39a80cdaee6b9f682da04c90758ae62c276ebab00f211e85b8846ff1366bb",
+      "tests/qt4tests/app/FunctxFn.xml": "8204c8a09e9238d48b4c8f015424acd3cafaa733a59410bcb4e37c2c095b99b7",
+      "tests/qt4tests/prod/GeneralComp.ne.xml": "45813c00503227991e485c9723a12797488f4cc9813e1346e25dfd2dd01956b6",
+      "tests/qt4tests/prod/GeneralComp.lt.xml": "1928064a97aec13d5762fd6ed479bd5cd9a682d68cb56f19f2e5f1c9f938fa63",
+      "tests/qt4tests/prod/GeneralComp.le.xml": "4be8591570f530ad2bec4202505ceabfe3e81dbb7f7df48afde60abd1a295c7c",
+      "tests/qt4tests/prod/GeneralComp.ge.xml": "cc1deae4d6f5e1c4d750683dea63cfbdbdc2a629ec40a52aa55b798a3306b7b0",
+      "tests/qt4tests/op/hexBinary-greater-than.xml": "42a62aaceb6c7726a81da006df4e80f028377034c0a521d84cd96b43dbfd2ad9",
+      "tests/qt4tests/op/hexBinary-less-than.xml": "c3cc63a8dad2338e9c4d01492116f8153221ea88a52cc6e69b4c2c99a0632efc",
+      "tests/qt4tests/fn/identity.xml": "270d0e6a77832eed08488665ef0d4986b051b9bf36beda40e8349de2b79f56b0",
+      "tests/qt4tests/fn/index-of-substring.xml": "61d3dacbdbae31a6cbb66194dc84f729eb52d13357ad4f9d886379f87d50c596",
+      "tests/qt4tests/fn/insert-separator.xml": "bae330d0109bea3d664147d46c7420f68d1702bd7482ad05b0cd18974523c867",
+      "tests/qt4tests/prod/LetClause.xml": "e334db200913ab16f51326bf26021fc5f2414616c91366ba743454c5d057e0f0",
+      "tests/qt4tests/fn/trace.xml": "005706e8d8c07bb65445bd0e85af337395571ee4e77fe1d33ab0e2c9755485d6",
+      "tests/qt4tests/fn/namespace-uri-from-QName.xml": "e579903dc55f4d3ba683161900cd25cc35ec213b831cad0250777597ee6384e0",
+      "tests/qt4tests/prod/NameTest.xml": "4df0faf3cf8f7341ba92922c494d9645aee4e287db5afaca02430cb3821ba644",
+      "tests/qt4tests/fn/reverse.xml": "6f679b51c80d23a74bebb91cca0f194d1c702b18991cbb9a121a8464c62b9539",
+      "tests/qt4tests/op/string-equal.xml": "c34f3f4fe3954cb0dabb595b75b7dd8f5738e52be796feb5dd268d7de5bf7507",
+      "tests/qt4tests/prod/Comment.xml": "3af4ffe8765555bf923492df0cc3aef3cdc08580123e7b36abb8f540655e3f0b",
+      "tests/qt4tests/misc/XMLEdition.xml": "82f7966c36c9b1b035dab258f8f9f9a71b0e4a82a849e1136c722ace6146af3d",
+      "tests/qt4tests/fn/local-name-from-QName.xml": "f257a007979f747b34a77ed4fa7746eb2224ecd7f2ac502233bd93d1e7221b66",
+      "tests/qt4tests/fn/map-to-element.xml": "618d1654be15cb0e461412bc666f21d8f1a65881bba7d2527291b8cd3e637601",
+      "tests/qt4tests/prod/ParenthesizedExpr.xml": "5526db69c1ff8b184b89e20f1d45ade42845258c0e67f206a8aa6cecb9dbdd59",
+      "tests/qt4tests/fn/partition.xml": "12318f9b7d58cef94fcc29a7d17155865ae993cda70826b7779a47e9e125a7f9",
+      "tests/qt4tests/fn/replicate.xml": "b358d6fb64707ab73d760b70508821fa15420fe3005731ce1c95315579be7517",
+      "tests/qt4tests/prod/ReturnClause.xml": "384d876a4bd4951d679e6ccb3d889a3e567dc9af7cdf1494331969583a6d32a3",
+      "tests/qt4tests/app/UseCaseSEQ.xml": "7320db4f97cefb4e498b042204c64d8d457db1c3ce55b7b6e4d20fefa0e19e8c",
+      "tests/qt4tests/prod/SquareArrayConstructor.xml": "eca98b522fd01c345cc5d0b396893bff34b6c0d1571a6906e1598afd98cb3091",
+      "tests/qt4tests/app/UseCaseSTRING.xml": "7e370bc62118ecf73945f1bc5296300f88a999c38877d1a05517d352dca36e1d",
+      "tests/qt4tests/prod/StringTemplate.xml": "91ed568017e15f0db7d72305f75a27954a551761e360e8f6204357f9c929ab61",
+      "tests/qt4tests/misc/Surrogates.xml": "cfc9ca0dcea8d91b17b2962706d0d74d7e4138a379d70874246370a3a0d49c57",
+      "tests/qt4tests/fn/tail.xml": "87a63e346cb6ce850f41c2f05a6173d4a5462a3c8f4f6c89a8ba6b91ca0ca1c7",
+      "tests/qt4tests/fn/take-while.xml": "08e43d6cd39241f9c44266ffa19f178b68fecf36a7f8001597b521493e170ce3",
+      "tests/qt4tests/fn/trunk.xml": "485e74957605b26c072cb7b2341a7b301784b462ba69d101be408f8ac6d62aad",
+      "tests/qt4tests/app/UseCaseJSON.xml": "545969d1d78c77aa5d6fbe1009b5373c62a53e8dcdb679bb8ab54f9053f628ee",
+      "tests/qt4tests/app/UseCaseNLP.xml": "aef64fe106bf14375c3b9789f560d4b74d8f574c0b1c4681363f04c64e1a1138",
+      "tests/qt4tests/xs/anySimpleType.xml": "5387170de02d7d45362b80761efb615a50050466505b3ccb13492e8a7533ff61",
+      "tests/qt4tests/xs/numeric.xml": "062998212c4f2df64aaff477a124e8f3a220ab306f7b8491ea335a04ad1ce0e8"
+    }
+  }
+}

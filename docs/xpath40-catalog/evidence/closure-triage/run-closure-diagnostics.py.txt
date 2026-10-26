@@ -1,0 +1,17 @@
+from pathlib import Path
+import json,subprocess,time
+r=Path('D:/Development/Bosak');e=r/'docs/xpath40-catalog/evidence/closure-triage';p=r/'.guard-tmp/closure-reflection/bin/Release/net10.0/Probe.dll';rows=json.loads((e/'diagnostic-selection.json').read_text());receipts=json.loads((e/'diagnostic-receipts.json').read_text()) if (e/'diagnostic-receipts.json').exists() else []
+for row in rows:
+ if any(x['suite']==row['Suite'] and x['name']==row['Name'] for x in receipts):continue
+ name=row['Suite']+'-'+row['Name'];request=e/(name+'-request.json');request.write_text(json.dumps(dict(Suite=row['Suite'],SuiteRoot=row['SuiteRoot'],SetFile=str(r/row['SetFile']),Name=row['Name']),indent=2)+'\n',encoding='utf-8');command=['dotnet',str(p),'probe',str(request)];start=time.monotonic()
+ with (e/(name+'-probe.log')).open('wb') as f:
+  try:proc=subprocess.run(command,cwd=r,stdout=f,stderr=subprocess.STDOUT,timeout=20);receipt=dict(exitCode=proc.returncode,timeout=False)
+  except subprocess.TimeoutExpired:receipt=dict(exitCode=None,timeout=True)
+ text=(e/(name+'-probe.log')).read_text(encoding='utf-8');result=None
+ if receipt['exitCode']==0:
+  try:result=json.loads(text.strip().splitlines()[-1])
+  except (ValueError,IndexError):pass
+ receipt.update(suite=row['Suite'],name=row['Name'],command=command,watchdogSeconds=20,wallSeconds=time.monotonic()-start,result=result,originalSkipReason=row['SkipReason']);receipts.append(receipt)
+ print(json.dumps(dict(name=name,exitCode=receipt['exitCode'],timeout=receipt['timeout'],result=result)),flush=True)
+ (e/'diagnostic-receipts.json').write_text(json.dumps(receipts,indent=2)+'\n',encoding='utf-8')
+print('Bounded diagnostic executions retained; no filters, fixtures or gate counts changed.')
