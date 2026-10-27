@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "6b8eefbce180c2ae34415e9bfefe0b867c9b0752",
+  "revision": "W3C XQuery 3.1 Recommendation 21 March 2017",
+  "specifications": [
+    "https://www.w3.org/TR/2017/REC-xquery-31-20170321/#id-schema-import"
+  ],
+  "scope": "K02-C02: supply file source URI to XmlReader for FileStream returned by schema resolver and existing file-location fallback. Do not infer identity from query base URI or unused hints for non-file resolver streams. Existing resolver/network/DTD policies unchanged. No public API, harness, skip, baseline or XSD1.1 backend changes.",
+  "schemaOwner": "Bosak.Schema REQ-009; future compiled-model seam remains separately governed."
+}

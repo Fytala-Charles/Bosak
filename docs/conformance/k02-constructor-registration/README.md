@@ -1,5 +1,9 @@
 # K02-C01: imported constructor registration — 27 October 2026
 
+**K02-C02 relative schema imports — 27 October 2026:** [File-backed source URI correction](../k02-relative-schema-uri/README.md) fixes the four remaining guarded regressions. All 324 eligible original cases now pass in guarded diagnostics; 17 declined-boundary cases remain unchanged. All 21,842 solution tests and both required gates pass: QT3 31,144/0/677 (all 677 skip names/reasons unchanged), qt4 8,436/0/1,894. Guarded loading stays default-off; admission/baseline review is separate. Candidate 1.26.8 is unpublished/public 1.26.3. Bosak.Schema REQ-009 owns XSD 1.1; this slice adds no public API or backend. REQ-126 remains Complete. Earlier failure counts are historical evidence.
+
+
+
 **K02-C01 is complete.** Imported schema simple-type constructor functions are now registered on the first evaluation of a fresh XQuery context. All **68 constructor-registration regressions** from the wider audit pass. The four relative-import failures remain assigned to K02-C02; guarded schema loading stays default-off.
 
 ## Change and boundary

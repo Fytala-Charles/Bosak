@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k02-c02-render/README.md.html",
+      "sha256": "75e4159b23a038beb37e2e43e9504c130b56d3fe540127a3169c7ce036b329e2"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k02-c02-render/docs_ARCHITECTURE.md.html",
+      "sha256": "d58a267593b4996543b35a4feaf698fa420e0247478504f87c48540d0d07d340"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k02-c02-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "d0a7572a2822b99e6c7a52ac480dfc4419c74c856e4b17730fb1fc56e9e2c971"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k02-c02-render/docs_INTEGRATION.md.html",
+      "sha256": "e9a889cfca84823c942460f40494fdcfaa5a83c96bec1ca72b698d95da7fef9a"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k02-c02-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "7e557731dce0be313f93cadb767a070dd2e2bd0568e1c6f4d9f07a963f241093"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k02-c02-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "67743e08187961c8ef46f52ca864bdc209724d9d6042b851171817f0150b5450"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k02-c02-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "d5e1fe474404cec493a49736ba8ce248623169addeeb2576fc13c378c1fc0c2e"
+    },
+    {
+      "source": "docs/conformance/k02-schema-inventory/README.md",
+      "html": ".guard-tmp/k02-c02-render/docs_conformance_k02-schema-inventory_README.md.html",
+      "sha256": "a187c81adc781721daf903e18a3dc527fade5c8fee81898a5d93d499f39845cc"
+    },
+    {
+      "source": "docs/conformance/k02-constructor-registration/README.md",
+      "html": ".guard-tmp/k02-c02-render/docs_conformance_k02-constructor-registration_README.md.html",
+      "sha256": "8cb832ee4218707b17262148187dddb9b1c449685b12f74a822f8b68ef0ef6f9"
+    },
+    {
+      "source": "docs/conformance/k02-schema-loader/README.md",
+      "html": ".guard-tmp/k02-c02-render/docs_conformance_k02-schema-loader_README.md.html",
+      "sha256": "776c2958198f81824a29e128e18156935cf95c1fd15559914bd656dbc44ccff1"
+    },
+    {
+      "source": "docs/conformance/k02-relative-schema-uri/README.md",
+      "html": ".guard-tmp/k02-c02-render/docs_conformance_k02-relative-schema-uri_README.md.html",
+      "sha256": "5936fdfac42b809bd3af0d598b33d3546f31e3c478952449881ce110dca1fde2"
+    }
+  ]
+}

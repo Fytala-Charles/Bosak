@@ -52,6 +52,7 @@
 //                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |
 //                      | Charles Korthout | 2.12  | 27-10-2026     | Expose main-module schema imports internally for guarded conformance diagnostics.         |
 //                      | Charles Korthout | 2.13  | 27-10-2026     | Register imported schema constructors on first evaluation (1.26.7).                    |
+//                      | Charles Korthout | 2.14  | 27-10-2026     | Preserve file-backed schema source URIs for relative imports (1.26.8).                 |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -294,7 +295,15 @@ public sealed class XQueryExecutable
 
             using (stream)
             {
-                using var reader = System.Xml.XmlReader.Create(stream);
+                // A file-backed resolver result identifies the schema document, independently
+                // of query base URI or location hints the resolver did not select. Other
+                // stream implementations retain the existing identity-free behavior.
+                if (stream is FileStream fileStream && Path.IsPathFullyQualified(fileStream.Name))
+                    resolvedLocation = fileStream.Name;
+                string schemaBaseUri = resolvedLocation is null
+                    ? string.Empty
+                    : new Uri(Path.GetFullPath(resolvedLocation)).AbsoluteUri;
+                using var reader = System.Xml.XmlReader.Create(stream, null, schemaBaseUri);
                 var schema = XmlSchema.Read(reader, null);
                 if (schema is null)
                     throw new InvalidOperationException($"XQST0059: Unable to read schema for namespace '{targetNs}'.");
