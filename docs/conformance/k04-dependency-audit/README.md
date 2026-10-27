@@ -1,5 +1,9 @@
 # K04: dependency and routing applicability audit — 27 October 2026
 
+**K04-C01 quote-routing proposal — 27 October 2026:** [Exact adoption review](../k04-quote-routing/BASELINE-UPDATE-PROPOSAL.md) verifies all16 original candidate assertions in an isolated corrected harness. Full rehearsal passes31,161/0/660, with exactly those16 skips removed and all660 retained names/reasons unchanged. Eleven boundary cases and13 lexical controls preserve broader guards. Normal source/baseline stays31,145/0/676 pending owner approval; no tracked engine/harness/filter change. Candidate1.26.11 unpublished/public1.26.3;22,007 solution passes and qt4 8,437/0/1,893 are inherited unchanged-engine evidence. Bosak.Schema XSD1.1 ownership and REQ-126 Complete are unchanged.
+
+
+
 **The initial K04 audit is complete; implementation and policy follow-ups remain open.** All **2,512 dependency skips** are reproduced through the actual current filters: **619 QT3** and **1,893 gated qt4**. No engine, harness, assertion or admission policy changes in this slice.
 
 ## What the skips mean

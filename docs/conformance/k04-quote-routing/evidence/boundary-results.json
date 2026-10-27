@@ -1,0 +1,486 @@
+[
+  {
+    "name": "contextDecl-028",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-028.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1858969999884721,
+    "log": "boundary-contextDecl-028-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-028",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-028.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18530569999711588,
+    "log": "boundary-contextDecl-028-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-028",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-018",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-018.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18586430000141263,
+    "log": "boundary-contextDecl-018-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-018",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-018.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1783045000047423,
+    "log": "boundary-contextDecl-018-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-018",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-032",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-032.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18847470000036992,
+    "log": "boundary-contextDecl-032-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-032",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-032.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18869090001680888,
+    "log": "boundary-contextDecl-032-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-019",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-019.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20745590000296943,
+    "log": "boundary-contextDecl-019-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-019",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-019.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19312290000380017,
+    "log": "boundary-contextDecl-019-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-019",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-022",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-022.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1965734999976121,
+    "log": "boundary-contextDecl-022-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-022",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-022.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.17975519999163225,
+    "log": "boundary-contextDecl-022-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-022",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-020",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-020.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23958339999080636,
+    "log": "boundary-contextDecl-020-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-020",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-020.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24421899998560548,
+    "log": "boundary-contextDecl-020-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-020",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-021",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-021.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1879270999925211,
+    "log": "boundary-contextDecl-021-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-021",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\contextDecl-021.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.177614199987147,
+    "log": "boundary-contextDecl-021-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-021",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Axes102",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Axes102.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18630870000924915,
+    "log": "boundary-Axes102-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Axes102",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Axes102",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\Axes102.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18856609999784268,
+    "log": "boundary-Axes102-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Axes102",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-CopyNamespacesProlog-3.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1972824000113178,
+    "log": "boundary-K-CopyNamespacesProlog-3-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-CopyNamespacesProlog-3.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18243519999668933,
+    "log": "boundary-K-CopyNamespacesProlog-3-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-CopyNamespacesProlog-5.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1914909000042826,
+    "log": "boundary-K-CopyNamespacesProlog-5-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-CopyNamespacesProlog-5.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.18456250001327135,
+    "log": "boundary-K-CopyNamespacesProlog-5-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4a",
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-ExtensionExpression-4a.json",
+      "current"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19996590001392178,
+    "log": "boundary-K-ExtensionExpression-4a-current.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  },
+  {
+    "name": "K-ExtensionExpression-4a",
+    "mode": "prototype",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-quote-driver/bin/Release/net10.0/Probe.dll",
+      "actual",
+      ".guard-tmp\\k04-quote-driver\\requests\\K-ExtensionExpression-4a.json",
+      "prototype"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1908681000059005,
+    "log": "boundary-K-ExtensionExpression-4a-prototype.log",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-ExtensionExpression-4a",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 1: XPST0003: QName literals (#) require XPath 4.0."
+    }
+  }
+]
