@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-27",
+  "decisionId": "K04-CB-calendar-adoption-v1",
+  "proposalRevision": "6df9a58bb382c22931d5998a728cf41db424f28b",
+  "answer": "Approve exact two-case CB adoption (Recommended)",
+  "scope": "Apply exact three-file patch, synchronize documentation, fresh normal gates and exploratory checks; no release",
+  "releaseApproved": false
+}

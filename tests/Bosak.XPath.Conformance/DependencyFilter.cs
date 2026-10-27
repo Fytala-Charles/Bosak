@@ -33,6 +33,7 @@
 //                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
 //                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
 //                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+//                      | Charles Korthout | 0.18  | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -106,6 +107,15 @@ internal sealed class DependencyFilter
 
         foreach (var dep in dependencies)
         {
+            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+            // Other calendar names retain their existing admission policy.
+            if (dep.Type == "calendar" && dep.Value == "CB")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
             // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
             // Keep other sequence names and dependency kinds under their existing policy.
             if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")

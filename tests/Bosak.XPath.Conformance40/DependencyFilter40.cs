@@ -20,6 +20,7 @@
 //                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
 //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
 //                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+//                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -102,6 +103,15 @@ internal sealed class DependencyFilter40
     {
         foreach (var dep in dependencies)
         {
+            // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+            // Other calendar names retain their existing admission policy.
+            if (dep.Type == "calendar" && dep.Value == "CB")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
             // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
             // Keep other sequence names and dependency kinds under their existing policy.
             if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
