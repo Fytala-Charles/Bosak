@@ -21,6 +21,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 18-10-2026     | Guard absent fallback layout and preserve FOJS0008 classification.                     |
 //                      | Charles Korthout | 0.5   | 27-10-2026     | Validate scalar XML NCName ranges and reject malformed UTF-16 (1.26.9).                |
+//                      | Charles Korthout | 0.6 | 27-10-2026     | Encode map element/attribute/prefix names without changing logical values. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -1187,7 +1188,7 @@ internal static class ElementMap
         {
             throw new InvalidOperationException("FOJS0009: xml layout value must be well-formed XML with a single element");
         }
-        return new XElement(el);   // fresh copy
+        return XDocumentProvider.CloneEncodedElement(el);   // fresh encoded-name copy
     }
 
     /// <summary>Builds parentless elements from map content.</summary>
@@ -1201,7 +1202,8 @@ internal static class ElementMap
 
         public XElement CreateElement(ParsedName name)
         {
-            var el = new XElement(XName.Get(name.Local, name.Uri));
+            var el = new XElement(XName.Get(Xml11NameCodec.EncodeName(name.Local), name.Uri));
+            el.AddAnnotation(Xml11Annotation.Instance);
             if (name.Uri.Length > 0)
             {
                 if (name.Prefix.Length > 0)
@@ -1219,7 +1221,7 @@ internal static class ElementMap
                 if (prefix.Length == 0)
                     root.SetAttributeValue("xmlns", uri);
                 else
-                    root.SetAttributeValue(XNamespace.Xmlns + prefix, uri);
+                    root.SetAttributeValue(XNamespace.Xmlns + Xml11NameCodec.EncodeName(prefix), uri);
             }
         }
 
@@ -1397,7 +1399,7 @@ internal static class ElementMap
             if (v.Kind == XdmValueKind.QName)
                 throw new InvalidOperationException("FOJS0009: attribute values cannot be QNames");
             // A plan type 'skip' leaves the lexical value untouched (map-to-element-137).
-            el.SetAttributeValue(XName.Get(parsed.Local, parsed.Uri), LexicalOf(v));
+            el.SetAttributeValue(XName.Get(Xml11NameCodec.EncodeName(parsed.Local), parsed.Uri), LexicalOf(v));
         }
 
         private void AddChildElement(XElement parent, string key, XdmValue v)

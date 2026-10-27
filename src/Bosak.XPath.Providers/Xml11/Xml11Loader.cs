@@ -26,6 +26,7 @@
 //                      | Charles Korthout | 0.9   | 17-09-2026     | Split unparsed-entity extraction into a shared XmlDocument-based helper;                 |
 //                      |                  |       |                | AttachUnparsedEntitiesFromDoctype lets the streaming provider annotate its shell         |
 //                      |                  |       |                | document from captured DOCTYPE components (sf-unparsed-entity-01..08)                    |
+//                      | Charles Korthout | 0.10 | 27-10-2026     | Use existing reader reference decoding; preserve literal sentinel values. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -110,7 +111,7 @@ public static class Xml11Loader
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
-            FinalizeXml11Document(doc);
+            RestoreNamespaceUndeclarations(doc);
         }
         return doc;
     }
@@ -136,7 +137,7 @@ public static class Xml11Loader
         if (isXml11)
         {
             doc.AddAnnotation(Xml11Annotation.Instance);
-            FinalizeXml11Document(doc);
+            RestoreNamespaceUndeclarations(doc);
         }
         return doc;
     }
@@ -160,7 +161,7 @@ public static class Xml11Loader
         AnnotateOriginalPrefixes(doc, rewritten, baseUri ?? "");
         NormalizeXmlIdValues(doc);
         doc.AddAnnotation(Xml11Annotation.Instance);
-        FinalizeXml11Document(doc);
+        RestoreNamespaceUndeclarations(doc);
         return doc;
     }
 
@@ -722,7 +723,7 @@ public static class Xml11Loader
                             }
                             else
                             {
-                                EncodeInvalidReferencesInRange(text, valStart, i - valStart, sb);
+                                sb.Append(text, valStart, i - valStart);
                             }
                             if (i < text.Length)
                             {
@@ -739,26 +740,10 @@ public static class Xml11Loader
             }
             else
             {
-                // Text content: copy through to the next '<', encoding XML 1.1 character
-                // references that are not valid in XML 1.0 (for example C0/C1 controls).
+                // The reader's existing CheckCharacters=false setting materializes numeric
+                // references directly. Literal values must never pass through the name codec.
                 int textStart = i;
-                while (i < text.Length && text[i] != '<')
-                {
-                    if (text[i] == '&' && TryParseCharacterReference(text, i, out var cp, out var refEnd))
-                    {
-                        if (Xml11NameCodec.IsInvalidXml10Char(cp))
-                        {
-                            sb.Append(text, textStart, i - textStart);
-                            sb.Append(EncodeInvalidCharacterReference(cp));
-                            textStart = refEnd;
-                        }
-                        i = refEnd;
-                    }
-                    else
-                    {
-                        i++;
-                    }
-                }
+                while (i < text.Length && text[i] != '<') i++;
                 sb.Append(text, textStart, i - textStart);
             }
         }
@@ -770,108 +755,6 @@ public static class Xml11Loader
     {
         return c == ' ' || c == '\t' || c == '\n' || c == '\r' || c == '>' || c == '/' || c == '=';
     }
-
-    private static void FinalizeXml11Document(XDocument document)
-    {
-        RestoreNamespaceUndeclarations(document);
-        DecodeTextValues(document);
-    }
-
-    /// <summary>
-    /// Restores sentinel-encoded XML 1.1 control characters in text, attribute,
-    /// comment, and processing-instruction values after parsing.
-    /// </summary>
-    private static void DecodeTextValues(XDocument document)
-    {
-        foreach (var element in document.Descendants().ToList())
-        {
-            foreach (var attr in element.Attributes().ToList())
-            {
-                if (!attr.IsNamespaceDeclaration)
-                    attr.Value = Xml11NameCodec.DecodeValue(attr.Value);
-            }
-
-            foreach (var node in element.Nodes().ToList())
-            {
-                switch (node)
-                {
-                    case XText text:
-                        text.Value = Xml11NameCodec.DecodeValue(text.Value);
-                        break;
-                    case XComment comment:
-                        comment.Value = Xml11NameCodec.DecodeValue(comment.Value);
-                        break;
-                    case XProcessingInstruction pi:
-                        pi.Data = Xml11NameCodec.DecodeValue(pi.Data);
-                        break;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Replaces placeholder namespace-declaration values introduced for XML 1.1
-    /// prefixed undeclarations with <see cref="PrefixedNamespaceUndeclarations"/>
-    /// annotations on the owning element.
-    /// </summary>
-    private static void EncodeInvalidReferencesInRange(string text, int start, int length, StringBuilder sb)
-    {
-        int i = start;
-        int end = start + length;
-        int literalStart = start;
-        while (i < end)
-        {
-            if (text[i] == '&' && TryParseCharacterReference(text, i, out var cp, out var refEnd))
-            {
-                if (Xml11NameCodec.IsInvalidXml10Char(cp))
-                {
-                    sb.Append(text, literalStart, i - literalStart);
-                    sb.Append(EncodeInvalidCharacterReference(cp));
-                    literalStart = refEnd;
-                }
-                i = refEnd;
-            }
-            else
-            {
-                i++;
-            }
-        }
-        sb.Append(text, literalStart, end - literalStart);
-    }
-
-    private static bool TryParseCharacterReference(string text, int start, out int codepoint, out int endIndex)
-    {
-        codepoint = 0;
-        endIndex = start;
-        if (start + 1 >= text.Length || text[start] != '&' || text[start + 1] != '#')
-            return false;
-
-        int i = start + 2;
-        bool hex = false;
-        if (i < text.Length && (text[i] == 'x' || text[i] == 'X'))
-        {
-            hex = true;
-            i++;
-        }
-
-        int valueStart = i;
-        while (i < text.Length && text[i] != ';')
-            i++;
-
-        if (i >= text.Length || valueStart == i)
-            return false;
-
-        var number = text.Substring(valueStart, i - valueStart);
-        var style = hex ? System.Globalization.NumberStyles.HexNumber : System.Globalization.NumberStyles.Integer;
-        if (!int.TryParse(number, style, System.Globalization.CultureInfo.InvariantCulture, out codepoint))
-            return false;
-
-        endIndex = i + 1;
-        return true;
-    }
-
-    private static string EncodeInvalidCharacterReference(int codepoint)
-        => Xml11NameCodec.EncodeValue(char.ConvertFromUtf32(codepoint));
 
     private static void RestoreNamespaceUndeclarations(XDocument document)
     {

@@ -1,5 +1,9 @@
 # K03-C02: content-preserving name serialization — 27 October 2026
 
+**K03 name-storage integration — 27 October 2026:** [Bounded core completion](../k03-name-storage/README.md) preserves Unicode map/provider names, literal values and namespace/copy metadata. All47 new regressions and22,007 solution tests pass. The original map-to-element-053 assertion now passes; qt4 improves to8,437/0/1,893 with exactly that skip removed and all1,893 retained reasons unchanged. QT3 remains31,145/0/676 with identical676 skips. No fixture, assertion, harness filter or gated-set change. Candidate1.26.11 unpublished/public1.26.3. Parser-edition/current-draft limits remain explicit; Bosak.Schema retains XSD1.1 ownership and REQ-126 remains Complete. Next: K04 dependency/routing applicability audit. Earlier open Unicode findings are historical checkpoints.
+
+
+
 **K03-C02 is complete for serialization of existing stored node content.** All 40 focused regressions pass, including the 39 failures reproduced before correction. Full solution tests pass at **21,960**. Name-storage integration remains open, and the original qt4 supplementary-name skip stays in place.
 
 ## Change

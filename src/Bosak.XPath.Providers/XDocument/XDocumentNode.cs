@@ -113,6 +113,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      | Charles Korthout | 2.16  | 27-10-2026     | Decode serialized name tokens without changing literal node content (1.26.10).         |
+//                      | Charles Korthout | 2.17 | 27-10-2026     | Preserve literal values and namespace names across encoded tree boundaries. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -268,8 +269,12 @@ public sealed class XDocumentNode : IXdmNode
     {
         get
         {
-            if (_node is System.Xml.Linq.XDocument doc)
-                return doc.Annotation<Xml11Annotation>() != null;
+            if (_isNamespaceNode && _namespaceOwner is not null)
+                return Wrap(_namespaceOwner).UsesEncodedNames;
+            if (_node.Annotation<Xml11Annotation>() is not null)
+                return true;
+            if (_node is System.Xml.Linq.XDocument)
+                return false;
 
             XElement? element = _node switch
             {
@@ -289,6 +294,8 @@ public sealed class XDocumentNode : IXdmNode
             return _node.Document?.Annotation<Xml11Annotation>() != null;
         }
     }
+
+    internal bool UsesEncodedNames => IsXml11Document;
 
     private string Decode(string name) => IsXml11Document ? Xml11NameCodec.DecodeName(name) : name;
 
@@ -431,7 +438,7 @@ public sealed class XDocumentNode : IXdmNode
             return _node switch
             {
                 XElement e => e.Value,
-                XAttribute a => IsXml11Document ? Xml11NameCodec.DecodeValue(a.Value) : a.Value,
+                XAttribute a => a.Value,
                 XText t => t.Value,
                 XComment c => c.Value,
                 XProcessingInstruction pi => pi.Data,
@@ -2133,6 +2140,8 @@ public sealed class XDocumentNode : IXdmNode
                     continue;
 
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
+                if (Wrap(current).UsesEncodedNames)
+                    prefix = Xml11NameCodec.DecodeName(prefix);
                 if (undeclared.Contains(prefix))
                     continue;
                 AddNamespaceNode(collected, seen, prefix, attr.Value, element);
@@ -2195,7 +2204,7 @@ public sealed class XDocumentNode : IXdmNode
         if (!seen.Add(prefix))
             return;
 
-        bool xml11 = owner.Document?.Annotation<Xml11Annotation>() != null;
+        bool xml11 = Wrap(owner).UsesEncodedNames;
         XAttribute declaration = GetOrCreateNamespaceAttribute(owner, prefix, uri, xml11);
         items.Add(XdmValue.FromNode(new XDocumentNode(declaration, owner)));
     }
@@ -2468,7 +2477,7 @@ public sealed class XDocumentNode : IXdmNode
         {
             var attr = ns.NodeValue;
             if (attr is null) continue;
-            string prefix = attr.LocalName;
+            string prefix = IsXml11ElementTree(element) ? attr.EncodedLocalName : attr.LocalName;
             if (prefix == "xml") continue; // always implicitly in scope
             if (existing.Contains(prefix)) continue;
             if (string.IsNullOrEmpty(attr.StringValue)) continue;

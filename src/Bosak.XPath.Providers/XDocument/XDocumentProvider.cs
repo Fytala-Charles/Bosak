@@ -59,6 +59,7 @@
 //                      | Charles Korthout | 0.24  | 10-10-2026     | REQ-125 Slice B: LoadControlled parses host-approved bytes with DTD/entities prohibited  |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.25  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 0.26 | 27-10-2026     | Normalize copied trees into reversible encoded-name storage. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -137,9 +138,8 @@ public static class XDocumentProvider
         if (!string.IsNullOrEmpty(spec.BaseUri))
             element.AddAnnotation(spec.BaseUri);
 
-        // Mark XML 1.1 constructed trees so the adapter knows to decode encoded names.
-        if (spec.Xml11Mode)
-            element.AddAnnotation(Xml11Annotation.Instance);
+        // Mark encoded-name storage independently of XML-version feature validation.
+        element.AddAnnotation(Xml11Annotation.Instance);
 
         // XDM: elements created by an element constructor have type annotation xs:anyType,
         // while elements parsed from an unvalidated document have type annotation xs:untyped.
@@ -223,7 +223,7 @@ public static class XDocumentProvider
 
             if (declaredUris.TryAdd(p, nsUri))
             {
-                var declAttr = new XAttribute(XNamespace.Xmlns + p, nsUri);
+                var declAttr = new XAttribute(XNamespace.Xmlns + Xml11NameCodec.EncodeName(p), nsUri);
                 // Bindings implied by an attribute's name are part of this element's
                 // in-scope namespaces but do not propagate to nested constructors.
                 if (impliedByAttributeName)
@@ -245,7 +245,7 @@ public static class XDocumentProvider
             }
 
             string newPrefix = GeneratePrefix();
-            var newDeclAttr = new XAttribute(XNamespace.Xmlns + newPrefix, nsUri);
+            var newDeclAttr = new XAttribute(XNamespace.Xmlns + Xml11NameCodec.EncodeName(newPrefix), nsUri);
             if (impliedByAttributeName)
                 newDeclAttr.AddAnnotation(new NonPropagatingNamespaceBinding());
             element.Add(newDeclAttr);
@@ -289,7 +289,7 @@ public static class XDocumentProvider
                 // XQST0070: no prefix may be bound to the XMLNS namespace URI.
                 if (attr.Value == "http://www.w3.org/2000/xmlns/")
                     throw new InvalidOperationException($"XQST0070: The prefix '{attr.LocalName}' cannot be bound to the XMLNS namespace URI.");
-                element.Add(new XAttribute(XNamespace.Xmlns + attr.LocalName, attr.Value));
+                element.Add(new XAttribute(XNamespace.Xmlns + Xml11NameCodec.EncodeName(attr.LocalName), attr.Value));
             }
             else if (attr.LocalName == "xmlns" && attr.Prefix is null)
             {
@@ -313,7 +313,7 @@ public static class XDocumentProvider
                 string encodedAttrLocalName = Xml11NameCodec.EncodeName(attr.LocalName);
                 var newAttr = new XAttribute(ans + encodedAttrLocalName, attr.Value);
                 if (!string.IsNullOrEmpty(actualPrefix))
-                    newAttr.AddAnnotation(new AttributePrefixAnnotation(actualPrefix));
+                    newAttr.AddAnnotation(new AttributePrefixAnnotation(Xml11NameCodec.EncodeName(actualPrefix)));
                 element.Add(newAttr);
             }
         }
@@ -362,7 +362,7 @@ public static class XDocumentProvider
                     }
                     else if (!declared.Contains(nsDeclPrefix) && declaredUris.TryAdd(nsDeclPrefix, nsDeclUri))
                     {
-                        element.Add(new XAttribute(XNamespace.Xmlns + nsDeclPrefix, nsDeclUri));
+                        element.Add(new XAttribute(XNamespace.Xmlns + Xml11NameCodec.EncodeName(nsDeclPrefix), nsDeclUri));
                         declared.Add(nsDeclPrefix);
                     }
                     break;
@@ -380,7 +380,7 @@ public static class XDocumentProvider
                         var docContent = (childDoc.Root?.Name.LocalName == "__xdm_doc__" && childDoc.Root.Name.NamespaceName == "")
                             ? childDoc.Root.Nodes()
                             : childDoc.Nodes();
-                        foreach (var docChild in docContent)
+                        foreach (var docChild in docContent.ToList())
                         {
                             switch (docChild)
                             {
@@ -389,6 +389,7 @@ public static class XDocumentProvider
                                     break;
                                 case XElement childElement:
                                     FlushText();
+                                    childElement.Remove();
                                     element.Add(childElement);
                                     break;
                                 case XComment comment:
@@ -495,10 +496,11 @@ public static class XDocumentProvider
         XNamespace ns = attribute.NamespaceUri is null ? XNamespace.None : XNamespace.Get(attribute.NamespaceUri);
         string encodedAttrLocalName = Xml11NameCodec.EncodeName(attribute.LocalName);
         var xattr = new XAttribute(ns + encodedAttrLocalName, attribute.Value);
+        xattr.AddAnnotation(Xml11Annotation.Instance);
         // LINQ attributes cannot carry a prefix; record it as an annotation so the
         // free-standing attribute still reports its constructed prefix.
         if (!string.IsNullOrEmpty(attribute.Prefix))
-            xattr.AddAnnotation(new AttributePrefixAnnotation(attribute.Prefix));
+            xattr.AddAnnotation(new AttributePrefixAnnotation(Xml11NameCodec.EncodeName(attribute.Prefix)));
         return XDocumentNode.Wrap(xattr);
     }
 
@@ -517,6 +519,7 @@ public static class XDocumentProvider
         bool singleElementRoot = content.Count == 1 && content[0].Kind == XdmContentKind.Node &&
             content[0].Node!.Value.NodeValue.NodeKind == XdmNodeKind.Element;
         var document = new System.Xml.Linq.XDocument();
+        document.AddAnnotation(Xml11Annotation.Instance);
         XContainer container = document;
         if (!singleElementRoot)
         {
@@ -560,7 +563,7 @@ public static class XDocumentProvider
                         var docChildren = (childDoc.Root?.Name.LocalName == "__xdm_doc__" && childDoc.Root.Name.NamespaceName == "")
                             ? childDoc.Root.Nodes()
                             : childDoc.Nodes();
-                        foreach (var docChild in docChildren)
+                        foreach (var docChild in docChildren.ToList())
                         {
                             switch (docChild)
                             {
@@ -569,6 +572,7 @@ public static class XDocumentProvider
                                     break;
                                 case XElement childElement:
                                     FlushText();
+                                    childElement.Remove();
                                     container.Add(childElement);
                                     break;
                                 case XComment comment:
@@ -599,8 +603,8 @@ public static class XDocumentProvider
         {
             clone = xDocumentNode.UnderlyingObject switch
             {
-                XElement element => CloneWithAttributeAnnotations(element),
-                System.Xml.Linq.XDocument document => new XDocument(document),
+                XElement element => CloneEncodedElement(element),
+                System.Xml.Linq.XDocument document => CloneEncodedDocument(document),
                 XText text => new XText(text.Value),
                 XComment comment => new XComment(comment.Value),
                 XProcessingInstruction pi => new XProcessingInstruction(pi.Target, pi.Data),
@@ -623,23 +627,45 @@ public static class XDocumentProvider
             // Preserve annotation-based semantics: the namespace inheritance barrier,
             // prefixed namespace undeclarations, and the base-URI annotation.
             foreach (var annotation in sourceElement.Annotations<object>())
-                cloneElement.AddAnnotation(annotation);
+                if (annotation is not Xml11Annotation && annotation is not OriginalPrefixAnnotation)
+                    cloneElement.AddAnnotation(annotation);
         }
         return clone;
     }
 
-    // Clones an element; the XElement copy constructor does not carry attribute
-    // annotations, so non-propagating namespace-binding markers are re-applied.
-    private static XElement CloneWithAttributeAnnotations(XElement source)
+    /// <summary>Copies a tree into the provider's reversible encoded-name representation.</summary>
+    internal static XElement CloneEncodedElement(XElement source)
     {
         var clone = new XElement(source);
-        foreach (var sourceAttr in source.Attributes())
+        foreach (var pair in source.DescendantsAndSelf().Zip(clone.DescendantsAndSelf()))
         {
-            if (sourceAttr.Annotation<NonPropagatingNamespaceBinding>() is null)
-                continue;
-            var cloneAttr = clone.Attribute(sourceAttr.Name);
-            cloneAttr?.AddAnnotation(new NonPropagatingNamespaceBinding());
+            bool encoded = XDocumentNode.Wrap(pair.First).UsesEncodedNames;
+            if (!encoded)
+                pair.Second.Name = XName.Get(Xml11NameCodec.EncodeName(pair.First.Name.LocalName), pair.First.Name.NamespaceName);
+            if (pair.First.Annotation<OriginalPrefixAnnotation>() is { } original)
+                pair.Second.AddAnnotation(new OriginalPrefixAnnotation { Prefix = encoded ? original.Prefix : Xml11NameCodec.EncodeName(original.Prefix) });
+            pair.Second.RemoveAttributes();
+            foreach (var attribute in pair.First.Attributes())
+            {
+                string local = encoded ? attribute.Name.LocalName : Xml11NameCodec.EncodeName(attribute.Name.LocalName);
+                var target = new XAttribute(XName.Get(local, attribute.Name.NamespaceName), attribute.Value);
+                pair.Second.Add(target);
+                if (attribute.Annotation<NonPropagatingNamespaceBinding>() is not null)
+                    target.AddAnnotation(new NonPropagatingNamespaceBinding());
+                if (attribute.Annotation<AttributePrefixAnnotation>() is { } prefix)
+                    target.AddAnnotation(new AttributePrefixAnnotation(encoded ? prefix.Prefix : Xml11NameCodec.EncodeName(prefix.Prefix)));
+            }
         }
+        clone.AddAnnotation(Xml11Annotation.Instance);
+        return clone;
+    }
+
+    private static XDocument CloneEncodedDocument(XDocument source)
+    {
+        var clone = new XDocument(source);
+        if (source.Root is { } root)
+            clone.Root!.ReplaceWith(CloneEncodedElement(root));
+        clone.AddAnnotation(Xml11Annotation.Instance);
         return clone;
     }
 
@@ -654,7 +680,7 @@ public static class XDocumentProvider
                 if (!attr.IsNamespaceDeclaration)
                     continue;
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
-                declared.TryAdd(prefix, attr.Value);
+                declared.TryAdd(XDocumentNode.Wrap(ancestor).UsesEncodedNames ? prefix : Xml11NameCodec.EncodeName(prefix), attr.Value);
             }
         }
 

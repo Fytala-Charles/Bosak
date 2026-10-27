@@ -1,0 +1,10 @@
+﻿// Generated read-only .NET XML character-reference mechanism control.
+using System.Xml;
+using System.Xml.Linq;
+using System.Text.Json;
+var rows=new List<object>();
+foreach(bool check in new[]{false,true})foreach(int point in new[]{1,0,11,133}){
+ try{using var reader=XmlReader.Create(new StringReader($"<r a='&#x{point:X};'>&#x{point:X};</r>"),new XmlReaderSettings{CheckCharacters=check});var doc=XDocument.Load(reader);rows.Add(new{check,point,attribute=(int)doc.Root!.Attribute("a")!.Value[0],text=(int)doc.Root.Value[0],error=(string?)null});}
+ catch(Exception e){rows.Add(new{check,point,error=e.Message});}
+}
+Console.WriteLine(JsonSerializer.Serialize(rows));
