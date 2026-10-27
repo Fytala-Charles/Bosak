@@ -32,6 +32,7 @@
 //                      | Charles Korthout | 0.14  | 23-08-2026     | schemaValidation feature now admitted                                                    |
 //                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
 //                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+//                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -105,6 +106,15 @@ internal sealed class DependencyFilter
 
         foreach (var dep in dependencies)
         {
+            // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+            // Keep other sequence names and dependency kinds under their existing policy.
+            if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
             if (dep.Type == "feature"
                 && !FrozenAdmittedFeatures.Contains(dep.Value)
                 && !UnsupportedFeatures.Contains(dep.Value))

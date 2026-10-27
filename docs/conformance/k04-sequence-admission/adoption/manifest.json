@@ -1,0 +1,43 @@
+{
+  "files": {
+    "approval.json": "b7241a392a881c98539c14981dc054fe5920c568f89dd36a13f58153844f7046",
+    "BASELINE-ADOPTION.md": "9d087a5a2455d4d8a85f3b71da303ba982ad4005d79517e8e2ff56b2fdd03f55",
+    "build.log": "29a71601f83a571918b343a25f4105fb40900e8dc4eb77564f1fb46d0e1c4733",
+    "check-receipts.json": "43042aedfb5f2854a2f7a0f95fa0093326245e1b195d9abfbfa4457e621a688a",
+    "proposal-identities.json": "8465d794c7ce4db22ef9b936200496005604e1b08391ddd49d8b11bb8ffac24f",
+    "qt3-controls.jsonl": "9db13c08df5a45f92a6116fdc628b4b650843919e932258f9748730ebbdd7799",
+    "qt3-controls.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qt3-original.log": "fe524458acf79572933ab282820adeb09213bd99c0a9e83f3c81f51dc1bf8023",
+    "qt3-skips.txt": "9a1f19f16b3405584ef2e9395b4f4db96be52dc6792230a206a75d3f6361cdd2",
+    "qt3.log": "44fadfaacd6ae60b00a3923216ba106592573bcb5bf68b3075bbe7115d9b624f",
+    "qt4-controls.jsonl": "a3c1debfc4c7097ed7d83c2d11c9c1c514139d22255fc8e81b2e0df7f3599f6d",
+    "qt4-controls.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "qt4-original.log": "fa65d09724926e4284ee127505efb62cf9c2366269971042ca651d6a9a7042bf",
+    "qt4-skips.txt": "71bdfebb3bec0aeb46aea805fff4b81984c426bccc38b8a88f47d45be8679cd7",
+    "qt4.log": "402ba85db2d8c3028e5e1735fd514ee1e3101a7a9f0bba029f4e6455e3e3f97b",
+    "render-program.cjs.txt": "a55ca9d426dd8c46fd8674d98d6dbb7c52465787714dc7ea09e1b88d7afbc681",
+    "render-receipts.json": "3cdfb4e8b7675150690c56c9c147953d79320fca56a2c3777f0a90fe3a858fee",
+    "run-checks.py": "bc9a2e476d014c2084d0feb3282c5acc0d348b8e8ee10b5801adbcd51227211c",
+    "skip-verification.json": "cf10421c140f0a03f354e1d5325a21f615f7ccaa7fb4fe6627d821a9a3ae7f98",
+    "solution-tests.log": "db2288e56dcd1da706a6fcb777b2f6891d490142369a17ffa6c335133d9815fa",
+    "validate-adoption.py": "fdbcef948110ae7243537e733e6e1b2e50a108dcff91a6d639b0ca46e299c848",
+    "validation.json": "7b5364ed24f09859a833e5dfbe3a949960b98af8f6e076622b754719ee81bedc"
+  },
+  "documents": {
+    ".gitattributes": "756d36f71ebe7e83accf85148e3c8af5295da47a",
+    "AGENTS.md": "bf9798f46ea5aea22e8237db249edd4c542ce277",
+    "README.md": "f781065b50d2e7dbf3edaec2f6c865a77d244714",
+    "docs/ARCHITECTURE.md": "4ea93e60bd69c92e65ca89994e2e8e4df01a2cda",
+    "docs/FEATURE_REQUESTS.md": "2248c01a0a984c8c538ff49c39838a6201f40bbb",
+    "docs/INTEGRATION.md": "c67ccb5534634982014e836eb1d3afcda202925b",
+    "docs/AGENT_HANDOVER.md": "4f3c08ce87deb06549eeb530bd6775b67926865a",
+    "docs/DOCUMENTATION_RENDERER_TEST.md": "ca41dde583cc96f634e54738bcf1fa274a7c3a3a",
+    "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md": "d91b110a8ad731876d1067c73f15453245ff5046",
+    "docs/conformance/k04-dependency-audit/README.md": "a4c196cac7ad4860627f9bde42e76ccb25fa0191",
+    "docs/conformance/k04-parse-integer-fix/README.md": "533d104735db22da22e2f949f31bf60b241d5814",
+    "docs/conformance/k04-sequence-admission/README.md": "3be201640cebd3a561ab28df74d56f3181ede6f9",
+    "docs/conformance/k04-sequence-admission/BASELINE-UPDATE-PROPOSAL.md": "167c125ca297e541e64ae44da03b4b059afcfc2c",
+    "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "607e75cf688dcde9f88edc74ff9f0b42f18b1b06",
+    "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "285cc23e3d17df12f0ba7fe0f989e0facbc87920"
+  }
+}

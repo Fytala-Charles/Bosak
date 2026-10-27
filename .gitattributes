@@ -249,3 +249,6 @@ docs/conformance/k04-parse-integer-fix/evidence/** -text whitespace=cr-at-eol,-b
 # K04 unsupported-sequence proposal retains exact evidence and an LF dry patch.
 docs/conformance/k04-sequence-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-sequence-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# Owner-approved unsupported-sequence adoption receipts retain exact bytes.
+docs/conformance/k04-sequence-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

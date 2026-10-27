@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-27",
+  "proposalCommit": "e924a708",
+  "decisionId": "K04-sequence-adoption-v1",
+  "ownerApproved": true,
+  "normalQt3": [
+    31162,
+    0,
+    659
+  ],
+  "normalQt4": [
+    8587,
+    0,
+    1892
+  ],
+  "removedPerSuite": [
+    "format-integer-042"
+  ],
+  "retainedQt3NamesAndReasons": 659,
+  "retainedQt4NamesAndReasons": 1892,
+  "solutionPassed": 22198,
+  "solutionProjects": 10,
+  "normalFilterControls": 288,
+  "normalOriginalsPassed": 2,
+  "gatedSets": 226,
+  "qt4ExperimentalPassed": 11,
+  "candidateVersion": "1.28.0",
+  "publishedVersion": "1.26.3",
+  "buildExitCode": 0,
+  "solutionExitCode": 0,
+  "qt3ExitCode": 0,
+  "qt4ExitCode": 0,
+  "releaseApproved": false
+}

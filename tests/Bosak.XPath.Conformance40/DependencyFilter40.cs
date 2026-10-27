@@ -19,6 +19,7 @@
 //                      | Charles Korthout | 0.4   | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
 //                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
 //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+//                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -101,6 +102,15 @@ internal sealed class DependencyFilter40
     {
         foreach (var dep in dependencies)
         {
+            // This reviewed numbering sequence is unsupported; the engine uses decimal fallback.
+            // Keep other sequence names and dependency kinds under their existing policy.
+            if (dep.Type == "format-integer-sequence" && dep.Value == "\uFBF4")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
             if (dep.Type == "feature"
                 && !FrozenAdmittedFeatures.Contains(dep.Value)
                 && !UnsupportedFeatures.Contains(dep.Value))
