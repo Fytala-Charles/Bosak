@@ -1,0 +1,50 @@
+# K04: dependency and routing applicability audit — 27 October 2026
+
+**The initial K04 audit is complete; implementation and policy follow-ups remain open.** All **2,512 dependency skips** are reproduced through the actual current filters: **619 QT3** and **1,893 gated qt4**. No engine, harness, assertion or admission policy changes in this slice.
+
+## What the skips mean
+
+| QT3 actual filter/routing combination | Cases |
+| --- | ---: |
+| XQuery dependency predicates pass; syntax gate refuses | 246 |
+| XQuery dependency predicates fail; syntax gate accepts | 367 |
+| Both refuse | 6 |
+| **Total current dependency skips** | **619** |
+
+The audit reparses each original fixture through the actual `TestCase` parser and invokes actual filter methods for both the full dependency list and individual declarations. Syntax eligibility is recorded separately from semantic support. Multiple rejected predicates overlap; their mentions must not be added as distinct skipped cases.
+
+Among the 246 routing-only cases, **16 contain triple double quotes**. `CanHandleAsXQuery` rejects that raw character sequence before considering doubled-quote escaping or surrounding lexical context. Five sampled quote cases pass their original assertions through public XQuery: four positive assertions and one malformed-constructor error assertion. This supports a narrow routing follow-up, not blanket removal of prolog guards.
+
+Most gated qt4 dependency exclusions are XQuery/version-related: 1,608 mention rejected XQ10+ predicates. The qt4 runner remains XPath-only. Schema, language, static-typing and capability predicates can overlap those version exclusions. Passing a query through another language pipeline does not establish legal applicability.
+
+## Bounded execution results
+
+Sixteen selected original QT3 cases run in two independent diagnostic paths, each under a 20-second external watchdog. One invokes the actual direct executor; the other invokes public XQuery and the real assertion comparer against resource-free environments. Both bypass normal dependency admission only for diagnosis and preserve the original fixture/assertion. This selected public path uses no output-option overrides; it is not a universal substitute for the harness.
+
+| Diagnostic path | Passed | Failed assertions | Executor skips |
+| --- | ---: | ---: | ---: |
+| Current direct executor | 2 | 2 | 12 |
+| Public XQuery with original assertions | 6 | 10 | 0 |
+
+The public XQuery successes are `K2-DirectConElemAttr-8`, `Constr-attr-syntax-5`, `DirectConElemAttr-1`, `K2-DirectConElemAttr-29`, `Literals069` and `K-CopyNamespacesProlog-5`. The first and last are negative syntax checks; they do not prove general constructor/prolog support. Only five successes concern the quote heuristic.
+
+All seven sampled context declarations, construction stripping, a valid copy-namespace declaration and a pragma control still fail original assertions through public XQuery. Those ten failures remain failures in the review. An expected parse-error assertion can pass on an unsupported construct, so it is insufficient evidence for broad unskipping.
+
+The 32 execution processes and four metadata processes complete without timeouts. Metadata covers 2,512 original cases plus **62 synthetic predicate assessments**; it does not execute those 2,512 queries. Heavy suites, remote resources and a full exploratory qt4 sweep are not run.
+
+## Five open follow-ups
+
+1. **K04-F01 / next K04-C01:** quote-aware routing. Audit all 16 candidates with positive/negative lexical controls, then rehearse the complete runner before proposing a QT3 baseline change. [Next-slice scope](NEXT-SLICE.md).
+2. **K04-F02:** keep unsupported prolog/pragma guards until each construct's engine semantics are verified.
+3. **K04-F03:** define explicit polarity and capability profiles. Synthetic negative mixed XP/XQ predicates can pass despite matching XPath tokens; contradictory positive/negative XQ31 predicates pass in admitted-XQuery mode. Negative fr-CA is rejected despite positive fr-CA rejection. Unknown positive features default to supported. These observations need profile review, not automatic unskips.
+4. **K04-F04:** correct schema capability wording and coordinate profile predicates with Bosak.Schema. Both filters admit `xsd-version=1.1` and contain comments asserting implemented XSD 1.1, but their predicates do not establish that capability. The current core schema representation is `XmlSchemaSet`; Bosak.Schema owns staged XSD 1.1. This audit records the mismatch without changing the frozen profile.
+5. **K04-F05:** keep qt4 XQuery/version exclusions distinct from core bugs; broader language routing requires its own design and evidence.
+
+[RESULTS.json](RESULTS.json) records all findings, outcomes and overlapping counts. [Evidence](evidence/manifest.json) includes current filter records, synthetic controls, original requests/assertions, binaries, fixture pins and prior raw artifacts. The initial executor-driver compile error is preserved; all final diagnostic processes complete successfully.
+
+```powershell
+python docs/conformance/k04-dependency-audit/build-review.py
+python docs/conformance/k04-dependency-audit/evidence/validate-evidence.py
+```
+
+Source is unchanged from `a707c90a`. Its **22,007 solution passes**, QT3 **31,145/0/676** and qt4 **8,437/0/1,893**, 224 gated sets and 11 existing Experimental passes are inherited, not new full-suite/gate runs. Candidate **1.26.11 remains unpublished**, public **1.26.3**. REQ-126 remains Complete for its owner-accepted bounded catalog. No fixture, assertion, filter, baseline, package, release, upstream or Braid change occurs.

@@ -207,3 +207,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/conformance/k03-serialization/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/conformance/k03-name-storage/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k04-dependency-audit/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
