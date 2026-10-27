@@ -1,0 +1,7 @@
+=== 5 skipped: Unsupported dependency ===
+format-integer-042
+format-integer-065
+format-integer-066
+format-integer-076
+format-integer-077
+

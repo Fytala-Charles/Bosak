@@ -1,0 +1,93 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C07",
+  "status": "Bounded qt4 CLDR admission complete;15 exploratory radix errors retained",
+  "sourceBase": "7387170fa934d5a0ea24bee2b1920ccba228967b",
+  "summary": {
+    "filterControls": 242,
+    "profileOutcomesPerPhase": 355,
+    "changedFilterOutcomes": 6,
+    "normalOriginalAssertionsPassed": 6,
+    "newQt4ExploratoryPasses": 4,
+    "exploratorySetBefore": [
+      102,
+      82,
+      15,
+      5
+    ],
+    "exploratorySetAfter": [
+      102,
+      86,
+      15,
+      1
+    ],
+    "exploratoryFailuresRetained": 15,
+    "remainingSetDependencySkips": 1,
+    "smallWatchdogProcesses": 12,
+    "timeouts": 0,
+    "solutionPassed": 22043,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1892,
+    "gatedSetsChanged": false,
+    "baselineChanged": false,
+    "candidateVersion": "1.26.12",
+    "publishedVersion": "1.26.3"
+  },
+  "changedFilterAssessments": [
+    {
+      "id": "feature-qt4-fn-format-integer-CLDR-True",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "feature-qt4-fn-format-integer-CLDR-False",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-format-integer-065-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-format-integer-066-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-format-integer-076-full",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt4-format-integer-077-full",
+      "before": false,
+      "after": true
+    }
+  ],
+  "removedExploratorySkips": [
+    "format-integer-065",
+    "format-integer-066",
+    "format-integer-076",
+    "format-integer-077"
+  ],
+  "limits": [
+    "Admission covers reviewed bounded word-numbering behavior;not complete CLDR/RBNF",
+    "Existing language type admission is unchanged;default-language guard remains distinct from full locale support",
+    "No engine,fixture,assertion,GatedSets,schema,QT3 baseline or version change",
+    "The exploratory set remains ungated because15 failures persist",
+    "No complete exploratory qt4 sweep;only the102-case format-integer set executed",
+    "Bosak.Schema owns XSD1.1;REQ-126 remains Complete;no release or upstream contribution"
+  ],
+  "next": "Review the15 retained XPath4 radix-picture failures against immutable specification evidence before implementing a bounded radix-formatting slice."
+}

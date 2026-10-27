@@ -230,3 +230,6 @@ docs/conformance/k04-cldr-review/evidence/** -text whitespace=cr-at-eol,-blank-a
 
 # K04 bounded formatter correction preserves exact validation/adoption receipts.
 docs/conformance/k04-cldr-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded CLDR admission retains exact before/after validation receipts.
+docs/conformance/k04-cldr-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
