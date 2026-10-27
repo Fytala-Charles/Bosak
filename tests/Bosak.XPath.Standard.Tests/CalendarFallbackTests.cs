@@ -1,0 +1,88 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 27 October 2026
+// PURPOSE              : Verifies calendar fallback, error boundaries and shared formatter modes.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 27-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 27-10-2026     | Preserve separately observed empty-sequence wrapper error outside calendar correction.   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+using Xunit;
+
+namespace Bosak.XPath.Standard.Tests;
+
+/// <summary>Verifies calendar fallback, error boundaries and shared formatter modes.</summary>
+public sealed class CalendarFallbackTests
+{
+    /// <summary>Supplies supported, unsupported and invalid calendars across formatter modes.</summary>
+    /// <returns>Profile, XSLT mode, expression, exact expected output and optional error code.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        foreach (var profile in new[] { XPathCompatibility.XPath31, XPathCompatibility.XPath40, XPathCompatibility.XPath40Experimental })
+        {
+            foreach (bool xslt in new[] { false, true })
+            {
+                foreach (string calendar in "AH AME AM AP AS BE CB CE CL CS EE FE JE KE KY ME MS NS OS RS SE SH SS TE VE VS".Split(' '))
+                    yield return [profile, xslt, $"format-date(xs:date('2002-03-07'), '[Y0001]-[M01]-[D01]', 'en', '{calendar}', ())", "[Calendar: AD]2002-03-07", ""];
+            }
+            foreach (var call in new[]
+            {
+                ("format-date", "xs:date('2002-03-07')", "[M01]", "03"),
+                ("format-dateTime", "xs:dateTime('2002-03-07T12:30:00')", "[M01]", "03"),
+                ("format-time", "xs:time('12:30:00')", "[H01]", "12")
+            })
+            {
+                foreach (string calendar in new[] { "AD", "ISO", "Gregorian", "ISO8601", "ad", "Q{}ISO", "" })
+                    yield return [profile, false, $"{call.Item1}({call.Item2}, '{call.Item3}', 'en', '{calendar}', ())", call.Item4, ""];
+                foreach (string calendar in new[] { "CB", "Q{}CB", "Q{urn:calendar}custom", "Q{urn:calendar}AD" })
+                    yield return [profile, false, $"{call.Item1}({call.Item2}, '{call.Item3}', 'en', '{calendar}', ())", "[Calendar: AD]" + call.Item4, ""];
+                foreach (string calendar in new[] { "ZZ", "ZODIAC", "Q{}ZZ", "1bad", ":bad", "Q{}1" })
+                    yield return [profile, false, $"{call.Item1}({call.Item2}, '{call.Item3}', 'en', '{calendar}', ())", "", "FOFD1340"];
+                yield return [profile, false, $"{call.Item1}({call.Item2}, '', 'en', 'CB', ())", "[Calendar: AD]", ""];
+                yield return [profile, false, $"{call.Item1}({call.Item2}, 'literal', 'en', 'CB', ())", "[Calendar: AD]literal", ""];
+                yield return [profile, false, $"{call.Item1}({call.Item2}, 'literal', 'en', 'ZZ', ())", "", "FOFD1340"];
+                yield return [profile, false, $"{call.Item1}({call.Item2}, '', 'en', 'ZZ', ())", "", "FOFD1340"];
+                yield return [profile, false, $"{call.Item1}({call.Item2}, '{call.Item3}', 'en', (), ())", call.Item4, ""];
+                // Existing sequence-wrapper handling raises XPTY0004 before calendar formatting.
+                // Preserve this separate known defect; do not assert correct empty-value semantics.
+                yield return [profile, false, $"string({call.Item1}((), '[', 'en', 'ZZ', ()))", "", "XPTY0004"];
+            }
+            yield return [profile, false, "format-date(xs:date('2002-03-07'), '[C] [Y0001]-[M01]-[D01]', 'en', 'CB', ())", "[Calendar: AD]AD 2002-03-07", ""];
+            yield return [profile, true, "format-date(xs:date('2002-03-07'), '[M01]-[D01]', 'en', 'ZODIAC', ())", "[Calendar: AD]03-07", ""];
+            yield return [profile, true, "format-date(xs:date('2002-03-07'), 'literal', 'en', 'ZZ', ())", "[Calendar: AD]literal", ""];
+            yield return [profile, true, "format-date(xs:date('2002-03-07'), '[Y]', 'en', '1bad', ())", "", "FOFD1340"];
+            yield return [profile, false, "format-date(xs:date('2002-03-07'), '[', 'en', 'CB', ())", "", "FOFD1340"];
+            yield return [profile, false, "format-date(xs:date('2002-03-07'), '[H]', 'en', 'CB', ())", "", "FOFD1350"];
+        }
+    }
+
+    /// <summary>Checks calendar fallback and retained error boundaries through the public API.</summary>
+    /// <param name="profile">The compatibility profile.</param>
+    /// <param name="xslt">Whether the shared formatter runs in XSLT mode.</param>
+    /// <param name="expression">The expression.</param>
+    /// <param name="expected">The exact formatted output.</param>
+    /// <param name="errorCode">The expected error, or empty for success.</param>
+    [Theory, MemberData(nameof(Cases))]
+    public void CalendarContract(XPathCompatibility profile, bool xslt, string expression, string expected, string errorCode)
+    {
+        var context = new EvaluationContext { IsXsltMode = xslt };
+        FunctionLibrary.Populate(context);
+        string Run() => XPath31Expression.Compile(expression, new CompileOptions { Compatibility = profile }).Evaluate(context).ToString();
+        if (errorCode.Length == 0)
+            Assert.Equal(expected, Run());
+        else
+            Assert.Contains(errorCode, Assert.ThrowsAny<Exception>(() => Run()).Message);
+    }
+}
