@@ -236,3 +236,6 @@ docs/conformance/k04-cldr-admission/evidence/** -text whitespace=cr-at-eol,-blan
 
 # K04 read-only radix review retains exact original and boundary-control receipts.
 docs/conformance/k04-radix-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 radix formatter adoption and validation preserve original receipt bytes.
+docs/conformance/k04-radix-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

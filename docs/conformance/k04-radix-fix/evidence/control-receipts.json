@@ -1,0 +1,682 @@
+[
+  {
+    "name": "qt3-control-qt3-caret-decimal10",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-caret-decimal10-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3353157000092324,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-caret-decimal10",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-caret-decimal10.log"
+  },
+  {
+    "name": "qt4-control-qt4-caret-decimal10",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-caret-decimal10-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3300687000155449,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-caret-decimal10",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-caret-decimal10.log"
+  },
+  {
+    "name": "qt3-control-qt3-caret-decimal9",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-caret-decimal9-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34028659999603406,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-caret-decimal9",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-caret-decimal9.log"
+  },
+  {
+    "name": "qt4-control-qt4-caret-decimal9",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-caret-decimal9-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3277132000075653,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-caret-decimal9",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-caret-decimal9.log"
+  },
+  {
+    "name": "qt3-control-qt3-caret-grouping",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-caret-grouping-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3508125999942422,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-caret-grouping",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-caret-grouping.log"
+  },
+  {
+    "name": "qt4-control-qt4-caret-grouping",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-caret-grouping-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33761990000493824,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-caret-grouping",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-caret-grouping.log"
+  },
+  {
+    "name": "qt3-control-qt3-hex-lower",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-hex-lower-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.38185320000047795,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-hex-lower",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-hex-lower.log"
+  },
+  {
+    "name": "qt4-control-qt4-hex-lower",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-hex-lower-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.36129619998973794,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-hex-lower",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-hex-lower.log"
+  },
+  {
+    "name": "qt3-control-qt3-hex-upper-group",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-hex-upper-group-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3810209999792278,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-hex-upper-group",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-hex-upper-group.log"
+  },
+  {
+    "name": "qt4-control-qt4-hex-upper-group",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-hex-upper-group-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3374535999901127,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-hex-upper-group",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-hex-upper-group.log"
+  },
+  {
+    "name": "qt3-control-qt3-hex-original-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-hex-original-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3377951000002213,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-hex-original-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-hex-original-ordinal.log"
+  },
+  {
+    "name": "qt4-control-qt4-hex-original-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-hex-original-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3097778999945149,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-hex-original-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-hex-original-ordinal.log"
+  },
+  {
+    "name": "qt3-control-qt3-hex-alpha-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-hex-alpha-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3128879999858327,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-hex-alpha-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-hex-alpha-ordinal.log"
+  },
+  {
+    "name": "qt4-control-qt4-hex-alpha-ordinal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-hex-alpha-ordinal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3085785000002943,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-hex-alpha-ordinal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-hex-alpha-ordinal.log"
+  },
+  {
+    "name": "qt3-control-qt3-parse-hex",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-parse-hex-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3081135000102222,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-parse-hex",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-parse-hex.log"
+  },
+  {
+    "name": "qt4-control-qt4-parse-hex",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-parse-hex-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30662680001114495,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-parse-hex",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-parse-hex.log"
+  },
+  {
+    "name": "qt3-control-qt3-parse-binary",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-parse-binary-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3256470000196714,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-parse-binary",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-parse-binary.log"
+  },
+  {
+    "name": "qt4-control-qt4-parse-binary",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-parse-binary-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30870650001452304,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-parse-binary",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found."
+    },
+    "log": "qt4-control-qt4-parse-binary.log"
+  },
+  {
+    "name": "qt3-control-qt3-lookup-parse",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-lookup-parse-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3325708000047598,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-lookup-parse",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-lookup-parse.log"
+  },
+  {
+    "name": "qt4-control-qt4-lookup-parse",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-lookup-parse-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.30270479997852817,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-lookup-parse",
+      "kind": "Failed",
+      "message": "assert-true failed. Got: false"
+    },
+    "log": "qt4-control-qt4-lookup-parse.log"
+  },
+  {
+    "name": "qt3-control-qt3-decimal-ordinal21",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-decimal-ordinal21-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3225038999808021,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-decimal-ordinal21",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-decimal-ordinal21.log"
+  },
+  {
+    "name": "qt4-control-qt4-decimal-ordinal21",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-decimal-ordinal21-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32153590000234544,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-decimal-ordinal21",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-decimal-ordinal21.log"
+  },
+  {
+    "name": "qt3-control-qt3-decimal-ordinal15",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-decimal-ordinal15-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3319777999713551,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-decimal-ordinal15",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-decimal-ordinal15.log"
+  },
+  {
+    "name": "qt4-control-qt4-decimal-ordinal15",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-decimal-ordinal15-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3144021999905817,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-decimal-ordinal15",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-decimal-ordinal15.log"
+  },
+  {
+    "name": "qt3-control-qt3-empty-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-empty-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3329669999948237,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-empty-radix",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-empty-radix.log"
+  },
+  {
+    "name": "qt4-control-qt4-empty-radix",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-empty-radix-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28856200000154786,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-empty-radix",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-empty-radix.log"
+  },
+  {
+    "name": "qt3-control-qt3-invalid-base",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-invalid-base-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32685149999451824,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-invalid-base",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-invalid-base.log"
+  },
+  {
+    "name": "qt4-control-qt4-invalid-base",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-invalid-base-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3169053999881726,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-invalid-base",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-invalid-base.log"
+  },
+  {
+    "name": "qt3-control-qt3-mixed-case",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-mixed-case-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.32156559999566525,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-mixed-case",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-mixed-case.log"
+  },
+  {
+    "name": "qt4-control-qt4-mixed-case",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-mixed-case-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31252589999348857,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-mixed-case",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-mixed-case.log"
+  },
+  {
+    "name": "qt3-control-qt3-int64-max",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-int64-max-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3236544000101276,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-int64-max",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-int64-max.log"
+  },
+  {
+    "name": "qt4-control-qt4-int64-max",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-int64-max-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.31025390001013875,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-int64-max",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-int64-max.log"
+  },
+  {
+    "name": "qt3-control-qt3-int64-min",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt3-control-qt3-int64-min-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.33102660000440665,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-int64-min",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-control-qt3-int64-min.log"
+  },
+  {
+    "name": "qt4-control-qt4-int64-min",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-radix-fix\\evidence\\qt4-control-qt4-int64-min-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.302962399990065,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-qt4-int64-min",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-control-qt4-int64-min.log"
+  }
+]

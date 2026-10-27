@@ -1,0 +1,51 @@
+{
+  "regressionsBefore": {
+    "command": "dotnet test tests/Bosak.XPath.Standard.Tests -c Release --filter FullyQualifiedName~FormatIntegerRadixTests",
+    "exitCode": 1,
+    "passed": 15,
+    "failed": 53,
+    "log": "regressions-before.log"
+  },
+  "regressionsAfter": {
+    "command": "dotnet test tests/Bosak.XPath.Standard.Tests -c Release --no-build --filter FullyQualifiedName~FormatIntegerRadixTests",
+    "exitCode": 0,
+    "passed": 68,
+    "failed": 0,
+    "log": "regressions-after.log"
+  },
+  "build": {
+    "command": "dotnet build Bosak.sln -c Release",
+    "exitCode": 0,
+    "log": "solution-build.log"
+  },
+  "tests": {
+    "command": "dotnet test Bosak.sln -c Release --no-build",
+    "exitCode": 0,
+    "localHttpListenerAccess": true,
+    "log": "solution-tests.log",
+    "passed": 22111
+  },
+  "qt3": {
+    "command": "dotnet run --project tests/Bosak.XPath.Conformance -c Release --no-build",
+    "exitCode": 0,
+    "log": "qt3.log",
+    "totals": [
+      31161,
+      0,
+      660
+    ]
+  },
+  "qt4": {
+    "command": "dotnet run --project tests/Bosak.XPath.Conformance40 -c Release --no-build -- tests/qt4tests",
+    "environment": {
+      "BOSAK_QT4_GATE_ONLY": "1"
+    },
+    "exitCode": 0,
+    "log": "qt4.log",
+    "totals": [
+      8438,
+      0,
+      1892
+    ]
+  }
+}

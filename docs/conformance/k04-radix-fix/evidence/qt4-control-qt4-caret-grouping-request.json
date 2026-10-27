@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-radix-fix/evidence/control-fixtures.xml", "Name": "control-qt4-caret-grouping", "case": "caret-grouping", "expression": "format-integer(2345,'9^000')", "boundary": false, "expected": "2^345"}
