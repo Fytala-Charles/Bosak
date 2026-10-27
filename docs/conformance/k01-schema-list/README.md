@@ -1,5 +1,8 @@
 # K01: schema-list binding correction and skip review
 
+
+**K01 complete; approved QT3 baseline — 27 October 2026:** [Exact two-case adoption](BASELINE-ADOPTION.md) removes only CastAs-ListType-20 and -28 from known skips. The fresh full QT3 gate passes **31,144/0/677**; qt4 remains 8,436/0/1,894. The owner approval and original receipts are preserved; no fixture/assertion/filter change. Source candidate 1.26.4 remains unpublished and REQ-126 remains Complete. Earlier totals and pending-approval notices are historical.
+
 **27 October 2026 — source candidate 1.26.4, unpublished; public 1.26.3 unchanged.**
 
 `CastAs-ListType-20` is an invalid variable-binding item type, not a failed list cast. The query declares `xs:NMTOKENS` as a SequenceType item type and requires XPST0051. The old legacy EnforceType path checked the constructed sequence's cardinality first and reported XPTY0004. It now uses the existing illegal conversion-target validator before atomization and membership/cardinality checks. List constructors and list casts remain valid in their proper contexts.

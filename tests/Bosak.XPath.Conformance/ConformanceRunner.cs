@@ -123,6 +123,7 @@
 //                      | Charles Korthout | 1.36  | 22-08-2026     | Skip app-Demos and app-XMark during full sweeps (heavy demo/benchmark sets) |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.35  | 21-08-2026     | Drop XML 1.1-only name-character gaps after implementing encode/decode construction        |
+//                      | Charles Korthout | 1.37  | 27-10-2026     | Remove only the two owner-approved K01 list-binding/castability skips.                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -168,12 +169,6 @@ internal sealed class ConformanceRunner
         ["cbcl-cast-duration-002"] = "Implementation-defined range limit: 10^27-year duration component rejected lexically before range detection",
         ["cbcl-cast-gYear-001"] = "Implementation-defined range limit: 10^26-digit year rejected lexically before range detection",
         ["cbcl-cast-gYearMonth-001"] = "Implementation-defined range limit: 10^26-digit year rejected lexically before range detection",
-        // XSD list-type casts resolve through the schema-simple-type path with the wrong
-        // error code (CastAs-ListType-20: XPTY0004 instead of XPST0051) and 'castable as'
-        // against a list type does not tokenize correctly (CastAs-ListType-28). List-type
-        // support is partial; recorded as an engine gap for a future schema-types pass.
-        ["CastAs-ListType-20"] = "Engine gap: cast to XSD list type raises XPTY0004 instead of XPST0051 (schema path)",
-        ["CastAs-ListType-28"] = "Engine gap: 'castable as' against an XSD list type does not tokenize the value",
     };
 
     /// <summary>

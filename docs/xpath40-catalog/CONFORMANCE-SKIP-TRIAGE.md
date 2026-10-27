@@ -4,6 +4,9 @@
   <p>26 October 2026 — released Bosak 1.26.3; frozen baselines preserved</p>
 </div>
 
+**K01 complete; approved QT3 baseline — 27 October 2026:** [Exact two-case adoption](../conformance/k01-schema-list/BASELINE-ADOPTION.md) removes only CastAs-ListType-20 and -28 from known skips. The fresh full QT3 gate passes **31,144/0/677**; qt4 remains 8,436/0/1,894. The owner approval and original receipts are preserved; no fixture/assertion/filter change. Source candidate 1.26.4 remains unpublished and REQ-126 remains Complete. Earlier totals and pending-approval notices are historical.
+
+
 **K01 schema-list correction — 27 October 2026:** [Correction and evidence](../conformance/k01-schema-list/README.md) fixes legacy typed bindings reporting XPTY0004 instead of XPST0051 for invalid list item types. All 18 regressions pass (baseline 6 failed/12 passed); direct original QT3 cases CastAs-ListType-20 and -28 now both pass. Both skips and frozen totals stay unchanged pending a separate baseline-policy approval. Source candidate 1.26.4 is unpublished; public 1.26.3 and REQ-126 bounded acceptance are unchanged. Earlier checkpoints are historical.
 
 
@@ -64,7 +67,7 @@ The observed multi-QName schema failure is a real capability boundary: XSD 1.1 s
 
 | ID | Follow-up | Recommendation |
 |---|---|---|
-| K01 | Schema-list stale skip/error-code pair | Correction verified in candidate1.26.4;18 regressions and both original direct probes pass. Exactly two skip removals await baseline-policy approval; totals remain frozen |
+| K01 | Schema-list stale skip/error-code pair | Complete: correction verified and exactly two skips removed with explicit approval; fresh QT3 31,144/0/677. Original frozen triage below remains historical. |
 | K02 | Seven schema-loader cases | Separate duration built-in resolution from six multi-affiliation substitution cases; establish supported XSD subset/design before implementing |
 | K03 | Supplementary XML-name construction | Trace QName/XDM/provider/serialization behavior; retain the actual Unicode name and assertion |
 | K04 | Dependency/routing applicability | Review negative/unknown capabilities and version/routing policy; stage resource-bounded wider qt4 exploration separately |
