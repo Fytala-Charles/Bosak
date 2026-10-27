@@ -1,0 +1,25 @@
+{
+  "command": [
+    "dotnet",
+    ".guard-tmp/k04-sequence-mechanism/bin/Release/net10.0/Probe.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 20,
+  "wallSeconds": 0.10911960000521503,
+  "log": "mechanism.log",
+  "results": [
+    {
+      "codepoint": 64500,
+      "value": 1,
+      "supported": false,
+      "result": ""
+    },
+    {
+      "codepoint": 9312,
+      "value": 1,
+      "supported": true,
+      "result": "\u2460"
+    }
+  ]
+}

@@ -1,4 +1,6 @@
 # K04-C11: bounded parse-integer and integer-set gate promotion
+**K04-C12 unsupported-sequence proposal - 27 October 2026:** [Exact baseline review](../k04-sequence-admission/BASELINE-UPDATE-PROPOSAL.md) verifies original format-integer-042 assertions in both profiles. Actual formatter mechanism and16expression controls prove decimal fallback for unsupported U+FBF4;288filter controls preserve other policy. Complete isolated rehearsals pass **31,162/0/659** and **8,587/0/1,892**,with only042removed and all retained skip reasons identical. Normal source and AGENTS stay **31,161/0/660** / **8,586/0/1,893** pending explicit owner approval of the exact three-file patch. Source-identical22,198solution passes are inherited,not a fresh unit run. Candidate1.28.0 unpublished/public1.26.3;no engine,fixture/assertion,schema or GatedSets change. Bosak.Schema owns staged XSD1.1;REQ-126 remains Complete. Earlier K04 notices are historical checkpoints.
+
 
 27 October 2026. Source base **4efb46a5**;new function functionality advances the unpublished candidate to **1.28.0**. Public version remains **1.26.3**.
 
