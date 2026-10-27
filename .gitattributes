@@ -221,3 +221,6 @@ docs/conformance/k04-profile-review/evidence/** -text whitespace=cr-at-eol,-blan
 
 # K04 explicit feature-admission review receipts retain original bytes.
 docs/conformance/k04-feature-inventory/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded collation-admission evidence retains original receipt bytes.
+docs/conformance/k04-collation-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

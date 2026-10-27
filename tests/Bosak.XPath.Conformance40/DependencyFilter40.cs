@@ -17,6 +17,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
 //                      | Charles Korthout | 0.4   | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+//                      | Charles Korthout | 0.5   | 27-10-2026     | Admit existing bounded non-codepoint collations; retain language and URI guards.       |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -47,7 +48,6 @@ internal sealed class DependencyFilter40
         "fullText-defaults",
         "binary",                            // EXPath-style binary data model not implemented
         "fn-format-integer-CLDR",            // CLDR numbering systems not implemented
-        "non_unicode_codepoint_collation",   // non-Unicode codepoint collations not supported
         "typedData",                         // harness does not build schema-validated (PSVI-typed) source nodes
     };
 
@@ -68,6 +68,7 @@ internal sealed class DependencyFilter40
         "moduleImport",
         "namespace-axis",
         "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation", // Existing HTML ASCII/UCA routes; URI support is bounded.
         "remote_http",
         "schemaImport",
         "schemaValidation",

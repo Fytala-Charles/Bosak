@@ -1,0 +1,142 @@
+[
+  {
+    "name": "control-ascii-equal",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-ascii-equal-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27389379998203367,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ascii-equal",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-ascii-equal.log"
+  },
+  {
+    "name": "control-ascii-only",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-ascii-only-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.28618460000143386,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ascii-only",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-ascii-only.log"
+  },
+  {
+    "name": "control-codepoint-distinct",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-codepoint-distinct-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2777936999918893,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-codepoint-distinct",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-codepoint-distinct.log"
+  },
+  {
+    "name": "control-uca-primary",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-uca-primary-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25015239999629557,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-uca-primary",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-uca-primary.log"
+  },
+  {
+    "name": "control-uca-order",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-uca-order-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24568819999694824,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-uca-order",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-uca-order.log"
+  },
+  {
+    "name": "control-unknown-uri",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-unknown-uri-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23423859998001717,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-unknown-uri",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-unknown-uri.log"
+  },
+  {
+    "name": "control-ascii-contains",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\control-ascii-contains-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23142779999761842,
+    "result": {
+      "Suite": "qt4",
+      "Name": "control-ascii-contains",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "control-ascii-contains.log"
+  }
+]

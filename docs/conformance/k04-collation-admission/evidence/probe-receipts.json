@@ -1,0 +1,262 @@
+[
+  {
+    "name": "compare-010",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\compare-010-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.9386895000061486,
+    "result": {
+      "Suite": "qt4",
+      "Name": "compare-010",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "compare-010.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-56",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-56-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.9497291999869049,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-56",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "K-SeqDeepEqualFunc-56.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-57",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-57-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.9381462000019383,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-57",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "K-SeqDeepEqualFunc-57.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-58",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-58-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19484660000307485,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-58",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-58.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-59",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-59-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1949148999992758,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-59",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-59.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-60",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-60-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20030739999492653,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-60",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-60.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-61",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-61-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19895970000652596,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-61",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 11: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-61.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-62",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-62-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.1988310000160709,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-62",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 132: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-62.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-63",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-63-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2017479999922216,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-63",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 49: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-63.log"
+  },
+  {
+    "name": "K-SeqDeepEqualFunc-70",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\K-SeqDeepEqualFunc-70-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22110959998099133,
+    "result": {
+      "Suite": "qt4",
+      "Name": "K-SeqDeepEqualFunc-70",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 132: XPST0003: Unexpected token LessThan in primary expression"
+    },
+    "log": "K-SeqDeepEqualFunc-70.log"
+  },
+  {
+    "name": "fn-substring-after-24",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\fn-substring-after-24-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26812039999640547,
+    "result": {
+      "Suite": "qt4",
+      "Name": "fn-substring-after-24",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "fn-substring-after-24.log"
+  },
+  {
+    "name": "fn-substring-before-24",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\fn-substring-before-24-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2800023999880068,
+    "result": {
+      "Suite": "qt4",
+      "Name": "fn-substring-before-24",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "fn-substring-before-24.log"
+  },
+  {
+    "name": "group-017",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-collation-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-collation-admission\\evidence\\group-017-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.19721809998736717,
+    "result": {
+      "Suite": "qt4",
+      "Name": "group-017",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 72: XPST0003: XPath does not allow a group by clause."
+    },
+    "log": "group-017.log"
+  }
+]
