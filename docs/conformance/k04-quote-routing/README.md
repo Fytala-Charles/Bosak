@@ -1,4 +1,6 @@
 # K04-C01: quote-aware routing review — 27 October 2026
+**K04-C01 adopted ? 27 October 2026:** Owner approved the exact 16-case quote-routing change proposed at `d0ca0741`. The complete normal QT3 gate passes **31,161/0/660**; exactly the 16 approved cases leave the skip set and all 660 retained names/reasons are unchanged. The qt4 gated run passes **8,437/0/1,893**, with 11 Experimental passes. All broader routing/schema/dependency guards remain unchanged. Candidate 1.26.11 remains unpublished; public version is 1.26.3. Bosak.Schema retains XSD 1.1 ownership; REQ-126 remains Complete. Next: the remaining K04 dependency-profile/polarity review. See [adoption receipt](adoption/BASELINE-ADOPTION.md) for approval and fresh validation. Earlier proposal notices are historical.
+
 
 **Correction verified in isolation; normal adoption awaits owner approval.** All 16 previously identified quote-routing cases pass their original assertions in a copied harness with only the raw quote refusal removed. The complete rehearsal reports **31,161/0/660**. Normal QT3 remains **31,145/0/676** until approval and a fresh adopted normal run.
 

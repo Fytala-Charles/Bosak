@@ -61,7 +61,7 @@ Target framework: `net10.0`. All tests must pass before considering a task compl
 
 Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
 
-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,145/0/676** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence.
+- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,161/0/660** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676.
 - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
 
 ## Architecture Overview

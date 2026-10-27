@@ -55,6 +55,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.26  | 03-10-2026     | Run schema-aware (QT3 schemaImport admitted): json-to-xml validate uses built-in schema |
 //                      | Charles Korthout | 0.27  | 27-10-2026     | Add default-off guarded query-owned schema initialization for bounded diagnostics.         |
+//                      | Charles Korthout | 0.28  | 27-10-2026     | Apply owner-approved quote-aware XQuery routing without broadening other guards.       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -289,11 +290,8 @@ internal sealed class TestExecutor
     {
         var stripped = StripLiteralsAndComments(expr).TrimStart();
 
-        // """...""" string constructors are not supported (checked on the raw text:
-        // stripping removes string literals and (: :) comments).
-        if (expr.Contains("\"\"\""))
-            return false;
-
+        // Existing lexical normalization and the XQuery parser handle doubled quotes;
+        // raw triple-double-quote substrings are not an unsupported-grammar predicate.
         if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
             return false;
 
