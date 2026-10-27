@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C03",
+  "status": "Complete for explicit feature-name admission;capability gaps retained",
+  "sourceBase": "8ea5e4ae1d6aa3591097fe59a61c79f1248d2706",
+  "summary": {
+    "controls": 222,
+    "profileOutcomesPerPhase": 327,
+    "changedProfileOutcomes": 23,
+    "changedControlRows": 15,
+    "smallProcesses": 4,
+    "timeouts": 0,
+    "inventoryCases": 78806,
+    "qt3FeatureNames": 24,
+    "qt4FeatureNames": 31,
+    "featureLedgerRows": 55,
+    "explicitLegacyAdmissions": {
+      "qt3": 19,
+      "qt4": 17
+    },
+    "currentFeatureDecisionsChanged": 0,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8437,
+      0,
+      1893
+    ],
+    "solutionPassed": 22007,
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1893,
+    "baselineChanged": false,
+    "candidateVersion": "1.26.11",
+    "publishedVersion": "1.26.3"
+  },
+  "changedControls": [
+    {
+      "id": "qt3-feature-unknown-k04-control-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-feature-unknown-k04-control-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3--True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3--True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3- serialization-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3- serialization-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-expath-file-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-expath-file-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-future-bosak-feature-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-future-bosak-feature-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-future-bosak-feature-2-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-future-bosak-feature-2-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-higherOrderFunction-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt3-higherOrderFunction-True",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-unknown-and-known",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-unknown-and-known",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-feature-unknown-k04-control-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt4--True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt4- serialization-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt4-future-bosak-feature-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt4-future-bosak-feature-2-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "feature-qt4-higherOrderFunction-True",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-unknown-and-known",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    }
+  ],
+  "limits": [
+    "Explicit legacy admissions are not full capability certifications",
+    "Other dependency kinds and their fallback policies are unchanged",
+    "No schema backend change;Bosak.Schema owns staged XSD1.1",
+    "No exploratory qt4 query sweep;all46985 qt4 cases inventoried as metadata",
+    "REQ-126 remains Complete;no release or upstream submission"
+  ],
+  "next": "Review non_unicode_codepoint_collation:QT3 admits original13cases;qt4 has one gated skip and12 exploratory cases;original assertions and scoped rehearsal required before changing admission."
+}

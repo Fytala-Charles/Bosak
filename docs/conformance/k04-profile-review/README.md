@@ -1,4 +1,6 @@
 # K04-C02: consistent bounded dependency polarity
+**K04-C03 explicit feature admission - 27 October 2026:** [Capability inventory](../k04-feature-inventory/README.md) records all 78,806 catalog cases and 55 feature/profile rows. Both filters now reject unrecognized feature names for either polarity and preserve explicit legacy admissions (19 QT3/17 qt4), without certifying full support. All 222 before/after controls pass; current feature decisions and all skip names/reasons remain unchanged. Fresh solution validation passes **22,007 tests**. Fresh gates remain **31,161/0/660** and **8,437/0/1,893**. Bosak.Schema retains staged XSD 1.1 ownership. Candidate1.26.11 unpublished/public1.26.3; REQ-126 remains Complete. Next: original-assertion review of the single gated qt4 non-codepoint-collation skip. Earlier K04 notices are historical checkpoints.
+
 
 27 October 2026. Source base `8a5eba4a`; candidate **1.26.11** unpublished, public **1.26.3**.
 

@@ -31,6 +31,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 23-08-2026     | schemaValidation feature now admitted                                                    |
 //                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
+//                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -47,6 +48,32 @@ internal sealed class DependencyFilter
         "xpath-1.0-compatibility",
         "olson-timezone",
         "arbitraryPrecisionDecimal",
+    };
+
+    // Explicit legacy catalog admission, not a certification of complete feature support.
+    // Keep schema/backend and harness-specific limits in the capability review ledger.
+    // Unrecognized names require review before either polarity can admit a test.
+    private static readonly HashSet<string> FrozenAdmittedFeatures = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "advanced-uca-fallback",
+        "collection-stability",
+        "directory-as-collection-uri",
+        "fn-format-integer-CLDR",
+        "fn-load-xquery-module",
+        "fn-transform-XSLT",
+        "fn-transform-XSLT30",
+        "higherOrderFunctions",
+        "infoset-dtd",
+        "moduleImport",
+        "namespace-axis",
+        "non_empty_sequence_collection",
+        "non_unicode_codepoint_collation",
+        "remote_http",
+        "schemaImport",
+        "schemaValidation",
+        "serialization",
+        "simple-uca-fallback",
+        "typedData",
     };
 
     // Spec tokens that Bosak supports (XPath versions)
@@ -78,6 +105,11 @@ internal sealed class DependencyFilter
 
         foreach (var dep in dependencies)
         {
+            if (dep.Type == "feature"
+                && !FrozenAdmittedFeatures.Contains(dep.Value)
+                && !UnsupportedFeatures.Contains(dep.Value))
+                return false; // Unknown is not evidence of support or non-support.
+
             if (!dep.Satisfied)
             {
                 // Apply polarity to the same profile predicate used by positive dependencies.
