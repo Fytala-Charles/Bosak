@@ -252,3 +252,6 @@ docs/conformance/k04-sequence-admission/PROPOSED-ADOPTION.patch -text whitespace
 
 # Owner-approved unsupported-sequence adoption receipts retain exact bytes.
 docs/conformance/k04-sequence-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C13 immutable diagnostic receipts.
+docs/conformance/k04-negative-capability-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
