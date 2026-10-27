@@ -50,6 +50,7 @@
 //                      | Charles Korthout | 2.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 2.10  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
 //                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |
+//                      | Charles Korthout | 2.12  | 27-10-2026     | Expose main-module schema imports internally for guarded conformance diagnostics.         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -104,6 +105,9 @@ public sealed class XQueryExecutable
 {
     private readonly IrModule _module;
     private readonly XQueryStaticContext _staticContext;
+
+    /// <summary>Gets declared main-module schema imports for conformance host initialization.</summary>
+    internal IReadOnlyList<SchemaImport> ConformanceSchemaImports => _staticContext.ImportedSchemas;
     private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
     private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
     private readonly IReadOnlyList<XQueryModuleSource> _moduleSources;

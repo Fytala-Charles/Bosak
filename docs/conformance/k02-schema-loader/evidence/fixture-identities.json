@@ -1,0 +1,8 @@
+{
+  "tests/qt3tests/prod/ValidateExpr.xml": "f2d9e0ca40e3208c24fd4fd04bc0beb7070be31823a38f87f40439acc6662984",
+  "tests/qt3tests/prod/ValidateExpr/xq-e18.xsd": "4968d5974da63eb685e070428ff8416aa31396c737816ed8e257eb43dc5b3c89",
+  "tests/qt3tests/prod/OrderByClause/orderData.xml": "04a6813de952f4dc43b9ef81f8e7e9c0042b5f816d5e41e7fd49cff8b4e93b16",
+  "tests/qt3tests/prod/OrderByClause/orderData.xsd": "08c7054054f27e6b95025fbdfbab10136ac75dec74c63582fc566ac854ea60d0",
+  "tests/qt3tests/prod/SchemaImport.xml": "55e0bc0b0395914511c6fd86e1f8bf605a9e1794ef308dd4758acb2e2cf503ec",
+  "tests/qt3tests/prod/SchemaImport/substitution11.xsd": "cdcaf21b589fd62855ebff6df733f0304c9cf1706141188b45fa323cfd4d442c"
+}

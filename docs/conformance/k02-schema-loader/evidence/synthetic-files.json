@@ -1,0 +1,26 @@
+{
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/invalid.xml": {
+    "sha256": "06413f1650464dbc2b1fd740cdf175ce7eb9132b9ecf59500a6487e5a1062a34",
+    "text": "<e xmlns=\"urn:loader\">oops</e>"
+  },
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/invalid.xsd": {
+    "sha256": "854495c3a0d14f8483fbd13863779d343f15e62d3c17a36db6c6e099b9d457fc",
+    "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:loader\" targetNamespace=\"urn:loader\" elementFormDefault=\"qualified\"><xs:element name=\"e\" type=\"xs:dayTimeDuration\"/></xs:schema>"
+  },
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/other.xsd": {
+    "sha256": "f37f790e42c2cc8c7b1de3357798383007f97a370a75b3e987704a1685d1876a",
+    "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:other\" targetNamespace=\"urn:other\" elementFormDefault=\"qualified\"><xs:element name=\"e\" type=\"xs:MissingType\"/></xs:schema>"
+  },
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/part.xsd": {
+    "sha256": "90ce4567a13b471b3f58dc8a6eb6fa61448846f38a3f3828a1086722acc8b997",
+    "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" targetNamespace=\"urn:loader\"><xs:element name=\"other\" type=\"xs:string\"/></xs:schema>"
+  },
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/valid.xml": {
+    "sha256": "cea3fe8b9acc5515779ca70a88dd8a19dcb4ef022a04a86928e9e2c94e01e35b",
+    "text": "<e xmlns=\"urn:loader\">7</e>"
+  },
+  "D:/Development/Bosak/.guard-tmp/k02-loader/fixtures/valid.xsd": {
+    "sha256": "aa01d9c52584fcc153e964fb710e58e46f6b58e5712d36481fd1da1b99333cb4",
+    "text": "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" xmlns:t=\"urn:loader\" targetNamespace=\"urn:loader\" elementFormDefault=\"qualified\"><xs:element name=\"e\" type=\"xs:integer\"/></xs:schema>"
+  }
+}

@@ -54,6 +54,7 @@
 //                      | Charles Korthout | 0.25  | 21-09-2026     | API freeze stage A: ParseException renamed to XPathParseException                      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.26  | 03-10-2026     | Run schema-aware (QT3 schemaImport admitted): json-to-xml validate uses built-in schema |
+//                      | Charles Korthout | 0.27  | 27-10-2026     | Add default-off guarded query-owned schema initialization for bounded diagnostics.         |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -66,13 +67,25 @@ using Bosak.XPath.Parser;
 using Bosak.XPath.Runtime.Vm;
 using Bosak.XPath.Standard.Functions;
 using Bosak.XQuery.Api;
+using Bosak.XQuery.Compiler;
 
 namespace Bosak.XPath.Conformance;
 
 internal sealed class TestExecutor
 {
+    /// <summary>Gets whether bounded diagnostics delegate eligible schemas to declared query imports.</summary>
+    internal bool UseQueryOwnedSchemasForDiagnostics { get; init; }
+
+    /// <summary>Gets whether the last diagnostic deferred environment schema compilation.</summary>
+    internal bool DeferredEnvironmentSchemas { get; private set; }
+
+    /// <summary>Gets the guarded initialization decision for the last executed diagnostic.</summary>
+    internal string SchemaInitializationDecision { get; private set; } = "NoEnvironment";
+
     public TestOutcome Execute(TestCase testCase, TestEnvironment? environment)
     {
+        DeferredEnvironmentSchemas = false;
+        SchemaInitializationDecision = "NoEnvironment";
         string expr = testCase.Expression.Trim();
         bool xquerySyntax = LooksLikeXQuery(expr);
         bool hasXqDeps = DependencyFilter.HasXQueryOnlySpecDependency(testCase.Dependencies);
@@ -129,7 +142,10 @@ internal sealed class TestExecutor
 
         if (environment is not null)
         {
-            ctx = environment.ApplyTo(ctx);
+            var schemaDecision = DecideSchemaInitialization(routeXQuery, testCase, environment, expr);
+            DeferredEnvironmentSchemas = schemaDecision.Defer;
+            SchemaInitializationDecision = schemaDecision.Reason;
+            ctx = environment.ApplyTo(ctx, schemaDecision.Defer);
 
             // Bind external variables: evaluate each <param select="..."> in the prepared
             // context (namespaces, sources, and $var sources are already applied).
@@ -216,6 +232,49 @@ internal sealed class TestExecutor
         }
 
         return ResultComparer.Compare(testCase.ResultElement, result, caughtException, testCase.BaseDirectory, ctx.StaticOutputParameters);
+    }
+
+    private (bool Defer, string Reason) DecideSchemaInitialization(bool xquery, TestCase test,
+        TestEnvironment environment, string expression)
+    {
+        if (!UseQueryOwnedSchemasForDiagnostics) return (false, "CurrentMode");
+        if (!xquery) return (false, "XPathPath");
+        if (test.Dependencies.Any(d => d.Type == "xsd-version")
+            || environment.Schemas.Any(s => s.XsdVersion is not null))
+            return (false, "DeclaredXsdProfileNotReviewed");
+        if (environment.Sources.Any(s => !string.IsNullOrEmpty(s.Validation)))
+            return (false, "DeclaredSourceValidation");
+        if (environment.Parameters.Count != 0) return (false, "EnvironmentParameters");
+        if (!string.IsNullOrEmpty(environment.ContextItemSelect)) return (false, "InlineContext");
+        if (environment.CollectionQueries.Count != 0) return (false, "CollectionQueries");
+        if (test.Modules.Count != 0) return (false, "ModulesNotReviewed");
+        if (environment.Schemas.Count == 0) return (false, "NoEnvironmentSchemas");
+        if (environment.Schemas.Any(s => string.IsNullOrEmpty(s.Uri)))
+            return (false, "NoNamespaceAssociation");
+        if (environment.Schemas.Any(s => !File.Exists(s.FilePath)))
+            return (false, "MissingSchemaFile");
+        if (environment.Schemas.GroupBy(s => s.Uri).Any(g => g.Count() != 1))
+            return (false, "MultiplePhysicalComponents");
+        try
+        {
+            // Inspect the parsed main module before compilation can load module files.
+            var parsed = XQueryParser.Parse(expression);
+            if (parsed.IsLibraryModule || parsed.StaticContext.ImportedModules.Count != 0)
+                return (false, "ModulesNotReviewed");
+            var compiler = new XQueryCompiler();
+            foreach (var ns in environment.Namespaces) compiler.WithNamespace(ns.Prefix, ns.Uri);
+            var namespaces = compiler.Compile(expression).ConformanceSchemaImports
+                .Select(import => import.NamespaceUri ?? "").ToHashSet(StringComparer.Ordinal);
+            if (namespaces.Count == 0) return (false, "NoQueryImports");
+            if (environment.Schemas.Any(s => !namespaces.Contains(s.Uri!)))
+                return (false, "UnownedEnvironmentNamespace");
+            return (true, "QueryOwnedImportSubset");
+        }
+        catch (Exception error)
+        {
+            // A diagnostic decision must not replace the normal compilation/error path.
+            return (false, "CompileMetadataUnavailable:" + error.GetType().Name);
+        }
     }
 
     /// <summary>

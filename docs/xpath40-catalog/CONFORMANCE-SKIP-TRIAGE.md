@@ -4,6 +4,9 @@
   <p>26 October 2026 — released Bosak 1.26.3; frozen baselines preserved</p>
 </div>
 
+**K02 guarded loader diagnostics — 27 October 2026:** [Implemented guarded mode](../conformance/k02-schema-loader/README.md) delegates eligible schemas to actual query imports only when explicitly enabled for diagnostics; normal eager loading stays the default. All 66 actual-harness diagnostic runs match independent expectations, including wrong-assertion failures and preserved source/profile boundaries. All 21,825 solution tests and both normal gates pass at 31,144/0/677 and 8,436/0/1,894; all 677 QT3 skips/reasons are unchanged. Candidate 1.26.6 is unpublished. K02 profile/capability and wider applicability work remain open; no admission or baseline change. Earlier checkpoints are historical.
+
+
 **K02 bounded diagnostic correction — 27 October 2026:** [Duration-schema investigation](../conformance/k02-schema-duration/README.md) reproduces the unavailable schema duration types and corrects the public aggregated schema-import error to XQST0012. All 9 regressions pass (baseline 4 failed/5 passed). The original public query reaches its declared error alternative, but the QT3 environment still fails before query execution; validateexpr-28 remains skipped. No XSD 1.1 capability, skip, fixture or baseline change. Candidate 1.26.5 is unpublished; public 1.26.3 and REQ-126 acceptance are unchanged. Earlier checkpoints are historical.
 
 
@@ -71,7 +74,7 @@ The observed multi-QName schema failure is a real capability boundary: XSD 1.1 s
 | ID | Follow-up | Recommendation |
 |---|---|---|
 | K01 | Schema-list stale skip/error-code pair | Complete: correction verified and exactly two skips removed with explicit approval; fresh QT3 31,144/0/677. Original frozen triage below remains historical. |
-| K02 | Seven schema-loader cases | Duration boundary reproduced; public aggregated import error corrected to XQST0012 in candidate1.26.5. Environment loading and six substitution cases remain open; no skip/baseline change. |
+| K02 | Seven schema-loader cases | Guarded diagnostic mode verified in candidate1.26.6; duration error alternative passes only when opted in. Normal loading, explicit-profile/substitution capability and wider applicability remain open; all677 normal skips unchanged. |
 | K03 | Supplementary XML-name construction | Trace QName/XDM/provider/serialization behavior; retain the actual Unicode name and assertion |
 | K04 | Dependency/routing applicability | Review negative/unknown capabilities and version/routing policy; stage resource-bounded wider qt4 exploration separately |
 | K05 | Billion-item range guard | Establish a spec-correct early bound and bounded regression before executing the original dangerous case |

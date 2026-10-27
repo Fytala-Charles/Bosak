@@ -1,5 +1,8 @@
 # K02: duration-schema boundary and import diagnostics
 
+
+**K02 guarded loader diagnostics — 27 October 2026:** [Implemented guarded mode](../k02-schema-loader/README.md) delegates eligible schemas to actual query imports only when explicitly enabled for diagnostics; normal eager loading stays the default. All 66 actual-harness diagnostic runs match independent expectations, including wrong-assertion failures and preserved source/profile boundaries. All 21,825 solution tests and both normal gates pass at 31,144/0/677 and 8,436/0/1,894; all 677 QT3 skips/reasons are unchanged. Candidate 1.26.6 is unpublished. K02 profile/capability and wider applicability work remain open; no admission or baseline change. Earlier checkpoints are historical.
+
 **27 October 2026 — unpublished source candidate 1.26.5; public 1.26.3 unchanged.**
 
 `validateexpr-28` imports a schema that restricts `xs:dayTimeDuration` and `xs:yearMonthDuration`. The current .NET schema compiler rejects those names in schema definitions before the QT3 query executes. This remains a loader/profile boundary. Substituting `xs:duration` would require independent proof of subtype, lexical, facet and typed-value behavior; this slice makes no such substitution.

@@ -1,0 +1,29 @@
+// Generated bounded K02 harness-copy driver; all original assertions remain unchanged.
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Conformance;
+
+var request=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement.EnumerateArray().Single(q=>q.GetProperty("id").GetString()==args[1]);
+var mode=args[2];var suite=Path.GetFullPath("tests/qt3tests");XNamespace ns="http://www.w3.org/2010/09/qt-fots-catalog";
+TestCase test;TestEnvironment? env=null;bool declaredSchemaVersion=false;
+if(request.GetProperty("kind").GetString()=="original"){
+ var path=request.GetProperty("setFile").GetString()!;var doc=XDocument.Load(path,LoadOptions.PreserveWhitespace);
+ var e=doc.Descendants(ns+"test-case").Single(t=>(string?)t.Attribute("name")==request.GetProperty("name").GetString());
+ test=TestCase.FromElement(e,ns,doc.Root!.Elements(ns+"dependency").Select(d=>Dependency.FromElement(d)).ToList(),Path.GetDirectoryName(path)!);
+ var reference=e.Element(ns+"environment");var name=(string?)reference?.Attribute("ref");
+ var definition=name is null?reference:doc.Descendants(ns+"environment").FirstOrDefault(x=>(string?)x.Attribute("name")==name);
+ if(definition is null&&name is not null){definition=XDocument.Load(Path.Combine(suite,"catalog.xml")).Descendants(ns+"environment").FirstOrDefault(x=>(string?)x.Attribute("name")==name);if(definition is not null)env=TestEnvironment.FromElement(definition,suite,suite);}
+ if(definition is not null)declaredSchemaVersion=definition.DescendantsAndSelf().Any(x=>x.Attribute("xsd-version") is not null);
+ if(env is null&&definition is not null)env=TestEnvironment.FromElement(definition,suite,Path.GetDirectoryName(path)!);
+}else{
+ var element=new XElement(ns+"test-case",new XAttribute("name",request.GetProperty("id").GetString()!),new XElement(ns+"dependency",new XAttribute("type","spec"),new XAttribute("value",request.GetProperty("dependency").GetString()!)),new XElement(ns+"test",request.GetProperty("expression").GetString()),XElement.Parse("<result xmlns='"+ns+"'>"+request.GetProperty("result").GetString()+"</result>"));
+ if(request.TryGetProperty("xsdVersion",out var version))element.Add(new XElement(ns+"dependency",new XAttribute("type","xsd-version"),new XAttribute("value",version.GetString()!)));
+ if(request.TryGetProperty("module",out var module)&&module.GetBoolean())element.Add(new XElement(ns+"module",new XAttribute("uri","urn:module"),new XAttribute("file","not-loaded.xq")));
+ test=TestCase.FromElement(element,ns,new List<Dependency>(),Path.GetFullPath(".guard-tmp/k02-loader/fixtures"));
+ var environment=XElement.Parse("<environment xmlns='"+ns+"'>"+request.GetProperty("environment").GetString()+"</environment>");declaredSchemaVersion=environment.DescendantsAndSelf().Any(x=>x.Attribute("xsd-version") is not null);env=TestEnvironment.FromElement(environment,suite,Path.GetFullPath(".guard-tmp/k02-loader/fixtures"));
+}
+env??=new TestEnvironment();
+var executor=new TestExecutor{SchemaMode=mode,DeclaredSchemaVersion=declaredSchemaVersion};string kind,message;string? exceptionType=null;
+try{var result=executor.Execute(test,env);kind=result.Kind.ToString();message=result.Message??"";}
+catch(Exception error){kind="HarnessException";message=error.Message;exceptionType=error.GetType().FullName;}
+Console.WriteLine(JsonSerializer.Serialize(new{id=request.GetProperty("id").GetString(),mode,kind,message,exceptionType,deferred=executor.Deferred,decision=executor.Decision,expression=test.Expression,assertion=test.ResultElement.ToString(SaveOptions.DisableFormatting)}));

@@ -1,0 +1,16 @@
+from pathlib import Path
+import json,subprocess,time
+E=Path('docs/conformance/k02-schema-loader/evidence');request=E/'requests.json';rows=json.loads(request.read_text(encoding='utf-8'));receipts=[]
+for row in rows:
+ for mode in row['modes']:
+  log=E/(row['id']+'-'+mode+'.log');command=['dotnet','.guard-tmp/k02-loader/bin/Release/net10.0/Bosak.XPath.Conformance.dll',str(request),row['id'],mode];start=time.monotonic()
+  with log.open('wb') as output:
+   try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+   except subprocess.TimeoutExpired:code=None;timeout=True
+  lines=log.read_text(encoding='utf-8-sig').splitlines();result=None
+  if code==0:
+   try:result=json.loads(lines[-1])
+   except(ValueError,IndexError):pass
+  receipts.append(dict(id=row['id'],mode=mode,exitCode=code,timeout=timeout,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result))
+  print(row['id'],mode,result['kind'] if result else code,result['decision'] if result else '',flush=True)
+(E/'results.json').write_text(json.dumps(receipts,indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
