@@ -1,0 +1,142 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C02",
+  "status": "Complete for bounded spec/default-language polarity;broader profile policy remains open",
+  "sourceBase": "8a5eba4a9d75c2459a5e73d8e79113b348a8ff50",
+  "summary": {
+    "controls": 74,
+    "profileOutcomesPerPhase": 111,
+    "changedProfileOutcomes": 13,
+    "smallProcesses": 4,
+    "timeouts": 0,
+    "inventory": {
+      "counts": {
+        "qt3": {
+          "allCases": 31821,
+          "normalGateCases": 31821,
+          "selectedCases": 0,
+          "gatedSelectedCases": 0
+        },
+        "qt4": {
+          "allCases": 46985,
+          "normalGateCases": 10330,
+          "selectedCases": 0,
+          "gatedSelectedCases": 0
+        }
+      },
+      "negativeTypes": {
+        "feature": 58,
+        "language": 4,
+        "calendar": 4,
+        "format-integer-sequence": 2,
+        "unicode-normalization-form": 4,
+        "revalidation": 3
+      },
+      "gatedSetCount": 224
+    },
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8437,
+      0,
+      1893
+    ],
+    "solutionPassed": 22007,
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1893,
+    "baselineChanged": false,
+    "candidateVersion": "1.26.11",
+    "publishedVersion": "1.26.3"
+  },
+  "changedControls": [
+    {
+      "id": "qt3-spec-XP40+-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-spec-XP40+-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-spec-XQ31+-False",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-spec-XP31+ XQ31+-False",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-spec-XP31+ XQ10-False",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt3-spec-XQ40+-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-spec-XQ40+-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-default-language-fr-CA-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-default-language-fr-CA-False",
+      "profile": "xquerySupported",
+      "before": false,
+      "after": true
+    },
+    {
+      "id": "qt3-contradiction-XQ31+",
+      "profile": "xquerySupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-spec-XP31+ XQ31+-False",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-spec-XP31+ XQ10-False",
+      "profile": "xpathSupported",
+      "before": true,
+      "after": false
+    },
+    {
+      "id": "qt4-default-language-fr-CA-False",
+      "profile": "xpathSupported",
+      "before": false,
+      "after": true
+    }
+  ],
+  "limits": [
+    "Positive predicates and routing policy unchanged",
+    "Other negative dependency types and unknown positive feature policy unchanged",
+    "No XSD1.1 capability added;Bosak.Schema owns staged implementation",
+    "All46985 qt4 cases inventoried as metadata;only10330 gated cases executed",
+    "REQ-126 remains Complete for accepted bounded catalog",
+    "No release or upstream submission"
+  ]
+}

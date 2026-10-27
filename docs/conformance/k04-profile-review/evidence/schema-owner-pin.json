@@ -1,0 +1,6 @@
+{
+  "path": "D:\\Development\\Bosak.Schema\\docs\\XSD11_GAP_MATRIX.md",
+  "sha256": "5a52cbf714085055fd97a69fbedcd30fd9d3f4bf345ed6513e6f9a8d95583944",
+  "repositoryRevision": "f9c4c41336a7a40c80d9bd13d31345fb2e9f83c3",
+  "observation": "Staged XSD1.1 REQ-009 owned by Bosak.Schema;current core seam uses XmlSchemaSet;filter admission alone is not implementation capability."
+}

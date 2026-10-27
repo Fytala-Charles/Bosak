@@ -30,6 +30,7 @@
 //                      | Charles Korthout | 0.13  | 23-08-2026     | advanced-uca-fallback feature now supported                                               |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.14  | 23-08-2026     | schemaValidation feature now admitted                                                    |
+//                      | Charles Korthout | 0.15  | 27-10-2026     | Invert spec/default-language predicates consistently; clarify schema profile ownership. |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -79,6 +80,16 @@ internal sealed class DependencyFilter
         {
             if (!dep.Satisfied)
             {
+                // Apply polarity to the same profile predicate used by positive dependencies.
+                // Other dependency kinds retain their existing capability policy.
+                if (dep.Type is "spec" or "default-language")
+                {
+                    var positive = new Dependency(dep.Type, dep.Value, satisfied: true);
+                    if (IsSupported(new[] { positive }, allowXQuerySpecs))
+                        return false;
+                    continue;
+                }
+
                 // Negative dependency: if we DO support this feature, skip the test
                 if (IsUnsupportedFeature(dep))
                     continue; // we don't support it, so negative dependency is satisfied
@@ -139,7 +150,8 @@ internal sealed class DependencyFilter
 
             if (dep.Type == "xsd-version")
             {
-                // Bosak implements XSD 1.1 (required by XPath 3.1); skip XSD 1.0-only tests
+                // Frozen catalog admission profile; this is not an XSD 1.1 capability claim.
+                // Bosak.Schema owns staged XSD 1.1; the current core seam uses XmlSchemaSet.
                 if (dep.Value == "1.0")
                     return false;
                 if (dep.Value != "1.1")
