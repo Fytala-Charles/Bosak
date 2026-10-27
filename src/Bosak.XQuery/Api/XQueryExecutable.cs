@@ -49,6 +49,7 @@
 //                      | Charles Korthout | 2.8   | 09-09-2026     | Register unsupplied external variable declarations (XPDY0002 on reference)               |
 //                      | Charles Korthout | 2.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 2.10  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
+//                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -299,7 +300,7 @@ public sealed class XQueryExecutable
         schemaSet.Compile();
         if (errors.Count > 0)
         {
-            throw new InvalidOperationException($"Schema compilation failed:\n{string.Join("\n", errors)}");
+            throw new InvalidOperationException($"XQST0012: Schema compilation failed:\n{string.Join("\n", errors)}");
         }
         return schemaSet;
     }

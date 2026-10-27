@@ -35,6 +35,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**K02 bounded diagnostic correction — 27 October 2026:** [Duration-schema investigation](conformance/k02-schema-duration/README.md) reproduces the unavailable schema duration types and corrects the public aggregated schema-import error to XQST0012. All 9 regressions pass (baseline 4 failed/5 passed). The original public query reaches its declared error alternative, but the QT3 environment still fails before query execution; validateexpr-28 remains skipped. No XSD 1.1 capability, skip, fixture or baseline change. Candidate 1.26.5 is unpublished; public 1.26.3 and REQ-126 acceptance are unchanged. Earlier checkpoints are historical.
+
+
 **K01 complete; approved QT3 baseline — 27 October 2026:** [Exact two-case adoption](conformance/k01-schema-list/BASELINE-ADOPTION.md) removes only CastAs-ListType-20 and -28 from known skips. The fresh full QT3 gate passes **31,144/0/677**; qt4 remains 8,436/0/1,894. The owner approval and original receipts are preserved; no fixture/assertion/filter change. Source candidate 1.26.4 remains unpublished and REQ-126 remains Complete. Earlier totals and pending-approval notices are historical.
 
 
@@ -3978,3 +3981,8 @@ Source 1.24.0 adds `GetLiteralElementRenameTarget` / `ProposeLiteralElementRenam
 ### Schema-list binding correction (candidate 1.26.4)
 
 A list constructor such as `xs:NMTOKENS("a b c")` produces member atomic values. Bind them as `xs:NMTOKEN*`, rather than declaring the list name `xs:NMTOKENS` as a variable item type. Executed legacy bindings with an invalid list item type now report XPST0051 before cardinality checking. This does not establish complete eager static validation. See [the pinned contract and regressions](conformance/k01-schema-list/README.md).
+
+
+### Schema-import compilation diagnostics (candidate 1.26.5)
+
+When imported schema definitions fail compilation, the public XQuery resolver path now prefixes its collected diagnostic with `XQST0012`. Missing schema resolution retains `XQST0059`; resolver I/O and malformed XML are preserved. This does not add XSD 1.1 schema datatype support or change the current eager environment loader in the QT3 harness. See [the exact boundary and regressions](conformance/k02-schema-duration/README.md).

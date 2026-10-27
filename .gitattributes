@@ -184,3 +184,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/conformance/k01-schema-list/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/conformance/k01-schema-list/baseline-adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-schema-duration/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
