@@ -199,3 +199,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/conformance/k02-admission-review/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/conformance/k02-admission-review/baseline-adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k03-unicode-names/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

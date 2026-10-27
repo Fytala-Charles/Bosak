@@ -1,0 +1,882 @@
+[
+  {
+    "id": "original-map-to-element-053",
+    "request": {
+      "id": "original-map-to-element-053",
+      "kind": "harness",
+      "case": "map-to-element-053"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "original-map-to-element-053"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.8007233000244014,
+    "log": "original-map-to-element-053.log",
+    "result": {
+      "id": "original-map-to-element-053",
+      "kind": "harness",
+      "detail": {
+        "kind": "Skipped",
+        "message": "Unexpected error: XmlException: Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+        "expression": "string-to-codepoints(name(map-to-element({ codepoints-to-string(119070): 'x' })))",
+        "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>119070</assert-eq>\r\n</result>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "map-name-0x41",
+    "request": {
+      "id": "map-name-0x41",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(65): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x41"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7792007999960333,
+    "log": "map-name-0x41.log",
+    "result": {
+      "id": "map-name-0x41",
+      "kind": "query",
+      "detail": {
+        "value": "(sequence)"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "map-name-0x3c0",
+    "request": {
+      "id": "map-name-0x3c0",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(960): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x3c0"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.7817074000195134,
+    "log": "map-name-0x3c0.log",
+    "result": {
+      "id": "map-name-0x3c0",
+      "kind": "query",
+      "detail": {
+        "value": "(sequence)"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "map-name-0x3001",
+    "request": {
+      "id": "map-name-0x3001",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(12289): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x3001"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2801144999975804,
+    "log": "map-name-0x3001.log",
+    "result": {
+      "id": "map-name-0x3001",
+      "kind": "query",
+      "detail": null,
+      "error": "FOJS0009: map key '、' is not a valid XML name",
+      "exceptionType": "InvalidOperationException",
+      "stack": "   at Bosak.XPath.Standard.Functions.ElementMap.FailName(String key) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 449\r\n   at Bosak.XPath.Standard.Functions.ElementMap.ParseName(String key, Boolean isAttribute, EmOptions o, EvaluationContext ctx, String parentNs) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 442\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1157\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0x200c",
+    "request": {
+      "id": "map-name-0x200c",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(8204): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x200c"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2771407999971416,
+    "log": "map-name-0x200c.log",
+    "result": {
+      "id": "map-name-0x200c",
+      "kind": "query",
+      "detail": null,
+      "error": "FOJS0009: map key '‌' is not a valid XML name",
+      "exceptionType": "InvalidOperationException",
+      "stack": "   at Bosak.XPath.Standard.Functions.ElementMap.FailName(String key) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 449\r\n   at Bosak.XPath.Standard.Functions.ElementMap.ParseName(String key, Boolean isAttribute, EmOptions o, EvaluationContext ctx, String parentNs) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 442\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1157\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0x10000",
+    "request": {
+      "id": "map-name-0x10000",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(65536): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x10000"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25866240001050755,
+    "log": "map-name-0x10000.log",
+    "result": {
+      "id": "map-name-0x10000",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '𐀀' character, hexadecimal value 0x10000.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0x1d11e",
+    "request": {
+      "id": "map-name-0x1d11e",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(119070): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x1d11e"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25342300001648255,
+    "log": "map-name-0x1d11e.log",
+    "result": {
+      "id": "map-name-0x1d11e",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0xeffff",
+    "request": {
+      "id": "map-name-0xeffff",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(983039): 'x' })))",
+      "contract": "Accepted scalar NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0xeffff"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25342059999820776,
+    "log": "map-name-0xeffff.log",
+    "result": {
+      "id": "map-name-0xeffff",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '󯿿' character, hexadecimal value 0xEFFFF.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0xf0000",
+    "request": {
+      "id": "map-name-0xf0000",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(983040): 'x' })))",
+      "contract": "FOJS0009 invalid NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0xf0000"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2530494999955408,
+    "log": "map-name-0xf0000.log",
+    "result": {
+      "id": "map-name-0xf0000",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '󰀀' character, hexadecimal value 0xF0000.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "map-name-0x10ffff",
+    "request": {
+      "id": "map-name-0x10ffff",
+      "kind": "query",
+      "expression": "string-to-codepoints(name(map-to-element(map { codepoints-to-string(1114111): 'x' })))",
+      "contract": "FOJS0009 invalid NCName"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "map-name-0x10ffff"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25280499999644235,
+    "log": "map-name-0x10ffff.log",
+    "result": {
+      "id": "map-name-0x10ffff",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '􏿿' character, hexadecimal value 0x10FFFF.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "supplementary-child",
+    "request": {
+      "id": "supplementary-child",
+      "kind": "query",
+      "expression": "name(map-to-element(map{'r': map{codepoints-to-string(119070): 'x'}})/*)"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "supplementary-child"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2530863000138197,
+    "log": "supplementary-child.log",
+    "result": {
+      "id": "supplementary-child",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.AddChildElement(XElement parent, String key, XdmValue v) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1437\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.FillFromMap(XElement el, XdmMap map) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1394\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.FillContent(XElement el, XdmValue value, Boolean isRoot) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1328\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1184\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "supplementary-attribute",
+    "request": {
+      "id": "supplementary-attribute",
+      "kind": "query",
+      "expression": "name(map-to-element(map{'r': map{'@' || codepoints-to-string(119070): 'x'}})/@*)"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "supplementary-attribute"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.25786990000051446,
+    "log": "supplementary-attribute.log",
+    "result": {
+      "id": "supplementary-attribute",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.AddAttribute(XElement el, String name, XdmValue v) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1414\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.FillFromMap(XElement el, XdmMap map) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1388\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.FillContent(XElement el, XdmValue value, Boolean isRoot) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1328\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1184\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "supplementary-qname",
+    "request": {
+      "id": "supplementary-qname",
+      "kind": "query",
+      "expression": "local-name(map-to-element(map{'Q{urn:k03}' || codepoints-to-string(119070): 'x'}))"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "supplementary-qname"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26814090000698343,
+    "log": "supplementary-qname.log",
+    "result": {
+      "id": "supplementary-qname",
+      "kind": "query",
+      "detail": null,
+      "error": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+      "exceptionType": "XmlException",
+      "stack": "   at System.Xml.XmlConvert.VerifyNCName(String name, ExceptionType exceptionType)\r\n   at System.Xml.Linq.XName..ctor(XNamespace ns, String localName)\r\n   at System.Xml.Linq.XNamespace.GetName(String localName, Int32 index, Int32 count)\r\n   at Bosak.XPath.Standard.Functions.ElementMap.Builder.CreateElement(ParsedName name) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1218\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1183\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "ascii-serialize",
+    "request": {
+      "id": "ascii-serialize",
+      "kind": "query",
+      "expression": "serialize(map-to-element(map{'r': 'x'}))"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "ascii-serialize"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24697299997205846,
+    "log": "ascii-serialize.log",
+    "result": {
+      "id": "ascii-serialize",
+      "kind": "query",
+      "detail": {
+        "value": "<r>x</r>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "literal-sentinel-text",
+    "request": {
+      "id": "literal-sentinel-text",
+      "kind": "query",
+      "expression": "string(map-to-element(map{'r': 'ǀ0041ǁ'}))"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "literal-sentinel-text"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24200450000353158,
+    "log": "literal-sentinel-text.log",
+    "result": {
+      "id": "literal-sentinel-text",
+      "kind": "query",
+      "detail": {
+        "value": "ǀ0041ǁ"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "literal-sentinel-serialize",
+    "request": {
+      "id": "literal-sentinel-serialize",
+      "kind": "query",
+      "expression": "serialize(map-to-element(map{'r': 'ǀ0041ǁ'}))"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "literal-sentinel-serialize"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23653059999924153,
+    "log": "literal-sentinel-serialize.log",
+    "result": {
+      "id": "literal-sentinel-serialize",
+      "kind": "query",
+      "detail": {
+        "value": "<r>ǀ0041ǁ</r>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "literal-sentinel-name",
+    "request": {
+      "id": "literal-sentinel-name",
+      "kind": "query",
+      "expression": "name(map-to-element(map{'ǀ0041ǁ': 'x'}))"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "literal-sentinel-name"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2446778000157792,
+    "log": "literal-sentinel-name.log",
+    "result": {
+      "id": "literal-sentinel-name",
+      "kind": "query",
+      "detail": {
+        "value": "ǀ0041ǁ"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "invalid-digit-start",
+    "request": {
+      "id": "invalid-digit-start",
+      "kind": "query",
+      "expression": "map-to-element(map{'1bad': 'x'})"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "invalid-digit-start"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24094989997684024,
+    "log": "invalid-digit-start.log",
+    "result": {
+      "id": "invalid-digit-start",
+      "kind": "query",
+      "detail": null,
+      "error": "FOJS0009: map key '1bad' is not a valid XML name",
+      "exceptionType": "InvalidOperationException",
+      "stack": "   at Bosak.XPath.Standard.Functions.ElementMap.FailName(String key) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 449\r\n   at Bosak.XPath.Standard.Functions.ElementMap.ParseName(String key, Boolean isAttribute, EmOptions o, EvaluationContext ctx, String parentNs) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 442\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1157\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "invalid-empty",
+    "request": {
+      "id": "invalid-empty",
+      "kind": "query",
+      "expression": "map-to-element(map{'': 'x'})"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "invalid-empty"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23359200000413693,
+    "log": "invalid-empty.log",
+    "result": {
+      "id": "invalid-empty",
+      "kind": "query",
+      "detail": null,
+      "error": "FOJS0009: map key is not a valid XML name",
+      "exceptionType": "InvalidOperationException",
+      "stack": "   at Bosak.XPath.Standard.Functions.ElementMap.ParseName(String key, Boolean isAttribute, EmOptions o, EvaluationContext ctx, String parentNs) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 403\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1157\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "invalid-space",
+    "request": {
+      "id": "invalid-space",
+      "kind": "query",
+      "expression": "map-to-element(map{'a b': 'x'})"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "invalid-space"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23822510000900365,
+    "log": "invalid-space.log",
+    "result": {
+      "id": "invalid-space",
+      "kind": "query",
+      "detail": null,
+      "error": "FOJS0009: map key 'a b' is not a valid XML name",
+      "exceptionType": "InvalidOperationException",
+      "stack": "   at Bosak.XPath.Standard.Functions.ElementMap.FailName(String key) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 449\r\n   at Bosak.XPath.Standard.Functions.ElementMap.ParseName(String key, Boolean isAttribute, EmOptions o, EvaluationContext ctx, String parentNs) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 442\r\n   at Bosak.XPath.Standard.Functions.ElementMap.MapToElement(XdmValue input, EmOptions o, EvaluationContext ctx) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\ElementMap.cs:line 1157\r\n   at Bosak.XPath.Standard.Functions.FunctionLibrary.MapToElement_1(EvaluationContext ctx, ReadOnlySpan`1 args) in D:\\Development\\Bosak\\src\\Bosak.XPath.Standard\\Functions\\FunctionLibrary.cs:line 5471\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.ExecuteBlock(IrModule module, EvaluationContext context, XdmValue[] registers, Int32 startIp) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 628\r\n   at Bosak.XPath.Runtime.Vm.VmEngine.Execute(IrModule module, EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Runtime\\Vm\\VmEngine.cs:line 473\r\n   at Bosak.XPath.Api.XPath31Expression.Evaluate(EvaluationContext context) in D:\\Development\\Bosak\\src\\Bosak.XPath.Api\\XPath31Expression.cs:line 862\r\n   at Program.<Main>$(String[] args) in D:\\Development\\Bosak\\.guard-tmp\\k03-driver\\Program.cs:line 18"
+    }
+  },
+  {
+    "id": "platform-65",
+    "request": {
+      "id": "platform-65",
+      "kind": "platform",
+      "name": "A"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "platform-65"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.07539350001025014,
+    "log": "platform-65.log",
+    "result": {
+      "id": "platform-65",
+      "kind": "platform",
+      "detail": {
+        "verifyError": null,
+        "xnameError": null
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "platform-960",
+    "request": {
+      "id": "platform-960",
+      "kind": "platform",
+      "name": "π"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "platform-960"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.07566849997965619,
+    "log": "platform-960.log",
+    "result": {
+      "id": "platform-960",
+      "kind": "platform",
+      "detail": {
+        "verifyError": null,
+        "xnameError": null
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "platform-12289",
+    "request": {
+      "id": "platform-12289",
+      "kind": "platform",
+      "name": "、"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "platform-12289"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.07350349999614991,
+    "log": "platform-12289.log",
+    "result": {
+      "id": "platform-12289",
+      "kind": "platform",
+      "detail": {
+        "verifyError": "Name cannot begin with the '、' character, hexadecimal value 0x3001.",
+        "xnameError": "Name cannot begin with the '、' character, hexadecimal value 0x3001."
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "platform-119070",
+    "request": {
+      "id": "platform-119070",
+      "kind": "platform",
+      "name": "𝄞"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "platform-119070"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.07735559999127872,
+    "log": "platform-119070.log",
+    "result": {
+      "id": "platform-119070",
+      "kind": "platform",
+      "detail": {
+        "verifyError": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E.",
+        "xnameError": "Name cannot begin with the '𝄞' character, hexadecimal value 0x1D11E."
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "platform-983040",
+    "request": {
+      "id": "platform-983040",
+      "kind": "platform",
+      "name": "󰀀"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "platform-983040"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.0705071999982465,
+    "log": "platform-983040.log",
+    "result": {
+      "id": "platform-983040",
+      "kind": "platform",
+      "detail": {
+        "verifyError": "Name cannot begin with the '󰀀' character, hexadecimal value 0xF0000.",
+        "xnameError": "Name cannot begin with the '󰀀' character, hexadecimal value 0xF0000."
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "provider-65-False",
+    "request": {
+      "id": "provider-65-False",
+      "kind": "provider",
+      "name": "A",
+      "xml11": false,
+      "text": "ǀ0041ǁ"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "provider-65-False"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.08240380001370795,
+    "log": "provider-65-False.log",
+    "result": {
+      "id": "provider-65-False",
+      "kind": "provider",
+      "detail": {
+        "localName": "A",
+        "stringValue": "ǀ0041ǁ",
+        "serialized": "<A>ǀ0041ǁ</A>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "provider-119070-False",
+    "request": {
+      "id": "provider-119070-False",
+      "kind": "provider",
+      "name": "𝄞",
+      "xml11": false,
+      "text": "ǀ0041ǁ"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "provider-119070-False"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.08713080000597984,
+    "log": "provider-119070-False.log",
+    "result": {
+      "id": "provider-119070-False",
+      "kind": "provider",
+      "detail": {
+        "localName": "ǀD834ǁǀDD1Eǁ",
+        "stringValue": "ǀ0041ǁ",
+        "serialized": "<ǀD834ǁǀDD1Eǁ>ǀ0041ǁ</ǀD834ǁǀDD1Eǁ>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "provider-65-True",
+    "request": {
+      "id": "provider-65-True",
+      "kind": "provider",
+      "name": "A",
+      "xml11": true,
+      "text": "ǀ0041ǁ"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "provider-65-True"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.08281720001832582,
+    "log": "provider-65-True.log",
+    "result": {
+      "id": "provider-65-True",
+      "kind": "provider",
+      "detail": {
+        "localName": "A",
+        "stringValue": "ǀ0041ǁ",
+        "serialized": "<A>A</A>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "provider-119070-True",
+    "request": {
+      "id": "provider-119070-True",
+      "kind": "provider",
+      "name": "𝄞",
+      "xml11": true,
+      "text": "ǀ0041ǁ"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "provider-119070-True"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.08905280000180937,
+    "log": "provider-119070-True.log",
+    "result": {
+      "id": "provider-119070-True",
+      "kind": "provider",
+      "detail": {
+        "localName": "𝄞",
+        "stringValue": "ǀ0041ǁ",
+        "serialized": "<𝄞>A</𝄞>"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  },
+  {
+    "id": "codec-roundtrip",
+    "request": {
+      "id": "codec-roundtrip",
+      "kind": "codec",
+      "name": "𝄞",
+      "text": "ǀ0041ǁ"
+    },
+    "command": [
+      "dotnet",
+      ".guard-tmp/k03-driver/bin/Release/net10.0/Probe.dll",
+      "D:\\Development\\Bosak\\docs\\conformance\\k03-unicode-names\\evidence\\requests.json",
+      "codec-roundtrip"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.0815291999897454,
+    "log": "codec-roundtrip.log",
+    "result": {
+      "id": "codec-roundtrip",
+      "kind": "codec",
+      "detail": {
+        "encoded": "ǀD834ǁǀDD1Eǁ",
+        "decoded": "𝄞",
+        "literalDecoded": "A"
+      },
+      "error": null,
+      "exceptionType": null,
+      "stack": null
+    }
+  }
+]

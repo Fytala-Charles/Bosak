@@ -4,6 +4,10 @@
   <p>Practical reference: Frozen 4.0</p>
 </div>
 
+**K03 Unicode-name trace — 27 October 2026:** [Bounded investigation](../../conformance/k03-unicode-names/README.md) reproduces map-to-element-053 and separates three open corrections: scalar NCName validation, reversible provider name storage, and serialization that preserves literal sentinel text. All 30 isolated diagnostics complete without timeouts; no engine or baseline change. Next: K03-C01 name-validation regressions/correction, followed by serialization preservation before map storage integration. QT3 remains31,145/0/676 and qt4 remains8,436/0/1,894; solution21,842 and gates are inherited unchanged-source evidence. Candidate1.26.8 unpublished/public1.26.3; REQ-126 remains Complete. Bosak.Schema XSD1.1 ownership is unchanged.
+
+
+
 **C10 contract/evidence review — 26 October 2026:** [Per-entry receipt](../SEMANTIC-REVIEW-BATCH-2.md) records 2 contract groups with exact examples, context, applicable evidence and language-alignment limits. Status: **Limited verified frozen contract**. The reduced example does not certify the whole conversion-plan/record/namespaces space; supplementary provider Unicode limits belong to the deferred skip queue. Current-draft escape-names encoding is unsupported; use XML-compatible field names and verified conversion options. Review completion is not final owner acceptance; earlier checkpoints remain historical.
 
 ## 1. Name and Classification
