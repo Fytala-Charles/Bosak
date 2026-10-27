@@ -190,3 +190,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/conformance/k02-schema-loader/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/conformance/k02-schema-inventory/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k02-constructor-registration/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

@@ -51,6 +51,7 @@
 //                      | Charles Korthout | 2.10  | 21-09-2026     | API freeze stage C: callers use XdmConversions                                          |
 //                      | Charles Korthout | 2.11  | 27-10-2026     | Report collected schema compilation failures with XQST0012 (K02).                       |
 //                      | Charles Korthout | 2.12  | 27-10-2026     | Expose main-module schema imports internally for guarded conformance diagnostics.         |
+//                      | Charles Korthout | 2.13  | 27-10-2026     | Register imported schema constructors on first evaluation (1.26.7).                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -386,6 +387,8 @@ public sealed class XQueryExecutable
         if (ctx.SchemaSet is null && _staticContext.ImportedSchemas.Count > 0)
         {
             ctx.SchemaSet = BuildSchemaSet(_staticContext.ImportedSchemas, ctx);
+            if (!ctx.SkipStandardFunctionPopulation)
+                FunctionLibrary.RegisterSchemaConstructors(ctx);
         }
 
         foreach (var ((localName, nsUri), value) in _staticContext.Variables)

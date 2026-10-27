@@ -1,0 +1,1022 @@
+[
+  {
+    "index": 2,
+    "id": "K2-DataFunc-6",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3535684999951627,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\2.json",
+      "K2-DataFunc-6",
+      "current"
+    ],
+    "log": "boundary-2-current.log",
+    "result": {
+      "id": "K2-DataFunc-6",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n      \t/*/data()\n      \t\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n        <error code=\"FOTY0012\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 2,
+    "id": "K2-DataFunc-6",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3473482999834232,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\2.json",
+      "K2-DataFunc-6",
+      "guarded"
+    ],
+    "log": "boundary-2-guarded.log",
+    "result": {
+      "id": "K2-DataFunc-6",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "XPathPath",
+      "expression": "\n      \t/*/data()\n      \t\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n        <error code=\"FOTY0012\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 318,
+    "id": "fn-union-node-args-022",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.353500700002769,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\318.json",
+      "fn-union-node-args-022",
+      "current"
+    ],
+    "log": "boundary-318-current.log",
+    "result": {
+      "id": "fn-union-node-args-022",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "(/atomic:root/atomic:idrefs/text()) | (/atomic:root/atomic:idrefs/text())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-string-value>id1 id2</assert-string-value>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 318,
+    "id": "fn-union-node-args-022",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35271500001545064,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\318.json",
+      "fn-union-node-args-022",
+      "guarded"
+    ],
+    "log": "boundary-318-guarded.log",
+    "result": {
+      "id": "fn-union-node-args-022",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "XPathPath",
+      "expression": "(/atomic:root/atomic:idrefs/text()) | (/atomic:root/atomic:idrefs/text())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-string-value>id1 id2</assert-string-value>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 3,
+    "id": "fn-datacomplextype-1",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3491531000181567,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\3.json",
+      "fn-datacomplextype-1",
+      "current"
+    ],
+    "log": "boundary-3-current.log",
+    "result": {
+      "id": "fn-datacomplextype-1",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace mc =\"http://www.w3.org/XQueryTest/mixedcontent\"; \n        fn:data( validate { <mc:weather> <mc:temperature>30</mc:temperature> <mc:precipitation>10</mc:precipitation> </mc:weather> } )\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"FOTY0012\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 3,
+    "id": "fn-datacomplextype-1",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.348264600004768,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\3.json",
+      "fn-datacomplextype-1",
+      "guarded"
+    ],
+    "log": "boundary-3-guarded.log",
+    "result": {
+      "id": "fn-datacomplextype-1",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "\n        import schema namespace mc =\"http://www.w3.org/XQueryTest/mixedcontent\"; \n        fn:data( validate { <mc:weather> <mc:temperature>30</mc:temperature> <mc:precipitation>10</mc:precipitation> </mc:weather> } )\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"FOTY0012\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 980,
+    "id": "combined-errors-3",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35925069998484105,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\980.json",
+      "combined-errors-3",
+      "current"
+    ],
+    "log": "boundary-980-current.log",
+    "result": {
+      "id": "combined-errors-3",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        validate strict {<Strings><orderData>one string</orderData></Strings>}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <any-of>\r\n            <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n            <error code=\"XQST0075\" />\r\n            <error code=\"XQST0009\" />\r\n         </any-of>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 980,
+    "id": "combined-errors-3",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3782486000272911,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\980.json",
+      "combined-errors-3",
+      "guarded"
+    ],
+    "log": "boundary-980-guarded.log",
+    "result": {
+      "id": "combined-errors-3",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "DeclaredSourceValidation",
+      "expression": "declare default element namespace \"http://www.w3.org/XQueryTestOrderBy\"; \n        import schema \"http://www.w3.org/XQueryTestOrderBy\"; \n        validate strict {<Strings><orderData>one string</orderData></Strings>}",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <any-of>\r\n            <assert-xml><![CDATA[<Strings xmlns=\"http://www.w3.org/XQueryTestOrderBy\"><orderData>one string</orderData></Strings>]]></assert-xml>\r\n            <error code=\"XQST0075\" />\r\n            <error code=\"XQST0009\" />\r\n         </any-of>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 63,
+    "id": "json-to-xml-001",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.36588950001168996,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\63.json",
+      "json-to-xml-001",
+      "current"
+    ],
+    "log": "boundary-63-current.log",
+    "result": {
+      "id": "json-to-xml-001",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "fn:json-to-xml('{}')",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <all-of>\r\n                <assert-count>1</assert-count>\r\n                <assert-type>document-node()</assert-type>\r\n                <assert-xml ignore-prefixes=\"true\"><![CDATA[<map xmlns=\"http://www.w3.org/2005/xpath-functions\"/>]]></assert-xml>\r\n            </all-of>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 63,
+    "id": "json-to-xml-001",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3606648000131827,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\63.json",
+      "json-to-xml-001",
+      "guarded"
+    ],
+    "log": "boundary-63-guarded.log",
+    "result": {
+      "id": "json-to-xml-001",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "NoQueryImports",
+      "expression": "fn:json-to-xml('{}')",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <all-of>\r\n                <assert-count>1</assert-count>\r\n                <assert-type>document-node()</assert-type>\r\n                <assert-xml ignore-prefixes=\"true\"><![CDATA[<map xmlns=\"http://www.w3.org/2005/xpath-functions\"/>]]></assert-xml>\r\n            </all-of>\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 639,
+    "id": "instanceof134",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.34970429999521,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\639.json",
+      "instanceof134",
+      "current"
+    ],
+    "log": "boundary-639-current.log",
+    "result": {
+      "id": "instanceof134",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n         filter#2 instance of function(function(*), item()*) as item()*\n       ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n       </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 639,
+    "id": "instanceof134",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35505479999119416,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\639.json",
+      "instanceof134",
+      "guarded"
+    ],
+    "log": "boundary-639-guarded.log",
+    "result": {
+      "id": "instanceof134",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "NoQueryImports",
+      "expression": "\n         filter#2 instance of function(function(*), item()*) as item()*\n       ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n       </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 115,
+    "id": "fn-load-xquery-module-050",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.43250750002334826,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\115.json",
+      "fn-load-xquery-module-050",
+      "current"
+    ],
+    "log": "boundary-115-current.log",
+    "result": {
+      "id": "fn-load-xquery-module-050",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n      let $module-ns := \"http://www.w3.org/fots/fn/load-xquery-module/import-schema/module\",\n       $module := fn:load-xquery-module($module-ns)\n      return\n      $module(\"functions\")(QName($module-ns, \"hatsize\"))(1)(8)\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert-xml><![CDATA[<a>8</a>]]></assert-xml>\r\n    </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 115,
+    "id": "fn-load-xquery-module-050",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.4116595999803394,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\115.json",
+      "fn-load-xquery-module-050",
+      "guarded"
+    ],
+    "log": "boundary-115-guarded.log",
+    "result": {
+      "id": "fn-load-xquery-module-050",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "ModulesNotReviewed",
+      "expression": "\n      let $module-ns := \"http://www.w3.org/fots/fn/load-xquery-module/import-schema/module\",\n       $module := fn:load-xquery-module($module-ns)\n      return\n      $module(\"functions\")(QName($module-ns, \"hatsize\"))(1)(8)\n    ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert-xml><![CDATA[<a>8</a>]]></assert-xml>\r\n    </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 817,
+    "id": "qischema90431-no-err",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.35782919998746365,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\817.json",
+      "qischema90431-no-err",
+      "current"
+    ],
+    "log": "boundary-817-current.log",
+    "result": {
+      "id": "qischema90431-no-err",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        declare namespace hat = \"http://www.fpml.org/2005/FpML-4-2\"; \n        import module \"http://www.fpml.org/2005/FpML-4-2\"; \n        if (exists($hat:docvar)) then <a/> else <b/>\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert>$result/self::b</assert>\r\n    </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 817,
+    "id": "qischema90431-no-err",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.3764672999968752,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\817.json",
+      "qischema90431-no-err",
+      "guarded"
+    ],
+    "log": "boundary-817-guarded.log",
+    "result": {
+      "id": "qischema90431-no-err",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "ModulesNotReviewed",
+      "expression": "\n        declare namespace hat = \"http://www.fpml.org/2005/FpML-4-2\"; \n        import module \"http://www.fpml.org/2005/FpML-4-2\"; \n        if (exists($hat:docvar)) then <a/> else <b/>\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n      <assert>$result/self::b</assert>\r\n    </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 433,
+    "id": "notation-cast-2",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.27130619998206384,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\433.json",
+      "notation-cast-2",
+      "current"
+    ],
+    "log": "boundary-433-current.log",
+    "result": {
+      "id": "notation-cast-2",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace myType = \"http://www.w3.org/XQueryTest/userDefinedTypes\"; \n        myType:NOTATIONBased(\"myType:value1\") cast as xs:NOTATION",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <error code=\"XPST0080\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 433,
+    "id": "notation-cast-2",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26726359999156557,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\433.json",
+      "notation-cast-2",
+      "guarded"
+    ],
+    "log": "boundary-433-guarded.log",
+    "result": {
+      "id": "notation-cast-2",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:InvalidOperationException",
+      "expression": "\n        import schema namespace myType = \"http://www.w3.org/XQueryTest/userDefinedTypes\"; \n        myType:NOTATIONBased(\"myType:value1\") cast as xs:NOTATION",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n            <error code=\"XPST0080\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 838,
+    "id": "substitution-020",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2424518000043463,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\838.json",
+      "substitution-020",
+      "current"
+    ],
+    "log": "boundary-838-current.log",
+    "result": {
+      "id": "substitution-020",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 838,
+    "id": "substitution-020",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22930629999609664,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\838.json",
+      "substitution-020",
+      "guarded"
+    ],
+    "log": "boundary-838-guarded.log",
+    "result": {
+      "id": "substitution-020",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 839,
+    "id": "substitution-021",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23804440000094473,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\839.json",
+      "substitution-021",
+      "current"
+    ],
+    "log": "boundary-839-current.log",
+    "result": {
+      "id": "substitution-021",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 839,
+    "id": "substitution-021",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23583879999932833,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\839.json",
+      "substitution-021",
+      "guarded"
+    ],
+    "log": "boundary-839-guarded.log",
+    "result": {
+      "id": "substitution-021",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <A/>\n              </cuckoo>            \n            }; \n        $in/s:A instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 840,
+    "id": "substitution-022",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23377670001355,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\840.json",
+      "substitution-022",
+      "current"
+    ],
+    "log": "boundary-840-current.log",
+    "result": {
+      "id": "substitution-022",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 840,
+    "id": "substitution-022",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.22682939999504015,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\840.json",
+      "substitution-022",
+      "guarded"
+    ],
+    "log": "boundary-840-guarded.log",
+    "result": {
+      "id": "substitution-022",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 841,
+    "id": "substitution-023",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.26408220001030713,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\841.json",
+      "substitution-023",
+      "current"
+    ],
+    "log": "boundary-841-current.log",
+    "result": {
+      "id": "substitution-023",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 841,
+    "id": "substitution-023",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2383589000091888,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\841.json",
+      "substitution-023",
+      "guarded"
+    ],
+    "log": "boundary-841-guarded.log",
+    "result": {
+      "id": "substitution-023",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <B/>\n              </cuckoo>            \n            }; \n        $in/s:B instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-true />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 842,
+    "id": "substitution-024",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24876869999570772,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\842.json",
+      "substitution-024",
+      "current"
+    ],
+    "log": "boundary-842-current.log",
+    "result": {
+      "id": "substitution-024",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 842,
+    "id": "substitution-024",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24181529998895712,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\842.json",
+      "substitution-024",
+      "guarded"
+    ],
+    "log": "boundary-842-guarded.log",
+    "result": {
+      "id": "substitution-024",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H1)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 843,
+    "id": "substitution-025",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.23645709999254905,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\843.json",
+      "substitution-025",
+      "current"
+    ],
+    "log": "boundary-843-current.log",
+    "result": {
+      "id": "substitution-025",
+      "mode": "current",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 843,
+    "id": "substitution-025",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2338210000016261,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\843.json",
+      "substitution-025",
+      "guarded"
+    ],
+    "log": "boundary-843-guarded.log",
+    "result": {
+      "id": "substitution-025",
+      "mode": "guarded",
+      "kind": "HarnessException",
+      "message": "The value for the 'substitutionGroup' attribute is invalid - 's:H1 s:H2' is an invalid value for the 'substitutionGroup' attribute.",
+      "exceptionType": "System.Xml.Schema.XmlSchemaException",
+      "deferred": false,
+      "decision": "DeclaredXsdProfileNotReviewed",
+      "expression": "\n        import schema namespace s=\"http://www.w3.org/XQueryTest/substitution11\"; \n        declare variable $in :=\n            validate strict {\n              <cuckoo xmlns=\"http://www.w3.org/XQueryTest/substitution11\">\n                <C xsi:nil=\"true\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"/>\n              </cuckoo>            \n            }; \n        $in/s:C instance of schema-element(s:H2)\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <assert-false />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 930,
+    "id": "validate-as-91012",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24682529998244718,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\930.json",
+      "validate-as-91012",
+      "current"
+    ],
+    "log": "boundary-930-current.log",
+    "result": {
+      "id": "validate-as-91012",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate type hat:hatsize hat:brimsize { <hat>8</hat> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 930,
+    "id": "validate-as-91012",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2507317000126932,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\930.json",
+      "validate-as-91012",
+      "guarded"
+    ],
+    "log": "boundary-930-guarded.log",
+    "result": {
+      "id": "validate-as-91012",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:XPathParseException",
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate type hat:hatsize hat:brimsize { <hat>8</hat> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 935,
+    "id": "validate-as-91017",
+    "mode": "current",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.2602273999946192,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\935.json",
+      "validate-as-91017",
+      "current"
+    ],
+    "log": "boundary-935-current.log",
+    "result": {
+      "id": "validate-as-91017",
+      "mode": "current",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CurrentMode",
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate as hat:hatsize { <hut>8</hut> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "reuse": null
+    }
+  },
+  {
+    "index": 935,
+    "id": "validate-as-91017",
+    "mode": "guarded",
+    "exitCode": 0,
+    "timeout": false,
+    "budgetExceeded": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.24381440001889132,
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll",
+      ".guard-tmp\\k02-wide\\requests\\935.json",
+      "validate-as-91017",
+      "guarded"
+    ],
+    "log": "boundary-935-guarded.log",
+    "result": {
+      "id": "validate-as-91017",
+      "mode": "guarded",
+      "kind": "Passed",
+      "message": "",
+      "exceptionType": null,
+      "deferred": false,
+      "decision": "CompileMetadataUnavailable:XPathParseException",
+      "expression": "\n        import schema namespace hat = \"http://www.w3.org/XQueryTest/hats\"(:  at \"qischema001.xsd\" :); \n        validate as hat:hatsize { <hut>8</hut> }\n      ",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n         <error code=\"XPST0003\" />\r\n      </result>",
+      "reuse": null
+    }
+  }
+]

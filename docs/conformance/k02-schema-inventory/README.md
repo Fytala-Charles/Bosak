@@ -1,5 +1,9 @@
 # K02 wider schema-import audit — 27 October 2026
 
+**K02-C01 constructor registration — 27 October 2026:** [First-evaluation correction](../k02-constructor-registration/README.md) fixes all 68 constructor regressions in the wider audit. All 11 focused tests and 21,836 solution tests pass; QT3 remains 31,144/0/677 and the qt4 gate 8,436/0/1,894. The 324-case paired sweep leaves four relative-import failures for K02-C02, with no new failures; 17 declined boundaries are unchanged. Guarded loading stays default-off. Candidate 1.26.7 is unpublished/public 1.26.3. Bosak.Schema REQ-009 owns XSD 1.1; no new public schema seam or capability is introduced. REQ-126 remains Complete. Earlier audit counts are historical evidence.
+
+
+
 **Normal adoption is blocked.** The actual guarded loader breaks 72 cases that pass with normal eager loading. Keep `UseQueryOwnedSchemasForDiagnostics` off by default. This audit changes documentation and evidence only; REQ-126 remains Complete for its accepted bounded catalog.
 
 ## Scope and results

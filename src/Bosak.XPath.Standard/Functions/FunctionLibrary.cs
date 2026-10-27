@@ -473,6 +473,7 @@
 //                      | Charles Korthout | 5.153 | 26-10-2026     | Preserve abs integer results and widen Int64.MinValue within existing storage (1.26.3).   |
 //                      | Charles Korthout | 5.154 | 26-10-2026     | Retain decimal-backed integer identity in floor and ceiling (1.26.3).                    |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 5.155 | 27-10-2026     | Reuse schema constructor registration after query-owned imports (1.26.7).              |
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -4637,6 +4638,26 @@ public static class FunctionLibrary
         };
         context.InstallStandardFunctionTable(template.Value);
 
+        RegisterSchemaConstructors(context);
+
+        // Set up default document loader if not already configured
+        if (context.DocumentLoader is null)
+        {
+            context.DocumentLoader = XDocumentProvider.LoadFile;
+        }
+
+        // Provide the default collation-aware string comparer used by XPath value
+        // and general comparison operators. Consumers may override this after Populate.
+        if (context.CollationComparer is null)
+        {
+            context.CollationComparer = CompareStrings;
+        }
+    }
+
+    /// <summary>Registers missing constructors from the current compiled schema set.</summary>
+    /// <param name="context">The context whose existing function bindings are preserved.</param>
+    internal static void RegisterSchemaConstructors(EvaluationContext context)
+    {
         // Register constructor functions for simple types declared in imported schemas.
         // XSD-derived simple types (e.g. hat:hatsize) are available as Q{uri}local#1
         // constructors just like the built-in xs:* constructors (qischema030).
@@ -4669,19 +4690,6 @@ public static class FunctionLibrary
                     Implementation = (ctx, args) => UserDefinedTypeConstructor(ctx, args, typeName)
                 });
             }
-        }
-
-        // Set up default document loader if not already configured
-        if (context.DocumentLoader is null)
-        {
-            context.DocumentLoader = XDocumentProvider.LoadFile;
-        }
-
-        // Provide the default collation-aware string comparer used by XPath value
-        // and general comparison operators. Consumers may override this after Populate.
-        if (context.CollationComparer is null)
-        {
-            context.CollationComparer = CompareStrings;
         }
     }
 
