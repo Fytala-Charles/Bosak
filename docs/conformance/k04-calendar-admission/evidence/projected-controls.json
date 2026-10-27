@@ -1,0 +1,418 @@
+[
+  {
+    "Suite": "qt3",
+    "id": "qt3-calendar-CB-True",
+    "dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-calendar-CB-False",
+    "dependencies": []
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-feature-staticTyping-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-feature-staticTyping-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-feature-unreviewed-calendar-control-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unreviewed-calendar-control",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-feature-unreviewed-calendar-control-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unreviewed-calendar-control",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-language-xib-True",
+    "dependencies": [
+      {
+        "type": "language",
+        "value": "xib",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-language-xib-False",
+    "dependencies": [
+      {
+        "type": "language",
+        "value": "xib",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-calendar-ZZ-True",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "ZZ",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-CB-negative-with-calendar-ZZ-False",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "ZZ",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-original-format-date-en152",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt3",
+    "id": "qt3-original-format-dateTime-en152",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-calendar-CB-True",
+    "dependencies": []
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-calendar-CB-False",
+    "dependencies": []
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-feature-staticTyping-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-feature-staticTyping-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "staticTyping",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-feature-unreviewed-calendar-control-True",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unreviewed-calendar-control",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-feature-unreviewed-calendar-control-False",
+    "dependencies": [
+      {
+        "type": "feature",
+        "value": "unreviewed-calendar-control",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-xsd-version-1.0-True",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-xsd-version-1.0-False",
+    "dependencies": [
+      {
+        "type": "xsd-version",
+        "value": "1.0",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XQ10-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XQ10-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ10",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XP31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XP31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XQ31+-True",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-spec-XQ31+-False",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XQ31+",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-language-xib-True",
+    "dependencies": [
+      {
+        "type": "language",
+        "value": "xib",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-language-xib-False",
+    "dependencies": [
+      {
+        "type": "language",
+        "value": "xib",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-calendar-ZZ-True",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "ZZ",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-CB-negative-with-calendar-ZZ-False",
+    "dependencies": [
+      {
+        "type": "calendar",
+        "value": "ZZ",
+        "satisfied": false
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-original-format-date-en152",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "id": "qt4-original-format-dateTime-en152",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      }
+    ]
+  }
+]

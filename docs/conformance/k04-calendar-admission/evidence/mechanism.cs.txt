@@ -1,0 +1,13 @@
+// Generated read-only diagnostic of the actual private calendar classification method.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+var directory=Path.GetFullPath("tests/Bosak.XPath.Conformance/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(ctx,name)=>{var path=Path.Combine(directory,name.Name+".dll");return File.Exists(path)?Assembly.LoadFrom(path):null;};
+var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Standard.dll"));
+var method=assembly.GetType("Bosak.XPath.Standard.Functions.FormatDateTimeEngine",true)!.GetMethod("ValidateCalendar",BindingFlags.NonPublic|BindingFlags.Static)!;
+foreach(bool xslt in new[]{false,true})
+foreach(var calendar in new[]{"AD","ISO","CB","Q{}CB","AH","Q{urn:calendar}AD","ZZ", "1bad"}){
+ try{var fallback=(bool)method.Invoke(null,new object?[]{calendar,xslt})!;Console.WriteLine(JsonSerializer.Serialize(new{calendar,xslt,fallbackRequired=(bool?)fallback,error=(string?)null}));}
+ catch(TargetInvocationException e){Console.WriteLine(JsonSerializer.Serialize(new{calendar,xslt,fallbackRequired=(bool?)null,error=e.InnerException?.Message}));}
+}

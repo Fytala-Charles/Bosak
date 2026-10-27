@@ -261,3 +261,8 @@ docs/conformance/k04-calendar-review/** -text whitespace=cr-at-eol,-blank-at-eof
 
 # K04-C15 calendar correction raw validation receipts.
 docs/conformance/k04-calendar-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C16 exact CB admission proposal and raw receipts.
+docs/conformance/k04-calendar-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-calendar-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-calendar-admission/RESULTS.json -text whitespace=cr-at-eol
