@@ -239,3 +239,6 @@ docs/conformance/k04-radix-review/evidence/** -text whitespace=cr-at-eol,-blank-
 
 # K04 radix formatter adoption and validation preserve original receipt bytes.
 docs/conformance/k04-radix-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 parse-integer contract review preserves all original and boundary receipts.
+docs/conformance/k04-parse-integer-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

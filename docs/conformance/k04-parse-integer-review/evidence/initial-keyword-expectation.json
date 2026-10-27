@@ -1,0 +1,33 @@
+{
+  "reason": "3.1 keyword grammar fails before missing-function lookup;initial XPST0017 expectation was incorrect",
+  "initialRequest": {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-parse-integer-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-keyword",
+    "category": "positive",
+    "expression": "parse-integer(radix := 16, value := 'ff')",
+    "expectationOrigin": "Pinned contract except range-overflow,which proposes an explicit Int64 size bound"
+  },
+  "initialReceipt": {
+    "name": "qt3-control-qt3-keyword",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k04-radix-fix-driver/bin/Release/net10.0/Probe.dll",
+      "execute",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-parse-integer-review\\evidence\\qt3-control-qt3-keyword-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 20,
+    "wallSeconds": 0.20146189999650232,
+    "result": {
+      "Suite": "qt3",
+      "Name": "control-qt3-keyword",
+      "kind": "Failed",
+      "message": "Expected error XPST0017, got: Parse error at position 14: XPST0003: Keyword arguments ('name := value') are an XPath 4.0 feature and are not available in XPath 3.1."
+    },
+    "log": "qt3-control-qt3-keyword.log"
+  },
+  "correctCode": "XPST0003"
+}

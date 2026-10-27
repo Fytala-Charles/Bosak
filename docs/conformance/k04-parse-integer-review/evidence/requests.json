@@ -1,0 +1,802 @@
+[
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-001",
+    "expression": "parse-integer(\"1234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-002",
+    "expression": "parse-integer(\"  1234  \")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-003",
+    "expression": "parse-integer(\"  +1234  \")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-004",
+    "expression": "parse-integer(\"-1234  \")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>-1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-005",
+    "expression": "parse-integer(\"1_234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-006",
+    "expression": "parse-integer(\"1 234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-007",
+    "expression": "parse-integer(\"001234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-008",
+    "expression": "parse-integer(\"001234\") instance of xs:integer",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-009",
+    "expression": "every $x in (2 to 36) ! parse-integer(\"0\", .) satisfies $x eq 0",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-010",
+    "expression": "every $x in (2 to 36) ! parse-integer(\"-0\", .) satisfies $x eq 0",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-011",
+    "expression": "every $x in (2 to 36) ! parse-integer(\" +0 \", .) satisfies $x eq 0",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-012",
+    "expression": "every $x in (2 to 36) ! parse-integer(\" 1 \", .) satisfies $x eq 1",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-013",
+    "expression": "every $x in (2 to 36) satisfies parse-integer(\" 10 \", $x) eq $x",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-014",
+    "expression": "every $x in (2 to 36) satisfies parse-integer(\"+11\", $x) eq $x + 1",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-true />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-015",
+    "expression": "parse-integer(\"0001 0010 0011 0100 0101 0110 0111 1000 1001 1010 1011 1100 1101 1110 1111 0000\", 2)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1311768467463790320</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-016",
+    "expression": "parse-integer(\"0377\", 8)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>255</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-017",
+    "expression": "parse-integer(\"cafebabe\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>3405691582</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-018",
+    "expression": "parse-integer(\"fffff\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1048575</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-019",
+    "expression": "parse-integer(\"-fffff\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>-1048575</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-020",
+    "expression": "parse-integer(string-join(replicate(\"142857\", 100))) gt 1e200",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-true />\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>        \n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-021",
+    "expression": "parse-integer(string-join(replicate(\"ff 00 ff 00 \", 100)), 16) gt 1e200",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-true />\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>        \n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-022",
+    "expression": "parse-integer(())",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-empty />    \n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-023",
+    "expression": "parse-integer((), 8)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-empty />    \n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-024",
+    "expression": "parse-integer(\"1\" || char('\\t') || \"2\" || char('\\r') || 3 || char('\\n') || \"4  \")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>1234</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-901",
+    "expression": "parse-integer(\"1.234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0012\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-902",
+    "expression": "parse-integer(\"+-1234\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0012\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-903",
+    "expression": "parse-integer(\"1'234'567\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0012\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-904",
+    "expression": "parse-integer(\"42\", 42)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0011\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-905",
+    "expression": "parse-integer(\"0\", 1)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0011\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-906",
+    "expression": "parse-integer(\"42\", -8)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0011\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-907",
+    "expression": "parse-integer(\"\", 4)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0012\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-908",
+    "expression": "parse-integer(\"-\", 4)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:error code=\"FORG0012\" />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-empty1",
+    "expression": "parse-integer(\"111\", ())",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>111</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-empty2",
+    "expression": "parse-integer((), 4)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-empty />\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-909",
+    "expression": "parse-integer(\"2147483648\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>2147483648</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-910",
+    "expression": "parse-integer(\"4294967297\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>4294967297</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-911",
+    "expression": "parse-integer(\"-2147483649\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>-2147483649</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-912",
+    "expression": "parse-integer(\"80000000\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>2147483648</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-913",
+    "expression": "parse-integer(\"100000001\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>4294967297</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-914",
+    "expression": "parse-integer(\"-100000000\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-eq>-4294967296</ns0:assert-eq>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-915",
+    "expression": "parse-integer(\"9223372036854775807\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>9223372036854775807</ns0:assert-eq>\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-916",
+    "expression": "parse-integer(\"-9223372036854775808\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>(-9223372036854775807 - 1)</ns0:assert-eq>\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-917",
+    "expression": "parse-integer(\"8000000000000000\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>9223372036854775808</ns0:assert-eq>\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-918",
+    "expression": "parse-integer(\"10000000000000001\", 16)",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>18446744073709551617</ns0:assert-eq>\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-919",
+    "expression": "parse-integer(\"18446744073709551617\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:any-of>\n            <ns0:assert-eq>18446744073709551617</ns0:assert-eq>\n            <ns0:error code=\"FOCA0003\" />\n         </ns0:any-of>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-920",
+    "expression": "parse-integer(\"999999999999999999\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>999999999999999999</ns0:assert-string-value>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/parse-integer.xml",
+    "Name": "parse-integer-921",
+    "expression": "parse-integer(\"9007199254740993\")",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <ns0:assert-string-value>9007199254740993</ns0:assert-string-value>\n      </ns0:result>\n   ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-integer.xml",
+    "Name": "format-integer-40-012",
+    "expression": "every $r in (2 to 36), \n                    $n in (0, 1, 7, 23, 86, 159, 2134672, 105093381562) \n                    satisfies (format-integer($n, $r || '^X') => parse-integer($r)) eq $n\n        ",
+    "assertion": "<ns0:result xmlns:ns0=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n            <ns0:assert-true />\n        </ns0:result>    \n    ",
+    "dependencies": [
+      {
+        "type": "spec",
+        "value": "XP30+ XQ30+",
+        "satisfied": true
+      },
+      {
+        "type": "spec",
+        "value": "XP40+ XQ40+",
+        "satisfied": true
+      }
+    ]
+  }
+]

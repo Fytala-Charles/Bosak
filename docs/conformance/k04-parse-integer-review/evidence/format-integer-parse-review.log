@@ -1,0 +1,71 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-parse-integer
+
+Discovered 738 test sets.
+  Starting: fn-parse-integer ...
+  Done: fn-parse-integer (47 tests total) [P+=0 F+=47 S+=0]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   47
+Passed:  0
+Failed:  47
+Skipped: 0
+
+Pass rate: 0.00%
+
+First 20 failures:
+  FAIL parse-integer-001: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-002: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-003: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-004: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-005: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-006: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-007: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-008: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-009: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-010: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-011: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-012: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-013: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-014: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-015: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-016: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-017: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-018: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-019: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-020: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.]
+  FAIL parse-integer-021: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.]
+  FAIL parse-integer-022: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-023: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-024: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-901: Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-902: Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-903: Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-904: Expected error FORG0011, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-905: Expected error FORG0011, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-906: Expected error FORG0011, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-907: Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-908: Expected error FORG0012, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-empty1: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-empty2: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-909: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-910: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-911: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-912: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-913: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-914: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.
+  FAIL parse-integer-915: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.]
+  FAIL parse-integer-916: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.]
+  FAIL parse-integer-917: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.]
+  FAIL parse-integer-918: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#2 not found.]
+  FAIL parse-integer-919: any-of: none matched. [Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.; Expected error FOCA0003, got: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.]
+  FAIL parse-integer-920: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+  FAIL parse-integer-921: Unexpected error: XPST0017: Function {http://www.w3.org/2005/xpath-functions}parse-integer#1 not found.
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 47
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.20s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-parse-integer-review\evidence\format-integer-parse-review-skips.txt
