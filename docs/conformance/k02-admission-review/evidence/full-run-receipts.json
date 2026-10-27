@@ -1,0 +1,54 @@
+[
+  {
+    "mode": "current",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-admission-driver/bin/Release/net10.0/Probe.dll",
+      "current",
+      "docs\\conformance\\k02-admission-review\\evidence\\current-skips.txt",
+      "docs\\conformance\\k02-admission-review\\evidence\\current-summary.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 69.47155359998578,
+    "result": {
+      "mode": "current",
+      "defaultGuarded": false,
+      "selectedGuarded": false,
+      "total": 31821,
+      "passed": 31144,
+      "failed": 0,
+      "skipped": 677,
+      "skipDump": "docs\\conformance\\k02-admission-review\\evidence\\current-skips.txt",
+      "binary": "D:\\Development\\Bosak\\.guard-tmp\\c02-artifacts\\bin\\Bosak.XPath.Conformance\\release\\Bosak.XPath.Conformance.dll"
+    },
+    "log": "current-full-run.log"
+  },
+  {
+    "mode": "guarded",
+    "command": [
+      "dotnet",
+      ".guard-tmp/k02-admission-driver/bin/Release/net10.0/Probe.dll",
+      "guarded",
+      "docs\\conformance\\k02-admission-review\\evidence\\guarded-skips.txt",
+      "docs\\conformance\\k02-admission-review\\evidence\\guarded-summary.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 300,
+    "wallSeconds": 68.07853329999489,
+    "result": {
+      "mode": "guarded",
+      "defaultGuarded": false,
+      "selectedGuarded": true,
+      "total": 31821,
+      "passed": 31145,
+      "failed": 0,
+      "skipped": 676,
+      "skipDump": "docs\\conformance\\k02-admission-review\\evidence\\guarded-skips.txt",
+      "binary": "D:\\Development\\Bosak\\.guard-tmp\\c02-artifacts\\bin\\Bosak.XPath.Conformance\\release\\Bosak.XPath.Conformance.dll"
+    },
+    "log": "guarded-full-run.log"
+  }
+]

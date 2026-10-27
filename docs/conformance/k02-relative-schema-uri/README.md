@@ -1,5 +1,9 @@
 # K02-C02: relative schema import URI — 27 October 2026
 
+**K02 admission review — 27 October 2026:** [Guarded-runner proposal](../k02-admission-review/BASELINE-UPDATE-PROPOSAL.md) is ready for owner approval. Two full actual-runner rehearsals verify current 31,144/0/677 and guarded 31,145/0/676, with only validateexpr-28 leaving the skip set through its existing XQST0012 alternative; all 676 retained names/reasons match. Normal runner, AGENTS policy and baseline remain unchanged pending approval. Candidate 1.26.8 is unpublished/public 1.26.3. Unit21,842 and qt4 8,436/0/1,894 receipts are inherited from unchanged source; no new XSD1.1 capability. Bosak.Schema REQ-009 owns that track; REQ-126 remains Complete.
+
+
+
 **K02-C02 is complete.** All four remaining guarded-loader regressions (`qischema032` and its a/b/c variants) now pass. The complete bounded audit has **324/324 guarded passes**, with no new failures. Normal schema initialization and the known-skip list remain unchanged; guarded mode stays default-off.
 
 ## File-backed source identity

@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "55905ddcd83b2f7ade2cc846a73b74225ffedf79",
+  "files": {
+    "binary-identities.json": "43dcf732d0c09cafab82c1cf088845b139249e38d4cc33c7b98bb8ed87823bbf",
+    "current-full-run.log": "b66b164b88bac61301f7d902fc540fe437e163032a153a90a08133957d3c42a6",
+    "current-skips.txt": "083852b3c3e01224a32502e12704fa126ebed16c7179c6926037beedf7ee8e54",
+    "current-summary.json": "ffb008e520c27c77226c1b2dd4570f7b6089c187a114635efcae98ac27d698f3",
+    "driver-build.log": "51d9531dc13fce0a2e9285d9c57f9ff086d74db91f4f14f1aeb5ae6a852f3223",
+    "driver.cs.txt": "dcc0055622d217d4d13193d86f3487c63ae3121d74a18506f6e11319d8faa131",
+    "driver.csproj.txt": "5500354786e3863d0990ac6092d8373c56e1220912384c8e2b77cc2a456d9b41",
+    "full-run-dispatch.log": "08cfca527c2f906b157566363b6344fec0d6d3e5186eb912ad999e0a3db27dcb",
+    "full-run-program.py": "22ddf89410b693bb5cc6563449bd2e322f7eee18b8dfda79361dfd3ad26a1fb7",
+    "full-run-receipts.json": "1f7143857c3c26dc48f7d80ce64dd38420974cc1ad08eda537180f3ccfa8e238",
+    "guarded-full-run.log": "76fb5e06727c8a5943d314df16a00b9ce6a1e0b7a6699f8a9b23c739426b51a6",
+    "guarded-skips.txt": "7784959c5a0b88a4515dcfe000c1b7a59a80f6dc53f89136b1baaacda9f9dadd",
+    "guarded-summary.json": "f6d8740c6c65c4e77b07cb652a6c013ecd0c82e0121594c5202a6c5c38c8bd1e",
+    "previous-identities.json": "3c77e100d7f8179ef2c1f772021ffd3828146e26b6688f718b5313a0e6636b84",
+    "render-program.cjs.txt": "195dd6691d9f0358b052dd5ec9665c1180079f86547cbdd6abd2edf2995be3a5",
+    "render-receipts.json": "30a42b9661361d73e439402f9e49c9db721b9ce944712a49e60478d9bb3ce1f7",
+    "REVIEW-PIN.json": "fb93dd5ef0ccb410080a4f953b69911e5687371fbfb10ee2af3cc9a3f7f97e32",
+    "validate-evidence.py": "084f158e58c1c775a101e9ce65ecf1577a87e4da9e2679c9d7844a0cd2eba67a"
+  },
+  "documents": {
+    ".gitattributes": "c3ce838355e6a7a2383b268a3de8ba844c9f5351",
+    "README.md": "22e57e37f054f01a6f755766f478892911ef8525",
+    "docs/ARCHITECTURE.md": "62bb3c10c92f1e2311b628acf65b8b440698a8b3",
+    "docs/FEATURE_REQUESTS.md": "5b1adcd712760281ef27160ba8593b4795bf1861",
+    "docs/INTEGRATION.md": "525620946de67f7e675d9b52c50b7ea7bbecbdde",
+    "docs/AGENT_HANDOVER.md": "0eb1d089d055b9d59fdce718173cc0babd0188bb",
+    "docs/DOCUMENTATION_RENDERER_TEST.md": "daa153701d1d18c14b9db37fa3e5eb9088dc1b88",
+    "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md": "b5ec72955b331debb0260727a369c955e30ee26c",
+    "docs/conformance/k02-relative-schema-uri/README.md": "4e0326e6a1573328262f879ebd47fda9dd2ba2fb",
+    "docs/conformance/k02-admission-review/README.md": "994a18dbb6b8aa91e7a114536de8160f1e1e0cc0",
+    "docs/conformance/k02-admission-review/BASELINE-UPDATE-PROPOSAL.md": "8b9f989c8ddaa48647acea8291b59950debd92e0",
+    "docs/conformance/k02-admission-review/PROPOSED-ADOPTION.patch": "2b39c4a0f9bcfd6bf44f7b05bb136616554d241a",
+    "docs/conformance/k02-admission-review/build-review.py": "8247604bff9abd7b049fadd3e51665f4ba5e886a"
+  },
+  "sourceFiles": {
+    "AGENTS.md": "1dfaacc6a21e78a225fd62e43fae50ffeb89d1cb",
+    "src/Directory.Build.props": "86e0a5545584ab0ef1ca465691a6233d6fb2bbbc",
+    "src/Bosak.XQuery/Api/XQueryExecutable.cs": "ddd3dd65fa6ac2c3b67c4509581a5449676404b4",
+    "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs": "a2d715f76066493af14740cfca6238159e9d365c",
+    "tests/Bosak.XPath.Conformance/TestExecutor.cs": "6408b902af84f561dcd31311dcf90dfc5ab6484e",
+    "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "2aedab51528271a6999607448973bcb91de380be",
+    "tests/Bosak.XPath.Conformance/Program.cs": "b88e51ae87bd081610ddae09b65e1423d61d0b1e"
+  },
+  "markdownFiles": [
+    "README.md",
+    "docs/ARCHITECTURE.md",
+    "docs/FEATURE_REQUESTS.md",
+    "docs/INTEGRATION.md",
+    "docs/AGENT_HANDOVER.md",
+    "docs/DOCUMENTATION_RENDERER_TEST.md",
+    "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+    "docs/conformance/k02-relative-schema-uri/README.md",
+    "docs/conformance/k02-admission-review/README.md",
+    "docs/conformance/k02-admission-review/BASELINE-UPDATE-PROPOSAL.md"
+  ],
+  "reviewSha256": "c748554de563a7afdb3693887151ae43a4b6516f6e1dabd2e3da8e59e63dc65f",
+  "policy": "Read-only full-run rehearsal and pending exact proposal. No tracked engine/harness/AGENTS/fixture/baseline/version change; inherited unit/qt4 receipts only. Explicit owner approval still required."
+}
