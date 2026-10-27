@@ -24,6 +24,7 @@
 //                      | Charles Korthout | 0.10  | 09-09-2026     | XML doc coverage on public API (Beta review)                                             |
 //                      | Charles Korthout | 0.11  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.12  | 27-10-2026     | Correct cardinal variation parsing and bounded German named ordinal endings (1.26.12). |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -43,7 +44,7 @@ internal static class FormatIntegerEngine
     /// </summary>
     /// <param name="ctx">The evaluation context.</param>
     /// <param name="value">The integer to format.</param>
-    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="picture">The format picture with optional cardinal or ordinal variation and numbering modifiers.</param>
     /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
     /// <returns>The formatted integer string.</returns>
     /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
@@ -55,7 +56,7 @@ internal static class FormatIntegerEngine
     /// </summary>
     /// <param name="ctx">The evaluation context.</param>
     /// <param name="value">The integer to format.</param>
-    /// <param name="picture">The format picture (primary token with optional <c>;o</c>/<c>;c</c>/<c>;t</c> modifier).</param>
+    /// <param name="picture">The format picture with optional cardinal or ordinal variation and numbering modifiers.</param>
     /// <param name="language">An optional language tag (e.g. <c>de</c>, <c>fr</c>) used for word and ordinal output.</param>
     /// <returns>The formatted integer string.</returns>
     /// <exception cref="InvalidOperationException">The picture is invalid (FODF1310).</exception>
@@ -70,6 +71,13 @@ internal static class FormatIntegerEngine
 
         // 2. Parse format modifier
         ParseModifier(modifier, out bool ordinal, out string? ordinalSuffix, out bool titleCase);
+
+        // A known German word-numbering scheme may select ordinal output even under c(...).
+        // Other schemes/languages retain the existing cardinal or ordinal fallback.
+        if (NormalizeLanguage(language) == "de"
+            && (primaryToken is "w" or "W" or "Ww")
+            && GermanOrdinalEnding(ordinalSuffix) is not null)
+            ordinal = true;
 
         // 3. Format based on primary token
         BigInteger absValue = BigInteger.Abs(value);
@@ -199,14 +207,16 @@ internal static class FormatIntegerEngine
             return;
         }
 
-        // Check for ordinal with suffix: o(-suffix)
-        if (remaining.StartsWith("o(") && remaining.EndsWith(")"))
+        // Both cardinal and ordinal modifiers may carry a nonempty variation name.
+        if (remaining.Length > 3
+            && (remaining[0] is 'c' or 'o')
+            && remaining[1] == '(' && remaining[^1] == ')')
         {
-            // Validate parentheses are balanced
+            // Preserve the existing balanced-parenthesis convention.
             if (remaining.Count(c => c == '(') != remaining.Count(c => c == ')'))
                 throw new InvalidOperationException("FODF1310");
 
-            ordinal = true;
+            ordinal = remaining[0] == 'o';
             ordinalSuffix = remaining.Substring(2, remaining.Length - 3);
             return;
         }
@@ -1069,9 +1079,20 @@ internal static class FormatIntegerEngine
         return n.ToString(CultureInfo.InvariantCulture);
     }
 
+    // Bounded aliases from the pinned German CLDR rules; feminine is the legacy e alias.
+    private static string? GermanOrdinalEnding(string? variation) => variation switch
+    {
+        "%spellout-ordinal" or "%spellout-ordinal-feminine" => "e",
+        "%spellout-ordinal-s" => "es",
+        "%spellout-ordinal-r" => "er",
+        "%spellout-ordinal-n" => "en",
+        _ => null,
+    };
+
     private static string GermanToOrdinalWords(string cardinalWord, string? suffix)
     {
-        string ending = string.IsNullOrEmpty(suffix) || suffix.StartsWith("%") ? "e" : suffix.TrimStart('-');
+        string ending = GermanOrdinalEnding(suffix)
+            ?? (string.IsNullOrEmpty(suffix) || suffix.StartsWith("%") ? "e" : suffix.TrimStart('-'));
         int lastSpace = cardinalWord.LastIndexOf(' ');
         if (lastSpace < 0)
             return MatchCase(cardinalWord, GermanMakeOrdinalLastWord(cardinalWord.ToLowerInvariant(), ending));

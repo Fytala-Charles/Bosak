@@ -1,4 +1,6 @@
 # K04-C05: CLDR format-integer review
+**K04-C06 formatter correction - 27 October 2026:** [Bounded integer-variation fix](../k04-cldr-fix/README.md) accepts cardinal variations and preserves known German named ordinal endings using pinned F&O/CLDR semantics. All six original assertions and22 diagnostic controls pass. The new36 regression rows pass in both compatibility paths (21failed before). Fresh solution validation passes **22,043 tests**; gates remain **31,161/0/660** and **8,438/0/1,892**, with every skip name/reason unchanged. Candidate **1.26.12** remains unpublished/public1.26.3. No qt4 CLDR admission, fixture/assertion, GatedSets, schema or QT3 baseline change. Bosak.Schema owns staged XSD1.1; REQ-126 remains Complete. Next: separate bounded qt4 CLDR admission review. Earlier K04 notices are historical checkpoints.
+
 
 27 October 2026. Source base `01e67cec`; candidate **1.26.11** unpublished, public **1.26.3**.
 

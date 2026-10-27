@@ -227,3 +227,6 @@ docs/conformance/k04-collation-admission/evidence/** -text whitespace=cr-at-eol,
 
 # K04 read-only CLDR diagnostics preserve original and calibration receipt bytes.
 docs/conformance/k04-cldr-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04 bounded formatter correction preserves exact validation/adoption receipts.
+docs/conformance/k04-cldr-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

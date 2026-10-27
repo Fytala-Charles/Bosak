@@ -1,0 +1,54 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C06",
+  "status": "Bounded formatter correction complete;qt4 CLDR admission unchanged",
+  "sourceBase": "68e18be9c8a24a9423c862af24bf1a73070a3fa1",
+  "specificationAdoption": "evidence/SPECIFICATION-ADOPTION.json",
+  "summary": {
+    "regressionRows": 36,
+    "regressionCompatibilityPaths": [
+      "XPath31",
+      "XPath40"
+    ],
+    "beforeRegressionPassed": 15,
+    "beforeRegressionFailed": 21,
+    "afterRegressionPassed": 36,
+    "originalAssertionsPassed": 6,
+    "modifierControlsPassed": 22,
+    "normalOriginalQt3Passed": 2,
+    "normalOriginalQt4Skipped": 4,
+    "smallWatchdogProcesses": 34,
+    "timeouts": 0,
+    "solutionPassed": 22043,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8438,
+      0,
+      1892
+    ],
+    "retainedQt3NamesAndReasons": 660,
+    "retainedQt4NamesAndReasons": 1892,
+    "admissionChanged": false,
+    "baselineChanged": false,
+    "candidateVersion": "1.26.12",
+    "publishedVersion": "1.26.3"
+  },
+  "limits": [
+    "Only known German ordinal aliases dispatch to existing ending logic",
+    "Unknown cardinal variations fall back to existing cardinal formatting",
+    "Unknown ordinal variations retain existing ordinary-ordinal fallback",
+    "Retain existing numeric range/language/casing behavior;not full CLDR rule evaluation",
+    "No qt4 feature admission change in this implementation slice",
+    "German %spellout-ordinal-feminine is an explicit legacy alias for the existing e ending, not a rule name in pinned CLDR46 de.xml",
+    "Known named German ordinal overrides apply only to w/W/Ww word pictures",
+    "Retain prior title-case flag and balanced-parenthesis convention;this slice does not implement the complete modifier grammar or all RBNF ranges",
+    "No complete CLDR/RBNF implementation",
+    "No harness,fixture,assertion,GatedSets,REQ-126 status or release change",
+    "Bosak.Schema retains staged XSD1.1 ownership"
+  ],
+  "next": "Review qt4 CLDR admission separately with the original four cases and relevant profile/language controls;no admission included in this implementation slice."
+}
