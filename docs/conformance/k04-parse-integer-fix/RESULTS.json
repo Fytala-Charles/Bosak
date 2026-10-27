@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-27",
+  "slice": "K04-C11",
+  "status": "Bounded parse-integer complete;both integer sets promoted after zero-failure full runs",
+  "sourceBase": "4efb46a54579656b9a0f237fe7ac8cf2793cf46c",
+  "specificationAdoption": "evidence/SPECIFICATION-ADOPTION.json",
+  "summary": {
+    "regressionRows": 87,
+    "beforeRegressionsPassed": 6,
+    "beforeRegressionsFailed": 81,
+    "initialPostFixPassed": 85,
+    "initialEmptyDisplayExpectationMistakes": 2,
+    "finalRegressionsPassed": 87,
+    "originalParseAssertionsPassed": 47,
+    "originalRoundTripPassed": 1,
+    "profileControlsPassed": 46,
+    "normalParseSet": [
+      47,
+      0,
+      0
+    ],
+    "normalFormatSet": [
+      101,
+      0,
+      1
+    ],
+    "smallWatchdogProcesses": 96,
+    "timeouts": 0,
+    "solutionPassed": 22198,
+    "normalQt3": [
+      31161,
+      0,
+      660
+    ],
+    "qt4Gated": [
+      8586,
+      0,
+      1893
+    ],
+    "gatedSetsBefore": 224,
+    "gatedSetsAfter": 226,
+    "newlyGatedPasses": 148,
+    "qt3RetainedNamesAndReasons": 660,
+    "qt4PriorRetainedNamesAndReasons": 1892,
+    "qt4AddedExistingSkip": "format-integer-042",
+    "candidateVersion": "1.28.0",
+    "publishedVersion": "1.26.3"
+  },
+  "policies": [
+    "4.0-only arities1/2 with value/radix keywords;radix defaults10 when omitted/empty",
+    "Int64 result bound;FOCA0003 for valid lexical values outside it;no float/decimal parsing roundtrip",
+    "Remove only codepoints9/10/13/32/95 as in pinned equivalent;ASCII digit alphabet only",
+    "Normal function conversion/type checking precedes body;empty value returns empty before radix-domain validation",
+    "For nonempty values validate radix domain first;validate complete lexical text before reporting accumulated size overflow",
+    "Unsupported arities and3.1 calls/references/lookup stay unavailable;3.1 keywords retain XPST0003",
+    "No fixture/assertion/REQ-126 disposition or schema changes;set promotion requires separate fresh evidence"
+  ],
+  "limits": [
+    "Int64 output limit;oversized valid lexical input raisesFOCA0003",
+    "No general arbitrary-precision integer representation or latest-draft certification",
+    "Two initial test display expectations corrected to semantic empty assertions;original logs/source retained",
+    "Seven original any-of size alternatives preserved,not weakened",
+    "No fixture/assertion/filter/schema/QT3 baseline or REQ-126 disposition change",
+    "Bosak.Schema owns XSD1.1;no release or upstream contribution"
+  ],
+  "next": "Review the remaining format-integer-042 negative numbering-sequence dependency in both profiles before any exact QT3 baseline proposal."
+}

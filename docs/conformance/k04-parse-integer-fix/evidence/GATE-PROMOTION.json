@@ -1,0 +1,26 @@
+{
+  "sourceBase": "4efb46a54579656b9a0f237fe7ac8cf2793cf46c",
+  "date": "2026-10-27",
+  "policy": "AGENTS.md:4.0 sets promoted only when green;runner seed criterion P>0,F=0 permits retained dependency skips",
+  "beforeCount": 224,
+  "afterCount": 226,
+  "added": [
+    "fn-format-integer",
+    "fn-parse-integer"
+  ],
+  "removed": [],
+  "prerequisites": {
+    "format-integer-implementation-parse-receipt.json": "d1770dc25bc3b46c4a4b6e7a86811eb0f936dff6430054de44a0af60ef73b724",
+    "format-integer-implementation-format-receipt.json": "a10e294a7fa4f5c60a14bbd2dd4d18d13313229a0627000f9c19c6e365e20747"
+  },
+  "expectedGate": [
+    8586,
+    0,
+    1893
+  ],
+  "expectedGateTotal": 10479,
+  "expectedAddedSkip": {
+    "format-integer-042": "Unsupported dependency"
+  },
+  "releaseApproved": false
+}

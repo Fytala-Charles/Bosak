@@ -51,6 +51,7 @@
 //                      |                  |       |                | typed-let coercion incl. numeric downcasting, lexical let scoping                        |
 //                      |------------------|-------|----------------|------------------------------------------------------------------------------------------
 //                      | Charles Korthout | 0.13  | 24-10-2026     | Correct fn-map-to-element gate name to enforce the frozen native test set.                |
+//                      | Charles Korthout | 0.14  | 27-10-2026     | Promote zero-failure integer parse/format sets after complete original-case validation. |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -354,6 +355,8 @@ internal sealed class ConformanceRunner40
         "app-UseCaseNLP",
         "app-UseCaseSEQ",
         "app-UseCaseSTRING",
+        "fn-format-integer",
+        "fn-parse-integer",
     };
 
     /// <summary>Failures inside <see cref="GatedSets"/> — these fail the run.</summary>

@@ -474,6 +474,8 @@
 //                      | Charles Korthout | 5.154 | 26-10-2026     | Retain decimal-backed integer identity in floor and ceiling (1.26.3).                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.155 | 27-10-2026     | Reuse schema constructor registration after query-owned imports (1.26.7).              |
+//                      | Charles Korthout | 5.156 | 27-10-2026     | Add bounded XPath4 parse-integer signatures, defaults, keywords and errors (1.28.0).    |
+// ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
 using System.Numerics;
@@ -2573,6 +2575,26 @@ public static class FunctionLibrary
                 ParameterTypes = [XdmValueKind.String],
                 ReturnType = XdmValueKind.DateTime,
                 Implementation = ParseIetfDate
+            },
+            [(Namespaces.Fn, "parse-integer", 1)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-integer", Arity = 1,
+                ParameterTypes = [XdmValueKind.String],
+                ParameterTypeNames = ["xs:string?"],
+                ReturnType = XdmValueKind.Integer,
+                ReturnTypeName = "xs:integer?",
+                IsXPath40Only = true,
+                Implementation = ParseInteger
+            },
+            [(Namespaces.Fn, "parse-integer", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "parse-integer", Arity = 2,
+                ParameterTypes = [XdmValueKind.String, XdmValueKind.Integer],
+                ParameterTypeNames = ["xs:string?", "xs:integer?"],
+                ReturnType = XdmValueKind.Integer,
+                ReturnTypeName = "xs:integer?",
+                IsXPath40Only = true,
+                Implementation = ParseInteger
             },
             [(Namespaces.Fn, "format-integer", 2)] = new()
             {
@@ -4732,6 +4754,7 @@ public static class FunctionLibrary
         var table = new Dictionary<(string Ns, string Local), KeywordSignatureInfo>
         {
             [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
+            [(Namespaces.Fn, "parse-integer")] = new(["value", "radix"], [null, "10"]),
             [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
             [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
@@ -15681,6 +15704,75 @@ public static class FunctionLibrary
             || name.Equals("MDT", StringComparison.OrdinalIgnoreCase)
             || name.Equals("PST", StringComparison.OrdinalIgnoreCase)
             || name.Equals("PDT", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static XdmValue ParseInteger(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+    {
+        // Dispatch performs the declared optional-argument conversion before this body.
+        var input = AtomizeSingleton(args[0]);
+        if (input.IsUndefined)
+            return XdmValue.Undefined;
+        string text = RequireString(input);
+        int radix = 10;
+        if (args.Length > 1)
+        {
+            var supplied = AtomizeSingleton(args[1]);
+            if (!supplied.IsUndefined)
+            {
+                if (!VmEngine.ValueMatchesType(supplied, "xs:integer", ctx))
+                    throw new InvalidOperationException("XPTY0004: parse-integer radix must be an integer.");
+                decimal domain = supplied.Kind == XdmValueKind.Integer
+                    ? supplied.IntegerValue : supplied.DecimalValue;
+                if (domain is < 2m or > 36m)
+                    throw new InvalidOperationException("FORG0011: parse-integer radix must be between 2 and 36.");
+                radix = (int)domain;
+            }
+        }
+
+        bool first = true;
+        bool negative = false;
+        bool sawDigit = false;
+        bool overflow = false;
+        ulong magnitude = 0;
+        ulong limit = long.MaxValue;
+        foreach (char ch in text)
+        {
+            if (ch is '\t' or '\n' or '\r' or ' ' or '_')
+                continue;
+            if (first)
+            {
+                first = false;
+                if (ch is '+' or '-')
+                {
+                    negative = ch == '-';
+                    if (negative)
+                        limit = 1UL << 63;
+                    continue;
+                }
+            }
+            int digit = ch is >= '0' and <= '9' ? ch - '0'
+                : ch is >= 'a' and <= 'z' ? ch - 'a' + 10
+                : ch is >= 'A' and <= 'Z' ? ch - 'A' + 10 : -1;
+            if (digit < 0 || digit >= radix)
+                throw new InvalidOperationException("FORG0012: Invalid parse-integer lexical value.");
+            sawDigit = true;
+            // Continue lexical validation after overflow so bad trailing digits retain their error.
+            if (!overflow)
+            {
+                if (magnitude > (limit - (uint)digit) / (uint)radix)
+                    overflow = true;
+                else
+                    magnitude = magnitude * (uint)radix + (uint)digit;
+            }
+        }
+        if (!sawDigit)
+            throw new InvalidOperationException("FORG0012: parse-integer requires at least one digit.");
+        if (overflow)
+            throw new InvalidOperationException("FOCA0003: parse-integer result exceeds the Int64 implementation limit.");
+        long result = negative
+            ? magnitude == (1UL << 63) ? long.MinValue : -(long)magnitude
+            : (long)magnitude;
+        return XdmValue.FromInteger(result);
     }
 
     private static XdmValue FormatInteger_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)

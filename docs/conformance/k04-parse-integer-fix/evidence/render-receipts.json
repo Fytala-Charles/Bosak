@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-parse-fix-render/README.md.html",
+      "sha256": "4007b68d8f99c1aae14bdf63a5b2fc2cc83d40e642398cdfda3d88f8a7683b36"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "42eb15be019e27c1b928b9e66867c618eabf0b0df79901f726a78f93dd577062"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "05d34ee89af701a4d319be53bdd4183285b5b3cbec39637b77fa3165587872d9"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_INTEGRATION.md.html",
+      "sha256": "5c1a6497f48048dc45b82c7ee98767ac0737c10efaaa2b76c6fb45d5a1bb6f23"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "ea0d442811e0640d67776ce7982928f833f81b11776ca79a23235be3397b7e8d"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "70c773f7a9d3708cb00af2cb8f106daa60ea2baab56756e84dd1f01039e5bf73"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "c4b3a894e0620450d223c03c4bbd7cca26ce79d8c86a2f0b5cbcecf573fc3c0e"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "4caf9d01406baf31c004c7b0d318c7e79ffd4315b9b207fdf027d37f99df0b8b"
+    },
+    {
+      "source": "docs/conformance/k04-parse-integer-review/README.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_conformance_k04-parse-integer-review_README.md.html",
+      "sha256": "ca8a96aa2adeb7df40f42dade8142c1c088ea6d421fab6e0e8474a51a9e0b173"
+    },
+    {
+      "source": "docs/conformance/k04-parse-integer-fix/README.md",
+      "html": ".guard-tmp/k04-parse-fix-render/docs_conformance_k04-parse-integer-fix_README.md.html",
+      "sha256": "1f7567721735e4a054a21ce1af7cc5879630c929f72029d08bdcaf3a3da58d5c"
+    }
+  ]
+}
