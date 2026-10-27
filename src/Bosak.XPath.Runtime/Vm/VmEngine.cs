@@ -431,6 +431,7 @@
 //                      | Charles Korthout | 2.204 | 25-10-2026     | Propagate empty atomized numeric binary and modern range operands before conversion.         |
 //                      | Charles Korthout | 2.205 | 25-10-2026     | Report function/map atomization errors for numeric-union function parameters.                |
 //                      | Charles Korthout | 2.206 | 26-10-2026     | Retain atomization errors for integer function parameters including rounding precision.     |
+//                      | Charles Korthout | 2.207 | 27-10-2026     | Validate legacy binding item types before atomization and cardinality checks (K01).        |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -1668,6 +1669,10 @@ internal static class VmEngine
                         // XQuery 3.1 'as SequenceType' enforcement for variable bindings: the
                         // value is atomized (unless the target is a node-kind test) and then
                         // instance-checked — no casts or promotions (XQuery 3.1 §4.16/§4.10).
+                        // An illegal list item type is XPST0051 regardless of whether its
+                        // value has one or multiple items (XQuery 3.1 §2.5.5.2). Validate
+                        // before InstanceOf can reject cardinality with XPTY0004.
+                        ValidateFunctionConversionTarget(enforceInfo.TypeName, context);
                         if (!IsNodeKindTest(enforceInfo.TypeName))
                             value = AtomizeItems(value);
                         if (!InstanceOf(value, enforceInfo.TypeName, enforceInfo.Occurrence, context.DefaultElementNamespace, context))

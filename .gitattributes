@@ -180,3 +180,5 @@ contributions/xslt40/switch-comparison-boundaries/review-readiness.json -text wh
 /docs/xpath40-catalog/evidence/c13-final-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 
 /docs/xpath40-catalog/evidence/c13-owner-acceptance/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+/docs/conformance/k01-schema-list/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

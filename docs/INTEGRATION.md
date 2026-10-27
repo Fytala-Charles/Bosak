@@ -35,6 +35,9 @@
   <p>Quick-reference for any application consuming the Bosak XPath 3.1 + XSLT + XQuery stack</p>
 </div>
 
+**K01 schema-list correction — 27 October 2026:** [Correction and evidence](conformance/k01-schema-list/README.md) fixes legacy typed bindings reporting XPTY0004 instead of XPST0051 for invalid list item types. All 18 regressions pass (baseline 6 failed/12 passed); direct original QT3 cases CastAs-ListType-20 and -28 now both pass. Both skips and frozen totals stay unchanged pending a separate baseline-policy approval. Source candidate 1.26.4 is unpublished; public 1.26.3 and REQ-126 bounded acceptance are unchanged. Earlier checkpoints are historical.
+
+
 **REQ-126 complete for the accepted bounded catalog — 26 October 2026:** [Owner acceptance](xpath40-catalog/CATALOG-ACCEPTANCE.md) closes C13 and all 13 workpackages; zero remain open. AC-01 through AC-04 are explicitly accepted for 76 entries/235 bounded contract groups; AC-05 maintained. All 38 catalog dispositions are accepted while all 48 unmet batch observations and original technical exit criteria remain unchanged. No full current-draft compliance, engine fix, gate change or release follows. Earlier open-state notices are historical.
 
 
@@ -3967,3 +3970,8 @@ Literal element creation remains available through the accepted REQ-132 API. Ren
 ## REQ-136 source-only integration contract
 
 Source 1.24.0 adds `GetLiteralElementRenameTarget` / `ProposeLiteralElementRename` and `GetLiteralElementDeletionTarget` / `ProposeLiteralElementDeletion`, with separate capability flags. Use actual fresh descriptors after each candidate; inspect exclusive outcomes and all graph/attribute/merge evidence before a consumer decides Apply. [API example and exact supported profile](REQ-136-IMPLEMENTATION.md). Neither public 1.23.8 nor Braid currently adopts these new APIs. One later Braid integration PR must deliver Rename and Delete together, preserving Create, session/license/revision checks, atomic Apply and history.
+
+
+### Schema-list binding correction (candidate 1.26.4)
+
+A list constructor such as `xs:NMTOKENS("a b c")` produces member atomic values. Bind them as `xs:NMTOKEN*`, rather than declaring the list name `xs:NMTOKENS` as a variable item type. Executed legacy bindings with an invalid list item type now report XPST0051 before cardinality checking. This does not establish complete eager static validation. See [the pinned contract and regressions](conformance/k01-schema-list/README.md).

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-27",
+  "recordedBeforeImplementation": true,
+  "sourceBase": "7d70078d",
+  "scope": "K01: report XPST0051 for invalid list SequenceType item names at executed legacy typed bindings; independently verify the already-passing castable case",
+  "immutableSpecification": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+  "revision": "W3C Recommendation 21 March 2017",
+  "sections": [
+    "2.5.4 SequenceType Syntax",
+    "2.5.5.2 Matching an ItemType and an Item",
+    "3.18.3 Cast",
+    "3.18.4 Castable",
+    "3.18.5 Constructor Functions"
+  ],
+  "requiredBehavior": "A SequenceType EQName must resolve to a generalized atomic type; a named list type is invalid and raises XPST0051. A list constructor/cast may instead return a sequence of member atomic values; castable to xs:NMTOKENS remains valid.",
+  "intentionalBoundaries": [
+    "Use the existing illegal function-conversion target validator before legacy EnforceType atomization/cardinality checks.",
+    "This correction does not establish a complete static-error detection mode or change all schema/type resolution paths.",
+    "No XPath4 draft adoption, generic list item type, schema-loader expansion or fixture assertion change.",
+    "Keep both existing skip entries and exact frozen baseline totals until explicit approval of a concrete baseline-policy update."
+  ],
+  "qt3FixtureRevision": "201a6e466940cdfc727f4babfedcde5332b9f578",
+  "fixture": "tests/qt3tests/prod/CastExpr.schema.xml",
+  "cases": ["CastAs-ListType-20", "CastAs-ListType-28"]
+}

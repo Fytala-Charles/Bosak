@@ -4,6 +4,11 @@
   <p>26 October 2026 — released Bosak 1.26.3; frozen baselines preserved</p>
 </div>
 
+**K01 schema-list correction — 27 October 2026:** [Correction and evidence](../conformance/k01-schema-list/README.md) fixes legacy typed bindings reporting XPTY0004 instead of XPST0051 for invalid list item types. All 18 regressions pass (baseline 6 failed/12 passed); direct original QT3 cases CastAs-ListType-20 and -28 now both pass. Both skips and frozen totals stay unchanged pending a separate baseline-policy approval. Source candidate 1.26.4 is unpublished; public 1.26.3 and REQ-126 bounded acceptance are unchanged. Earlier checkpoints are historical.
+
+
+**Historical initial triage — 26 October 2026; K01 is superseded by the correction above.**
+
 **Yes, some skipped cases merit follow-up.** The strongest immediate lead is the QT3 schema-list pair: `CastAs-ListType-28` already passes in the released executor, while `CastAs-ListType-20` still returns XPTY0004 where its assertion expects XPST0051. This task investigates and plans work; it changes no skip, assertion, fixture, capability declaration, retry policy or frozen expected count.
 
 ## Scope and counts
@@ -59,7 +64,7 @@ The observed multi-QName schema failure is a real capability boundary: XSD 1.1 s
 
 | ID | Follow-up | Recommendation |
 |---|---|---|
-| K01 | Schema-list stale skip/error-code pair | **First:** add targeted regressions, review schema/profile semantics, fix the remaining mismatch and remove only justified skips |
+| K01 | Schema-list stale skip/error-code pair | Correction verified in candidate1.26.4;18 regressions and both original direct probes pass. Exactly two skip removals await baseline-policy approval; totals remain frozen |
 | K02 | Seven schema-loader cases | Separate duration built-in resolution from six multi-affiliation substitution cases; establish supported XSD subset/design before implementing |
 | K03 | Supplementary XML-name construction | Trace QName/XDM/provider/serialization behavior; retain the actual Unicode name and assertion |
 | K04 | Dependency/routing applicability | Review negative/unknown capabilities and version/routing policy; stage resource-bounded wider qt4 exploration separately |
