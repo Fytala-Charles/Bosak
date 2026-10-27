@@ -1,7 +1,7 @@
 // ===========================================================================================================================================================
 // AUTHOR               : Charles Korthout
 // CREATE DATE          : 09 October 2026
-// PURPOSE              : XML↔map conversion shared by fn:element-to-map, fn:map-to-element and fn:element-to-map-plan (F&O 4.0 §17.6)
+// PURPOSE              : Converts XML elements and maps for the XPath 4.0 function library.
 // SPECIAL NOTES        : Part of the standard XPath / XQuery function library.
 //
 // COPYRIGHT            : Fytala
@@ -20,10 +20,13 @@
 //                      | Charles Korthout |       |                | is now the F+O 4.0 section 17.7 JNode accessor in FunctionLibrary)
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 18-10-2026     | Guard absent fallback layout and preserve FOJS0008 classification.                     |
+//                      | Charles Korthout | 0.5   | 27-10-2026     | Validate scalar XML NCName ranges and reject malformed UTF-16 (1.26.9).                |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
+using System.Buffers;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
@@ -337,55 +340,38 @@ internal static class ElementMap
     internal static string AbsoluteName(IXdmNode node)
         => node.NamespaceUri.Length == 0 ? node.LocalName : "Q{" + node.NamespaceUri + "}" + node.LocalName;
 
-    /// <summary>
-    /// NCName validation approximating XML 1.1 / XSD (the 𝄞-class astral characters are
-    /// accepted, which XmlConvert.VerifyNCName rejects — map-to-element-053).
-    /// </summary>
+    /// <summary>Validates an NCName using the XML 1.0 Fifth Edition scalar name ranges.</summary>
     private static bool IsNcName(string name)
     {
         if (name.Length == 0)
             return false;
-        for (int i = 0; i < name.Length; i++)
+        for (int offset = 0; offset < name.Length;)
         {
-            char c = name[i];
-            if (char.IsSurrogatePair(name, i))
-            {
-                // Astral characters are valid name characters (surrogate pair).
-                i++;
-                continue;
-            }
-            if (!IsNameChar(c, i == 0))
+            // Enumerating runes with replacement would admit malformed UTF-16 as U+FFFD.
+            if (Rune.DecodeFromUtf16(name.AsSpan(offset), out var rune, out int consumed) != OperationStatus.Done)
                 return false;
+            if (!IsNameChar(rune.Value, offset == 0))
+                return false;
+            offset += consumed;
         }
         return true;
     }
 
-    private static bool IsNameChar(char c, bool isStart)
-    {
-        if (c == '_' || c == '-')
-            return !isStart || c == '_';
-        if (c == '.')
-            return !isStart;
-        var cat = char.GetUnicodeCategory(c);
-        return cat switch
-        {
-            System.Globalization.UnicodeCategory.UppercaseLetter or
-            System.Globalization.UnicodeCategory.LowercaseLetter or
-            System.Globalization.UnicodeCategory.TitlecaseLetter or
-            System.Globalization.UnicodeCategory.ModifierLetter or
-            System.Globalization.UnicodeCategory.OtherLetter or
-            System.Globalization.UnicodeCategory.NonSpacingMark or
-            System.Globalization.UnicodeCategory.SpacingCombiningMark or
-            System.Globalization.UnicodeCategory.DecimalDigitNumber or
-            System.Globalization.UnicodeCategory.ConnectorPunctuation or
-            System.Globalization.UnicodeCategory.LetterNumber => !isStart || cat is not
-                (System.Globalization.UnicodeCategory.NonSpacingMark or
-                 System.Globalization.UnicodeCategory.SpacingCombiningMark or
-                 System.Globalization.UnicodeCategory.DecimalDigitNumber or
-                 System.Globalization.UnicodeCategory.ConnectorPunctuation),
-            _ => false,
-        };
-    }
+    private static bool IsNameChar(int scalar, bool isStart)
+        => IsNameStartChar(scalar)
+            || (!isStart && (scalar is '-' or '.' or >= '0' and <= '9' or 0xB7
+                or >= 0x0300 and <= 0x036F or >= 0x203F and <= 0x2040));
+
+    // XML NameStartChar, excluding colon for NCName. These explicit ranges are shared
+    // by XML 1.0 Fifth Edition and XML 1.1; Unicode letter categories are insufficient.
+    private static bool IsNameStartChar(int scalar)
+        => scalar is >= 'A' and <= 'Z' or '_' or >= 'a' and <= 'z'
+            or >= 0xC0 and <= 0xD6 or >= 0xD8 and <= 0xF6 or >= 0xF8 and <= 0x2FF
+            or >= 0x370 and <= 0x37D or >= 0x37F and <= 0x1FFF
+            or >= 0x200C and <= 0x200D or >= 0x2070 and <= 0x218F
+            or >= 0x2C00 and <= 0x2FEF or >= 0x3001 and <= 0xD7FF
+            or >= 0xF900 and <= 0xFDCF or >= 0xFDF0 and <= 0xFFFD
+            or >= 0x10000 and <= 0xEFFFF;
 
     /// <summary>Result of parsing a map key as an XML name.</summary>
     internal readonly record struct ParsedName(string Uri, string Local, string Prefix);

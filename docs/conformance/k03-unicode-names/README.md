@@ -1,5 +1,9 @@
 # K03: Unicode XML-name boundary trace — 27 October 2026
 
+**K03-C01 XML-name validation — 27 October 2026:** [Scalar validation correction](../k03-name-validation/README.md) replaces category/surrogate-pair approximation with explicit XML name ranges and rejects malformed UTF-16. All78 focused tests pass (baseline18 failures), all21,920 solution tests pass, and gates stay QT3 31,145/0/676 and qt4 8,436/0/1,894. All676 QT3 skip names/reasons are unchanged. Original supplementary construction and literal-content serialization findings remain open; next is K03-C02 serialization preservation before provider storage integration. Candidate1.26.9 unpublished/public1.26.3; no baseline or XSD1.1 capability change. REQ-126 remains Complete.
+
+
+
 **The bounded trace is complete; K03 implementation remains open.** The original qt4 `map-to-element-053` still skips on U+1D11E construction. Thirty independent diagnostics identify three separate corrections. No engine source, original assertion, skip or baseline changes in this slice.
 
 ## What fails

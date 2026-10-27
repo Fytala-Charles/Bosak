@@ -1,0 +1,36 @@
+// Generated read-only K03 harness, public-API and provider mechanism diagnostics.
+using System.Reflection;
+using System.Runtime.Loader;
+using System.Text.Json;
+using System.Xml;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+var directory=Path.GetFullPath("tests/Bosak.XPath.Conformance40/bin/Release/net10.0");
+AssemblyLoadContext.Default.Resolving+=(context,name)=>{var file=Path.Combine(directory,name.Name+".dll");return File.Exists(file)?Assembly.LoadFrom(file):null;};
+var row=JsonDocument.Parse(File.ReadAllText(args[0])).RootElement.EnumerateArray().Single(q=>q.GetProperty("id").GetString()==args[1]);
+string S(string key)=>row.GetProperty(key).GetString()!;
+object? detail=null;string? error=null,type=null,stack=null;
+try{
+ switch(S("kind")){
+ case "query":detail=new{value=XPath31Expression.Compile(S("expression"),new CompileOptions{Compatibility=XPathCompatibility.XPath40}).Evaluate(new EvaluationContext()).ToString()};break;
+ case "harness":{
+  var assembly=Assembly.LoadFrom(Path.Combine(directory,"Bosak.XPath.Conformance40.dll"));var flags=BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance|BindingFlags.Static;
+  Type T(string name)=>assembly.GetType("Bosak.XPath.Conformance."+name,true)!;
+  object Deps(IEnumerable<XElement> elements){var list=Activator.CreateInstance(typeof(List<>).MakeGenericType(T("Dependency")))!;foreach(var e in elements)list.GetType().GetMethod("Add")!.Invoke(list,new[]{T("Dependency").GetMethod("FromElement",flags)!.Invoke(null,new object[]{e})});return list;}
+  XNamespace ns="http://www.w3.org/2010/09/qt-fots-catalog";var path=Path.GetFullPath("tests/qt4tests/fn/map-to-element.xml");var doc=XDocument.Load(path);var e=doc.Descendants(ns+"test-case").Single(e=>(string?)e.Attribute("name")==S("case"));
+  var test=T("TestCase").GetMethod("FromElement",flags)!.Invoke(null,new object?[]{e,ns,Deps(doc.Root!.Elements(ns+"dependency")),Path.GetDirectoryName(path)})!;
+  var executor=Activator.CreateInstance(T("TestExecutor40"))!;var outcome=T("TestExecutor40").GetMethod("Execute",flags)!.Invoke(executor,new object?[]{test,null})!;
+  detail=new{kind=outcome.GetType().GetProperty("Kind")!.GetValue(outcome)!.ToString(),message=outcome.GetType().GetProperty("Message")!.GetValue(outcome),expression=e.Element(ns+"test")!.Value,assertion=e.Element(ns+"result")!.ToString()};break;}
+ case "platform":{
+  string? verifyError=null,xnameError=null;try{XmlConvert.VerifyNCName(S("name"));}catch(Exception e){verifyError=e.Message;}try{_ = XName.Get(S("name"));}catch(Exception e){xnameError=e.Message;}detail=new{verifyError,xnameError};break;}
+ case "provider":{
+  var node=XDocumentProvider.ConstructElement(new XdmElementSpec(S("name"),null,null,Array.Empty<XdmAttributeValue>(),new[]{new XdmContentItem(XdmContentKind.Text,S("text"))},Xml11Mode:row.GetProperty("xml11").GetBoolean()));
+  detail=new{localName=node.LocalName,stringValue=node.StringValue,serialized=node.ToXmlString()};break;}
+ case "codec":detail=new{encoded=Xml11NameCodec.EncodeName(S("name")),decoded=Xml11NameCodec.DecodeName(Xml11NameCodec.EncodeName(S("name"))),literalDecoded=Xml11NameCodec.DecodeName(S("text"))};break;
+ default:throw new ArgumentException("Unknown probe kind");
+ }
+}catch(Exception e){error=e.Message;type=e.GetType().Name;stack=e.StackTrace;}
+Console.WriteLine(JsonSerializer.Serialize(new{id=S("id"),kind=S("kind"),detail,error,exceptionType=type,stack}));
