@@ -1,0 +1,1 @@
+{"id":"platform-12289","kind":"platform","detail":{"verifyError":"Name cannot begin with the \u0027\u3001\u0027 character, hexadecimal value 0x3001.","xnameError":"Name cannot begin with the \u0027\u3001\u0027 character, hexadecimal value 0x3001."},"error":null,"exceptionType":null,"stack":null}

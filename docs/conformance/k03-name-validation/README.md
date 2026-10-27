@@ -1,5 +1,9 @@
 # K03-C01: scalar XML-name validation — 27 October 2026
 
+**K03-C02 serialization — 27 October 2026:** [Content-preserving name decoding](../k03-serialization/README.md) restores encoded element/attribute name tokens while preserving existing literal node content, namespace URIs and declarations. All40 focused regressions and21,960 solution tests pass; QT3 remains31,145/0/676 with identical676 skips, and qt4 remains8,436/0/1,894. The original supplementary-name skip remains. Candidate1.26.10 unpublished/public1.26.3. Next: reversible name-storage integration with loader/accessor/copy round-trip verification; no public API, baseline or XSD1.1 ownership change. REQ-126 remains Complete.
+
+
+
 **K03-C01 is complete.** All 78 focused regressions pass, including the 18 failures reproduced before correction. The complete solution has 21,920 passing tests. The original supplementary-name construction skip remains: provider name storage and content-preserving serialization are still separate work.
 
 ## Change

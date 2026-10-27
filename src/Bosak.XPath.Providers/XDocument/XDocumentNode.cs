@@ -112,6 +112,7 @@
 //                      |                  |       |                | untypedAtomic to xs:untypedAtomic (validation-0108)                                     |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
+//                      | Charles Korthout | 2.16  | 27-10-2026     | Decode serialized name tokens without changing literal node content (1.26.10).         |
 //                      |==================|=======|================|=========================================================================================
 
 // ===========================================================================================================================================================
@@ -2496,25 +2497,118 @@ public sealed class XDocumentNode : IXdmNode
         }
         OmitRedundantDeclarations(clone, new Dictionary<string, string>(StringComparer.Ordinal));
 
-        string xml = clone.ToString(SaveOptions.DisableFormatting);
-
-        // XML 1.1 constructed trees store encoded names; decode them before serialization
-        // so the output reflects the original Unicode names (misc-XMLEdition name tests).
-        // This is a string-level replacement: if text/attribute values happen to contain the
-        // sentinel-encoded form literally, they will also be decoded. XML 1.1 text content
-        // containing the sentinel characters is an edge case not exercised by the suite.
-        if (IsXml11ElementTree(element))
-            xml = Xml11NameCodec.DecodeName(xml);
-
-        return xml;
+        return DecodeXml11Names(clone.ToString(SaveOptions.DisableFormatting), IsXml11ElementTree(element));
     }
 
-    /// <summary>
-    /// Decodes XML 1.1 sentinel-encoded names in a serialized XML string when the
-    /// source tree is known to be XML 1.1.
-    /// </summary>
+    /// <summary>Restores encoded element/attribute name tokens without rewriting serialized content.</summary>
     private static string DecodeXml11Names(string xml, bool isXml11)
-        => isXml11 ? Xml11NameCodec.DecodeName(xml) : xml;
+    {
+        if (!isXml11 || xml.IndexOf((char)0x01C0) < 0)
+            return xml;
+
+        StringBuilder? output = null;
+        int copiedThrough = 0;
+        int position = 0;
+
+        void SkipThrough(string terminator)
+        {
+            int end = xml.IndexOf(terminator, position, StringComparison.Ordinal);
+            position = end < 0 ? xml.Length : end + terminator.Length;
+        }
+
+        void DecodeNameToken()
+        {
+            int start = position;
+            while (position < xml.Length && !char.IsWhiteSpace(xml[position])
+                && xml[position] is not ('/' or '>' or '='))
+                position++;
+            var token = xml.AsSpan(start, position - start);
+            if (token.IndexOf((char)0x01C0) < 0)
+                return;
+            string decoded = Xml11NameCodec.DecodeName(token.ToString());
+            if (token.SequenceEqual(decoded.AsSpan()))
+                return;
+            output ??= new StringBuilder(xml.Length);
+            output.Append(xml, copiedThrough, start - copiedThrough).Append(decoded);
+            copiedThrough = position;
+        }
+
+        while (position < xml.Length)
+        {
+            int markup = xml.IndexOf('<', position);
+            if (markup < 0)
+                break;
+            position = markup;
+            if (xml.AsSpan(position).StartsWith("<!--", StringComparison.Ordinal))
+            {
+                SkipThrough("-->");
+                continue;
+            }
+            if (xml.AsSpan(position).StartsWith("<![CDATA[", StringComparison.Ordinal))
+            {
+                SkipThrough("]]>");
+                continue;
+            }
+            if (xml.AsSpan(position).StartsWith("<?", StringComparison.Ordinal))
+            {
+                // PI targets are not encoded by the loader or construction hook.
+                SkipThrough("?>");
+                continue;
+            }
+            position++;
+            if (position < xml.Length && xml[position] == '!')
+            {
+                // Preserve the complete declaration, including quoted DTD literals and
+                // internal subsets. Comments/PIs may contain brackets and '>' characters.
+                int depth = 0;
+                char quote = (char)0;
+                while (position < xml.Length)
+                {
+                    char c = xml[position];
+                    if (quote != 0)
+                    {
+                        if (c == quote) quote = (char)0;
+                    }
+                    else if (xml.AsSpan(position).StartsWith("<!--", StringComparison.Ordinal))
+                    {
+                        SkipThrough("-->");
+                        continue;
+                    }
+                    else if (xml.AsSpan(position).StartsWith("<?", StringComparison.Ordinal))
+                    {
+                        SkipThrough("?>");
+                        continue;
+                    }
+                    else if (c is '\'' or '"') quote = c;
+                    else if (c == '[') depth++;
+                    else if (c == ']') depth--;
+                    else if (c == '>' && depth == 0) { position++; break; }
+                    position++;
+                }
+                continue;
+            }
+            if (position < xml.Length && xml[position] == '/') position++;
+            DecodeNameToken();
+            while (position < xml.Length)
+            {
+                char c = xml[position];
+                if (c == '>') { position++; break; }
+                if (char.IsWhiteSpace(c) || c == '/') { position++; continue; }
+                if (c is '\'' or '"')
+                {
+                    position++;
+                    int end = xml.IndexOf(c, position);
+                    position = end < 0 ? xml.Length : end + 1;
+                    continue;
+                }
+                if (c == '=') { position++; continue; }
+                DecodeNameToken();
+            }
+        }
+        if (output is null)
+            return xml;
+        return output.Append(xml, copiedThrough, xml.Length - copiedThrough).ToString();
+    }
 
     /// <summary>
     /// Returns <c>true</c> when <paramref name="element"/> or any ancestor carries
