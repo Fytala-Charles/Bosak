@@ -1,0 +1,61 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-radix-render/README.md.html",
+      "sha256": "9f4b41fd7fa0f1a0a0109d77038f3eaa037d6e48d05b4218a8f3d9ac80feb693"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-radix-render/docs_ARCHITECTURE.md.html",
+      "sha256": "881695a58ac516ae380d43c630f261efb860ff04415c970cc5224b575031f730"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-radix-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "5c5621d0a3ade32fdd0c4020caacbe5c8942b94b6393ecbaac2145cbe539a25c"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-radix-render/docs_INTEGRATION.md.html",
+      "sha256": "76929ed2da8959398965b77e89a9fd187556507676a9558f1dfaa3c2452c323e"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-radix-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "45410d8f0f8c90822c7c013fa9a0f0907bca951949f94d967adfafe1adb06287"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-radix-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "386942ca889e008811f0124225a8ca690e9f5b13a62eb160fc44e1e8ea7e3c51"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-radix-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "c254e1192795d771d15add0941ceee98e26b7c63d339ad6ae7e87f0168352212"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-radix-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "87064723dc1a2f8113a4dfeeb73c855df2492828472be66b51ac275b29133cb7"
+    },
+    {
+      "source": "docs/conformance/k04-cldr-admission/README.md",
+      "html": ".guard-tmp/k04-radix-render/docs_conformance_k04-cldr-admission_README.md.html",
+      "sha256": "1c1816122efd407e90a97c6947a55877d8ba82a5c922b1fdb7fb5182e2c5a8b4"
+    },
+    {
+      "source": "docs/conformance/k04-radix-review/README.md",
+      "html": ".guard-tmp/k04-radix-render/docs_conformance_k04-radix-review_README.md.html",
+      "sha256": "73081fc69db4f9bbd716b5dd01a485b95d139bcdf3a9a65e06729372761eff95"
+    },
+    {
+      "source": "docs/conformance/k04-radix-review/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-radix-render/docs_conformance_k04-radix-review_NEXT-SLICE.md.html",
+      "sha256": "b667edef73c3a7d297aa16f2d1cd42e29a134c0596148f632601255d39ee29d6"
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "date": "2026-10-27",
+  "sourceBase": "65d1a731a5bf2cf994f8b0230c105c0acfeeca02",
+  "source": "https://raw.githubusercontent.com/qt4cg/qtspecs/e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e/specifications/xpath-functions-40/src/function-catalog.xml",
+  "revision": "e7ee4ab8cb6c6c0f6f60014e2367f1a90909e69e",
+  "sha256": "409221fb91752e0a174a00f3ef6aecd7bf69807bf203e15f91e4d420145e39e5",
+  "section": "fn:format-integer / radix prefix, digit-pattern, grouping and ordinal rules",
+  "kind": "Review pin only;not engine adoption",
+  "rationale": "Reuse the exact frozen catalog revision already recorded by REQ-126 changed31 audit;test-fixture and publication revisions remain separate",
+  "futureImplementationRequirements": [
+    "Record explicit adoption and intentional bounds before modifying semantics",
+    "Preserve3.1 interpretation of caret-grouped decimal pictures",
+    "Keep radix formatting distinct from source numeric literals and generic wide-integer conversion"
+  ]
+}

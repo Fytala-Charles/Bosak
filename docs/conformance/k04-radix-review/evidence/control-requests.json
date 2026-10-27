@@ -1,0 +1,342 @@
+[
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-caret-decimal10",
+    "case": "caret-decimal10",
+    "expression": "format-integer(999,'10^0000')",
+    "boundary": false,
+    "expected": "00^0999"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-caret-decimal10",
+    "case": "caret-decimal10",
+    "expression": "format-integer(999,'10^0000')",
+    "boundary": false,
+    "expected": "00^0999"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-caret-decimal9",
+    "case": "caret-decimal9",
+    "expression": "format-integer(999,'9^9999')",
+    "boundary": false,
+    "expected": "0^0999"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-caret-decimal9",
+    "case": "caret-decimal9",
+    "expression": "format-integer(999,'9^9999')",
+    "boundary": false,
+    "expected": "0^0999"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-caret-grouping",
+    "case": "caret-grouping",
+    "expression": "format-integer(2345,'9^000')",
+    "boundary": false,
+    "expected": "2^345"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-caret-grouping",
+    "case": "caret-grouping",
+    "expression": "format-integer(2345,'9^000')",
+    "boundary": false,
+    "expected": "2^345"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-hex-lower",
+    "case": "hex-lower",
+    "expression": "format-integer(255,'16^xx')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-hex-lower",
+    "case": "hex-lower",
+    "expression": "format-integer(255,'16^xx')",
+    "boundary": true,
+    "expected": "ff"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-hex-upper-group",
+    "case": "hex-upper-group",
+    "expression": "format-integer(65535,'16^XX:XX')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-hex-upper-group",
+    "case": "hex-upper-group",
+    "expression": "format-integer(65535,'16^XX:XX')",
+    "boundary": true,
+    "expected": "FF:FF"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-hex-original-ordinal",
+    "case": "hex-original-ordinal",
+    "expression": "format-integer(21,'16^xx;o')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-hex-original-ordinal",
+    "case": "hex-original-ordinal",
+    "expression": "format-integer(21,'16^xx;o')",
+    "boundary": true,
+    "expected": "15st"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-hex-alpha-ordinal",
+    "case": "hex-alpha-ordinal",
+    "expression": "format-integer(26,'16^x;o')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-hex-alpha-ordinal",
+    "case": "hex-alpha-ordinal",
+    "expression": "format-integer(26,'16^x;o')",
+    "boundary": true,
+    "expected": "1ath"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-parse-hex",
+    "case": "parse-hex",
+    "expression": "parse-integer('ff',16)",
+    "boundary": "parse",
+    "expected": "XPST0017"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-parse-hex",
+    "case": "parse-hex",
+    "expression": "parse-integer('ff',16)",
+    "boundary": "parse",
+    "expected": "255"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-parse-binary",
+    "case": "parse-binary",
+    "expression": "parse-integer('101',2)",
+    "boundary": "parse",
+    "expected": "XPST0017"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-parse-binary",
+    "case": "parse-binary",
+    "expression": "parse-integer('101',2)",
+    "boundary": "parse",
+    "expected": "5"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-lookup-parse",
+    "case": "lookup-parse",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2))",
+    "boundary": "lookup",
+    "expected": "false"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-lookup-parse",
+    "case": "lookup-parse",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','parse-integer'),2))",
+    "boundary": "lookup",
+    "expected": "true"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-decimal-ordinal21",
+    "case": "decimal-ordinal21",
+    "expression": "format-integer(21,'00;o')",
+    "boundary": false,
+    "expected": "21st"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-decimal-ordinal21",
+    "case": "decimal-ordinal21",
+    "expression": "format-integer(21,'00;o')",
+    "boundary": false,
+    "expected": "21st"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-decimal-ordinal15",
+    "case": "decimal-ordinal15",
+    "expression": "format-integer(15,'00;o')",
+    "boundary": false,
+    "expected": "15th"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-decimal-ordinal15",
+    "case": "decimal-ordinal15",
+    "expression": "format-integer(15,'00;o')",
+    "boundary": false,
+    "expected": "15th"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-empty-radix",
+    "case": "empty-radix",
+    "expression": "format-integer((),'16^xx')",
+    "boundary": false,
+    "expected": ""
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-empty-radix",
+    "case": "empty-radix",
+    "expression": "format-integer((),'16^xx')",
+    "boundary": false,
+    "expected": ""
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-invalid-base",
+    "case": "invalid-base",
+    "expression": "format-integer(1,'1^x')",
+    "boundary": false,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-invalid-base",
+    "case": "invalid-base",
+    "expression": "format-integer(1,'1^x')",
+    "boundary": false,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-mixed-case",
+    "case": "mixed-case",
+    "expression": "format-integer(255,'16^xX')",
+    "boundary": false,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-mixed-case",
+    "case": "mixed-case",
+    "expression": "format-integer(255,'16^xX')",
+    "boundary": false,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-int64-max",
+    "case": "int64-max",
+    "expression": "format-integer(9223372036854775807,'16^x')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-int64-max",
+    "case": "int64-max",
+    "expression": "format-integer(9223372036854775807,'16^x')",
+    "boundary": true,
+    "expected": "7fffffffffffffff"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt3-int64-min",
+    "case": "int64-min",
+    "expression": "format-integer(-9223372036854775808,'16^x')",
+    "boundary": true,
+    "expected": "FODF1310"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml",
+    "Name": "control-qt4-int64-min",
+    "case": "int64-min",
+    "expression": "format-integer(-9223372036854775808,'16^x')",
+    "boundary": true,
+    "expected": "-8000000000000000"
+  }
+]

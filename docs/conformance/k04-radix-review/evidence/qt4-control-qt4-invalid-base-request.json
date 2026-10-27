@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "docs/conformance/k04-radix-review/evidence/control-fixtures.xml", "Name": "control-qt4-invalid-base", "case": "invalid-base", "expression": "format-integer(1,'1^x')", "boundary": false, "expected": "FODF1310"}
