@@ -1,5 +1,9 @@
 # K02 guarded-runner admission review — 27 October 2026
 
+**K02 adopted — 27 October 2026:** [Owner-approved normal-runner adoption](BASELINE-ADOPTION.md) is complete. The fresh normal QT3 gate passes **31,145/0/676**; only validateexpr-28 leaves the skip set through its original XQST0012 error alternative, and all 676 retained names/reasons match. AGENTS now requires this exact baseline. The normal runner selects the existing guard; standalone TestExecutor defaults and all profile/structural exclusions remain unchanged. Engine/candidate1.26.8 unchanged and unpublished; public1.26.3. Solution21,842 and qt4 8,436/0/1,894 are inherited source-identical validation. Bosak.Schema owns XSD1.1. REQ-126 remains Complete; earlier pending/default-off notices are historical checkpoints.
+
+
+
 **Review ready; owner approval pending. Normal QT3 remains 31,144/0/677 and guarded loading remains default-off.**
 
 The [concrete adoption proposal](BASELINE-UPDATE-PROPOSAL.md) would enable the existing guarded loader on the normal runner and adopt **31,145/0/676**. A complete original-catalog rehearsal verifies exactly one gain: `validateexpr-28` reaches its existing XQST0012 error alternative. All other 676 skip names and reasons are unchanged, with zero failures or timeouts. There is no known-skip entry to remove.

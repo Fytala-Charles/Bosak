@@ -124,6 +124,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.35  | 21-08-2026     | Drop XML 1.1-only name-character gaps after implementing encode/decode construction        |
 //                      | Charles Korthout | 1.37  | 27-10-2026     | Remove only the two owner-approved K01 list-binding/castability skips.                    |
+//                      | Charles Korthout | 1.45  | 27-10-2026     | Enable owner-approved guarded schema initialization in the normal QT3 runner.           |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -138,7 +139,7 @@ internal sealed class ConformanceRunner
     private readonly string? _testFilter;
     private readonly XNamespace _ns = "http://www.w3.org/2010/09/qt-fots-catalog";
     private readonly DependencyFilter _dependencyFilter = new();
-    private readonly TestExecutor _executor = new();
+    private readonly TestExecutor _executor = new() { UseQueryOwnedSchemasForDiagnostics = true };
 
     /// <summary>
     /// Tests that can never pass in this harness, with the reason. Each entry is a

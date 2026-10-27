@@ -1,0 +1,10 @@
+{
+  "date": "2026-10-27",
+  "decisionId": "K02-guarded-runner-adoption-v1",
+  "questionItemId": "[\"request_user_input_async\",\"call_7e2a2d55d34340a7b53e166de4f04e05\",0]",
+  "question": "Approve the K02 proposal at docs/conformance/k02-admission-review/BASELINE-UPDATE-PROPOSAL.md (commit 628f169e)? It enables the existing guarded schema loader in the normal QT3 runner, updates AGENTS.md from 31,144/0/677 to 31,145/0/676, and requires a fresh complete normal gate. Full-runner rehearsals confirm only validateexpr-28 leaves the skip set through its original XQST0012 alternative; all 676 remaining skip names/reasons are unchanged. Profile guards remain intact, Bosak.Schema retains XSD 1.1 ownership, and no release is approved. Explicit approval is needed because AGENTS.md requires the current exact baseline.",
+  "answer": "Approve scoped K02 adoption (Recommended)",
+  "proposalCommit": "628f169e",
+  "sourceBase": "628f169e8399f65d8be4ff88679ff98fd746e4b9",
+  "scope": "Exact presented patch, canonical documentation sync and fresh normal gate; no release."
+}

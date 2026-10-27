@@ -1,5 +1,9 @@
 # Proposed K02 guarded-runner adoption
 
+**K02 adopted — 27 October 2026:** [Owner-approved normal-runner adoption](BASELINE-ADOPTION.md) is complete. The fresh normal QT3 gate passes **31,145/0/676**; only validateexpr-28 leaves the skip set through its original XQST0012 error alternative, and all 676 retained names/reasons match. AGENTS now requires this exact baseline. The normal runner selects the existing guard; standalone TestExecutor defaults and all profile/structural exclusions remain unchanged. Engine/candidate1.26.8 unchanged and unpublished; public1.26.3. Solution21,842 and qt4 8,436/0/1,894 are inherited source-identical validation. Bosak.Schema owns XSD1.1. REQ-126 remains Complete; earlier pending/default-off notices are historical checkpoints.
+
+
+
 **Pending owner approval — 27 October 2026. Current normal runner and baseline are unchanged.**
 
 Decision ID: `K02-guarded-runner-adoption-v1`. Source candidate **1.26.8**, published version **1.26.3**.
