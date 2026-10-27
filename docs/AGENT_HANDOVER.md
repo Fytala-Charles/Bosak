@@ -1,5 +1,11 @@
 ## REQ-126 C05 type/collection/pattern reconciliation — 26 October 2026
 
+**K02 wider audit — 27 October 2026:** [Schema/import inventory](conformance/k02-schema-inventory/README.md) blocks normal adoption: 324 eligible original cases yield 251 retained passes, 72 regressions and one environment-exception-to-pass transition. All 1,584 metadata/paired/boundary processes complete without timeouts. Two corrections remain open: schema constructor registration after import (68 observed regressions), then relative schema-import base URI (four). Guarded loading stays default-off; no source, skip, baseline or version change. Next: K02-C01 constructor registration. Candidate 1.26.6 unpublished/public 1.26.3; REQ-126 remains Complete. Earlier narrow-sample results remain historical evidence.
+
+Source/documentation base: `ff1fd574`; delivery commit: `git log -1 --format=%H -- docs/conformance/k02-schema-inventory/README.md`. What was built: complete 1,010-case schema inventory; actual guard metadata for 902 cases; 648 eligible paired and 34 boundary executions; public-API registration traces and controlled .NET schema base-URI comparison; pinned raw evidence and deterministic review/validator. Inherited source-identical validation: 21,825 solution passes, QT3 31,144/0/677, qt4 8,436/0/1,894. No fresh full-suite claim. README commands, architecture, integration matrix, feature registry and AGENTS conventions remain current; mandatory gate totals and all prior evidence are preserved. Next implementation requires its own source pin and regression/gate validation.
+
+
+
 
 **K02 guarded loader diagnostics — 27 October 2026:** [Implemented guarded mode](conformance/k02-schema-loader/README.md) delegates eligible schemas to actual query imports only when explicitly enabled for diagnostics; normal eager loading stays the default. All 66 actual-harness diagnostic runs match independent expectations, including wrong-assertion failures and preserved source/profile boundaries. All 21,825 solution tests and both normal gates pass at 31,144/0/677 and 8,436/0/1,894; all 677 QT3 skips/reasons are unchanged. Candidate 1.26.6 is unpublished. K02 profile/capability and wider applicability work remain open; no admission or baseline change. Earlier checkpoints are historical.
 

@@ -1,5 +1,9 @@
 # K02: guarded query-owned schema diagnostics
 
+**K02 wider audit — 27 October 2026:** [Schema/import inventory](../k02-schema-inventory/README.md) blocks normal adoption: 324 eligible original cases yield 251 retained passes, 72 regressions and one environment-exception-to-pass transition. All 1,584 metadata/paired/boundary processes complete without timeouts. Two corrections remain open: schema constructor registration after import (68 observed regressions), then relative schema-import base URI (four). Guarded loading stays default-off; no source, skip, baseline or version change. Next: K02-C01 constructor registration. Candidate 1.26.6 unpublished/public 1.26.3; REQ-126 remains Complete. Earlier narrow-sample results remain historical evidence.
+
+
+
 **27 October 2026 — source candidate 1.26.6, unpublished; public 1.26.3 unchanged.**
 
 The actual QT3 harness now has an internal diagnostic mode that delegates eligible environment schemas to the query's declared imports. The mode is **off by default**; the normal runner, known skips and baselines are unchanged. `validateexpr-28` passes in the guarded diagnostic through its original XQST0012 alternative. It remains skipped in the normal gate.

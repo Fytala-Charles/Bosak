@@ -1,0 +1,45 @@
+from pathlib import Path
+import json,hashlib,subprocess,time,concurrent.futures,xml.etree.ElementTree as ET
+E=Path('docs/conformance/k02-schema-inventory/evidence');P=Path('.guard-tmp/k02-wide/requests');rows=json.loads((E/'schema-cases.json').read_text(encoding='utf-8'));byid={v['id']:v for v in rows};metadata=json.loads((E/'metadata-results.json').read_text(encoding='utf-8'));assert len(metadata)==902 and all(v['exitCode']==0 and not v['timeout'] for v in metadata)
+eligible=[v for v in metadata if v['result']['deferred']];assert len(eligible)==324
+resources={};root=Path.cwd().resolve()
+for row in metadata:
+ for field in ['schemas','sources']:
+  for v in row['result'][field]:
+   p=Path(v['FilePath']).resolve()
+   if not p.is_file():continue
+   assert p.is_relative_to(root),str(p)
+   key=p.relative_to(root).as_posix()
+   if key in resources:continue
+   item=dict(sha256=hashlib.sha256(p.read_bytes()).hexdigest(),roles=[])
+   if field=='schemas':
+    try:
+     doc=ET.parse(p).getroot();item['targetNamespace']=doc.get('targetNamespace');item['schemaReferences']=[dict(kind=e.tag.rsplit('}',1)[-1],namespace=e.get('namespace'),location=e.get('schemaLocation')) for e in doc if e.tag.rsplit('}',1)[-1] in ['include','import','redefine','override']]
+    except ET.ParseError as ex:item['xmlMetadataError']=str(ex)
+   resources[key]=item
+  # Roles are descriptive; the actual harness guard, not this XML scan, decides eligibility.
+for row in metadata:
+ for field in ['schemas','sources']:
+  for v in row['result'][field]:
+   p=Path(v['FilePath']).resolve()
+   if p.is_file():resources[p.relative_to(root).as_posix()]['roles'].append(dict(case=row['id'],role=field))
+(E/'resource-identities.json').write_text(json.dumps(resources,indent=2)+'\n',encoding='utf-8')
+(E/'eligible-cases.json').write_text(json.dumps([byid[v['id']] for v in eligible],indent=2,ensure_ascii=False)+'\n',encoding='utf-8')
+started=time.monotonic();jobs=[(v,mode) for v in eligible for mode in ['current','guarded']]
+def run(item):
+ meta,mode=item;index=meta['index'];q=byid[meta['id']];request=P/(str(index)+'.json');log=E/('compare-'+str(index)+'-'+mode+'.log');command=['dotnet','.guard-tmp/k02-wide/bin/Release/net10.0/K02WideDiagnostic.dll',str(request),q['id'],mode];start=time.monotonic()
+ if start-started>240:return dict(index=index,id=q['id'],mode=mode,exitCode=None,timeout=False,budgetExceeded=True,result=None)
+ with log.open('wb') as output:
+  try:p=subprocess.run(command,stdout=output,stderr=subprocess.STDOUT,timeout=20);code=p.returncode;timeout=False
+  except subprocess.TimeoutExpired:code=None;timeout=True
+ result=None
+ if code==0:
+  try:result=json.loads(log.read_text(encoding='utf-8-sig').splitlines()[-1])
+  except(ValueError,IndexError):pass
+ return dict(index=index,id=q['id'],mode=mode,exitCode=code,timeout=timeout,budgetExceeded=False,watchdogSeconds=20,wallSeconds=time.monotonic()-start,command=command,log=log.name,result=result)
+out=[]
+with (E/'comparison-results.jsonl').open('w',encoding='utf-8') as checkpoint,concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+ for v in pool.map(run,jobs):
+  out.append(v);checkpoint.write(json.dumps(v,ensure_ascii=False)+'\n');checkpoint.flush()
+  if len(out)%50==0 or v['exitCode']!=0:print(len(out),'of',len(jobs),'elapsed',round(time.monotonic()-started,1),v['id'],v['mode'],v['result']['kind'] if v['result'] else v['exitCode'],flush=True)
+(E/'comparison-results.json').write_text(json.dumps(out,indent=2,ensure_ascii=False)+'\n',encoding='utf-8');print('Finished',len(out),'comparison processes',flush=True)

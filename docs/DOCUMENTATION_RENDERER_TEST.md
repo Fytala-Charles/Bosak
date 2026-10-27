@@ -129,6 +129,10 @@
 
 # Documentation Renderer Test
 
+**K02 wider audit — 27 October 2026:** [Schema/import inventory](conformance/k02-schema-inventory/README.md) blocks normal adoption: 324 eligible original cases yield 251 retained passes, 72 regressions and one environment-exception-to-pass transition. All 1,584 metadata/paired/boundary processes complete without timeouts. Two corrections remain open: schema constructor registration after import (68 observed regressions), then relative schema-import base URI (four). Guarded loading stays default-off; no source, skip, baseline or version change. Next: K02-C01 constructor registration. Candidate 1.26.6 unpublished/public 1.26.3; REQ-126 remains Complete. Earlier narrow-sample results remain historical evidence.
+
+
+
 23 October2026: PR425 REQ-136 formal consumer acceptance and canonical status counterparts rendered with markdown-it and unchanged Fytala CSS under `.guard-tmp/req136-acceptance-render`; original acceptance Git bytes, four1444-pass TRX hashes/counters, nine signed public assembly identities, reported native limits, registry/detail consistency and new links checked. Evidence was inspected, not rerun. HTML only; no screenshot/PDF acceptance; kit assets unchanged.
 
 
