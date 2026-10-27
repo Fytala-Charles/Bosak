@@ -255,3 +255,6 @@ docs/conformance/k04-sequence-admission/adoption/** -text whitespace=cr-at-eol,-
 
 # K04-C13 immutable diagnostic receipts.
 docs/conformance/k04-negative-capability-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C14 immutable calendar diagnostic receipts.
+docs/conformance/k04-calendar-review/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
