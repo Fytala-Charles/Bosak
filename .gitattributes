@@ -349,3 +349,6 @@ docs/conformance/k04-copy-namespaces/PROTOTYPE-ROUTING.patch -text whitespace=cr
 docs/conformance/k04-copy-namespaces-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-copy-namespaces-admission/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-copy-namespaces-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C32 owner-approved admission preserves complete normal adoption evidence.
+docs/conformance/k04-copy-namespaces-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

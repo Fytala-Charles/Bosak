@@ -1,0 +1,13 @@
+{
+  "reason": "Rebuilding embeds the newer source revision in AssemblyInformationalVersion; raw DLL hashes differ while implementation methods/signatures and assembly versions match.",
+  "oldSourceStamps": [
+    "1.31.0+3a5017df32289bd3a519677629c3eb3d1756ecc0"
+  ],
+  "newSourceStamps": [
+    "1.31.0+451f596a26b3cd8f6197aee5c0d1ad2d203d2841"
+  ],
+  "engineSourceChanged": false,
+  "comparedAssemblies": 9,
+  "methodBodiesAndSignaturesEqual": true,
+  "comparisonExitCode": 0
+}
