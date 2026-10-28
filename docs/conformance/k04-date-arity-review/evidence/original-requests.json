@@ -1,0 +1,66 @@
+[
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-date.xml",
+    "Name": "format-date-inpt-er4a",
+    "expression": "format-date(xs:date('2001-12-31'), \"[D01]\", ())",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-string-value>31</assert-string-value>\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-date.xml",
+    "Name": "format-date-049",
+    "expression": "format-date(xs:date('2026-10-02'), '[D] [MNn] [Y]', 'en', 'AD')",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-eq>'2 October 2026'</assert-eq>\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-date.xml",
+    "Name": "format-date-050",
+    "expression": "format-date((), '[D]', 'en', 'AD')",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-empty />\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-date.xml",
+    "Name": "format-date-051",
+    "expression": "format-date(xs:date('2026-10-02'), '[D]', 'en', 'Q{}unknown')",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <error code=\"FOFD1340\" />\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-dateTime.xml",
+    "Name": "format-dateTime-inpt-er4a",
+    "expression": "format-dateTime(xs:dateTime('2001-12-31T00:00:00'), \"[D01]\", ())",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-string-value>31</assert-string-value>\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-dateTime.xml",
+    "Name": "format-dateTime-019",
+    "expression": "format-dateTime(xs:dateTime('2026-10-02T13:05:00'), '[D] [MNn] [Y] [H01]:[m01]', 'en', 'AD')",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-eq>'2 October 2026 13:05'</assert-eq>\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-time.xml",
+    "Name": "format-time-inpt-er4a",
+    "expression": "format-time(xs:time('12:12:12'), \"[H01]\", ())",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-string-value>12</assert-string-value>\n      </result>\n   "
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "tests/qt4tests/fn/format-time.xml",
+    "Name": "format-time-031",
+    "expression": "format-time(xs:time('13:05:00'), '[H01]:[m01]', 'en', 'AD')",
+    "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-eq>'13:05'</assert-eq>\n      </result>\n   "
+  }
+]

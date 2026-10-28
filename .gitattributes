@@ -269,3 +269,7 @@ docs/conformance/k04-calendar-admission/RESULTS.json -text whitespace=cr-at-eol
 
 # Owner-approved K04-C16 CB admission receipts retain exact bytes.
 docs/conformance/k04-calendar-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# K04-C17 date-arity review preserves raw diagnostics and source snapshots.
+docs/conformance/k04-date-arity-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-date-arity-review/RESULTS.json -text whitespace=cr-at-eol

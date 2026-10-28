@@ -1,0 +1,578 @@
+[
+  {
+    "Name": "qt3-format-date-arity-2",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-arity-3",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', ())",
+    "expected": "07",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-date-arity-4",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'AD')",
+    "expected": "07",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-date-arity-5",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'AD', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-empty-2",
+    "expression": "format-date((), '[D01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-empty-string-test-2",
+    "expression": "string(format-date((), '[D01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-empty-5",
+    "expression": "format-date((), '[D01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-empty-string-test-5",
+    "expression": "string(format-date((), '[D01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-reference-3",
+    "expression": "function-arity(format-date#3)",
+    "expected": 3,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-date-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-date'),3))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-reference-4",
+    "expression": "function-arity(format-date#4)",
+    "expected": 4,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-date-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-date'),4))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-date-keyword",
+    "expression": "format-date(picture := '[D01]', value := xs:date('2002-03-07'), calendar := 'AD')",
+    "expected": "07",
+    "error": "XPST0003"
+  },
+  {
+    "Name": "qt3-format-date-invalid-calendar-5",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt3-format-date-invalid-language-type",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt3-format-date-empty-with-invalid-picture",
+    "expression": "format-date((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-arity-2",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-arity-3",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-arity-4",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'AD')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-arity-5",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'AD', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-empty-2",
+    "expression": "format-date((), '[D01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-empty-string-test-2",
+    "expression": "string(format-date((), '[D01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-empty-5",
+    "expression": "format-date((), '[D01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-empty-string-test-5",
+    "expression": "string(format-date((), '[D01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-reference-3",
+    "expression": "function-arity(format-date#3)",
+    "expected": 3,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-date'),3))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-reference-4",
+    "expression": "function-arity(format-date#4)",
+    "expected": 4,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-date'),4))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-keyword",
+    "expression": "format-date(picture := '[D01]', value := xs:date('2002-03-07'), calendar := 'AD')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-date-invalid-calendar-5",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt4-format-date-invalid-language-type",
+    "expression": "format-date(xs:date('2002-03-07'), '[D01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt4-format-date-empty-with-invalid-picture",
+    "expression": "format-date((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-arity-2",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-arity-3",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', ())",
+    "expected": "07",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-dateTime-arity-4",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'AD')",
+    "expected": "07",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-dateTime-arity-5",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'AD', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-empty-2",
+    "expression": "format-dateTime((), '[D01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-empty-string-test-2",
+    "expression": "string(format-dateTime((), '[D01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-empty-5",
+    "expression": "format-dateTime((), '[D01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-empty-string-test-5",
+    "expression": "string(format-dateTime((), '[D01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-reference-3",
+    "expression": "function-arity(format-dateTime#3)",
+    "expected": 3,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-dateTime-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-dateTime'),3))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-reference-4",
+    "expression": "function-arity(format-dateTime#4)",
+    "expected": 4,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-dateTime-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-dateTime'),4))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-dateTime-keyword",
+    "expression": "format-dateTime(picture := '[D01]', value := xs:dateTime('2002-03-07T12:30:00'), calendar := 'AD')",
+    "expected": "07",
+    "error": "XPST0003"
+  },
+  {
+    "Name": "qt3-format-dateTime-invalid-calendar-5",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt3-format-dateTime-invalid-language-type",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt3-format-dateTime-empty-with-invalid-picture",
+    "expression": "format-dateTime((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-arity-2",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-arity-3",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-arity-4",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'AD')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-arity-5",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'AD', ())",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-empty-2",
+    "expression": "format-dateTime((), '[D01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-empty-string-test-2",
+    "expression": "string(format-dateTime((), '[D01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-empty-5",
+    "expression": "format-dateTime((), '[D01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-empty-string-test-5",
+    "expression": "string(format-dateTime((), '[D01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-reference-3",
+    "expression": "function-arity(format-dateTime#3)",
+    "expected": 3,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-dateTime'),3))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-reference-4",
+    "expression": "function-arity(format-dateTime#4)",
+    "expected": 4,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-dateTime'),4))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-keyword",
+    "expression": "format-dateTime(picture := '[D01]', value := xs:dateTime('2002-03-07T12:30:00'), calendar := 'AD')",
+    "expected": "07",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-dateTime-invalid-calendar-5",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt4-format-dateTime-invalid-language-type",
+    "expression": "format-dateTime(xs:dateTime('2002-03-07T12:30:00'), '[D01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt4-format-dateTime-empty-with-invalid-picture",
+    "expression": "format-dateTime((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-arity-2",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]')",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-arity-3",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', ())",
+    "expected": "12",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-time-arity-4",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'AD')",
+    "expected": "12",
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-time-arity-5",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'AD', ())",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-empty-2",
+    "expression": "format-time((), '[H01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-empty-string-test-2",
+    "expression": "string(format-time((), '[H01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-empty-5",
+    "expression": "format-time((), '[H01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-empty-string-test-5",
+    "expression": "string(format-time((), '[H01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-reference-3",
+    "expression": "function-arity(format-time#3)",
+    "expected": 3,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-time-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-time'),3))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-reference-4",
+    "expression": "function-arity(format-time#4)",
+    "expected": 4,
+    "error": "XPST0017"
+  },
+  {
+    "Name": "qt3-format-time-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-time'),4))",
+    "expected": false,
+    "error": null
+  },
+  {
+    "Name": "qt3-format-time-keyword",
+    "expression": "format-time(picture := '[H01]', value := xs:time('12:30:00'), calendar := 'AD')",
+    "expected": "12",
+    "error": "XPST0003"
+  },
+  {
+    "Name": "qt3-format-time-invalid-calendar-5",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt3-format-time-invalid-language-type",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt3-format-time-empty-with-invalid-picture",
+    "expression": "format-time((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-arity-2",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]')",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-arity-3",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', ())",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-arity-4",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'AD')",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-arity-5",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'AD', ())",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-empty-2",
+    "expression": "format-time((), '[H01]')",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-empty-string-test-2",
+    "expression": "string(format-time((), '[H01]'))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-empty-5",
+    "expression": "format-time((), '[H01]', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-empty-string-test-5",
+    "expression": "string(format-time((), '[H01]', 'en', 'AD', ()))",
+    "expected": "",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-reference-3",
+    "expression": "function-arity(format-time#3)",
+    "expected": 3,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-lookup-3",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-time'),3))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-reference-4",
+    "expression": "function-arity(format-time#4)",
+    "expected": 4,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-lookup-4",
+    "expression": "exists(function-lookup(QName('http://www.w3.org/2005/xpath-functions','format-time'),4))",
+    "expected": true,
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-keyword",
+    "expression": "format-time(picture := '[H01]', value := xs:time('12:30:00'), calendar := 'AD')",
+    "expected": "12",
+    "error": null
+  },
+  {
+    "Name": "qt4-format-time-invalid-calendar-5",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 'en', 'Q{}unknown', ())",
+    "expected": null,
+    "error": "FOFD1340"
+  },
+  {
+    "Name": "qt4-format-time-invalid-language-type",
+    "expression": "format-time(xs:time('12:30:00'), '[H01]', 42, (), ())",
+    "expected": null,
+    "error": "XPTY0004"
+  },
+  {
+    "Name": "qt4-format-time-empty-with-invalid-picture",
+    "expression": "format-time((), '[', 'en', 'AD', ())",
+    "expected": null,
+    "error": null
+  }
+]

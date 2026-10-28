@@ -1,0 +1,1 @@
+{"Suite": "qt4", "SuiteRoot": "tests/qt4tests", "SetFile": "tests/qt4tests/fn/format-date.xml", "Name": "format-date-050", "expression": "format-date((), '[D]', 'en', 'AD')", "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n         <assert-empty />\n      </result>\n   "}

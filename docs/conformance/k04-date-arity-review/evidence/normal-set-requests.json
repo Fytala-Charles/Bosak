@@ -1,0 +1,20 @@
+[
+  {
+    "scope": "fn-format-date",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-date"
+    ]
+  },
+  {
+    "scope": "fn-format-time",
+    "command": [
+      "dotnet",
+      "tests/Bosak.XPath.Conformance40/bin/Release/net10.0/Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-format-time"
+    ]
+  }
+]

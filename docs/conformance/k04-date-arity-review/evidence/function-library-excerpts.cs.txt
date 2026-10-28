@@ -1,0 +1,156 @@
+            [(Namespaces.Fn, "format-date", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 2,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:date?", "xs:string"],
+                Implementation = FormatDate_2
+            },
+            [(Namespaces.Fn, "format-date", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
+                Implementation = FormatDate_5
+            },
+            [(Namespaces.Fn, "format-time", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 2,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:time?", "xs:string"],
+                Implementation = FormatTime_2
+            },
+            [(Namespaces.Fn, "format-time", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
+                Implementation = FormatTime_5
+            },
+            [(Namespaces.Fn, "format-dateTime", 2)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 2,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:dateTime?", "xs:string"],
+                Implementation = FormatDateTime_2
+            },
+            [(Namespaces.Fn, "format-dateTime", 5)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
+                Implementation = FormatDateTime_5
+            },
+
+
+// ---- Relevant source excerpt; full-file git identity is separately pinned. ----
+    private static FrozenDictionary<(string Ns, string Local), KeywordSignatureInfo> BuildKeywordSignatures()
+    {
+        var table = new Dictionary<(string Ns, string Local), KeywordSignatureInfo>
+        {
+            [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
+            [(Namespaces.Fn, "parse-integer")] = new(["value", "radix"], [null, "10"]),
+            [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
+            [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
+            [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
+            [(Namespaces.Fn, "atomic-type-annotation")] = new(["value"], [null]),
+            [(Namespaces.Fn, "compare")] = new(["comparand1", "comparand2", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "collation-key")] = new(["value", "collation"], [null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "contains-token")] = new(["value", "token", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "node-name")] = new(["node"], [null]),
+            [(Namespaces.Fn, "min")] = new(["values", "collation"], [null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "max")] = new(["values", "collation"], [null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "subsequence")] = new(["input", "start", "length"], [null, null, "()"]),
+            [(Namespaces.Fn, "substring")] = new(["value", "start", "length"], [null, null, "()"]),
+            [(Namespaces.Fn, "string-join")] = new(["values", "separator"], [null, "''"]),
+            [(Namespaces.Fn, "replace")] = new(["value", "pattern", "replacement", "flags"], [null, null, "''", "''"]),
+            [(Namespaces.Fn, "matches")] = new(["value", "pattern", "flags"], [null, null, "''"]),
+            [(Namespaces.Fn, "contains")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "starts-with")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "ends-with")] = new(["value", "substring", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "index-of")] = new(["input", "target", "collation"], [null, null, "fn:default-collation()"]),
+            [(Namespaces.Fn, "serialize")] = new(["input", "options"], [null, "map{}"]),
+            [(Namespaces.Fn, "slice")] = new(["input", "start", "end", "step"], [null, "0", "0", "0"]),
+            [(Namespaces.Fn, "parse-uri")] = new(["uri", "options"], [null, "map{}"]),
+            [(Namespaces.Fn, "hash")] = new(["value", "algorithm", "options"], [null, "'MD5'", "map{}"]),
+            [(Namespaces.Map, "merge")] = new(["maps", "options"], [null, "map{}"]),
+            [(Namespaces.Map, "build")] = new(["input", "key", "value", "options"], [null, "fn:identity#1", "fn:identity#1", "map{}"]),
+            [(Namespaces.Array, "members")] = new(["array"], [null]),
+            [(Namespaces.Array, "of-members")] = new(["input"], [null]),
+            [(Namespaces.Array, "sort")] = new(["array", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
+            [(Namespaces.Array, "sort-with")] = new(["array", "comparators"], [null, null]),
+            [(Namespaces.Array, "slice")] = new(["array", "start", "end", "step"], [null, "0", "0", "0"]),
+            [(Namespaces.Fn, "some")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
+            [(Namespaces.Fn, "every")] = new(["input", "predicate"], [null, "fn:boolean#1"]),
+            [(Namespaces.Fn, "index-where")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "partition")] = new(["input", "split-when"], [null, null]),
+            [(Namespaces.Fn, "take-while")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "drop-while")] = new(["input", "predicate"], [null, null]),
+            [(Namespaces.Fn, "while-do")] = new(["input", "predicate", "action"], [null, null, null]),
+            [(Namespaces.Fn, "do-until")] = new(["input", "action", "predicate"], [null, null, null]),
+            [(Namespaces.Fn, "partial-apply")] = new(["function", "arguments"], [null, null]),
+            [(Namespaces.Fn, "transitive-closure")] = new(["node", "step"], [null, null]),
+            [(Namespaces.Fn, "scan")] = new(["input", "init", "action"], [null, null, null]),
+            [(Namespaces.Fn, "op")] = new(["operator"], [null]),
+            [(Namespaces.Fn, "atomic-equal")] = new(["value1", "value2"], [null, null]),
+            [(Namespaces.Fn, "parse-csv")] = new(["value", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "csv-to-xml")] = new(["value", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "csv-doc")] = new(["source", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "element-to-map")] = new(["input", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "map-to-element")] = new(["input", "options"], [null, "{}"]),
+            [(Namespaces.Fn, "element-to-map-plan")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jtree")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jkey")] = new(["input"], [null]),
+            [(Namespaces.Fn, "jvalue")] = new(["input"], [null]),
+        };
+        return table.ToFrozenDictionary();
+    }
+
+// ---- Relevant source excerpt; full-file git identity is separately pinned. ----
+    private static XdmValue FormatDate_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date, ctx.IsXsltMode);
+
+    private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
+
+    private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time, ctx.IsXsltMode);
+
+    private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
+
+    private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime, ctx.IsXsltMode);
+
+    private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
+
+    // The $language/$calendar/$place arguments are xs:string?: a non-string atomic value
+    // (xs:integer, ...) is a type error (XPTY0004) checked before the picture string is
+    // parsed (format-date-inpt-er3). The empty sequence maps to "" (as AtomizedString did).
+    private static string? OptionalStringArg(XdmValue value)
+    {
+        if (value.IsUndefined || IsEmptySequence(value))
+            return string.Empty;
+        var atomized = AtomizeSingleton(value);
+        if (atomized.Kind != XdmValueKind.String)
+            throw new InvalidOperationException($"XPTY0004: format-date/time language, calendar, and place arguments must be xs:string, not {atomized.Kind}.");
+        return atomized.StringValue;
+    }
+
+    private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode)
+    {
+        if (value.IsUndefined)
+            return XdmValue.FromString(string.Empty);
+
+        XPathDateTime xdt = value.Kind switch
+        {
+            XdmValueKind.DateTime => value.DateTimeXPathValue,
+            XdmValueKind.Date => value.DateXPathValue,
+            XdmValueKind.Time => value.TimeXPathValue,
+            _ => throw new InvalidOperationException("XPTY0004")
+        };
+
+        string result = FormatDateTimeEngine.Format(xdt, picture, language, calendar, place, components, isXsltMode);
+        return XdmValue.FromString(result);
+    }
+
