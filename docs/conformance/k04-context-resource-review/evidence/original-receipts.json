@@ -1,0 +1,1064 @@
+[
+  {
+    "name": "contextDecl-040-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-040-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5552838000003248,
+    "log": "contextDecl-040-normal-resources.log",
+    "case": "contextDecl-040",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-041-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-041-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5549146000121254,
+    "log": "contextDecl-041-normal-resources.log",
+    "case": "contextDecl-041",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-046-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-046-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5545916999981273,
+    "log": "contextDecl-046-normal-resources.log",
+    "case": "contextDecl-046",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "contextDecl-047-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-047-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10056880000047386,
+    "log": "contextDecl-047-normal-resources.log",
+    "case": "contextDecl-047",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-047",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "current-date()",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-048-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-048-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10160460000042804,
+    "log": "contextDecl-048-normal-resources.log",
+    "case": "contextDecl-048",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-048",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule1",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-1.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-049-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-049-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.100998800015077,
+    "log": "contextDecl-049-normal-resources.log",
+    "case": "contextDecl-049",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-050-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-050-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10037390000070445,
+    "log": "contextDecl-050-normal-resources.log",
+    "case": "contextDecl-050",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-051-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-051-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10170100000686944,
+    "log": "contextDecl-051-normal-resources.log",
+    "case": "contextDecl-051",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\docs/works-mod.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-052-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-052-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09884989997954108,
+    "log": "contextDecl-052-normal-resources.log",
+    "case": "contextDecl-052",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-052",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule3",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-3.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-054-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-054-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09732280002208427,
+    "log": "contextDecl-054-normal-resources.log",
+    "case": "contextDecl-054",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-054",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "current-dateTime()",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule2",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-2.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-056-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-056-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09790610001073219,
+    "log": "contextDecl-056-normal-resources.log",
+    "case": "contextDecl-056",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/unionListDefined",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "4",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule4",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-4.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-057-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-057-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09543819999089465,
+    "log": "contextDecl-057-normal-resources.log",
+    "case": "contextDecl-057",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "Sources": [],
+      "Schemas": [
+        {
+          "Uri": "http://www.w3.org/XQueryTest/unionListDefined",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/unionListDefined.xsd",
+          "XsdVersion": null
+        }
+      ],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "current-date()",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule4",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-4.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-058-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-058-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09626829999615438,
+    "log": "contextDecl-058-normal-resources.log",
+    "case": "contextDecl-058",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": "['blue', 'green']",
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/ContextItemDecl.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/libmodule5",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ContextItemDecl/libmodule-5.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "contextDecl-040-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-040-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.37964880000799894,
+    "log": "contextDecl-040-normal-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-040-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-040-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.825030699983472,
+    "log": "contextDecl-040-prototype-actual.log",
+    "case": "contextDecl-040",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-040",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-041-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-041-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27857780002523214,
+    "log": "contextDecl-041-normal-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-041-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-041-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.4522417999978643,
+    "log": "contextDecl-041-prototype-actual.log",
+    "case": "contextDecl-041",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-041",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-046-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-046-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19111770001472905,
+    "log": "contextDecl-046-normal-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-046-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-046-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19530049999593757,
+    "log": "contextDecl-046-prototype-actual.log",
+    "case": "contextDecl-046",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-046",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-047-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-047-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3275902000023052,
+    "log": "contextDecl-047-normal-actual.log",
+    "case": "contextDecl-047",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-047",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-047-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-047-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33272029997897334,
+    "log": "contextDecl-047-prototype-actual.log",
+    "case": "contextDecl-047",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-047",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-048-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-048-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2308506999979727,
+    "log": "contextDecl-048-normal-actual.log",
+    "case": "contextDecl-048",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-048",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-048-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-048-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23311679999460466,
+    "log": "contextDecl-048-prototype-actual.log",
+    "case": "contextDecl-048",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-048",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-049-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-049-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.23070429998915642,
+    "log": "contextDecl-049-normal-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-049-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-049-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3523081000021193,
+    "log": "contextDecl-049-prototype-actual.log",
+    "case": "contextDecl-049",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-049",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-050-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-050-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.22171309997793287,
+    "log": "contextDecl-050-normal-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-050-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-050-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29198180002276786,
+    "log": "contextDecl-050-prototype-actual.log",
+    "case": "contextDecl-050",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-050",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-051-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-051-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19647520000580698,
+    "log": "contextDecl-051-normal-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-051-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-051-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2259726999909617,
+    "log": "contextDecl-051-prototype-actual.log",
+    "case": "contextDecl-051",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-051",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-052-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-052-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21450729999924079,
+    "log": "contextDecl-052-normal-actual.log",
+    "case": "contextDecl-052",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-052",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-052-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-052-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1929212999821175,
+    "log": "contextDecl-052-prototype-actual.log",
+    "case": "contextDecl-052",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-052",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-054-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-054-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2693364000006113,
+    "log": "contextDecl-054-normal-actual.log",
+    "case": "contextDecl-054",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-054",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-054-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-054-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2919812999898568,
+    "log": "contextDecl-054-prototype-actual.log",
+    "case": "contextDecl-054",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-054",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "contextDecl-056-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-056-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.24734140001237392,
+    "log": "contextDecl-056-normal-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-056-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-056-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2839864999987185,
+    "log": "contextDecl-056-prototype-actual.log",
+    "case": "contextDecl-056",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-056",
+      "kind": "Failed",
+      "message": "Unexpected error: XPST0081: Prefix 'u' is not declared."
+    }
+  },
+  {
+    "name": "contextDecl-057-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-057-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.253387799981283,
+    "log": "contextDecl-057-normal-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-057-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-057-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27271550000295974,
+    "log": "contextDecl-057-prototype-actual.log",
+    "case": "contextDecl-057",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-057",
+      "kind": "Failed",
+      "message": "Expected error XPTY0004, got: XPST0081: Prefix 'u' is not declared."
+    }
+  },
+  {
+    "name": "contextDecl-058-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-058-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.24601619999157265,
+    "log": "contextDecl-058-normal-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "contextDecl-058-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\contextDecl-058-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28898579999804497,
+    "log": "contextDecl-058-prototype-actual.log",
+    "case": "contextDecl-058",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "contextDecl-058",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

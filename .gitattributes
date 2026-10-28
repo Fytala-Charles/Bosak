@@ -316,3 +316,8 @@ docs/conformance/k04-context-duplicate-fix/RESULTS.json -text whitespace=cr-at-e
 # K04-C26 retains phased main-context regressions, diagnostic probes and final gates.
 docs/conformance/k04-main-context/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-main-context/RESULTS.json -text whitespace=cr-at-eol
+
+# C27 preserves original resource/module diagnostics and unqualified prototype results.
+docs/conformance/k04-context-resource-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-resource-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-context-resource-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol

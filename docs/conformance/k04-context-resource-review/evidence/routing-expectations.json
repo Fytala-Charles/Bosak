@@ -1,0 +1,72 @@
+[
+  {
+    "name": "routing-context-value",
+    "normal": false,
+    "prototype": true
+  },
+  {
+    "name": "routing-context-comments",
+    "normal": false,
+    "prototype": true
+  },
+  {
+    "name": "routing-context-type-error",
+    "normal": false,
+    "prototype": true
+  },
+  {
+    "name": "routing-context-in-string",
+    "normal": true,
+    "prototype": true
+  },
+  {
+    "name": "routing-context-in-comment",
+    "normal": true,
+    "prototype": true
+  },
+  {
+    "name": "routing-context-in-nested-comment",
+    "normal": true,
+    "prototype": true
+  },
+  {
+    "name": "routing-construction",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-copy-namespaces",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-pragma",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-context-and-construction",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-context-and-copy",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-context-and-pragma",
+    "normal": false,
+    "prototype": false
+  },
+  {
+    "name": "routing-plain-expression",
+    "normal": true,
+    "prototype": true
+  },
+  {
+    "name": "routing-module-import",
+    "normal": true,
+    "prototype": true
+  }
+]

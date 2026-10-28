@@ -1,0 +1,30 @@
+[
+  {
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "filters",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\routing-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\routing-normal.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11701139999786392
+  },
+  {
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-context-resource-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "filters",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\routing-requests.json",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\routing-prototype.jsonl"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11118310000165366
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "prototypeExitCode": 2,
+  "meaning": "QT3 Program returns2 when any original assertion fails",
+  "correction": "Review orchestration records expected qualification failure instead of requiring zero or assuming exit1",
+  "originalProductOutcomesChanged": false,
+  "initialSetReceipts": "initial-set-run/set-receipts.json",
+  "finalSetReceipts": "set-receipts.json",
+  "noTimeouts": true
+}

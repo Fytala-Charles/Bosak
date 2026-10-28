@@ -1,0 +1,65 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "C27-original-056-importer-u-bound",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Diagnostic importer binding only; unchanged original expression/assertion and original resources"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-original-057-importer-u-bound",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Diagnostic importer binding only; unchanged original expression/assertion and original resources"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-builtin-prefix-baseline",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-library-alias-only",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-matching-importer-alias",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-conflicting-importer-alias",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-library-alias-wrong-value",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-colliding-lexical-types",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "C27-distinct-lexical-types",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\docs\\conformance\\k04-context-resource-review\\evidence\\control-fixtures.xml",
+    "Purpose": "Independent library declaration namespace/type constraint control"
+  }
+]
