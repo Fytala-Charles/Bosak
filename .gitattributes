@@ -380,3 +380,8 @@ docs/conformance/k04-pragma-review/*.patch -text whitespace=cr-at-eol,-blank-at-
 docs/conformance/k04-pragma-fallback/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-pragma-fallback/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-pragma-fallback/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C38 preserves exact pragma admission qualification and pending adoption proposal.
+docs/conformance/k04-pragma-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol

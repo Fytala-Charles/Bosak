@@ -1,0 +1,52 @@
+--- a/tests/Bosak.XPath.Conformance/TestExecutor.cs
++++ b/tests/Bosak.XPath.Conformance/TestExecutor.cs
+@@ -59,6 +59,7 @@
+ //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
+ //                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
+ //                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
++//                      | Charles Korthout | 0.32  | 28-10-2026     | Isolated C38 pragma review; normal source and policy remain unchanged.          |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -282,24 +283,11 @@
+     }
+ 
+     /// <summary>
+-    /// True when the expression uses only XQuery constructs the Bosak.XQuery pipeline
+-    /// supports today: prolog-less queries, the basic prolog declarations (namespace,
+-    /// default element/function namespace, default collation, version), and full FLWOR
+-    /// (for/let/where/order by/count/group by/window). Queries using constructors,
+-    /// switch/typeswitch, try, unordered/ordered, or unsupported prolog forms
+-    /// stay skipped. String literals and comments are stripped before matching.
++    /// Indicates whether an expression may enter XQuery routing. The bounded grammar
++    /// refusal set is empty after qualified pragma adoption; dependency admission stays
++    /// separate and invalid syntax is reported by the parser.
+     /// </summary>
+-    internal static bool CanHandleAsXQuery(string expr)
+-    {
+-        var stripped = StripLiteralsAndComments(expr).TrimStart();
+-
+-        // Existing lexical normalization and the XQuery parser handle doubled quotes;
+-        // raw triple-double-quote substrings are not an unsupported-grammar predicate.
+-        if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
+-            return false;
+-
+-        return true;
+-    }
++    internal static bool CanHandleAsXQuery(string expr) => true;
+ 
+     /// <summary>
+     /// Heuristic: the expression uses XQuery-only grammar that our XPath parser cannot
+@@ -375,12 +363,6 @@
+         @"|\b(sliding|tumbling)\s+window\b",
+         RegexOptions.Compiled);
+ 
+-    // XQuery constructs the Bosak.XQuery pipeline does NOT support yet; matching queries
+-    // keep their "XQuery syntax not supported" skip instead of being routed.
+-    private static readonly Regex UnsupportedXQueryConstructRegex = new(
+-        @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
+-        RegexOptions.Compiled);
+-
+     /// <summary>
+     /// Removes string literals (with doubled-quote escapes) like
+     /// <see cref="StripLiteralsAndComments"/>, but replaces every XQuery comment with a

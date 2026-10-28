@@ -1,0 +1,10 @@
+{
+  "id": "K04-pragma-adoption-v1",
+  "sourceBase": "254d07d735f4f0e3f204d437f591b3725192abfb",
+  "ownerApproval": "pending",
+  "sha256": {
+    "docs/conformance/k04-pragma-admission/PROPOSED-ADOPTION.patch": "63f91be2ee8f3d80eb568b7f22d3b28a6dbe544e7bf9b0f0352ccc08f0174e95",
+    "docs/conformance/k04-pragma-admission/evidence/proposed-executor.cs.txt": "db425c1ea4963e65ced736d5ac1ff2462d3a50151ee24f53b6146dd06ab38884",
+    "docs/conformance/k04-pragma-admission/evidence/proposed-AGENTS.md.txt": "bbe502cc457b3bbcc36de00280d44735116c1ee63d4bb1d51497874194e2e746"
+  }
+}
