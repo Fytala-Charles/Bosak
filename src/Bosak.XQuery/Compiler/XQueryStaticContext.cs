@@ -31,6 +31,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.11  | 28-10-2026     | Represent main-module context item declarations and preserve them in clones (1.30.0).    |
 //                      | Charles Korthout | 0.12  | 28-10-2026     | Carry immutable copy-namespaces modes through static-context cloning (1.31.0). |
+//                      | Charles Korthout | 0.13  | 28-10-2026     | Retain immutable construction declarations across context cloning (1.32.0). |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -149,7 +150,7 @@ internal sealed class XQueryStaticContext
         DecimalFormat? declaredDefaultDecimalFormat,
         bool? boundarySpaceStrip,
         ContextItemDeclaration? contextDeclaration,
-        bool? preserveNamespaces, bool? inheritNamespaces)
+        bool? preserveNamespaces, bool? inheritNamespaces, XdmConstructionMode? constructionMode)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -173,6 +174,7 @@ internal sealed class XQueryStaticContext
         ContextDeclaration = contextDeclaration;
         PreserveNamespaces = preserveNamespaces;
         InheritNamespaces = inheritNamespaces;
+        ConstructionMode = constructionMode;
     }
 
     /// <summary>
@@ -246,6 +248,15 @@ internal sealed class XQueryStaticContext
     /// null = not declared (spec default is strip).
     /// </summary>
     public bool? BoundarySpaceStrip { get; private init; }
+
+    /// <summary>The declared construction mode; null selects the documented preserve default.</summary>
+    public XdmConstructionMode? ConstructionMode { get; private init; }
+
+    /// <summary>Creates a static context with the construction policy set.</summary>
+    /// <param name="mode">The declared schema annotation policy.</param>
+    /// <returns>The new immutable context.</returns>
+    public XQueryStaticContext WithConstructionMode(XdmConstructionMode mode)
+        => CloneWith(constructionMode: mode);
 
     /// <summary>The declared preserve/no-preserve mode; null means the default preserve.</summary>
     public bool? PreserveNamespaces { get; private init; }
@@ -445,7 +456,7 @@ internal sealed class XQueryStaticContext
         DecimalFormat? declaredDefaultDecimalFormat = null,
         bool? boundarySpaceStrip = null,
         ContextItemDeclaration? contextDeclaration = null,
-        bool? preserveNamespaces = null, bool? inheritNamespaces = null)
+        bool? preserveNamespaces = null, bool? inheritNamespaces = null, XdmConstructionMode? constructionMode = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -468,6 +479,6 @@ internal sealed class XQueryStaticContext
             declaredDefaultDecimalFormat ?? DeclaredDefaultDecimalFormat,
             boundarySpaceStrip ?? BoundarySpaceStrip,
             contextDeclaration ?? ContextDeclaration,
-            preserveNamespaces ?? PreserveNamespaces, inheritNamespaces ?? InheritNamespaces);
+            preserveNamespaces ?? PreserveNamespaces, inheritNamespaces ?? InheritNamespaces, constructionMode ?? ConstructionMode);
     }
 }

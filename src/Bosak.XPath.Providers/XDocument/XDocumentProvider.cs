@@ -63,6 +63,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 0.27  | 28-10-2026     | Clone node content with lexical namespace preservation/inheritance modes (1.31.0). |
+//                      | Charles Korthout | 0.28  | 28-10-2026     | Apply explicit/default construction copying with destination-private annotations (1.32.0). |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -144,7 +145,17 @@ public static class XDocumentProvider
 
         // XDM: elements created by an element constructor have type annotation xs:anyType,
         // while elements parsed from an unvalidated document have type annotation xs:untyped.
-        element.AddAnnotation(ConstructedElementAnnotation.Instance);
+        if (spec.ConstructionMode == XdmConstructionMode.Strip)
+            XQueryConstructionMetadata.Strip(element);
+        else
+        {
+            element.AddAnnotation(ConstructedElementAnnotation.Instance);
+            if (spec.ConstructionMode == XdmConstructionMode.Preserve)
+                element.AddAnnotation(new XmlSchemaInfo
+                {
+                    SchemaType = XmlSchemaType.GetBuiltInComplexType(new System.Xml.XmlQualifiedName("anyType", "http://www.w3.org/2001/XMLSchema"))
+                });
+        }
 
         // Declare prefixes so serialization uses the source prefixes rather than generated ones.
         // Explicit xmlns declarations in the constructor always win over generated ones.
@@ -315,6 +326,8 @@ public static class XDocumentProvider
                 var newAttr = new XAttribute(ans + encodedAttrLocalName, attr.Value);
                 if (!string.IsNullOrEmpty(actualPrefix))
                     newAttr.AddAnnotation(new AttributePrefixAnnotation(Xml11NameCodec.EncodeName(actualPrefix)));
+                if (spec.ConstructionMode is { } mode)
+                    XQueryConstructionMetadata.Attribute(attr.SourceNode, newAttr, mode);
                 element.Add(newAttr);
             }
         }
@@ -369,7 +382,7 @@ public static class XDocumentProvider
                     break;
                 default:
                     FlushText();
-                    var childNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces);
+                    var childNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces, item.ConstructionMode);
                     if (item.IsLiteralElement && childNode is XElement literalChild)
                         literalChild.AddAnnotation(new XQueryNamespaceCopyBoundary());
                     // XQuery strips document nodes used as element content and inserts their
@@ -504,6 +517,7 @@ public static class XDocumentProvider
         // free-standing attribute still reports its constructed prefix.
         if (!string.IsNullOrEmpty(attribute.Prefix))
             xattr.AddAnnotation(new AttributePrefixAnnotation(Xml11NameCodec.EncodeName(attribute.Prefix)));
+        if (attribute.ConstructionMode is { } mode) XQueryConstructionMetadata.Attribute(attribute.SourceNode, xattr, mode);
         return XDocumentNode.Wrap(xattr);
     }
 
@@ -558,7 +572,7 @@ public static class XDocumentProvider
                     break;
                 default:
                     FlushText();
-                    var docChildNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces);
+                    var docChildNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces, item.ConstructionMode);
                     // XQuery strips document nodes used as document content and inserts their
                     // children instead (prod-CompDocConstructor document-node tests).
                     if (docChildNode is System.Xml.Linq.XDocument childDoc)
@@ -598,7 +612,7 @@ public static class XDocumentProvider
         return XDocumentNode.Wrap(document);
     }
 
-    private static XNode CloneNode(XdmValue nodeValue, bool preserveNamespaces, bool inheritNamespaces)
+    private static XNode CloneNode(XdmValue nodeValue, bool preserveNamespaces, bool inheritNamespaces, XdmConstructionMode? constructionMode)
     {
         var node = nodeValue.NodeValue;
         XNode clone;
@@ -651,6 +665,8 @@ public static class XDocumentProvider
                  originalDocument.UnderlyingObject is XDocument sourceDocument && sourceDocument.Root is { } sourceRoot && copiedDocument.Root is { } copiedRoot &&
                  (!preserveNamespaces || !inheritNamespaces))
             ApplyNamespaceCopyMode(sourceRoot, copiedRoot, preserveNamespaces, inheritNamespaces);
+        if (constructionMode is { } mode)
+            XQueryConstructionMetadata.ApplyTree((node as XDocumentNode)?.UnderlyingObject as XObject, clone, mode, preserveNamespaces);
         return clone;
     }
 

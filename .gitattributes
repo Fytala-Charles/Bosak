@@ -357,3 +357,8 @@ docs/conformance/k04-copy-namespaces-admission/adoption/** -text whitespace=cr-a
 docs/conformance/k04-construction-mode-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-construction-mode-review/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-construction-mode-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C34 preserves construction implementation and intermediate/final evidence.
+docs/conformance/k04-construction-modes/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-construction-modes/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-construction-modes/*.patch -text whitespace=cr-at-eol,-blank-at-eol

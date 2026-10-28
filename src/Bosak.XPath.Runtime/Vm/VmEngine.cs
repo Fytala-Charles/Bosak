@@ -436,6 +436,7 @@
 
 //                      | Charles Korthout | 2.208 | 28-10-2026     | Resolve pending XQuery initial focus at semantic context-load instructions (1.30.0).     |
 //                      | Charles Korthout | 2.209 | 28-10-2026     | Pass constructor-local namespace-copy modes to provider node-content cloning (1.31.0). |
+//                      | Charles Korthout | 2.210 | 28-10-2026     | Carry construction mode and original attribute metadata through provider hooks (1.32.0). |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -1827,8 +1828,8 @@ internal static class VmEngine
                                 AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix, computedInfo.LexicalNamespaces);
                                 if (context.ElementConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
-                                ApplyNamespaceCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces);
-                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode);
+                                ApplyConstructionCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces, computedInfo.ConstructionMode);
+                                var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode) { ConstructionMode = computedInfo.ConstructionMode };
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                                 break;
                             }
@@ -1849,7 +1850,7 @@ internal static class VmEngine
                                     throw new InvalidOperationException("XQDY0091: An xml:id attribute value must not have leading or trailing whitespace.");
                                 if (context.AttributeConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no attribute-constructor provider is registered (EvaluationContext.AttributeConstructorHook).");
-                                registers[instr.RegisterA] = XdmValue.FromNode(context.AttributeConstructorHook(new XdmAttributeValue(local, prefix, ns, value)));
+                                registers[instr.RegisterA] = XdmValue.FromNode(context.AttributeConstructorHook(new XdmAttributeValue(local, prefix, ns, value) { ConstructionMode = computedInfo.ConstructionMode }));
                                 break;
                             }
                             case ComputedConstructorKind.Document:
@@ -1860,7 +1861,7 @@ internal static class VmEngine
                                 accumulator.Flush();
                                 if (context.DocumentConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no document-constructor provider is registered (EvaluationContext.DocumentConstructorHook).");
-                                ApplyNamespaceCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces);
+                                ApplyConstructionCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces, computedInfo.ConstructionMode);
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.DocumentConstructorHook(accumulator.Content));
                                 break;
                             }
@@ -2143,7 +2144,7 @@ internal static class VmEngine
                                 {
                                     throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                                 }
-                                attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                                 return;
                             }
                             if (member.IsNode)
@@ -2198,7 +2199,7 @@ internal static class VmEngine
                                             {
                                                 throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                                             }
-                                            attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                                            attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                                             continue;
                                         }
                                         // A namespace node in content becomes a namespace declaration
@@ -2290,8 +2291,8 @@ internal static class VmEngine
                                 "Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
                         }
 
-                        ApplyNamespaceCopyMode(content, ctorInfo.PreserveNamespaces, ctorInfo.InheritNamespaces);
-                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode);
+                        ApplyConstructionCopyMode(content, ctorInfo.PreserveNamespaces, ctorInfo.InheritNamespaces, ctorInfo.ConstructionMode);
+                        var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode) { ConstructionMode = ctorInfo.ConstructionMode };
                         registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                         ip++;
                         break;
@@ -11491,6 +11492,8 @@ internal static class VmEngine
         bool nillableType = typeName.TrimEnd().EndsWith("?");
         if (node.IsNilled)
             return nillableType;
+        // xs:anyType is the base of every element annotation, including xs:untyped.
+        if (targetNs == XmlSchema.Namespace && targetLocal == "anyType") return true;
         if (node.SchemaTypeAnnotation is not { } actual)
         {
             // Untyped parsed element: xs:anyType and xs:untyped both match.
@@ -16378,12 +16381,16 @@ internal static class VmEngine
         }
     }
 
-    private static void ApplyNamespaceCopyMode(List<XdmContentItem> content, bool preserve, bool inherit)
+    private static void ApplyConstructionCopyMode(List<XdmContentItem> content, bool preserve, bool inherit, XdmConstructionMode mode)
     {
-        if (preserve && inherit) return;
         for (int i = 0; i < content.Count; i++)
-            if (content[i].Kind == XdmContentKind.Node && !content[i].IsLiteralElement)
-                content[i] = content[i] with { PreserveNamespaces = preserve, InheritNamespaces = inherit };
+            if (content[i].Kind == XdmContentKind.Node)
+                content[i] = content[i] with
+                {
+                    ConstructionMode = mode,
+                    PreserveNamespaces = content[i].IsLiteralElement || preserve,
+                    InheritNamespaces = content[i].IsLiteralElement || inherit
+                };
     }
 
     private sealed class ComputedContentAccumulator
@@ -16432,7 +16439,7 @@ internal static class VmEngine
                 {
                     throw new InvalidOperationException($"XQDY0025: Duplicate attribute '{attrNode.LocalName}'.");
                 }
-                _attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue));
+                _attributes.Add(new XdmAttributeValue(attrNode.LocalName, attrNode.Prefix, itemNs, attrNode.StringValue) { SourceNode = attrNode });
                 return;
             }
             if (item.IsNode && item.NodeValue.NodeKind == XdmNodeKind.Namespace)

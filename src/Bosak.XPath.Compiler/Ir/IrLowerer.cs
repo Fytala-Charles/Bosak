@@ -136,6 +136,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 1.57  | 28-10-2026     | Capture lexical namespace-copy modes on direct and computed constructor IR (1.31.0). |
+//                      | Charles Korthout | 1.58  | 28-10-2026     | Capture schema construction policy on constructors and inline functions (1.32.0). |
 // ===========================================================================================================================================================
 using System.Diagnostics;
 using Bosak.XPath.Core.Xdm;
@@ -281,6 +282,8 @@ internal readonly record struct ConstructElementInfo(
     public bool PreserveNamespaces { get; init; } = true;
     /// <summary>Whether copied content inherits constructor namespace bindings.</summary>
     public bool InheritNamespaces { get; init; } = true;
+    /// <summary>The declaring module's construction policy.</summary>
+    public XdmConstructionMode ConstructionMode { get; init; } = XdmConstructionMode.Preserve;
     /// <summary>Namespace declarations from lexical direct-constructor ancestors.</summary>
     public IReadOnlyList<(string Prefix, string Uri)>? LexicalNamespaces { get; init; }
 }
@@ -352,6 +355,8 @@ internal readonly record struct ComputedConstructorInfo(
     public bool PreserveNamespaces { get; init; } = true;
     /// <summary>Whether copied content inherits constructor namespace bindings.</summary>
     public bool InheritNamespaces { get; init; } = true;
+    /// <summary>The declaring module's construction policy.</summary>
+    public XdmConstructionMode ConstructionMode { get; init; } = XdmConstructionMode.Preserve;
     /// <summary>Namespace declarations from lexical direct-constructor ancestors.</summary>
     public IReadOnlyList<(string Prefix, string Uri)>? LexicalNamespaces { get; init; }
 }
@@ -423,6 +428,8 @@ internal sealed class IrLowerer
     public bool PreserveNamespaces { get; set; } = true;
     /// <summary>Copy-namespaces inheritance mode compiled into each constructor.</summary>
     public bool InheritNamespaces { get; set; } = true;
+    /// <summary>The schema annotation policy compiled into constructors and inline functions.</summary>
+    public XdmConstructionMode ConstructionMode { get; set; } = XdmConstructionMode.Preserve;
 
     private EmptyOrder ResolveEmptyOrder(EmptyOrder? specEmptyOrder)
         => specEmptyOrder ?? DefaultEmptyOrder ?? EmptyOrder.Least;
@@ -1190,7 +1197,7 @@ internal sealed class IrLowerer
             AddPart(p);
 
         int baseReg = exprRegs.Count > 0 ? PackArgumentsConsecutive(exprRegs.ToArray()) : 0;
-        var info = new ConstructElementInfo(node.TagName, node.Prefix, attrs.ToArray(), firstContentPart, node.Content.Count, parts.ToArray()) { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, LexicalNamespaces = _constructorNamespaces.Select(p => (p.Key, p.Value)).ToArray() };
+        var info = new ConstructElementInfo(node.TagName, node.Prefix, attrs.ToArray(), firstContentPart, node.Content.Count, parts.ToArray()) { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, ConstructionMode = ConstructionMode, LexicalNamespaces = _constructorNamespaces.Select(p => (p.Key, p.Value)).ToArray() };
         int poolIdx = AddToLiteralPool(info);
         Emit(IrOpCode.ConstructElement, (ushort)resultReg, (ushort)baseReg, 0, poolIdx);
 
@@ -1220,7 +1227,7 @@ internal sealed class IrLowerer
         int resultReg = targetReg ?? AllocRegister();
         int nameReg = nameExpression is not null ? LowerNode(nameExpression) : -1;
         int contentReg = LowerNode(contentExpression);
-        var info = new ComputedConstructorInfo(kind, localName, prefix, namespaceUri, nameReg >= 0) { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, LexicalNamespaces = _constructorNamespaces.Select(p => (p.Key, p.Value)).ToArray() };
+        var info = new ComputedConstructorInfo(kind, localName, prefix, namespaceUri, nameReg >= 0) { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, ConstructionMode = ConstructionMode, LexicalNamespaces = _constructorNamespaces.Select(p => (p.Key, p.Value)).ToArray() };
         int poolIdx = AddToLiteralPool(info);
         Emit(IrOpCode.ConstructComputed, (ushort)resultReg, (ushort)(nameReg >= 0 ? nameReg : 0), (ushort)contentReg, poolIdx);
         return resultReg;
@@ -3669,7 +3676,7 @@ internal sealed class IrLowerer
     {
         int resultReg = targetReg ?? AllocRegister();
 
-        var subLowerer = new IrLowerer { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, _constructorNamespaces = new Dictionary<string, string>(_constructorNamespaces, StringComparer.Ordinal) };
+        var subLowerer = new IrLowerer { PreserveNamespaces = PreserveNamespaces, InheritNamespaces = InheritNamespaces, ConstructionMode = ConstructionMode, _constructorNamespaces = new Dictionary<string, string>(_constructorNamespaces, StringComparer.Ordinal) };
         int bodyReg = subLowerer.LowerNode(node.Body);
         subLowerer.Emit(IrOpCode.Return, (ushort)bodyReg);
         var module = subLowerer.Lower(node.Body);

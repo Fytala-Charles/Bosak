@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-construction-modes-render/README.md.html",
+      "sha256": "b2bdb38380f01c43dbef5f3876e3dc33ab65abfbec5d9139905611bad5d43636"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_ARCHITECTURE.md.html",
+      "sha256": "3932d138e9e026a39dc4939073d20b71dcf3e1cdcb979276ad3d993235263767"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "837cb1b84023a40824c0420f9a2278d91d2ff75d2d1b6672619de64f4f894f9c"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_INTEGRATION.md.html",
+      "sha256": "e36093b8a378005d1e535b1afbaed952933eb5b34c444ca7354375982eee01e6"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "59a7d8e92698b41baff4286ce688800daa824eb68bd2948f98d8c653d48ed68d"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "f8950589628eed2b4e1440c8c53e39f6ca92c3ee4a7fe93cfcff4407196181cc"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "09c127c4b5e2c878406c3552f6e299053ac37173d172783a339fca65e15bb597"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "991954a296b5c38fe0a9ec168bb1eac73ed6ac86989f38f471428b9deee4362c"
+    },
+    {
+      "source": "docs/conformance/k04-construction-modes/README.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_conformance_k04-construction-modes_README.md.html",
+      "sha256": "c6fffa2a8098f51b9480831d7e860aeeb7997d1b32932f4e01bbf79717119e79"
+    },
+    {
+      "source": "docs/conformance/k04-construction-modes/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-construction-modes-render/docs_conformance_k04-construction-modes_NEXT-SLICE.md.html",
+      "sha256": "11c5ff96cc5abce5685a8787f6a88f2655a795a76bf98fc24d3086cfc338d6be"
+    }
+  ]
+}

@@ -62,8 +62,10 @@
 //                      | Charles Korthout | 1.17  | 28-10-2026     | Report XQST0099 for duplicate library context declarations (1.29.3).                    |
 //                      | Charles Korthout | 1.18  | 28-10-2026     | Parse typed main-module context item values/defaults and retain library restrictions.    |
 //                      | Charles Korthout | 1.19  | 28-10-2026     | Parse copy-namespaces modes, ordering and duplicate XQST0055 (1.31.0). |
+//                      | Charles Korthout | 1.20  | 28-10-2026     | Parse strip/preserve, ordering and duplicate XQST0067 (1.32.0). |
 // ===========================================================================================================================================================
 
+using Bosak.XPath.Core.Xdm;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -601,6 +603,22 @@ internal sealed class XQueryParser
             string optionNs = eqNameUri ?? (prefix is null ? string.Empty : context.Namespaces[prefix]);
             ValidateOutputOption(context, local, optionNs, _position);
             context = context.WithOption(local, optionNs, value);
+            return true;
+        }
+
+        if (TryMatchLiteral("construction"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new XPathParseException("XPST0003: Construction must precede variable, function, option, and context item declarations.", _position);
+            if (context.ConstructionMode.HasValue)
+                throw new XPathParseException("XQST0067: More than one construction declaration.", _position);
+            XdmConstructionMode mode;
+            if (TryMatchLiteral("preserve")) mode = XdmConstructionMode.Preserve;
+            else if (TryMatchLiteral("strip")) mode = XdmConstructionMode.Strip;
+            else throw new XPathParseException("XPST0003: Expected strip or preserve.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            context = context.WithConstructionMode(mode);
             return true;
         }
 

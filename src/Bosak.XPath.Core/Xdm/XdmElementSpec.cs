@@ -18,8 +18,18 @@
 //                      | Charles Korthout | 0.3   | 25-07-2026     | Added XdmContentKind.Namespace for computed namespace constructors                      |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.4   | 28-10-2026     | Expose namespace-copy policy on node content without changing constructor signatures (1.31.0). |
+//                      | Charles Korthout | 0.5   | 28-10-2026     | Add compatible construction-mode and copied-attribute inputs (1.32.0). |
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
+
+/// <summary>The schema annotation policy used by compiled XQuery constructors.</summary>
+public enum XdmConstructionMode
+{
+    /// <summary>Preserve copied node metadata; newly constructed elements have type xs:anyType.</summary>
+    Preserve,
+    /// <summary>Strip copied metadata; elements are xs:untyped and attributes xs:untypedAtomic.</summary>
+    Strip
+}
 
 /// <summary>The kind of one piece of element content produced by a constructor.</summary>
 public enum XdmContentKind
@@ -50,6 +60,9 @@ public sealed record XdmContentItem(XdmContentKind Kind, string? Text = null, Xd
     /// <summary>Whether this item is lexical child markup rather than a copied enclosed-expression value.</summary>
     public bool IsLiteralElement { get; init; }
 
+    /// <summary>The constructor's schema-copy policy; null retains legacy direct-hook behavior.</summary>
+    public XdmConstructionMode? ConstructionMode { get; init; }
+
     /// <summary>Whether a copied node retains unused source namespace bindings; default true.</summary>
     public bool PreserveNamespaces { get; init; } = true;
     /// <summary>Whether a copied node inherits its constructor's namespace bindings; default true.</summary>
@@ -61,7 +74,13 @@ public sealed record XdmContentItem(XdmContentKind Kind, string? Text = null, Xd
 /// <param name="Prefix">The namespace prefix used in the source, or null.</param>
 /// <param name="NamespaceUri">The resolved namespace URI, or null for no namespace.</param>
 /// <param name="Value">The computed attribute value.</param>
-public sealed record XdmAttributeValue(string LocalName, string? Prefix, string? NamespaceUri, string Value);
+public sealed record XdmAttributeValue(string LocalName, string? Prefix, string? NamespaceUri, string Value)
+{
+    /// <summary>The original attribute when copying existing node content, or null for a new attribute.</summary>
+    public IXdmNode? SourceNode { get; init; }
+    /// <summary>The policy for a standalone attribute hook; null retains legacy hook behavior.</summary>
+    public XdmConstructionMode? ConstructionMode { get; init; }
+}
 
 /// <summary>
 /// Provider-neutral element-construction input: the tag, computed attributes, and content
@@ -82,4 +101,8 @@ public sealed record XdmElementSpec(
     IReadOnlyList<XdmAttributeValue> Attributes,
     IReadOnlyList<XdmContentItem> Content,
     string? BaseUri = null,
-    bool Xml11Mode = false);
+    bool Xml11Mode = false)
+{
+    /// <summary>The schema policy for the new element and copied content; null retains legacy hook behavior.</summary>
+    public XdmConstructionMode? ConstructionMode { get; init; }
+}

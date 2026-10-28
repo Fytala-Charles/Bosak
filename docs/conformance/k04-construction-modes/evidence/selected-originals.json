@@ -1,0 +1,524 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "Axes102",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\AxisStep.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Axes111",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\AxisStep.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-docnode-constrmod-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompDocConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-docnode-constrmod-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompDocConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-docnode-constrmod-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompDocConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-docnode-constrmod-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompDocConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ComputeConElem-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-ComputeConElem-12",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-11",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-12",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-13",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-14",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-15",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-16",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-17",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-18",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-19",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-20",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "constprolog-21",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ConstructionProlog-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ConstructionProlog-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ConstructionProlog-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-ConstructionProlog-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.schema.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.schema.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.schema.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-compelem-constrmod-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\ConstructionDecl.schema.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-constrmod-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-11",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemContent-36",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-DirectConElemContent-38",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema005",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema006",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema007",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema008",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema009",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema010",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema080",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema265",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema266",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema90007",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "qischema90008",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-validated-schema-element-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-validated-schema-element-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-validated-schema-element-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-023",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-024",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-025",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-026",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "extvardef-027",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VarDefaultValue.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "version_declaration-005",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VersionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-VersionProlog-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VersionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-VersionProlog-5-v3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\VersionDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQDY0027",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQST0067",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQTY0086_1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQTY0086_2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQTY0086_3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  }
+]

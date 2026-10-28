@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"extvardef-026","Sources":[],"Schemas":[{"Uri":"http://www.w3.org/XQueryTest/hats","FilePath":"D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport/hats.xsd","XsdVersion":null}],"Parameters":[],"Namespaces":[],"ContextItemSelect":null,"BaseUri":"file:///D:/Development/Bosak/tests/qt3tests/prod/VarDefaultValue.xml","Modules":[]}

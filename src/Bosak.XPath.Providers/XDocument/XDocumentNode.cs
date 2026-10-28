@@ -117,6 +117,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 2.18  | 28-10-2026     | Respect copied-element no-inherit namespace boundaries on the XDM namespace axis (1.31.0). |
+//                      | Charles Korthout | 2.19  | 28-10-2026     | Expose strip typed values/types and XQuery-specific ID reset semantics (1.32.0). |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -509,6 +510,8 @@ public sealed class XDocumentNode : IXdmNode
     /// </summary>
     private XdmValue GetTypedValue()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return XdmValue.FromString(StringValue, "untypedAtomic");
         if (_isNamespaceNode)
             return XdmValue.FromString(StringValue);
 
@@ -1290,6 +1293,8 @@ public sealed class XDocumentNode : IXdmNode
 
     private (string NamespaceUri, string LocalName)? GetSchemaTypeAnnotation()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return (XmlSchema.Namespace, _node is XAttribute ? "untypedAtomic" : "untyped");
         if (_isNamespaceNode)
             return null;
 
@@ -2695,6 +2700,8 @@ public sealed class XDocumentNode : IXdmNode
 
     private static bool IsIdAttribute(XAttribute attr)
     {
+        if (attr.Annotation<XQueryStrippedTypeAnnotation>() is not null)
+            return attr.Name == XNamespace.Xml + "id" && IsValidNCName(attr.Value.Trim());
         var info = attr.GetSchemaInfo();
         if (info is not null)
         {
@@ -2743,6 +2750,7 @@ public sealed class XDocumentNode : IXdmNode
 
     private static bool IsIdElement(XElement element)
     {
+        if (element.Annotation<XQueryStrippedTypeAnnotation>() is not null) return false;
         var info = element.GetSchemaInfo();
         if (info is not null)
         {
@@ -2841,6 +2849,7 @@ public sealed class XDocumentNode : IXdmNode
 
     private bool ComputeIsIdref()
     {
+        if (_node.Annotation<XQueryStrippedTypeAnnotation>() is not null) return false;
         if (_isNamespaceNode)
             return false;
 

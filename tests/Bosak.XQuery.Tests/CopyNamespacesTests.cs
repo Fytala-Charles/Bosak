@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.2   | 28-10-2026     | Remove obsolete construction-refusal case after C34 support; retain copy-policy coverage. |
 // ===========================================================================================================================================================
 using Bosak.XQuery.Api;
 using Xunit;
@@ -124,7 +125,6 @@ public sealed class CopyNamespacesTests
     [InlineData("declare variable $v := 1; declare copy-namespaces preserve, inherit; $v", "XPST0003")]
     [InlineData("declare function local:f(){1}; declare copy-namespaces preserve, inherit; local:f()", "XPST0003")]
     [InlineData("declare context item := 1; declare copy-namespaces preserve, inherit; .", "XPST0003")]
-    [InlineData("declare construction strip; 1", "XPST0003")]
     public void StaticErrors(string query, string code)
         => Assert.Contains(code,Assert.ThrowsAny<Exception>(()=>new XQueryCompiler().Compile(query)).Message);
 
