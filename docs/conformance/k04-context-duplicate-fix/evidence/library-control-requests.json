@@ -1,0 +1,27 @@
+[
+  {
+    "Name": "library-external",
+    "Source": "module namespace m = 'urn:c24'; declare context item external;",
+    "ExpectedCode": ""
+  },
+  {
+    "Name": "library-typed-external",
+    "Source": "module namespace m = 'urn:c24'; declare context item as xs:integer external;",
+    "ExpectedCode": ""
+  },
+  {
+    "Name": "library-initializer",
+    "Source": "module namespace m = 'urn:c24'; declare context item := 1;",
+    "ExpectedCode": "XQST0113"
+  },
+  {
+    "Name": "library-default",
+    "Source": "module namespace m = 'urn:c24'; declare context item external := 1;",
+    "ExpectedCode": "XQST0113"
+  },
+  {
+    "Name": "library-duplicate",
+    "Source": "module namespace m = 'urn:c24'; declare context item external; declare context item external;",
+    "ExpectedCode": "XQST0099"
+  }
+]

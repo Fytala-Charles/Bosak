@@ -1,0 +1,10 @@
+{
+  "unchangedOriginalAndPublicControlResults": 80,
+  "unchangedActualFilterAssessments": 97,
+  "changedLibraryControls": [
+    "library-duplicate"
+  ],
+  "libraryPassed": 5,
+  "libraryFailed": 0,
+  "mainModuleSupportChanged": false
+}

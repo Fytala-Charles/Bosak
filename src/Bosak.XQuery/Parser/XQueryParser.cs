@@ -59,6 +59,7 @@
 //                      |                  |       |                | default collation                                                                      |
 //                      |==================|=======|================|=========================================================================================
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 1.17  | 28-10-2026     | Report XQST0099 for duplicate library context declarations (1.29.3).                    |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -634,9 +635,9 @@ internal sealed class XQueryParser
                 SkipWhitespace();
             }
             ExpectChar(';');
-            // XQST0113: more than one context item declaration in one module.
+            // XQST0099: more than one context item declaration in one module.
             if (_seenContextItemDecl)
-                throw new XPathParseException("XQST0113: More than one context item declaration in a module.", _position);
+                throw new XPathParseException("XQST0099: More than one context item declaration in a module.", _position);
             _seenContextItemDecl = true;
             _seenSecondPhaseDecl = true;
             // XQST0113: an initial or default value is not allowed in a library module.
