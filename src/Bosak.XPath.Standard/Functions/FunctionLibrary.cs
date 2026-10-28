@@ -476,6 +476,7 @@
 //                      | Charles Korthout | 5.155 | 27-10-2026     | Reuse schema constructor registration after query-owned imports (1.26.7).              |
 //                      | Charles Korthout | 5.156 | 27-10-2026     | Add bounded XPath4 parse-integer signatures, defaults, keywords and errors (1.28.0).    |
 //                      | Charles Korthout | 5.157 | 28-10-2026     | Return true empty date-formatting results with optional string metadata (1.28.2).        |
+//                      | Charles Korthout | 5.158 | 28-10-2026     | Add typed XPath4 date-formatting arities3/4 and keyword defaults (1.29.0).                 |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2635,13 +2636,31 @@ public static class FunctionLibrary
                 ParameterTypeNames = ["xs:date?", "xs:string"],
                 Implementation = FormatDate_2
             },
+            [(Namespaces.Fn, "format-date", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 3,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateWithOptions
+            },
+            [(Namespaces.Fn, "format-date", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 4,
+                ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateWithOptions
+            },
             [(Namespaces.Fn, "format-date", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
                 ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatDate_5
+                Implementation = FormatDateWithOptions
             },
             [(Namespaces.Fn, "format-time", 2)] = new()
             {
@@ -2651,13 +2670,31 @@ public static class FunctionLibrary
                 ParameterTypeNames = ["xs:time?", "xs:string"],
                 Implementation = FormatTime_2
             },
+            [(Namespaces.Fn, "format-time", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 3,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatTimeWithOptions
+            },
+            [(Namespaces.Fn, "format-time", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 4,
+                ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatTimeWithOptions
+            },
             [(Namespaces.Fn, "format-time", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
                 ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatTime_5
+                Implementation = FormatTimeWithOptions
             },
             [(Namespaces.Fn, "format-dateTime", 2)] = new()
             {
@@ -2667,13 +2704,31 @@ public static class FunctionLibrary
                 ParameterTypeNames = ["xs:dateTime?", "xs:string"],
                 Implementation = FormatDateTime_2
             },
+            [(Namespaces.Fn, "format-dateTime", 3)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 3,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateTimeWithOptions
+            },
+            [(Namespaces.Fn, "format-dateTime", 4)] = new()
+            {
+                NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 4,
+                ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
+                ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?"],
+                IsXPath40Only = true,
+                Implementation = FormatDateTimeWithOptions
+            },
             [(Namespaces.Fn, "format-dateTime", 5)] = new()
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
                 ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
-                Implementation = FormatDateTime_5
+                Implementation = FormatDateTimeWithOptions
             },
 
             // ----- fn:adjust-date-to-timezone ---------------------------------
@@ -4762,6 +4817,9 @@ public static class FunctionLibrary
         {
             [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
             [(Namespaces.Fn, "parse-integer")] = new(["value", "radix"], [null, "10"]),
+            [(Namespaces.Fn, "format-date")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
+            [(Namespaces.Fn, "format-dateTime")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
+            [(Namespaces.Fn, "format-time")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
             [(Namespaces.Fn, "sort")] = new(["input", "collation", "key"], [null, "fn:default-collation()", "fn:data#1"]),
             [(Namespaces.Fn, "sort-by")] = new(["input", "keys"], [null, null]),
             [(Namespaces.Fn, "sort-with")] = new(["input", "comparators"], [null, null]),
@@ -15816,20 +15874,20 @@ public static class FunctionLibrary
     private static XdmValue FormatDate_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Date, ctx.IsXsltMode);
 
-    private static XdmValue FormatDate_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Date, ctx.IsXsltMode);
+    private static XdmValue FormatDateWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.Date, ctx.IsXsltMode);
 
     private static XdmValue FormatTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.Time, ctx.IsXsltMode);
 
-    private static XdmValue FormatTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.Time, ctx.IsXsltMode);
+    private static XdmValue FormatTimeWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.Time, ctx.IsXsltMode);
 
     private static XdmValue FormatDateTime_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
         => FormatDateTime(args[0], AtomizedString(args[1]), null, null, null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
-    private static XdmValue FormatDateTime_5(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), OptionalStringArg(args[3]), OptionalStringArg(args[4]), DateTimeComponents.DateTime, ctx.IsXsltMode);
+    private static XdmValue FormatDateTimeWithOptions(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
+        => FormatDateTime(args[0], AtomizedString(args[1]), OptionalStringArg(args[2]), args.Length > 3 ? OptionalStringArg(args[3]) : null, args.Length > 4 ? OptionalStringArg(args[4]) : null, DateTimeComponents.DateTime, ctx.IsXsltMode);
 
     // The $language/$calendar/$place arguments are xs:string?: a non-string atomic value
     // (xs:integer, ...) is a type error (XPTY0004) checked before the picture string is

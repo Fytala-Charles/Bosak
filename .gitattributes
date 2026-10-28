@@ -277,3 +277,7 @@ docs/conformance/k04-date-arity-review/RESULTS.json -text whitespace=cr-at-eol
 # K04-C18 date-formatting empty-result correction retains raw validation evidence.
 docs/conformance/k04-date-empty-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-date-empty-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C19 optional date calls retain raw regressions, qualification and validation receipts.
+docs/conformance/k04-date-optional-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-date-optional-fix/RESULTS.json -text whitespace=cr-at-eol

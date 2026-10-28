@@ -1,0 +1,20 @@
+{
+  "reason": "Exactly12 live catalog expectations asserted the old absence of the six implemented overloads.",
+  "failedCaseIds": [
+    "changed31-contract-reference-fn-format-date-3",
+    "changed31-contract-reference-fn-format-date-4",
+    "changed31-contract-reference-fn-format-dateTime-3",
+    "changed31-contract-reference-fn-format-dateTime-4",
+    "changed31-contract-reference-fn-format-time-3",
+    "changed31-contract-reference-fn-format-time-4",
+    "changed31-inventory-fn-format-date-3",
+    "changed31-inventory-fn-format-date-4",
+    "changed31-inventory-fn-format-dateTime-3",
+    "changed31-inventory-fn-format-dateTime-4",
+    "changed31-inventory-fn-format-time-3",
+    "changed31-inventory-fn-format-time-4"
+  ],
+  "initialXsltPassed": 8184,
+  "initialXsltFailed": 12,
+  "correction": "Update current examples/cases.json expected4.0 values and retain explicit3.1 absence/refusal checks. Keep original XPath files and all historical REQ126 structured receipts unchanged."
+}

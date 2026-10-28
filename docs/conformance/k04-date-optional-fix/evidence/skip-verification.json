@@ -1,0 +1,57 @@
+{
+  "qt3": {
+    "added": {},
+    "removed": {},
+    "retainedNamesAndReasons": 657,
+    "totalSkipNames": 657
+  },
+  "qt4": {
+    "added": {
+      "format-date-en151": "Unsupported dependency",
+      "format-date-en154": "Unsupported dependency",
+      "format-date-inpt-er4": "Unsupported dependency",
+      "format-dateTime-019a": "Unsupported dependency",
+      "format-dateTime-019b": "Unsupported dependency",
+      "format-dateTime-019c": "Unsupported dependency",
+      "format-dateTime-019d": "Unsupported dependency",
+      "format-dateTime-019e": "Unsupported dependency",
+      "format-dateTime-019f": "Unsupported dependency",
+      "format-dateTime-019g": "Unsupported dependency",
+      "format-dateTime-019h": "Unsupported dependency",
+      "format-dateTime-025a": "Unsupported dependency",
+      "format-dateTime-025b": "Unsupported dependency",
+      "format-dateTime-025c": "Unsupported dependency",
+      "format-dateTime-025d": "Unsupported dependency",
+      "format-dateTime-025e": "Unsupported dependency",
+      "format-dateTime-en151": "Unsupported dependency",
+      "format-dateTime-inpt-er4": "Unsupported dependency",
+      "format-time-025a": "Unsupported dependency",
+      "format-time-025b": "Unsupported dependency",
+      "format-time-025c": "Unsupported dependency",
+      "format-time-inpt-er4": "Unsupported dependency"
+    },
+    "removed": {},
+    "retainedNamesAndReasons": 1892,
+    "totalSkipNames": 1914
+  },
+  "promotedSets": [
+    {
+      "name": "fn-format-date",
+      "passed": 135,
+      "failed": 0,
+      "skipped": 3
+    },
+    {
+      "name": "fn-format-dateTime",
+      "passed": 79,
+      "failed": 0,
+      "skipped": 15
+    },
+    {
+      "name": "fn-format-time",
+      "passed": 94,
+      "failed": 0,
+      "skipped": 4
+    }
+  ]
+}

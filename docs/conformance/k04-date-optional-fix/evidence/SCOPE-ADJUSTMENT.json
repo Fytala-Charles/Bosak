@@ -1,0 +1,8 @@
+{
+  "date": "2026-10-28",
+  "kind": "Post-implementation documentation expectation synchronization; original semantic adoption remains unchanged",
+  "trigger": "The complete solution exposed12 live catalog examples asserting the previously missing arities.",
+  "authorizedMaintenance": "Update exactly12 current documentation expectations for the implemented capability; retain unchanged XPath files and explicit3.1 checks.",
+  "boundaryClarification": "The original catalog fixture/assertion limit protects frozen QT3/qt4 conformance fixtures and assertions. It does not freeze live documentation lookup/reference observations when the implemented capability changes.",
+  "preserved": "All historical REQ126 structured records, owner dispositions and48 unmet batch observations; all original QT3/qt4 fixtures/assertions."
+}
