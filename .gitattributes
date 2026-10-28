@@ -295,3 +295,8 @@ src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt -text
 # K04-C22 preserves normalization option diagnostics and validation receipts.
 docs/conformance/k04-normalization-options-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-normalization-options-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C23 preserves exact unadopted patch and isolated admission receipts.
+docs/conformance/k04-normalization-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-normalization-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eol

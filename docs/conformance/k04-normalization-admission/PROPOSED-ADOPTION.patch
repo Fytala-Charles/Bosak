@@ -1,0 +1,49 @@
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@
+ 
+ Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
+ 
+-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,164/0/657** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659.
++- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,165/0/656** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659.
+ - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
+ 
+ ## Architecture Overview
+--- a/tests/Bosak.XPath.Conformance/ConformanceRunner.cs
++++ b/tests/Bosak.XPath.Conformance/ConformanceRunner.cs
+@@ -125,6 +125,7 @@
+ //                      | Charles Korthout | 1.35  | 21-08-2026     | Drop XML 1.1-only name-character gaps after implementing encode/decode construction        |
+ //                      | Charles Korthout | 1.37  | 27-10-2026     | Remove only the two owner-approved K01 list-binding/castability skips.                    |
+ //                      | Charles Korthout | 1.45  | 27-10-2026     | Enable owner-approved guarded schema initialization in the normal QT3 runner.           |
++//                      | Charles Korthout | 1.46  | 28-10-2026     | Remove owner-approved repaired FULLY-NORMALIZED positive skip only.                    |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -147,9 +148,6 @@
+     /// </summary>
+     private static readonly Dictionary<string, string> DocumentedSkips = new(StringComparer.Ordinal)
+     {
+-        // Upstream defect: the expected value in the catalog carries an artifactual leading
+-        // space (formatting), but U+09BE by itself is the only correct result.
+-        ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",
+         // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
+         // custom date representation.
+         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",
+--- a/tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs
++++ b/tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs
+@@ -53,6 +53,7 @@
+ //                      | Charles Korthout | 0.13  | 24-10-2026     | Correct fn-map-to-element gate name to enforce the frozen native test set.                |
+ //                      | Charles Korthout | 0.14  | 27-10-2026     | Promote zero-failure integer parse/format sets after complete original-case validation. |
+ //                      | Charles Korthout | 0.15  | 28-10-2026     | Promote zero-failure date/dateTime/time sets after optional-argument implementation.     |
++//                      | Charles Korthout | 0.16  | 28-10-2026     | Promote owner-approved zero-failure Unicode normalization set (230 gated sets).         |
+ // ===========================================================================================================================================================
+ 
+ using System.Xml.Linq;
+@@ -362,6 +363,7 @@
+         "fn-format-time",
+         "fn-format-integer",
+         "fn-parse-integer",
++        "fn-normalize-unicode",
+     };
+ 
+     /// <summary>Failures inside <see cref="GatedSets"/> — these fail the run.</summary>
