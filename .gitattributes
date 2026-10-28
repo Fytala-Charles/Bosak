@@ -375,3 +375,8 @@ docs/conformance/k04-construction-admission/adoption/** -text whitespace=cr-at-e
 docs/conformance/k04-pragma-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-pragma-review/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-pragma-review/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C37 preserves pragma semantic adoption, implementation and final/intermediate evidence.
+docs/conformance/k04-pragma-fallback/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-fallback/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-fallback/*.patch -text whitespace=cr-at-eol,-blank-at-eol

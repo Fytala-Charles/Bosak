@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/README.md.html",
+      "sha256": "c0d9ec181ab2869bc1e1b2e955f0135943a2378691ffa984e6d300abe69cde6d"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_ARCHITECTURE.md.html",
+      "sha256": "fcf8adf1f71789f968b185d7bef9bbd69629b946e0782f3984adbf61cdf2bfdc"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "7d7c74917a5df2643e2f6ee7d7b3fa38505b1d5c4ec0ab536863bb142980c115"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_INTEGRATION.md.html",
+      "sha256": "81d774e5dcc3af7bf5fb77105de587bf41a7775a5c002ab7acc6f9b7f0fcfb78"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "0d4b2d9941949d71cd0aa3f8707e418c43864bc9e257a0ec6ad83d64ccc83601"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "9fb5cba900ae9e1ad8e0bc6f6975dafc5cc853cdb43a4e8142c21f364fb6ee36"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "198e56e72bd57c2936c69934070311cfc3b1f25cd74c7e1c9b10858a580932e9"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "889844ce09fb9c44b8f361b03ef9fa5bae397fedb37078ff37b18e337507ff7f"
+    },
+    {
+      "source": "docs/conformance/k04-pragma-fallback/README.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_conformance_k04-pragma-fallback_README.md.html",
+      "sha256": "c84964157b9deac2c32e92502001649e5310bef8198e29e29bd50a9ed05db639"
+    },
+    {
+      "source": "docs/conformance/k04-pragma-fallback/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-pragma-fallback-render/docs_conformance_k04-pragma-fallback_NEXT-SLICE.md.html",
+      "sha256": "5f59204e9095ea6c8d933664ef9388e442dc5282c62f9c2b9419dc6be533b501"
+    }
+  ]
+}

@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 1.18  | 28-10-2026     | Parse typed main-module context item values/defaults and retain library restrictions.    |
 //                      | Charles Korthout | 1.19  | 28-10-2026     | Parse copy-namespaces modes, ordering and duplicate XQST0055 (1.31.0). |
 //                      | Charles Korthout | 1.20  | 28-10-2026     | Parse strip/preserve, ordering and duplicate XQST0067 (1.32.0). |
+//                      | Charles Korthout | 1.21  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -1552,6 +1553,12 @@ internal sealed class XQueryParser
         while (_position < _source.Length && depth > 0)
         {
             char c = _source[_position];
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == '#')
+            {
+                _position += XPathLexer.ScanPragmaLength(_source.AsSpan(_position));
+                continue;
+            }
+
             if (c == '<')
             {
                 // Direct element constructor: skip the whole span (K2-Axes-1/2).
@@ -1596,6 +1603,12 @@ internal sealed class XQueryParser
         while (_position < _source.Length)
         {
             char c = _source[_position];
+            if (c == '(' && _position + 1 < _source.Length && _source[_position + 1] == '#')
+            {
+                _position += XPathLexer.ScanPragmaLength(_source.AsSpan(_position));
+                continue;
+            }
+
             if (c == '<')
             {
                 // Direct element constructor: skip the whole span so apostrophes and

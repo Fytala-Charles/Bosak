@@ -1,0 +1,155 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 28 October 2026
+// PURPOSE              : Verify ignored-pragma fallback, raw content, namespace scope and grammar compatibility.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XQuery.Api;
+using Bosak.XPath.Api;
+using Xunit;
+
+namespace Bosak.XQuery.Tests;
+
+/// <summary>Verify ignored pragmas without weakening namespace, syntax or profile rules.</summary>
+public sealed class PragmaExpressionTests
+{
+    /// <summary>Provides fallback values, static/dynamic failures and raw lexical edge cases.</summary>
+    /// <returns>Queries, expected error codes and integer results.</returns>
+    public static IEnumerable<object?[]> Cases()
+    {
+        yield return new object?[]{"declare namespace p=\"urn:unknown\"; (#p:x#){42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){42}",null,42L};
+        yield return new object?[]{"(#x#){42}",null,42L};
+        yield return new object?[]{"(#Q{}x#){42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x#)(#Q{}y#){42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){}","XQST0079",0L};
+        yield return new object?[]{"(#x#){}","XQST0079",0L};
+        yield return new object?[]{"(#p:x#){42}","XPST0081",0L};
+        yield return new object?[]{"(#Q{urn:unknown}x \"unterminated quote #){42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x (:unterminated comment #){42}",null,42L};
+        yield return new object?[]{"(:outside:) (#Q{urn:unknown}x#) (:between:) {42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x \"#) {42}",null,42L};
+        yield return new object?[]{"(#Q{urn:unknown}x(content)#){42}","XPST0003",0L};
+        yield return new object?[]{"(#(:bad:)Q{urn:unknown}x#){42}","XPST0003",0L};
+        yield return new object?[]{"(##){42}","XPST0003",0L};
+        yield return new object?[]{"(#Q{urn:unknown}x content","XPST0003",0L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){<e/>}/*","XPST0003",0L};
+        yield return new object?[]{"count(((#Q{urn:unknown}x#){<e><c/></e>})/*)",null,1L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){(1,2)}[1]","XPST0003",0L};
+        yield return new object?[]{"((#Q{urn:unknown}x#){(1,2)})[1]",null,1L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){Q{urn:no-function}missing()}","XPST0017",0L};
+        yield return new object?[]{"(#Q{urn:unknown}x#){error(QName(\"http://www.w3.org/2005/xqt-errors\",\"FOER0000\"))}","FOER0000",0L};
+        yield return new object?[]{"40+2",null,42L};
+        yield return new object?[]{"string-length(\"(#p:x#)\")",null,7L};
+        yield return new object?[]{"(#x raw { } ; &#bad; #){42}",null,42L};
+        yield return new object?[]{"(#x raw \\u0000 #){42}",null,42L};
+        yield return new object?[]{"(#if#){42}",null,42L};
+        yield return new object?[]{"(#xml:x#){42}",null,42L};
+        yield return new object?[]{"declare default function namespace 'urn:unknown'; (#x#){42}",null,42L};
+        yield return new object?[]{"declare default element namespace 'urn:unknown'; (#x#){42}",null,42L};
+        yield return new object?[]{"1+(#x#){41}",null,42L};
+        yield return new object?[]{"-(#x#){-42}",null,42L};
+        yield return new object?[]{"(#x#){(#y#){42}}",null,42L};
+        yield return new object?[]{"let $f := function(){(#x#){42}} return $f()",null,42L};
+        yield return new object?[]{"declare function local:f(){(#x \" ; } (: #){42}}; local:f()",null,42L};
+        yield return new object?[]{"declare variable $v := (#x \" ; } (: #){42}; $v",null,42L};
+        yield return new object?[]{"declare context item := (#x \" ; } (: #){42}; .",null,42L};
+        yield return new object?[]{"count(<e>{(#x \" } (: #){<c/>}}</e>/*)",null,1L};
+        yield return new object?[]{"string-length(string(<e a='{(#x \" } (: #){42}}'/>/@a))",null,2L};
+        yield return new object?[]{"string-length(string(``[before`{(#x \" } (: #){42}}`after]``))",null,13L};
+        yield return new object?[]{"count(<e xmlns:p='urn:local'>{(#p:x#){<c/>}}</e>/*)",null,1L};
+        yield return new object?[]{"count(<e xmlns:p='urn:local'><f>{(#p:x#){<c/>}}</f></e>/*/*)",null,1L};
+        yield return new object?[]{"count((#x#) {()})",null,0L};
+        yield return new object?[]{"count((#Q{}x#) {()})",null,0L};
+        yield return new object?[]{"(#x#){1} ! .","XPST0003",0L};
+        yield return new object?[]{"(#x#){1}()","XPST0003",0L};
+        yield return new object?[]{"string-length((#x#){1} => string())",null,1L};
+        yield return new object?[]{"(#x#){1}, (#p:x#){1}","XPST0081",0L};
+        yield return new object?[]{"(<e xmlns:p='urn:local'>{(#p:x#){1}}</e>, (#p:x#){1})","XPST0081",0L};
+        yield return new object?[]{"if(false()) then (#p:x#){1} else 42","XPST0081",0L};
+        yield return new object?[]{"declare namespace p=''; (#p:x#){1}","XPST0081",0L};
+        yield return new object?[]{"(#Q{urn:x}#){1}","XPST0003",0L};
+        yield return new object?[]{"(#p:*#){1}","XPST0003",0L};
+        yield return new object?[]{"(#Q{urn:x}p:y#){1}","XPST0003",0L};
+        yield return new object?[]{"(#x\u00a0content#){1}","XPST0003",0L};
+        yield return new object?[]{"(#\u00a0x#){1}","XPST0003",0L};
+        yield return new object?[]{"(#x\u0000#){1}","XPST0003",0L};
+        yield return new object?[]{"(#x#)(##){1}","XPST0003",0L};
+    }
+
+    /// <summary>Applies the empty recognized-namespace policy with required fallback and errors.</summary>
+    /// <param name="query">The original query.</param>
+    /// <param name="code">The expected error code, or null for a value.</param>
+    /// <param name="expected">The expected integer value.</param>
+    [Theory,MemberData(nameof(Cases))]
+    public void FallbackAndErrors(string query,string? code,long expected)
+    {
+        if(code is not null) Assert.Contains(code,Assert.ThrowsAny<Exception>(()=>new XQueryCompiler().Compile(query).Evaluate(new XQueryContext())).Message);
+        else Assert.Equal(expected,new XQueryCompiler().Compile(query).Evaluate(new XQueryContext()).IntegerValue);
+    }
+
+    /// <summary>Resolves pragma prefixes in library functions, variables, closures and loaded modules.</summary>
+    /// <param name="path">The library export used.</param>
+    /// <param name="declared">Whether the library declares its pragma prefix.</param>
+    [Theory]
+    [InlineData(0,true)][InlineData(1,true)][InlineData(2,true)][InlineData(3,true)]
+    [InlineData(0,false)][InlineData(1,false)][InlineData(2,false)][InlineData(3,false)]
+    public void DeclaringModuleScope(int path,bool declared)
+    {
+        string declaration=path switch
+        {
+            1=>"declare variable $m:v := (#p:x raw } ; \" (: #){42};",
+            2=>"declare function m:closure(){function(){(#p:x raw } ; \" (: #){42}}};",
+            _=>"declare function m:f(){(#p:x raw } ; \" (: #){42}};"
+        };
+        string lib="module namespace m='urn:c37:m'; "+(declared?"declare namespace p='urn:c37:p'; ":"")+declaration;
+        var compiler=new XQueryCompiler().WithModule("urn:c37:m",lib);
+        string body=path switch{0=>"m:f()",1=>"$m:v",2=>"m:closure()()",_=>"load-xquery-module('urn:c37:m')('functions')(QName('urn:c37:m','f'))(0)()"};
+        string query="import module namespace m='urn:c37:m'; declare namespace p='urn:c37:caller'; "+body;
+        if(declared)Assert.Equal(42,compiler.Compile(query).Evaluate(new XQueryContext()).IntegerValue);
+        else Assert.Contains("XPST0081",Assert.ThrowsAny<Exception>(()=>compiler.Compile(query).Evaluate(new XQueryContext())).Message);
+    }
+
+    /// <summary>Preserves XPath rejection of XQuery-only extension grammar.</summary>
+    /// <param name="query">The extension expression.</param>
+    [Theory]
+    [InlineData("(#x#){42}")][InlineData("(#Q{urn:x}x raw (: #){42}")]
+    public void XPath31RejectsExtension(string query)=>Assert.ThrowsAny<Exception>(()=>XPath31Expression.Compile(query));
+
+    /// <summary>Retains QName literals and rejects extension grammar in both XPath 4.0 profiles.</summary>
+    /// <param name="experimental">Whether to use the experimental profile.</param>
+    /// <param name="query">The profile expression.</param>
+    /// <param name="valid">Whether the expression is valid XPath.</param>
+    [Theory]
+    [InlineData(false,"#Q{urn:c37}name",true)][InlineData(true,"#Q{urn:c37}name",true)]
+    [InlineData(false,"(#Q{urn:c37}name)",true)][InlineData(true,"(#Q{urn:c37}name)",true)]
+    [InlineData(false,"(#Q{urn:c37}name#){42}",false)][InlineData(true,"(#Q{urn:c37}name#){42}",false)]
+    [InlineData(false,"(#name#){42}",false)][InlineData(true,"(#name#){42}",false)]
+    public void XPath40Compatibility(bool experimental,string query,bool valid)
+    {
+        var options=new CompileOptions{Compatibility=experimental?XPathCompatibility.XPath40Experimental:XPathCompatibility.XPath40};
+        if(valid)Assert.NotNull(XPath31Expression.Compile(query,options));
+        else Assert.ThrowsAny<Exception>(()=>XPath31Expression.Compile(query,options));
+    }
+
+    /// <summary>Checks declaring scopes before dead-code optimization and without caller bindings.</summary>
+    /// <param name="query">The query containing an unbound pragma prefix.</param>
+    [Theory]
+    [InlineData("declare function local:f(){(#p:x#){42}}; 1")]
+    [InlineData("declare variable $v := (#p:x#){42}; 1")]
+    [InlineData("declare context item := (#p:x#){42}; 1")]
+    [InlineData("declare function local:f(){if(false()) then (#p:x#){1} else 42}; local:f()")]
+    [InlineData("declare variable $v := if(false()) then (#p:x#){1} else 42; $v")]
+    [InlineData("declare namespace p='urn:outer'; <e xmlns:p=''>{(#p:x#){42}}</e>")]
+    public void UnboundDeclaringScopes(string query)=>Assert.Contains("XPST0081",Assert.ThrowsAny<Exception>(()=>new XQueryCompiler().Compile(query)).Message);
+}

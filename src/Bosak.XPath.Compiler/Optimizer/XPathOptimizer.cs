@@ -53,6 +53,7 @@
 //                      | Charles Korthout | 1.14  | 24-10-2026     | Check integer folding overflow and retain decimal-backed integer literal type.            |
 //                      | Charles Korthout | 1.15  | 25-10-2026     | Avoid unary minimum-value wraparound and retain wide integer literal identity.             |
 //                      | Charles Korthout | 1.16  | 25-10-2026     | Preserve atomization, conversion and errors across repeated unary negation.                 |
+//                      | Charles Korthout | 1.17  | 28-10-2026     | Implement statically validated ignored-pragma fallback and raw scanning (1.33.0). |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Parser.Ast;
@@ -138,6 +139,7 @@ internal sealed class XPathOptimizer
             StringConstructorNode n => OptimizeStringConstructor(n, ref changed),
             StringTemplateNode n => OptimizeStringTemplate(n, ref changed),
             ValidateExpressionNode n => OptimizeValidate(n, ref changed),
+            ExtensionExpressionNode n => OptimizeIgnoredExtension(n, ref changed),
             _ => node
         };
     }
@@ -167,6 +169,13 @@ internal sealed class XPathOptimizer
             if (optPart != part) anyChanged = true;
         }
         return anyChanged ? parts : null;
+    }
+
+    private XPathAstNode OptimizeIgnoredExtension(ExtensionExpressionNode node, ref bool changed)
+    {
+        // No pragma namespaces are recognized. Static validation precedes optimization.
+        changed = true;
+        return OptimizeNode(node.Expression, ref changed);
     }
 
     private XPathAstNode OptimizeValidate(ValidateExpressionNode node, ref bool changed)
