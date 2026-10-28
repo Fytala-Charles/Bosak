@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/README.md.html",
+      "sha256": "4ec1785f0ba2f650fbf8f4efe567e4609c9746f01fe4b993fb87dbaa216164bf"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_ARCHITECTURE.md.html",
+      "sha256": "612fac36779f474ba630ad97ff7c0e4406beba571cdd0700af33d886f2e6e921"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "5dbe00d5c8d2ae32ef9b4f9256b5f2ad7732bd505170027e2687a70601256a01"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_INTEGRATION.md.html",
+      "sha256": "28dd5aa0b7a5e75028463ab1ae7569f4e7ee2f2f0fe975631d25d028804ae900"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "c5ef48d9bf9909d9256fb75070934cadd1bf8b03a8e3d408f7017e0a2c617f1b"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "85c056bc0c19ce64d4cc61f2c110a9deee767b2514e56cccdfd551f5f40ac4f2"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "8843f9c7f3d6e0e81d61eb0f732ff8ed185b9d8b9d99f8ce556d24678fa2f83c"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "919b5f8cf993b46bbad843ac6617838c0e60a1b305e9ec55d2ba2716c4dcd345"
+    },
+    {
+      "source": "docs/conformance/k04-copy-namespaces-admission/README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_conformance_k04-copy-namespaces-admission_README.md.html",
+      "sha256": "926a86ee5a713e43bb8ca0222dd10266ee25599f055011aff8e34b7444a54f27"
+    },
+    {
+      "source": "docs/conformance/k04-copy-namespaces-admission/BASELINE-UPDATE-PROPOSAL.md",
+      "html": ".guard-tmp/k04-copy-namespaces-admission-render/docs_conformance_k04-copy-namespaces-admission_BASELINE-UPDATE-PROPOSAL.md.html",
+      "sha256": "786148e311e14de974605f987d103e0dbbf5e109dbeb347d41a742a0db3426b0"
+    }
+  ]
+}

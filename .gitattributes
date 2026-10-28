@@ -344,3 +344,8 @@ docs/conformance/k04-prolog-mode-review/PROTOTYPE-ROUTING.patch -text whitespace
 docs/conformance/k04-copy-namespaces/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-copy-namespaces/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-copy-namespaces/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C32 preserves exact copy-only routing qualification and pending adoption patch.
+docs/conformance/k04-copy-namespaces-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-copy-namespaces-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-copy-namespaces-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol

@@ -1,0 +1,296 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "nscons-031",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-032",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-033",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-034",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-035",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-036",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-037",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-038",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "nscons-039",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-10",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-11",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-12",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-13",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-14",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-15",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-16",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-17",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-18",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-19",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-20",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-21",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "copynamespace-22",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K-CopyNamespacesProlog-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-5",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-8",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-CopyNamespacesProlog-9",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CopyNamespacesDecl.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-directconelem-001",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-directconelem-002",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemConstructor.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-1",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-2",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-3",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "Constr-cont-nsmode-4",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "XQST0055",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\misc\\CombinedErrorCodes.xml"
+  }
+]
