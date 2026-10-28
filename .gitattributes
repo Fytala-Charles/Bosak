@@ -331,3 +331,6 @@ docs/conformance/k04-library-context-fix/PROTOTYPE-ROUTING.patch -text whitespac
 docs/conformance/k04-context-routing-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-context-routing-review/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-context-routing-review/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C29 owner-approved adoption preserves fresh normal gate evidence.
+docs/conformance/k04-context-routing-review/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
