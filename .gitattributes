@@ -397,3 +397,6 @@ docs/conformance/k04-independent-profile-review/RESULTS.json -text whitespace=cr
 docs/conformance/k04-xib-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-xib-admission/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-xib-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C40 owner-approved adoption preserves fresh normal gates and matrix replay.
+docs/conformance/k04-xib-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

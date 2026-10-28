@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/README.md.html",
+      "sha256": "3a368d63f8aaec1da96202445ddf60bcf5a5d44c7340dbd3a9a0ccdc33913eb9"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_ARCHITECTURE.md.html",
+      "sha256": "a0d9e4d1e90c9db48dc20a492844e0c811adba84e7225b722507c1b842e1f05f"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "9f06733adc15d517840891a99d3c879d339dade66df76d041f1f66d0a3f4d725"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_INTEGRATION.md.html",
+      "sha256": "b16123db99459d0ac58422730a51582d76508468227f95a2d7dd4e3e6f5eab70"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "41660db1666874c0e5870620f65bb09dee029d80f0100727ac2a4cfb744bbfba"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "be97366e9e41791c8dd39cd99d2f8455cf88ba71d9afb098c56a3cc4673e0dcd"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "34cbcd59ac36bc0dbb7c3e4d78f8c8ace9e1e691c72b7878a07fc33d5613ac10"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "948aa1e0ae7f8d16a125cef0c525679614e453639588a9799aa896a517dbba16"
+    },
+    {
+      "source": "docs/conformance/k04-xib-admission/adoption/BASELINE-ADOPTION.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_conformance_k04-xib-admission_adoption_BASELINE-ADOPTION.md.html",
+      "sha256": "2227efe7a2786dfcbe1cadf5c3d032773e09a4899036928ce3a1009294a3e717"
+    },
+    {
+      "source": "docs/conformance/k04-xib-admission/adoption/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-xib-adoption-render/docs_conformance_k04-xib-admission_adoption_NEXT-SLICE.md.html",
+      "sha256": "7aa6b737e9a2cd6a5c84711f436cf5aaecd6bec8f3d1eb1a1e12c8646a084a24"
+    }
+  ]
+}

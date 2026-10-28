@@ -21,6 +21,7 @@
 //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
 //                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
 //                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
+//                      | Charles Korthout | 0.9  | 28-10-2026     | Admit reviewed canonical xib fallback cases with correct dependency polarity. |
 // ===========================================================================================================================================================
 
 namespace Bosak.XPath.Conformance;
@@ -103,6 +104,15 @@ internal sealed class DependencyFilter40
     {
         foreach (var dep in dependencies)
         {
+            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
+            // Other language metadata retains the existing bounded admission policy.
+            if (dep.Type == "language" && dep.Value == "xib")
+            {
+                if (dep.Satisfied)
+                    return false;
+                continue;
+            }
+
             // CB is a reviewed unsupported calendar: the formatter falls back to AD.
             // Other calendar names retain their existing admission policy.
             if (dep.Type == "calendar" && dep.Value == "CB")
