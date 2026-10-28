@@ -1,0 +1,173 @@
+[
+  {
+    "name": "Bosak.XPath.Api.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Api.dll",
+      "sha256": "a95797b08dcf67a1b121e1d8ae4cf3170cf6aee69bcdb96f6324493d7ba91637",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 156,
+      "methodAndSignatureSha256": "647bd817d504132abdc8b74c8e710224148b257c33425b1e44947b68233c1a0c"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Api.dll",
+      "sha256": "1a080f28dcf1c4d22f6b4f37e79d4c72602d0a5a9a0f109ed7393f80eeab04d5",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 156,
+      "methodAndSignatureSha256": "647bd817d504132abdc8b74c8e710224148b257c33425b1e44947b68233c1a0c"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Compiler.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Compiler.dll",
+      "sha256": "980468c263d13676d238b6a4f195443825ab2ca05cfdc53129c7bdb9f479e1b5",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 563,
+      "methodAndSignatureSha256": "38347ad81d27446a7ca9764cd873f7cb485ea46c5b8509e54b25570597e07283"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Compiler.dll",
+      "sha256": "40b323ce099e10e6c6e681883a60bb68cb743412f1dbf769b1a26cfb1d0730f3",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 563,
+      "methodAndSignatureSha256": "38347ad81d27446a7ca9764cd873f7cb485ea46c5b8509e54b25570597e07283"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Core.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Core.dll",
+      "sha256": "6fc7763408d0acdadaa2188e213284deab72712bfa1ad23c88d73b8cc5520945",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 414,
+      "methodAndSignatureSha256": "874f9d459cc03663f0be7b44d5c3727fb9437e109ed983c66842dc047edf8a88"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Core.dll",
+      "sha256": "b16e343b44d5230a9070322ab4f39bd3f4556a3253294fb91bb372c959849fb6",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 414,
+      "methodAndSignatureSha256": "874f9d459cc03663f0be7b44d5c3727fb9437e109ed983c66842dc047edf8a88"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Parser.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Parser.dll",
+      "sha256": "acf5819f70346eb088ae296d642fcabe7ccf79c599529b8dba3a39816eba2a4f",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 1673,
+      "methodAndSignatureSha256": "7a00f830be9d565d1269f3b0f8a568164871b72d06730fda1ed99ee86b54f83d"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Parser.dll",
+      "sha256": "746cf22148ae9ef100c927788271a37bb88c7994b360c5aaa276f43cd019d97f",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 1673,
+      "methodAndSignatureSha256": "7a00f830be9d565d1269f3b0f8a568164871b72d06730fda1ed99ee86b54f83d"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Providers.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Providers.dll",
+      "sha256": "cd4f7169f90d839cb0ae8cfab9a5dca12764a15092c9a65586b8931c7b0f572c",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 723,
+      "methodAndSignatureSha256": "d8324cbc0444c3f33e17e72c3b4dc87a7d9e7c526ea67f2e79d7c95b063853f5"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Providers.dll",
+      "sha256": "66b363e69cabc152e1ad2673e61b5385ca2728970cf5c97ebb0949b96b17a90a",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 723,
+      "methodAndSignatureSha256": "d8324cbc0444c3f33e17e72c3b4dc87a7d9e7c526ea67f2e79d7c95b063853f5"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Runtime.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Runtime.dll",
+      "sha256": "00a9a080abe6e862bbdb23c9910c92e07cb312ebbb8d8bba98e6a1e649559d9d",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 989,
+      "methodAndSignatureSha256": "eba346b3e00faa0e92c58c88443273b5f632e4c8e9084ed48c2c79a069ea5428"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Runtime.dll",
+      "sha256": "111af93efa0515e7dbce408955b59acef09d8e6a0d3c4702407d680e9ac1d33e",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 989,
+      "methodAndSignatureSha256": "eba346b3e00faa0e92c58c88443273b5f632e4c8e9084ed48c2c79a069ea5428"
+    }
+  },
+  {
+    "name": "Bosak.XPath.Standard.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XPath.Standard.dll",
+      "sha256": "1704adce4e3e4bc51bd573733ef2e6b8e4a0201b3443554013eb56bc11b32861",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 1668,
+      "methodAndSignatureSha256": "5c340172bc45a393dd5cfc9208a60b94ef4d37e5f8e3cdf781745b1f2c3c2894"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XPath.Standard.dll",
+      "sha256": "7f1c5e3febde99063e62d3f8e08276fea6d877a2ffd5ab4561a4ececdb9970d1",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 1668,
+      "methodAndSignatureSha256": "5c340172bc45a393dd5cfc9208a60b94ef4d37e5f8e3cdf781745b1f2c3c2894"
+    }
+  },
+  {
+    "name": "Bosak.XQuery.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.XQuery.dll",
+      "sha256": "dd43e46781bb102f57e1e8f56722a40254a402304466710102d0626f6851d0e4",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 614,
+      "methodAndSignatureSha256": "3cc7d321d024e7c2ccc4ca7d41298c036eacb7325caca56fb78ff830818610a5"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.XQuery.dll",
+      "sha256": "0c0f8dea267752cdbea76b5987bfe426a37fe13b2e8ef44a1d0ca5c38fafd004",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 614,
+      "methodAndSignatureSha256": "3cc7d321d024e7c2ccc4ca7d41298c036eacb7325caca56fb78ff830818610a5"
+    }
+  },
+  {
+    "name": "Bosak.Xslt.dll",
+    "review": {
+      "path": ".guard-tmp/k04-construction-admission-harness/bin/Release/net10.0/Bosak.Xslt.dll",
+      "sha256": "ab9d99aa07b8285ceee068944665864623c0adb532864b4f10cd6503f06d97d5",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B11bb1c1e74755dc23bcf3512e7f6eb7d85fb17be",
+      "methodBodies": 5037,
+      "methodAndSignatureSha256": "1c04629d893b0b51fa72c158d53cd28ef11ca239d17b366c1d4db3edd1b9c535"
+    },
+    "adopted": {
+      "path": "tests/Bosak.XPath.Conformance/bin/Release/net10.0/Bosak.Xslt.dll",
+      "sha256": "cf9a58afaceaa702c94932c38f7d1a1efb8f5d4cf157ea81b3040c2ee2193415",
+      "assemblyVersion": "1.32.0.0",
+      "informationalVersion": "1.32.0\u002B7c0fc78cff36dfed63cbae002bb2026fd950efa1",
+      "methodBodies": 5037,
+      "methodAndSignatureSha256": "1c04629d893b0b51fa72c158d53cd28ef11ca239d17b366c1d4db3edd1b9c535"
+    }
+  }
+]

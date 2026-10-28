@@ -58,6 +58,7 @@
 //                      | Charles Korthout | 0.28  | 27-10-2026     | Apply owner-approved quote-aware XQuery routing without broadening other guards.       |
 //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
 //                      | Charles Korthout | 0.30  | 28-10-2026     | Admit qualified copy-namespaces; preserve construction, pragma and dependency guards.    |
+//                      | Charles Korthout | 0.31  | 28-10-2026     | Admit qualified construction declarations; retain pragma and independent dependency guards.|
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -297,12 +298,6 @@ internal sealed class TestExecutor
         if (UnsupportedXQueryConstructRegex.IsMatch(stripped))
             return false;
 
-        // The prolog gate matches a comment-tolerant form in which comments collapse to a
-        // single space, so keyword phrases stay detectable ('declare(::)default(::)order'
-        // must stay gated even though the supported prolog forms handle comments inline).
-        if (UnsupportedPrologRegex.IsMatch(StripLiteralsNormalizeComments(expr)))
-            return false;
-
         return true;
     }
 
@@ -385,14 +380,6 @@ internal sealed class TestExecutor
     private static readonly Regex UnsupportedXQueryConstructRegex = new(
         @"\(#\s*[A-Za-z_]",                         // pragma extension expressions (# ... #)
         RegexOptions.Compiled);
-
-    // Prolog forms the XQuery parser does NOT support (namespace, default element/function
-    // namespace, default collation, default order empty, ordering, boundary-space,
-    // decimal-format, base-uri, option, variable, function, module import, schema import,
-    // and version declarations are supported).
-    private static readonly Regex UnsupportedPrologRegex = new(
-        @"\bdeclare\s+(construction)\b",
-        RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
     /// <summary>
     /// Removes string literals (with doubled-quote escapes) like

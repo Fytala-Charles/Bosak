@@ -1,0 +1,24 @@
+{
+  "command": [
+    "dotnet",
+    "test",
+    "Bosak.sln",
+    "-c",
+    "Release",
+    "--no-build"
+  ],
+  "exitCode": 0,
+  "projects": 10,
+  "passed": 24082,
+  "failed": 0,
+  "skipped": 0,
+  "log": "solution-tests.log",
+  "applicationControlWorkaroundUsed": false,
+  "execution": "Approved unsandboxed rerun for database loopback HttpListener",
+  "previousAttempt": {
+    "exitCode": 1,
+    "log": "solution-tests-restricted-failure.log",
+    "failed": 45,
+    "cause": "Database test local HttpListener startup failed with invalid handle in restricted execution; no source changes before retry."
+  }
+}
