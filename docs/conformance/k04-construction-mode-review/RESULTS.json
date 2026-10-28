@@ -1,0 +1,37 @@
+{
+  "slice": "K04-C33",
+  "status": "read-only review complete; construction admission unqualified",
+  "sourceBase": "71233bfc",
+  "catalogCases": 31821,
+  "affectedCases": 87,
+  "constructionOnly": 75,
+  "mixed": 12,
+  "normalQt3": [
+    31257,
+    0,
+    564
+  ],
+  "prototypeQt3": [
+    31261,
+    79,
+    481
+  ],
+  "prototypeExit": 2,
+  "qt4": [
+    8939,
+    0,
+    1920
+  ],
+  "publicControls": {
+    "Passed": 4,
+    "Failed": 4
+  },
+  "typedCopyPaths": 3,
+  "sourceMetadataUnchanged": true,
+  "defaultPolicy": "implementation-defined; current metadata hybrid is not qualified as either mode",
+  "diagnosticProcesses": 276,
+  "sourceChanged": false,
+  "baselineChanged": false,
+  "release": false,
+  "next": "C34 consistent construction-mode/default/typed-copy implementation; preserve guards"
+}

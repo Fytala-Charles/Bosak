@@ -1,0 +1,202 @@
+[
+  {
+    "name": "C33-strip",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-strip-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20498470001621172,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-strip",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction strip; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-strip.log"
+  },
+  {
+    "name": "C33-preserve",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-preserve-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2058714999584481,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-preserve",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction preserve; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-preserve.log"
+  },
+  {
+    "name": "C33-duplicate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-duplicate-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20452029997250065,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-duplicate",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Expected error XQST0067, got: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare construction strip; declare construction preserve; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XQST0067\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-duplicate.log"
+  },
+  {
+    "name": "C33-invalid",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-invalid-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20716240000911057,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-invalid",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare construction invalid; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-invalid.log"
+  },
+  {
+    "name": "C33-missing-semicolon",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-missing-semicolon-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20579219999490306,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-missing-semicolon",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare construction strip 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-missing-semicolon.log"
+  },
+  {
+    "name": "C33-variable-order",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-variable-order-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20453260000795126,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-variable-order",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare variable $v := 1; declare construction strip; $v",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-variable-order.log"
+  },
+  {
+    "name": "C33-function-order",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-function-order-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2036791000282392,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-function-order",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "declare function local:f(){1}; declare construction preserve; local:f()",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <error code=\"XPST0003\" />\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-function-order.log"
+  },
+  {
+    "name": "C33-mixed",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\C33-mixed-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20374460000311956,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C33-mixed",
+      "mode": "public-xquery",
+      "kind": "Failed",
+      "message": "Unexpected error: Parse error at position 8: XPST0003: Unexpected token Name",
+      "expression": "declare copy-namespaces no-preserve, no-inherit; declare construction preserve; 1",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>1</assert-eq>\r\n</result>",
+      "exceptionType": "XPathParseException",
+      "error": "Parse error at position 8: XPST0003: Unexpected token Name"
+    },
+    "log": "C33-mixed.log"
+  }
+]

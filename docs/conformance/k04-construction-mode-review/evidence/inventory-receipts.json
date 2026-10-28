@@ -1,0 +1,32 @@
+[
+  {
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      "tests/Bosak.XPath.Conformance/bin/Release/net10.0",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\normal",
+      "normal",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\lexical-controls.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 0.765760499984026
+  },
+  {
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-inventory\\bin\\Release\\net10.0\\Probe.dll",
+      ".guard-tmp/k04-construction-harness/bin/Release/net10.0",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\prototype",
+      "prototype",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\lexical-controls.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 60,
+    "wallSeconds": 1.0026799999759533
+  }
+]

@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/README.md.html",
+      "sha256": "d3f95a49e421015b05bc15ef9bd9c3253b1cc26c5510aba10c1a15214099a196"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_ARCHITECTURE.md.html",
+      "sha256": "53b30b6f0ff1d7f70ef54aafe025a20d181b77a6fabb797308a77aed1f2bd578"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "08cc218d22fe80a1d8a5eba905a1ab4cbafea7ce364c6bb5536b11511f1dc68f"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_INTEGRATION.md.html",
+      "sha256": "56ed35419b52aa0b099a8c3102f38a79121f09f6172da3b8bce9f5f674a11d22"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "27d49dfd8149b19b635d828c9cb95214c74ea67df55d60025979433efb16f029"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "46941e64fa995007fea4d148bc56efd89493933fdfee7c84e8ca0fe25c56ce8c"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "e3b5529f1e68e265951ea7540a9753cc43a30de44f98cd3d8131a713a75ba0bc"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "d50f370bb17b031e953761518ca458039d8ef581961d0808c41508e92a5a739e"
+    },
+    {
+      "source": "docs/conformance/k04-construction-mode-review/README.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_conformance_k04-construction-mode-review_README.md.html",
+      "sha256": "883cf395e4077b6e877e01809aa13cadd38420b6aa9e007b5531b8787796d47e"
+    },
+    {
+      "source": "docs/conformance/k04-construction-mode-review/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-construction-mode-review-render/docs_conformance_k04-construction-mode-review_NEXT-SLICE.md.html",
+      "sha256": "81e21284ce59160c08c067929e989f74b56002f312aa4afac1ca88d0653feba7"
+    }
+  ]
+}

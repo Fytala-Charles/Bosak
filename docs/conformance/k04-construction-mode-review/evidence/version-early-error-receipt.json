@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-construction-driver\\bin\\Release\\net10.0\\Probe.dll",
+    "library-parse",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-construction-mode-review\\evidence\\version-early-error-request.json"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 0.09978019999107346,
+  "result": {
+    "Name": "C33-version-early-error",
+    "kind": "Passed",
+    "expectedCode": "XQST0038",
+    "errorType": "XPathParseException",
+    "error": "Parse error at position 119: XQST0038: Collation 'xspanish' is not supported."
+  }
+}

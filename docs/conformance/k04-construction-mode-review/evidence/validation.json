@@ -1,0 +1,11 @@
+{
+  "status": "passed review checks",
+  "checksBeforeManifest": 70301,
+  "prototypeExpectedFailure": true,
+  "admissionQualified": false,
+  "typedCopyPaths": 3,
+  "sourceUnchanged": true,
+  "baselineUnchanged": true,
+  "diagnosticProcesses": 276,
+  "schemaOwnershipPreserved": true
+}
