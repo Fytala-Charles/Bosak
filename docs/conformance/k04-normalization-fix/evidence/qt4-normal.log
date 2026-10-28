@@ -1,0 +1,29 @@
+Bosak XPath 4.0 Conformance Harness
+Catalog: D:\Development\Bosak\tests\qt4tests\catalog.xml
+Test-set filter:  fn-normalize-unicode
+
+Discovered 738 test sets.
+  Starting: fn-normalize-unicode ...
+  Done: fn-normalize-unicode (50 tests total) [P+=42 F+=2 S+=6]
+
+============================================================
+Conformance Test Results
+============================================================
+Total:   50
+Passed:  42
+Failed:  2
+Skipped: 6
+
+Pass rate: 84.00%
+
+First 20 failures:
+  FAIL fn-normalize-unicode2args-5a: Unexpected error: XPTY0004
+  FAIL fn-normalize-unicode-empty: Unexpected error: XPTY0004
+
+Skip reasons (grouped):
+      6  Unsupported dependency
+
+Gated failures (fail the run): 0   Exploratory failures (reported only): 2
+Experimental-level (XPath40Experimental) passes: 0
+Elapsed: 0.31s
+Skip details written to D:\Development\Bosak\docs\conformance\k04-normalization-fix\evidence\qt4-normal-skips.txt

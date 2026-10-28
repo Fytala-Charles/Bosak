@@ -477,6 +477,7 @@
 //                      | Charles Korthout | 5.156 | 27-10-2026     | Add bounded XPath4 parse-integer signatures, defaults, keywords and errors (1.28.0).    |
 //                      | Charles Korthout | 5.157 | 28-10-2026     | Return true empty date-formatting results with optional string metadata (1.28.2).        |
 //                      | Charles Korthout | 5.158 | 28-10-2026     | Add typed XPath4 date-formatting arities3/4 and keyword defaults (1.29.0).                 |
+//                      | Charles Korthout | 5.159 | 28-10-2026     | Convert FULLY-NORMALIZED strings with a coherent pinned Unicode17 backend (1.29.1).      |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -9204,14 +9205,7 @@ public static class FunctionLibrary
             case "NFKD":
                 return XdmValue.FromString(input.Normalize(System.Text.NormalizationForm.FormKD));
             case "FULLY-NORMALIZED":
-                // XML 1.1 full normalization: NFC and not starting with a non-starter
-                // (combining mark; spacing marks such as U+09BE are starters).
-                if (!input.IsNormalized(System.Text.NormalizationForm.FormC) ||
-                    (input.Length > 0 && char.GetUnicodeCategory(input, 0) is
-                        System.Globalization.UnicodeCategory.NonSpacingMark or
-                        System.Globalization.UnicodeCategory.EnclosingMark))
-                    throw new InvalidOperationException("FOCH0003");
-                return XdmValue.FromString(input);
+                return XdmValue.FromString(FullNormalizationEngine.Normalize(input));
             default:
                 throw new InvalidOperationException("FOCH0003");
         }

@@ -1,0 +1,28 @@
+[
+  {
+    "suite": "qt3",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance\\bin\\Release\\net10.0\\Bosak.XPath.Conformance.dll",
+      "tests/qt3tests",
+      "fn-normalize-unicode"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.3659592999902088
+  },
+  {
+    "suite": "qt4",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\tests\\Bosak.XPath.Conformance40\\bin\\Release\\net10.0\\Bosak.XPath.Conformance40.dll",
+      "tests/qt4tests",
+      "fn-normalize-unicode"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 120,
+    "wallSeconds": 0.385108799993759
+  }
+]

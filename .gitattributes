@@ -285,3 +285,9 @@ docs/conformance/k04-date-optional-fix/RESULTS.json -text whitespace=cr-at-eol
 # K04-C20 normalization contract review preserves original diagnostic bytes.
 docs/conformance/k04-normalization-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-normalization-review/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C21 preserves raw Unicode data and validation receipts.
+docs/conformance/k04-normalization-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-fix/RESULTS.json -text whitespace=cr-at-eol
+src/Bosak.XPath.Standard/Resources/UnicodeNormalization17.bin -text
+src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt -text
