@@ -1,0 +1,19 @@
+--- a/tests/Bosak.XPath.Conformance/TestExecutor.cs
++++ b/tests/Bosak.XPath.Conformance/TestExecutor.cs
+@@ -57,6 +57,7 @@
+ //                      | Charles Korthout | 0.27  | 27-10-2026     | Add default-off guarded query-owned schema initialization for bounded diagnostics.         |
+ //                      | Charles Korthout | 0.28  | 27-10-2026     | Apply owner-approved quote-aware XQuery routing without broadening other guards.       |
+ //                      | Charles Korthout | 0.29  | 28-10-2026     | Admit qualified context declarations; preserve copy-namespaces/construction/pragma guards. |
++//                      | Charles Korthout | 0.30  | 28-10-2026     | Isolated C30 prolog-mode review; normal source and policy remain unchanged.          |
+ //                      |==================|=======|================|=========================================================================================
+ // ===========================================================================================================================================================
+ 
+@@ -390,7 +391,7 @@
+     // decimal-format, base-uri, option, variable, function, module import, schema import,
+     // and version declarations are supported).
+     private static readonly Regex UnsupportedPrologRegex = new(
+-        @"\bdeclare\s+(copy-namespaces|construction)\b",
++        @"(?!)",
+         RegexOptions.Compiled | RegexOptions.IgnoreCase);
+ 
+     /// <summary>

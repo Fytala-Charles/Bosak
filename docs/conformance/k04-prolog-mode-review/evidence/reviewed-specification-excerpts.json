@@ -1,0 +1,14 @@
+{
+  "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+  "sourceSha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+  "sections": [
+    {
+      "anchor": "id-construction-declaration",
+      "text": "id=\"id-construction-declaration\"> 4.6 Construction Declaration [12] ConstructionDecl ::= \"declare\" \"construction\" (\"strip\" | \"preserve\") [ Definition : A construction declaration sets the construction mode in the static context , overriding any implementation-defined default.] The construction mode governs the behavior of element and document node constructors. If construction mode is preserve , the type of a constructed element node is xs:anyType , and all attribute and element nodes copied during node construction retain their original types. If construction mode is strip , the type of a constructed element node is xs:untyped ; all element nodes copied during node construction receive the type xs:untyped , and all attribute nodes copied during node construction receive the type xs:untypedAtomic . The following example illustrates a construction declaration: declare construction strip; If a Prolog specifies more than one construction declaration, a static error is raised [ err:XQST0067 ]. "
+    },
+    {
+      "anchor": "id-copy-namespaces-decl",
+      "text": "id=\"id-copy-namespaces-decl\"> 4.9 Copy-Namespaces Declaration [15] CopyNamespacesDecl ::= \"declare\" \"copy-namespaces\" PreserveMode \",\" InheritMode [16] PreserveMode ::= \"preserve\" | \"no-preserve\" [17] InheritMode ::= \"inherit\" | \"no-inherit\" [ Definition : A copy-namespaces declaration sets the value of copy-namespaces mode in the static context , overriding any implementation-defined default. Copy-namespaces mode controls the namespace bindings that are assigned when an existing element node is copied by an element constructor or document constructor.] Handling of namespace bindings by element constructors is described in 3.9.1 Direct Element Constructors . The following example illustrates a copy-namespaces declaration: declare copy-namespaces preserve, no-inherit; If a Prolog contains more than one copy-namespaces declaration, a static error is raised [ err:XQST0055 ]. "
+    }
+  ]
+}

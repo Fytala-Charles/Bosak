@@ -1,0 +1,12 @@
+# C31 - Implement the XQuery copy-namespaces contract
+
+28 October 2026. C30 qualifies no admission: its full isolated gate has 126 failures. Start with the 49 copy-namespaces-only originals across five sets; keep the 75 construction-only and 12 mixed-mode cases separately tracked. All 49 copy-only cases have XQuery-admissible dependencies under current policy.
+
+1. Before implementation, record immutable adoption of XQuery 3.1 REC-20170321 section 4.9 and the normative constructor namespace-copy rules it references, including XQST0055. Preserve C30's original queries, assertions, controls, source/resource pins and failing receipts separately.
+2. Trace direct/computed constructor copying and namespace fixup through parser, compiler, runtime and providers. Define per-module immutable preserve/no-preserve and inherit/no-inherit modes, their defaults, library-module scope and propagation. Keep default behavior stable; do not mutate the source node or leak a callee's mode into caller evaluation. Existing XSLT controls do not establish XQuery module semantics.
+3. Implement valid grammar, duplicate XQST0055 and prolog ordering/malformed cases together with the actual mode effects. Cover all four mode combinations, unused source prefixes, required name bindings, conflicting parent prefixes, default namespaces and nested copying. Syntax acceptance with ignored options is not sufficient.
+4. Add public API happy/edge regressions, including direct/computed elements, namespace inspection, caller/source preservation, missing/conflicting/default bindings and library-module scope. Keep construction declarations unsupported in this slice; retain XSD 1.1 ownership in Bosak.Schema. Do not infer typed construction behavior from namespace-copy success.
+5. Re-run all 49 unchanged copy-only originals through isolated actual environment/module machinery, the independent copy controls, C29's admitted context cohort, all solution tests and both complete normal gates. Preserve mixed-mode failures and independent dependency exclusions. The current exact normal gates are QT3 31,208/0/613 and qt4 8,939/0/1,920.
+6. Follow feature versioning for an implementation. Keep both production prolog refusals, dependency filters, KnownSkips, GatedSets and baselines unchanged during the engine slice. Only after semantic qualification should a separate routing review reconcile every affected case and present any exact baseline proposal for owner disposition.
+
+No release, upstream submission, Braid or schema-backend change is part of this recommendation.

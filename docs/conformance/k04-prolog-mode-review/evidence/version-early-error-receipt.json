@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-prolog-mode-driver\\bin\\Release\\net10.0\\Probe.dll",
+    "library-parse",
+    "D:\\Development\\Bosak\\docs\\conformance\\k04-prolog-mode-review\\evidence\\version-early-error-request.json"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 0.09986119996756315,
+  "result": {
+    "Name": "C30-version-declaration-005-early-error",
+    "kind": "Passed",
+    "expectedCode": "XQST0038",
+    "errorType": "XPathParseException",
+    "error": "Parse error at position 119: XQST0038: Collation 'xspanish' is not supported."
+  }
+}
