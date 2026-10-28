@@ -1,0 +1,6 @@
+{
+  "kind": "Supplementary context-declaration library boundary controls",
+  "specification": "REC-xquery-31-20170321 section4.17",
+  "scope": "Read-only parser controls; no module import or admission change",
+  "expectedCases": 5
+}

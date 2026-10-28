@@ -304,3 +304,7 @@ docs/conformance/k04-normalization-admission/PROPOSED-ADOPTION.patch -text white
 # K04-C23 owner adoption preserves raw approval, proposal snapshots and normal receipts.
 docs/conformance/k04-normalization-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-normalization-admission/adoption/BASELINE-ADOPTION.md text
+
+# K04-C24 retains raw context-declaration diagnostics and setup-failure disposition.
+docs/conformance/k04-context-declaration-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-context-declaration-review/RESULTS.json -text whitespace=cr-at-eol

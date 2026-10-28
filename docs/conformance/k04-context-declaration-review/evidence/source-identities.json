@@ -1,0 +1,13 @@
+{
+  "AGENTS.md": "eb00a674661c410571dbbe0765e349a8b260ee37",
+  "src/Directory.Build.props": "669aa1e39cb8d096cd48bf4114316a3c3a7c77cd",
+  "src/Bosak.XQuery/Parser/XQueryParser.cs": "83227f9464c9a0bea82a01afdb44d28c39d3d237",
+  "src/Bosak.XQuery/Compiler/XQueryStaticContext.cs": "3890e18d93c9e714843c14f12903518190083183",
+  "src/Bosak.XQuery/Api/XQueryCompiler.cs": "dcf73ea94f5ef076317d31b12e0352d557244dc7",
+  "src/Bosak.XQuery/Api/XQueryExecutable.cs": "ddd3dd65fa6ac2c3b67c4509581a5449676404b4",
+  "tests/Bosak.XPath.Conformance/TestExecutor.cs": "ad1d9160b86fff29dc06715c061f64bc89c1cd94",
+  "tests/Bosak.XPath.Conformance/DependencyFilter.cs": "f13158aa59e4af03c106497c7630733a462aa1f4",
+  "tests/Bosak.XPath.Conformance40/DependencyFilter40.cs": "d7fca12a5404f0f84c19eaf9dc145a88f2fa91ba",
+  "tests/Bosak.XPath.Conformance/ConformanceRunner.cs": "fb136debe22a0b4013bacce9d23bd05113511662",
+  "tests/Bosak.XPath.Conformance40/ConformanceRunner40.cs": "dd35bdd3e3a99f292baef49628b8a9d3e698366c"
+}
