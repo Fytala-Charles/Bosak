@@ -300,3 +300,7 @@ docs/conformance/k04-normalization-options-fix/RESULTS.json -text whitespace=cr-
 docs/conformance/k04-normalization-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-normalization-admission/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-normalization-admission/PROPOSED-ADOPTION.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# K04-C23 owner adoption preserves raw approval, proposal snapshots and normal receipts.
+docs/conformance/k04-normalization-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-admission/adoption/BASELINE-ADOPTION.md text

@@ -125,6 +125,7 @@
 //                      | Charles Korthout | 1.35  | 21-08-2026     | Drop XML 1.1-only name-character gaps after implementing encode/decode construction        |
 //                      | Charles Korthout | 1.37  | 27-10-2026     | Remove only the two owner-approved K01 list-binding/castability skips.                    |
 //                      | Charles Korthout | 1.45  | 27-10-2026     | Enable owner-approved guarded schema initialization in the normal QT3 runner.           |
+//                      | Charles Korthout | 1.46  | 28-10-2026     | Remove owner-approved repaired FULLY-NORMALIZED positive skip only.                    |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -147,9 +148,6 @@ internal sealed class ConformanceRunner
     /// </summary>
     private static readonly Dictionary<string, string> DocumentedSkips = new(StringComparer.Ordinal)
     {
-        // Upstream defect: the expected value in the catalog carries an artifactual leading
-        // space (formatting), but U+09BE by itself is the only correct result.
-        ["cbcl-fn-normalize-unicode-006"] = "Upstream defect: expected value has an artifactual leading space",
         // Platform limitation (AGENTS.md): DateTimeOffset minimum year is 1; year -2 needs a
         // custom date representation.
         ["fo-test-fn-year-from-dateTime-005"] = "Platform limitation: DateTimeOffset does not support year -2",

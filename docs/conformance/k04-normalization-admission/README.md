@@ -1,3 +1,5 @@
+**K04-C23 adopted (2026-10-28):** Owner approved the exact proposal at `ee19ebbf`. [Fresh normal adoption receipt](adoption/BASELINE-ADOPTION.md) verifies QT3 **31,165/0/656**, qt4 **8,939/0/1,920**, 230 gated sets, normalization sets **43/0/5** and **44/0/6**, and exact agreement of all skip mappings with rehearsal. All **23,746 solution tests** pass. AGENTS now requires the adopted QT3 baseline. Candidate 1.29.2 unpublished/public 1.26.3; no release. Earlier pending-proposal text below is historical.
+
 # K04-C23 - Normalization admission review
 
 28 October 2026. **Proposal complete; adoption awaits explicit owner approval.** Source base `25d6d817`; candidate **1.29.2** remains unpublished/public **1.26.3**.

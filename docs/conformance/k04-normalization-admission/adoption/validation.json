@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C23-adoption",
+  "sourceBase": "ee19ebbf9c48d3eba2477f4bb02198bdd0d99ae1",
+  "decisionId": "K04-normalization-adoption-v1",
+  "candidateVersion": "1.29.2",
+  "publishedVersion": "1.26.3",
+  "normalQt3": [
+    31165,
+    0,
+    656
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "normalizationQt3": [
+    43,
+    0,
+    5
+  ],
+  "normalizationQt4": [
+    44,
+    0,
+    6
+  ],
+  "gatedSets": 230,
+  "experimentalPasses": 11,
+  "freshSolutionPassed": 23746,
+  "solutionProjects": 10,
+  "standardPassed": 13797,
+  "xsltPassed": 8196,
+  "boundedNormalProcesses": 6,
+  "allNormalMappingsMatchRehearsal": true,
+  "adopted": true,
+  "releaseApproved": false
+}
