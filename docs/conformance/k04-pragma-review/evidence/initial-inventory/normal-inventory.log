@@ -1,0 +1,2 @@
+Unhandled exception. System.Exception: Control failed: comment-gap
+   at Program.<Main>$(String[] args) in D:\Development\Bosak\.guard-tmp\k04-pragma-inventory\Program.cs:line 51

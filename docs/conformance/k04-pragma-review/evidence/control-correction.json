@@ -1,0 +1,7 @@
+{
+  "case": "comment-gap",
+  "initialBefore": true,
+  "correctedBefore": false,
+  "reason": "The actual normalizer removes comment text, so the existing regex recognizes (#p:x after normalization. This is a routing observation, not acceptance of invalid pragma grammar. Initial failed diagnostic receipts preserved.",
+  "productionChanged": false
+}

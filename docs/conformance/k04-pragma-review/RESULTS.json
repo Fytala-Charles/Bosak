@@ -1,0 +1,43 @@
+{
+  "slice": "K04-C36",
+  "base": "1b5554b6",
+  "reviewComplete": true,
+  "admissionQualified": false,
+  "normalQt3": [
+    31340,
+    0,
+    481
+  ],
+  "isolatedQt3": [
+    31348,
+    47,
+    426
+  ],
+  "normalQt4": [
+    8939,
+    0,
+    1920
+  ],
+  "remainingSkips": 481,
+  "dependencySkips": 425,
+  "dependencyPartition": {
+    "routingOnly": 55,
+    "routingAndIndependent": 2,
+    "independent": 368
+  },
+  "originals": 60,
+  "originalPrototype": {
+    "passed": 11,
+    "failed": 49
+  },
+  "publicControls": {
+    "passed": 8,
+    "failed": 16
+  },
+  "processes": 209,
+  "inheritedSolutionPasses": 24082,
+  "candidate": "1.32.0",
+  "published": "1.26.3",
+  "next": "C37 bounded ignored-pragma fallback implementation",
+  "releaseApproved": false
+}

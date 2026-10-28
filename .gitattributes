@@ -370,3 +370,8 @@ docs/conformance/k04-construction-admission/*.patch -text whitespace=cr-at-eol,-
 
 # C35 owner-approved adoption preserves fresh normal evidence.
 docs/conformance/k04-construction-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C36 preserves remaining-skip classification and failed pragma qualification.
+docs/conformance/k04-pragma-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-pragma-review/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-pragma-review/*.patch -text whitespace=cr-at-eol,-blank-at-eol
