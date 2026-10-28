@@ -1,0 +1,374 @@
+[
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-301"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-34F"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-903"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-9BE"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1161"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-11A8"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1100"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-20DD"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1D165"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1D167"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "ascii"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty-string"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-A-dot"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-bengali"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-Hangul-LV"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-Hangul-LVT"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-A-dot"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-bengali"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-Hangul-LV"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-Hangul-LVT"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "unknown-form"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-trim-case"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty-form"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "wrong-value-type"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "wrong-form-type"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-XML-whitespace"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-NBSP"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt3-default-form-empty"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt3-default-form-compose"
+  },
+  {
+    "Suite": "qt3",
+    "SuiteRoot": "tests/qt3tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt3-keyword-form"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-301"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-34F"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-903"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-9BE"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1161"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-11A8"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1100"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-20DD"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1D165"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "full-1D167"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "ascii"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty-string"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-A-dot"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-bengali"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-Hangul-LV"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "compose-Hangul-LVT"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-A-dot"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-bengali"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-Hangul-LV"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "nfc-Hangul-LVT"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "unknown-form"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-trim-case"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "empty-form"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "wrong-value-type"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "wrong-form-type"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-XML-whitespace"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "form-NBSP"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt4-default-form-empty"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt4-default-form-compose"
+  },
+  {
+    "Suite": "qt4",
+    "SuiteRoot": "tests/qt4tests",
+    "SetFile": "docs/conformance/k04-normalization-review/evidence/control-fixtures.xml",
+    "Name": "qt4-keyword-form"
+  }
+]
