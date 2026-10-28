@@ -1,0 +1,11 @@
+{
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Api.dll": "0f0ddff9638ddaca9f575172d0a3bb70df225024e8519eb8e9b093cd98ddfc97",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Compiler.dll": "5bd71894be134ea4326bd9449ce295269cdaaf70b700c547c6e058420c3cafc1",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Core.dll": "d6215415b076e36128e53e2097680c3d364465bbe1306256289ca12ca04717f1",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Parser.dll": "5a60e067627899d073d650c1c74dc7e119c642384f0009c6ac0121135efef389",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Providers.dll": "6652a8865b5dd5cc29fb62d38f7551cc6ea67438b63db532b835074bb88c9327",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Runtime.dll": "0503e06d1be5b8b9a286a33bab71e8c4ea8c8f5e7c2c31c4e565e2add45716de",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XPath.Standard.dll": "87707a823b384d229e2454d3d9066ef80ae4a1492f6aa1c5ef030e4961f81971",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.XQuery.dll": "4c45cae4ff18d2ad46a9161bf19da2e56eaca81f738832104d72c025ef16fcb1",
+  ".guard-tmp/k04-library-context-baseline/lib/Bosak.Xslt.dll": "3da1ead57e6945fd0672259c498552fb1cdef57ee6ef023c103a2c3f8e982159"
+}

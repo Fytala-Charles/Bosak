@@ -55,6 +55,7 @@
 //                      | Charles Korthout | 2.14  | 27-10-2026     | Preserve file-backed schema source URIs for relative imports (1.26.8).                 |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 28-10-2026     | Initialize main context with strict typing, lazy-global cycles and scoped focus (1.30.0). |
+//                      | Charles Korthout | 2.16  | 28-10-2026     | Match imported context types in declaration scope and restore caller namespaces (1.30.1). |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -115,7 +116,7 @@ public sealed class XQueryExecutable
     private readonly IReadOnlyList<CompiledUserFunction> _userFunctions;
     private readonly IReadOnlyList<CompiledUserVariable> _userVariables;
     private readonly IReadOnlyList<XQueryModuleSource> _moduleSources;
-    private readonly IReadOnlyList<string> _libraryModuleContextItemTypes;
+    private readonly IReadOnlyList<LibraryContextItemConstraint> _libraryModuleContextItemTypes;
     private readonly ModuleVisibilityValidator.UnresolvedNameReferences? _unresolvedNames;
 
     internal XQueryExecutable(
@@ -124,7 +125,7 @@ public sealed class XQueryExecutable
         IReadOnlyList<CompiledUserFunction>? userFunctions = null,
         IReadOnlyList<CompiledUserVariable>? userVariables = null,
         IReadOnlyList<XQueryModuleSource>? moduleSources = null,
-        IReadOnlyList<string>? libraryModuleContextItemTypes = null,
+        IReadOnlyList<LibraryContextItemConstraint>? libraryModuleContextItemTypes = null,
         ModuleVisibilityValidator.UnresolvedNameReferences? unresolvedNames = null,
         IrModule? contextInitializer = null)
     {
@@ -217,9 +218,9 @@ public sealed class XQueryExecutable
             {
                 foreach (var contextItemType in _libraryModuleContextItemTypes)
                 {
-                    if (!XdmConversions.ValueMatchesType(evaluationContext.ContextItem, contextItemType, evaluationContext))
+                    if (!contextItemType.Matches(evaluationContext.ContextItem, evaluationContext))
                         throw new InvalidOperationException(
-                            $"XPTY0004: The initial context item does not match the context item type '{contextItemType}' declared in an imported library module.");
+                            $"XPTY0004: The initial context item does not match the context item type '{contextItemType.TypeName}' declared in an imported library module.");
                 }
             }
 

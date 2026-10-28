@@ -63,6 +63,7 @@
 //                      | Charles Korthout | 3.5   | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.5   | 28-10-2026     | Compile main context initializers with complete prolog visibility (1.30.0).              |
+//                      | Charles Korthout | 3.6   | 28-10-2026     | Retain every library context constraint with its declaring type namespace (1.30.1).      |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -214,10 +215,8 @@ public sealed class XQueryCompiler
         // initial context item at evaluation time (XQuery 3.1 §4.14; contextDecl-054).
         var libraryModuleContextItemTypes = moduleGraph.Values
             .SelectMany(modules => modules)
-            .Select(m => m.StaticContext.ContextItemTypeName)
-            .Where(t => t is not null)
-            .Distinct(StringComparer.Ordinal)
-            .Cast<string>()
+            .Where(m => m.StaticContext.ContextItemTypeName is not null)
+            .Select(m => new LibraryContextItemConstraint(m.StaticContext))
             .ToList();
 
         IrModule? contextInitializer = null;

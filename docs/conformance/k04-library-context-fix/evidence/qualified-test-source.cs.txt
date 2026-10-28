@@ -1,0 +1,189 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 28 October 2026
+// PURPOSE              : Verify library type declaration namespaces, aliases, constraint identity and loader behavior.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Text;
+using System.Xml;
+using System.Xml.Schema;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XQuery.Api;
+using Xunit;
+
+namespace Bosak.XQuery.Tests;
+
+/// <summary>Verify library type declaration namespaces, aliases, constraint identity and loader behavior.</summary>
+public sealed class LibraryContextTypeScopeTests
+{
+    private const string Xs = "http://www.w3.org/2001/XMLSchema";
+    private const string Module = "urn:c28:module";
+    private const string Types = "urn:c28:Types";
+
+    /// <summary>Supplies atomic and nested type aliases, node names and literal targets across loading modes.</summary>
+    /// <returns>Dynamic mode, caller alias mode, library ItemType, supplied expression and whether it matches.</returns>
+    public static IEnumerable<object[]> AliasCases()
+    {
+        foreach (bool dynamic in new[] { false, true })
+        foreach (int caller in new[] { 0, 1, 2 })
+        foreach (var pair in new[]
+        {
+            ("xs:integer", "27", true),
+            ("t:integer", "27", true),
+            ("t:integer", "'London'", false),
+            ("Q{http://www.w3.org/2001/XMLSchema}integer", "27", true),
+            ("array(t:integer)", "[1,2]", true),
+            ("array(t:integer)", "[1,'bad']", false),
+            ("map(t:string,t:integer)", "map{'x':1}", true),
+            ("map(t:string,t:integer)", "map{'x':'bad'}", false),
+            ("function(t:integer) as t:string", "['blue','green']", true),
+            ("function(t:integer) as t:string", "[1,2]", false),
+            ("element(t:Entry)", "<p:Entry xmlns:p='http://www.w3.org/2001/XMLSchema'/>", true),
+            ("element(t:Entry)", "<p:entry xmlns:p='http://www.w3.org/2001/XMLSchema'/>", false),
+            ("document-node(element(n:Entry))", "document {<n:Entry xmlns:n='urn:c28:nodes'/>}", true),
+            ("processing-instruction('Target')", "processing-instruction Target {'text'}", true),
+            ("tau:integer", "27", true)
+        }) yield return [dynamic, caller, pair.Item1, pair.Item2, pair.Item3];
+    }
+
+    /// <summary>Matches library declarations independently of caller bindings and restores namespace state.</summary>
+    /// <param name="dynamic">Whether to use fn:load-xquery-module.</param>
+    /// <param name="caller">Missing, matching or conflicting caller alias mode.</param>
+    /// <param name="type">The library-declared ItemType.</param>
+    /// <param name="input">The supplied context expression.</param>
+    /// <param name="matches">Whether the context item satisfies the declaration.</param>
+    [Theory, MemberData(nameof(AliasCases))]
+    public void AliasContract(bool dynamic, int caller, string type, string input, bool matches)
+    {
+        var compiler = new XQueryCompiler().WithModule(Module,
+            $"module namespace m='{Module}'; declare namespace t='{Xs}'; declare namespace tau='{Xs}'; declare namespace n='urn:c28:nodes'; declare context item as {type} external; declare variable $m:v := .;");
+        var context = Context(input);
+        string? callerAlias = caller == 0 ? null : caller == 1 ? Xs : "urn:c28:caller-type";
+        if (callerAlias is not null)
+        {
+            compiler.WithNamespace("t", callerAlias);
+            context.EvaluationContext.WithNamespace("t", callerAlias);
+        }
+        var executable = compiler.Compile(Query(dynamic, Module));
+        if (matches) Assert.True(executable.Evaluate(context).BooleanValue);
+        else Assert.Contains(dynamic ? "FOQM0005" : "XPTY0004", Assert.ThrowsAny<Exception>(() => executable.Evaluate(context)).Message);
+        Assert.Equal("urn:c28:caller-elements", context.EvaluationContext.DefaultElementNamespace);
+        Assert.Equal(callerAlias is not null, context.EvaluationContext.TryResolveNamespace("t", out var actual));
+        if (callerAlias is not null) Assert.Equal(callerAlias, actual);
+        Assert.False(context.EvaluationContext.TryResolveNamespace("n", out _));
+    }
+
+    /// <summary>Uses the library default element/type namespace for atomic types and node names.</summary>
+    /// <param name="dynamic">Whether the library loads dynamically.</param>
+    /// <param name="kind">Built-in, user union or node declaration.</param>
+    /// <param name="matches">Whether the supplied item should match.</param>
+    [Theory]
+    [InlineData(false,0,true)] [InlineData(true,0,true)]
+    [InlineData(false,0,false)] [InlineData(true,0,false)]
+    [InlineData(false,1,true)] [InlineData(true,1,true)]
+    [InlineData(false,1,false)] [InlineData(true,1,false)]
+    [InlineData(false,2,true)] [InlineData(true,2,true)]
+    [InlineData(false,2,false)] [InlineData(true,2,false)]
+    public void DefaultTypeNamespace(bool dynamic, int kind, bool matches)
+    {
+        string ns = kind == 0 ? Xs : kind == 1 ? Types : "urn:c28:nodes";
+        string type = kind == 0 ? "integer" : kind == 1 ? "Choice" : "element(Entry)";
+        string schema = kind == 1 ? $"import schema namespace s='{Types}'; " : "";
+        var compiler = new XQueryCompiler().WithModule(Module,
+            $"module namespace m='{Module}'; {schema}declare default element namespace '{ns}'; declare context item as {type} external; declare variable $m:v := .;");
+        string input = kind == 2 ? (matches ? "<Entry xmlns='urn:c28:nodes'/>" : "<Entry xmlns='urn:c28:wrong'/>")
+            : matches ? "27" : kind == 1 ? "xs:date('2020-01-01')" : "'London'";
+        var context = Context(input).WithSchemaResolver((uri,_) => uri == Types ? Schema(Types,"xs:decimal xs:string") : null);
+        if (kind == 1 && !dynamic) context.EvaluationContext.SchemaSet = PreparedSchemas((Types,"xs:decimal xs:string"));
+        var executable = compiler.Compile(Query(dynamic, Module));
+        if (matches) Assert.True(executable.Evaluate(context).BooleanValue);
+        else Assert.Contains(dynamic ? "FOQM0005" : "XPTY0004", Assert.ThrowsAny<Exception>(() => executable.Evaluate(context)).Message);
+        Assert.Equal("urn:c28:caller-elements", context.EvaluationContext.DefaultElementNamespace);
+    }
+
+    /// <summary>Preserves every module constraint even when two declarations have the same lexical type.</summary>
+    /// <param name="dynamic">Whether to dynamically load the importing library.</param>
+    /// <param name="distinct">Whether the second library uses a distinct prefix.</param>
+    /// <param name="mismatch">Whether the second union rejects the item.</param>
+    [Theory]
+    [InlineData(false,false,false)] [InlineData(false,false,true)]
+    [InlineData(false,true,false)] [InlineData(false,true,true)]
+    [InlineData(true,false,false)] [InlineData(true,false,true)]
+    [InlineData(true,true,false)] [InlineData(true,true,true)]
+    public void AllModuleConstraintsApply(bool dynamic, bool distinct, bool mismatch)
+    {
+        string prefix = distinct ? "r" : "t";
+        var compiler = new XQueryCompiler()
+            .WithNamespace("t", "urn:c28:left").WithNamespace("r", "urn:c28:right")
+            .WithModule("urn:c28:a", "module namespace a='urn:c28:a'; import schema namespace t='urn:c28:left'; import module namespace b='urn:c28:b'; declare context item as t:Choice external; declare variable $a:v := .;")
+            .WithModule("urn:c28:b", $"module namespace b='urn:c28:b'; import schema namespace {prefix}='urn:c28:right'; declare context item as {prefix}:Choice external; declare variable $b:v := .;");
+        var context = Context("27").WithSchemaResolver((uri,_) => uri switch
+        {
+            "urn:c28:left" => Schema(uri,"xs:decimal xs:string"),
+            "urn:c28:right" => Schema(uri,mismatch ? "xs:date xs:time" : "xs:decimal xs:string"),
+            _ => null
+        });
+        context.EvaluationContext.WithNamespace("t", "urn:c28:left").WithNamespace("r", "urn:c28:right");
+        if (!dynamic) context.EvaluationContext.SchemaSet = PreparedSchemas(("urn:c28:left","xs:decimal xs:string"),
+            ("urn:c28:right",mismatch ? "xs:date xs:time" : "xs:decimal xs:string"));
+        var executable = compiler.Compile(Query(dynamic,"urn:c28:a"));
+        if (mismatch) Assert.Contains("XPTY0004", Assert.ThrowsAny<Exception>(() => executable.Evaluate(context)).Message);
+        else Assert.True(executable.Evaluate(context).BooleanValue);
+        Assert.True(context.EvaluationContext.TryResolveNamespace("t", out var ns));
+        Assert.Equal("urn:c28:left", ns);
+        Assert.Equal("urn:c28:caller-elements", context.EvaluationContext.DefaultElementNamespace);
+    }
+
+    /// <summary>Does not borrow an importer binding for an undeclared library type prefix.</summary>
+    /// <param name="dynamic">Whether the module loads dynamically.</param>
+    [Theory, InlineData(false), InlineData(true)]
+    public void UndeclaredLibraryPrefixRemainsStaticError(bool dynamic)
+    {
+        var compiler = new XQueryCompiler().WithNamespace("missing", Xs).WithModule(Module,
+            $"module namespace m='{Module}'; declare context item as missing:integer external; declare variable $m:v := .;");
+        var context = Context("27");
+        context.EvaluationContext.WithNamespace("missing", Xs);
+        var error = Assert.ThrowsAny<Exception>(() => compiler.Compile(Query(dynamic,Module)).Evaluate(context));
+        Assert.Contains(dynamic ? "FOQM0003" : "XPST0081", error.Message);
+        Assert.Contains("XPST0081", error.Message);
+        Assert.Equal("urn:c28:caller-elements", context.EvaluationContext.DefaultElementNamespace);
+    }
+
+    private static XQueryContext Context(string expression)
+    {
+        var input = new XQueryCompiler().Compile(expression).Evaluate(new XQueryContext());
+        var context = new XQueryContext().WithContextItem(input).WithVariable("input",input);
+        context.EvaluationContext.DefaultElementNamespace = "urn:c28:caller-elements";
+        return context;
+    }
+
+    private static string Query(bool dynamic, string uri) => dynamic
+        ? $"declare variable $input external; let $m := load-xquery-module('{uri}', map{{'context-item':$input}}) return exists($m('variables')(QName('{uri}','v')))"
+        : $"import module namespace m='{uri}'; exists($m:v)";
+
+    private static XmlSchemaSet PreparedSchemas(params (string Uri, string Members)[] declarations)
+    {
+        var schemas = new XmlSchemaSet();
+        foreach (var declaration in declarations)
+        {
+            using var stream = Schema(declaration.Uri, declaration.Members);
+            using var reader = XmlReader.Create(stream);
+            schemas.Add(declaration.Uri, reader);
+        }
+        schemas.Compile();
+        return schemas;
+    }
+
+    private static Stream Schema(string uri, string members) => new MemoryStream(Encoding.UTF8.GetBytes(
+        $"<xs:schema xmlns:xs='{Xs}' targetNamespace='{uri}'><xs:simpleType name='Choice'><xs:union memberTypes='{members}'/></xs:simpleType></xs:schema>"));
+}

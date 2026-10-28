@@ -321,3 +321,8 @@ docs/conformance/k04-main-context/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-context-resource-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-context-resource-review/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-context-resource-review/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C28 preserves qualified library context evidence.
+docs/conformance/k04-library-context-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-library-context-fix/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-library-context-fix/PROTOTYPE-ROUTING.patch -text whitespace=cr-at-eol,-blank-at-eol

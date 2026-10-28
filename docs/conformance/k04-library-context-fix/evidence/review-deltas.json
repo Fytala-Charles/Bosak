@@ -1,0 +1,17 @@
+{
+  "correctedOriginals": [
+    "contextDecl-056",
+    "contextDecl-057"
+  ],
+  "correctedControls": [
+    "C27-library-alias-only",
+    "C27-matching-importer-alias",
+    "C27-conflicting-importer-alias",
+    "C27-colliding-union-type-contexts"
+  ],
+  "allOriginalsPassed": 13,
+  "allControlsPassed": 12,
+  "unchangedC26ExecutionResults": 80,
+  "unchangedC26FilterAssessments": 97,
+  "originalAssertionsChanged": false
+}
