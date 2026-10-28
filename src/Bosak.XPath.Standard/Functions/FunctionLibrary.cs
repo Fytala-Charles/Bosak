@@ -478,6 +478,7 @@
 //                      | Charles Korthout | 5.157 | 28-10-2026     | Return true empty date-formatting results with optional string metadata (1.28.2).        |
 //                      | Charles Korthout | 5.158 | 28-10-2026     | Add typed XPath4 date-formatting arities3/4 and keyword defaults (1.29.0).                 |
 //                      | Charles Korthout | 5.159 | 28-10-2026     | Convert FULLY-NORMALIZED strings with a coherent pinned Unicode17 backend (1.29.1).      |
+//                      | Charles Korthout | 5.160 | 28-10-2026     | Fix normalization XML whitespace, XPath4 empty-form defaults and keywords (1.29.2).     |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4818,6 +4819,7 @@ public static class FunctionLibrary
         {
             [(Namespaces.Fn, "lang")] = new(["language", "node"], [null, "."]),
             [(Namespaces.Fn, "parse-integer")] = new(["value", "radix"], [null, "10"]),
+            [(Namespaces.Fn, "normalize-unicode")] = new(["value", "form"], [null, "'NFC'"]),
             [(Namespaces.Fn, "format-date")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
             [(Namespaces.Fn, "format-dateTime")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
             [(Namespaces.Fn, "format-time")] = new(["value", "picture", "language", "calendar", "place"], [null, null, "()", "()", "()"]),
@@ -9186,13 +9188,14 @@ public static class FunctionLibrary
         => NormalizeUnicode(RequireString(args[0]), "NFC");
 
     private static XdmValue NormalizeUnicode_2(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
-        => NormalizeUnicode(RequireString(args[0]), RequireStringRequired(args[1]));
+        => NormalizeUnicode(RequireString(args[0]),
+            ctx.IsXPath40 && IsEmptySequence(args[1]) ? "NFC" : RequireStringRequired(args[1]));
 
     private static XdmValue NormalizeUnicode(string input, string form)
     {
-        // The form name is matched case-insensitively after stripping whitespace; the
-        // zero-length form performs no normalization (fn-normalize-unicode-1/2args-2/4).
-        switch (form.Trim().ToUpperInvariant())
+        // Effective form is upper-case(normalize-space(form)): XML whitespace only.
+        // A zero-length string form performs no normalization in every profile.
+        switch (NormalizeSpaceString(form).ToUpperInvariant())
         {
             case "":
                 return XdmValue.FromString(input);

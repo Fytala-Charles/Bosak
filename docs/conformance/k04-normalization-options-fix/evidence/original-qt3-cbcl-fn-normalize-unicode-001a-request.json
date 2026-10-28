@@ -1,0 +1,1 @@
+{"Suite": "qt3", "SuiteRoot": "tests/qt3tests", "SetFile": "tests/qt3tests/fn/normalize-unicode.xml", "Name": "cbcl-fn-normalize-unicode-001a", "expression": "normalize-unicode(\"blah\",\"FULLY-NORMALIZED\")", "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\n\t    <error code=\"FOCH0003\" />\n      </result>\n   "}

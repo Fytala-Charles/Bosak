@@ -291,3 +291,7 @@ docs/conformance/k04-normalization-fix/evidence/** -text whitespace=cr-at-eol,-b
 docs/conformance/k04-normalization-fix/RESULTS.json -text whitespace=cr-at-eol
 src/Bosak.XPath.Standard/Resources/UnicodeNormalization17.bin -text
 src/Bosak.XPath.Standard/Resources/Unicode17-LICENSE.txt -text
+
+# K04-C22 preserves normalization option diagnostics and validation receipts.
+docs/conformance/k04-normalization-options-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-normalization-options-fix/RESULTS.json -text whitespace=cr-at-eol
