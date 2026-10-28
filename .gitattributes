@@ -362,3 +362,8 @@ docs/conformance/k04-construction-mode-review/PROTOTYPE-ROUTING.patch -text whit
 docs/conformance/k04-construction-modes/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-construction-modes/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-construction-modes/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C35 preserves exact construction admission qualification and pending proposal.
+docs/conformance/k04-construction-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-construction-admission/RESULTS.json -text whitespace=cr-at-eol
+docs/conformance/k04-construction-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
