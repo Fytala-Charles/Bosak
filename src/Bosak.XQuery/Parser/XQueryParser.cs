@@ -61,6 +61,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.17  | 28-10-2026     | Report XQST0099 for duplicate library context declarations (1.29.3).                    |
 //                      | Charles Korthout | 1.18  | 28-10-2026     | Parse typed main-module context item values/defaults and retain library restrictions.    |
+//                      | Charles Korthout | 1.19  | 28-10-2026     | Parse copy-namespaces modes, ordering and duplicate XQST0055 (1.31.0). |
 // ===========================================================================================================================================================
 
 using System.Globalization;
@@ -600,6 +601,28 @@ internal sealed class XQueryParser
             string optionNs = eqNameUri ?? (prefix is null ? string.Empty : context.Namespaces[prefix]);
             ValidateOutputOption(context, local, optionNs, _position);
             context = context.WithOption(local, optionNs, value);
+            return true;
+        }
+
+        if (TryMatchLiteral("copy-namespaces"))
+        {
+            if (_seenSecondPhaseDecl)
+                throw new XPathParseException("XPST0003: Copy-namespaces must precede variable, function, option, and context item declarations.", _position);
+            if (context.PreserveNamespaces.HasValue)
+                throw new XPathParseException("XQST0055: More than one copy-namespaces declaration.", _position);
+            bool preserve;
+            if (TryMatchLiteral("preserve")) preserve = true;
+            else if (TryMatchLiteral("no-preserve")) preserve = false;
+            else throw new XPathParseException("XPST0003: Expected preserve or no-preserve.", _position);
+            SkipWhitespace();
+            ExpectChar(',');
+            bool inherit;
+            if (TryMatchLiteral("inherit")) inherit = true;
+            else if (TryMatchLiteral("no-inherit")) inherit = false;
+            else throw new XPathParseException("XPST0003: Expected inherit or no-inherit.", _position);
+            SkipWhitespace();
+            ExpectChar(';');
+            context = context.WithCopyNamespaces(preserve, inherit);
             return true;
         }
 

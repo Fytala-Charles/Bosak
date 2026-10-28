@@ -1,0 +1,56 @@
+{
+  "kind": "HTML only; no screenshot/PDF acceptance",
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "pages": [
+    {
+      "source": "README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/README.md.html",
+      "sha256": "7fd9c7b880b63258f48f166bc8df5739ab63b4e564017f720fb272830705ba84"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_ARCHITECTURE.md.html",
+      "sha256": "eafdf4ef38ebf4345a74d83e2ba792722edd597a6a6bb5a6ddfb0724d4d8c47d"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_FEATURE_REQUESTS.md.html",
+      "sha256": "a87937d1cc7a2cdee0532c203a837a8de3328c095860f56b26dbc1c7ce2a05e3"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_INTEGRATION.md.html",
+      "sha256": "a88132570867f2e8209546d132a20e0294beb0cb49a852b62161b089b55ea17d"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_AGENT_HANDOVER.md.html",
+      "sha256": "db1c9d34ba07fe52cd737d195aab575152f9de1fb2d6680a8be4f99ef2c537a1"
+    },
+    {
+      "source": "docs/DOCUMENTATION_RENDERER_TEST.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_DOCUMENTATION_RENDERER_TEST.md.html",
+      "sha256": "ab0e32056b28b94cc4de7236efd0369a00b5a8c5069548851baedab197a8bc1b"
+    },
+    {
+      "source": "docs/xpath40-catalog/CONFORMANCE-SKIP-TRIAGE.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_xpath40-catalog_CONFORMANCE-SKIP-TRIAGE.md.html",
+      "sha256": "1db0e2d6422df9159e2dd7fcd0ccecd0073c77ebc8bd6a508edf94e100515d6e"
+    },
+    {
+      "source": "docs/conformance/k04-dependency-audit/README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_conformance_k04-dependency-audit_README.md.html",
+      "sha256": "ee12fb8ecce13b065c2d6bf46b5f085b2376f5f826e86673fce209df99677521"
+    },
+    {
+      "source": "docs/conformance/k04-copy-namespaces/README.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_conformance_k04-copy-namespaces_README.md.html",
+      "sha256": "9ccaa0c1e873a5c932193cd706a03e26ef2d7e9d51e08952d5bdd45aa9e7e381"
+    },
+    {
+      "source": "docs/conformance/k04-copy-namespaces/NEXT-SLICE.md",
+      "html": ".guard-tmp/k04-copy-namespaces-render/docs_conformance_k04-copy-namespaces_NEXT-SLICE.md.html",
+      "sha256": "f65c1b39d572dd3e06390b2c436fca9d884139e60ce4b0d114fbf8ab1101b54c"
+    }
+  ]
+}

@@ -1,0 +1,3680 @@
+[
+  {
+    "name": "nscons-031-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-031-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.7136689000180922,
+    "log": "nscons-031-normal-resources.log",
+    "case": "nscons-031",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-031",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "nscons-032-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-032-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.713182500039693,
+    "log": "nscons-032-normal-resources.log",
+    "case": "nscons-032",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-032",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "nscons-033-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-033-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.7125672000111081,
+    "log": "nscons-033-normal-resources.log",
+    "case": "nscons-033",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-033",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "nscons-034-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-034-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0920571000315249,
+    "log": "nscons-034-normal-resources.log",
+    "case": "nscons-034",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-034",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "nscons-035-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-035-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09198349999496713,
+    "log": "nscons-035-normal-resources.log",
+    "case": "nscons-035",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-035",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/cnc-module",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nscons-036-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-036-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09669080004096031,
+    "log": "nscons-036-normal-resources.log",
+    "case": "nscons-036",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-036",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/cnc-module",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nscons-037-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-037-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10166620003292337,
+    "log": "nscons-037-normal-resources.log",
+    "case": "nscons-037",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-037",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/cnc-module",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nscons-038-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-038-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0927757000317797,
+    "log": "nscons-038-normal-resources.log",
+    "case": "nscons-038",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-038",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": [
+        {
+          "Uri": "http://www.w3.org/TestModules/cnc-module",
+          "Location": null,
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CompNamespaceConstructor/cnc-module.xq"
+        }
+      ]
+    }
+  },
+  {
+    "name": "nscons-039-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-039-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09246810001786798,
+    "log": "nscons-039-normal-resources.log",
+    "case": "nscons-039",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-039",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CompNamespaceConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09322139999130741,
+    "log": "copynamespace-1-normal-resources.log",
+    "case": "copynamespace-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-1",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09571889997459948,
+    "log": "copynamespace-2-normal-resources.log",
+    "case": "copynamespace-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-2",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09704469999996945,
+    "log": "copynamespace-3-normal-resources.log",
+    "case": "copynamespace-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-3",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09186789998784661,
+    "log": "copynamespace-4-normal-resources.log",
+    "case": "copynamespace-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08978729997761548,
+    "log": "copynamespace-5-normal-resources.log",
+    "case": "copynamespace-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-5",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-6-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-6-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09671260003233328,
+    "log": "copynamespace-6-normal-resources.log",
+    "case": "copynamespace-6",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-6",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-7-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-7-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09475669998209924,
+    "log": "copynamespace-7-normal-resources.log",
+    "case": "copynamespace-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-8-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-8-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09410679998109117,
+    "log": "copynamespace-8-normal-resources.log",
+    "case": "copynamespace-8",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-8",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-9-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-9-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09313059999840334,
+    "log": "copynamespace-9-normal-resources.log",
+    "case": "copynamespace-9",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-9",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-10-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-10-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09522879996802658,
+    "log": "copynamespace-10-normal-resources.log",
+    "case": "copynamespace-10",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-10",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-11-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-11-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09063109999988228,
+    "log": "copynamespace-11-normal-resources.log",
+    "case": "copynamespace-11",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-11",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-12-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-12-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09000339999329299,
+    "log": "copynamespace-12-normal-resources.log",
+    "case": "copynamespace-12",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-12",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-13-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-13-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09249010001076385,
+    "log": "copynamespace-13-normal-resources.log",
+    "case": "copynamespace-13",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-13",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-14-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-14-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08843730000080541,
+    "log": "copynamespace-14-normal-resources.log",
+    "case": "copynamespace-14",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-14",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-15-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-15-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08884839998790994,
+    "log": "copynamespace-15-normal-resources.log",
+    "case": "copynamespace-15",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-15",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-16-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-16-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0938482999918051,
+    "log": "copynamespace-16-normal-resources.log",
+    "case": "copynamespace-16",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-16",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-17-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-17-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09340359998168424,
+    "log": "copynamespace-17-normal-resources.log",
+    "case": "copynamespace-17",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-17",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-18-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-18-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08667419996345416,
+    "log": "copynamespace-18-normal-resources.log",
+    "case": "copynamespace-18",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-18",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-19-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-19-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09395230002701283,
+    "log": "copynamespace-19-normal-resources.log",
+    "case": "copynamespace-19",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-19",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-20-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-20-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09095599997090176,
+    "log": "copynamespace-20-normal-resources.log",
+    "case": "copynamespace-20",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-20",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-21-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-21-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08996559999650344,
+    "log": "copynamespace-21-normal-resources.log",
+    "case": "copynamespace-21",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-21",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "copynamespace-22-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-22-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09352920000674203,
+    "log": "copynamespace-22-normal-resources.log",
+    "case": "copynamespace-22",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-22",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09320359997218475,
+    "log": "K-CopyNamespacesProlog-1-normal-resources.log",
+    "case": "K-CopyNamespacesProlog-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-1",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09398370003327727,
+    "log": "K-CopyNamespacesProlog-2-normal-resources.log",
+    "case": "K-CopyNamespacesProlog-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-2",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08867220004322007,
+    "log": "K-CopyNamespacesProlog-3-normal-resources.log",
+    "case": "K-CopyNamespacesProlog-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09179330000188202,
+    "log": "K-CopyNamespacesProlog-4-normal-resources.log",
+    "case": "K-CopyNamespacesProlog-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08800180000253022,
+    "log": "K-CopyNamespacesProlog-5-normal-resources.log",
+    "case": "K-CopyNamespacesProlog-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09334839996881783,
+    "log": "K2-CopyNamespacesProlog-1-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09250840003369376,
+    "log": "K2-CopyNamespacesProlog-4-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-5-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-5-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08821180002996698,
+    "log": "K2-CopyNamespacesProlog-5-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-5",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-7-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-7-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09002539998618886,
+    "log": "K2-CopyNamespacesProlog-7-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-7",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-8-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-8-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.08867049997206777,
+    "log": "K2-CopyNamespacesProlog-8-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-8",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-9-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-9-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09357629995793104,
+    "log": "K2-CopyNamespacesProlog-9-normal-resources.log",
+    "case": "K2-CopyNamespacesProlog-9",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/CopyNamespacesDecl.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-directconelem-001-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-001-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10997930000303313,
+    "log": "cbcl-directconelem-001-normal-resources.log",
+    "case": "cbcl-directconelem-001",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-001",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "cbcl-directconelem-002-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-002-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.09650599997257814,
+    "log": "cbcl-directconelem-002-normal-resources.log",
+    "case": "cbcl-directconelem-002",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-002",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemConstructor.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-1-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-1-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10999159998027608,
+    "log": "Constr-cont-nsmode-1-normal-resources.log",
+    "case": "Constr-cont-nsmode-1",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-1",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent/nsmode.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemContent.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-2-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-2-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10250749997794628,
+    "log": "Constr-cont-nsmode-2-normal-resources.log",
+    "case": "Constr-cont-nsmode-2",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-2",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent/nsmode.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemContent.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-3-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-3-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10265570000046864,
+    "log": "Constr-cont-nsmode-3-normal-resources.log",
+    "case": "Constr-cont-nsmode-3",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-3",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent/nsmode.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemContent.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-4-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-4-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.10832380002830178,
+    "log": "Constr-cont-nsmode-4-normal-resources.log",
+    "case": "Constr-cont-nsmode-4",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-4",
+      "Sources": [
+        {
+          "Role": ".",
+          "FilePath": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\DirElemContent/nsmode.xml",
+          "Uri": null,
+          "Validation": null
+        }
+      ],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/prod/DirElemContent.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "XQST0055-normal-resources",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\XQST0055-normal-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.0984593000030145,
+    "log": "XQST0055-normal-resources.log",
+    "case": "XQST0055",
+    "mode": "resources",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0055",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/misc/CombinedErrorCodes.xml",
+      "Modules": []
+    }
+  },
+  {
+    "name": "nscons-031-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-031-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36244779999833554,
+    "log": "nscons-031-normal-actual.log",
+    "case": "nscons-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-031",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-031-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-031-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.8763859000173397,
+    "log": "nscons-031-prototype-actual.log",
+    "case": "nscons-031",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-031",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-032-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-032-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26277119998121634,
+    "log": "nscons-032-normal-actual.log",
+    "case": "nscons-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-032",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-032-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-032-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5239056999562308,
+    "log": "nscons-032-prototype-actual.log",
+    "case": "nscons-032",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-032",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-033-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-033-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1811079999897629,
+    "log": "nscons-033-normal-actual.log",
+    "case": "nscons-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-033",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-033-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-033-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3346220000530593,
+    "log": "nscons-033-prototype-actual.log",
+    "case": "nscons-033",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-033",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-034-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-034-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.21960339997895062,
+    "log": "nscons-034-normal-actual.log",
+    "case": "nscons-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-034",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-034-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-034-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3491951000178233,
+    "log": "nscons-034-prototype-actual.log",
+    "case": "nscons-034",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-034",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-035-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-035-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2179755999823101,
+    "log": "nscons-035-normal-actual.log",
+    "case": "nscons-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-035",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-035-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-035-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3297494999715127,
+    "log": "nscons-035-prototype-actual.log",
+    "case": "nscons-035",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-035",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-036-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-036-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.198497400037013,
+    "log": "nscons-036-normal-actual.log",
+    "case": "nscons-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-036",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-036-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-036-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31601020001107827,
+    "log": "nscons-036-prototype-actual.log",
+    "case": "nscons-036",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-036",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-037-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-037-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18162139999913052,
+    "log": "nscons-037-normal-actual.log",
+    "case": "nscons-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-037",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-037-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-037-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.313483800040558,
+    "log": "nscons-037-prototype-actual.log",
+    "case": "nscons-037",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-037",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-038-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-038-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18226710002636537,
+    "log": "nscons-038-normal-actual.log",
+    "case": "nscons-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-038",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-038-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-038-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3105244000325911,
+    "log": "nscons-038-prototype-actual.log",
+    "case": "nscons-038",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-038",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "nscons-039-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-039-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.17720249999547377,
+    "log": "nscons-039-normal-actual.log",
+    "case": "nscons-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-039",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "nscons-039-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\nscons-039-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.31182130001252517,
+    "log": "nscons-039-prototype-actual.log",
+    "case": "nscons-039",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "nscons-039",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19036820001201704,
+    "log": "copynamespace-1-normal-actual.log",
+    "case": "copynamespace-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18725160002941266,
+    "log": "copynamespace-1-prototype-actual.log",
+    "case": "copynamespace-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18701990001136437,
+    "log": "copynamespace-2-normal-actual.log",
+    "case": "copynamespace-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-2",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.29193949996260926,
+    "log": "copynamespace-2-prototype-actual.log",
+    "case": "copynamespace-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.17916399997193366,
+    "log": "copynamespace-3-normal-actual.log",
+    "case": "copynamespace-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3017563999746926,
+    "log": "copynamespace-3-prototype-actual.log",
+    "case": "copynamespace-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1915343999862671,
+    "log": "copynamespace-4-normal-actual.log",
+    "case": "copynamespace-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-4",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3011352999601513,
+    "log": "copynamespace-4-prototype-actual.log",
+    "case": "copynamespace-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1777816999820061,
+    "log": "copynamespace-5-normal-actual.log",
+    "case": "copynamespace-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2945198999950662,
+    "log": "copynamespace-5-prototype-actual.log",
+    "case": "copynamespace-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-6-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-6-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18121800001244992,
+    "log": "copynamespace-6-normal-actual.log",
+    "case": "copynamespace-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-6",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-6-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-6-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2934352000011131,
+    "log": "copynamespace-6-prototype-actual.log",
+    "case": "copynamespace-6",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-6",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1798994999844581,
+    "log": "copynamespace-7-normal-actual.log",
+    "case": "copynamespace-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-7",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3039979999884963,
+    "log": "copynamespace-7-prototype-actual.log",
+    "case": "copynamespace-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-7",
+      "kind": "Failed",
+      "message": "Unexpected error: XPTY0004: fn:in-scope-prefixes argument must be an element node."
+    }
+  },
+  {
+    "name": "copynamespace-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2012941999710165,
+    "log": "copynamespace-8-normal-actual.log",
+    "case": "copynamespace-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-8",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3298478000215255,
+    "log": "copynamespace-8-prototype-actual.log",
+    "case": "copynamespace-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-8",
+      "kind": "Failed",
+      "message": "Unexpected error: XPTY0004: fn:in-scope-prefixes argument must be an element node."
+    }
+  },
+  {
+    "name": "copynamespace-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19238710001809523,
+    "log": "copynamespace-9-normal-actual.log",
+    "case": "copynamespace-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-9",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.330666099966038,
+    "log": "copynamespace-9-prototype-actual.log",
+    "case": "copynamespace-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-9",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-10-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-10-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2005170999909751,
+    "log": "copynamespace-10-normal-actual.log",
+    "case": "copynamespace-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-10",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-10-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-10-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3231742999632843,
+    "log": "copynamespace-10-prototype-actual.log",
+    "case": "copynamespace-10",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-10",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-11-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-11-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18734260002383962,
+    "log": "copynamespace-11-normal-actual.log",
+    "case": "copynamespace-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-11",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-11-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-11-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3112039000261575,
+    "log": "copynamespace-11-prototype-actual.log",
+    "case": "copynamespace-11",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-11",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-12-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-12-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18772709998302162,
+    "log": "copynamespace-12-normal-actual.log",
+    "case": "copynamespace-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-12",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-12-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-12-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.299329100002069,
+    "log": "copynamespace-12-prototype-actual.log",
+    "case": "copynamespace-12",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-12",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-13-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-13-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19497860001865774,
+    "log": "copynamespace-13-normal-actual.log",
+    "case": "copynamespace-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-13",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-13-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-13-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.318831600015983,
+    "log": "copynamespace-13-prototype-actual.log",
+    "case": "copynamespace-13",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-13",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-14-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-14-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20650430000387132,
+    "log": "copynamespace-14-normal-actual.log",
+    "case": "copynamespace-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-14",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-14-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-14-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32602140004746616,
+    "log": "copynamespace-14-prototype-actual.log",
+    "case": "copynamespace-14",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-14",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-15-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-15-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19031909998739138,
+    "log": "copynamespace-15-normal-actual.log",
+    "case": "copynamespace-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-15",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-15-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-15-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3105726999929175,
+    "log": "copynamespace-15-prototype-actual.log",
+    "case": "copynamespace-15",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-15",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-16-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-16-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19142420002026483,
+    "log": "copynamespace-16-normal-actual.log",
+    "case": "copynamespace-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-16",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-16-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-16-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3172756999847479,
+    "log": "copynamespace-16-prototype-actual.log",
+    "case": "copynamespace-16",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-16",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-17-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-17-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18888620001962408,
+    "log": "copynamespace-17-normal-actual.log",
+    "case": "copynamespace-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-17",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-17-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-17-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3188708999659866,
+    "log": "copynamespace-17-prototype-actual.log",
+    "case": "copynamespace-17",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-17",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-18-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-18-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19470449996879324,
+    "log": "copynamespace-18-normal-actual.log",
+    "case": "copynamespace-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-18",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-18-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-18-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3218604000285268,
+    "log": "copynamespace-18-prototype-actual.log",
+    "case": "copynamespace-18",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-18",
+      "kind": "Failed",
+      "message": "assert-string-value failed. Expected: 'namespace1 xml', Got: 'namespace1 namespace2 namespace3 xml'"
+    }
+  },
+  {
+    "name": "copynamespace-19-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-19-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20400860003428534,
+    "log": "copynamespace-19-normal-actual.log",
+    "case": "copynamespace-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-19",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-19-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-19-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32942559994990006,
+    "log": "copynamespace-19-prototype-actual.log",
+    "case": "copynamespace-19",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-19",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-20-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-20-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2029708999907598,
+    "log": "copynamespace-20-normal-actual.log",
+    "case": "copynamespace-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-20",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-20-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-20-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32101010001497343,
+    "log": "copynamespace-20-prototype-actual.log",
+    "case": "copynamespace-20",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-20",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-21-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-21-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18648790003499016,
+    "log": "copynamespace-21-normal-actual.log",
+    "case": "copynamespace-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-21",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-21-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-21-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.30104709998704493,
+    "log": "copynamespace-21-prototype-actual.log",
+    "case": "copynamespace-21",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-21",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "copynamespace-22-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-22-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.188193499983754,
+    "log": "copynamespace-22-normal-actual.log",
+    "case": "copynamespace-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-22",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "copynamespace-22-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\copynamespace-22-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3177488999790512,
+    "log": "copynamespace-22-prototype-actual.log",
+    "case": "copynamespace-22",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "copynamespace-22",
+      "kind": "Failed",
+      "message": "assert-string-value failed. Expected: 'namespace2 xml', Got: 'namespace2 namespace3 xml'"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19009769998956472,
+    "log": "K-CopyNamespacesProlog-1-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.196806599968113,
+    "log": "K-CopyNamespacesProlog-1-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18538619996979833,
+    "log": "K-CopyNamespacesProlog-2-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-2",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2603354000020772,
+    "log": "K-CopyNamespacesProlog-2-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18615770002361387,
+    "log": "K-CopyNamespacesProlog-3-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2733447999926284,
+    "log": "K-CopyNamespacesProlog-3-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19734869996318594,
+    "log": "K-CopyNamespacesProlog-4-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.20078680000733584,
+    "log": "K-CopyNamespacesProlog-4-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2063163000275381,
+    "log": "K-CopyNamespacesProlog-5-normal-actual.log",
+    "case": "K-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K-CopyNamespacesProlog-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K-CopyNamespacesProlog-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2022071000537835,
+    "log": "K-CopyNamespacesProlog-5-prototype-actual.log",
+    "case": "K-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2002682999591343,
+    "log": "K2-CopyNamespacesProlog-1-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27115749998483807,
+    "log": "K2-CopyNamespacesProlog-1-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-1",
+      "kind": "Failed",
+      "message": "assert-xml failed. Expected: <doc><a><b/></a><a><b {http:p=\"http://example.com/\"/></a></doc>, Got: <doc><a><b/></a><a><b/></a></doc>"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1803104000282474,
+    "log": "K2-CopyNamespacesProlog-4-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.26543129998026416,
+    "log": "K2-CopyNamespacesProlog-4-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-5-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-5-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18685150000965223,
+    "log": "K2-CopyNamespacesProlog-5-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-5-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-5-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.27458039997145534,
+    "log": "K2-CopyNamespacesProlog-5-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-5",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-5",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-7-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-7-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18808210000861436,
+    "log": "K2-CopyNamespacesProlog-7-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-7-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-7-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2754856999963522,
+    "log": "K2-CopyNamespacesProlog-7-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-7",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-7",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-8-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-8-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.17947919998550788,
+    "log": "K2-CopyNamespacesProlog-8-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-8-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-8-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2669228999875486,
+    "log": "K2-CopyNamespacesProlog-8-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-8",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-8",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-9-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-9-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.17606279999017715,
+    "log": "K2-CopyNamespacesProlog-9-normal-actual.log",
+    "case": "K2-CopyNamespacesProlog-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "K2-CopyNamespacesProlog-9-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\K2-CopyNamespacesProlog-9-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2964425000245683,
+    "log": "K2-CopyNamespacesProlog-9-prototype-actual.log",
+    "case": "K2-CopyNamespacesProlog-9",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "K2-CopyNamespacesProlog-9",
+      "kind": "Failed",
+      "message": "assert-string-value failed. Expected: 'namespace1 xml | namespace1 namespace2 namespace3 xml', Got: 'namespace1 namespace2 namespace3 xml | namespace1 namespace2 namespace3 xml'"
+    }
+  },
+  {
+    "name": "cbcl-directconelem-001-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-001-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1859744000248611,
+    "log": "cbcl-directconelem-001-normal-actual.log",
+    "case": "cbcl-directconelem-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-001",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "cbcl-directconelem-001-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-001-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32345450000138953,
+    "log": "cbcl-directconelem-001-prototype-actual.log",
+    "case": "cbcl-directconelem-001",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-001",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "cbcl-directconelem-002-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-002-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19196510000620037,
+    "log": "cbcl-directconelem-002-normal-actual.log",
+    "case": "cbcl-directconelem-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-002",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "cbcl-directconelem-002-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\cbcl-directconelem-002-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3328804000047967,
+    "log": "cbcl-directconelem-002-prototype-actual.log",
+    "case": "cbcl-directconelem-002",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-directconelem-002",
+      "kind": "Failed",
+      "message": "assert-string-value failed. Expected: 'xmlns:a=\"http://example.com/1\" xmlns:b=\"http://example.com/2\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" | xmlns=\"http://example.com/0\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"', Got: 'xmlns:a=\"http://example.com/1\" xmlns:b=\"http://example.com/2\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\" | xmlns=\"http://example.com/0\" xmlns:a=\"http://example.com/1\" xmlns:c=\"http://example.com/3\" xmlns:xml=\"http://www.w3.org/XML/1998/namespace\"'"
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-1-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-1-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1874684999929741,
+    "log": "Constr-cont-nsmode-1-normal-actual.log",
+    "case": "Constr-cont-nsmode-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-1",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-1-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-1-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2818128000362776,
+    "log": "Constr-cont-nsmode-1-prototype-actual.log",
+    "case": "Constr-cont-nsmode-1",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-1",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-2-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-2-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.18738610000582412,
+    "log": "Constr-cont-nsmode-2-normal-actual.log",
+    "case": "Constr-cont-nsmode-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-2",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-2-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-2-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28397420002147555,
+    "log": "Constr-cont-nsmode-2-prototype-actual.log",
+    "case": "Constr-cont-nsmode-2",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-2",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-3-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-3-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1881658000056632,
+    "log": "Constr-cont-nsmode-3-normal-actual.log",
+    "case": "Constr-cont-nsmode-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-3",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-3-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-3-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.28381950000766665,
+    "log": "Constr-cont-nsmode-3-prototype-actual.log",
+    "case": "Constr-cont-nsmode-3",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-3",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-4-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-4-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1928302999585867,
+    "log": "Constr-cont-nsmode-4-normal-actual.log",
+    "case": "Constr-cont-nsmode-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-4",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "Constr-cont-nsmode-4-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\Constr-cont-nsmode-4-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.2821348999859765,
+    "log": "Constr-cont-nsmode-4-prototype-actual.log",
+    "case": "Constr-cont-nsmode-4",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "Constr-cont-nsmode-4",
+      "kind": "Passed",
+      "message": null
+    }
+  },
+  {
+    "name": "XQST0055-normal-actual",
+    "phase": "normal",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\XQST0055-normal-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1884114000131376,
+    "log": "XQST0055-normal-actual.log",
+    "case": "XQST0055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0055",
+      "kind": "Skipped",
+      "message": "XQuery syntax not supported"
+    }
+  },
+  {
+    "name": "XQST0055-prototype-actual",
+    "phase": "prototype",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-copy-namespaces-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-copy-namespaces\\evidence\\XQST0055-prototype-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.19263569999020547,
+    "log": "XQST0055-prototype-actual.log",
+    "case": "XQST0055",
+    "mode": "actual",
+    "result": {
+      "Suite": "qt3",
+      "Name": "XQST0055",
+      "kind": "Passed",
+      "message": null
+    }
+  }
+]

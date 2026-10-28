@@ -17,6 +17,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.3   | 25-07-2026     | Added XdmContentKind.Namespace for computed namespace constructors                      |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.4   | 28-10-2026     | Expose namespace-copy policy on node content without changing constructor signatures (1.31.0). |
 // ===========================================================================================================================================================
 namespace Bosak.XPath.Core.Xdm;
 
@@ -44,7 +45,16 @@ public enum XdmContentKind
 /// <param name="Text">The text/comment/PI-data payload, when applicable.</param>
 /// <param name="Node">The node to deep-copy, when <paramref name="Kind"/> is <see cref="XdmContentKind.Node"/>.</param>
 /// <param name="Target">The PI target, when <paramref name="Kind"/> is <see cref="XdmContentKind.ProcessingInstruction"/>.</param>
-public sealed record XdmContentItem(XdmContentKind Kind, string? Text = null, XdmValue? Node = null, string? Target = null);
+public sealed record XdmContentItem(XdmContentKind Kind, string? Text = null, XdmValue? Node = null, string? Target = null)
+{
+    /// <summary>Whether this item is lexical child markup rather than a copied enclosed-expression value.</summary>
+    public bool IsLiteralElement { get; init; }
+
+    /// <summary>Whether a copied node retains unused source namespace bindings; default true.</summary>
+    public bool PreserveNamespaces { get; init; } = true;
+    /// <summary>Whether a copied node inherits its constructor's namespace bindings; default true.</summary>
+    public bool InheritNamespaces { get; init; } = true;
+}
 
 /// <summary>Attribute data for element construction through the element-constructor hook.</summary>
 /// <param name="LocalName">The attribute's local name.</param>

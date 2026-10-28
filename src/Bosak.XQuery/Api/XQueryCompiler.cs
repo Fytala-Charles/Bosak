@@ -64,6 +64,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.5   | 28-10-2026     | Compile main context initializers with complete prolog visibility (1.30.0).              |
 //                      | Charles Korthout | 3.6   | 28-10-2026     | Retain every library context constraint with its declaring type namespace (1.30.1).      |
+//                      | Charles Korthout | 3.7   | 28-10-2026     | Compile module-local namespace-copy modes for bodies, initializers and functions (1.31.0). |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -208,7 +209,7 @@ public sealed class XQueryCompiler
         }
 
         // 5. Lower to IR.
-        var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) };
+        var lowerer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast), PreserveNamespaces = parseResult.StaticContext.PreserveNamespaces ?? true, InheritNamespaces = parseResult.StaticContext.InheritNamespaces ?? true };
         var module = lowerer.Lower(optimized);
 
         // The context item type declared by each loaded library module constrains the
@@ -228,7 +229,7 @@ public sealed class XQueryCompiler
             unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                 resolvedInitializer, parseResult.StaticContext, moduleNamespaces,
                 mainVisibility.Functions, mainVisibility.Variables));
-            contextInitializer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) }
+            contextInitializer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast), PreserveNamespaces = parseResult.StaticContext.PreserveNamespaces ?? true, InheritNamespaces = parseResult.StaticContext.InheritNamespaces ?? true }
                 .Lower(optimizer.Optimize(resolvedInitializer));
         }
 
@@ -407,7 +408,7 @@ public sealed class XQueryCompiler
             unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                 fnBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
                 fn.Parameters.Select(p => p.Name)));
-            var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+            var fnModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast), PreserveNamespaces = context.PreserveNamespaces ?? true, InheritNamespaces = context.InheritNamespaces ?? true }
                 .Lower(optimizer.Optimize(fnBodyAst));
             userFunctions.Add(new CompiledUserFunction(
                 fn.LocalName,
@@ -434,7 +435,7 @@ public sealed class XQueryCompiler
                 unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
                     varBodyAst, context, moduleNamespaces, visibility.Functions, visibility.Variables,
                     excludeVariable: (v.LocalName, v.NamespaceUri)));
-                varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast) }
+                varModule = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(context.DefaultEmptyOrderLeast), PreserveNamespaces = context.PreserveNamespaces ?? true, InheritNamespaces = context.InheritNamespaces ?? true }
                     .Lower(optimizer.Optimize(varBodyAst));
                 // A declared type is enforced strictly on the initializer: atomization plus
                 // an instance check — no casts or promotions (XPTY0004, K2-ExternalVariablesWith-12..19).

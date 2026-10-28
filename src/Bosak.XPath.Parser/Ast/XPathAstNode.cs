@@ -73,6 +73,7 @@
 //                      |                  |       |                | QuantifiedBinding (XPath 4.0 let $(...)/$[...]/${...} bindings)                         |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 1.26  | 14-10-2026     | Represent omitted host arguments independently of empty sequence.                        |
+//                      | Charles Korthout | 1.27  | 28-10-2026     | Retain lexical child-markup origin through immutable AST rewrites (1.31.0). |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 
@@ -403,7 +404,11 @@ internal sealed record DirectElementConstructorNode(
     string TagName,
     string? Prefix,
     IReadOnlyList<DirectAttributeNode> Attributes,
-    IReadOnlyList<XPathAstNode> Content) : XPathAstNode;
+    IReadOnlyList<XPathAstNode> Content) : XPathAstNode
+{
+    /// <summary>Whether this element is lexical child markup rather than an enclosed expression.</summary>
+    public bool IsLiteralChild { get; init; }
+}
 
 /// <summary>A direct attribute constructor: <c>name="literal {expr} literal"</c>.</summary>
 /// <param name="Name">The local name of the attribute.</param>

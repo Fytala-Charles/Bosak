@@ -171,6 +171,7 @@
 //                      | Charles Korthout | 1.76  | 13-10-2026     | Validate targeted processing-instruction sequence types with shared target parsing
 //                      | Charles Korthout | 1.77 | 13-10-2026     | Parse XPath 4.0 fn function types and documentary parameters
 //                      | Charles Korthout | 1.78 | 22-10-2026     | Gate record types while retaining inline-function signature text in older profiles.
+//                      | Charles Korthout | 1.79  | 28-10-2026     | Distinguish literal child elements from enclosed-expression node copies (1.31.0). |
 // ===========================================================================================================================================================
 using System.Globalization;
 using System.Runtime.CompilerServices;
@@ -3761,7 +3762,7 @@ internal sealed class XPathParser
                 if (char.IsLetter(next) || next == '_')
                 {
                     FlushText();
-                    content.Add(ScanElementConstructor(ref pos, ctorStart));
+                    content.Add(((DirectElementConstructorNode)ScanElementConstructor(ref pos, ctorStart)) with { IsLiteralChild = true });
                     continue;
                 }
                 throw ConstructorError("unexpected '<' in element content", pos);

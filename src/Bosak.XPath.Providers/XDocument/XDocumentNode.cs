@@ -116,6 +116,7 @@
 //                      | Charles Korthout | 2.17 | 27-10-2026     | Preserve literal values and namespace names across encoded tree boundaries. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.18  | 28-10-2026     | Respect copied-element no-inherit namespace boundaries on the XDM namespace axis (1.31.0). |
 // ===========================================================================================================================================================
 
 using System.Collections.Concurrent;
@@ -2112,6 +2113,7 @@ public sealed class XDocumentNode : IXdmNode
 
         string elementNs = element.Name.NamespaceName;
         bool elementNsIsNonEmpty = !string.IsNullOrEmpty(elementNs);
+        if (!elementNsIsNonEmpty) seen.Add(string.Empty);
         bool hasExplicitDefaultForElementNs = false;
         bool hasPrefixDeclarationForElementNs = false;
 
@@ -2123,6 +2125,7 @@ public sealed class XDocumentNode : IXdmNode
         bool isTargetElement = true;
         while (current is not null)
         {
+            if (current.Annotation<XQueryDefaultNamespaceAbsence>() is not null) seen.Add(string.Empty);
             // XML 1.1 prefixed namespace undeclarations on this element hide the
             // same prefixes declared at or above it for this subtree.
             if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
@@ -2155,6 +2158,8 @@ public sealed class XDocumentNode : IXdmNode
                 }
             }
 
+            if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null)
+                break;
             isTargetElement = false;
             current = current.Parent;
 
@@ -2169,7 +2174,7 @@ public sealed class XDocumentNode : IXdmNode
         // for every element (e.g. elements created by json-to-xml). Treat a
         // non-empty element namespace as an implied default-namespace binding only
         // when it is not already declared explicitly (either as default or prefixed).
-        if (elementNsIsNonEmpty && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
+        if (elementNsIsNonEmpty && elementNs != XNamespace.Xml.NamespaceName && !hasExplicitDefaultForElementNs && !hasPrefixDeclarationForElementNs)
         {
             AddNamespaceNode(collected, seen, string.Empty, elementNs, element);
         }

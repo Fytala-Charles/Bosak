@@ -62,6 +62,7 @@
 //                      | Charles Korthout | 0.26 | 27-10-2026     | Normalize copied trees into reversible encoded-name storage. (1.26.11). |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 0.27  | 28-10-2026     | Clone node content with lexical namespace preservation/inheritance modes (1.31.0). |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -368,7 +369,9 @@ public static class XDocumentProvider
                     break;
                 default:
                     FlushText();
-                    var childNode = CloneNode(item.Node!.Value);
+                    var childNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces);
+                    if (item.IsLiteralElement && childNode is XElement literalChild)
+                        literalChild.AddAnnotation(new XQueryNamespaceCopyBoundary());
                     // XQuery strips document nodes used as element content and inserts their
                     // children instead (Constr-compelem-doc-1, K2-DirectConElem-42/43).
                     // The engine represents non-element-root document nodes with a synthetic
@@ -555,7 +558,7 @@ public static class XDocumentProvider
                     break;
                 default:
                     FlushText();
-                    var docChildNode = CloneNode(item.Node!.Value);
+                    var docChildNode = CloneNode(item.Node!.Value, item.PreserveNamespaces, item.InheritNamespaces);
                     // XQuery strips document nodes used as document content and inserts their
                     // children instead (prod-CompDocConstructor document-node tests).
                     if (docChildNode is System.Xml.Linq.XDocument childDoc)
@@ -595,7 +598,7 @@ public static class XDocumentProvider
         return XDocumentNode.Wrap(document);
     }
 
-    private static XNode CloneNode(XdmValue nodeValue)
+    private static XNode CloneNode(XdmValue nodeValue, bool preserveNamespaces, bool inheritNamespaces)
     {
         var node = nodeValue.NodeValue;
         XNode clone;
@@ -624,13 +627,74 @@ public static class XDocumentProvider
             sourceNode.UnderlyingObject is XElement sourceElement)
         {
             CopyInScopeNamespaces(sourceElement, cloneElement);
+            bool defaultAbsent = true;
+            foreach (var ns in XDocumentNode.Wrap(sourceElement).Axis(XdmAxis.Namespace))
+                if (ns.NodeValue.LocalName.Length == 0) { defaultAbsent = false; break; }
+            if (preserveNamespaces && defaultAbsent)
+            {
+                cloneElement.Attribute("xmlns")?.Remove();
+                cloneElement.AddAnnotation(new XQueryDefaultNamespaceAbsence());
+            }
             // Preserve annotation-based semantics: the namespace inheritance barrier,
             // prefixed namespace undeclarations, and the base-URI annotation.
             foreach (var annotation in sourceElement.Annotations<object>())
                 if (annotation is not Xml11Annotation && annotation is not OriginalPrefixAnnotation)
                     cloneElement.AddAnnotation(annotation);
         }
+        if (clone is XElement copied && node is XDocumentNode original && original.UnderlyingObject is XElement source)
+        {
+            copied.RemoveAnnotations<XQueryNamespaceCopyBoundary>();
+            if (!preserveNamespaces || !inheritNamespaces)
+                ApplyNamespaceCopyMode(source, copied, preserveNamespaces, inheritNamespaces);
+        }
+        else if (clone is XDocument copiedDocument && node is XDocumentNode originalDocument &&
+                 originalDocument.UnderlyingObject is XDocument sourceDocument && sourceDocument.Root is { } sourceRoot && copiedDocument.Root is { } copiedRoot &&
+                 (!preserveNamespaces || !inheritNamespaces))
+            ApplyNamespaceCopyMode(sourceRoot, copiedRoot, preserveNamespaces, inheritNamespaces);
         return clone;
+    }
+
+    private static void ApplyNamespaceCopyMode(XElement source, XElement copy, bool preserve, bool inherit)
+    {
+        foreach (var pair in source.DescendantsAndSelf().Zip(copy.DescendantsAndSelf()))
+        {
+            var bindings = new Dictionary<string, string>(StringComparer.Ordinal);
+            if (preserve)
+            {
+                foreach (var value in XDocumentNode.Wrap(pair.First).Axis(XdmAxis.Namespace))
+                    bindings[value.NodeValue.LocalName] = value.NodeValue.StringValue;
+                // Absence of a default namespace is itself a namespace binding.
+                bindings.TryAdd(string.Empty, string.Empty);
+            }
+            else
+            {
+                var element = XDocumentNode.Wrap(pair.First);
+                bindings[element.Prefix ?? string.Empty] = element.NamespaceUri;
+                foreach (var attribute in pair.First.Attributes().Where(a => !a.IsNamespaceDeclaration && a.Name.NamespaceName.Length != 0))
+                {
+                    var node = XDocumentNode.Wrap(attribute);
+                    string prefix = node.Prefix ?? string.Empty;
+                    if (prefix.Length == 0) prefix = "ns" + bindings.Count;
+                    bindings[prefix] = node.NamespaceUri;
+                }
+                pair.Second.Attributes().Where(a => a.IsNamespaceDeclaration).Remove();
+            }
+            pair.Second.RemoveAnnotations<XQueryDefaultNamespaceAbsence>();
+            foreach (var (prefix, uri) in bindings)
+            {
+                if (prefix is "xml" or "xmlns") continue;
+                if (prefix.Length == 0 && uri.Length == 0)
+                {
+                    pair.Second.Attribute("xmlns")?.Remove();
+                    pair.Second.AddAnnotation(new XQueryDefaultNamespaceAbsence());
+                    continue;
+                }
+                XName name = prefix.Length == 0 ? XName.Get("xmlns") : XNamespace.Xmlns + Xml11NameCodec.EncodeName(prefix);
+                pair.Second.SetAttributeValue(name, uri);
+            }
+            pair.Second.RemoveAnnotations<XQueryNamespaceCopyBoundary>();
+            if (!inherit) pair.Second.AddAnnotation(new XQueryNamespaceCopyBoundary());
+        }
     }
 
     /// <summary>Copies a tree into the provider's reversible encoded-name representation.</summary>
@@ -640,6 +704,10 @@ public static class XDocumentProvider
         foreach (var pair in source.DescendantsAndSelf().Zip(clone.DescendantsAndSelf()))
         {
             bool encoded = XDocumentNode.Wrap(pair.First).UsesEncodedNames;
+            if (pair.First.Annotation<XQueryNamespaceCopyBoundary>() is not null)
+                pair.Second.AddAnnotation(new XQueryNamespaceCopyBoundary());
+            if (pair.First.Annotation<XQueryDefaultNamespaceAbsence>() is not null)
+                pair.Second.AddAnnotation(new XQueryDefaultNamespaceAbsence());
             if (!encoded)
                 pair.Second.Name = XName.Get(Xml11NameCodec.EncodeName(pair.First.Name.LocalName), pair.First.Name.NamespaceName);
             if (pair.First.Annotation<OriginalPrefixAnnotation>() is { } original)
@@ -682,6 +750,7 @@ public static class XDocumentProvider
                 string prefix = attr.Name.LocalName == "xmlns" ? string.Empty : attr.Name.LocalName;
                 declared.TryAdd(XDocumentNode.Wrap(ancestor).UsesEncodedNames ? prefix : Xml11NameCodec.EncodeName(prefix), attr.Value);
             }
+            if (ancestor.Annotation<XQueryNamespaceCopyBoundary>() is not null) break;
         }
 
         var declaredOnClone = new HashSet<string>(
@@ -964,3 +1033,9 @@ public static class XDocumentProvider
         }
     }
 }
+
+/// <summary>Stops namespace-axis inheritance above a copied XQuery element.</summary>
+internal sealed class XQueryNamespaceCopyBoundary { }
+
+/// <summary>Preserves an absent default namespace without adding redundant serialized declarations.</summary>
+internal sealed class XQueryDefaultNamespaceAbsence { }

@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C31",
+  "kind": "Pre-implementation adoption: XQuery copy-namespaces",
+  "sourceBase": "3a5017df32289bd3a519677629c3eb3d1756ecc0",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xquery-31-20170321/",
+    "revision": "REC-xquery-31-20170321",
+    "sha256": "6e9929f70702ea179c279effbf823c2f6a51cf6ca50e93ebdee2cfe83bdb9e6b",
+    "sections": [
+      "4.9 Copy-Namespaces Declaration",
+      "3.9.1 Direct Element Constructors: copied-element in-scope namespaces",
+      "3.9.3 Computed Constructors: corresponding element/document content rules",
+      "4.1 Prolog: declaration ordering"
+    ]
+  },
+  "contract": [
+    "Default preserve/inherit; all four declared combinations; malformed XPST0003 and duplicate XQST0055",
+    "Mode belongs to the declaring module and constructor, including returned inline functions and imported variables",
+    "Copy keeps only name-required bindings under no-preserve; inherit augments with parent namespaces without overriding preserved bindings; no-inherit excludes parent bindings",
+    "Original nodes and caller settings are not mutated; compilation records mode on constructor IR",
+    "Apply to deep copies and copied document children through provider-neutral content inputs"
+  ],
+  "boundedScope": [
+    "49 unchanged copy-only QT3 originals and independent public API regressions",
+    "Construction declarations and mixed-mode schema/type-annotation behavior remain unsupported/deferred",
+    "No adoption of construction-preserve typed QName XQTY0086 handling is claimed here; construction guard remains",
+    "Both normal prolog refusals and all dependency filters/baselines remain unchanged; no release"
+  ]
+}

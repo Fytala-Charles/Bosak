@@ -480,6 +480,7 @@
 //                      | Charles Korthout | 5.159 | 28-10-2026     | Convert FULLY-NORMALIZED strings with a coherent pinned Unicode17 backend (1.29.1).      |
 //                      | Charles Korthout | 5.160 | 28-10-2026     | Fix normalization XML whitespace, XPath4 empty-form defaults and keywords (1.29.2).     |
 //                      | Charles Korthout | 5.161 | 28-10-2026     | Resolve pending XQuery initial focus for implicit-context standard functions (1.30.0).   |
+//                      | Charles Korthout | 5.162 | 28-10-2026     | Honor XQuery namespace-copy boundaries in prefix inspection functions (1.31.0). |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -20008,6 +20009,7 @@ public static class FunctionLibrary
 
         var prefixes = new List<XdmValue>();
         var seen = new HashSet<string>();
+        if (node.NamespaceUri.Length == 0) seen.Add(string.Empty);
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
@@ -20017,6 +20019,7 @@ public static class FunctionLibrary
             while (current != null)
             {
                 path.Add(current);
+                if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null) break;
                 current = current.Parent;
 
                 // Stop at namespace inheritance barrier (inherit-namespaces="no").
@@ -20031,6 +20034,7 @@ public static class FunctionLibrary
             bool isTargetElement = true;
             foreach (var el in path)
             {
+                if (el.Annotation<XQueryDefaultNamespaceAbsence>() is not null) seen.Add(string.Empty);
                 if (el.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
                     foreach (var undeclaredPrefix in undeclarations.Prefixes)
                         undeclared.Add(undeclaredPrefix);
@@ -20077,6 +20081,8 @@ public static class FunctionLibrary
 
         if (prefix == "xml")
             return XdmValue.FromString("http://www.w3.org/XML/1998/namespace", "anyURI");
+        if (prefix.Length == 0 && node.NamespaceUri.Length == 0)
+            return XdmValue.Undefined;
 
         if (node is Providers.Xml.XDocumentNode xdocNode && xdocNode.UnderlyingObject is XElement elem)
         {
@@ -20085,6 +20091,8 @@ public static class FunctionLibrary
             bool isTargetElement = true;
             while (current != null)
             {
+                if (prefix.Length == 0 && current.Annotation<XQueryDefaultNamespaceAbsence>() is not null)
+                    return XdmValue.Undefined;
                 // XML 1.1 prefixed namespace undeclarations hide the same prefixes
                 // declared at or above them.
                 if (current.Annotation<PrefixedNamespaceUndeclarations>() is { } undeclarations)
@@ -20110,6 +20118,7 @@ public static class FunctionLibrary
                         }
                     }
                 }
+                if (current.Annotation<XQueryNamespaceCopyBoundary>() is not null) break;
                 isTargetElement = false;
                 current = current.Parent;
 

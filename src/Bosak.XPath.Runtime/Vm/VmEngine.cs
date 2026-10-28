@@ -435,6 +435,7 @@
 //                      |==================|=======|================|=========================================================================================
 
 //                      | Charles Korthout | 2.208 | 28-10-2026     | Resolve pending XQuery initial focus at semantic context-load instructions (1.30.0).     |
+//                      | Charles Korthout | 2.209 | 28-10-2026     | Pass constructor-local namespace-copy modes to provider node-content cloning (1.31.0). |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -1823,9 +1824,10 @@ internal static class VmEngine
                                 // the namespace axis see it (K2-InScopePrefixesFunc-12/29).
                                 if (ns is null && !string.IsNullOrEmpty(context.DefaultElementNamespace))
                                     accumulator.Content.Insert(0, new XdmContentItem(XdmContentKind.Namespace, "", null, ""));
-                                AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix);
+                                AppendConstructorLocalNamespaces(accumulator.Content, accumulator.Attributes, context, prefix, computedInfo.LexicalNamespaces);
                                 if (context.ElementConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
+                                ApplyNamespaceCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces);
                                 var spec = new XdmElementSpec(local, prefix, ns, accumulator.Attributes, accumulator.Content, context.BaseUri, context.Xml11Mode);
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                                 break;
@@ -1858,6 +1860,7 @@ internal static class VmEngine
                                 accumulator.Flush();
                                 if (context.DocumentConstructorHook is null)
                                     throw new InvalidOperationException("Node construction is not available: no document-constructor provider is registered (EvaluationContext.DocumentConstructorHook).");
+                                ApplyNamespaceCopyMode(accumulator.Content, computedInfo.PreserveNamespaces, computedInfo.InheritNamespaces);
                                 registers[instr.RegisterA] = XdmValue.FromNode(context.DocumentConstructorHook(accumulator.Content));
                                 break;
                             }
@@ -2245,7 +2248,7 @@ internal static class VmEngine
                                         if (item.IsNode)
                                         {
                                             FlushAtomic();
-                                            content.Add(new XdmContentItem(XdmContentKind.Node, null, item));
+                                            content.Add(new XdmContentItem(XdmContentKind.Node, null, item) { IsLiteralElement = part.IsLiteralElement });
                                             seenNonAttributeContent = true;
                                         }
                                         else if (item.IsFunction)
@@ -2279,7 +2282,7 @@ internal static class VmEngine
                             }
                         }
                         FlushAtomic();
-                        AppendConstructorLocalNamespaces(content, attributes, context, ctorInfo.Prefix);
+                        AppendConstructorLocalNamespaces(content, attributes, context, ctorInfo.Prefix, ctorInfo.LexicalNamespaces);
 
                         if (context.ElementConstructorHook is null)
                         {
@@ -2287,6 +2290,7 @@ internal static class VmEngine
                                 "Node construction is not available: no element-constructor provider is registered (EvaluationContext.ElementConstructorHook).");
                         }
 
+                        ApplyNamespaceCopyMode(content, ctorInfo.PreserveNamespaces, ctorInfo.InheritNamespaces);
                         var spec = new XdmElementSpec(ctorInfo.LocalName, ctorInfo.Prefix, tagNs, attributes, content, context.BaseUri, context.Xml11Mode);
                         registers[instr.RegisterA] = XdmValue.FromNode(context.ElementConstructorHook(spec));
                         ip++;
@@ -16353,7 +16357,7 @@ internal static class VmEngine
     // resolution reserved for real content declarations (K2-DirectConElemNamespace-77).
     private static void AppendConstructorLocalNamespaces(
         List<XdmContentItem> content, IReadOnlyList<XdmAttributeValue> attributes, EvaluationContext context,
-        string? tagPrefix)
+        string? tagPrefix, IReadOnlyList<(string Prefix, string Uri)>? lexicalNamespaces = null)
     {
         var declared = new HashSet<string>(StringComparer.Ordinal);
         foreach (var attr in attributes)
@@ -16366,11 +16370,20 @@ internal static class VmEngine
                 declared.Add(item.Target ?? "");
         if (tagPrefix is not null)
             declared.Add(tagPrefix);
-        foreach (var (prefix, uri) in context.ConstructorLocalNamespaces)
+        foreach (var (prefix, uri) in lexicalNamespaces ?? context.ConstructorLocalNamespaces)
         {
+            if (prefix.Length != 0 && uri.Length == 0) continue;
             if (!declared.Contains(prefix))
                 content.Add(new XdmContentItem(XdmContentKind.Namespace, uri, null, prefix));
         }
+    }
+
+    private static void ApplyNamespaceCopyMode(List<XdmContentItem> content, bool preserve, bool inherit)
+    {
+        if (preserve && inherit) return;
+        for (int i = 0; i < content.Count; i++)
+            if (content[i].Kind == XdmContentKind.Node && !content[i].IsLiteralElement)
+                content[i] = content[i] with { PreserveNamespaces = preserve, InheritNamespaces = inherit };
     }
 
     private sealed class ComputedContentAccumulator

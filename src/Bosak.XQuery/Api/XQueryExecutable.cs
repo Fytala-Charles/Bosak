@@ -56,6 +56,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 2.15  | 28-10-2026     | Initialize main context with strict typing, lazy-global cycles and scoped focus (1.30.0). |
 //                      | Charles Korthout | 2.16  | 28-10-2026     | Match imported context types in declaration scope and restore caller namespaces (1.30.1). |
+//                      | Charles Korthout | 2.17  | 28-10-2026     | Isolate lazy initializer and declared-function constructor namespace frames (1.31.0). |
 // ===========================================================================================================================================================
 
 using System.Xml;
@@ -515,7 +516,7 @@ public sealed class XQueryExecutable
                 ReturnType = XdmValueKind.External,
                 ParameterTypeNames = captured.ParameterTypes,
                 ReturnTypeName = captured.ReturnType,
-                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args, mainModuleDefaultElementNamespace)
+                Implementation = (callCtx, args) => InvokeWithModuleContext(captured, callCtx, args, mainModuleDefaultElementNamespace, _staticContext.Namespaces)
             });
         }
 
@@ -550,7 +551,7 @@ public sealed class XQueryExecutable
                         {
                             var focus = initialFocus?.Invoke() ?? (initialItem, initialPosition, initialSize);
                             ctx.WithFocus(focus.Item1, focus.Item2, focus.Item3);
-                            var value = EvaluateWithModuleContext(v, ctx);
+                            var value = EvaluateWithModuleContext(v, ctx, _staticContext);
                             return initialFocus is null ? value : StabilizeSequence(value);
                         }
                         // Errors raised while evaluating a global variable initializer are
@@ -623,7 +624,7 @@ public sealed class XQueryExecutable
     // Invokes a user function body, applying the declaring library module's runtime static
     // context (namespaces, base URI, default element namespace, default collation) when the
     // function was declared in a library module (cbcl-module-002: module-local base URIs).
-    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args, string? mainModuleDefaultElementNamespace)
+    private static XdmValue InvokeWithModuleContext(CompiledUserFunction function, EvaluationContext callCtx, ReadOnlySpan<XdmValue> args, string? mainModuleDefaultElementNamespace, IReadOnlyDictionary<string, string> mainNamespaces)
     {
         if (function.ModuleNamespaces is null)
         {
@@ -632,9 +633,13 @@ public sealed class XQueryExecutable
             // namespace does not leak into the function body's type tests and name
             // resolution (extvardeclwithtype-23).
             var savedMainDefaultNs = callCtx.DefaultElementNamespace;
+            var savedMainNamespaces = callCtx.SnapshotNamespaces();
+            var savedMainLocals = callCtx.ConstructorLocalNamespaces.ToArray();
             try
             {
                 callCtx.DefaultElementNamespace = mainModuleDefaultElementNamespace;
+                callCtx.RestoreNamespaces(new Dictionary<string, string>(mainNamespaces));
+                callCtx.TruncateConstructorLocalNamespaces(0);
                 return XdmConversions.InvokeFunctionItem(
                     new InlineFunctionItem(function.Parameters, function.Body, function.ParameterTypes, function.ReturnType),
                     callCtx, args);
@@ -642,8 +647,12 @@ public sealed class XQueryExecutable
             finally
             {
                 callCtx.DefaultElementNamespace = savedMainDefaultNs;
+                callCtx.RestoreNamespaces(savedMainNamespaces);
+                RestoreConstructorNamespaces(callCtx, savedMainLocals);
             }
         }
+        var savedLocals = callCtx.ConstructorLocalNamespaces.ToArray();
+        callCtx.TruncateConstructorLocalNamespaces(0);
         var snapshot = callCtx.SnapshotNamespaces();
         var savedDefaultNs = callCtx.DefaultElementNamespace;
         var savedBaseUri = callCtx.BaseUri;
@@ -661,6 +670,7 @@ public sealed class XQueryExecutable
         }
         finally
         {
+            RestoreConstructorNamespaces(callCtx, savedLocals);
             callCtx.RestoreNamespaces(snapshot);
             callCtx.DefaultElementNamespace = savedDefaultNs;
             callCtx.BaseUri = savedBaseUri;
@@ -671,10 +681,29 @@ public sealed class XQueryExecutable
     }
 
     // Evaluates a global variable initializer with the declaring module's runtime context.
-    private static XdmValue EvaluateWithModuleContext(CompiledUserVariable variable, EvaluationContext ctx)
+    private static XdmValue EvaluateWithModuleContext(CompiledUserVariable variable, EvaluationContext ctx, XQueryStaticContext mainContext)
     {
         if (variable.ModuleNamespaces is null)
-            return VmEngine.Execute(variable.Body!, ctx);
+        {
+            var savedNamespaces = ctx.SnapshotNamespaces();
+            var savedDefault = ctx.DefaultElementNamespace;
+            var savedLocals = ctx.ConstructorLocalNamespaces.ToArray();
+            try
+            {
+                ctx.RestoreNamespaces(new Dictionary<string, string>(mainContext.Namespaces));
+                ctx.DefaultElementNamespace = mainContext.DefaultElementNamespace;
+                ctx.TruncateConstructorLocalNamespaces(0);
+                return VmEngine.Execute(variable.Body!, ctx);
+            }
+            finally
+            {
+                ctx.RestoreNamespaces(savedNamespaces);
+                ctx.DefaultElementNamespace = savedDefault;
+                RestoreConstructorNamespaces(ctx, savedLocals);
+            }
+        }
+        var moduleLocals = ctx.ConstructorLocalNamespaces.ToArray();
+        ctx.TruncateConstructorLocalNamespaces(0);
         var snapshot = ctx.SnapshotNamespaces();
         var savedDefaultNs = ctx.DefaultElementNamespace;
         var savedBaseUri = ctx.BaseUri;
@@ -690,6 +719,7 @@ public sealed class XQueryExecutable
         }
         finally
         {
+            RestoreConstructorNamespaces(ctx, moduleLocals);
             ctx.RestoreNamespaces(snapshot);
             ctx.DefaultElementNamespace = savedDefaultNs;
             ctx.BaseUri = savedBaseUri;
@@ -697,6 +727,12 @@ public sealed class XQueryExecutable
             ctx.DefaultDecimalFormat = savedDefaultFormat;
             ctx.RestoreDecimalFormats(savedFormats);
         }
+    }
+
+    private static void RestoreConstructorNamespaces(EvaluationContext ctx, (string Prefix, string Uri)[] saved)
+    {
+        ctx.TruncateConstructorLocalNamespaces(0);
+        foreach (var (prefix, uri) in saved) ctx.AddConstructorLocalNamespace(prefix, uri);
     }
 
     private static void ApplyModuleContext(
@@ -708,11 +744,8 @@ public sealed class XQueryExecutable
         IReadOnlyDictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
         DecimalFormat? defaultDecimalFormat = null)
     {
-        foreach (var (prefix, nsUri) in namespaces)
-        {
-            if (!string.IsNullOrEmpty(prefix))
-                ctx.WithNamespace(prefix, nsUri);
-        }
+        ctx.RestoreNamespaces(new Dictionary<string, string>(namespaces));
+        ctx.DefaultElementNamespace = defaultElementNamespace;
         if (!string.IsNullOrEmpty(baseUri))
             ctx.BaseUri = baseUri;
         if (!string.IsNullOrEmpty(defaultElementNamespace))
