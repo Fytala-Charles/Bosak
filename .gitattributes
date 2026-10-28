@@ -385,3 +385,6 @@ docs/conformance/k04-pragma-fallback/*.patch -text whitespace=cr-at-eol,-blank-a
 docs/conformance/k04-pragma-admission/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-pragma-admission/RESULTS.json -text whitespace=cr-at-eol
 docs/conformance/k04-pragma-admission/*.patch -text whitespace=cr-at-eol,-blank-at-eol
+
+# C38 owner-approved adoption preserves fresh normal execution evidence.
+docs/conformance/k04-pragma-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab

@@ -1,0 +1,12 @@
+{
+  "reason": "The rebuild embeds the current source revision in informational versions; all nine compared engine method/signature and assembly-version identities remain unchanged.",
+  "oldSourceStamps": [
+    "1.33.0+5ba5528c752d8ae57cfb73cd5a97a6371265ed5b"
+  ],
+  "newSourceStamps": [
+    "1.33.0+124a73d10c16d8246283c4c3ac82989557eb1770"
+  ],
+  "engineSourceChanged": false,
+  "comparedAssemblies": 9,
+  "methodBodiesAndSignaturesEqual": true
+}
