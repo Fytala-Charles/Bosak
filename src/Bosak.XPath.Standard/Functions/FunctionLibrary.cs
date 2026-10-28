@@ -475,6 +475,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 5.155 | 27-10-2026     | Reuse schema constructor registration after query-owned imports (1.26.7).              |
 //                      | Charles Korthout | 5.156 | 27-10-2026     | Add bounded XPath4 parse-integer signatures, defaults, keywords and errors (1.28.0).    |
+//                      | Charles Korthout | 5.157 | 28-10-2026     | Return true empty date-formatting results with optional string metadata (1.28.2).        |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -2630,6 +2631,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 2,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:date?", "xs:string"],
                 Implementation = FormatDate_2
             },
@@ -2637,6 +2639,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-date", Arity = 5,
                 ParameterTypes = [XdmValueKind.Date, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:date?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatDate_5
             },
@@ -2644,6 +2647,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 2,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:time?", "xs:string"],
                 Implementation = FormatTime_2
             },
@@ -2651,6 +2655,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-time", Arity = 5,
                 ParameterTypes = [XdmValueKind.Time, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:time?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatTime_5
             },
@@ -2658,6 +2663,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 2,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:dateTime?", "xs:string"],
                 Implementation = FormatDateTime_2
             },
@@ -2665,6 +2671,7 @@ public static class FunctionLibrary
             {
                 NamespaceUri = Namespaces.Fn, LocalName = "format-dateTime", Arity = 5,
                 ParameterTypes = [XdmValueKind.DateTime, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String, XdmValueKind.String], ReturnType = XdmValueKind.String,
+                ReturnTypeName = "xs:string?",
                 ParameterTypeNames = ["xs:dateTime?", "xs:string", "xs:string?", "xs:string?", "xs:string?"],
                 Implementation = FormatDateTime_5
             },
@@ -15839,8 +15846,8 @@ public static class FunctionLibrary
 
     private static XdmValue FormatDateTime(XdmValue value, string picture, string? language, string? calendar, string? place, DateTimeComponents components, bool isXsltMode)
     {
-        if (value.IsUndefined)
-            return XdmValue.FromString(string.Empty);
+        if (value.IsUndefined || IsEmptySequence(value))
+            return XdmValue.Undefined;
 
         XPathDateTime xdt = value.Kind switch
         {

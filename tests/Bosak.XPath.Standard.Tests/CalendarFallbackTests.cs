@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 27-10-2026     | Creation                                                                                 |
 //                      | Charles Korthout | 0.2   | 27-10-2026     | Preserve separately observed empty-sequence wrapper error outside calendar correction.   |
+//                      | Charles Korthout | 0.3   | 28-10-2026     | Require corrected empty results; preserve historical C15 defect receipts separately.     |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Api;
@@ -55,9 +56,9 @@ public sealed class CalendarFallbackTests
                 yield return [profile, false, $"{call.Item1}({call.Item2}, 'literal', 'en', 'ZZ', ())", "", "FOFD1340"];
                 yield return [profile, false, $"{call.Item1}({call.Item2}, '', 'en', 'ZZ', ())", "", "FOFD1340"];
                 yield return [profile, false, $"{call.Item1}({call.Item2}, '{call.Item3}', 'en', (), ())", call.Item4, ""];
-                // Existing sequence-wrapper handling raises XPTY0004 before calendar formatting.
-                // Preserve this separate known defect; do not assert correct empty-value semantics.
-                yield return [profile, false, $"string({call.Item1}((), '[', 'en', 'ZZ', ()))", "", "XPTY0004"];
+                // C18 corrects the independent empty-result defect; preserve C15 raw evidence.
+                // Well-typed empty values bypass picture/calendar semantic formatting.
+                yield return [profile, false, $"string({call.Item1}((), '[', 'en', 'ZZ', ()))", "", ""];
             }
             yield return [profile, false, "format-date(xs:date('2002-03-07'), '[C] [Y0001]-[M01]-[D01]', 'en', 'CB', ())", "[Calendar: AD]AD 2002-03-07", ""];
             yield return [profile, true, "format-date(xs:date('2002-03-07'), '[M01]-[D01]', 'en', 'ZODIAC', ())", "[Calendar: AD]03-07", ""];
