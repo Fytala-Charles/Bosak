@@ -1,0 +1,44 @@
+{
+  "UnsupportedFeatures": [
+    "schema-location-hint",
+    "static-typing",
+    "staticTyping",
+    "xpath-1.0-compatibility",
+    "olson-timezone",
+    "arbitraryPrecisionDecimal",
+    "XQUpdate",
+    "fullText",
+    "fullText-ignore",
+    "fullText-units",
+    "fullText-defaults",
+    "binary",
+    "typedData"
+  ],
+  "FrozenAdmittedFeatures": [
+    "advanced-uca-fallback",
+    "collection-stability",
+    "directory-as-collection-uri",
+    "expath-file",
+    "fn-format-integer-CLDR",
+    "fn-load-xquery-module",
+    "fn-transform-XSLT",
+    "fn-transform-XSLT30",
+    "higherOrderFunctions",
+    "infoset-dtd",
+    "moduleImport",
+    "namespace-axis",
+    "non_empty_sequence_collection",
+    "non_unicode_codepoint_collation",
+    "remote_http",
+    "schemaImport",
+    "schemaValidation",
+    "serialization",
+    "simple-uca-fallback"
+  ],
+  "SupportedSpecs": [
+    "XP20\u002B",
+    "XP30\u002B",
+    "XP31\u002B",
+    "XP40\u002B"
+  ]
+}

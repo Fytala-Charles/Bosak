@@ -1,0 +1,821 @@
+[
+  {
+    "name": "qt3-format-date-en151-resources",
+    "suite": "qt3",
+    "case": "format-date-en151",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-format-date-en151-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5508550999802537,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en151",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [
+        {
+          "Name": "b",
+          "SelectExpression": "xs:date('2006-03-01')",
+          "NamespaceUri": null
+        }
+      ],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/format-date.xml",
+      "Modules": []
+    },
+    "log": "qt3-format-date-en151-resources.log"
+  },
+  {
+    "name": "qt3-format-date-en151-actual",
+    "suite": "qt3",
+    "case": "format-date-en151",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-format-date-en151-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 1.0700359999900684,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-date-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-format-date-en151-actual.log"
+  },
+  {
+    "name": "qt3-format-dateTime-en151-resources",
+    "suite": "qt3",
+    "case": "format-dateTime-en151",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-format-dateTime-en151-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.5500213000341319,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en151",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [
+        {
+          "Name": "b",
+          "SelectExpression": "xs:dateTime('2006-03-01T12:00:00')",
+          "NamespaceUri": null
+        }
+      ],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/format-dateTime.xml",
+      "Modules": []
+    },
+    "log": "qt3-format-dateTime-en151-resources.log"
+  },
+  {
+    "name": "qt3-format-dateTime-en151-actual",
+    "suite": "qt3",
+    "case": "format-dateTime-en151",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-format-dateTime-en151-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.519568000047002,
+    "result": {
+      "Suite": "qt3",
+      "Name": "format-dateTime-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt3-format-dateTime-en151-actual.log"
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-001a-resources",
+    "suite": "qt3",
+    "case": "cbcl-fn-normalize-unicode-001a",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-cbcl-fn-normalize-unicode-001a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12098260002676398,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/normalize-unicode.xml",
+      "Modules": []
+    },
+    "log": "qt3-cbcl-fn-normalize-unicode-001a-resources.log"
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-001a-actual",
+    "suite": "qt3",
+    "case": "cbcl-fn-normalize-unicode-001a",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-cbcl-fn-normalize-unicode-001a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3464154999819584,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "log": "qt3-cbcl-fn-normalize-unicode-001a-actual.log"
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-006a-resources",
+    "suite": "qt3",
+    "case": "cbcl-fn-normalize-unicode-006a",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-cbcl-fn-normalize-unicode-006a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12289050000254065,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/normalize-unicode.xml",
+      "Modules": []
+    },
+    "log": "qt3-cbcl-fn-normalize-unicode-006a-resources.log"
+  },
+  {
+    "name": "qt3-cbcl-fn-normalize-unicode-006a-actual",
+    "suite": "qt3",
+    "case": "cbcl-fn-normalize-unicode-006a",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-cbcl-fn-normalize-unicode-006a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3229812000063248,
+    "result": {
+      "Suite": "qt3",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "log": "qt3-cbcl-fn-normalize-unicode-006a-actual.log"
+  },
+  {
+    "name": "qt3-default-language-006-resources",
+    "suite": "qt3",
+    "case": "default-language-006",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-default-language-006-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.11777640000218526,
+    "result": {
+      "Suite": "qt3",
+      "Name": "default-language-006",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt3tests/fn/default-language.xml",
+      "Modules": []
+    },
+    "log": "qt3-default-language-006-resources.log"
+  },
+  {
+    "name": "qt3-default-language-006-actual",
+    "suite": "qt3",
+    "case": "default-language-006",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-default-language-006-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3094903000164777,
+    "result": {
+      "Suite": "qt3",
+      "Name": "default-language-006",
+      "kind": "Failed",
+      "message": "assert-eq failed. Expected: fr-CA, Got: en"
+    },
+    "log": "qt3-default-language-006-actual.log"
+  },
+  {
+    "name": "qt4-format-date-en151-resources",
+    "suite": "qt4",
+    "case": "format-date-en151",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-format-date-en151-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.12947350001195446,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-date-en151",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [
+        {
+          "Name": "b",
+          "SelectExpression": "xs:date('2006-03-01')",
+          "NamespaceUri": null
+        }
+      ],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt4tests/fn/format-date.xml",
+      "Modules": []
+    },
+    "log": "qt4-format-date-en151-resources.log"
+  },
+  {
+    "name": "qt4-format-date-en151-actual",
+    "suite": "qt4",
+    "case": "format-date-en151",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-format-date-en151-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3343136999756098,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-date-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-format-date-en151-actual.log"
+  },
+  {
+    "name": "qt4-format-dateTime-en151-resources",
+    "suite": "qt4",
+    "case": "format-dateTime-en151",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-format-dateTime-en151-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.1422129000420682,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-dateTime-en151",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [
+        {
+          "Name": "b",
+          "SelectExpression": "xs:dateTime('2006-03-01T12:00:00')",
+          "NamespaceUri": null
+        }
+      ],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt4tests/fn/format-dateTime.xml",
+      "Modules": []
+    },
+    "log": "qt4-format-dateTime-en151-resources.log"
+  },
+  {
+    "name": "qt4-format-dateTime-en151-actual",
+    "suite": "qt4",
+    "case": "format-dateTime-en151",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-format-dateTime-en151-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3481416000286117,
+    "result": {
+      "Suite": "qt4",
+      "Name": "format-dateTime-en151",
+      "kind": "Passed",
+      "message": null
+    },
+    "log": "qt4-format-dateTime-en151-actual.log"
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-001a-resources",
+    "suite": "qt4",
+    "case": "cbcl-fn-normalize-unicode-001a",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-cbcl-fn-normalize-unicode-001a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13846069999272004,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt4tests/fn/normalize-unicode.xml",
+      "Modules": []
+    },
+    "log": "qt4-cbcl-fn-normalize-unicode-001a-resources.log"
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-001a-actual",
+    "suite": "qt4",
+    "case": "cbcl-fn-normalize-unicode-001a",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-cbcl-fn-normalize-unicode-001a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3070632999879308,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-001a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "log": "qt4-cbcl-fn-normalize-unicode-001a-actual.log"
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-006a-resources",
+    "suite": "qt4",
+    "case": "cbcl-fn-normalize-unicode-006a",
+    "mode": "resources",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "resources",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-cbcl-fn-normalize-unicode-006a-resources-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.13119290000759065,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "Sources": [],
+      "Schemas": [],
+      "Parameters": [],
+      "Namespaces": [],
+      "ContextItemSelect": null,
+      "BaseUri": "file:///D:/Development/Bosak/tests/qt4tests/fn/normalize-unicode.xml",
+      "Modules": []
+    },
+    "log": "qt4-cbcl-fn-normalize-unicode-006a-resources.log"
+  },
+  {
+    "name": "qt4-cbcl-fn-normalize-unicode-006a-actual",
+    "suite": "qt4",
+    "case": "cbcl-fn-normalize-unicode-006a",
+    "mode": "actual",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "actual",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt4-cbcl-fn-normalize-unicode-006a-actual-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.299574600008782,
+    "result": {
+      "Suite": "qt4",
+      "Name": "cbcl-fn-normalize-unicode-006a",
+      "kind": "Failed",
+      "message": "Expected error FOCH0003 but succeeded"
+    },
+    "log": "qt4-cbcl-fn-normalize-unicode-006a-actual.log"
+  },
+  {
+    "name": "qt3-C39-xib-date-public-xquery",
+    "suite": "qt3",
+    "case": "C39-xib-date",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-xib-date-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3418840999947861,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-xib-date",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-date(xs:date('2006-03-01'), '[MNn]', 'xib', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-xib-date-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-xib-dateTime-public-xquery",
+    "suite": "qt3",
+    "case": "C39-xib-dateTime",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-xib-dateTime-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3371954000322148,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-xib-dateTime",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-dateTime(xs:dateTime('2006-03-01T12:00:00'), '[MNn]', 'xib', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-xib-dateTime-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-xib-time-public-xquery",
+    "suite": "qt3",
+    "case": "C39-xib-time",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-xib-time-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3434568999800831,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-xib-time",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-time(xs:time('12:00:00'), '[H01]', 'xib', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]12'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-xib-time-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-en-date-public-xquery",
+    "suite": "qt3",
+    "case": "C39-en-date",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-en-date-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.34574900002917275,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-en-date",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-date(xs:date('2006-03-01'), '[MNn]', 'en', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-en-date-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-en-dateTime-public-xquery",
+    "suite": "qt3",
+    "case": "C39-en-dateTime",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-en-dateTime-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3626026000129059,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-en-dateTime",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-dateTime(xs:dateTime('2006-03-01T12:00:00'), '[MNn]', 'en', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-en-dateTime-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-en-time-public-xquery",
+    "suite": "qt3",
+    "case": "C39-en-time",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-en-time-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36850099998991936,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-en-time",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-time(xs:time('12:00:00'), '[H01]', 'en', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'12'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-en-time-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-de-date-public-xquery",
+    "suite": "qt3",
+    "case": "C39-de-date",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-de-date-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.33292239997535944,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-de-date",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-date(xs:date('2006-03-01'), '[MNn]', 'de', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'M\u00e4rz'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-de-date-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-de-dateTime-public-xquery",
+    "suite": "qt3",
+    "case": "C39-de-dateTime",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-de-dateTime-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.37301390001084656,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-de-dateTime",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-dateTime(xs:dateTime('2006-03-01T12:00:00'), '[MNn]', 'de', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'M\u00e4rz'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-de-dateTime-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-de-time-public-xquery",
+    "suite": "qt3",
+    "case": "C39-de-time",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-de-time-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.35474439995596185,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-de-time",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-time(xs:time('12:00:00'), '[H01]', 'de', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'12'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-de-time-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-XIB-date-public-xquery",
+    "suite": "qt3",
+    "case": "C39-XIB-date",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-XIB-date-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.36352610000176355,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-XIB-date",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-date(xs:date('2006-03-01'), '[MNn]', 'XIB', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-XIB-date-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-XIB-dateTime-public-xquery",
+    "suite": "qt3",
+    "case": "C39-XIB-dateTime",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-XIB-dateTime-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.32929530000546947,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-XIB-dateTime",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-dateTime(xs:dateTime('2006-03-01T12:00:00'), '[MNn]', 'XIB', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]March'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-XIB-dateTime-public-xquery.log"
+  },
+  {
+    "name": "qt3-C39-XIB-time-public-xquery",
+    "suite": "qt3",
+    "case": "C39-XIB-time",
+    "mode": "public-xquery",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-independent-profile-driver\\bin\\Release\\net10.0\\Probe.dll",
+      "public-xquery",
+      "D:\\Development\\Bosak\\docs\\conformance\\k04-independent-profile-review\\evidence\\qt3-C39-XIB-time-public-xquery-request.json"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 30,
+    "wallSeconds": 0.3184952999581583,
+    "result": {
+      "Suite": "qt3",
+      "Name": "C39-XIB-time",
+      "mode": "public-xquery",
+      "kind": "Passed",
+      "message": null,
+      "expression": "format-time(xs:time('12:00:00'), '[H01]', 'XIB', (), ())",
+      "assertion": "<result xmlns=\"http://www.w3.org/2010/09/qt-fots-catalog\">\r\n  <assert-eq>'[Language: en]12'</assert-eq>\r\n</result>",
+      "exceptionType": null,
+      "error": null
+    },
+    "log": "qt3-C39-XIB-time-public-xquery.log"
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "language": "xib",
+  "sourceCapability": "FormatDateTimeEngine.IsLanguageSupported returns false; fallback is English with a language marker.",
+  "currentFilterPositive": true,
+  "currentFilterNegative": false,
+  "originalsPassed": {
+    "qt3": 2,
+    "qt4": 2
+  },
+  "qt4CasesAlreadyGated": true,
+  "recommendation": "C40 exact known-unsupported xib metadata qualification in both filters; preserve other language values and dependency kinds",
+  "adoptionQualified": false,
+  "expectedOnlyIfFullQualificationPasses": {
+    "qt3": [
+      31397,
+      0,
+      424
+    ],
+    "qt4": [
+      8941,
+      0,
+      1918
+    ]
+  },
+  "ownerApprovalRequiredBeforeBaselineChange": true
+}

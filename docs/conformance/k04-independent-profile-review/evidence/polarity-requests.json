@@ -1,0 +1,162 @@
+[
+  {
+    "Type": "language",
+    "Value": "xib",
+    "Satisfied": true
+  },
+  {
+    "Type": "language",
+    "Value": "xib",
+    "Satisfied": false
+  },
+  {
+    "Type": "language",
+    "Value": "en",
+    "Satisfied": true
+  },
+  {
+    "Type": "language",
+    "Value": "en",
+    "Satisfied": false
+  },
+  {
+    "Type": "language",
+    "Value": "de",
+    "Satisfied": true
+  },
+  {
+    "Type": "language",
+    "Value": "de",
+    "Satisfied": false
+  },
+  {
+    "Type": "language",
+    "Value": "XIB",
+    "Satisfied": true
+  },
+  {
+    "Type": "language",
+    "Value": "XIB",
+    "Satisfied": false
+  },
+  {
+    "Type": "language",
+    "Value": "zzzz",
+    "Satisfied": true
+  },
+  {
+    "Type": "language",
+    "Value": "zzzz",
+    "Satisfied": false
+  },
+  {
+    "Type": "unicode-normalization-form",
+    "Value": "FULLY-NORMALIZED",
+    "Satisfied": true
+  },
+  {
+    "Type": "unicode-normalization-form",
+    "Value": "FULLY-NORMALIZED",
+    "Satisfied": false
+  },
+  {
+    "Type": "feature",
+    "Value": "fn-load-xquery-module",
+    "Satisfied": true
+  },
+  {
+    "Type": "feature",
+    "Value": "fn-load-xquery-module",
+    "Satisfied": false
+  },
+  {
+    "Type": "feature",
+    "Value": "staticTyping",
+    "Satisfied": true
+  },
+  {
+    "Type": "feature",
+    "Value": "staticTyping",
+    "Satisfied": false
+  },
+  {
+    "Type": "spec",
+    "Value": "XQ10",
+    "Satisfied": true
+  },
+  {
+    "Type": "spec",
+    "Value": "XQ10",
+    "Satisfied": false
+  },
+  {
+    "Type": "spec",
+    "Value": "XQ31+",
+    "Satisfied": true
+  },
+  {
+    "Type": "spec",
+    "Value": "XQ31+",
+    "Satisfied": false
+  },
+  {
+    "Type": "xsd-version",
+    "Value": "1.0",
+    "Satisfied": true
+  },
+  {
+    "Type": "xsd-version",
+    "Value": "1.0",
+    "Satisfied": false
+  },
+  {
+    "Type": "xsd-version",
+    "Value": "1.1",
+    "Satisfied": true
+  },
+  {
+    "Type": "xsd-version",
+    "Value": "1.1",
+    "Satisfied": false
+  },
+  {
+    "Type": "xml-version",
+    "Value": "1.0",
+    "Satisfied": true
+  },
+  {
+    "Type": "xml-version",
+    "Value": "1.0",
+    "Satisfied": false
+  },
+  {
+    "Type": "xml-version",
+    "Value": "1.1",
+    "Satisfied": true
+  },
+  {
+    "Type": "xml-version",
+    "Value": "1.1",
+    "Satisfied": false
+  },
+  {
+    "Type": "default-language",
+    "Value": "en",
+    "Satisfied": true
+  },
+  {
+    "Type": "default-language",
+    "Value": "en",
+    "Satisfied": false
+  },
+  {
+    "Type": "default-language",
+    "Value": "fr-CA",
+    "Satisfied": true
+  },
+  {
+    "Type": "default-language",
+    "Value": "fr-CA",
+    "Satisfied": false
+  }
+]

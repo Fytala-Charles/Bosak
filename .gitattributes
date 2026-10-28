@@ -388,3 +388,7 @@ docs/conformance/k04-pragma-admission/*.patch -text whitespace=cr-at-eol,-blank-
 
 # C38 owner-approved adoption preserves fresh normal execution evidence.
 docs/conformance/k04-pragma-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C39 preserves independent-profile dispositions, original diagnostics and schema context.
+docs/conformance/k04-independent-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-independent-profile-review/RESULTS.json -text whitespace=cr-at-eol

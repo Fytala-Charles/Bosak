@@ -1,0 +1,214 @@
+{
+  "remainingSkips": 426,
+  "unsupportedDependencyCases": 370,
+  "rejectedDependencyOccurrences": 371,
+  "categories": {
+    "earlier-spec-applicability": 165,
+    "xml-version-profile": 39,
+    "negative-on-frozen-admitted-feature": 26,
+    "legacy-xsd-profile-review": 37,
+    "declared-unsupported-optional-feature": 93,
+    "negative-on-implemented-normalization": 2,
+    "different-default-language": 1,
+    "unreported-unicode-version": 5,
+    "known-xib-polarity-candidate": 2
+  },
+  "overlappingCase": "fn-transform-902",
+  "overlapReason": "Two negative feature predicates in the same disposition category",
+  "occurrences": [
+    {
+      "Type": "spec",
+      "Value": "XQ10",
+      "Satisfied": true,
+      "Count": 117
+    },
+    {
+      "Type": "feature",
+      "Value": "staticTyping",
+      "Satisfied": true,
+      "Count": 75
+    },
+    {
+      "Type": "xml-version",
+      "Value": "1.0",
+      "Satisfied": true,
+      "Count": 37
+    },
+    {
+      "Type": "xsd-version",
+      "Value": "1.0",
+      "Satisfied": true,
+      "Count": 37
+    },
+    {
+      "Type": "feature",
+      "Value": "fn-load-xquery-module",
+      "Satisfied": false,
+      "Count": 16
+    },
+    {
+      "Type": "spec",
+      "Value": "XP20 XQ10",
+      "Satisfied": true,
+      "Count": 15
+    },
+    {
+      "Type": "spec",
+      "Value": "XQ10 XQ30",
+      "Satisfied": true,
+      "Count": 11
+    },
+    {
+      "Type": "feature",
+      "Value": "olson-timezone",
+      "Satisfied": true,
+      "Count": 8
+    },
+    {
+      "Type": "spec",
+      "Value": "XP20 XP30 XQ10 XQ30",
+      "Satisfied": true,
+      "Count": 7
+    },
+    {
+      "Type": "spec",
+      "Value": "XQ10 XP20",
+      "Satisfied": true,
+      "Count": 7
+    },
+    {
+      "Type": "feature",
+      "Value": "xpath-1.0-compatibility",
+      "Satisfied": true,
+      "Count": 5
+    },
+    {
+      "Type": "feature",
+      "Value": "fn-transform-XSLT",
+      "Satisfied": false,
+      "Count": 3
+    },
+    {
+      "Type": "feature",
+      "Value": "schema-location-hint",
+      "Satisfied": true,
+      "Count": 3
+    },
+    {
+      "Type": "spec",
+      "Value": "XP30 XQ30",
+      "Satisfied": true,
+      "Count": 2
+    },
+    {
+      "Type": "spec",
+      "Value": "XQ10 XP20 XQ30 XP30",
+      "Satisfied": true,
+      "Count": 2
+    },
+    {
+      "Type": "feature",
+      "Value": "typedData",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "feature",
+      "Value": "serialization",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "xml-version",
+      "Value": "1.0:4-",
+      "Satisfied": true,
+      "Count": 2
+    },
+    {
+      "Type": "unicode-normalization-form",
+      "Value": "FULLY-NORMALIZED",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "feature",
+      "Value": "collection-stability",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "unicode-version",
+      "Value": "7.0",
+      "Satisfied": true,
+      "Count": 2
+    },
+    {
+      "Type": "feature",
+      "Value": "fn-transform-XSLT30",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "language",
+      "Value": "xib",
+      "Satisfied": false,
+      "Count": 2
+    },
+    {
+      "Type": "feature",
+      "Value": "arbitraryPrecisionDecimal",
+      "Satisfied": true,
+      "Count": 2
+    },
+    {
+      "Type": "default-language",
+      "Value": "fr-CA",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "unicode-version",
+      "Value": "5.2",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "unicode-version",
+      "Value": "6.0",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "unicode-version",
+      "Value": "6.2",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "spec",
+      "Value": "XP20 XQ10 XP30 XQ30",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "spec",
+      "Value": "XP20",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "spec",
+      "Value": "XQ30",
+      "Satisfied": true,
+      "Count": 1
+    },
+    {
+      "Type": "spec",
+      "Value": "XQ30 XP30",
+      "Satisfied": true,
+      "Count": 1
+    }
+  ],
+  "otherSkips": 56,
+  "schemaHarnessErrors": 6
+}

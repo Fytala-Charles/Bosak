@@ -1,0 +1,1 @@
+{"Suite":"qt3","Name":"format-dateTime-en151","Sources":[],"Schemas":[],"Parameters":[{"Name":"b","SelectExpression":"xs:dateTime(\u00272006-03-01T12:00:00\u0027)","NamespaceUri":null}],"Namespaces":[],"ContextItemSelect":null,"BaseUri":"file:///D:/Development/Bosak/tests/qt3tests/fn/format-dateTime.xml","Modules":[]}
