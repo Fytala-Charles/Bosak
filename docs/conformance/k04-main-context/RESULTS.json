@@ -1,0 +1,58 @@
+{
+  "status": "Complete bounded main-module context initialization; wider resource/module qualification remains open",
+  "validation": {
+    "date": "2026-10-28",
+    "slice": "K04-C26",
+    "sourceBase": "e2034067eb87e8a92ff978eb14c0fab72bb3ac12",
+    "candidateVersion": "1.30.0",
+    "publishedVersion": "1.26.3",
+    "newRegressionRows": 52,
+    "initialBaselineRows": 36,
+    "initialBaselineFailed": 30,
+    "initialBaselinePassed": 6,
+    "supplementalRows": 12,
+    "solutionPassed": 23822,
+    "solutionProjects": 10,
+    "xqueryPassed": 423,
+    "standardPassed": 13797,
+    "xsltPassed": 8196,
+    "originalPublicPassed": 31,
+    "originalPublicFailed": 0,
+    "independentControlsPassed": 18,
+    "unchangedLibraryControls": 5,
+    "correctedReviewOutcomes": 45,
+    "unchangedFilterAssessments": 97,
+    "actualDirectOriginals": {
+      "Passed": 1,
+      "Skipped": 30
+    },
+    "normalQt3": [
+      31165,
+      0,
+      656
+    ],
+    "normalQt4": [
+      8939,
+      0,
+      1920
+    ],
+    "normalContextQt3": [
+      4,
+      0,
+      40
+    ],
+    "normalContextQt4": [
+      0,
+      0,
+      53
+    ],
+    "gatedSets": 230,
+    "experimentalPasses": 11,
+    "finalBoundedProcesses": 90,
+    "admissionChanged": false,
+    "baselineChanged": false,
+    "releaseApproved": false,
+    "grammarReviewRows": 4
+  },
+  "next": "C27: audit13 resource/module-bearing QT3 originals before any guard/admission proposal"
+}

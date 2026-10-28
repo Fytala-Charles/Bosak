@@ -62,6 +62,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 3.5   | 08-10-2026     | REQ-118 4.0-S4: ResolveFunctionNamespaces for PipelineExprNode
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 3.5   | 28-10-2026     | Compile main context initializers with complete prolog visibility (1.30.0).              |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Api;
@@ -219,7 +220,20 @@ public sealed class XQueryCompiler
             .Cast<string>()
             .ToList();
 
-        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames);
+        IrModule? contextInitializer = null;
+        if (parseResult.StaticContext.ContextDeclaration?.Initializer is { } initializer)
+        {
+            var resolvedInitializer = ResolveFunctionNamespaces(initializer, parseResult.StaticContext);
+            StaticNameTestValidator.Validate(resolvedInitializer, prefix =>
+                parseResult.StaticContext.Namespaces.TryGetValue(prefix, out var uri) ? uri : null);
+            unresolvedNames.Merge(ModuleVisibilityValidator.Validate(
+                resolvedInitializer, parseResult.StaticContext, moduleNamespaces,
+                mainVisibility.Functions, mainVisibility.Variables));
+            contextInitializer = new IrLowerer { DefaultEmptyOrder = ToEmptyOrder(parseResult.StaticContext.DefaultEmptyOrderLeast) }
+                .Lower(optimizer.Optimize(resolvedInitializer));
+        }
+
+        return new XQueryExecutable(module, parseResult.StaticContext, userFunctions, userVariables, _moduleSources, libraryModuleContextItemTypes, unresolvedNames, contextInitializer);
     }
 
     private static EmptyOrder? ToEmptyOrder(bool? least)

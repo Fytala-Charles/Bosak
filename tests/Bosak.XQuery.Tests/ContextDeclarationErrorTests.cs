@@ -12,6 +12,7 @@
 //                      |     Author       |Version|  Date          | Notes                                                                                    |
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      | Charles Korthout | 0.2   | 28-10-2026     | Replace prior main-module refusal controls after explicit C26 semantic adoption.          |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
@@ -82,11 +83,13 @@ public sealed class ContextDeclarationErrorTests
         Assert.Contains(loadDynamically ? "FOQM0005" : "XPTY0004", error.Message);
     }
 
-    /// <summary>Retains the existing main-module declaration boundary.</summary>
-    /// <param name="query">The unsupported main-module declaration.</param>
+    /// <summary>Checks main declarations alongside the unchanged library error contract.</summary>
+    /// <param name="query">The main-module declaration.</param>
+    /// <param name="expected">The expected initial item.</param>
     [Theory]
-    [InlineData("declare context item := 3; .")]
-    [InlineData("declare context item external; .")]
-    public void MainDeclarationsRemainOutsideThisFix(string query) =>
-        Assert.Contains("XPST0003", Assert.ThrowsAny<Exception>(() => new XQueryCompiler().Compile(query)).Message);
+    [InlineData("declare context item := 3; .", "3")]
+    [InlineData("declare context item external; .", "27")]
+    public void MainDeclarationsCoexistWithLibraryErrors(string query, string expected) =>
+        Assert.Equal(expected, new XQueryCompiler().Compile(query)
+            .Evaluate(new XQueryContext().WithContextItem(XdmValue.FromInteger(27))).ToString());
 }

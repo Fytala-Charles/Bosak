@@ -126,6 +126,7 @@
 //                      | Charles Korthout | 2.48  | 18-10-2026     | Correct build-warning documentation and nullable-flow diagnostics.                     |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.49  | 28-10-2026     | Add internal semantic-focus resolution and per-variable lazy-cache invalidation for XQuery. |
 // ===========================================================================================================================================================
 using Bosak.XPath.Core.Xdm;
 using Bosak.XPath.Runtime.Functions;
@@ -885,6 +886,23 @@ public sealed class EvaluationContext
     // ------------------------------------------------------------------
     // Focus
     // ------------------------------------------------------------------
+
+    /// <summary>Resolves an initial focus when a semantic read finds it absent.</summary>
+    internal Action? InitialFocusResolver { get; set; }
+
+    /// <summary>Reads the context item, resolving a pending initial focus if necessary.</summary>
+    /// <returns>The resolved context item, or undefined when focus remains absent.</returns>
+    internal XdmValue ResolveContextItem()
+    {
+        if (_contextItem.IsUndefined) InitialFocusResolver?.Invoke();
+        return _contextItem;
+    }
+
+    /// <summary>Invalidates one cached global before a new explicit-context query evaluation.</summary>
+    /// <param name="localName">The variable local name.</param>
+    /// <param name="namespaceUri">The variable namespace.</param>
+    internal void InvalidateLazyGlobal(string localName, string namespaceUri)
+        => _evaluatedLazyGlobals.Remove((localName, namespaceUri));
 
     /// <summary>The context item (the value of the <c>.</c> expression); undefined when there is no focus.</summary>
     public XdmValue ContextItem => _contextItem;

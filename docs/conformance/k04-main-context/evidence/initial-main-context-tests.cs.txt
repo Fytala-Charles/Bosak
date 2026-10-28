@@ -1,0 +1,118 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 28 October 2026
+// PURPOSE              : Verify main context declaration initialization, typing, focus, cycles and evaluation reuse.
+// SPECIAL NOTES        : Unit tests verifying correctness of the underlying implementation.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 28-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using Bosak.XPath.Core.Xdm;
+using Bosak.XQuery.Api;
+using Xunit;
+
+namespace Bosak.XQuery.Tests;
+
+/// <summary>Verify main context declaration initialization, typing, focus, cycles and evaluation reuse.</summary>
+public sealed class MainContextDeclarationTests
+{
+    /// <summary>Supplies initialization, external/default, grammar, type and dependency controls.</summary>
+    /// <returns>Query, expected lexical result, error and optional supplied integer context.</returns>
+    public static IEnumerable<object[]> Cases()
+    {
+        foreach (var row in new[]
+        {
+            ("declare context item := 3; .+4", "7", "", false),
+            ("declare context item := 3; .", "3", "", true),
+            ("declare context item as xs:integer := 3; .", "3", "", false),
+            ("declare context item external := 5; .", "5", "", false),
+            ("declare context item external := 5; .", "27", "", true),
+            ("declare context item as xs:integer external; .", "27", "", true),
+            ("declare context item external; 42", "42", "", false),
+            ("declare context item external; .", "", "XPDY0002", false),
+            ("declare context item as xs:integer := 'London'; .", "", "XPTY0004", false),
+            ("declare context item as xs:string external; .", "", "XPTY0004", true),
+            ("declare context item := (); .", "", "XPTY0004", false),
+            ("declare context item := (1,2); .", "", "XPTY0004", false),
+            ("declare context item := 1; declare context item := 2; .", "", "XQST0099", false),
+            ("declare context item external; declare context item external; .", "", "XQST0099", false),
+            ("declare context item := 3; concat(position(), ':',last())", "1:1", "", false),
+            ("declare variable $x := . + 5; declare context item := 17; $x", "22", "", false),
+            ("declare context item := $x; declare variable $x := 7; .", "7", "", false),
+            ("declare context item := local:x(); declare function local:x() {7}; .", "7", "", false),
+            ("declare variable $x := .; declare context item := $x; .", "", "XQDY0054", false),
+            ("declare context item := .; .", "", "XQDY0054", false),
+            ("declare context item := .; .", "", "XQDY0054", true),
+            ("declare context item := position(); .", "", "XQDY0054", false),
+            ("declare context item := last(); .", "", "XQDY0054", false),
+            ("declare (:c:) context (:c:) item := 3; .", "3", "", false),
+            ("declare context item as xs:integer? := 3; .", "", "XPST0003", false),
+            ("declare context item as xs:integer+ := 3; .", "", "XPST0003", false),
+            ("declare context item as xs:integer* := 3; .", "", "XPST0003", false),
+            ("declare context item as empty-sequence() external; .", "", "XPST0003", false),
+            ("declare context item; .", "", "XPST0003", false),
+            ("declare context item as element(a) := <a/>; local-name(.)", "a", "", false),
+            ("declare context item := map{'x':7}; .?x", "7", "", false),
+            ("declare context item as xs:integer := xs:untypedAtomic('3'); .", "", "XPTY0004", false),
+            ("declare context item := 3; declare namespace p='urn:p'; .", "", "XPST0003", false)
+        }) yield return [row.Item1, row.Item2, row.Item3, row.Item4];
+    }
+
+    /// <summary>Checks exact results/errors and restores the host's supplied focus.</summary>
+    /// <param name="query">The main-module query.</param>
+    /// <param name="expected">The expected lexical result.</param>
+    /// <param name="code">The required error, or empty for success.</param>
+    /// <param name="supplyContext">Whether the host supplies integer 27.</param>
+    [Theory, MemberData(nameof(Cases))]
+    public void MainDeclarationContract(string query, string expected, string code, bool supplyContext)
+    {
+        var context = new XQueryContext();
+        if (supplyContext) context.WithContextItem(XdmValue.FromInteger(27));
+        string Run() => new XQueryCompiler().Compile(query).Evaluate(context).ToString();
+        if (code.Length == 0) Assert.Equal(expected, Run());
+        else Assert.Contains(code, Assert.ThrowsAny<Exception>(() => Run()).Message);
+        Assert.Equal(supplyContext ? "27" : "", context.EvaluationContext.ContextItem.IsUndefined ? "" : context.EvaluationContext.ContextItem.ToString());
+    }
+
+    /// <summary>Reinitializes declared focus and dependent globals when a host context is reused.</summary>
+    [Fact]
+    public void ReusedContextRefreshesDependentGlobals()
+    {
+        var query = new XQueryCompiler().Compile("declare context item external; declare variable $x := .; $x");
+        var context = new XQueryContext().WithContextItem(XdmValue.FromInteger(1));
+        Assert.Equal("1", query.Evaluate(context).ToString());
+        context.WithContextItem(XdmValue.FromInteger(2));
+        Assert.Equal("2", query.Evaluate(context).ToString());
+        Assert.Equal("2", context.EvaluationContext.ContextItem.ToString());
+    }
+
+    /// <summary>Stabilizes sequence results before restoring host focus.</summary>
+    [Fact]
+    public void SequenceResultRetainsDeclaredGlobalFocus()
+    {
+        var context = new XQueryContext().WithContextItem(XdmValue.FromInteger(99));
+        var query = new XQueryCompiler().Compile("declare context item := 10; declare variable $g := .; (1,2,3) ! ($g + .)");
+        var result = query.Evaluate(context);
+        Assert.Equal("99", context.EvaluationContext.ContextItem.ToString());
+        var values = new List<string>();
+        foreach (var item in XdmSequence.FromSource(result.SequenceValue!)) values.Add(item.ToString());
+        Assert.Equal(new[] { "11", "12", "13" }, values);
+    }
+
+    /// <summary>Keeps declared globals available to a returned function through the current host context.</summary>
+    [Fact]
+    public void ReturnedFunctionCanUseDeclaredGlobals()
+    {
+        var context = new XQueryContext();
+        var query = new XQueryCompiler().Compile("declare context item := 27; declare variable $g := .; function(){ $g }");
+        context.WithVariable("f", query.Evaluate(context));
+        Assert.Equal("27", new XQueryCompiler().Compile("$f()").Evaluate(context).ToString());
+    }
+}

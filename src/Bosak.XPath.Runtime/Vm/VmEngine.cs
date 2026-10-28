@@ -434,6 +434,7 @@
 //                      | Charles Korthout | 2.207 | 27-10-2026     | Validate legacy binding item types before atomization and cardinality checks (K01).        |
 //                      |==================|=======|================|=========================================================================================
 
+//                      | Charles Korthout | 2.208 | 28-10-2026     | Resolve pending XQuery initial focus at semantic context-load instructions (1.30.0).     |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -663,18 +664,20 @@ internal static class VmEngine
                 // Context
                 // ------------------------------------------------------------------
                 case IrOpCode.LoadContextItem:
-                    if (context.ContextItem.IsUndefined)
+                    if (context.ResolveContextItem().IsUndefined)
                         throw new InvalidOperationException("XPDY0002: The context item is absent.");
                     registers[instr.RegisterA] = context.ContextItem;
                     ip++;
                     break;
 
                 case IrOpCode.LoadContextPosition:
+                    context.ResolveContextItem();
                     registers[instr.RegisterA] = XdmValue.FromInteger(context.ContextPosition);
                     ip++;
                     break;
 
                 case IrOpCode.LoadContextSize:
+                    context.ResolveContextItem();
                     registers[instr.RegisterA] = XdmValue.FromInteger(context.ContextSize);
                     ip++;
                     break;

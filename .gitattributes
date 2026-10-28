@@ -312,3 +312,7 @@ docs/conformance/k04-context-declaration-review/RESULTS.json -text whitespace=cr
 # K04-C25 preserves duplicate-context regression, replay and gate evidence.
 docs/conformance/k04-context-duplicate-fix/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
 docs/conformance/k04-context-duplicate-fix/RESULTS.json -text whitespace=cr-at-eol
+
+# K04-C26 retains phased main-context regressions, diagnostic probes and final gates.
+docs/conformance/k04-main-context/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-main-context/RESULTS.json -text whitespace=cr-at-eol

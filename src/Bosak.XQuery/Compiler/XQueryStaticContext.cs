@@ -29,6 +29,7 @@
 //                      | Charles Korthout | 0.9   | 21-09-2026     | API freeze stage A: reduced accessibility (internalized Parser/Compiler types)         |
 //                      | Charles Korthout | 0.10  | 21-09-2026     | API freeze stage C: internalized type                                                   |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.11  | 28-10-2026     | Represent main-module context item declarations and preserve them in clones (1.30.0).    |
 // ===========================================================================================================================================================
 
 using Bosak.XPath.Core.Xdm;
@@ -59,6 +60,12 @@ internal sealed record UserVariableDeclaration(
     bool IsExternal,
     int Position,
     bool IsPrivate = false);
+
+/// <summary>A main-module initial context item declaration.</summary>
+/// <param name="TypeName">The declared ItemType, defaulting to item().</param>
+/// <param name="Initializer">The initial or external-default expression, when present.</param>
+/// <param name="IsExternal">Whether the host may supply the initial item.</param>
+internal sealed record ContextItemDeclaration(string TypeName, XPathAstNode? Initializer, bool IsExternal);
 
 /// <summary>A module import declaration (<c>import module namespace p = "uri" at "loc", ...;</c>).</summary>
 public sealed record ModuleImport(
@@ -139,7 +146,8 @@ internal sealed class XQueryStaticContext
         string? contextItemTypeName,
         Dictionary<(string LocalName, string NamespaceUri), DecimalFormat> decimalFormats,
         DecimalFormat? declaredDefaultDecimalFormat,
-        bool? boundarySpaceStrip)
+        bool? boundarySpaceStrip,
+        ContextItemDeclaration? contextDeclaration)
     {
         _namespaces = namespaces;
         _variables = variables;
@@ -160,6 +168,7 @@ internal sealed class XQueryStaticContext
         ContextItemTypeName = contextItemTypeName;
         DeclaredDefaultDecimalFormat = declaredDefaultDecimalFormat;
         BoundarySpaceStrip = boundarySpaceStrip;
+        ContextDeclaration = contextDeclaration;
     }
 
     /// <summary>
@@ -201,6 +210,15 @@ internal sealed class XQueryStaticContext
     /// declare one. Used by fn:load-xquery-module to validate the supplied context item.
     /// </summary>
     public string? ContextItemTypeName { get; private init; }
+
+    /// <summary>The main-module initial context item declaration, if explicitly present.</summary>
+    internal ContextItemDeclaration? ContextDeclaration { get; private init; }
+
+    /// <summary>Creates a context carrying a main-module context declaration.</summary>
+    /// <param name="declaration">The parsed declaration.</param>
+    /// <returns>The updated immutable static context.</returns>
+    internal XQueryStaticContext WithContextDeclaration(ContextItemDeclaration declaration)
+        => CloneWith(contextDeclaration: declaration);
 
     /// <summary>Creates a new context with the declared context item type set.</summary>
     public XQueryStaticContext WithContextItemType(string? typeName)
@@ -408,7 +426,8 @@ internal sealed class XQueryStaticContext
         string? contextItemTypeName = null,
         Dictionary<(string LocalName, string NamespaceUri), DecimalFormat>? decimalFormats = null,
         DecimalFormat? declaredDefaultDecimalFormat = null,
-        bool? boundarySpaceStrip = null)
+        bool? boundarySpaceStrip = null,
+        ContextItemDeclaration? contextDeclaration = null)
     {
         return new XQueryStaticContext(
             namespaces ?? _namespaces,
@@ -429,6 +448,7 @@ internal sealed class XQueryStaticContext
             contextItemTypeName ?? ContextItemTypeName,
             decimalFormats ?? _decimalFormats,
             declaredDefaultDecimalFormat ?? DeclaredDefaultDecimalFormat,
-            boundarySpaceStrip ?? BoundarySpaceStrip);
+            boundarySpaceStrip ?? BoundarySpaceStrip,
+            contextDeclaration ?? ContextDeclaration);
     }
 }

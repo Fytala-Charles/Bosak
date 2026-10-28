@@ -479,6 +479,7 @@
 //                      | Charles Korthout | 5.158 | 28-10-2026     | Add typed XPath4 date-formatting arities3/4 and keyword defaults (1.29.0).                 |
 //                      | Charles Korthout | 5.159 | 28-10-2026     | Convert FULLY-NORMALIZED strings with a coherent pinned Unicode17 backend (1.29.1).      |
 //                      | Charles Korthout | 5.160 | 28-10-2026     | Fix normalization XML whitespace, XPath4 empty-form defaults and keywords (1.29.2).     |
+//                      | Charles Korthout | 5.161 | 28-10-2026     | Resolve pending XQuery initial focus for implicit-context standard functions (1.30.0).   |
 // ===========================================================================================================================================================
 using System.Collections.Frozen;
 using System.Globalization;
@@ -4895,7 +4896,7 @@ public static class FunctionLibrary
 
     private static XdmValue String_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:string() called with no context item.");
         if (item.IsFunction || item.IsArray || item.IsMap)
@@ -5609,7 +5610,7 @@ public static class FunctionLibrary
     /// <summary>F&amp;O 4.0 §17.7 fn:jkey#0 — the entry key of the context-item JNode.</summary>
     private static XdmValue JKey_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:jkey() requires a context item");
         return JKey(item);
@@ -5632,7 +5633,7 @@ public static class FunctionLibrary
     /// <summary>F&amp;O 4.0 §17.7 fn:jvalue#0 — the wrapped value of the context-item JNode.</summary>
     private static XdmValue JValue_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:jvalue() requires a context item");
         return JValue(item);
@@ -6087,7 +6088,7 @@ public static class FunctionLibrary
     private static XdmValue Snapshot_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         // fn:snapshot() with no argument is fn:snapshot(.); an absent context item is XPDY0002.
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         return Snapshot(ctx, new[] { item });
@@ -6797,14 +6798,14 @@ public static class FunctionLibrary
 
     private static XdmValue Position(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:position() called with no context item.");
         return XdmValue.FromInteger(ctx.ContextPosition);
     }
 
     private static XdmValue Last(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:last() called with no context item.");
         if (ctx.ContextSize < 0)
         {
@@ -6851,7 +6852,7 @@ public static class FunctionLibrary
 
     private static XdmValue StringLength_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:string-length() called with no context item.");
         // fn:string-length() is equivalent to fn:string-length(fn:string(.))
@@ -7963,7 +7964,7 @@ public static class FunctionLibrary
 
     private static XdmValue HasChildren_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: Context item is absent for fn:has-children().");
         return HasChildren(item);
@@ -8015,7 +8016,7 @@ public static class FunctionLibrary
 
     private static XdmValue Path_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         return Path_1(ctx, new[] { item });
@@ -9167,7 +9168,7 @@ public static class FunctionLibrary
 
     private static XdmValue NormalizeSpace_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:normalize-space() called with no context item.");
         return XdmValue.FromString(NormalizeSpaceString(AtomizedString(item)));
@@ -9550,7 +9551,7 @@ public static class FunctionLibrary
     // namespace-aware arity-1 constructor.
     private static XdmValue XsFocusCtor(EvaluationContext ctx, string typeName)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException($"XPDY0002: xs:{typeName}() called with no context item.");
         if (typeName == "QName")
@@ -10058,7 +10059,7 @@ public static class FunctionLibrary
 
     private static XdmValue Id_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:id() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:id");
@@ -10105,7 +10106,7 @@ public static class FunctionLibrary
 
     private static XdmValue ElementWithId_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:element-with-id() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:element-with-id");
@@ -10221,7 +10222,7 @@ public static class FunctionLibrary
 
     private static XdmValue Idref_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var focus = ctx.ContextItem;
+        var focus = ctx.ResolveContextItem();
         if (!focus.IsNode)
             throw new InvalidOperationException("XPTY0004: fn:idref() context item is not a node.");
         RequireDocumentRootedTree(focus.NodeValue, "fn:idref");
@@ -11578,7 +11579,7 @@ public static class FunctionLibrary
 
     private static XdmValue BaseUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:base-uri() called with no context item.");
         if (!item.IsNode)
@@ -11623,7 +11624,7 @@ public static class FunctionLibrary
 
     private static XdmValue DocumentUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:document-uri() called with no context item.");
         if (!item.IsNode)
@@ -11665,7 +11666,7 @@ public static class FunctionLibrary
 
     private static XdmValue Nilled_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined || IsEmptySequence(item))
             throw new InvalidOperationException("XPDY0002: fn:nilled() called with no context item.");
         if (!item.IsNode || item.NodeValue == null)
@@ -15324,7 +15325,7 @@ public static class FunctionLibrary
 
     private static XdmValue LocalName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15340,7 +15341,7 @@ public static class FunctionLibrary
 
     private static XdmValue NamespaceUri_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15356,7 +15357,7 @@ public static class FunctionLibrary
 
     private static XdmValue Name_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -15381,7 +15382,7 @@ public static class FunctionLibrary
 
     private static XdmValue Lang_1(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:lang() called with no context item.");
         if (!item.IsNode)
@@ -16277,7 +16278,7 @@ public static class FunctionLibrary
 
     private static XdmValue NodeName_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -16305,7 +16306,7 @@ public static class FunctionLibrary
 
     private static XdmValue Number_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:number() called with no context item.");
         return Number(ctx.ContextItem);
     }
@@ -16333,7 +16334,7 @@ public static class FunctionLibrary
     private static XdmValue Data_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
         // fn:data() is fn:data(.); an absent context item is XPDY0002 (K2-DataFunc-4).
-        if (ctx.ContextItem.IsUndefined)
+        if (ctx.ResolveContextItem().IsUndefined)
             throw new InvalidOperationException("XPDY0002: fn:data() called with no context item.");
         return Data(ctx.ContextItem);
     }
@@ -16445,7 +16446,7 @@ public static class FunctionLibrary
 
     private static XdmValue Root_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002");
         if (!item.IsNode)
@@ -17413,7 +17414,7 @@ public static class FunctionLibrary
 
     private static XdmValue GenerateId_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         // XPDY0002 when the context item is absent; XPTY0004 when it is not a node
         // (generate-id-901).
         if (item.IsUndefined)
@@ -19639,7 +19640,7 @@ public static class FunctionLibrary
 
     private static XdmValue CopyOf_0(EvaluationContext ctx, ReadOnlySpan<XdmValue> args)
     {
-        var item = ctx.ContextItem;
+        var item = ctx.ResolveContextItem();
         if (item.IsUndefined)
             throw new InvalidOperationException("XPDY0002: copy-of() requires a context item.");
         return CopyOf(ctx, item);
