@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-28",
+  "slice": "K04-C40",
+  "sourceBase": "08fe2e5aab1f4d5ee59e675dd78468c5788894b3",
+  "kind": "Isolated exact known-unsupported language=xib qualification",
+  "scope": [
+    "Canonical ordinal dependency Type=language,Value=xib only",
+    "Positive predicate false; negative predicate true; preserve conjunction with all other dependencies",
+    "Both full catalogs, original assertions/resources, scope controls and complete gates",
+    "No normal source/filter, engine, fixtures, assertions, baseline, version, GatedSets, schema backend or release change"
+  ],
+  "capabilityEvidence": "C39 source/capability observations and unchanged original fallback assertions",
+  "specification": {
+    "source": "https://www.w3.org/TR/2017/REC-xpath-functions-31-20170321/#formatting-dates-and-times",
+    "revision": "REC-xpath-functions-31-20170321",
+    "sections": [
+      "9.8.4 date/time formatting",
+      "9.8.4.8 language/calendar/place"
+    ],
+    "kind": "Read-only semantic review, not implementation adoption",
+    "paraphrase": "The supported language set is implementation-defined. Formatting with an unsupported requested language uses fallback and identifies the actual language. This does not prove support for every unknown language or justify reversing negative dependencies on implemented features."
+  },
+  "ownerApproval": "not requested until exact proposal is complete"
+}

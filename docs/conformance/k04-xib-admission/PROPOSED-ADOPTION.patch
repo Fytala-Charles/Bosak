@@ -1,0 +1,63 @@
+--- a/tests/Bosak.XPath.Conformance/DependencyFilter.cs
++++ b/tests/Bosak.XPath.Conformance/DependencyFilter.cs
+@@ -34,6 +34,7 @@
+ //                      | Charles Korthout | 0.16  | 27-10-2026     | Require recognized feature names; preserve explicit frozen catalog admissions.         |
+ //                      | Charles Korthout | 0.17  | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+ //                      | Charles Korthout | 0.18  | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
++//                      | Charles Korthout | 0.19  | 28-10-2026     | Admit reviewed canonical xib fallback cases with correct dependency polarity. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -107,6 +108,15 @@
+ 
+         foreach (var dep in dependencies)
+         {
++            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
++            // Other language metadata retains the existing bounded admission policy.
++            if (dep.Type == "language" && dep.Value == "xib")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+             // Other calendar names retain their existing admission policy.
+             if (dep.Type == "calendar" && dep.Value == "CB")
+--- a/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
++++ b/tests/Bosak.XPath.Conformance40/DependencyFilter40.cs
+@@ -21,6 +21,7 @@
+ //                      | Charles Korthout | 0.6   | 27-10-2026     | Admit reviewed bounded CLDR integer cases; preserve other profile and language guards. |
+ //                      | Charles Korthout | 0.7   | 27-10-2026     | Recognize reviewed unsupported FBF4 sequence with correct dependency polarity.           |
+ //                      | Charles Korthout | 0.8   | 27-10-2026     | Recognize reviewed unsupported CB calendar with correct dependency polarity.             |
++//                      | Charles Korthout | 0.9  | 28-10-2026     | Admit reviewed canonical xib fallback cases with correct dependency polarity. |
+ // ===========================================================================================================================================================
+ 
+ namespace Bosak.XPath.Conformance;
+@@ -103,6 +104,15 @@
+     {
+         foreach (var dep in dependencies)
+         {
++            // Canonical xib is reviewed unsupported: date formatting uses English fallback.
++            // Other language metadata retains the existing bounded admission policy.
++            if (dep.Type == "language" && dep.Value == "xib")
++            {
++                if (dep.Satisfied)
++                    return false;
++                continue;
++            }
++
+             // CB is a reviewed unsupported calendar: the formatter falls back to AD.
+             // Other calendar names retain their existing admission policy.
+             if (dep.Type == "calendar" && dep.Value == "CB")
+--- a/AGENTS.md
++++ b/AGENTS.md
+@@ -61,7 +61,7 @@
+ 
+ Two manual gate runners (not unit-test projects; run them before merging engine-touching slices):
+ 
+-- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,395/0/426** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions. The owner-approved K04 pragma update supersedes 31,340/0/481; its 55 eligible pragma admissions retain all 426 remaining skip names and reasons, including two independent exact-XQ10 pragma exclusions.
++- **QT3 (frozen 3.1 gate):** `dotnet run --project tests/Bosak.XPath.Conformance -c Release` — must stay exactly **31,397/0/424** (any engine-touching slice). The owner-approved [K01 two-case update](docs/conformance/k01-schema-list/BASELINE-ADOPTION.md) and K02 guarded-runner adoption supersede 31,142/0/679 and 31,144/0/677; original receipts remain historical evidence. The owner-approved K04 quote-routing update supersedes 31,145/0/676. The owner-approved K04 unsupported-sequence update supersedes 31,161/0/660. The owner-approved K04 CB-calendar update supersedes 31,162/0/659. The owner-approved K04 context-routing update supersedes 31,165/0/656; its 43 original admissions retain all remaining skip names and reasons. The owner-approved K04 copy-namespaces update supersedes 31,208/0/613; its 49 original admissions retain all 564 remaining skip names and reasons. The owner-approved K04 construction update supersedes 31,257/0/564; its 83 eligible original admissions retain all 481 remaining skip names and reasons, including four independent exact-XQ10 exclusions. The owner-approved K04 pragma update supersedes 31,340/0/481; its 55 eligible pragma admissions retain all 426 remaining skip names and reasons, including two independent exact-XQ10 pragma exclusions. The owner-approved K04 canonical xib update supersedes 31,395/0/426; only format-date-en151 and format-dateTime-en151 leave QT3 skips, retaining all 424 remaining names and reasons.
+ - **qt4tests (4.0 gate, REQ-123 S2):** `dotnet run --project tests/Bosak.XPath.Conformance40 -c Release -- tests/qt4tests` — exit code 2 only when a **GatedSets** member fails (exploratory failures are reported, not gated); `BOSAK_QT4_GATE_ONLY=1` runs just the gated sets for a fast verification pass; `BOSAK_QT4_TEST_TIMEOUT_SECS` tunes the per-test watchdog (default 120s — qt4tests contains pathological runaway evaluations). A 4.0 slice promotes its test-sets into `GatedSets` only when they are 100% green.
+ 
+ ## Architecture Overview
