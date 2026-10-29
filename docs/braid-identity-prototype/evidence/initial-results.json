@@ -1,0 +1,214 @@
+{
+  "checks": [
+    {
+      "id": "approved-closure-admitted",
+      "passed": true
+    },
+    {
+      "id": "candidate-under-old-approval-refused",
+      "passed": true
+    },
+    {
+      "id": "candidate-needs-explicit-new-approval",
+      "passed": true
+    },
+    {
+      "id": "revision-distinct-from-runtime-members",
+      "passed": true
+    },
+    {
+      "id": "source-pin-alone-not-proof",
+      "passed": true
+    },
+    {
+      "id": "identity-deterministic",
+      "passed": true
+    },
+    {
+      "id": "member-order-irrelevant",
+      "passed": true
+    },
+    {
+      "id": "paths-not-identity",
+      "passed": true
+    },
+    {
+      "id": "relocation-admitted",
+      "passed": true
+    },
+    {
+      "id": "artifact-change-distinct",
+      "passed": true
+    },
+    {
+      "id": "revision-change-distinct",
+      "passed": true
+    },
+    {
+      "id": "facade-only-swap-refused",
+      "passed": true
+    },
+    {
+      "id": "same-version-byte-change-refused",
+      "passed": true
+    },
+    {
+      "id": "wrong-assembly-metadata-refused",
+      "passed": true
+    },
+    {
+      "id": "missing-member-refused",
+      "passed": true
+    },
+    {
+      "id": "duplicate-member-refused",
+      "passed": true
+    },
+    {
+      "id": "unreadable-member-refused",
+      "passed": true
+    },
+    {
+      "id": "unexpected-member-refused",
+      "passed": true
+    },
+    {
+      "id": "invalid-hash-refused",
+      "passed": true
+    },
+    {
+      "id": "unsupported-layout-refused",
+      "passed": true
+    },
+    {
+      "id": "unstable-binding-refused",
+      "passed": true
+    },
+    {
+      "id": "lazy-unobserved-member-refused",
+      "passed": true
+    },
+    {
+      "id": "model-complete-loaded-observation-admitted",
+      "passed": true
+    },
+    {
+      "id": "operation-recheck-refuses-drift",
+      "passed": true
+    },
+    {
+      "id": "worker-restart-reobserves",
+      "passed": true
+    },
+    {
+      "id": "identity-includes-format-version",
+      "passed": true
+    },
+    {
+      "id": "old-pin-only-identity-is-historical",
+      "passed": true
+    },
+    {
+      "id": "different-closure-result-is-historical",
+      "passed": true
+    },
+    {
+      "id": "same-verified-result-is-current",
+      "passed": true
+    },
+    {
+      "id": "matching-identity-cannot-bypass-freshness",
+      "passed": true
+    },
+    {
+      "id": "history-not-rewritten",
+      "passed": true
+    },
+    {
+      "id": "equal-parent-worker-admitted",
+      "passed": true
+    },
+    {
+      "id": "wrong-worker-identity-refused",
+      "passed": true
+    },
+    {
+      "id": "wrong-worker-profile-refused",
+      "passed": true
+    },
+    {
+      "id": "wrong-request-id-refused",
+      "passed": true
+    },
+    {
+      "id": "entitlement-independent",
+      "passed": true
+    },
+    {
+      "id": "validation-independent",
+      "passed": true
+    },
+    {
+      "id": "resource-admission-independent",
+      "passed": true
+    },
+    {
+      "id": "parent-entitlement-independent",
+      "passed": true
+    },
+    {
+      "id": "disk-only-evidence-does-not-admit",
+      "passed": true
+    },
+    {
+      "id": "prior-eight-assembly-trace-incomplete-for-nine",
+      "passed": true
+    }
+  ],
+  "mutations": [
+    {
+      "id": "omit-content-hash",
+      "detected": true
+    },
+    {
+      "id": "facade-only-admission",
+      "detected": true
+    },
+    {
+      "id": "omit-complete-observation",
+      "detected": true
+    },
+    {
+      "id": "omit-worker-identity",
+      "detected": true
+    },
+    {
+      "id": "omit-worker-profile",
+      "detected": true
+    },
+    {
+      "id": "omit-entitlement",
+      "detected": true
+    }
+  ],
+  "disk": [
+    {
+      "artifact": "baseline",
+      "membersObserved": 9,
+      "metadataAndHashMatch": true,
+      "runtimeAdmission": false,
+      "note": "Disk observation does not establish stable loaded binding"
+    },
+    {
+      "artifact": "candidate",
+      "membersObserved": 9,
+      "metadataAndHashMatch": true,
+      "runtimeAdmission": false,
+      "note": "Disk observation does not establish stable loaded binding"
+    }
+  ],
+  "approvedRuntimeIdentity": "prototype-runtime-v1:6a3372fc3b91e733b71a426cf40f26feaaeb3bcb:348c1856002cb3cc2e2456f8b659272237f8a2989e375ab60b1f967f70224029",
+  "candidateRuntimeIdentity": "prototype-runtime-v1:2e33d3b7c02eb20a1bfe757a73bb78ebb034c980:e4b806d6dbadaa1bfb489b42f1848b11ea4b2a9221329970fc55a7fa9446f37e",
+  "modelOnlyRuntimeAndWorkerControls": true,
+  "actualBraidIntegration": false
+}

@@ -1,0 +1,141 @@
+﻿// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Qualifies isolated engine identity admission and retained-result policy contracts.
+// SPECIAL NOTES        : Diagnostic harness only; does not change consumer pins, formats or production source.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : LICENSE.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation; isolated engine identity policy contract prototype                                   |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+
+//                      | Charles Korthout | 0.2   | 29-10-2026     | Validate runtime identity syntax and consume recorded load evidence controls               |
+
+using System.Security.Cryptography;
+using System.Text;
+using System.Text.Json;
+using System.Reflection;
+
+var json = new JsonSerializerOptions { PropertyNameCaseInsensitive=true, WriteIndented=true };
+var inputs = JsonSerializer.Deserialize<Dictionary<string, Manifest>>(File.ReadAllText(args[0]), json)!;
+var approved=inputs["baseline"];var candidate=inputs["candidate"];
+var checks=new List<object>();
+void Check(string id, bool result) { checks.Add(new { id, passed=result }); if(!result) throw new InvalidOperationException(id); }
+Manifest Edit(Func<Member,Member> edit) => approved with { Members=approved.Members.Select(edit).ToArray() };
+Manifest Replace(int index, Member member) { var members=approved.Members.ToArray();members[index]=member;return approved with { Members=members }; }
+Observation Bound(Manifest manifest) => new(manifest.Members, true, true);
+var complete=Bound(approved);var policy=new Policy();
+Check("approved-closure-admitted",policy.Admit(approved,complete));
+Check("candidate-under-old-approval-refused",!policy.Admit(approved,Bound(candidate)));
+Check("candidate-needs-explicit-new-approval",policy.Admit(candidate,Bound(candidate)));
+Check("revision-distinct-from-runtime-members",!policy.Admit(approved,candidate.Members.SequenceEqual(approved.Members) ? complete : Bound(candidate)));
+Check("source-pin-alone-not-proof",!policy.Admit(approved,Bound(candidate with { Revision=approved.Revision })));
+Check("identity-deterministic",Policy.Digest(approved)==Policy.Digest(approved));
+Check("member-order-irrelevant",Policy.Digest(approved)==Policy.Digest(approved with { Members=approved.Members.Reverse().ToArray() }));
+Check("paths-not-identity",Policy.Digest(approved)==Policy.Digest(Edit(m=>m with { Path="relocated/"+m.Name })));
+Check("relocation-admitted",policy.Admit(approved,Bound(Edit(m=>m with { Path="relocated/"+m.Name }))));
+Check("artifact-change-distinct",Policy.Digest(approved)!=Policy.Digest(candidate));
+Check("revision-change-distinct",Policy.Digest(approved)!=Policy.Digest(approved with { Revision=candidate.Revision }));
+Check("facade-only-swap-refused",!policy.Admit(approved,Bound(Replace(8,candidate.Members[8]))));
+Check("same-version-byte-change-refused",!policy.Admit(approved,Bound(Replace(0,approved.Members[0] with { Sha256=new string('a',64) }))));
+Check("wrong-assembly-metadata-refused",!policy.Admit(approved,Bound(Replace(0,approved.Members[0] with { Identity="wrong" }))));
+Check("missing-member-refused",!policy.Admit(approved,Bound(approved with { Members=approved.Members.Skip(1).ToArray() })));
+Check("duplicate-member-refused",!policy.Admit(approved,Bound(approved with { Members=approved.Members.Append(approved.Members[0]).ToArray() })));
+Check("unreadable-member-refused",!policy.Admit(approved,Bound(Replace(0,approved.Members[0] with { Readable=false }))));
+Check("unexpected-member-refused",!policy.Admit(approved,Bound(approved with { Members=approved.Members.Append(approved.Members[0] with { Name="Other" }).ToArray() })));
+Check("invalid-hash-refused",!policy.Admit(approved,Bound(Replace(0,approved.Members[0] with { Sha256="not-a-hash" }))));
+Check("unsupported-layout-refused",!policy.Admit(approved,complete with { SupportedLayout=false }));
+Check("unstable-binding-refused",!policy.Admit(approved,complete with { StableBinding=false }));
+var lazy=complete with { Loaded=complete.Loaded.Skip(1).ToArray() };
+Check("lazy-unobserved-member-refused",!policy.Admit(approved,lazy));
+Check("model-complete-loaded-observation-admitted",policy.Admit(approved,complete));
+Check("operation-recheck-refuses-drift",policy.Admit(approved,complete)&&!policy.Admit(approved,Bound(candidate)));
+Check("worker-restart-reobserves",policy.Admit(approved,complete)&&!policy.Admit(approved,Bound(candidate)));
+var runtime=Policy.RuntimeIdentity(approved);var newRuntime=Policy.RuntimeIdentity(candidate);
+Check("identity-includes-format-version",runtime.StartsWith("prototype-runtime-v1:",StringComparison.Ordinal));
+Check("old-pin-only-identity-is-historical",!Policy.Current("bosak:"+approved.Revision,runtime,true));
+Check("different-closure-result-is-historical",!Policy.Current(newRuntime,runtime,true));
+Check("same-verified-result-is-current",Policy.Current(runtime,runtime,true));
+Check("matching-identity-cannot-bypass-freshness",!Policy.Current(runtime,runtime,false));
+var history=JsonSerializer.Serialize(new { identity="bosak:"+approved.Revision, result="retained" });
+_ = Policy.Current("bosak:"+approved.Revision,runtime,true);
+Check("history-not-rewritten",history==JsonSerializer.Serialize(new { identity="bosak:"+approved.Revision, result="retained" }));
+var request=new Envelope("request-1",runtime,"worker-profile",true,true,true);
+Check("equal-parent-worker-admitted",policy.Accept(request,request));
+Check("wrong-worker-identity-refused",!policy.Accept(request,request with { RuntimeIdentity=newRuntime }));
+Check("wrong-worker-profile-refused",!policy.Accept(request,request with { Profile="other" }));
+Check("wrong-request-id-refused",!policy.Accept(request,request with { RequestId="request-2" }));
+Check("entitlement-independent",!policy.Accept(request,request with { Entitled=false }));
+Check("validation-independent",!policy.Accept(request,request with { Validated=false }));
+Check("resource-admission-independent",!policy.Accept(request,request with { ResourcesAdmitted=false }));
+Check("parent-entitlement-independent",!policy.Accept(request with { Entitled=false },request));
+var mutations=new List<object>();
+void Mutant(string id, bool brokenAdmits) { mutations.Add(new {id,detected=brokenAdmits});if(!brokenAdmits)throw new InvalidOperationException("Unkilled mutant "+id); }
+Mutant("omit-content-hash",new Policy(SkipHash:true).Admit(approved,Bound(Replace(0,approved.Members[0] with {Sha256=new string('a',64)}))));
+Mutant("facade-only-admission",new Policy(FacadeOnly:true).Admit(approved,Bound(Replace(0,candidate.Members[0]))));
+Mutant("omit-complete-observation",new Policy(AllowPartial:true).Admit(approved,lazy));
+Mutant("omit-worker-identity",new Policy(SkipWorkerIdentity:true).Accept(request,request with {RuntimeIdentity=newRuntime}));
+Mutant("omit-worker-profile",new Policy(SkipProfile:true).Accept(request,request with {Profile="other"}));
+Mutant("omit-entitlement",new Policy(SkipEntitlement:true).Accept(request,request with {Entitled=false}));
+// Real file/PE observations are separate from modeled runtime binding and worker state.
+var disk=new List<object>();
+foreach(var pair in inputs)
+{
+    var observed=new List<Member>();
+    foreach(var member in pair.Value.Members)
+    {
+        var hash=Convert.ToHexString(SHA256.HashData(File.ReadAllBytes(member.Path))).ToLowerInvariant();
+        var identity=AssemblyName.GetAssemblyName(member.Path).FullName;
+        if(hash!=member.Sha256 || identity!=member.Identity)throw new InvalidOperationException("Disk evidence mismatch");
+        observed.Add(member with {Sha256=hash,Identity=identity});
+    }
+    disk.Add(new {artifact=pair.Key,membersObserved=observed.Count,metadataAndHashMatch=true,runtimeAdmission=policy.Admit(approved,new(observed.ToArray(),false,true)),note="Disk observation does not establish stable loaded binding"});
+}
+Check("disk-only-evidence-does-not-admit",!policy.Admit(approved,new(approved.Members,false,true)));
+var recordedNames=JsonSerializer.Deserialize<string[]>(File.ReadAllText(Path.Combine(Path.GetDirectoryName(args[0])!,"recorded-load-names.json")))!;
+var missingXQuery=approved.Members.Where(m=>recordedNames.Contains(m.Name,StringComparer.Ordinal)).ToArray();
+Check("prior-eight-assembly-trace-incomplete-for-nine",!policy.Admit(approved,new(missingXQuery,true,true)));
+Check("legacy-worker-pair-refused",!policy.Accept(request with {RuntimeIdentity="bosak:"+approved.Revision},request with {RuntimeIdentity="bosak:"+approved.Revision}));
+Check("empty-request-id-refused",!policy.Accept(request with {RequestId=""},request with {RequestId=""}));
+Check("empty-profile-refused",!policy.Accept(request with {Profile=""},request with {Profile=""}));
+Check("malformed-current-identity-refused",!Policy.Current("prototype-runtime-v1:broken","prototype-runtime-v1:broken",true));
+Check("malformed-approved-revision-refused",!policy.Admit(approved with {Revision="not-a-revision"},complete));
+Check("actual-trace-names-consumed",recordedNames.Length==8 && missingXQuery.Length==8);
+File.WriteAllText(args[1],JsonSerializer.Serialize(new {checks,mutations,disk,approvedRuntimeIdentity=runtime,candidateRuntimeIdentity=newRuntime,modelOnlyRuntimeAndWorkerControls=true,actualBraidIntegration=false},json));
+Console.WriteLine($"{checks.Count} controls passed; {mutations.Count} enforcement mutants detected; 18 real PE/hash observations matched.");
+
+internal sealed record Member(string Name,string Identity,string Sha256,string Path,bool Readable);
+internal sealed record Manifest(string Revision,Member[] Members);
+internal sealed record Observation(Member[] Loaded,bool StableBinding,bool SupportedLayout);
+internal sealed record Envelope(string RequestId,string RuntimeIdentity,string Profile,bool Entitled,bool Validated,bool ResourcesAdmitted);
+internal sealed record Policy(bool SkipHash=false,bool FacadeOnly=false,bool AllowPartial=false,bool SkipWorkerIdentity=false,bool SkipProfile=false,bool SkipEntitlement=false)
+{
+    internal static readonly string[] Required=["Bosak.XPath.Core","Bosak.XPath.Parser","Bosak.XPath.Compiler","Bosak.XPath.Runtime","Bosak.XPath.Standard","Bosak.XPath.Providers","Bosak.XPath.Api","Bosak.XQuery","Bosak.Xslt"];
+    internal bool Admit(Manifest approved,Observation actual)
+    {
+        if(!actual.StableBinding || !actual.SupportedLayout || (!Valid(approved.Members) || !Hex(approved.Revision,40)))return false;
+        if(actual.Loaded.Any(m=>!m.Readable)||actual.Loaded.Select(m=>m.Name).Distinct(StringComparer.Ordinal).Count()!=actual.Loaded.Length)return false;
+        if(!AllowPartial && !Valid(actual.Loaded))return false;
+        var required=FacadeOnly ? approved.Members.Where(m=>m.Name=="Bosak.Xslt") : approved.Members.Where(m=>!AllowPartial || actual.Loaded.Any(a=>a.Name==m.Name));
+        return required.All(expected=>actual.Loaded.Any(m=>m.Name==expected.Name && m.Identity==expected.Identity && (SkipHash||m.Sha256==expected.Sha256)));
+    }
+    private static bool Valid(Member[] members)=>members.Length==Required.Length && members.Select(m=>m.Name).ToHashSet(StringComparer.Ordinal).SetEquals(Required) && members.All(m=>m.Readable && !string.IsNullOrWhiteSpace(m.Identity) && m.Sha256.Length==64 && m.Sha256.All(c=>c is >= '0' and <= '9' or >= 'a' and <= 'f'));
+    internal static string Digest(Manifest manifest)
+    {
+        if(!Valid(manifest.Members) || !Hex(manifest.Revision,40))throw new ArgumentException("Invalid approved closure");
+        var canonical=JsonSerializer.Serialize(new {schema="prototype-manifest-v1",revision=manifest.Revision,members=manifest.Members.OrderBy(m=>m.Name,StringComparer.Ordinal).Select(m=>new {name=m.Name,identity=m.Identity,sha256=m.Sha256})});
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(canonical))).ToLowerInvariant();
+    }
+    internal static string RuntimeIdentity(Manifest manifest)=>"prototype-runtime-v1:"+manifest.Revision+":"+Digest(manifest);
+    private static bool Hex(string text,int length)=>text.Length==length && text.All(c=>c is >= '0' and <= '9' or >= 'a' and <= 'f');
+    private static bool Runtime(string text) { var parts=text.Split(':'); return parts.Length==3 && parts[0]=="prototype-runtime-v1" && Hex(parts[1],40) && Hex(parts[2],64); }
+    internal static bool Current(string retained,string verified,bool fresh)=>fresh && Runtime(retained) && retained==verified;
+    internal bool Accept(Envelope parent,Envelope worker)=>!string.IsNullOrWhiteSpace(parent.RequestId) && !string.IsNullOrWhiteSpace(parent.Profile) && Runtime(parent.RuntimeIdentity) && Runtime(worker.RuntimeIdentity) && parent.RequestId==worker.RequestId && (SkipWorkerIdentity||parent.RuntimeIdentity==worker.RuntimeIdentity) && (SkipProfile||parent.Profile==worker.Profile) && (SkipEntitlement||parent.Entitled&&worker.Entitled) && parent.Validated&&worker.Validated && parent.ResourcesAdmitted&&worker.ResourcesAdmitted;
+}
+
