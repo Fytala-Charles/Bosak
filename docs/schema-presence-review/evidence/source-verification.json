@@ -1,0 +1,13 @@
+{
+  "date": "2026-10-29",
+  "allSevenSourceIdentitiesMatch": true,
+  "sources": {
+    "examples/Bosak.Schema.Assessment.Example/Program.cs": "a419310ecb8840c9016b937553989df657b0fe254fe8596493575ceaca143271",
+    "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs": "719a70ba6aee05bd032d2a5a866c7135078d737d64eceaab1927a6217134074d",
+    "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "7b698c384c2d0887f8f699033dd0a8549bfd1b2523c65f8c35f1ebc9adad27ed",
+    "src/Bosak.Schema/Bosak.Schema.csproj": "a1bade5fe569dfb0b2480edcac9102a043345a5bd02468e573b7adcd52ee724d",
+    "tests/Bosak.Schema.Tests/Xsd11/PresenceAssertionAssessmentTests.cs": "4d0eb66d7fab6706c746990c62a401ed822cfcb310ff94958ace0ccbd2e841a9",
+    "tests/Bosak.Schema.Tests/Xsd11/CountAssertionAssessmentTests.cs": "a3cd51fac36d2b012c92067358707edc7c0b7f3e922d4782b48b3ce7b554459d",
+    "tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs": "fc839d2fc38b720261811022aed812e0ebc6257f07ad603b7c3dc10a87fc91cf"
+  }
+}
