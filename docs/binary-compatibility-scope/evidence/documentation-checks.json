@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "fa46b83b7ccf350d194fda17e842b1e4e556cd50094f9bd4529393f1b1480331"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "9a0bf3e5574582653b927dca59c9aec7b821a311849c4dc1d1bec0d05728040e"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "1e6728704526d648bac003ce1282cfdb27597f1f2c132b1fcc8587f1a3c089b1"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "f1b82a1fd310cf6e6441bdb24f1c8a27fdb4f9ec4db9d4e77397c8ed5234ff69"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "528eeaa8cb0efaa07261a2f9313672fccd3e4e43c05049a7fe20442965769244"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "c10e8df196b69cee2e44cf3a7fda3ce6f3d7c7ed1547f067a4994384fe80f084"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "77fda15c9594a119269904b203469b3e83fe94d2b70c917da8fc5d10576034cf"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "8313f5ce9c456d7e8302f72c03ebde80392644fa7790d736860ff23e10212113"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-count-implementation/README.md",
+      "htmlSha256": "ff732085a9c7b07cd6d451cb075a26f5b82ff3f97136a5fe5020e8b00498f046"
+    },
+    {
+      "source": "docs/schema-count-implementation/GUIDE.md",
+      "htmlSha256": "af228badf3de1cc301f1c1033641c9dfe2eee6e115ff1687ea094dae3359018e"
+    },
+    {
+      "source": "docs/schema-count-implementation/ASSESSMENT-GUIDE.md",
+      "htmlSha256": "960166cfa50af9a0814bb1c0a130372e7b793f10602c1e0a5358183171ef8a3f"
+    },
+    {
+      "source": "docs/schema-count-implementation/ADOPTION.md",
+      "htmlSha256": "88b29b8faa9f6a053815cdd1ac3fe1e1c24715566667b484fc052cb6456c89f6"
+    },
+    {
+      "source": "docs/binary-compatibility-scope/README.md",
+      "htmlSha256": "59cd72d7024c62b3285b16750cc5656216fddea4d1350cbd0027e7dab5f4c985"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "4891222ab8dfedf312eccb5953a6d469be52badf2c307d86f808736aa86e65db"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "c3a71d4dd9bccad1d40da10266a1d90df66377530117f65f0c9603006fc9cc43"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "c140306ad8bacb6498b8cdec22c4669cb2baa88bb7ce4f1bb493f87ae6c197ea"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "cdf8ee2442d626d009702432a06b377cae3f3be986ad90b87cab082492e41d5c"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "45c53f5c9105eafb6d609478d4b49888c53adc7d7e88d26b1ca3446a4579720e"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "0fd69ae683479045ce6af8b107d7cea783c320c7bc7361662cec3871fb5cb89e"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "62332b53b210d6edfd6a1380dea3afb2fac51cae03e6bbd38d16584975e56a28"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/COUNT-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "b61b98430ba2e9fd28d3b2d05e4db156d262287adadeb623b929ad8b68bac73b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/UNCHANGED-BINARY-COMPATIBILITY-PLAN.md",
+      "htmlSha256": "e591633eb19a19efeeb3f30a17867a3b2583fa2241d298fa311064a6a71de36d"
+    }
+  ],
+  "localLinks": 2196,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

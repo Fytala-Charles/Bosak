@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "schemaCommit": "944e356fe6f33ce75842d4eb679b49d26482c912",
+  "coreDeliveryResolver": "git log -1 --format=%H -- docs/binary-compatibility-review/README.md",
+  "reviewedDossiers": [
+    "binary-compatibility-scope",
+    "binary-compatibility-execution"
+  ],
+  "productionChanged": false,
+  "newExecutionInReview": false
+}

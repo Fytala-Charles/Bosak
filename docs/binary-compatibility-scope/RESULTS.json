@@ -1,0 +1,11 @@
+{
+  "date": "2026-10-29",
+  "scope": "plan and read-only retained binary inventory",
+  "outputGroups": 9,
+  "priorSealedBinaryHashesMatch": true,
+  "binaryReplacementExecuted": false,
+  "consumerTestsRerun": false,
+  "productionChanged": false,
+  "next": "frozen baseline control then exact engine-only replacement",
+  "uncommitted": true
+}

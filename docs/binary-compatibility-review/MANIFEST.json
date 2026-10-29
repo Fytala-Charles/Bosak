@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed frozen binary qualification checkpoint; no production change",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 350,
+      "sha256": "a20df3de2ab185cc94e816ac446884bb864b027d91fd6cda3ef5d4dbe1edd05b"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4994,
+      "sha256": "628492b926bad6ff89166650683bd378c7eeed1d8bd6318dab21408c78370448"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1380,
+      "sha256": "e75abeb8c9ecf32a6a1b25121d581220fab85dc4c473fbae4ccbbeaca3becbff"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2445,
+      "sha256": "4a1d5c36b66822aec73a9ecdb7e2e35e1b38bf2e7b4fb10ce04a399b0a6b3afa"
+    }
+  ]
+}
