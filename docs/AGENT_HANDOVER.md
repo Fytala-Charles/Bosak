@@ -1,5 +1,7 @@
 # Current restart checkpoint — 29 October 2026
 
+Remote backup: `origin/checkpoint/restart-2026-10-29`, [draft PR #467](https://github.com/Fytala-Charles/Bosak/pull/467). GitHub requires PRs for main; local main has the checkpoint history and remote main is not merged.
+
 Read [restart state](RESTART-2026-10-29.md) and [XDM 4.0 compatibility review plan](XDM40-COMPATIBILITY-REVIEW-PLAN.md) first. C44 is complete at `affc228a`; C45 production approval remains pending. Resume with the consumer compatibility review. Older dated sections below are historical. Delivery commit: `git log -1 --format=%H -- docs/RESTART-2026-10-29.md`.
 
 ## REQ-126 C05 type/collection/pattern reconciliation — 26 October 2026
