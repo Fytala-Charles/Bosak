@@ -1,0 +1,39 @@
+{
+  "final": {
+    "controlCount": 110,
+    "mutants": [
+      "fallback",
+      "qname",
+      "partial",
+      "unwrap"
+    ],
+    "boundedProcesses": 10
+  },
+  "initial": {
+    "prefix": "initial-",
+    "disposition": "Node wrapper omitted existing SchemaTypeAnnotation, so the actual engine correctly returned untyped text. This setup error is not an engine defect."
+  },
+  "intermediate": [
+    {
+      "prefix": "v1-",
+      "controls": 91
+    },
+    {
+      "prefix": "v2-",
+      "controls": 97
+    },
+    {
+      "prefix": "v3-",
+      "controls": 103
+    },
+    {
+      "prefix": "v4-",
+      "controls": 107
+    }
+  ],
+  "declarationCalibration": [
+    "initial-proposed-contracts-build.log",
+    "initial2-proposed-contracts-build.log"
+  ],
+  "disposition": "Preserve all earlier execution receipts. Only unprefixed final results and final source identities qualify the proposal; intermediate sources are not separately certified."
+}

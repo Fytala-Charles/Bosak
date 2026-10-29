@@ -1,0 +1,11 @@
+{
+  "command": [
+    "dotnet",
+    "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-session-inspector\\bin\\Release\\net10.0\\Inspector.dll"
+  ],
+  "exitCode": 0,
+  "timeout": false,
+  "watchdogSeconds": 30,
+  "wallSeconds": 0.18762509996304289,
+  "log": "api-inspector.log"
+}

@@ -1,0 +1,40 @@
+{
+  "recordedUtc": "2026-10-29T05:20:04.911063+00:00",
+  "date": "2026-10-29",
+  "baseCommit": "029be319cb9e165550b974a3ea2ef2ba4bd15b44",
+  "kind": "Immutable semantic adoption for isolated C44 fake-provider contract prototype only, before source generation",
+  "sources": [
+    {
+      "revision": "REC-xpath-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+      "sections": [
+        "2.5.5.4",
+        "2.5.6"
+      ],
+      "adoption": "Candidate declaration/type/nillability constraints, actual member sets, sequence occurrences and function contravariance."
+    },
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "sections": [
+        "3.3 Element Declarations",
+        "Substitution Group OK (Transitive)"
+      ],
+      "adoption": "Affiliation lists and actual membership constraints in an intentionally bounded deterministic fake graph."
+    }
+  ],
+  "deviations": [
+    "No schema parser, structural XSD validator, CTA evaluator or real Bosak.Schema provider is implemented.",
+    "Synthetic component graph and alternate atomic carrier are a contract experiment, not product semantics or public API acceptance.",
+    "Prototype cannot claim original six QT3 assertions or 30+one XSLT integration cases pass.",
+    "No production source/interface/layout, filter, baseline, version, dependency, sibling or release change."
+  ],
+  "policies": {
+    "ownership": "Unowned requests alone can use legacy fallback; after claim no downgrade on unsupported, invalid, cancellation or failure.",
+    "identity": "Reference-bound immutable component universe, scoped declarations and closure provenance; QName alone is not authority.",
+    "lifetime": "Annotations/escaped values hold strong immutable-session references; host disposal only ends registration.",
+    "license": "No commercial activation, key generation, package execution or sibling edits."
+  },
+  "candidate": "1.33.1",
+  "published": "1.26.3"
+}

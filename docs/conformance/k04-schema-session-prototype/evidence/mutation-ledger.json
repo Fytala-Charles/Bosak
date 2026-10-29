@@ -1,0 +1,27 @@
+{
+  "fallback": [
+    "owned NotApplicable never downgrades",
+    "owned Invalid never downgrades",
+    "owned Unsupported never downgrades",
+    "cancelled result never downgrades",
+    "provider diagnostic details retained"
+  ],
+  "qname": [
+    "QName-equal foreign type refuses",
+    "closure-key-equal foreign declaration refuses",
+    "foreign binding rejects equal QName"
+  ],
+  "partial": [
+    "complete P members include extension witness",
+    "head affiliation does not prove subset",
+    "function contra Hx1/P1=False"
+  ],
+  "unwrap": [
+    "stripped atom cannot regain foreign identity",
+    "carrier payload roundtrip String/payload",
+    "carrier payload roundtrip Decimal/12.5",
+    "carrier payload roundtrip QName/v:value",
+    "carrier payload roundtrip Decimal/0",
+    "carrier payload roundtrip String/"
+  ]
+}

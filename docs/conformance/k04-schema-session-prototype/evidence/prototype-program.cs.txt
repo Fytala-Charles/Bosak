@@ -1,0 +1,201 @@
+// ===========================================================================================================================================================
+// AUTHOR               : Charles Korthout
+// CREATE DATE          : 29 October 2026
+// PURPOSE              : Isolated schema-session contract and alternate atomic carrier prototype.
+// SPECIAL NOTES        : Generated isolated prototype, not a production API or XSD validator.
+//
+// COPYRIGHT            : Fytala
+// LICENSE              : license.md (Apache-2.0)
+// SPDX-License-Identifier: Apache-2.0
+// ===========================================================================================================================================================
+// Change History:      |==================|=======|================|=========================================================================================
+//                      |     Author       |Version|  Date          | Notes                                                                                    |
+//                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.1   | 29-10-2026     | Creation                                                                                 |
+//                      |==================|=======|================|=========================================================================================
+// ===========================================================================================================================================================
+using System.Diagnostics;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Text.Json;
+using System.Xml.Linq;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+
+namespace C44;
+
+internal static class Program
+{
+    private static readonly List<object> Results = [];
+    private static int Failed;
+    private static int LegacyCalls;
+    private static int Legacy() { LegacyCalls++; return 17; }
+    private static void Check(string name, Func<bool> test)
+    {
+        bool pass = false; string? error = null;
+        try { pass = test(); } catch (Exception ex) { error = ex.GetType().Name + ": " + ex.Message; }
+        if (!pass) Failed++;
+        Results.Add(new { name, passed = pass, error });
+    }
+    private static bool Throws(string reason, Action action)
+    {
+        try { action(); return false; } catch (ContractFailure ex) { return ex.Reason == reason; }
+    }
+    private static bool Cancelled(Action action) { try { action(); return false; } catch (OperationCanceledException) { return true; } }
+    internal static int Main(string[] args)
+    {
+        Router.Mutation = args.FirstOrDefault() ?? "none";
+        var s = Fixture.Create(); var foreign = Fixture.Create();
+        var annotation = new Annotation(s.Type("RType"), s.Element("R"));
+        Check("unregistered uses legacy", () => Router.Open<int>(null, Legacy) == 17 && LegacyCalls == 1);
+        Check("unclaimed uses legacy", () => Router.Open(Reply<int>.Other(Verdict.NotApplicable, "unowned"), Legacy) == 17 && LegacyCalls == 2);
+        Check("supported false is data", () => !Router.Owned(() => Reply<bool>.Supported(false), () => true));
+        foreach (var v in new[] { Verdict.NotApplicable, Verdict.Invalid, Verdict.Unsupported })
+            Check("owned " + v + " never downgrades", () => { int before = LegacyCalls; return Throws(v == Verdict.NotApplicable ? "OwnershipLost" : v.ToString(), () => Router.Owned(() => Reply<int>.Other(v, "detail"), Legacy)) && LegacyCalls == before; });
+        Check("cancelled result never downgrades", () => { int n = LegacyCalls; return Cancelled(() => Router.Owned(() => Reply<int>.Other(Verdict.Cancelled, "cancel"), Legacy)) && n == LegacyCalls; });
+        Check("provider exception retains failure", () => Throws("ProviderFailure", () => Router.Owned<int>(() => throw new IOException("fault"), Legacy)));
+        Check("cancellation before assessment", () => { int calls = 0; return Cancelled(() => Router.Owned(() => { calls++; return Reply<int>.Supported(1); }, Legacy, new CancellationToken(true))) && calls == 0; });
+        Check("provider cancellation preserved", () => Cancelled(() => Router.Owned<int>(() => throw new OperationCanceledException(), Legacy)));
+        Check("provider diagnostic details retained", () => { try { Router.Owned(() => Reply<int>.Other(Verdict.Unsupported, "multi-head"), Legacy); return false; } catch (ContractFailure ex) { return ex.Findings.Length == 1 && ex.Findings[0].Reason == "multi-head"; } });
+        Check("provider inner exception retained", () => { var fault = new IOException("original"); try { Router.Owned<int>(() => throw fault, Legacy); return false; } catch (ContractFailure ex) { return ReferenceEquals(ex.InnerException, fault); } });
+        Check("mid-assessment cancellation does not downgrade", () => { using var cts = new CancellationTokenSource(); int n = LegacyCalls; return Cancelled(() => Router.Owned(() => { cts.Cancel(); cts.Token.ThrowIfCancellationRequested(); return Reply<int>.Supported(1); }, Legacy, cts.Token)) && LegacyCalls == n; });
+        Check("foreign unresolved type in closure refuses", () => Throws("UnknownType", () => new Session("invalid", [new TypeDef("Base", null)], [new ElementDef("n", "Foreign", [])])));
+        Check("unlinked affiliation in closure refuses", () => Throws("UnknownAffiliation", () => new Session("invalid", [new TypeDef("Base", null)], [new ElementDef("n", "Base", ["Foreign"])])));
+        var resources = new List<Resource> { new("urn:root", "root"), new("urn:import", "base") }; var bindings = new Dictionary<string, string> { ["p"] = "urn:p", ["q"] = "urn:q" };
+        string Key(IEnumerable<Resource> r, string b = "urn:base", string l = "1.1", string p = "deny-network", IReadOnlyDictionary<string, string>? n = null, string st = "XPath31") => Closure.Key(r, b, l, p, n ?? bindings, st);
+        var key = Key(resources);
+        Check("closure ordering canonical", () => key == Key(resources.AsEnumerable().Reverse(), n: new Dictionary<string, string> { ["q"] = "urn:q", ["p"] = "urn:p" }));
+        Check("import bytes affect closure", () => key != Key([resources[0], new("urn:import", "changed")]));
+        Check("root bytes affect closure", () => key != Key([new("urn:root", "changed"), resources[1]]));
+        Check("base URI affects closure", () => key != Key(resources, b: "urn:other"));
+        Check("policy affects closure", () => key != Key(resources, p: "other"));
+        Check("language affects closure", () => key != Key(resources, l: "1.0"));
+        Check("static namespace affects closure", () => key != Key(resources, n: new Dictionary<string, string> { ["p"] = "urn:other" }));
+        Check("static context fingerprint affects closure", () => key != Key(resources, st: "XPath40Experimental"));
+        Check("default namespace affects closure", () => key != Key(resources, n: new Dictionary<string, string>(bindings) { [""] = "urn:default" }));
+        Check("duplicate resource URI refuses", () => Throws("DuplicateResource", () => Key([resources[0], resources[0]])));
+        Check("scoped local versus global declaration", () => !ReferenceEquals(s.Element("A"), s.Element("A", "/cuckoo/A")));
+        Check("QName-equal foreign type refuses", () => Throws("ForeignIdentity", () => s.Derived(foreign.Type("RType"), s.Type("Base"))));
+        Check("closure-key-equal foreign declaration refuses", () => Throws("ForeignIdentity", () => s.ActualMember(foreign.Element("B"), s.Element("H1"))));
+        Check("mixed annotation authority refuses", () => Throws("ForeignIdentity", () => new Annotation(s.Type("RType"), foreign.Element("R"))));
+        foreach (var (candidate, head, expected) in new[] { ("A", "H1", false), ("A", "H2", false), ("A", "A", false), ("B", "H1", true), ("B", "H2", true), ("B", "A", true), ("C", "H2", true), ("D", "H1", true), ("E", "D", false), ("E", "H1", true), ("R", "H1", true), ("X", "Hx", false), ("Mid", "H1", true), ("Deep", "H1", false), ("RR", "HR", false), ("V", "P", true), ("V", "Hx", false) })
+            Check($"membership {candidate}/{head}={expected}", () => s.ActualMember(s.Element(candidate), s.Element(head)) == expected);
+        Check("complete P members include extension witness", () => s.ActualMembers(s.Element("P")).Select(x => x.Definition.Name).SequenceEqual(["P", "V"]));
+        Check("head affiliation does not prove subset", () => !s.Subtype(s.Element("P"), s.Element("Hx")));
+        foreach (var (ap, ao, tp, to, expected) in new[] { ("H1", '1', "A", '1', true), ("A", '1', "H1", '1', false), ("D", '1', "E", '1', false), ("Hx", '1', "P", '1', false), ("H1", '?', "A", '1', true), ("H1", '1', "A", '?', false), ("H1", '*', "A", '+', true), ("H1", '+', "A", '*', false) })
+            Check($"function contra {ap}{ao}/{tp}{to}={expected}", () => s.FunctionSubtype(s.Element(ap), ao, s.Element(tp), to) == expected);
+        Check("abstract global name excludes local candidate", () => !s.Matches("A", new(s.Type("Base"), s.Element("A", "/cuckoo/A")), s.Element("H1"), false));
+        Check("nilled concrete member matches abstract head", () => s.Matches("B", new(s.Type("Base"), s.Element("B")), s.Element("A"), true));
+        Check("candidate nillability rejects C", () => !s.Matches("C", new(s.Type("Base"), s.Element("C")), s.Element("H1"), true));
+        Check("member annotation cannot use broad head type", () => !s.Matches("N", new(s.Type("Base"), s.Element("N")), s.Element("H1"), false));
+        Check("nilled still checks candidate type", () => !s.Matches("N", new(s.Type("Base"), s.Element("N")), s.Element("H1"), true));
+        Check("untyped node remains unmatched", () => !s.Matches("B", null, s.Element("H1"), false));
+        var source = XElement.Parse("<root code='12'><child>12</child></root>"); var original = source.ToString(SaveOptions.DisableFormatting);
+        var annotations = new Dictionary<string, Annotation> { ["/"] = annotation, ["/child"] = annotation, ["/@code"] = annotation }; var tree = new TreeView(source, annotations); annotations.Clear();
+        Check("assessment snapshots caller and map", () => tree.Annotations.Count == 3 && source.ToString(SaveOptions.DisableFormatting) == original);
+        Check("owned assessment cannot mix annotation universes", () => Throws("MixedAuthorityTree", () => new TreeView(source, new Dictionary<string, Annotation> { ["/"] = annotation, ["/child"] = new(foreign.Type("RType"), foreign.Element("R")) })));
+        source.SetAttributeValue("code", "changed");
+        Check("source mutation cannot change owned view", () => tree.Xml == original);
+        Check("preserve copies retain all node and attribute identities", () => { var c = tree.Copy(true); return c.Annotations.Count == 3 && ReferenceEquals(c.Annotations["/@code"], annotation); });
+        Check("strip copies remove descendants and attributes", () => tree.Copy(false).Annotations.Count == 0 && tree.Annotations.Count == 3);
+        var typed = XdmValue.FromInteger(12, "integer", "Q{urn:types}Restricted");
+        var atomic = tree.Atomize("/child", typed);
+        Check("typed atomization keeps authority", () => ReferenceEquals(atomic.Annotation, annotation) && atomic.Value.IntegerValue == 12);
+        Check("reattaching same annotation is safe", () => ReferenceEquals(atomic.WithAnnotation(annotation).Annotation, annotation));
+        Check("annotation attachment cannot replace foreign authority", () => Throws("ForeignIdentity", () => atomic.WithAnnotation(new Annotation(foreign.Type("RType"), foreign.Element("R")))));
+        Check("annotation type replacement requires reassessment", () => Throws("AnnotationReplacement", () => atomic.WithAnnotation(new Annotation(s.Type("XType"), s.Element("X")))));
+        Check("assignment and binding retain authority", () => ReferenceEquals(atomic.Bind(s, s.Type("Base")).Annotation, annotation));
+        Check("foreign binding rejects equal QName", () => Throws("ForeignIdentity", () => atomic.Bind(foreign, foreign.Type("Base"))));
+        Check("unrelated binding rejects annotation type", () => Throws("XPTY0004", () => atomic.Bind(s, s.Type("XType"))));
+        Check("identity conversion retains derived identity", () => ReferenceEquals(atomic.Bind(s, s.Type("RType")).Annotation, annotation));
+        Check("built-in cast clears provider identity", () => atomic.CastToBuiltInInteger().Annotation is null && atomic.CastToBuiltInInteger().Value.UserSchemaTypeName is null);
+        Check("stripped atom cannot regain foreign identity", () => atomic.Strip().Annotation is null && Throws("MissingIdentity", () => atomic.Strip().Bind(s, s.Type("Base"))));
+        foreach (var value in new[] { XdmValue.FromBoolean(true), XdmValue.FromInteger(42), XdmValue.FromDouble(1.25), XdmValue.FromFloat(1.5f), XdmValue.FromString("payload"), XdmValue.FromDecimal(12.50m), XdmValue.FromQName(new XsQName("value", "urn:value", "v")), XdmValue.FromBoolean(false), XdmValue.FromInteger(long.MinValue), XdmValue.FromDouble(double.NaN), XdmValue.FromDecimal(0m), XdmValue.FromString("") })
+            Check("carrier payload roundtrip " + value.Kind + "/" + value.ToString(), () => { var c = AtomicCarrier.From(value).WithAnnotation(annotation); return c.Value.Kind == value.Kind && c.Value.SchemaTypeName == value.SchemaTypeName && c.Value.UserSchemaTypeName == value.UserSchemaTypeName && c.Value.ToString() == value.ToString() && ReferenceEquals(c.Annotation, annotation) && c.Strip().Value.ToString() == value.ToString(); });
+        Check("annotated atom cannot silently enter legacy route", () => Throws("OwnedValueNeedsSession", () => Router.ExportLegacy(atomic)));
+        Check("explicit built-in cast may enter legacy route", () => Router.ExportLegacy(atomic.CastToBuiltInInteger()).IntegerValue == 12);
+        var second = new Annotation(foreign.Type("RType"), foreign.Element("R")); var foreignAtomic = AtomicCarrier.From(typed).WithAnnotation(second);
+        Check("equal lexical payloads remain separate owners", () => atomic.Value.ToString() == foreignAtomic.Value.ToString() && !ReferenceEquals(atomic.Annotation!.Type.Session, foreignAtomic.Annotation!.Type.Session));
+        Check("lexical-key sidecar collision witness", () => (atomic.Value.ToString(), atomic.Value.UserSchemaTypeName) == (foreignAtomic.Value.ToString(), foreignAtomic.Value.UserSchemaTypeName));
+        var registration = new Registration(s); var captured = registration.Capture(); registration.Dispose();
+        Check("host disposal prevents new capture", () => { try { registration.Capture(); return false; } catch (ObjectDisposedException) { return true; } });
+        Check("captured executable remains live after host disposal", () => captured.Derived(atomic.Annotation!.Type, captured.Type("Base")));
+        Check("escaped atom keeps independent session alive", Lifetime);
+        Check("parallel immutable session and annotation reads", () => { int failures = 0; Parallel.For(0, 2000, i => { if (!s.ActualMember(s.Element("B"), s.Element(i % 2 == 0 ? "H1" : "H2")) || atomic.Bind(s, s.Type("Base")).Value.IntegerValue != 12) Interlocked.Increment(ref failures); }); return failures == 0; });
+        foreach (var (h, op, why, expected) in new[] { ("XQuery", "Import", "Invalid", "XQST0012"), ("XQuery", "ResolveImport", "NotFound", "XQST0059"), ("XQuery", "Validate", "Invalid", "XQDY0027"), ("XSLT", "Validate", "Invalid", "XTTE1510"), ("XSLT", "Validate", "DeclarationMissing", "XTTE1512"), ("XPath", "Atomize", "NoTypedValue", "FOTY0012"), ("XPath", "Bind", "TypeMismatch", "XPTY0004"), ("XSLT", "Validate", "Unsupported", "SchemaCoverageFailure"), ("XQuery", "Validate", "Cancelled", "Cancelled"), ("XPath", "Validate", "OtherFault", "SchemaProviderFailure") })
+            Check($"host mapping {h}/{op}/{why}", () => HostMapping.Map(h, op, why) == expected);
+        var rawNode = new TaggedNode(XDocumentNode.Wrap(XElement.Parse("<n>12</n>")), typed, annotation); var context = new EvaluationContext().WithVariable("n", XdmValue.FromNode(rawNode)); FunctionLibrary.Populate(context);
+        var realData = XPath31Expression.Compile("data($n)").Evaluate(context);
+        Check("actual engine returns legacy typed data only", () => realData.IntegerValue == 12 && realData.UserSchemaTypeName == typed.UserSchemaTypeName && typeof(XdmValue).GetProperty("SchemaAnnotation") is null);
+        Check("prototype size equals existing value carrier", () => Unsafe.SizeOf<AtomicCarrier>() == Unsafe.SizeOf<XdmValue>());
+        Check("extra reference candidate increases size", () => Unsafe.SizeOf<ExtraFieldCarrier>() > Unsafe.SizeOf<XdmValue>());
+        var layout = new { actualXdmValueBytes = Unsafe.SizeOf<XdmValue>(), payloadEnvelopeCarrierBytes = Unsafe.SizeOf<AtomicCarrier>(), extraFieldCarrierBytes = Unsafe.SizeOf<ExtraFieldCarrier>(), actualPrivateFields = typeof(XdmValue).GetFields(BindingFlags.NonPublic | BindingFlags.Instance).Select(f => new { f.Name, type = f.FieldType.FullName }).ToArray(), note = "Field categories and managed size only; no production ABI guarantee or product carrier replacement." };
+        Console.WriteLine(JsonSerializer.Serialize(new { mutation = Router.Mutation, passed = Results.Count - Failed, failed = Failed, tests = Results, layout, performance = Benchmark(atomic, annotation), actualEngineBoundary = new { value = realData.ToString(), realData.UserSchemaTypeName, sessionAvailableThroughExistingValueApi = false }, limitations = new[] { "Fake graph only: no XSD parser/validator or commercial implementation.", "Alternate carrier supports seven atomic kinds; production accessor audit and all other kinds remain implementation gates.", "Real XPath data witness retains lexical type but has no new session channel; prototype never enters the production VM.", "Host projection tests cover listed categories; established detailed host precedence is retained by proposed adapters, not replaced." } }, new JsonSerializerOptions { WriteIndented = true }));
+        return Failed == 0 ? 0 : 2;
+    }
+    [MethodImpl(MethodImplOptions.NoInlining)]
+    private static (AtomicCarrier Atom, WeakReference<Session> Weak) Escaped()
+    {
+        var session = Fixture.Create("escaped"); var annotation = new Annotation(session.Type("RType"), session.Element("R"));
+        return (AtomicCarrier.From(XdmValue.FromInteger(91)).WithAnnotation(annotation), new(session));
+    }
+    private static bool Lifetime()
+    {
+        var escaped = Escaped(); GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect();
+        bool alive = escaped.Weak.TryGetTarget(out var target) && ReferenceEquals(target, escaped.Atom.Annotation!.Type.Session) && escaped.Atom.Value.IntegerValue == 91;
+        GC.KeepAlive(escaped.Atom); return alive;
+    }
+    private static object Benchmark(AtomicCarrier annotated, Annotation annotation)
+    {
+        const int n = 200000; var plain = AtomicCarrier.From(XdmValue.FromInteger(12)); long checksum = 0;
+        for (int i = 0; i < 20000; i++) checksum += annotated.Value.IntegerValue;
+        object Run(string label, Func<int, long> work)
+        {
+            long allocated = GC.GetAllocatedBytesForCurrentThread(); var watch = Stopwatch.StartNew();
+            for (int i = 0; i < n; i++) checksum += work(i);
+            watch.Stop(); return new { label, iterations = n, elapsedTicks = watch.ElapsedTicks, frequency = Stopwatch.Frequency, allocatedBytes = GC.GetAllocatedBytesForCurrentThread() - allocated };
+        }
+        return new { samples = new[] { Run("plain carrier read", _ => plain.Value.IntegerValue), Run("annotated carrier read", _ => annotated.Value.IntegerValue), Run("annotated envelope create", _ => plain.WithAnnotation(annotation).Value.IntegerValue) }, checksum, scope = "Single-process prototype observation, includes delegate/timer overhead; not a product benchmark or no-provider performance guarantee." };
+    }
+}
+internal sealed class TaggedNode(IXdmNode inner, XdmValue typed, Annotation annotation) : IXdmNode
+{
+    internal Annotation Annotation { get; } = annotation;
+    /// <inheritdoc/>
+    public XdmNodeKind NodeKind => inner.NodeKind;
+    /// <inheritdoc/>
+    public string LocalName => inner.LocalName;
+    /// <inheritdoc/>
+    public string NamespaceUri => inner.NamespaceUri;
+    /// <inheritdoc/>
+    public string Prefix => inner.Prefix;
+    /// <inheritdoc/>
+    public string StringValue => inner.StringValue;
+    /// <inheritdoc/>
+    public XdmValue TypedValue => typed;
+    /// <inheritdoc/>
+    public (string NamespaceUri, string LocalName)? SchemaTypeAnnotation => ("urn:types", "Restricted");
+    /// <inheritdoc/>
+    public IXdmNode? Parent => inner.Parent;
+    /// <inheritdoc/>
+    public IXdmNode? Document => inner.Document;
+    /// <inheritdoc/>
+    public XdmSequence Children(XdmNodeKind kind = XdmNodeKind.All) => inner.Children(kind);
+    /// <inheritdoc/>
+    public XdmSequence Attributes(string? localName = null, string? namespaceUri = null) => inner.Attributes(localName, namespaceUri);
+    /// <inheritdoc/>
+    public XdmSequence Axis(XdmAxis axis) => inner.Axis(axis);
+    /// <inheritdoc/>
+    public bool IsSameNode(IXdmNode other) => ReferenceEquals(this, other);
+    /// <inheritdoc/>
+    public long DocumentOrder => inner.DocumentOrder;
+    /// <inheritdoc/>
+    public string BaseUri => inner.BaseUri;
+    /// <inheritdoc/>
+    public string DocumentUri => inner.DocumentUri;
+    /// <inheritdoc/>
+    public string ToXmlString() => inner.ToXmlString();
+}

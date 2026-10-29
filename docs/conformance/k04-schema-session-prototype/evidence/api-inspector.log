@@ -1,0 +1,528 @@
+{
+  "kind": "Compiled proposed API shape only, namespace C44.Proposed; no production hooks or semantic implementation",
+  "references": [
+    "Bosak.XPath.Core",
+    "System.Collections",
+    "System.Collections.Immutable",
+    "System.Runtime"
+  ],
+  "exportedTypes": [
+    {
+      "type": "C44.Proposed.ISchemaAnnotatedNode",
+      "members": [
+        "C44.Proposed.SchemaNodeAnnotation SchemaAnnotation",
+        "C44.Proposed.SchemaNodeAnnotation get_SchemaAnnotation()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.ISchemaProvider",
+      "members": [
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.ISchemaSession] OpenSession(C44.Proposed.SchemaCompilationRequest, System.Threading.CancellationToken)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.ISchemaSession",
+      "members": [
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaAssessment] Assess(C44.Proposed.SchemaAssessmentRequest, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaDeclarationIdentity] ResolveAttribute(C44.Proposed.SchemaName, System.String, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaDeclarationIdentity] ResolveElement(C44.Proposed.SchemaName, System.String, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaElementDescription] DescribeElement(C44.Proposed.SchemaDeclarationIdentity, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaTypeDescription] DescribeType(C44.Proposed.SchemaTypeIdentity, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[C44.Proposed.SchemaTypeIdentity] ResolveType(C44.Proposed.SchemaName, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[System.Boolean] IsDerivedFrom(C44.Proposed.SchemaTypeIdentity, C44.Proposed.SchemaTypeIdentity, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaOutcome\u00601[System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity]] GetActualMembers(C44.Proposed.SchemaDeclarationIdentity, System.Threading.CancellationToken)",
+        "C44.Proposed.SchemaSessionIdentity Identity",
+        "C44.Proposed.SchemaSessionIdentity get_Identity()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaAssessment",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaAssessment)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaAssessment, C44.Proposed.SchemaAssessment)",
+        "Boolean op_Inequality(C44.Proposed.SchemaAssessment, C44.Proposed.SchemaAssessment)",
+        "Bosak.XPath.Core.Xdm.IXdmNode Root",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Root()",
+        "C44.Proposed.SchemaAssessment \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.String ToString()",
+        "Void .ctor(Bosak.XPath.Core.Xdm.IXdmNode)",
+        "Void Deconstruct(Bosak.XPath.Core.Xdm.IXdmNode ByRef)",
+        "Void set_Root(Bosak.XPath.Core.Xdm.IXdmNode)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaAssessmentMode",
+      "members": [
+        "C44.Proposed.SchemaAssessmentMode Lax",
+        "C44.Proposed.SchemaAssessmentMode Strict",
+        "C44.Proposed.SchemaAssessmentMode Type",
+        "Int32 value__"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaAssessmentRequest",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaAssessmentRequest)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaAssessmentRequest, C44.Proposed.SchemaAssessmentRequest)",
+        "Boolean op_Inequality(C44.Proposed.SchemaAssessmentRequest, C44.Proposed.SchemaAssessmentRequest)",
+        "Bosak.XPath.Core.Xdm.IXdmNode Candidate",
+        "Bosak.XPath.Core.Xdm.IXdmNode get_Candidate()",
+        "C44.Proposed.SchemaAssessmentMode Mode",
+        "C44.Proposed.SchemaAssessmentMode get_Mode()",
+        "C44.Proposed.SchemaAssessmentRequest \u003CClone\u003E$()",
+        "C44.Proposed.SchemaDeclarationIdentity GoverningDeclaration",
+        "C44.Proposed.SchemaDeclarationIdentity get_GoverningDeclaration()",
+        "C44.Proposed.SchemaTypeIdentity RequestedType",
+        "C44.Proposed.SchemaTypeIdentity get_RequestedType()",
+        "Int32 GetHashCode()",
+        "System.String ToString()",
+        "Void .ctor(Bosak.XPath.Core.Xdm.IXdmNode, C44.Proposed.SchemaAssessmentMode, C44.Proposed.SchemaTypeIdentity, C44.Proposed.SchemaDeclarationIdentity)",
+        "Void Deconstruct(Bosak.XPath.Core.Xdm.IXdmNode ByRef, C44.Proposed.SchemaAssessmentMode ByRef, C44.Proposed.SchemaTypeIdentity ByRef, C44.Proposed.SchemaDeclarationIdentity ByRef)",
+        "Void set_Candidate(Bosak.XPath.Core.Xdm.IXdmNode)",
+        "Void set_GoverningDeclaration(C44.Proposed.SchemaDeclarationIdentity)",
+        "Void set_Mode(C44.Proposed.SchemaAssessmentMode)",
+        "Void set_RequestedType(C44.Proposed.SchemaTypeIdentity)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaAtomicValues",
+      "members": [
+        "Boolean TryGetAnnotation(Bosak.XPath.Core.Xdm.XdmValue, C44.Proposed.SchemaValueAnnotation ByRef)",
+        "Bosak.XPath.Core.Xdm.XdmValue Attach(Bosak.XPath.Core.Xdm.XdmValue, C44.Proposed.SchemaValueAnnotation)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaCompilationRequest",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaCompilationRequest)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaCompilationRequest, C44.Proposed.SchemaCompilationRequest)",
+        "Boolean op_Inequality(C44.Proposed.SchemaCompilationRequest, C44.Proposed.SchemaCompilationRequest)",
+        "C44.Proposed.SchemaCompilationRequest \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaNamespaceBinding] NamespaceBindings",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaNamespaceBinding] get_NamespaceBindings()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaResource] Resources",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaResource] get_Resources()",
+        "System.String Language",
+        "System.String ResourcePolicyFingerprint",
+        "System.String StaticContextFingerprint",
+        "System.String ToString()",
+        "System.String get_Language()",
+        "System.String get_ResourcePolicyFingerprint()",
+        "System.String get_StaticContextFingerprint()",
+        "System.Uri BaseUri",
+        "System.Uri get_BaseUri()",
+        "Void .ctor(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaResource], System.Uri, System.String, System.String, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaNamespaceBinding], System.String)",
+        "Void Deconstruct(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaResource] ByRef, System.Uri ByRef, System.String ByRef, System.String ByRef, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaNamespaceBinding] ByRef, System.String ByRef)",
+        "Void set_BaseUri(System.Uri)",
+        "Void set_Language(System.String)",
+        "Void set_NamespaceBindings(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaNamespaceBinding])",
+        "Void set_ResourcePolicyFingerprint(System.String)",
+        "Void set_Resources(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaResource])",
+        "Void set_StaticContextFingerprint(System.String)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaDeclarationIdentity",
+      "members": [
+        "C44.Proposed.SchemaName Name",
+        "C44.Proposed.SchemaName get_Name()",
+        "C44.Proposed.SchemaSessionIdentity Session",
+        "C44.Proposed.SchemaSessionIdentity get_Session()",
+        "System.String Key",
+        "System.String Scope",
+        "System.String get_Key()",
+        "System.String get_Scope()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaDerivation",
+      "members": [
+        "C44.Proposed.SchemaDerivation Extension",
+        "C44.Proposed.SchemaDerivation None",
+        "C44.Proposed.SchemaDerivation Restriction",
+        "C44.Proposed.SchemaDerivation Substitution",
+        "Int32 value__"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaElementDescription",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaElementDescription)",
+        "Boolean Equals(System.Object)",
+        "Boolean IsAbstract",
+        "Boolean IsNillable",
+        "Boolean get_IsAbstract()",
+        "Boolean get_IsNillable()",
+        "Boolean op_Equality(C44.Proposed.SchemaElementDescription, C44.Proposed.SchemaElementDescription)",
+        "Boolean op_Inequality(C44.Proposed.SchemaElementDescription, C44.Proposed.SchemaElementDescription)",
+        "C44.Proposed.SchemaDeclarationIdentity Identity",
+        "C44.Proposed.SchemaDeclarationIdentity get_Identity()",
+        "C44.Proposed.SchemaDerivation BlockedDerivations",
+        "C44.Proposed.SchemaDerivation get_BlockedDerivations()",
+        "C44.Proposed.SchemaElementDescription \u003CClone\u003E$()",
+        "C44.Proposed.SchemaTypeIdentity Type",
+        "C44.Proposed.SchemaTypeIdentity get_Type()",
+        "Int32 GetHashCode()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity] Affiliations",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity] get_Affiliations()",
+        "System.String ToString()",
+        "Void .ctor(C44.Proposed.SchemaDeclarationIdentity, C44.Proposed.SchemaTypeIdentity, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity], Boolean, Boolean, C44.Proposed.SchemaDerivation)",
+        "Void Deconstruct(C44.Proposed.SchemaDeclarationIdentity ByRef, C44.Proposed.SchemaTypeIdentity ByRef, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity] ByRef, Boolean ByRef, Boolean ByRef, C44.Proposed.SchemaDerivation ByRef)",
+        "Void set_Affiliations(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaDeclarationIdentity])",
+        "Void set_BlockedDerivations(C44.Proposed.SchemaDerivation)",
+        "Void set_Identity(C44.Proposed.SchemaDeclarationIdentity)",
+        "Void set_IsAbstract(Boolean)",
+        "Void set_IsNillable(Boolean)",
+        "Void set_Type(C44.Proposed.SchemaTypeIdentity)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaFinding",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaFinding)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaFinding, C44.Proposed.SchemaFinding)",
+        "Boolean op_Inequality(C44.Proposed.SchemaFinding, C44.Proposed.SchemaFinding)",
+        "C44.Proposed.SchemaFinding \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.String ComponentKey",
+        "System.String Message",
+        "System.String Reason",
+        "System.String ResourceUri",
+        "System.String ToString()",
+        "System.String get_ComponentKey()",
+        "System.String get_Message()",
+        "System.String get_Reason()",
+        "System.String get_ResourceUri()",
+        "Void .ctor(System.String, System.String, System.String, System.String)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef, System.String ByRef, System.String ByRef)",
+        "Void set_ComponentKey(System.String)",
+        "Void set_Message(System.String)",
+        "Void set_Reason(System.String)",
+        "Void set_ResourceUri(System.String)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaIdentityIssuer",
+      "members": [
+        "C44.Proposed.SchemaDeclarationIdentity InternDeclaration(System.String, C44.Proposed.SchemaName, System.String)",
+        "C44.Proposed.SchemaIdentityIssuer Create(System.String)",
+        "C44.Proposed.SchemaSessionIdentity Identity",
+        "C44.Proposed.SchemaSessionIdentity get_Identity()",
+        "C44.Proposed.SchemaTypeIdentity InternType(System.String, System.Nullable\u00601[C44.Proposed.SchemaName])",
+        "Void Seal()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaName",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaName)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaName, C44.Proposed.SchemaName)",
+        "Boolean op_Inequality(C44.Proposed.SchemaName, C44.Proposed.SchemaName)",
+        "Int32 GetHashCode()",
+        "System.String LocalName",
+        "System.String NamespaceUri",
+        "System.String ToString()",
+        "System.String get_LocalName()",
+        "System.String get_NamespaceUri()",
+        "Void .ctor(System.String, System.String)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef)",
+        "Void set_LocalName(System.String)",
+        "Void set_NamespaceUri(System.String)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaNamespaceBinding",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaNamespaceBinding)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaNamespaceBinding, C44.Proposed.SchemaNamespaceBinding)",
+        "Boolean op_Inequality(C44.Proposed.SchemaNamespaceBinding, C44.Proposed.SchemaNamespaceBinding)",
+        "C44.Proposed.SchemaNamespaceBinding \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.String NamespaceUri",
+        "System.String Prefix",
+        "System.String ToString()",
+        "System.String get_NamespaceUri()",
+        "System.String get_Prefix()",
+        "Void .ctor(System.String, System.String)",
+        "Void Deconstruct(System.String ByRef, System.String ByRef)",
+        "Void set_NamespaceUri(System.String)",
+        "Void set_Prefix(System.String)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaNodeAnnotation",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaNodeAnnotation)",
+        "Boolean Equals(System.Object)",
+        "Boolean HasNoTypedValue",
+        "Boolean IsComplexType",
+        "Boolean IsId",
+        "Boolean IsIdrefs",
+        "Boolean IsNilled",
+        "Boolean get_HasNoTypedValue()",
+        "Boolean get_IsComplexType()",
+        "Boolean get_IsId()",
+        "Boolean get_IsIdrefs()",
+        "Boolean get_IsNilled()",
+        "Boolean op_Equality(C44.Proposed.SchemaNodeAnnotation, C44.Proposed.SchemaNodeAnnotation)",
+        "Boolean op_Inequality(C44.Proposed.SchemaNodeAnnotation, C44.Proposed.SchemaNodeAnnotation)",
+        "C44.Proposed.SchemaDeclarationIdentity Declaration",
+        "C44.Proposed.SchemaDeclarationIdentity get_Declaration()",
+        "C44.Proposed.SchemaNodeAnnotation \u003CClone\u003E$()",
+        "C44.Proposed.SchemaValueAnnotation ValueAnnotation",
+        "C44.Proposed.SchemaValueAnnotation get_ValueAnnotation()",
+        "Int32 GetHashCode()",
+        "System.String ToString()",
+        "Void .ctor(C44.Proposed.SchemaValueAnnotation, C44.Proposed.SchemaDeclarationIdentity, Boolean, Boolean, Boolean, Boolean, Boolean)",
+        "Void Deconstruct(C44.Proposed.SchemaValueAnnotation ByRef, C44.Proposed.SchemaDeclarationIdentity ByRef, Boolean ByRef, Boolean ByRef, Boolean ByRef, Boolean ByRef, Boolean ByRef)",
+        "Void set_Declaration(C44.Proposed.SchemaDeclarationIdentity)",
+        "Void set_HasNoTypedValue(Boolean)",
+        "Void set_IsComplexType(Boolean)",
+        "Void set_IsId(Boolean)",
+        "Void set_IsIdrefs(Boolean)",
+        "Void set_IsNilled(Boolean)",
+        "Void set_ValueAnnotation(C44.Proposed.SchemaValueAnnotation)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaOutcome\u00601",
+      "members": [
+        "C44.Proposed.SchemaOutcome\u00601[T] Cancelled()",
+        "C44.Proposed.SchemaOutcome\u00601[T] Invalid(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaFinding])",
+        "C44.Proposed.SchemaOutcome\u00601[T] NotApplicable()",
+        "C44.Proposed.SchemaOutcome\u00601[T] Supported(T)",
+        "C44.Proposed.SchemaOutcome\u00601[T] Unsupported(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaFinding])",
+        "C44.Proposed.SchemaVerdict Verdict",
+        "C44.Proposed.SchemaVerdict get_Verdict()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaFinding] Findings",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaFinding] get_Findings()",
+        "T Value",
+        "T get_Value()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaResource",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaResource)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaResource, C44.Proposed.SchemaResource)",
+        "Boolean op_Inequality(C44.Proposed.SchemaResource, C44.Proposed.SchemaResource)",
+        "C44.Proposed.SchemaResource \u003CClone\u003E$()",
+        "Int32 GetHashCode()",
+        "System.Collections.Immutable.ImmutableArray\u00601[System.Byte] Content",
+        "System.Collections.Immutable.ImmutableArray\u00601[System.Byte] get_Content()",
+        "System.String ToString()",
+        "System.Uri Origin",
+        "System.Uri get_Origin()",
+        "Void .ctor(System.Uri, System.Collections.Immutable.ImmutableArray\u00601[System.Byte])",
+        "Void Deconstruct(System.Uri ByRef, System.Collections.Immutable.ImmutableArray\u00601[System.Byte] ByRef)",
+        "Void set_Content(System.Collections.Immutable.ImmutableArray\u00601[System.Byte])",
+        "Void set_Origin(System.Uri)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaSessionIdentity",
+      "members": [
+        "System.String Fingerprint",
+        "System.String get_Fingerprint()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaTypeDescription",
+      "members": [
+        "Boolean Equals(C44.Proposed.SchemaTypeDescription)",
+        "Boolean Equals(System.Object)",
+        "Boolean op_Equality(C44.Proposed.SchemaTypeDescription, C44.Proposed.SchemaTypeDescription)",
+        "Boolean op_Inequality(C44.Proposed.SchemaTypeDescription, C44.Proposed.SchemaTypeDescription)",
+        "C44.Proposed.SchemaTypeDescription \u003CClone\u003E$()",
+        "C44.Proposed.SchemaTypeIdentity Identity",
+        "C44.Proposed.SchemaTypeIdentity ListItemType",
+        "C44.Proposed.SchemaTypeIdentity get_Identity()",
+        "C44.Proposed.SchemaTypeIdentity get_ListItemType()",
+        "C44.Proposed.SchemaTypeKind Kind",
+        "C44.Proposed.SchemaTypeKind get_Kind()",
+        "Int32 GetHashCode()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] DirectBases",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] Members",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] get_DirectBases()",
+        "System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] get_Members()",
+        "System.String BuiltInBaseName",
+        "System.String ToString()",
+        "System.String get_BuiltInBaseName()",
+        "Void .ctor(C44.Proposed.SchemaTypeIdentity, C44.Proposed.SchemaTypeKind, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity], System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity], C44.Proposed.SchemaTypeIdentity, System.String)",
+        "Void Deconstruct(C44.Proposed.SchemaTypeIdentity ByRef, C44.Proposed.SchemaTypeKind ByRef, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] ByRef, System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity] ByRef, C44.Proposed.SchemaTypeIdentity ByRef, System.String ByRef)",
+        "Void set_BuiltInBaseName(System.String)",
+        "Void set_DirectBases(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity])",
+        "Void set_Identity(C44.Proposed.SchemaTypeIdentity)",
+        "Void set_Kind(C44.Proposed.SchemaTypeKind)",
+        "Void set_ListItemType(C44.Proposed.SchemaTypeIdentity)",
+        "Void set_Members(System.Collections.Immutable.ImmutableArray\u00601[C44.Proposed.SchemaTypeIdentity])"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaTypeIdentity",
+      "members": [
+        "C44.Proposed.SchemaSessionIdentity Session",
+        "C44.Proposed.SchemaSessionIdentity get_Session()",
+        "System.Nullable\u00601[C44.Proposed.SchemaName] DisplayName",
+        "System.Nullable\u00601[C44.Proposed.SchemaName] get_DisplayName()",
+        "System.String Key",
+        "System.String get_Key()"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaTypeKind",
+      "members": [
+        "C44.Proposed.SchemaTypeKind Atomic",
+        "C44.Proposed.SchemaTypeKind ComplexElementOnly",
+        "C44.Proposed.SchemaTypeKind ComplexEmpty",
+        "C44.Proposed.SchemaTypeKind ComplexMixed",
+        "C44.Proposed.SchemaTypeKind ComplexSimple",
+        "C44.Proposed.SchemaTypeKind List",
+        "C44.Proposed.SchemaTypeKind Union",
+        "Int32 value__"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaValueAnnotation",
+      "members": [
+        "C44.Proposed.ISchemaSession Session",
+        "C44.Proposed.ISchemaSession get_Session()",
+        "C44.Proposed.SchemaTypeIdentity Type",
+        "C44.Proposed.SchemaTypeIdentity get_Type()",
+        "Void .ctor(C44.Proposed.ISchemaSession, C44.Proposed.SchemaTypeIdentity)"
+      ]
+    },
+    {
+      "type": "C44.Proposed.SchemaVerdict",
+      "members": [
+        "C44.Proposed.SchemaVerdict Cancelled",
+        "C44.Proposed.SchemaVerdict Invalid",
+        "C44.Proposed.SchemaVerdict NotApplicable",
+        "C44.Proposed.SchemaVerdict Supported",
+        "C44.Proposed.SchemaVerdict Unsupported",
+        "Int32 value__"
+      ]
+    }
+  ],
+  "actualXdmValuePublicMembers": [
+    "Boolean BooleanValue",
+    "Boolean GetEffectiveBooleanValue()",
+    "Boolean HasTimezone",
+    "Boolean IsArray",
+    "Boolean IsAtomic",
+    "Boolean IsFunction",
+    "Boolean IsJNode",
+    "Boolean IsMap",
+    "Boolean IsNode",
+    "Boolean IsSequence",
+    "Boolean IsUndefined",
+    "Boolean get_BooleanValue()",
+    "Boolean get_HasTimezone()",
+    "Boolean get_IsArray()",
+    "Boolean get_IsAtomic()",
+    "Boolean get_IsFunction()",
+    "Boolean get_IsJNode()",
+    "Boolean get_IsMap()",
+    "Boolean get_IsNode()",
+    "Boolean get_IsSequence()",
+    "Boolean get_IsUndefined()",
+    "Bosak.XPath.Core.Xdm.IXdmNode NodeValue",
+    "Bosak.XPath.Core.Xdm.IXdmNode get_NodeValue()",
+    "Bosak.XPath.Core.Xdm.IXdmSequence SequenceValue",
+    "Bosak.XPath.Core.Xdm.IXdmSequence get_SequenceValue()",
+    "Bosak.XPath.Core.Xdm.XPathDateTime DateTimeXPathValue",
+    "Bosak.XPath.Core.Xdm.XPathDateTime DateXPathValue",
+    "Bosak.XPath.Core.Xdm.XPathDateTime TimeXPathValue",
+    "Bosak.XPath.Core.Xdm.XPathDateTime get_DateTimeXPathValue()",
+    "Bosak.XPath.Core.Xdm.XPathDateTime get_DateXPathValue()",
+    "Bosak.XPath.Core.Xdm.XPathDateTime get_TimeXPathValue()",
+    "Bosak.XPath.Core.Xdm.XdmArray ArrayValue",
+    "Bosak.XPath.Core.Xdm.XdmArray get_ArrayValue()",
+    "Bosak.XPath.Core.Xdm.XdmJNode JNodeValue",
+    "Bosak.XPath.Core.Xdm.XdmJNode get_JNodeValue()",
+    "Bosak.XPath.Core.Xdm.XdmMap MapValue",
+    "Bosak.XPath.Core.Xdm.XdmMap get_MapValue()",
+    "Bosak.XPath.Core.Xdm.XdmValue False",
+    "Bosak.XPath.Core.Xdm.XdmValue FromArray(Bosak.XPath.Core.Xdm.XdmArray)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromBoolean(Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromBoolean(Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDate(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDate(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDate(System.DateTimeOffset)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDate(System.DateTimeOffset, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDate(System.DateTimeOffset, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDateTime(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDateTime(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDateTime(System.DateTimeOffset)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDateTime(System.DateTimeOffset, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDateTime(System.DateTimeOffset, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDecimal(System.Decimal)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDecimal(System.Decimal, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDouble(Double)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDouble(Double, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDuration(System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromDuration(System.String, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromExternal(System.Object)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromFloat(Single)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromFloat(Single, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromFunction(System.Object)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromInteger(Int64)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromInteger(Int64, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromJNode(Bosak.XPath.Core.Xdm.XdmJNode)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromMap(Bosak.XPath.Core.Xdm.XdmMap)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromNode(Bosak.XPath.Core.Xdm.IXdmNode)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromQName(Bosak.XPath.Core.Xdm.XsQName)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromQName(Bosak.XPath.Core.Xdm.XsQName, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromSequence(Bosak.XPath.Core.Xdm.XdmSequence)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromString(System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromString(System.String, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromTime(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromTime(Bosak.XPath.Core.Xdm.XPathDateTime, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromTime(System.DateTimeOffset)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromTime(System.DateTimeOffset, Boolean)",
+    "Bosak.XPath.Core.Xdm.XdmValue FromTime(System.DateTimeOffset, Boolean, System.String, System.String)",
+    "Bosak.XPath.Core.Xdm.XdmValue True",
+    "Bosak.XPath.Core.Xdm.XdmValue Undefined",
+    "Bosak.XPath.Core.Xdm.XdmValue get_False()",
+    "Bosak.XPath.Core.Xdm.XdmValue get_True()",
+    "Bosak.XPath.Core.Xdm.XdmValue get_Undefined()",
+    "Bosak.XPath.Core.Xdm.XdmValueKind Kind",
+    "Bosak.XPath.Core.Xdm.XdmValueKind get_Kind()",
+    "Bosak.XPath.Core.Xdm.XsQName QNameValue",
+    "Bosak.XPath.Core.Xdm.XsQName get_QNameValue()",
+    "Double DoubleValue",
+    "Double get_DoubleValue()",
+    "Int64 IntegerValue",
+    "Int64 get_IntegerValue()",
+    "System.DateTimeOffset DateTimeValue",
+    "System.DateTimeOffset DateValue",
+    "System.DateTimeOffset TimeValue",
+    "System.DateTimeOffset get_DateTimeValue()",
+    "System.DateTimeOffset get_DateValue()",
+    "System.DateTimeOffset get_TimeValue()",
+    "System.Decimal DecimalValue",
+    "System.Decimal get_DecimalValue()",
+    "System.Object ExternalValue",
+    "System.Object FunctionValue",
+    "System.Object get_ExternalValue()",
+    "System.Object get_FunctionValue()",
+    "System.String DurationValue",
+    "System.String SchemaTypeName",
+    "System.String StringValue",
+    "System.String ToString()",
+    "System.String UserSchemaTypeName",
+    "System.String get_DurationValue()",
+    "System.String get_SchemaTypeName()",
+    "System.String get_StringValue()",
+    "System.String get_UserSchemaTypeName()"
+  ]
+}

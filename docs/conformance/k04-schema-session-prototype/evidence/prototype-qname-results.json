@@ -1,0 +1,627 @@
+{
+  "mutation": "qname",
+  "passed": 107,
+  "failed": 3,
+  "tests": [
+    {
+      "name": "unregistered uses legacy",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unclaimed uses legacy",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "supported false is data",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned NotApplicable never downgrades",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned Invalid never downgrades",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned Unsupported never downgrades",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "cancelled result never downgrades",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider exception retains failure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "cancellation before assessment",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider cancellation preserved",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider diagnostic details retained",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "provider inner exception retained",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "mid-assessment cancellation does not downgrade",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "foreign unresolved type in closure refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "unlinked affiliation in closure refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "closure ordering canonical",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "import bytes affect closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "root bytes affect closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "base URI affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "policy affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "language affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "static namespace affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "static context fingerprint affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "default namespace affects closure",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "duplicate resource URI refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "scoped local versus global declaration",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "QName-equal foreign type refuses",
+      "passed": false,
+      "error": null
+    },
+    {
+      "name": "closure-key-equal foreign declaration refuses",
+      "passed": false,
+      "error": null
+    },
+    {
+      "name": "mixed annotation authority refuses",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership A/H1=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership A/H2=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership A/A=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership B/H1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership B/H2=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership B/A=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership C/H2=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership D/H1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership E/D=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership E/H1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership R/H1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership X/Hx=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership Mid/H1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership Deep/H1=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership RR/HR=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership V/P=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "membership V/Hx=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "complete P members include extension witness",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "head affiliation does not prove subset",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra H11/A1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra A1/H11=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra D1/E1=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra Hx1/P1=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra H1?/A1=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra H11/A?=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra H1*/A+=True",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "function contra H1+/A*=False",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "abstract global name excludes local candidate",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "nilled concrete member matches abstract head",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "candidate nillability rejects C",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "member annotation cannot use broad head type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "nilled still checks candidate type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "untyped node remains unmatched",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "assessment snapshots caller and map",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "owned assessment cannot mix annotation universes",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "source mutation cannot change owned view",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "preserve copies retain all node and attribute identities",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "strip copies remove descendants and attributes",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "typed atomization keeps authority",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "reattaching same annotation is safe",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "annotation attachment cannot replace foreign authority",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "annotation type replacement requires reassessment",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "assignment and binding retain authority",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "foreign binding rejects equal QName",
+      "passed": false,
+      "error": null
+    },
+    {
+      "name": "unrelated binding rejects annotation type",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "identity conversion retains derived identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "built-in cast clears provider identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "stripped atom cannot regain foreign identity",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Boolean/true",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Integer/42",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Double/1.25",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Float/1.5",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip String/payload",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Decimal/12.5",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip QName/v:value",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Boolean/false",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Integer/-9223372036854775808",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Double/NaN",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip Decimal/0",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "carrier payload roundtrip String/",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "annotated atom cannot silently enter legacy route",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "explicit built-in cast may enter legacy route",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "equal lexical payloads remain separate owners",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "lexical-key sidecar collision witness",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host disposal prevents new capture",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "captured executable remains live after host disposal",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "escaped atom keeps independent session alive",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "parallel immutable session and annotation reads",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XQuery/Import/Invalid",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XQuery/ResolveImport/NotFound",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XQuery/Validate/Invalid",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XSLT/Validate/Invalid",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XSLT/Validate/DeclarationMissing",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XPath/Atomize/NoTypedValue",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XPath/Bind/TypeMismatch",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XSLT/Validate/Unsupported",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XQuery/Validate/Cancelled",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "host mapping XPath/Validate/OtherFault",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "actual engine returns legacy typed data only",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "prototype size equals existing value carrier",
+      "passed": true,
+      "error": null
+    },
+    {
+      "name": "extra reference candidate increases size",
+      "passed": true,
+      "error": null
+    }
+  ],
+  "layout": {
+    "actualXdmValueBytes": 48,
+    "payloadEnvelopeCarrierBytes": 48,
+    "extraFieldCarrierBytes": 56,
+    "actualPrivateFields": [
+      {
+        "Name": "_kind",
+        "type": "Bosak.XPath.Core.Xdm.XdmValueKind"
+      },
+      {
+        "Name": "_integer",
+        "type": "System.Int64"
+      },
+      {
+        "Name": "_double",
+        "type": "System.Double"
+      },
+      {
+        "Name": "_reference",
+        "type": "System.Object"
+      },
+      {
+        "Name": "_schemaTypeName",
+        "type": "System.String"
+      },
+      {
+        "Name": "_userSchemaTypeName",
+        "type": "System.String"
+      }
+    ],
+    "note": "Field categories and managed size only; no production ABI guarantee or product carrier replacement."
+  },
+  "performance": {
+    "samples": [
+      {
+        "label": "plain carrier read",
+        "iterations": 200000,
+        "elapsedTicks": 43828,
+        "frequency": 10000000,
+        "allocatedBytes": 56
+      },
+      {
+        "label": "annotated carrier read",
+        "iterations": 200000,
+        "elapsedTicks": 44577,
+        "frequency": 10000000,
+        "allocatedBytes": 56
+      },
+      {
+        "label": "annotated envelope create",
+        "iterations": 200000,
+        "elapsedTicks": 100834,
+        "frequency": 10000000,
+        "allocatedBytes": 6400056
+      }
+    ],
+    "checksum": 7440000,
+    "scope": "Single-process prototype observation, includes delegate/timer overhead; not a product benchmark or no-provider performance guarantee."
+  },
+  "actualEngineBoundary": {
+    "value": "12",
+    "UserSchemaTypeName": "Q{urn:types}Restricted",
+    "sessionAvailableThroughExistingValueApi": false
+  },
+  "limitations": [
+    "Fake graph only: no XSD parser/validator or commercial implementation.",
+    "Alternate carrier supports seven atomic kinds; production accessor audit and all other kinds remain implementation gates.",
+    "Real XPath data witness retains lexical type but has no new session channel; prototype never enters the production VM.",
+    "Host projection tests cover listed categories; established detailed host precedence is retained by proposed adapters, not replaced."
+  ]
+}
