@@ -1,0 +1,70 @@
+# ADR-005: XSD 1.1 Compiled Model, Assertion Evaluation, and Validation Pipeline
+
+> **Status:** `Accepted` — owner-approved 2026-10-27 for S1/S2 scope (REQ-009 → In Progress)  
+> **Date:** 2026-10-27  
+> **Deciders:** Charles Korthout (owner), Kimi (drafting)
+
+---
+
+## Context
+
+REQ-009 (staged W3C XML Schema 1.1 support; see [`FEATURE_REQUESTS.md`](./FEATURE_REQUESTS.md)) starts from the S0 finding ([`XSD11_SOURCE_AUDIT.md`](./XSD11_SOURCE_AUDIT.md) §4): **every schema-bearing API in the Bosak seam — on both 0.12.1-beta and the repointed 1.26.3 line — is typed against `System.Xml.Schema.XmlSchemaSet`, and .NET's `System.Xml.Schema` implements XSD 1.0 only.** There is no platform 1.1 component model to reuse, and no current way to flow XSD 1.1 components (`xs:assert`, `xs:alternative`, `xs:assertion`, open content, …) into the engine.
+
+Forces shaping this decision:
+
+- **Preserve the baseline:** XSD 1.0, XQuery, XSLT and PSVI behavior and error codes must not change; before activation the package is inert and bit-identical to the free core (REQ-001 boundary, `SEAM_DESIGN.md`).
+- **Core/plugin boundary:** Bosak core must never reference `Bosak.Schema`; public Bosak API changes need a separate compatibility ADR and approval (handover non-negotiables).
+- **Single distributable assembly:** the handover proposes keeping one `Bosak.Schema` assembly; internal layout (`Compilation/`/`Model/`/`Validation/`/`XPath/`/`Psvi/`) may adapt to repo conventions.
+- **Greenfield model:** S1's compiled schema model is confirmed greenfield by the audit.
+- **Available building blocks (1.26.3):** `ControlledSchemaResolver`/`ControlledResourcePolicy` policy-based resource resolution; public XPath compile/evaluate surface (`XPath31Expression`, used by the core harness itself); `RegisterFunction` static-context seam; the `Bosak.Xslt.Validation.*` family's explicit `Refused`/`UnsupportedCoverage` diagnostic posture as a pattern to mirror.
+- **The W3C conformance skips:** the core harness (REQ-112) deliberately skips XSD 1.1 tests — **30 confirmed by running the harness on current core main 2026-10-27** (the REQ-112-era "28" was the FAIL→SKIP delta at the time); IDs enumerated in [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) §4.
+
+## Decision
+
+We will implement REQ-009 phases S1–S3 **entirely inside `Bosak.Schema`**, behind an explicit XSD 1.1 mode, with **zero changes to public Bosak APIs**. Specifically:
+
+1. **Compiled schema model (S1).** A new immutable component model (`record`-based, `sealed` classes) lives in the add-on: `CompiledSchema` (carrying `SchemaId`, SHA-256 digest, `XsdLanguageVersion`), `AssertionDefinition`, `TypeAlternativeDefinition`, open-content and remaining 1.1 components as phases land. Parsing uses `System.Xml.XmlReader` directly — never `XmlSchemaSet`. **XSD 1.0 documents keep flowing through the existing `XmlSchemaSet` stack untouched**; the 1.1 compiler activates only for `version="1.1"` schemas (or an explicit opt-in), so existing behavior is bit-identical by construction.
+
+2. **Validation as an add-on service (S1/S2).** Validation against 1.1-compiled schemas runs in the add-on's own pipeline and returns an explicit result object — `SchemaValidationResult { IsValid, Diagnostics }` with stable diagnostic codes in the `Refused`/`UnsupportedCoverage` style, never silent acceptance. The handover's proposed contract (`IXsdSchemaCompiler`, `IXsdValidationService`, `IXsdAssertionCompiler`, `ISchemaResourceResolver`) is the starting shape, adapted to actual core signatures per the audit.
+
+3. **Assertion evaluation through the public XPath surface (S2/S3).** Assertions are compiled with the engine's public XPath compiler and evaluated over XDM views of the candidate content. The W3C-constrained assertion environment (restricted static context, restricted function library, `xs:assert` vs `xs:assertion` context distinctions) is enforced **add-side by static analysis and sandboxed context construction** — no unrestricted-evaluation shortcut. Compiled assertions are cached keyed by (schema digest, expression, static context). Exact W3C context semantics (context item shape, variable bindings, error behavior) are pinned to spec sections during implementation and recorded in the phase report.
+
+4. **PSVI: explicit lifetime strategy, no silent mutation (S2+).** S1–S3 do **not** annotate shared engine nodes. Validation results are returned as values; any typed-view needs are served by immutable annotated views owned by the add-on. Annotating 1.1-typed nodes *inside* transforms (so `instance of element(*, T)` sees 1.1 types mid-pipeline) **requires an engine seam change** and is deferred: it becomes a separate core-repo compatibility ADR with owner approval before the S4/S5 design freeze, and is explicitly out of scope for the `xs:assert` slice.
+
+5. **Resolver security on `ControlledResourcePolicy` (S1).** The secure schema-resolution requirement (default deny network/DTD/external entities, import depth/count limits, base-URI allowlists, audit receipts) is built on the 1.26.3 `ControlledSchemaResolver`/`ControlledResourcePolicy` framework where the loading path flows through it. Fallback position if its defaults cannot be constrained to the REQ-009 posture: a parallel implementation behind the add-on's `ISchemaResourceResolver`, with the same testable controls. The S1 design check decides; either way the acceptance controls are the REQ-009 gate.
+
+6. **XmlDb integration stays an optional adapter (S6, boundary recorded now).** No compile-time or runtime dependency from Bosak core or base `Bosak.XmlDb` to `Bosak.Schema`. Transaction-time validation validates the final candidate at a stable snapshot against a pinned schema digest; replicas replay under the pinned interpretation; typed-index metadata is advisory.
+
+## Consequences
+
+### Positive
+
+- S1–S3 need no core release, no compatibility ADR, and no owner approval beyond S1/S2 scope — the riskiest coordination is deferred and made explicit.
+- The conformance baseline cannot regress: 1.0 documents never touch the new compiler; unsupported 1.1 constructs produce explicit diagnostics.
+- Assertion evaluation reuses the proven XPath engine instead of growing a second expression evaluator.
+- The `xs:assert` vertical slice can close its W3C skip family (see gap matrix §4) with acceptance tests running through the add-on API alone.
+
+### Negative / Accepted Costs
+
+- Add-on-side validation is a **second validation pipeline** alongside the engine's 1.0 stack: duplicated plumbing for document loading, namespace handling, and diagnostics until (if ever) an engine seam lands.
+- `instance of` / pattern matching against 1.1-only types inside running transforms does **not** work in S2; consumers get document validation + diagnostics first, typed-node integration later (S4/S5 + compatibility ADR).
+- The parallel-resolver fallback (decision 5) would duplicate policy machinery; the S1 design check must settle reuse vs. fallback early.
+- Conformance claims must cite exact W3C test IDs and excluded features per phase — no "XSD 1.1 supported" marketing before S5's coverage matrix.
+
+## Alternatives Considered
+
+| Option | Why Rejected |
+|--------|--------------|
+| Engine seam change up front (abstract schema-component model in core, 1.1 flows through engine validation) | Full-power, but is a public Bosak API change needing a compatibility ADR + approval before *any* slice ships; couples REQ-009's pace to core releases; violates the "smallest slice first" scope gate. Revisited at S4/S5 by design. |
+| Vendor in an existing XSD 1.1 library (e.g., Xerces2-J via IKVM) | Heavy native/dependency footprint in a zero-runtime-dependency package; licensing friction; poor fit with the immutable-model design goal. |
+| Extend `System.Xml.Schema` via partial classes / XmlSchemaSet subclassing | `XmlSchemaSet` is `sealed`-in-practice and XSD 1.0 hard-wired; no representation for 1.1 components exists to extend. |
+| Evaluate assertions with the unrestricted XPath 3.1 evaluator directly | Not conformant (handover's explicit warning): W3C constrains the assertion XPath environment; a compatibility layer is mandatory. |
+| Annotate shared persistent nodes in place for PSVI | The handover's design warning: silent mutation of shared nodes breaks thread-safety and XDM semantics; rejected for S1–S3 and gated behind an explicit strategy at S4/S5. |
+
+## References
+
+- REQ-009: [`FEATURE_REQUESTS.md`](./FEATURE_REQUESTS.md) · S0 deliverables: [`XSD11_SOURCE_AUDIT.md`](./XSD11_SOURCE_AUDIT.md) · [`XSD11_GAP_MATRIX.md`](./XSD11_GAP_MATRIX.md) (§4 = confirmed W3C skip IDs)
+- Design handover: [`Bosak_Schema_XSD11_Agent_Handover_v0.1.md`](./Bosak_Schema_XSD11_Agent_Handover_v0.1.md)
+- Seam contract: [`SEAM_DESIGN.md`](./SEAM_DESIGN.md); prior decisions: [ADR-001](./ADR-001-h3-typed-construction-api.md), [ADR-002](./ADR-002-h4-validation-service.md)
+- Core harness skip logic (REQ-112): `tests/Bosak.Xslt.Conformance/Program.cs` in the Bosak core repo
+- W3C XML Schema 1.1 Part 1 (Structures): https://www.w3.org/TR/xmlschema11-1/ · Part 2 (Datatypes): https://www.w3.org/TR/xmlschema11-2/

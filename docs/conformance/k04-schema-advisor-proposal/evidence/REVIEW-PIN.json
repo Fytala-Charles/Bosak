@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-29",
+  "recordedUtc": "2026-10-29T05:05:25.710321+00:00",
+  "baseCommit": "ebfb7c2f0ed566d4cfc1668219187c5f093f366a",
+  "kind": "Read-only compatibility proposal; no semantic implementation adoption or API freeze",
+  "specifications": [
+    {
+      "revision": "REC-xmlschema11-1-20120405",
+      "url": "https://www.w3.org/TR/2012/REC-xmlschema11-1-20120405/",
+      "sections": [
+        "3.3 Element Declarations",
+        "3.12 Type Alternatives",
+        "3.13 Assertions"
+      ]
+    },
+    {
+      "revision": "REC-xpath-31-20170321",
+      "url": "https://www.w3.org/TR/2017/REC-xpath-31-20170321/",
+      "sections": [
+        "2.5.5.4",
+        "2.5.6"
+      ]
+    }
+  ],
+  "candidate": "1.33.1",
+  "published": "1.26.3",
+  "normalGates": {
+    "qt3": [
+      31397,
+      0,
+      424
+    ],
+    "qt4": [
+      8941,
+      0,
+      1918
+    ]
+  },
+  "schemaOwner": "Bosak.Schema",
+  "implementationAuthorized": false,
+  "releaseApproved": false
+}

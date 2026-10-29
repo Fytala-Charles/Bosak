@@ -1,0 +1,218 @@
+{
+  "observed": "After bounded replay; initial full-checkout status was not captured. No clean-full-checkout claim.",
+  "workingTreeStatus": "M tests/misc/error/error-1500a.xml\n M tests/misc/xslt-compat/xslt-compat-003-2.out\n M tests/strm/si-for-each-group/account01826370.xml\n M tests/strm/si-for-each-group/account43861562.xml\n M tests/strm/si-for-each-group/account92741838.xml\n?? last_test.txt\n?? tests/attr/mode/verse10.xml\n?? tests/attr/mode/verse11.xml\n?? tests/attr/mode/verse12.xml\n?? tests/attr/mode/verse13.xml\n?? tests/attr/mode/verse14.xml\n?? tests/attr/mode/verse15.xml\n?? tests/attr/mode/verse16.xml\n?? tests/attr/mode/verse17.xml\n?? tests/attr/mode/verse18.xml\n?? tests/attr/mode/verse19.xml\n?? tests/attr/mode/verse2.xml\n?? tests/attr/mode/verse20.xml\n?? tests/attr/mode/verse21.xml\n?? tests/attr/mode/verse22.xml\n?? tests/attr/mode/verse23.xml\n?? tests/attr/mode/verse24.xml\n?? tests/attr/mode/verse25.xml\n?? tests/attr/mode/verse26.xml\n?? tests/attr/mode/verse27.xml\n?? tests/attr/mode/verse28.xml\n?? tests/attr/mode/verse29.xml\n?? tests/attr/mode/verse3.xml\n?? tests/attr/mode/verse30.xml\n?? tests/attr/mode/verse31.xml\n?? tests/attr/mode/verse32.xml\n?? tests/attr/mode/verse4.xml\n?? tests/attr/mode/verse5.xml\n?? tests/attr/mode/verse6.xml\n?? tests/attr/mode/verse7.xml\n?? tests/attr/mode/verse8.xml\n?? tests/attr/mode/verse9.xml\n?? tests/attr/validation/validation-0202-out/I1.xhtml\n?? tests/attr/validation/validation-0202-out/I10.xhtml\n?? tests/attr/validation/validation-0202-out/I11.xhtml\n?? tests/attr/validation/validation-0202-out/I12.xhtml\n?? tests/attr/validation/validation-0202-out/I13.xhtml\n?? tests/attr/validation/validation-0202-out/I14.xhtml\n?? tests/attr/validation/validation-0202-out/I15.xhtml\n?? tests/attr/validation/validation-0202-out/I17.xhtml\n?? tests/attr/validation/validation-0202-out/I18.xhtml\n?? tests/attr/validation/validation-0202-out/I19.xhtml\n?? tests/attr/validation/validation-0202-out/I2.xhtml\n?? tests/attr/validation/validation-0202-out/I20.xhtml\n?? tests/attr/validation/validation-0202-out/I21.xhtml\n?? tests/attr/validation/validation-0202-out/I22.xhtml\n?? tests/attr/validation/validation-0202-out/I23.xhtml\n?? tests/attr/validation/validation-0202-out/I24.xhtml\n?? tests/attr/validation/validation-0202-out/I25.xhtml\n?? tests/attr/validation/validation-0202-out/I3.xhtml\n?? tests/attr/validation/validation-0202-out/I4.xhtml\n?? tests/attr/validation/validation-0202-out/I5.xhtml\n?? tests/attr/validation/validation-0202-out/I6.xhtml\n?? tests/attr/validation/validation-0202-out/I7.xhtml\n?? tests/attr/validation/validation-0202-out/I8.xhtml\n?? tests/attr/validation/validation-0202-out/I9.xhtml\n?? tests/attr/validation/validation-0202-out/index.xhtml\n?? tests/decl/accumulator/item-results.xml\n?? tests/decl/accumulator/item_i1.xml\n?? tests/decl/accumulator/item_i2.xml\n?? tests/decl/accumulator/item_i3.xml\n?? tests/decl/accumulator/item_i4.xml\n?? tests/decl/accumulator/item_i5.xml\n?? tests/fn/current-output-uri/results/\n?? tests/fn/current-output-uri/row1.xml\n?? tests/fn/current-output-uri/second/\n?? tests/fn/resolve-uri/xmlbase_test.xml\n?? tests/fn/transform/secondary-outputs.xml\n?? tests/fn/transform/secondary1.txt\n?? tests/fn/transform/secondary2.xml\n?? tests/insn/message/out1.xml\n?? tests/insn/message/out10.xml\n?? tests/insn/message/out11.xml\n?? tests/insn/message/out12.xml\n?? tests/insn/message/out13.xml\n?? tests/insn/message/out14.xml\n?? tests/insn/message/out15.xml\n?? tests/insn/message/out16.xml\n?? tests/insn/message/out17.xml\n?? tests/insn/message/out18.xml\n?? tests/insn/message/out19.xml\n?? tests/insn/message/out2.xml\n?? tests/insn/message/out20.xml\n?? tests/insn/message/out3.xml\n?? tests/insn/message/out4.xml\n?? tests/insn/message/out5.xml\n?? tests/insn/message/out6.xml\n?? tests/insn/message/out7.xml\n?? tests/insn/message/out8.xml\n?? tests/insn/message/out9.xml\n?? tests/insn/result-document/Almighty108.xml\n?? tests/insn/result-document/And194.xml\n?? tests/insn/result-document/And252.xml\n?? tests/insn/result-document/Author192.xml\n?? tests/insn/result-document/Author270.xml\n?? tests/insn/result-document/Authorized82.xml\n?? tests/insn/result-document/Bible94.xml\n?? tests/insn/result-document/Book48.xml\n?? tests/insn/result-document/Bosak12.xml\n?? tests/insn/result-document/Bosak16.xml\n?? tests/insn/result-document/Bosak24.xml\n?? tests/insn/result-document/Brethren294.xml\n?? tests/insn/result-document/But158.xml\n?? tests/insn/result-document/Christ174.xml\n?? tests/insn/result-document/Christendom202.xml\n?? tests/insn/result-document/Church212.xml\n?? tests/insn/result-document/Church256.xml\n?? tests/insn/result-document/Commonly78.xml\n?? tests/insn/result-document/Compared70.xml\n?? tests/insn/result-document/Conformable74.xml\n?? tests/insn/result-document/Copyright20.xml\n?? tests/insn/result-document/Diligently68.xml\n?? tests/insn/result-document/Edition76.xml\n?? tests/insn/result-document/Elizabeth134.xml\n?? tests/insn/result-document/England114.xml\n?? tests/insn/result-document/England258.xml\n?? tests/insn/result-document/English244.xml\n?? tests/insn/result-document/Father112.xml\n?? tests/insn/result-document/Father214.xml\n?? tests/insn/result-document/For124.xml\n?? tests/insn/result-document/For226.xml\n?? tests/insn/result-document/Former64.xml\n?? tests/insn/result-document/God110.xml\n?? tests/insn/result-document/God160.xml\n?? tests/insn/result-document/God190.xml\n?? tests/insn/result-document/God200.xml\n?? tests/insn/result-document/God206.xml\n?? tests/insn/result-document/God254.xml\n?? tests/insn/result-document/God290.xml\n?? tests/insn/result-document/Government146.xml\n?? tests/insn/result-document/Grace96.xml\n?? tests/insn/result-document/Great104.xml\n?? tests/insn/result-document/Highness150.xml\n?? tests/insn/result-document/Highness170.xml\n?? tests/insn/result-document/Highness230.xml\n?? tests/insn/result-document/Highness282.xml\n?? tests/insn/result-document/James86.xml\n?? tests/insn/result-document/Jon10.xml\n?? tests/insn/result-document/Jon14.xml\n?? tests/insn/result-document/Jon22.xml\n?? tests/insn/result-document/King264.xml\n?? tests/insn/result-document/King84.xml\n?? tests/insn/result-document/Known80.xml\n?? tests/insn/result-document/Land136.xml\n?? tests/insn/result-document/Languages238.xml\n?? tests/insn/result-document/Lord102.xml\n?? tests/insn/result-document/Lord296.xml\n?? tests/insn/result-document/Majesty118.xml\n?? tests/insn/result-document/Majesty142.xml\n?? tests/insn/result-document/Majesty178.xml\n?? tests/insn/result-document/Majesty198.xml\n?? tests/insn/result-document/Majesty220.xml\n?? tests/insn/result-document/Majesty224.xml\n?? tests/insn/result-document/Majesty250.xml\n?? tests/insn/result-document/Majesty262.xml\n?? tests/insn/result-document/Majesty276.xml\n?? tests/insn/result-document/Man172.xml\n?? tests/insn/result-document/Mercy98.xml\n?? tests/insn/result-document/Mormon50.xml\n?? tests/insn/result-document/Mover268.xml\n?? tests/insn/result-document/New38.xml\n?? tests/insn/result-document/Occidental128.xml\n?? tests/insn/result-document/Old32.xml\n?? tests/insn/result-document/Old4.xml\n?? tests/insn/result-document/Old54.xml\n?? tests/insn/result-document/One8.xml\n?? tests/insn/result-document/Original232.xml\n?? tests/insn/result-document/Original60.xml\n?? tests/insn/result-document/Peace100.xml\n?? tests/insn/result-document/Person122.xml\n?? tests/insn/result-document/Person188.xml\n?? tests/insn/result-document/Persons288.xml\n?? tests/insn/result-document/Popish286.xml\n?? tests/insn/result-document/Predecessor166.xml\n?? tests/insn/result-document/Prince278.xml\n?? tests/insn/result-document/Queen132.xml\n?? tests/insn/result-document/Quran44.xml\n?? tests/insn/result-document/Revised72.xml\n?? tests/insn/result-document/Royal120.xml\n?? tests/insn/result-document/Sacred234.xml\n?? tests/insn/result-document/Sacred274.xml\n?? tests/insn/result-document/Scriptures242.xml\n?? tests/insn/result-document/Seed154.xml\n?? tests/insn/result-document/Sion126.xml\n?? tests/insn/result-document/So284.xml\n?? tests/insn/result-document/Sovereign106.xml\n?? tests/insn/result-document/Sovereign266.xml\n?? tests/insn/result-document/Star130.xml\n?? tests/insn/result-document/State138.xml\n?? tests/insn/result-document/Sun144.xml\n?? tests/insn/result-document/Teachers210.xml\n?? tests/insn/result-document/Testament34.xml\n?? tests/insn/result-document/Testament40.xml\n?? tests/insn/result-document/Testament56.xml\n?? tests/insn/result-document/Testament6.xml\n?? tests/insn/result-document/The18.xml\n?? tests/insn/result-document/The2.xml\n?? tests/insn/result-document/The26.xml\n?? tests/insn/result-document/The28.xml\n?? tests/insn/result-document/The30.xml\n?? tests/insn/result-document/The36.xml\n?? tests/insn/result-document/The42.xml\n?? tests/insn/result-document/The46.xml\n?? tests/insn/result-document/The52.xml\n?? tests/insn/result-document/The90.xml\n?? tests/insn/result-document/Then164.xml\n?? tests/insn/result-document/There216.xml\n?? tests/insn/result-document/Title156.xml\n?? tests/insn/result-document/Tongue246.xml\n?? tests/insn/result-document/Tongues236.xml\n?? tests/insn/result-document/Tongues62.xml\n?? tests/insn/result-document/Translated58.xml\n?? tests/insn/result-document/Translation240.xml\n?? tests/insn/result-document/Translations66.xml\n?? tests/insn/result-document/Translators92.xml\n?? tests/insn/result-document/Truth204.xml\n?? tests/insn/result-document/Truth292.xml\n?? tests/insn/result-document/Version88.xml\n?? tests/insn/result-document/Word162.xml\n?? tests/insn/result-document/Word208.xml\n?? tests/insn/result-document/You180.xml\n?? tests/insn/result-document/You184.xml\n?? tests/insn/result-document/You186.xml\n?? tests/insn/result-document/Your116.xml\n?? tests/insn/result-document/Your140.xml\n?? tests/insn/result-document/Your148.xml\n?? tests/insn/result-document/Your152.xml\n?? tests/insn/result-document/Your168.xml\n?? tests/insn/result-document/Your176.xml\n?? tests/insn/result-document/Your182.xml\n?? tests/insn/result-document/Your196.xml\n?? tests/insn/result-document/Your218.xml\n?? tests/insn/result-document/Your222.xml\n?? tests/insn/result-document/Your228.xml\n?? tests/insn/result-document/Your248.xml\n?? tests/insn/result-document/Your260.xml\n?? tests/insn/result-document/Your272.xml\n?? tests/insn/result-document/Your280.xml\n?? tests/insn/result-document/Your298.xml\n?? tests/insn/result-document/mult/\n?? tests/insn/result-document/multresult1.out\n?? tests/insn/result-document/multresult7.out\n?? tests/insn/result-document/one.xml\n?? tests/insn/result-document/out/\n?? tests/insn/result-document/out1.xml\n?? tests/insn/result-document/out2.xml\n?? tests/insn/result-document/result-document-0211b.out\n?? tests/insn/result-document/section1.html\n?? tests/insn/result-document/section2.html\n?? tests/insn/result-document/section3.html\n?? tests/insn/source-document/product-1-result.xml\n?? tests/insn/source-document/product-3-result.xml\n?? tests/insn/try/try-022-1.out\n?? tests/insn/try/try022x.out\n?? tests/insn/try/try023.out\n?? tests/insn/try/try023_1.out\n?? tests/insn/try/try023_2.out\n?? tests/insn/try/try024.out\n?? tests/insn/try/try024_1.out\n?? tests/misc/docbook/docbook-xsl-1.79.1/xhtml/docbook.css\n?? tests/misc/docbook/saxon_result.xml\n?? tests/misc/error/error249output.xml\n?? tests/misc/error/temp.out\n?? tests/strm/si-for-each-group/product0.xml\n?? tests/strm/si-for-each-group/product1.xml\n?? tests/strm/si-for-each-group/product10.xml\n?? tests/strm/si-for-each-group/product2.xml\n?? tests/strm/si-for-each-group/product3.xml\n?? tests/strm/si-for-each-group/product4.xml\n?? tests/strm/si-for-each-group/product5.xml\n?? tests/strm/si-for-each-group/product6.xml\n?? tests/strm/si-for-each-group/product7.xml\n?? tests/strm/si-for-each-group/product8.xml\n?? tests/strm/si-for-each-group/product9.xml\n?? tests/strm/si-for-each-group/si-group-039.out\n?? tests/strm/si-for-each/student001.xml\n?? tests/strm/si-for-each/student002.xml\n?? tests/strm/si-for-each/student003.xml\n?? tests/strm/si-for-each/student004.xml\n?? tests/strm/si-for-each/student005.xml\n?? tests/strm/si-for-each/student006.xml\n?? tests/strm/si-fork/H.xml\n?? tests/strm/si-fork/MMP.xml\n?? tests/strm/si-fork/P.xml\n?? tests/strm/si-fork/account01826370.xml\n?? tests/strm/si-fork/account43861562.xml\n?? tests/strm/si-fork/account92741838.xml\n?? tests/strm/si-fork/credits.xml\n?? tests/strm/si-fork/debits.xml\n?? tests/strm/si-fork/item_i1.html\n?? tests/strm/si-fork/item_i2.html\n?? tests/strm/si-fork/item_i3.html\n?? tests/strm/si-fork/item_i4.html\n?? tests/strm/si-fork/item_i5.html\n?? tests/strm/si-result-document/20.xml\n?? tests/strm/si-result-document/304.xml\n?? tests/strm/si-result-document/76543210.xml\n?? tests/strm/si-result-document/d-001.xml\n?? tests/strm/si-result-document/d-002.xml\n?? tests/strm/si-result-document/d-003.xml\n?? tests/strm/si-result-document/d-004.xml\n?? tests/strm/si-result-document/d-005.xml\n?? tests/strm/si-result-document/d-006.xml\n?? tests/strm/si-result-document/d-007.xml\n?? tests/strm/si-result-document/d-008-1.xml\n?? tests/strm/si-result-document/d-008-2.xml\n?? tests/strm/si-result-document/d-008-3.xml\n?? tests/strm/si-result-document/d-008-4.xml\n?? tests/strm/si-result-document/d-008-5.xml\n?? tests/strm/si-result-document/d-008-6.xml\n?? tests/strm/si-result-document/d-008-7.xml\n?? tests/strm/si-result-document/d-008-8.xml\n?? tests/strm/si-result-document/d-009-3.xml\n?? tests/strm/si-result-document/d-009-4.xml\n?? tests/strm/si-result-document/d-009-5.xml\n?? tests/strm/si-result-document/d-009-6.xml\n?? tests/strm/si-result-document/d-009-7.xml\n?? tests/strm/si-result-document/d-009-8.xml\n?? tests/strm/si-result-document/d-010.xml\n?? tests/strm/si-result-document/d-011.xml\n?? tests/strm/si-result-document/d-022.xml\n?? tests/strm/si-result-document/d-023.xml\n?? tests/strm/si-result-document/d-024.xml\n?? tests/strm/si-result-document/d-101.xml\n?? tests/strm/si-result-document/d-102.xml\n?? tests/strm/si-result-document/d-103.xml\n?? tests/strm/si-result-document/d-104.xml\n?? tests/strm/si-result-document/d-105.xml\n?? tests/strm/si-result-document/d-107.xml\n?? tests/strm/si-result-document/d-111.xml\n?? tests/strm/si-result-document/d-112.xml\n?? tests/strm/si-result-document/d-113.xml\n?? tests/strm/si-result-document/d-114.xml\n?? tests/strm/si-result-document/d-115.xml\n?? tests/strm/si-result-document/d-116.xml\n?? tests/strm/si-result-document/d-121.xml\n?? tests/strm/si-result-document/d-122.xml\n?? tests/strm/si-result-document/d-123.xml\n?? tests/strm/si-result-document/d-124.xml\n?? tests/strm/si-result-document/d-125.xml\n?? tests/strm/si-result-document/d-127.xml\n?? tests/strm/si-result-document/test2016081202Result2.xml",
+  "trackedChangedFiles": [
+    "tests/misc/error/error-1500a.xml",
+    "tests/misc/xslt-compat/xslt-compat-003-2.out",
+    "tests/strm/si-for-each-group/account01826370.xml",
+    "tests/strm/si-for-each-group/account43861562.xml",
+    "tests/strm/si-for-each-group/account92741838.xml"
+  ],
+  "reviewedResources": {
+    "tests/xslt30-test/tests/strm/docs/books.xsd": {
+      "headObject": "026d27c1cff737634ccb85eedf45785f32623b75",
+      "workingRawSha256": "09470c2ddcbf16588b3142f344227db7297ad9a5cd707fbe368b7010b06450b7",
+      "headRawSha256": "09470c2ddcbf16588b3142f344227db7297ad9a5cd707fbe368b7010b06450b7",
+      "lfNormalizedSha256": "a41d1a886f51d3554280b6c4755569a4b07be0ad094be10b19a5e69a277fb205"
+    },
+    "tests/xslt30-test/tests/strm/docs/books.xml": {
+      "headObject": "24a66f1cf49a366b33ad6213acaa0d3362ea46bb",
+      "workingRawSha256": "3d3d03d2a0cd3f382700a32fbc9fb7da4073a4dfe8b38c495767aa6cec6b1a8e",
+      "headRawSha256": "9fbff65f2bb24d3b7f63224051fabc764f0abd2692eaa5d3087e448611f50029",
+      "lfNormalizedSha256": "9fbff65f2bb24d3b7f63224051fabc764f0abd2692eaa5d3087e448611f50029"
+    },
+    "tests/xslt30-test/tests/strm/si-apply-templates/si-apply-templates-007.xsl": {
+      "headObject": "80aa373fab3a8098e4be6df6e578b7138017a22d",
+      "workingRawSha256": "3a9f254bdf807d93cd06e3a612c9cc8a2fabe0000a4fc50de192f26b3bdb0007",
+      "headRawSha256": "09a67de1c0e2a53074453e45fc0e718c5835f85bec84e430aaa5805a1c81474e",
+      "lfNormalizedSha256": "09a67de1c0e2a53074453e45fc0e718c5835f85bec84e430aaa5805a1c81474e"
+    },
+    "tests/xslt30-test/tests/strm/si-apply-templates/_si-apply-templates-test-set.xml": {
+      "headObject": "caf0301103a51e74e4db4f4e04694a62e3c516e9",
+      "workingRawSha256": "429df1c2761d399d546dbfdb85c3d580559721fad9243f2c55112b55f2bcd9b9",
+      "headRawSha256": "091124d8a8a9223faef5e5051d5356ee6edd9b52fbeb9783e97256a285e1fa76",
+      "lfNormalizedSha256": "091124d8a8a9223faef5e5051d5356ee6edd9b52fbeb9783e97256a285e1fa76"
+    },
+    "tests/xslt30-test/tests/strm/si-apply-templates/si-apply-templates-012.xsl": {
+      "headObject": "f6ba8e3c67724789de26a55fdf9770cbfb848b45",
+      "workingRawSha256": "895fcb21b12f974db207643eefbf0c4dd14593e038c41b6355e89ebeaefef2bd",
+      "headRawSha256": "9b9c1c17c9d6fe780c0d5efb599f1cda79114e7abcf38f6d096cb7d937794162",
+      "lfNormalizedSha256": "9b9c1c17c9d6fe780c0d5efb599f1cda79114e7abcf38f6d096cb7d937794162"
+    },
+    "tests/xslt30-test/tests/misc/catalog/catalog-005.xsl": {
+      "headObject": "3ed6ea67618dde5358d7c1abe3d1cd107047e786",
+      "workingRawSha256": "efbe8e8adee5b43bac84d45943a3989f623d47abcdf9fb5ea5d000ee58a45dd9",
+      "headRawSha256": "6e7a136f82c870c86219296b28d94d9b6240f8e1a72981d3c4db2905c8680810",
+      "lfNormalizedSha256": "6e7a136f82c870c86219296b28d94d9b6240f8e1a72981d3c4db2905c8680810"
+    },
+    "tests/xslt30-test/catalog.xml": {
+      "headObject": "097c9825573c8adbaad5983964ade549eef2e076",
+      "workingRawSha256": "87c133d714d6221ef37936546c56a56a908e5fdf91586780c1c91a522f518785",
+      "headRawSha256": "21aceb87d73297bc7b29ea0b5727017bb7949c4a1149f5261773af929521d170",
+      "lfNormalizedSha256": "21aceb87d73297bc7b29ea0b5727017bb7949c4a1149f5261773af929521d170"
+    },
+    "tests/xslt30-test/admin/catalog-schema.xsd": {
+      "headObject": "edddec312e43d0795de97aa58316acee0bac2fee",
+      "workingRawSha256": "ae599e7331ebf04843293962c7fde5208ef71d1a7085d6961593aaf4bd4ed586",
+      "headRawSha256": "8218f548c1966268795c129cd014d0ebb2d18c6e4866474ef51f2bf1fd5b016e",
+      "lfNormalizedSha256": "8218f548c1966268795c129cd014d0ebb2d18c6e4866474ef51f2bf1fd5b016e"
+    },
+    "tests/xslt30-test/admin/xml.xsd": {
+      "headObject": "aea7d0db0a423b962247aa2b4d3d48fc73cda659",
+      "workingRawSha256": "0bca167a1b2faabf9f2bb59a7c55c09b25c71974db4d6125f91a14b7071f5e9c",
+      "headRawSha256": "61960fb3131e38022caad5360e2f33a3382578ab3c80cd58bd74320ede61b20c",
+      "lfNormalizedSha256": "61960fb3131e38022caad5360e2f33a3382578ab3c80cd58bd74320ede61b20c"
+    },
+    "tests/xslt30-test/tests/misc/catalog/XMLSchema.xsd": {
+      "headObject": "21c707cd4a4e730814572c3564ae189dda721630",
+      "workingRawSha256": "b6f74411792f2a5cec509d84451231e90a7733ca889481de1e7cfafa96eb582d",
+      "headRawSha256": "047e652e9863065d297651c103e366daa24fb2c0933cebcf1982272cb80600f5",
+      "lfNormalizedSha256": "047e652e9863065d297651c103e366daa24fb2c0933cebcf1982272cb80600f5"
+    },
+    "tests/xslt30-test/tests/misc/catalog/schema-for-xslt30.xsd": {
+      "headObject": "095bacdf0628f7669a964569c02d17193bc534f1",
+      "workingRawSha256": "a3c612f23e8bae01953929164d0274b1e228a3f36e8e825d15026ce4bd2dfb65",
+      "headRawSha256": "233c89417423cd9b7eb64878c71e68216b0366f1323ea2ed73ceced7167ad3ad",
+      "lfNormalizedSha256": "233c89417423cd9b7eb64878c71e68216b0366f1323ea2ed73ceced7167ad3ad"
+    },
+    "tests/xslt30-test/tests/misc/catalog/_catalog-test-set.xml": {
+      "headObject": "64e2eb479bc5ce1ef6198e552eb05d3707fc6261",
+      "workingRawSha256": "bfe3ab370a4d6bd8d63fe34cd903fb9bcc0d48b790374f9eb881c26754d02295",
+      "headRawSha256": "b2e63292d5f2173042575cd69ac827cc7bfc3f590c536f6b4cfd77b831ff2a01",
+      "lfNormalizedSha256": "b2e63292d5f2173042575cd69ac827cc7bfc3f590c536f6b4cfd77b831ff2a01"
+    },
+    "tests/xslt30-test/tests/misc/catalog/catalog-009.xsl": {
+      "headObject": "551107eca478d8e60ee989fc077012b071b84310",
+      "workingRawSha256": "6320e2a72407f883c5a5267e50437a1421eae2ae463f50f62ce5edb0e1621769",
+      "headRawSha256": "9e937dc20fdd793b74b05b004141e5b89b01a1eb56e98885e6457a2bb7632cd5",
+      "lfNormalizedSha256": "9e937dc20fdd793b74b05b004141e5b89b01a1eb56e98885e6457a2bb7632cd5"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-049.xsl": {
+      "headObject": "293cf4465ddbc2c3d03f57de9ee0d346323a4362",
+      "workingRawSha256": "7f8e409f8a1648352f845ab00a11220afe1c9c10d9372e37ce448197544b61d7",
+      "headRawSha256": "08e5266f3d47e4bae99a522861fb5ff6840563a94f1019e84affd3a9355fedb9",
+      "lfNormalizedSha256": "08e5266f3d47e4bae99a522861fb5ff6840563a94f1019e84affd3a9355fedb9"
+    },
+    "tests/xslt30-test/tests/insn/merge/books.xsd": {
+      "headObject": "6b40102941ad8b326bf6d2ea2cffc36fa352e5de",
+      "workingRawSha256": "13ba8ec6fcc36c6208fce90637ac18af2d21a2b793f33f8f190aa7deb7a1376e",
+      "headRawSha256": "13ba8ec6fcc36c6208fce90637ac18af2d21a2b793f33f8f190aa7deb7a1376e",
+      "lfNormalizedSha256": "a0ea9d76608f487c8b567c5a63064a3f55b02b18c607a93a1e3de458f7ae9474"
+    },
+    "tests/xslt30-test/tests/insn/merge/_merge-test-set.xml": {
+      "headObject": "29fc0a3b6493170b02dadea451d05789905e8c95",
+      "workingRawSha256": "24db2c445cb41d93eaf9dcefc38ae0e7b4d4976998faa44b1e9715784356d8f0",
+      "headRawSha256": "2f68cc292b9297e95c3c92d7cfb3b8bc34f523c28e2a0b0a4e3740619af531da",
+      "lfNormalizedSha256": "2f68cc292b9297e95c3c92d7cfb3b8bc34f523c28e2a0b0a4e3740619af531da"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-050.xsl": {
+      "headObject": "f0f338b96e2c4f60f242280226409b751bbc1f21",
+      "workingRawSha256": "5ab1dab08beb66519e707a90cab2741601d2da68cd9e0ad65c81a617b5c1dc99",
+      "headRawSha256": "d78c2f024e1b20b555d82ba0e0055095c823ee970d693dfac507af4923dbe807",
+      "lfNormalizedSha256": "d78c2f024e1b20b555d82ba0e0055095c823ee970d693dfac507af4923dbe807"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-051.xsl": {
+      "headObject": "d838a1510426c180d6c9bcabafadee335d25e775",
+      "workingRawSha256": "90dac5e694a9b9340ac50243f1eca8ddb2962c7e8bb418019f0ab77f8cc5dcc0",
+      "headRawSha256": "a21c9eeecad11b8af04fb3736c0dc06b494e904b0ac4de995225e2e90d8eaca8",
+      "lfNormalizedSha256": "a21c9eeecad11b8af04fb3736c0dc06b494e904b0ac4de995225e2e90d8eaca8"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-052.xsl": {
+      "headObject": "b6a9de55f47fda6f279afb35ee910083660f36f4",
+      "workingRawSha256": "89745d71b7d872389a85bf4d1833864f3ecced510379de633ae65cd428c0a2b7",
+      "headRawSha256": "65b29f0339a7c28abe9736e37bba77d2fe3b615d0b8405ea6cd5fbf75011127b",
+      "lfNormalizedSha256": "65b29f0339a7c28abe9736e37bba77d2fe3b615d0b8405ea6cd5fbf75011127b"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-053.xsl": {
+      "headObject": "89baad4afea302f7698cfa86a078eee3ef56de9f",
+      "workingRawSha256": "1619dc80fce5db55dbd8fc01de6058ac6e110e1bcab28e1e30632be1e2857529",
+      "headRawSha256": "834088d948d1791e620a0599692dc4bdb10e0606de86e3f5d1b7394d28059c88",
+      "lfNormalizedSha256": "834088d948d1791e620a0599692dc4bdb10e0606de86e3f5d1b7394d28059c88"
+    },
+    "tests/xslt30-test/tests/insn/merge/merge-054.xsl": {
+      "headObject": "29c593ba9747218d2a08f71bc308568eaaea0560",
+      "workingRawSha256": "bd4100d52942398d7174089584c66e34b9e906fb029c021335b362f2e0b3dba9",
+      "headRawSha256": "6a407a71d16b15e781a730ffa1823ec673bebb47f4c0d6b39bf84ac53fa01a66",
+      "lfNormalizedSha256": "6a407a71d16b15e781a730ffa1823ec673bebb47f4c0d6b39bf84ac53fa01a66"
+    },
+    "tests/xslt30-test/tests/insn/source-document/stream-B.xsl": {
+      "headObject": "c9e42745806130e0570f7ddff3cad0f225dcbda5",
+      "workingRawSha256": "ff6e3bcb35e6e8260392eca062782f0c8fb44358fc7d5f7c0158003ac57e071a",
+      "headRawSha256": "27b5ce4dadaaf98c6991c9fe6ccfec9092ac602656381d448e373ef70b4456f0",
+      "lfNormalizedSha256": "27b5ce4dadaaf98c6991c9fe6ccfec9092ac602656381d448e373ef70b4456f0"
+    },
+    "tests/xslt30-test/tests/insn/source-document/books.xsd": {
+      "headObject": "6b40102941ad8b326bf6d2ea2cffc36fa352e5de",
+      "workingRawSha256": "13ba8ec6fcc36c6208fce90637ac18af2d21a2b793f33f8f190aa7deb7a1376e",
+      "headRawSha256": "13ba8ec6fcc36c6208fce90637ac18af2d21a2b793f33f8f190aa7deb7a1376e",
+      "lfNormalizedSha256": "a0ea9d76608f487c8b567c5a63064a3f55b02b18c607a93a1e3de458f7ae9474"
+    },
+    "tests/xslt30-test/tests/insn/source-document/_source-document-test-set.xml": {
+      "headObject": "361daa502e55533f48eabc7bf72d6b8452b5709d",
+      "workingRawSha256": "1016345dc15e2fa005e02ae3258962c57e44e864be7b7c09ad7bbbb1d74c3c2f",
+      "headRawSha256": "e715ff0fd0bb7d022d829ca86c816d0087d93a890420dfb3b28a8771a5a9850a",
+      "lfNormalizedSha256": "e715ff0fd0bb7d022d829ca86c816d0087d93a890420dfb3b28a8771a5a9850a"
+    },
+    "tests/xslt30-test/tests/decl/accumulator/books.xml": {
+      "headObject": "24a66f1cf49a366b33ad6213acaa0d3362ea46bb",
+      "workingRawSha256": "3d3d03d2a0cd3f382700a32fbc9fb7da4073a4dfe8b38c495767aa6cec6b1a8e",
+      "headRawSha256": "9fbff65f2bb24d3b7f63224051fabc764f0abd2692eaa5d3087e448611f50029",
+      "lfNormalizedSha256": "9fbff65f2bb24d3b7f63224051fabc764f0abd2692eaa5d3087e448611f50029"
+    },
+    "tests/xslt30-test/tests/decl/accumulator/books.xsd": {
+      "headObject": "026d27c1cff737634ccb85eedf45785f32623b75",
+      "workingRawSha256": "09470c2ddcbf16588b3142f344227db7297ad9a5cd707fbe368b7010b06450b7",
+      "headRawSha256": "09470c2ddcbf16588b3142f344227db7297ad9a5cd707fbe368b7010b06450b7",
+      "lfNormalizedSha256": "a41d1a886f51d3554280b6c4755569a4b07be0ad094be10b19a5e69a277fb205"
+    },
+    "tests/xslt30-test/tests/decl/accumulator/accumulator-073.xsl": {
+      "headObject": "903c0bf1d5b69dc719f71e21132a109658a2ff83",
+      "workingRawSha256": "f702ea23d695d663ffda84e94511ff8e6e09c143cf6d42b67a7c7c99c4ba0b1d",
+      "headRawSha256": "91e82044697b917f5a60cf190c2bead1ef504c947cd5c01bf4b696f3cfec6240",
+      "lfNormalizedSha256": "91e82044697b917f5a60cf190c2bead1ef504c947cd5c01bf4b696f3cfec6240"
+    },
+    "tests/xslt30-test/tests/decl/accumulator/_accumulator-test-set.xml": {
+      "headObject": "abf4a4206d3c36c240b2c4e13fe718ddf38576a6",
+      "workingRawSha256": "d0c92dd371dc5de608043d2fa14b852a1c234a6ba8a054cbabb4f2ae14377848",
+      "headRawSha256": "7e97abb6231eb54bf77730d031cc77348c553852f290b74ad76f21b4e31ce52d",
+      "lfNormalizedSha256": "7e97abb6231eb54bf77730d031cc77348c553852f290b74ad76f21b4e31ce52d"
+    },
+    "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xml": {
+      "headObject": "2dd65034223476ea9ee8fcfb1d1ae60d01899410",
+      "workingRawSha256": "102e4b2f03d810a5835cf8cbd4bf437b8e62ef85676d5237617f434579670c67",
+      "headRawSha256": "ba53c83f4af6756b313487004006f2959cc803e1b5ff4ad39dc84e481d03099f",
+      "lfNormalizedSha256": "ba53c83f4af6756b313487004006f2959cc803e1b5ff4ad39dc84e481d03099f"
+    },
+    "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xsd": {
+      "headObject": "a6ffc2c7966f879f01e846426eb7a84edb323d7e",
+      "workingRawSha256": "7f42c971a182c9fb7d08b68f8556febe38840892b0f55bc1626b766d2c2e7680",
+      "headRawSha256": "bf15a6e5dcee4b673236987b56bb9dc8eeb0418ac965113795119fc8994424c2",
+      "lfNormalizedSha256": "bf15a6e5dcee4b673236987b56bb9dc8eeb0418ac965113795119fc8994424c2"
+    },
+    "tests/xslt30-test/tests/decl/strip-space/strip-space-009.xsl": {
+      "headObject": "5dddda0526135ada52a391f46ea607c31cec921a",
+      "workingRawSha256": "8ebe9ae54ca42b3d171ad60d108cf8fbd053f8b08c7d035d5a411d2b5637e118",
+      "headRawSha256": "2b9fa7aa6fd801fc17c2193dc2ee452174e2aa72dc08acc27f0bad7639dfcd6e",
+      "lfNormalizedSha256": "2b9fa7aa6fd801fc17c2193dc2ee452174e2aa72dc08acc27f0bad7639dfcd6e"
+    },
+    "tests/xslt30-test/tests/decl/strip-space/_strip-space-test-set.xml": {
+      "headObject": "d6f51ddd22d97f82d9e4e6c71d7c30fe63df20ea",
+      "workingRawSha256": "5f638c9eebfdd76bcf1fd570c8e7928b72876c0f01218d7ca2a532f239fe597f",
+      "headRawSha256": "d23996b8240c843e7093e9c24f5f97a8f76e339cb4c424840cb4ffd2b44adea1",
+      "lfNormalizedSha256": "d23996b8240c843e7093e9c24f5f97a8f76e339cb4c424840cb4ffd2b44adea1"
+    },
+    "tests/xslt30-test/tests/attr/validation/validation-1301.xsl": {
+      "headObject": "49b192330438eca2ce9be8b105935e42893caec7",
+      "workingRawSha256": "5b361406c35c3b367bbdce768569fbd09569f2335f6d2399db40dad5a65f87a8",
+      "headRawSha256": "1ae1b9c8f5e216afb8296bfab4dd1fc38cb6ea87c583c1f1c5905c19710026e7",
+      "lfNormalizedSha256": "1ae1b9c8f5e216afb8296bfab4dd1fc38cb6ea87c583c1f1c5905c19710026e7"
+    },
+    "tests/xslt30-test/tests/attr/validation/_validation-test-set.xml": {
+      "headObject": "fa05f34214c6c6920b652a1f243e57911e538a5b",
+      "workingRawSha256": "ad31e5da7811623724c8c74af9932e1c16755b842eb8d977cf84cb77484688d3",
+      "headRawSha256": "663bdc4375817c01192aa4a56800149415d77c59d16422204ff97823253d6e74",
+      "lfNormalizedSha256": "663bdc4375817c01192aa4a56800149415d77c59d16422204ff97823253d6e74"
+    }
+  },
+  "disposition": "All 34 reviewed resources match pinned HEAD content after CRLF normalization and retain their pre-replay raw hashes. Unrelated tracked mutations/generated artifacts preserved without cleanup."
+}
