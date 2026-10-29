@@ -1,0 +1,37 @@
+{
+  "slice": "K04-C41",
+  "date": "2026-10-29",
+  "base": "f0cba471",
+  "reviewComplete": true,
+  "legacy": {
+    "total": 37,
+    "passed": 15,
+    "failed": 22,
+    "separateCoreSubstitutionFailures": 4
+  },
+  "schemaPreparationErrors": 6,
+  "exactQueryCompanionsPassed": 9,
+  "independentNodeControls": {
+    "passed": 6,
+    "mismatches": 4
+  },
+  "independentFunctionSubtypeMismatches": 1,
+  "qt3Normal": [
+    31397,
+    0,
+    424
+  ],
+  "qt4Normal": [
+    8941,
+    0,
+    1918
+  ],
+  "inheritedSolutionPasses": 24164,
+  "finalBoundedProcesses": 109,
+  "normalBaselineChanged": false,
+  "schemaAdvisorAccepted": false,
+  "candidate": "1.33.0",
+  "published": "1.26.3",
+  "next": "C42 existing schema-element contract repair",
+  "releaseApproved": false
+}

@@ -1,0 +1,18 @@
+{
+  "currentCoreSurfaces": {
+    "CompileOptions.SchemaSet": "XmlSchemaSet",
+    "EvaluationContext.SchemaSetAndLookups": "XmlSchemaSet / XmlSchemaElement / XmlSchemaAttribute / XmlSchemaType",
+    "XdmSchemaAnnotator": "XmlSchemaSet validation entry points",
+    "IXsdValidator": "Stream / IEnumerable<Stream> validation facade, not a component-model abstraction",
+    "IXdmNodeSchemaViews": "Expanded QName tuples and nilled/ID properties"
+  },
+  "separateCohorts": {
+    "qt3LegacyXsd10": 37,
+    "qt3SchemaPreparationErrors": 6,
+    "schemaDocumentsReportedXsltMapping": 30
+  },
+  "schemaReadiness": "Reviewed add-on documents describe S1-S3 and staged S4a/S4b/S5a/S5b progress; S4c remains conditioned on proposed ADR-006 acceptance. No multiple-affiliation backend coverage is certified by this review.",
+  "draftAcceptanceBaseline": "REQ-139 still quotes historical QT3 31,145/0/676; a future concrete compatibility proposal must refresh source/baseline receipts to current 31,397/0/424 and qt4 8,941/0/1,918 without silently rewriting the preserved draft.",
+  "ownerDisposition": "ADR-006 remains Proposed and REQ-139 Pending; no acceptance inferred.",
+  "nextRecommendation": "C42 existing XSD 1.0 schema-element actual-membership and subtype contract repair, retaining profile guards; separate later schema-advisor compatibility decision."
+}

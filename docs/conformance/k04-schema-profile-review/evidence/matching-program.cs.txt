@@ -1,0 +1,24 @@
+// Generated public-API schema matching observations over unchanged XSD 1.0 resources.
+using System.Xml.Linq;
+using System.Xml.Schema;
+using Bosak.XPath.Api;
+using Bosak.XPath.Core.Xdm;
+using Bosak.XPath.Providers.Xml;
+using Bosak.XPath.Runtime.Vm;
+using Bosak.XPath.Standard.Functions;
+using System.Text.Json;
+const string ns="http://www.w3.org/XQueryTest/substitution";
+var schemas=new XmlSchemaSet();schemas.Add(ns,Path.GetFullPath("tests/qt3tests/prod/SchemaImport/substitution.xsd"));schemas.Compile();
+var options=new CompileOptions{SchemaSet=schemas,Namespaces=new Dictionary<string,string>{{"s",ns}}};
+var inputs=new[]{("A","<A/>","H",false),("A-own","<A/>","A",false),("B","<B/>","H",true),("B-A","<B/>","A",true),("C","<C/>","H",true),("D","<D/>","H",true),("E","<E/>","D",false),("F","<F><string>s</string><decimal>12.7</decimal></F>","H",true),("G","<G><string>s</string><decimal>12.7</decimal><date>2012-10-10</date></G>","H",false),("C-nilled","<C xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xsi:nil='true'/>","H",false)};
+var rows=new List<object>();
+foreach(var (name,xml,target,expected) in inputs){
+ var document=XDocument.Parse("<cuckoo xmlns='"+ns+"'>"+xml+"</cuckoo>");document.Validate(schemas,(_,e)=>throw new Exception(e.Message),true);var child=document.Root!.Elements().Single();var node=XDocumentNode.Wrap(child);
+ var context=new EvaluationContext{SchemaSet=schemas,IsSchemaAware=true};context=context.WithNamespace("s",ns);context=context.WithVariable("n",XdmValue.FromNode(node));FunctionLibrary.Populate(context);
+ string query="$n instance of schema-element(s:"+target+")";bool? actual=null;Exception? error=null;
+ try{actual=XPath31Expression.Compile(query,options).Evaluate(context).BooleanValue;}catch(Exception ex){error=ex;}
+ rows.Add(new{name,xml,query,schemaValidated=true,annotation=node.SchemaTypeAnnotation is {} a ? $"Q{{{a.NamespaceUri}}}{a.LocalName}" : null,declaration=node.SchemaElementDeclaration is {} d ? $"Q{{{d.NamespaceUri}}}{d.LocalName}" : null,governingDeclarationIsGlobal=ReferenceEquals(child.GetSchemaInfo()?.SchemaElement,schemas.GlobalElements[new System.Xml.XmlQualifiedName(child.Name.LocalName,child.Name.NamespaceName)]),globalDeclarationAbstract=(schemas.GlobalElements[new System.Xml.XmlQualifiedName(child.Name.LocalName,child.Name.NamespaceName)] as XmlSchemaElement)?.IsAbstract,nilled=node.IsNilled,expected,actual,passed=error is null&&actual==expected,error=error?.Message});
+}
+string subtype="(function($p as schema-element(s:H)) as xs:integer {3}) instance of function(schema-element(s:A)) as xs:integer";var ctx=new EvaluationContext{SchemaSet=schemas,IsSchemaAware=true};ctx=ctx.WithNamespace("s",ns);FunctionLibrary.Populate(ctx);bool? functionActual=null;Exception? functionError=null;
+try{functionActual=XPath31Expression.Compile(subtype,options).Evaluate(ctx).BooleanValue;}catch(Exception ex){functionError=ex;}
+Console.WriteLine(JsonSerializer.Serialize(new{schema="tests/qt3tests/prod/SchemaImport/substitution.xsd",nodeControls=rows,functionControl=new{query=subtype,expected=true,actual=functionActual,passed=functionError is null&&functionActual==true,error=functionError?.Message}},new JsonSerializerOptions{WriteIndented=true}));

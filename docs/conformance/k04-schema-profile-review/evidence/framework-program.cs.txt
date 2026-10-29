@@ -1,0 +1,11 @@
+// Generated read-only framework schema preparation contrast; no fixture rewriting.
+using System.Xml.Schema;
+using System.Text.Json;
+using System.Runtime.InteropServices;
+var rows=new List<object>();
+foreach(string name in new[]{"substitution.xsd","substitution11.xsd"}){
+ string file=Path.GetFullPath("tests/qt3tests/prod/SchemaImport/"+name);var set=new XmlSchemaSet();string stage="Add";Exception? error=null;
+ try{set.Add(null,file);stage="Compile";set.Compile();stage="Complete";}catch(Exception ex){error=ex;}
+ rows.Add(new{name,file,stage,compiled=error is null,schemaCount=set.Count,globalElementCount=error is null?set.GlobalElements.Count:0,errorType=error?.GetType().FullName,message=error?.Message});
+}
+Console.WriteLine(JsonSerializer.Serialize(new{framework=RuntimeInformation.FrameworkDescription,substitutionGroupPropertyType=typeof(XmlSchemaElement).GetProperty("SubstitutionGroup")!.PropertyType.FullName,schemas=rows},new JsonSerializerOptions{WriteIndented=true}));

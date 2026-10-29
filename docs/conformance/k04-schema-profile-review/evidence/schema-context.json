@@ -1,0 +1,38 @@
+{
+  "date": "2026-10-29",
+  "head": "228c9bea101760bce480b1f011998f887217097c",
+  "workingTreeStatus": "?? assets/brand/\n?? assets/css/\n?? assets/icons-png/\n?? assets/icons/\n?? assets/images/\n?? assets/logos/\n?? docs/Bosak_Enterprise_Fabric_Architecture_Overview_Two_Page_v1.0.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.1.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.1.pdf\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.0.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.2.md\n?? docs/Bosak_Enterprise_Fabric_Master_Architecture_v1.2.pdf\n",
+  "documents": [
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_SOURCE_AUDIT.md",
+      "sha256": "c4ab0cdc90a084089f9d6d935da21c9231bf59c69285c37cf100dae774a319a6",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/XSD11_SOURCE_AUDIT.md.txt"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_GAP_MATRIX.md",
+      "sha256": "af8087ef6a8f00e0be97833a096016912d3ea1892e5a8de78b3547f7039ecf16",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/XSD11_GAP_MATRIX.md.txt"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\ADR-005-xsd11-compiled-model-and-validation.md",
+      "sha256": "0e99cb118a70ed6fc08ce228b9efb0d0a126f901c4b4a65a8e046838a6a55b5f",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/ADR-005-xsd11-compiled-model-and-validation.md.txt"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\ADR-006-xsd11-engine-seam-compatibility.md",
+      "sha256": "61b304da73ccaefaca8af8ce2b565cf954fe2e7ef51e57448bbeb730b00929a7",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/ADR-006-xsd11-engine-seam-compatibility.md.txt"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\XSD11_S4_DESIGN_PREP.md",
+      "sha256": "3d4cd7e32bb34090c65ee4a0862c95e6910d74ef17141684f877b08cb3736946",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/XSD11_S4_DESIGN_PREP.md.txt"
+    },
+    {
+      "source": "D:\\Development\\Bosak.Schema\\docs\\SEAM_DESIGN.md",
+      "sha256": "f2f2bebcd94592ff1ea5620d039398800a3d672b3cb3b988c294c13867831174",
+      "snapshot": "docs/conformance/k04-schema-profile-review/evidence/schema-context/SEAM_DESIGN.md.txt"
+    }
+  ],
+  "disposition": "Exact current working-tree snapshots; no sibling mutation, capability certification or seam acceptance."
+}

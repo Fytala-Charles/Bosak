@@ -400,3 +400,7 @@ docs/conformance/k04-xib-admission/*.patch -text whitespace=cr-at-eol,-blank-at-
 
 # C40 owner-approved adoption preserves fresh normal gates and matrix replay.
 docs/conformance/k04-xib-admission/adoption/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+
+# C41 preserves schema-profile originals, independent contract witnesses and readiness snapshots.
+docs/conformance/k04-schema-profile-review/evidence/** -text whitespace=cr-at-eol,-blank-at-eof,-blank-at-eol,-space-before-tab
+docs/conformance/k04-schema-profile-review/RESULTS.json -text whitespace=cr-at-eol
