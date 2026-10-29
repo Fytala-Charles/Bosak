@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-29",
+  "pages": [
+    {
+      "source": "README.md",
+      "htmlSha256": "f1fd5c7c4b75262dfec978c7871ce23c0f92cc4f54ec6be34280edf3804993da"
+    },
+    {
+      "source": "ROADMAP.md",
+      "htmlSha256": "5238805ae4e5760dfe42dd0925cc54ac9df9ae020904d287f74b5d9ff4b6a893"
+    },
+    {
+      "source": "docs/ARCHITECTURE.md",
+      "htmlSha256": "cf1118f00bbbb5fe283ec9f8fabbdb0819e7d7dce08856407e573e784eebe2e8"
+    },
+    {
+      "source": "docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "3a6184ea0fe919289a64d32e8fc3cf6a17baf6e4e698c7347da6f1f1ed16e7d7"
+    },
+    {
+      "source": "docs/INTEGRATION.md",
+      "htmlSha256": "e8c0d4b855bac98542e493cb19892dde534566286f8c7eacfd260d87f92c4b86"
+    },
+    {
+      "source": "docs/AGENT_HANDOVER.md",
+      "htmlSha256": "219d40532d74f3eeb9791dc55a75c626458ccee5866310a6b122de2f48b4b8f6"
+    },
+    {
+      "source": "docs/IMPLEMENTATION_STATUS.md",
+      "htmlSha256": "f259ef13cc23f8cc44079f5c62caeae9ad1ea808a1948db655ead75830cb0633"
+    },
+    {
+      "source": "docs/RESTART-2026-10-29.md",
+      "htmlSha256": "4638224a93d3c8fc62e88152a235ee3ec91d5da12b6ab5f240c09ca4e2096893"
+    },
+    {
+      "source": "docs/schema-document-bridge/README.md",
+      "htmlSha256": "8df47410ea39ecfab528d9a11b7925a1d597ac98e09eacb49a1614e501e30fa2"
+    },
+    {
+      "source": "docs/schema-document-bridge/ADOPTION.md",
+      "htmlSha256": "e9900b12bdcbcca2f85d5344fd67f95701813a53987a7e228199148f18d2987f"
+    },
+    {
+      "source": "docs/schema-count-implementation/README.md",
+      "htmlSha256": "ff732085a9c7b07cd6d451cb075a26f5b82ff3f97136a5fe5020e8b00498f046"
+    },
+    {
+      "source": "docs/schema-count-implementation/GUIDE.md",
+      "htmlSha256": "af228badf3de1cc301f1c1033641c9dfe2eee6e115ff1687ea094dae3359018e"
+    },
+    {
+      "source": "docs/schema-count-implementation/ASSESSMENT-GUIDE.md",
+      "htmlSha256": "960166cfa50af9a0814bb1c0a130372e7b793f10602c1e0a5358183171ef8a3f"
+    },
+    {
+      "source": "docs/schema-count-implementation/ADOPTION.md",
+      "htmlSha256": "88b29b8faa9f6a053815cdd1ac3fe1e1c24715566667b484fc052cb6456c89f6"
+    },
+    {
+      "source": "docs/braid-typed-inspector/README.md",
+      "htmlSha256": "c63e963dba0297635554562fda68cf5bf74ab7035f4099a059dafae778600c21"
+    },
+    {
+      "source": "docs/braid-integration-design/README.md",
+      "htmlSha256": "dd95edbfcfbfdd7a56d07291a360436a40866c5761322711137c8e27d8663c8c"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/README.md",
+      "htmlSha256": "7eb6c479691e93a61294b84f1331f2042b1cdc5600f83d42a00a437701f003c2"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/ROADMAP.md",
+      "htmlSha256": "d66d99011ba3049af45fb1768bdeb3dbfa0fe5457745aba0759828953f617646"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/AGENTS.md",
+      "htmlSha256": "475ef096d316bece13c32cc3ae2043c8b30af49fee6cf2913297b59039aab78a"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/ARCHITECTURE.md",
+      "htmlSha256": "901b233804aa1174b5457bd5cac5ec60e34cfeb6ba8b19c5699cbdcb1cd9c312"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/FEATURE_REQUESTS.md",
+      "htmlSha256": "83e29149db221578d8a8b0641768964c659e672391f01286f38bd2da95c0194d"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/INTEGRATION.md",
+      "htmlSha256": "e782180ab70e24180f04be7ffd997d15de16b8613316262df7dcc1860f573a4b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/AGENT_HANDOVER.md",
+      "htmlSha256": "fb23801dc0e5d0b6b10607b14bfa27b9edf577d14d14951788a1afeeac60b2ce"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/DOCUMENT-ASSESSMENT.md",
+      "htmlSha256": "7925572b528bb5e1f7633459ae556039a06b7aa6096a610ebe81d0677fdf8bc7"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/COUNT-ASSERTION-IMPLEMENTATION.md",
+      "htmlSha256": "b61b98430ba2e9fd28d3b2d05e4db156d262287adadeb623b929ad8b68bac73b"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-TYPED-INSPECTOR-PROOF.md",
+      "htmlSha256": "c63e963dba0297635554562fda68cf5bf74ab7035f4099a059dafae778600c21"
+    },
+    {
+      "source": ".worktrees/Bosak.Schema.Assessment/docs/BRAID-ENGINE-SESSION-INTEGRATION-DESIGN.md",
+      "htmlSha256": "5630df5c7e3f1b4701b12e4a3f9896cf32019d2cc89fff9568558dd44cb8484c"
+    }
+  ],
+  "localLinks": 2329,
+  "cssSha256": "d4d503a0315003cdd261e5a94347e7df85e95a8fe35e8d7268b7aca5ecd55f91",
+  "scope": "HTML rendering and local destinations; no screenshot, PDF or hosted CI claim"
+}

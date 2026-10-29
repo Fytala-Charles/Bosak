@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-29",
+  "scope": "Consumer-owned Braid integration design and bounded typed-inspector proof acceptance",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/consumer-source-identities.json",
+      "bytes": 2327,
+      "sha256": "3aadcee1eaad043bf0b1e745d9443d9ae0358d707e8c018c0be0fe2844b3ef69"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4268,
+      "sha256": "2f20ba442e45d0a34ab2fd3da61ab36903004bfed96f4e36f1bf8d5cfa6c38ef"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1192,
+      "sha256": "d2e812dca3458c35f7d915f43af24acd8f86fd11508960c420d27ead3121b324"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 11963,
+      "sha256": "aa23be24ece1ed0dbfe87e0b8ecafd160aace348c01aabf37f4ff32c704b855c"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 477,
+      "sha256": "0cb5cb46503eaa9b539fa63d312504a2b13c0babd1e6d0febc41a0a998691200"
+    }
+  ]
+}

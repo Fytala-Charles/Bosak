@@ -1,0 +1,58 @@
+{
+  "date": "2026-10-29",
+  "consumerHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "consumerStatus": [],
+  "coreHead": "da01acbd708b1a3c98a1987f196622033d705331",
+  "schemaHead": "64170263da581a6f81f57e737792b6fffee18b27",
+  "method": "Read-only integration contract inspection; no consumer build or execution",
+  "files": [
+    {
+      "path": "src/Bosak.Braid.Application/Bosak.Braid.Application.csproj",
+      "sha256": "473c9b7b5b181c633ffcdcdacd6d8bd3d97b7dfda6b73a764c6d5ea9c4533cb5"
+    },
+    {
+      "path": "src/Bosak.Braid.Core/Bosak.Braid.Core.csproj",
+      "sha256": "61e3f2d043e37f0db4be1d8083dd31bebbfbb8fde2cf027327db2556c16bc385"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/ISourceInspector.cs",
+      "sha256": "c056718a34813df36972456d6b813ee20e9815f30db4f3c7e380c60023909aa9"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/ILiteralElementEditor.cs",
+      "sha256": "9d33d83c702d239eac6c27e4e8dcaaaf565096b1673054f95d6f140a8b6dc4da"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/Testing/IPreviewExecutor.cs",
+      "sha256": "d104bffca5b6701ea3d1d103d7b7da9f2a68428a4c8d2e6d25e7109436f5f0b6"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/RestrictedExportSession.cs",
+      "sha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+      "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+      "sha256": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs",
+      "sha256": "dac931c02191ee1d58972ff8775311e85eec6c49526aa3d5a2fddada91581c2b"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerServer.cs",
+      "sha256": "f3095f56518700262411fd5555f1f035b2257ed480239c95ad6983824a5ffe01"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/WorkerProcessPreviewExecutor.cs",
+      "sha256": "85e8e241609625c11c982be7a8c13d502c865ea4adb7f6bae9ab0ad84d9df0a9"
+    },
+    {
+      "path": "src/Bosak.Braid.Desktop/Program.cs",
+      "sha256": "66f4253b54bb15cc6e57b14c9292e1be702325ea65cc11b7ac5c0e5ec9d86097"
+    }
+  ]
+}

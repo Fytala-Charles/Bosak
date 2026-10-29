@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-29",
+  "scope": "Reviewed typed-inspector/design checkpoint; raw-port lifetime gap remains explicit",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 343,
+      "sha256": "ceaac1d273b27d508a3b49819b83f0ebad196e39c7d29c4958a2b670e029312b"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4968,
+      "sha256": "937020c3f048beb3bda82eeb4fd9fb8c8143750af9c4df00830809bb1f2a2710"
+    },
+    {
+      "path": "evidence/review-verification.json",
+      "bytes": 1408,
+      "sha256": "38c21ec6863a44764d0b4845ecba53f2f5e701ffe7443b31973463fbc26fb102"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2556,
+      "sha256": "83e777b4240608fd1ddb0e1ca4159ae426f26a5cca00a2fcae3e3379c457ac1b"
+    }
+  ]
+}
