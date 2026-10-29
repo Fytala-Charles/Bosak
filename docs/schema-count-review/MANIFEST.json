@@ -1,0 +1,50 @@
+{
+  "date": "2026-10-29",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "CHECKPOINT.json",
+      "bytes": 245,
+      "sha256": "78e3ed9a88936fc2a53b73d1c890b3e87fca1f01603a2b2adc70880bedd91b1f"
+    },
+    {
+      "path": "evidence/charl_CHARLES_2026-10-29_18_45_32_net10.0.trx",
+      "bytes": 590794,
+      "sha256": "11e3accf8c6a08877f105f6e61914d4b79f0c3ffc38ad302419627fac139b0d1"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4593,
+      "sha256": "ec9f6481725906a90cfe16215fc8529521bdffa7976c74fa2a87ada606bd7eaf"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 574,
+      "sha256": "2dbb4577b7c8e846db26d70ff453be1f81bed0dcb07f7d64ee68032559eca6f0"
+    },
+    {
+      "path": "evidence/source-verification.json",
+      "bytes": 864,
+      "sha256": "3fd65bc52cf43fcefc31cb865e33cc6f707b1f87b523ae12258d7ef2523e4e26"
+    },
+    {
+      "path": "PRESENCE-PLAN.md",
+      "bytes": 3882,
+      "sha256": "33325690d72eee9366fbc17b3c2692b0b4583ad4ef78adfcb72199841aa98916"
+    },
+    {
+      "path": "PRESENCE-SOURCES.json",
+      "bytes": 1566,
+      "sha256": "f00fb89d8dd248b24169776803ff31b6d894bd0366a49b1ed08a65c93f49ef36"
+    },
+    {
+      "path": "README.md",
+      "bytes": 1381,
+      "sha256": "a5653b84ef20330e03f401f291e3dae2787313af71072dab4e2d8a9470c677e4"
+    }
+  ]
+}

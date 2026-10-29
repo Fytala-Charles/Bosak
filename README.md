@@ -148,4 +148,6 @@ The unpublished [bounded repeated-decimal candidate](docs/schema-repeated-implem
 
 The [bounded repetition review checkpoint](docs/schema-repetition-review/README.md) records current implementation review and paired delivery identity.
 
-The next [count assertion scope](docs/schema-count-assertions/README.md) defines a finite cardinality-function grammar extension while preserving native validation and existing child-name semantics.
+The unpublished [count assertion candidate](docs/schema-count-implementation/README.md) adds finite cardinality assertions while preserving native validation and existing child-name semantics.
+
+[Bounded Schema assessment review and next scope](docs/schema-count-review/README.md).

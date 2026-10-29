@@ -67,3 +67,8 @@ The [bounded repeated-decimal implementation](docs/schema-repeated-implementatio
 The [bounded repetition implementation](docs/schema-repetition-review/README.md) is reviewed for checkpoint delivery. A separately adopted fn:count assertion slice is next; aggregation and broader grammar remain outside that first function scope.
 
 The next [count assertion slice](docs/schema-count-assertions/README.md) is adopted/planned but unimplemented. Schema 0.7/core 1.34.1 remain current; Schema 0.8/v4 would mark the future count feature. Other aggregates and wider namespace/function grammar remain separate.
+
+The [bounded count implementation](docs/schema-count-implementation/README.md) is now a local Schema 0.8 candidate with unchanged core 1.34.1. Review/checkpoint comes before wider aggregation, namespaces/functions or general schema/session acceptance.
+
+
+**29 October 2026 review:** Schema 0.8 count assertions reviewed: fresh 397/397 Schema tests pass; core 1.34.1 source and inherited engine gates remain unchanged. Next is the separately scoped presence-predicate implementation; exists/empty remain unsupported in this checkpoint. [Review and next scope](docs/schema-count-review/README.md).

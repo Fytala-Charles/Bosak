@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Apache-2.0 schema-aware integration and staged XSD 1.1 compilation/validation for Bosak. No activation required.</Description>
+    <PackageId>Bosak.Schema</PackageId>
+    <MinVerMinimumMajorMinor>0.8</MinVerMinimumMajorMinor>
+    <AssemblyName>Bosak.Schema</AssemblyName>
+    <RootNamespace>Bosak.Schema</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(BosakSourceRoot)' == ''">
+    <PackageReference Include="Bosak.XPath.Api" Version="1.34.1" />
+    <PackageReference Include="Bosak.XPath.Providers" Version="1.34.1" />
+    <PackageReference Include="Bosak.Xslt" Version="1.34.1" />
+    <PackageReference Include="Bosak.XQuery" Version="1.34.1" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(BosakSourceRoot)' != ''">
+    <ProjectReference Include="$(BosakSourceRoot)/src/Bosak.XPath.Api/Bosak.XPath.Api.csproj" />
+    <ProjectReference Include="$(BosakSourceRoot)/src/Bosak.XPath.Providers/Bosak.XPath.Providers.csproj" />
+    <ProjectReference Include="$(BosakSourceRoot)/src/Bosak.Xslt/Bosak.Xslt.csproj" />
+    <ProjectReference Include="$(BosakSourceRoot)/src/Bosak.XQuery/Bosak.XQuery.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,8 @@
+{
+  "examples/Bosak.Schema.Assessment.Example/Program.cs": "77f0cb992ebdd109cb2232cd210030ad98f8116af591a1b6eff1757c40da9b8d",
+  "src/Bosak.Schema/Assessment/AssessmentProfileParser.cs": "f2ad4cda98a54769df68d40f654711e4e0b9a4e2ebd4df975e88cdb725b4ccff",
+  "src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "050a3166c10e4a16ec9455fdf389261b84d9ca0d9113c89e28c1431ad4099d2f",
+  "src/Bosak.Schema/Bosak.Schema.csproj": "32de3c60b273f1c462426ffae68589ec7ebf098cd10ee2ea424b71e806cc13ef",
+  "tests/Bosak.Schema.Tests/Xsd11/CountAssertionAssessmentTests.cs": "726c9e399dfcf828e04b5bce9c6652da1081d8be0f9ae2018abba9fe43a4de47",
+  "tests/Bosak.Schema.Tests/Xsd11/RepeatedDecimalAssessmentTests.cs": "2aaaf672884236b60755e837dee4b5a4b9f28a09a61b49162c6d57253ddd7b27"
+}

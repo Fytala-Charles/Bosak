@@ -681,3 +681,10 @@ Current core/Schema canonical and review pages receive separate HTML/local-link 
 ## Count assertion scope — 29 October 2026
 
 Current canonical, owning adoption/plan and core snapshots receive separate HTML/local-link and strict Schema docs checks. Normative source representation hashes, reviewed code identity and previous sealed dossier preservation are verified. New receipts live in `docs/schema-count-assertions/evidence`; no fresh full-engine/gate, screenshot or hosted-CI result is claimed.
+
+## Count assertion implementation — 29 October 2026
+
+Current canonical and owning count/assessment guides receive separate HTML/local-destination checks with unchanged Fytala CSS and strict Schema docs checks. Native count receipts, original expectation mapping, source/configuration invariance and old dossier preservation are recorded under `docs/schema-count-implementation/evidence`. No fresh full-core/gate, screenshot or hosted-CI claim.
+
+
+**29 October 2026 review:** Schema 0.8 count assertions reviewed: fresh 397/397 Schema tests pass; core 1.34.1 source and inherited engine gates remain unchanged. Next is the separately scoped presence-predicate implementation; exists/empty remain unsupported in this checkpoint. [Review and next scope](schema-count-review/README.md).

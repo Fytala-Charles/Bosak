@@ -1,0 +1,11 @@
+# Count assertion qualification evidence
+
+Fresh Schema qualification passes 397 cases, including 63 new count/grammar/native-validation/copy controls. The original 57-case cohort intentionally runs against the unchanged source first (23 passed/34 failed), and all 57 names pass afterward; six additional structural-profile/optimization-boundary cases complete the new suite. `cohort-comparison.json` preserves the original transition.
+
+Exactly one prior refusal is migrated to a dedicated supported/v4 capability check. `original-repeated-tests.cs.txt` preserves its source; `expectation-delta.json` and `legacy-cohort-comparison.json` map its old/new names and verify 333 unchanged prior expectations still pass. No original source/receipt is overwritten and no count failure is hidden by relaxing another assertion.
+
+`build.txt` records the zero-warning/error Schema solution build with explicit core source override. `example.txt` uses actual native count/absence assertions and records v4, original shared declaration/distinct states, total 15, ambiguous singular projection refusal and ordered typed preserve/strip copies. `source-identities.json` and source copies identify changed Schema compilation, profile metadata, tests, version and example. Raw receipts retain original encodings/line endings.
+
+`core-inheritance-proof.json` compares committed and working core source/tests/harness/fixture references and build configuration against the reviewed source and original qualified source hashes. Thus 24,214 core passes and exact QT3 31,397/0/424 / qt4 8,941/0/1,918, 230 sets, are inherited under the Schema-only plan. No new full-core/gate run or global cleanliness of historical nested upstream fixture worktrees is claimed.
+
+Documentation receipts cover HTML/local destinations with unchanged Fytala CSS and strict owning Schema checks, without screenshot, PDF or hosted-CI acceptance. All prior sealed integration, assessment, optional/repeated and count-scope dossiers are verified unchanged. These test scopes overlap and must not be summed. Prefix/alias/function expansion, full XSD 1.1, general API/session freeze, consumer adoption and release remain outside this candidate. Code/doc changes remain uncommitted.

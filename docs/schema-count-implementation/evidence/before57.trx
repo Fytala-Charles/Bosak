@@ -1,0 +1,1070 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="cf947f00-c9fc-4ef9-b331-182faa9c0b66" name="charl@CHARLES 2026-10-29 18:25:51" runUser="Charles\CodexSandboxOffline" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-29T18:25:51.6785827+01:00" queuing="2026-10-29T18:25:51.6785828+01:00" start="2026-10-29T18:25:50.3156539+01:00" finish="2026-10-29T18:25:52.5380722+01:00" />
+  <TestSettings name="default" id="2edc97c3-9092-44b6-8ce5-db1413419fe1">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-29_18_25_51" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="88cfdc70-158c-465c-9c10-8916415247ae" testId="47e0b918-16fc-950b-a4a3-a1e582b99583" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;79228162514264337593543950336&quot;, expected: Unsupported)" computerName="CHARLES" duration="00:00:00.0003432" startTime="2026-10-29T18:25:52.0750309+01:00" endTime="2026-10-29T18:25:52.0750627+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="88cfdc70-158c-465c-9c10-8916415247ae">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 214&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="973270af-7f86-46c3-b148-e7276746e510" testId="5d18a6e6-1079-0155-47f0-a7254fd46e38" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) + 1 eq 3&quot;)" computerName="CHARLES" duration="00:00:00.0000727" startTime="2026-10-29T18:25:51.7128253+01:00" endTime="2026-10-29T18:25:51.7128723+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="973270af-7f86-46c3-b148-e7276746e510" />
+    <UnitTestResult executionId="4066ce08-6d4c-4b64-9c59-d8755c7f09e2" testId="7fbef634-736c-ab08-db04-288a4a122354" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics" computerName="CHARLES" duration="00:00:00.3203475" startTime="2026-10-29T18:25:52.1420494+01:00" endTime="2026-10-29T18:25:52.4618466+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4066ce08-6d4c-4b64-9c59-d8755c7f09e2">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 245&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="ee5a74a0-3fce-4e01-a91e-c76433c935a1" testId="fc11d346-d87b-9435-bdcc-598fe2b39595" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000623" startTime="2026-10-29T18:25:51.7126900+01:00" endTime="2026-10-29T18:25:51.7127401+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ee5a74a0-3fce-4e01-a91e-c76433c935a1" />
+    <UnitTestResult executionId="7ebd96a8-dd0f-41f4-bc6e-bc9bc2dfdcb6" testId="6b1c24f3-4c45-e432-6f12-18d83d4dcdf3" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count(a) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0004194" startTime="2026-10-29T18:25:52.4629717+01:00" endTime="2026-10-29T18:25:52.4630069+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ebd96a8-dd0f-41f4-bc6e-bc9bc2dfdcb6">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 128&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="491be1ab-43c0-40d7-907e-16ec017acb2f" testId="1737bcad-4f32-2b62-a029-7494fdf29ea9" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a[1]) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000613" startTime="2026-10-29T18:25:51.7112932+01:00" endTime="2026-10-29T18:25:51.7113407+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="491be1ab-43c0-40d7-907e-16ec017acb2f" />
+    <UnitTestResult executionId="03b880c2-d6e7-4283-acbd-3f7a776faf09" testId="1ccf4996-ef9b-d988-5c27-c306e84aa74d" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count((a,b)) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0884711" startTime="2026-10-29T18:25:51.6578876+01:00" endTime="2026-10-29T18:25:51.7103151+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="03b880c2-d6e7-4283-acbd-3f7a776faf09" />
+    <UnitTestResult executionId="cc2cfe2e-b20f-4e6b-a553-85b372ac94d7" testId="1788b806-9f3f-87e1-17cb-281309f660bf" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison" computerName="CHARLES" duration="00:00:00.0005723" startTime="2026-10-29T18:25:52.1411877+01:00" endTime="2026-10-29T18:25:52.1412156+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cc2cfe2e-b20f-4e6b-a553-85b372ac94d7">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Valid&#xD;
+Actual:   Unsupported</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 99&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5fbef38a-d086-47ed-a26f-61892ee61edc" testId="ffdad60d-0918-f021-12a1-7908d37cdcca" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;0.00000000000000000000000000001&quot;, expected: Unsupported)" computerName="CHARLES" duration="00:00:00.0001461" startTime="2026-10-29T18:25:52.0754807+01:00" endTime="2026-10-29T18:25:52.0755054+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5fbef38a-d086-47ed-a26f-61892ee61edc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 214&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="94b5417e-cb9a-4ddc-8d29-11f0f0f601f9" testId="f1b9e712-0f72-9a5c-5812-76e8d9386e70" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) gt -1&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0001888" startTime="2026-10-29T18:25:51.6542423+01:00" endTime="2026-10-29T18:25:51.6542922+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="94b5417e-cb9a-4ddc-8d29-11f0f0f601f9">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6b848824-900a-4724-86c4-e4115256a978" testId="e161417a-8fcb-b7e7-1601-68c96afdfbe6" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission" computerName="CHARLES" duration="00:00:00.0008028" startTime="2026-10-29T18:25:52.4654014+01:00" endTime="2026-10-29T18:25:52.4656061+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6b848824-900a-4724-86c4-e4115256a978">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Strings differ&#xD;
+                                        ↓ (pos 29)&#xD;
+Expected: "decimal-sequence-assertions-v4"&#xD;
+Actual:   "decimal-sequence-assertions-v1"&#xD;
+                                        ↑ (pos 29)</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 173&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="610afcdc-4019-49d7-aa03-0fccc9a07d45" testId="52fcccbf-d973-8d3d-04c4-ee057f0a9683" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker" computerName="CHARLES" duration="00:00:00.3602263" startTime="2026-10-29T18:25:51.7150413+01:00" endTime="2026-10-29T18:25:52.0733654+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="610afcdc-4019-49d7-aa03-0fccc9a07d45">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Strings differ&#xD;
+                                        ↓ (pos 29)&#xD;
+Expected: "decimal-sequence-assertions-v4"&#xD;
+Actual:   "decimal-sequence-assertions-v1"&#xD;
+                                        ↑ (pos 29)</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 111&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="81bec955-45cf-4bcd-a680-f40c93742be4" testId="cbdb3b44-d21a-62dc-2768-ccf96e3a00ff" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 1.5&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000511" startTime="2026-10-29T18:25:51.6534147+01:00" endTime="2026-10-29T18:25:51.6534656+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="81bec955-45cf-4bcd-a680-f40c93742be4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="86d97467-2939-40be-9de5-f1956c3ff3fe" testId="43ed022a-a083-23b5-402b-9a3fb1f1b95b" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 2)" computerName="CHARLES" duration="00:00:00.0004280" startTime="2026-10-29T18:25:51.6198562+01:00" endTime="2026-10-29T18:25:51.6199168+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="86d97467-2939-40be-9de5-f1956c3ff3fe">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 65&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a1057fb4-5eb6-4c02-b784-8de33bd65117" testId="349d289c-91a6-5f53-5405-3757dbc35a1e" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) ne 2&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000507" startTime="2026-10-29T18:25:51.6524762+01:00" endTime="2026-10-29T18:25:51.6525316+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a1057fb4-5eb6-4c02-b784-8de33bd65117">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b9c7f291-b40d-4961-a5f5-95180c284b52" testId="2ad35ab5-a69b-1311-a00a-574cc3fd3513" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression" computerName="CHARLES" duration="00:00:00.0005109" startTime="2026-10-29T18:25:52.0739912+01:00" endTime="2026-10-29T18:25:52.0740930+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b9c7f291-b40d-4961-a5f5-95180c284b52">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 198&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="f830ed6e-516c-402c-97a8-60801b7564c6" testId="8c6fc0dc-b71d-8842-5b89-17c195387c10" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(unknown) eq 0&quot;)" computerName="CHARLES" duration="00:00:00.0000703" startTime="2026-10-29T18:25:51.7110399+01:00" endTime="2026-10-29T18:25:51.7110875+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f830ed6e-516c-402c-97a8-60801b7564c6" />
+    <UnitTestResult executionId="47b6b93d-7b53-43be-9862-8df073589be1" testId="11ff2bca-875c-8da4-6200-9e0247c9d027" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count((a)) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000699" startTime="2026-10-29T18:25:51.7148672+01:00" endTime="2026-10-29T18:25:51.7149134+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="47b6b93d-7b53-43be-9862-8df073589be1" />
+    <UnitTestResult executionId="3f71c3a1-0c2c-4484-89bf-a821a2c980dd" testId="49ff667e-026a-4f23-dd1e-fc40b1ea3d67" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) eq 2 trailing&quot;)" computerName="CHARLES" duration="00:00:00.0000611" startTime="2026-10-29T18:25:51.7132594+01:00" endTime="2026-10-29T18:25:51.7133107+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3f71c3a1-0c2c-4484-89bf-a821a2c980dd" />
+    <UnitTestResult executionId="3e51891b-56c4-4221-9bc1-2a574c845593" testId="b19b5f2f-f26f-4092-bae7-4d5fe0c24671" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 1)" computerName="CHARLES" duration="00:00:00.1978108" startTime="2026-10-29T18:25:51.4270655+01:00" endTime="2026-10-29T18:25:51.6189473+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3e51891b-56c4-4221-9bc1-2a574c845593">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 65&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="70708972-ee48-4f32-b801-72d1c6411fc9" testId="73c40e23-1233-58bd-0b87-d1dce1d19d24" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a/b) eq 0&quot;)" computerName="CHARLES" duration="00:00:00.0001269" startTime="2026-10-29T18:25:51.7147283+01:00" endTime="2026-10-29T18:25:51.7147651+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70708972-ee48-4f32-b801-72d1c6411fc9" />
+    <UnitTestResult executionId="674e5bbf-f18e-4b7a-9d1b-d589486be3a4" testId="2746accc-a65d-3880-07fa-006480162293" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion" computerName="CHARLES" duration="00:00:00.0002917" startTime="2026-10-29T18:25:52.4665959+01:00" endTime="2026-10-29T18:25:52.4666310+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="674e5bbf-f18e-4b7a-9d1b-d589486be3a4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Invalid&#xD;
+Actual:   Unsupported</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 236&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="3fa70198-bf32-4c11-88c8-184412dc4de1" testId="ec0e186f-36f6-764d-0669-84bf3289cb27" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 15, supported: True)" computerName="CHARLES" duration="00:00:00.0026909" startTime="2026-10-29T18:25:51.4172109+01:00" endTime="2026-10-29T18:25:51.4210298+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3fa70198-bf32-4c11-88c8-184412dc4de1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(Int32 groups, Boolean supported) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 189&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="1529b0c8-5d30-4533-9ad6-558cdd8da910" testId="cf0d4b5b-4fe7-d32d-7b4e-e7b62f33399f" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq count(b)&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000558" startTime="2026-10-29T18:25:51.6515297+01:00" endTime="2026-10-29T18:25:51.6516936+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1529b0c8-5d30-4533-9ad6-558cdd8da910">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="9b7d3d22-57ce-46eb-a35f-ec91111984db" testId="ec8df525-5c01-d3b5-8b1e-638454f699ca" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) le 2&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0002559" startTime="2026-10-29T18:25:51.6212789+01:00" endTime="2026-10-29T18:25:51.6213270+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9b7d3d22-57ce-46eb-a35f-ec91111984db">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0196325d-bd68-4479-9326-9f2f45e4f5dc" testId="1ad32da1-4958-b689-dab9-6eca2a0dee33" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;bad&quot;, expected: Invalid)" computerName="CHARLES" duration="00:00:00.0003734" startTime="2026-10-29T18:25:52.0744370+01:00" endTime="2026-10-29T18:25:52.0745464+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0196325d-bd68-4479-9326-9f2f45e4f5dc">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 214&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="cf645465-1225-42d6-a210-9508d8b8902e" testId="37783d46-c19b-ddbb-759b-76e4ef5f3c5c" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 16, supported: False)" computerName="CHARLES" duration="00:00:00.4152379" startTime="2026-10-29T18:25:50.9859479+01:00" endTime="2026-10-29T18:25:51.4081761+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="cf645465-1225-42d6-a210-9508d8b8902e" />
+    <UnitTestResult executionId="a55034a7-b2cb-48ac-b9d2-623d7f163971" testId="44fde44a-beaa-d1b1-e147-caa8c50b3417" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(1) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000986" startTime="2026-10-29T18:25:51.7109067+01:00" endTime="2026-10-29T18:25:51.7109574+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a55034a7-b2cb-48ac-b9d2-623d7f163971" />
+    <UnitTestResult executionId="70544b97-db1b-40db-92aa-2b610f7e4249" testId="8971c8bb-cbc6-d7e3-1ee7-12c63955552a" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count($a) eq 0&quot;)" computerName="CHARLES" duration="00:00:00.0000619" startTime="2026-10-29T18:25:51.7130998+01:00" endTime="2026-10-29T18:25:51.7131470+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="70544b97-db1b-40db-92aa-2b610f7e4249" />
+    <UnitTestResult executionId="08b027a2-ee4d-4723-ad7e-b0f886e70afc" testId="e69a90d9-e88f-adfd-efeb-27c1fbe2be18" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000604" startTime="2026-10-29T18:25:51.7115467+01:00" endTime="2026-10-29T18:25:51.7115924+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="08b027a2-ee4d-4723-ad7e-b0f886e70afc" />
+    <UnitTestResult executionId="dd343462-4991-4727-8da6-1b85a043b136" testId="f589e9c1-59d6-8368-da08-b9286c8b86b4" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a,b) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000595" startTime="2026-10-29T18:25:51.7116673+01:00" endTime="2026-10-29T18:25:51.7117134+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd343462-4991-4727-8da6-1b85a043b136" />
+    <UnitTestResult executionId="c305165c-8341-47f6-b115-33e356e3d96e" testId="d05ce8b0-81e6-b1d3-2727-a0cad3d6b96c" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True)" computerName="CHARLES" duration="00:00:00.0627574" startTime="2026-10-29T18:25:52.0763059+01:00" endTime="2026-10-29T18:25:52.1381891+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c305165c-8341-47f6-b115-33e356e3d96e">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 277&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="da462aaa-adc1-497b-b008-fa4f811da6f4" testId="c9f14c38-b322-538c-2508-1952f1bc36a4" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq +02.0&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000842" startTime="2026-10-29T18:25:51.6554113+01:00" endTime="2026-10-29T18:25:51.6554626+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="da462aaa-adc1-497b-b008-fa4f811da6f4">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="6684f4d2-9a59-45ab-a257-be4719f1a423" testId="99ef2453-53b9-d95d-8ed6-7914336333f8" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 0)" computerName="CHARLES" duration="00:00:00.0000846" startTime="2026-10-29T18:25:51.6207718+01:00" endTime="2026-10-29T18:25:51.6208186+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6684f4d2-9a59-45ab-a257-be4719f1a423">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 65&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="0b4bc451-bf39-4d36-a4f1-67f0f06b4bda" testId="657cdba8-d67e-dfc1-fd15-c8fe9b253b59" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count\t(\na\r) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0001363" startTime="2026-10-29T18:25:52.4642087+01:00" endTime="2026-10-29T18:25:52.4642517+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0b4bc451-bf39-4d36-a4f1-67f0f06b4bda">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 128&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b0c3e19a-30ce-42c8-9e07-4764f264deb4" testId="25e843d1-7aea-60dc-af16-78ad2d4bf471" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: &quot;http://www.w3.org/2005/xpath-functions&quot;)" computerName="CHARLES" duration="00:00:00.0005775" startTime="2026-10-29T18:25:52.1392376+01:00" endTime="2026-10-29T18:25:52.1394722+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b0c3e19a-30ce-42c8-9e07-4764f264deb4">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(String functionNamespace) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 162&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5105d871-3b3e-4916-9aa0-25a5a9f3aef5" testId="c59ac1e9-f1cf-7c28-c816-ac08840c90d2" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(*) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000667" startTime="2026-10-29T18:25:51.7133894+01:00" endTime="2026-10-29T18:25:51.7134370+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5105d871-3b3e-4916-9aa0-25a5a9f3aef5" />
+    <UnitTestResult executionId="1a4ef465-b9ac-45e8-9bdf-e2e88d159bca" testId="a74fc675-4816-e782-abef-190457203461" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) gt 1&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0003064" startTime="2026-10-29T18:25:51.6216603+01:00" endTime="2026-10-29T18:25:51.6217043+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1a4ef465-b9ac-45e8-9bdf-e2e88d159bca">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d45b228e-0341-4f30-a030-72ec50377887" testId="bccdcb91-cd80-1f1d-c60a-4c254665e7d0" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 16)" computerName="CHARLES" duration="00:00:00.0000854" startTime="2026-10-29T18:25:51.6203493+01:00" endTime="2026-10-29T18:25:51.6204134+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d45b228e-0341-4f30-a030-72ec50377887">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 65&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="4bed1ac6-92de-4058-87f0-13d1faf48e24" testId="5b5bd4b8-9691-288b-ebcb-ed522229cb15" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;fn:count(a) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000815" startTime="2026-10-29T18:25:51.7114178+01:00" endTime="2026-10-29T18:25:51.7114689+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="4bed1ac6-92de-4058-87f0-13d1faf48e24" />
+    <UnitTestResult executionId="652df8be-9741-44b2-be8f-e1b59bc8ea56" testId="bf7a3593-9b0b-7db5-0a1f-0f64598e1b21" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;exists(a)&quot;)" computerName="CHARLES" duration="00:00:00.0000443" startTime="2026-10-29T18:25:51.7145476+01:00" endTime="2026-10-29T18:25:51.7146352+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="652df8be-9741-44b2-be8f-e1b59bc8ea56" />
+    <UnitTestResult executionId="46c1cb03-550f-4e42-846f-9be4b24821da" testId="bd0ffda8-f310-dbd6-3de6-b319994ba3e0" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count ( a ) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0002933" startTime="2026-10-29T18:25:52.4625388+01:00" endTime="2026-10-29T18:25:52.4625813+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="46c1cb03-550f-4e42-846f-9be4b24821da">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 128&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="a4fcdf9f-b6ed-4c9f-813b-8152347def91" testId="8b5142ea-1f26-5027-66d8-edc3c31fc4d0" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;sum(a) gt 0&quot;)" computerName="CHARLES" duration="00:00:00.0000589" startTime="2026-10-29T18:25:51.7125156+01:00" endTime="2026-10-29T18:25:51.7125783+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a4fcdf9f-b6ed-4c9f-813b-8152347def91" />
+    <UnitTestResult executionId="278873f3-116d-4c94-8827-399b7e238ee1" testId="ba22ac13-071e-dcce-dd3b-4df0be91aa19" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) lt 3&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000522" startTime="2026-10-29T18:25:51.6530092+01:00" endTime="2026-10-29T18:25:51.6530608+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="278873f3-116d-4c94-8827-399b7e238ee1">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="5adca04d-d96f-45b6-9642-8b82bc6e1ca9" testId="aff67e5b-aa6d-7539-d88b-5f2dfe57b11e" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) ge 3&quot;, valid: False)" computerName="CHARLES" duration="00:00:00.0000441" startTime="2026-10-29T18:25:51.6538337+01:00" endTime="2026-10-29T18:25:51.6538848+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5adca04d-d96f-45b6-9642-8b82bc6e1ca9">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d0c16040-be1f-4636-9e5d-a83b02aa00c8" testId="89e48d8d-928c-b874-8de1-97866e224dce" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions" computerName="CHARLES" duration="00:00:00.0004297" startTime="2026-10-29T18:25:52.1415659+01:00" endTime="2026-10-29T18:25:52.1416382+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d0c16040-be1f-4636-9e5d-a83b02aa00c8">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.Equal() Failure: Values differ&#xD;
+Expected: Invalid&#xD;
+Actual:   Unsupported</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions() in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 226&#xD;
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="72bc93bb-e7cd-49b0-a630-c6b3acdba643" testId="5bf7bca6-d77f-cdcc-d412-96a73e5322df" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: &quot;urn:foreign&quot;)" computerName="CHARLES" duration="00:00:00.0002904" startTime="2026-10-29T18:25:52.1403450+01:00" endTime="2026-10-29T18:25:52.1403805+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="72bc93bb-e7cd-49b0-a630-c6b3acdba643">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(String functionNamespace) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 162&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="20295e80-f47b-426d-aadc-c67a8a6c63e2" testId="c72523d5-16d4-5b4d-4c8a-452482d63ccf" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 2 and count(b) eq 2&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000831" startTime="2026-10-29T18:25:51.6550215+01:00" endTime="2026-10-29T18:25:51.6550785+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="20295e80-f47b-426d-aadc-c67a8a6c63e2">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="c644516e-e47b-451e-8f38-4f730e5e91e0" testId="4e772f81-46eb-339c-5df8-dce40e540623" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 2&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0000746" startTime="2026-10-29T18:25:51.6220136+01:00" endTime="2026-10-29T18:25:51.6220606+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c644516e-e47b-451e-8f38-4f730e5e91e0">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="b780ca73-5ead-483f-ad0c-e98f7097a478" testId="f2632241-181e-f76a-ca2c-f4b1804f02be" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(count(a)) eq 1&quot;)" computerName="CHARLES" duration="00:00:00.0000499" startTime="2026-10-29T18:25:51.7143640+01:00" endTime="2026-10-29T18:25:51.7144211+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b780ca73-5ead-483f-ad0c-e98f7097a478" />
+    <UnitTestResult executionId="309d6219-0dec-4f4b-b305-d802baa4b54f" testId="19a05543-5143-981f-82e2-f32c1a4b4775" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;f:count(a) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0000651" startTime="2026-10-29T18:25:51.7111668+01:00" endTime="2026-10-29T18:25:51.7112140+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="309d6219-0dec-4f4b-b305-d802baa4b54f" />
+    <UnitTestResult executionId="f2e13482-d4c4-4f22-874e-7853dd7f96a3" testId="41ccc636-14dd-b16d-f4ce-d9ad95e1df5f" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) = 2&quot;)" computerName="CHARLES" duration="00:00:00.0004123" startTime="2026-10-29T18:25:51.7105246+01:00" endTime="2026-10-29T18:25:51.7107724+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f2e13482-d4c4-4f22-874e-7853dd7f96a3" />
+    <UnitTestResult executionId="f7980891-cafd-4355-86f2-fdda2bc5438a" testId="8af93cb1-b96a-b6ea-0611-d775a4f3b70b" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;avg(a) gt 0&quot;)" computerName="CHARLES" duration="00:00:00.0000977" startTime="2026-10-29T18:25:51.7135150+01:00" endTime="2026-10-29T18:25:51.7135627+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f7980891-cafd-4355-86f2-fdda2bc5438a" />
+    <UnitTestResult executionId="c1f3c5f5-1b01-4a08-94a6-f45c5097353c" testId="3d43dc5b-bb50-85f5-c7ac-064ff5aa4c42" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 0 or count(b) eq 2&quot;, valid: True)" computerName="CHARLES" duration="00:00:00.0001243" startTime="2026-10-29T18:25:51.6546344+01:00" endTime="2026-10-29T18:25:51.6546884+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c1f3c5f5-1b01-4a08-94a6-f45c5097353c">
+      <Output>
+        <ErrorInfo>
+          <Message>Assert.True() Failure&#xD;
+Expected: True&#xD;
+Actual:   False</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 89&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="464214ef-cf9d-4dec-9694-e173e9c4f6fa" testId="458bbc88-5369-a11c-ca94-d2f1931fd5cd" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;COUNT(a) eq 2&quot;)" computerName="CHARLES" duration="00:00:00.0001304" startTime="2026-10-29T18:25:51.7136410+01:00" endTime="2026-10-29T18:25:51.7136874+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="464214ef-cf9d-4dec-9694-e173e9c4f6fa" />
+    <UnitTestResult executionId="8f5945c4-53ac-4219-a58d-f584a2d9650d" testId="821d0ccf-27b7-071e-de93-afb8fb785c79" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count() eq 0&quot;)" computerName="CHARLES" duration="00:00:00.0001246" startTime="2026-10-29T18:25:51.7129682+01:00" endTime="2026-10-29T18:25:51.7130206+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8f5945c4-53ac-4219-a58d-f584a2d9650d" />
+    <UnitTestResult executionId="c8d63551-df42-40a2-bdeb-e1a8b5fe62d2" testId="319e8769-7bf9-df3d-14f5-ad5e02f345c8" testName="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False)" computerName="CHARLES" duration="00:00:00.0004292" startTime="2026-10-29T18:25:52.1388348+01:00" endTime="2026-10-29T18:25:52.1388707+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Failed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c8d63551-df42-40a2-bdeb-e1a8b5fe62d2">
+      <Output>
+        <ErrorInfo>
+          <Message>BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.</Message>
+          <StackTrace>   at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 51&#xD;
+   at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve) in D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs:line 277&#xD;
+   at InvokeStub_CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Object, Span`1)&#xD;
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)</StackTrace>
+        </ErrorInfo>
+      </Output>
+    </UnitTestResult>
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="7fbef634-736c-ab08-db04-288a4a122354">
+      <Execution id="4066ce08-6d4c-4b64-9c59-d8755c7f09e2" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CountValidatedDocument_PreservesTypedCopySemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq +02.0&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c9f14c38-b322-538c-2508-1952f1bc36a4">
+      <Execution id="da462aaa-adc1-497b-b008-fa4f811da6f4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(*) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c59ac1e9-f1cf-7c28-c816-ac08840c90d2">
+      <Execution id="5105d871-3b3e-4916-9aa0-25a5a9f3aef5" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count() eq 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="821d0ccf-27b7-071e-de93-afb8fb785c79">
+      <Execution id="8f5945c4-53ac-4219-a58d-f584a2d9650d" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count($a) eq 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8971c8bb-cbc6-d7e3-1ee7-12c63955552a">
+      <Execution id="70544b97-db1b-40db-92aa-2b610f7e4249" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 1)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="b19b5f2f-f26f-4092-bae7-4d5fe0c24671">
+      <Execution id="3e51891b-56c4-4221-9bc1-2a574c845593" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="Cardinality_IsAnIntegerAcrossFiniteDomain" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1788b806-9f3f-87e1-17cb-281309f660bf">
+      <Execution id="cc2cfe2e-b20f-4e6b-a553-85b372ac94d7" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="EmptyCount_DiffersFromEmptyValueComparison" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;f:count(a) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="19a05543-5143-981f-82e2-f32c1a4b4775">
+      <Execution id="309d6219-0dec-4f4b-b305-d802baa4b54f" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) gt 1&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="a74fc675-4816-e782-abef-190457203461">
+      <Execution id="1a4ef465-b9ac-45e8-9bdf-e2e88d159bca" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="89e48d8d-928c-b874-8de1-97866e224dce">
+      <Execution id="d0c16040-be1f-4636-9e5d-a83b02aa00c8" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="NativeStructure_PrecedesCountAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="e69a90d9-e88f-adfd-efeb-27c1fbe2be18">
+      <Execution id="08b027a2-ee4d-4723-ad7e-b0f886e70afc" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count(a) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="6b1c24f3-4c45-e432-6f12-18d83d4dcdf3">
+      <Execution id="7ebd96a8-dd0f-41f4-bc6e-bc9bc2dfdcb6" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CallWhitespace_IsBoundedXmlWhitespace" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(1) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="44fde44a-beaa-d1b1-e147-caa8c50b3417">
+      <Execution id="a55034a7-b2cb-48ac-b9d2-623d7f163971" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="2ad35ab5-a69b-1311-a00a-574cc3fd3513">
+      <Execution id="b9c7f291-b40d-4961-a5f5-95180c284b52" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CharacterAndTokenLimits_ApplyToTheWholeExpression" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 2&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="4e772f81-46eb-339c-5df8-dce40e540623">
+      <Execution id="c644516e-e47b-451e-8f38-4f730e5e91e0" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) gt -1&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="f1b9e712-0f72-9a5c-5812-76e8d9386e70">
+      <Execution id="94b5417e-cb9a-4ddc-8d29-11f0f0f601f9" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) ne 2&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="349d289c-91a6-5f53-5405-3757dbc35a1e">
+      <Execution id="a1057fb4-5eb6-4c02-b784-8de33bd65117" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 2 and count(b) eq 2&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="c72523d5-16d4-5b4d-4c8a-452482d63ccf">
+      <Execution id="20295e80-f47b-426d-aadc-c67a8a6c63e2" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count ( a ) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="bd0ffda8-f310-dbd6-3de6-b319994ba3e0">
+      <Execution id="46c1cb03-550f-4e42-846f-9be4b24821da" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CallWhitespace_IsBoundedXmlWhitespace" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 0)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="99ef2453-53b9-d95d-8ed6-7914336333f8">
+      <Execution id="6684f4d2-9a59-45ab-a257-be4719f1a423" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="Cardinality_IsAnIntegerAcrossFiniteDomain" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a/b) eq 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="73c40e23-1233-58bd-0b87-d1dce1d19d24">
+      <Execution id="70708972-ee48-4f32-b801-72d1c6411fc9" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 1.5&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="cbdb3b44-d21a-62dc-2768-ccf96e3a00ff">
+      <Execution id="81bec955-45cf-4bcd-a680-f40c93742be4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="2746accc-a65d-3880-07fa-006480162293">
+      <Execution id="674e5bbf-f18e-4b7a-9d1b-d589486be3a4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="UncountedMultiItemOperand_StillFailsAssertion" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 16)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="bccdcb91-cd80-1f1d-c60a-4c254665e7d0">
+      <Execution id="d45b228e-0341-4f30-a030-72ec50377887" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="Cardinality_IsAnIntegerAcrossFiniteDomain" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) = 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="41ccc636-14dd-b16d-f4ce-d9ad95e1df5f">
+      <Execution id="f2e13482-d4c4-4f22-874e-7853dd7f96a3" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) lt 3&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="ba22ac13-071e-dcce-dd3b-4df0be91aa19">
+      <Execution id="278873f3-116d-4c94-8827-399b7e238ee1" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="fc11d346-d87b-9435-bdcc-598fe2b39595">
+      <Execution id="ee5a74a0-3fce-4e01-a91e-c76433c935a1" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a[1]) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1737bcad-4f32-2b62-a029-7494fdf29ea9">
+      <Execution id="491be1ab-43c0-40d7-907e-16ec017acb2f" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;COUNT(a) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="458bbc88-5369-a11c-ca94-d2f1931fd5cd">
+      <Execution id="464214ef-cf9d-4dec-9694-e173e9c4f6fa" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: &quot;urn:foreign&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5bf7bca6-d77f-cdcc-d412-96a73e5322df">
+      <Execution id="72bc93bb-e7cd-49b0-a630-c6b3acdba643" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="PrefixBindings_DoNotBroadenFunctionAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;79228162514264337593543950336&quot;, expected: Unsupported)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="47e0b918-16fc-950b-a4a3-a1e582b99583">
+      <Execution id="88cfdc70-158c-465c-9c10-8916415247ae" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="NativeValueChecks_PrecedeCountAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a,b) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="f589e9c1-59d6-8368-da08-b9286c8b86b4">
+      <Execution id="dd343462-4991-4727-8da6-1b85a043b136" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="e161417a-8fcb-b7e7-1601-68c96afdfbe6">
+      <Execution id="6b848824-900a-4724-86c4-e4115256a978" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="MultipleAssertions_RequireCompleteAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) + 1 eq 3&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5d18a6e6-1079-0155-47f0-a7254fd46e38">
+      <Execution id="973270af-7f86-46c3-b148-e7276746e510" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;exists(a)&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="bf7a3593-9b0b-7db5-0a1f-0f64598e1b21">
+      <Execution id="652df8be-9741-44b2-be8f-e1b59bc8ea56" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;fn:count(a) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="5b5bd4b8-9691-288b-ebcb-ed522229cb15">
+      <Execution id="4bed1ac6-92de-4058-87f0-13d1faf48e24" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 16, supported: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="37783d46-c19b-ddbb-759b-76e4ef5f3c5c">
+      <Execution id="cf645465-1225-42d6-a210-9508d8b8902e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="DepthBound_IncludesCallParentheses" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq 0 or count(b) eq 2&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="3d43dc5b-bb50-85f5-c7ac-064ff5aa4c42">
+      <Execution id="c1f3c5f5-1b01-4a08-94a6-f45c5097353c" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 15, supported: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="ec0e186f-36f6-764d-0669-84bf3289cb27">
+      <Execution id="3fa70198-bf32-4c11-88c8-184412dc4de1" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="DepthBound_IncludesCallParentheses" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;avg(a) gt 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8af93cb1-b96a-b6ea-0611-d775a4f3b70b">
+      <Execution id="f7980891-cafd-4355-86f2-fdda2bc5438a" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;bad&quot;, expected: Invalid)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1ad32da1-4958-b689-dab9-6eca2a0dee33">
+      <Execution id="0196325d-bd68-4479-9326-9f2f45e4f5dc" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="NativeValueChecks_PrecedeCountAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: &quot;http://www.w3.org/2005/xpath-functions&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="25e843d1-7aea-60dc-af16-78ad2d4bf471">
+      <Execution id="b0c3e19a-30ce-42c8-9e07-4764f264deb4" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="PrefixBindings_DoNotBroadenFunctionAdmission" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(a) eq 2 trailing&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="49ff667e-026a-4f23-dd1e-fc40b1ea3d67">
+      <Execution id="3f71c3a1-0c2c-4484-89bf-a821a2c980dd" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="319e8769-7bf9-df3d-14f5-ad5e02f345c8">
+      <Execution id="c8d63551-df42-40a2-bdeb-e1a8b5fe62d2" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CountValidatedXQueryCopy_RetainsOrStripsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) ge 3&quot;, valid: False)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="aff67e5b-aa6d-7539-d88b-5f2dfe57b11e">
+      <Execution id="5adca04d-d96f-45b6-9642-8b82bc6e1ca9" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(unknown) eq 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8c6fc0dc-b71d-8842-5b89-17c195387c10">
+      <Execution id="f830ed6e-516c-402c-97a8-60801b7564c6" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count((a)) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="11ff2bca-875c-8da4-6200-9e0247c9d027">
+      <Execution id="47b6b93d-7b53-43be-9862-8df073589be1" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) eq count(b)&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="cf0d4b5b-4fe7-d32d-7b4e-e7b62f33399f">
+      <Execution id="1529b0c8-5d30-4533-9ad6-558cdd8da910" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count((a,b)) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="1ccf4996-ef9b-d988-5c27-c306e84aa74d">
+      <Execution id="03b880c2-d6e7-4283-acbd-3f7a776faf09" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: &quot;count\t(\na\r) eq 2&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="657cdba8-d67e-dfc1-fd15-c8fe9b253b59">
+      <Execution id="0b4bc451-bf39-4d36-a4f1-67f0f06b4bda" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CallWhitespace_IsBoundedXmlWhitespace" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;sum(a) gt 0&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="8b5142ea-1f26-5027-66d8-edc3c31fc4d0">
+      <Execution id="a4fcdf9f-b6ed-4c9f-813b-8152347def91" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="52fcccbf-d973-8d3d-04c4-ee057f0a9683">
+      <Execution id="610afcdc-4019-49d7-aa03-0fccc9a07d45" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CountChildName_IsNotAFunctionMarker" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="d05ce8b0-81e6-b1d3-2727-a0cad3d6b96c">
+      <Execution id="c305165c-8341-47f6-b115-33e356e3d96e" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="CountValidatedXQueryCopy_RetainsOrStripsOriginalState" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: &quot;0.00000000000000000000000000001&quot;, expected: Unsupported)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="ffdad60d-0918-f021-12a1-7908d37cdcca">
+      <Execution id="5fbef38a-d086-47ed-a26f-61892ee61edc" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="NativeValueChecks_PrecedeCountAssertions" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 2)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="43ed022a-a083-23b5-402b-9a3fb1f1b95b">
+      <Execution id="86d97467-2939-40be-9de5-f1956c3ff3fe" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="Cardinality_IsAnIntegerAcrossFiniteDomain" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: &quot;count(count(a)) eq 1&quot;)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="f2632241-181e-f76a-ca2c-f4b1804f02be">
+      <Execution id="b780ca73-5ead-483f-ad0c-e98f7097a478" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="WiderOrPartialGrammar_IsRefused" />
+    </UnitTest>
+    <UnitTest name="Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: &quot;count(a) le 2&quot;, valid: True)" storage="d:\development\bosak\.worktrees\bosak.schema.assessment\tests\bosak.schema.tests\bin\release\net10.0\bosak.schema.tests.dll" id="ec8df525-5c01-d3b5-8b1e-638454f699ca">
+      <Execution id="9b7d3d22-57ce-46eb-a35f-ec91111984db" />
+      <TestMethod codeBase="D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\bin\Release\net10.0\Bosak.Schema.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner3/netcore/" className="Bosak.Schema.Tests.CountAssertionAssessmentTests" name="ScalarComparisons_RetainNativeBooleanSemantics" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="47e0b918-16fc-950b-a4a3-a1e582b99583" executionId="88cfdc70-158c-465c-9c10-8916415247ae" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5d18a6e6-1079-0155-47f0-a7254fd46e38" executionId="973270af-7f86-46c3-b148-e7276746e510" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7fbef634-736c-ab08-db04-288a4a122354" executionId="4066ce08-6d4c-4b64-9c59-d8755c7f09e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc11d346-d87b-9435-bdcc-598fe2b39595" executionId="ee5a74a0-3fce-4e01-a91e-c76433c935a1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6b1c24f3-4c45-e432-6f12-18d83d4dcdf3" executionId="7ebd96a8-dd0f-41f4-bc6e-bc9bc2dfdcb6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1737bcad-4f32-2b62-a029-7494fdf29ea9" executionId="491be1ab-43c0-40d7-907e-16ec017acb2f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ccf4996-ef9b-d988-5c27-c306e84aa74d" executionId="03b880c2-d6e7-4283-acbd-3f7a776faf09" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1788b806-9f3f-87e1-17cb-281309f660bf" executionId="cc2cfe2e-b20f-4e6b-a553-85b372ac94d7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ffdad60d-0918-f021-12a1-7908d37cdcca" executionId="5fbef38a-d086-47ed-a26f-61892ee61edc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f1b9e712-0f72-9a5c-5812-76e8d9386e70" executionId="94b5417e-cb9a-4ddc-8d29-11f0f0f601f9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e161417a-8fcb-b7e7-1601-68c96afdfbe6" executionId="6b848824-900a-4724-86c4-e4115256a978" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="52fcccbf-d973-8d3d-04c4-ee057f0a9683" executionId="610afcdc-4019-49d7-aa03-0fccc9a07d45" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cbdb3b44-d21a-62dc-2768-ccf96e3a00ff" executionId="81bec955-45cf-4bcd-a680-f40c93742be4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="43ed022a-a083-23b5-402b-9a3fb1f1b95b" executionId="86d97467-2939-40be-9de5-f1956c3ff3fe" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="349d289c-91a6-5f53-5405-3757dbc35a1e" executionId="a1057fb4-5eb6-4c02-b784-8de33bd65117" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ad35ab5-a69b-1311-a00a-574cc3fd3513" executionId="b9c7f291-b40d-4961-a5f5-95180c284b52" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8c6fc0dc-b71d-8842-5b89-17c195387c10" executionId="f830ed6e-516c-402c-97a8-60801b7564c6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="11ff2bca-875c-8da4-6200-9e0247c9d027" executionId="47b6b93d-7b53-43be-9862-8df073589be1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="49ff667e-026a-4f23-dd1e-fc40b1ea3d67" executionId="3f71c3a1-0c2c-4484-89bf-a821a2c980dd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b19b5f2f-f26f-4092-bae7-4d5fe0c24671" executionId="3e51891b-56c4-4221-9bc1-2a574c845593" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="73c40e23-1233-58bd-0b87-d1dce1d19d24" executionId="70708972-ee48-4f32-b801-72d1c6411fc9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2746accc-a65d-3880-07fa-006480162293" executionId="674e5bbf-f18e-4b7a-9d1b-d589486be3a4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec0e186f-36f6-764d-0669-84bf3289cb27" executionId="3fa70198-bf32-4c11-88c8-184412dc4de1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="cf0d4b5b-4fe7-d32d-7b4e-e7b62f33399f" executionId="1529b0c8-5d30-4533-9ad6-558cdd8da910" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ec8df525-5c01-d3b5-8b1e-638454f699ca" executionId="9b7d3d22-57ce-46eb-a35f-ec91111984db" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ad32da1-4958-b689-dab9-6eca2a0dee33" executionId="0196325d-bd68-4479-9326-9f2f45e4f5dc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="37783d46-c19b-ddbb-759b-76e4ef5f3c5c" executionId="cf645465-1225-42d6-a210-9508d8b8902e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="44fde44a-beaa-d1b1-e147-caa8c50b3417" executionId="a55034a7-b2cb-48ac-b9d2-623d7f163971" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8971c8bb-cbc6-d7e3-1ee7-12c63955552a" executionId="70544b97-db1b-40db-92aa-2b610f7e4249" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e69a90d9-e88f-adfd-efeb-27c1fbe2be18" executionId="08b027a2-ee4d-4723-ad7e-b0f886e70afc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f589e9c1-59d6-8368-da08-b9286c8b86b4" executionId="dd343462-4991-4727-8da6-1b85a043b136" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d05ce8b0-81e6-b1d3-2727-a0cad3d6b96c" executionId="c305165c-8341-47f6-b115-33e356e3d96e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c9f14c38-b322-538c-2508-1952f1bc36a4" executionId="da462aaa-adc1-497b-b008-fa4f811da6f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="99ef2453-53b9-d95d-8ed6-7914336333f8" executionId="6684f4d2-9a59-45ab-a257-be4719f1a423" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="657cdba8-d67e-dfc1-fd15-c8fe9b253b59" executionId="0b4bc451-bf39-4d36-a4f1-67f0f06b4bda" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="25e843d1-7aea-60dc-af16-78ad2d4bf471" executionId="b0c3e19a-30ce-42c8-9e07-4764f264deb4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c59ac1e9-f1cf-7c28-c816-ac08840c90d2" executionId="5105d871-3b3e-4916-9aa0-25a5a9f3aef5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="a74fc675-4816-e782-abef-190457203461" executionId="1a4ef465-b9ac-45e8-9bdf-e2e88d159bca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bccdcb91-cd80-1f1d-c60a-4c254665e7d0" executionId="d45b228e-0341-4f30-a030-72ec50377887" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5b5bd4b8-9691-288b-ebcb-ed522229cb15" executionId="4bed1ac6-92de-4058-87f0-13d1faf48e24" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bf7a3593-9b0b-7db5-0a1f-0f64598e1b21" executionId="652df8be-9741-44b2-be8f-e1b59bc8ea56" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="bd0ffda8-f310-dbd6-3de6-b319994ba3e0" executionId="46c1cb03-550f-4e42-846f-9be4b24821da" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8b5142ea-1f26-5027-66d8-edc3c31fc4d0" executionId="a4fcdf9f-b6ed-4c9f-813b-8152347def91" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba22ac13-071e-dcce-dd3b-4df0be91aa19" executionId="278873f3-116d-4c94-8827-399b7e238ee1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="aff67e5b-aa6d-7539-d88b-5f2dfe57b11e" executionId="5adca04d-d96f-45b6-9642-8b82bc6e1ca9" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="89e48d8d-928c-b874-8de1-97866e224dce" executionId="d0c16040-be1f-4636-9e5d-a83b02aa00c8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5bf7bca6-d77f-cdcc-d412-96a73e5322df" executionId="72bc93bb-e7cd-49b0-a630-c6b3acdba643" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c72523d5-16d4-5b4d-4c8a-452482d63ccf" executionId="20295e80-f47b-426d-aadc-c67a8a6c63e2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e772f81-46eb-339c-5df8-dce40e540623" executionId="c644516e-e47b-451e-8f38-4f730e5e91e0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f2632241-181e-f76a-ca2c-f4b1804f02be" executionId="b780ca73-5ead-483f-ad0c-e98f7097a478" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="19a05543-5143-981f-82e2-f32c1a4b4775" executionId="309d6219-0dec-4f4b-b305-d802baa4b54f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="41ccc636-14dd-b16d-f4ce-d9ad95e1df5f" executionId="f2e13482-d4c4-4f22-874e-7853dd7f96a3" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8af93cb1-b96a-b6ea-0611-d775a4f3b70b" executionId="f7980891-cafd-4355-86f2-fdda2bc5438a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d43dc5b-bb50-85f5-c7ac-064ff5aa4c42" executionId="c1f3c5f5-1b01-4a08-94a6-f45c5097353c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="458bbc88-5369-a11c-ca94-d2f1931fd5cd" executionId="464214ef-cf9d-4dec-9694-e173e9c4f6fa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="821d0ccf-27b7-071e-de93-afb8fb785c79" executionId="8f5945c4-53ac-4219-a58d-f584a2d9650d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="319e8769-7bf9-df3d-14f5-ad5e02f345c8" executionId="c8d63551-df42-40a2-bdeb-e1a8b5fe62d2" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Failed">
+    <Counters total="57" executed="57" passed="23" failed="34" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v3.0.2+dd36e86129 (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.17]   Discovering: Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.24]   Discovered:  Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.28]   Starting:    Bosak.Schema.Tests&#xD;
+[xUnit.net 00:00:00.74]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:00.74]       Expected: True&#xD;
+[xUnit.net 00:00:00.74]       Actual:   False&#xD;
+[xUnit.net 00:00:00.74]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.74]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(189,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(Int32 groups, Boolean supported)&#xD;
+[xUnit.net 00:00:00.74]            at InvokeStub_CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.74]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.94]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(65,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.94]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(65,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count)&#xD;
+[xUnit.net 00:00:00.94]            at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.94]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(65,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count)&#xD;
+[xUnit.net 00:00:00.94]            at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.94]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(65,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Int32 count)&#xD;
+[xUnit.net 00:00:00.94]            at InvokeStub_CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.94]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.94]       Expected: True&#xD;
+[xUnit.net 00:00:00.94]       Actual:   False&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:00.94]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.94]       Expected: True&#xD;
+[xUnit.net 00:00:00.94]       Actual:   False&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.94]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.94]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.94]       Expected: True&#xD;
+[xUnit.net 00:00:00.94]       Actual:   False&#xD;
+[xUnit.net 00:00:00.94]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.94]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.94]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.94]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:00.97]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:00.97]       Expected: True&#xD;
+[xUnit.net 00:00:00.97]       Actual:   False&#xD;
+[xUnit.net 00:00:00.97]       Stack Trace:&#xD;
+[xUnit.net 00:00:00.97]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(89,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(String expression, Boolean valid)&#xD;
+[xUnit.net 00:00:00.97]            at InvokeStub_CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(Object, Span`1)&#xD;
+[xUnit.net 00:00:00.97]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.39]       Assert.Equal() Failure: Strings differ&#xD;
+[xUnit.net 00:00:01.39]                                               ↓ (pos 29)&#xD;
+[xUnit.net 00:00:01.39]       Expected: "decimal-sequence-assertions-v4"&#xD;
+[xUnit.net 00:00:01.39]       Actual:   "decimal-sequence-assertions-v1"&#xD;
+[xUnit.net 00:00:01.39]                                               ↑ (pos 29)&#xD;
+[xUnit.net 00:00:01.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.39]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(111,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker()&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.39]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.39]       Expected: True&#xD;
+[xUnit.net 00:00:01.39]       Actual:   False&#xD;
+[xUnit.net 00:00:01.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.39]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(198,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression()&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.39]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.39]       Expected: True&#xD;
+[xUnit.net 00:00:01.39]       Actual:   False&#xD;
+[xUnit.net 00:00:01.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.39]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(214,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.39]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.39]       Expected: True&#xD;
+[xUnit.net 00:00:01.39]       Actual:   False&#xD;
+[xUnit.net 00:00:01.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.39]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(214,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.39]            at InvokeStub_CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.39]       Assert.True() Failure&#xD;
+[xUnit.net 00:00:01.39]       Expected: True&#xD;
+[xUnit.net 00:00:01.39]       Actual:   False&#xD;
+[xUnit.net 00:00:01.39]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.39]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(214,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(String lexical, SchemaAssessmentOutcome expected)&#xD;
+[xUnit.net 00:00:01.39]            at InvokeStub_CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.39]            at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(277,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.46]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(277,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Boolean preserve)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(162,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(String functionNamespace)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.46]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(162,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(String functionNamespace)&#xD;
+[xUnit.net 00:00:01.46]            at InvokeStub_CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.46]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:01.46]       Expected: Valid&#xD;
+[xUnit.net 00:00:01.46]       Actual:   Unsupported&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(99,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison()&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.46]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:01.46]       Expected: Invalid&#xD;
+[xUnit.net 00:00:01.46]       Actual:   Unsupported&#xD;
+[xUnit.net 00:00:01.46]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.46]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(226,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions()&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.46]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.78]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(245,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics()&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.78]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(128,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)&#xD;
+[xUnit.net 00:00:01.78]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(128,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression)&#xD;
+[xUnit.net 00:00:01.78]            at InvokeStub_CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.78]       BSK-XSD-016: An assertion exceeds the bounded child/decimal comparison and logical-expression grammar.&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(51,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.Valid(XsdDocumentAssessor assessor, String children)&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(128,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(String expression)&#xD;
+[xUnit.net 00:00:01.78]            at InvokeStub_CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(Object, Span`1)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.78]       Assert.Equal() Failure: Strings differ&#xD;
+[xUnit.net 00:00:01.78]                                               ↓ (pos 29)&#xD;
+[xUnit.net 00:00:01.78]       Expected: "decimal-sequence-assertions-v4"&#xD;
+[xUnit.net 00:00:01.78]       Actual:   "decimal-sequence-assertions-v1"&#xD;
+[xUnit.net 00:00:01.78]                                               ↑ (pos 29)&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(173,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission()&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.78]       Assert.Equal() Failure: Values differ&#xD;
+[xUnit.net 00:00:01.78]       Expected: Invalid&#xD;
+[xUnit.net 00:00:01.78]       Actual:   Unsupported&#xD;
+[xUnit.net 00:00:01.78]       Stack Trace:&#xD;
+[xUnit.net 00:00:01.78]         D:\Development\Bosak\.worktrees\Bosak.Schema.Assessment\tests\Bosak.Schema.Tests\Xsd11\CountAssertionAssessmentTests.cs(236,0): at Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion()&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)&#xD;
+[xUnit.net 00:00:01.78]            at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)&#xD;
+[xUnit.net 00:00:01.79]   Finished:    Bosak.Schema.Tests&#xD;
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.4239402+01:00">
+        <Text>[xUnit.net 00:00:00.74]     Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 15, supported: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6195064+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 1) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6201528+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 2) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6205720+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 16) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6210624+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 0) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6214747+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) le 2", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6218422+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) gt 1", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6221752+01:00">
+        <Text>[xUnit.net 00:00:00.94]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq 2", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6845892+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq count(b)", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6846475+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) ne 2", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6846749+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) lt 3", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6846981+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq 1.5", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6847221+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) ge 3", valid: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6847566+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) gt -1", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6847818+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq 0 or count(b) eq 2", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6848069+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq 2 and count(b) eq 2", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:51.6848326+01:00">
+        <Text>[xUnit.net 00:00:00.97]     Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: "count(a) eq +02.0", valid: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.0738712+01:00">
+        <Text>[xUnit.net 00:00:01.39]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.0742598+01:00">
+        <Text>[xUnit.net 00:00:01.39]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.0747096+01:00">
+        <Text>[xUnit.net 00:00:01.39]     Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: "bad", expected: Invalid) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.0752111+01:00">
+        <Text>[xUnit.net 00:00:01.39]     Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: "79228162514264337593543950336", expected: Unsupported) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.0756184+01:00">
+        <Text>[xUnit.net 00:00:01.39]     Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: "0.00000000000000000000000000001", expected: Unsupported) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1386646+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1390199+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False) [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1398752+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: "http://www.w3.org/2005/xpath-functions") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1407099+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: "urn:foreign") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1413328+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.1417966+01:00">
+        <Text>[xUnit.net 00:00:01.46]     Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4622213+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4627299+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: "count ( a ) eq 2") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4631378+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: "count(a) eq 2") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4678444+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: "count\t(\na\r) eq 2") [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4678797+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission [FAIL]</Text>
+      </RunInfo>
+      <RunInfo computerName="CHARLES" outcome="Error" timestamp="2026-10-29T18:25:52.4679139+01:00">
+        <Text>[xUnit.net 00:00:01.78]     Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion [FAIL]</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

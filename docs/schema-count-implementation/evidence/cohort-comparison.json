@@ -1,0 +1,291 @@
+{
+  "originalCases": 57,
+  "allFinalPassed": true,
+  "cases": [
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: \"79228162514264337593543950336\", expected: Unsupported)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a) + 1 eq 3\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedDocument_PreservesTypedCopySemantics",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a)\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: \"count(a) eq 2\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a[1]) eq 1\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count((a,b)) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.EmptyCount_DiffersFromEmptyValueComparison",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: \"0.00000000000000000000000000001\", expected: Unsupported)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) gt -1\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.MultipleAssertions_RequireCompleteAdmission",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CountChildName_IsNotAFunctionMarker",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq 1.5\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 2)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) ne 2\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CharacterAndTokenLimits_ApplyToTheWholeExpression",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(unknown) eq 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count((a)) eq 1\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a) eq 2 trailing\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 1)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a/b) eq 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.UncountedMultiItemOperand_StillFailsAssertion",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 15, supported: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq count(b)\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) le 2\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeValueChecks_PrecedeCountAssertions(lexical: \"bad\", expected: Invalid)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.DepthBound_IncludesCallParentheses(groups: 16, supported: False)",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(1) eq 1\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count($a) eq 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a,b) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq +02.0\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 0)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: \"count\\t(\\na\\r) eq 2\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: \"http://www.w3.org/2005/xpath-functions\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(*) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) gt 1\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.Cardinality_IsAnIntegerAcrossFiniteDomain(count: 16)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"fn:count(a) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"exists(a)\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CallWhitespace_IsBoundedXmlWhitespace(expression: \"count ( a ) eq 2\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"sum(a) gt 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) lt 3\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) ge 3\", valid: False)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.NativeStructure_PrecedesCountAssertions",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.PrefixBindings_DoNotBroadenFunctionAdmission(functionNamespace: \"urn:foreign\")",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq 2 and count(b) eq 2\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq 2\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(count(a)) eq 1\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"f:count(a) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count(a) = 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"avg(a) gt 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.ScalarComparisons_RetainNativeBooleanSemantics(expression: \"count(a) eq 0 or count(b) eq 2\", valid: True)",
+      "before": "Failed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"COUNT(a) eq 2\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.WiderOrPartialGrammar_IsRefused(expression: \"count() eq 0\")",
+      "before": "Passed",
+      "after": "Passed"
+    },
+    {
+      "name": "Bosak.Schema.Tests.CountAssertionAssessmentTests.CountValidatedXQueryCopy_RetainsOrStripsOriginalState(preserve: False)",
+      "before": "Failed",
+      "after": "Passed"
+    }
+  ]
+}
