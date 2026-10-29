@@ -1,0 +1,276 @@
+{
+  "date": "2026-10-29",
+  "scope": "Read-only sibling source inspection; no consumer build, test, activation or migration",
+  "repositories": [
+    {
+      "name": "Bosak",
+      "path": "D:/Development/Bosak",
+      "revision": "4e523082dea931d9377f34672ff63c57eb5dbd7b",
+      "status": "?? docs/compatibility/",
+      "reviewedFiles": [
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/IXdmNode.cs",
+          "sha256": "ecd3ad5db439462533537b81a5d3673249c47a6cf0c6edae8c260ff20088c8fb"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmValue.cs",
+          "sha256": "3e0aeb932da7701a382f2d0c6c618ebf304a5b0c072e0d7d15258cf2b4b98b6c"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmValueKind.cs",
+          "sha256": "919c96e9e3b852af8d5775a20b6bddd9cc410dbf67cbf30a0f2fd2dc74818963"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmNodeKind.cs",
+          "sha256": "8931599fba36d8c705941f764c6a9f83fc4d5b42a31b6315cfe9cd46f3a19e61"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmJNode.cs",
+          "sha256": "27697b9d814093d965b61e9071d8ec42dd22188b27a486d04c9aeaf536e9eec6"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmMap.cs",
+          "sha256": "52fa2b45504a427bb52e0770483c28ab558b703fd3883932567700eaf0f052a4"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmRecordType.cs",
+          "sha256": "3026ff25adb8799dc4532d619bd18505a3ccba2debf407b48df751e39d3b6775"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmRecordField.cs",
+          "sha256": "bb3469d3854607926e078bae623882e014254daa57a92e9618eb822d587000ff"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmValueEqualityComparer.cs",
+          "sha256": "047132f57b5411ee510f62ad3f50a5e3b0fee5c2be33c6c24b1bd41a84cd98c4"
+        },
+        {
+          "path": "src/Bosak.XPath.Core/Xdm/XdmSequence.cs",
+          "sha256": "e81a3ff7fad9edfc71d916d2db58523bc982f8eec5c05b12cbb2e9d7f66c792d"
+        },
+        {
+          "path": "src/Bosak.XPath.Runtime/Vm/VmEngine.cs",
+          "sha256": "234bcd5b0ca50b1142e80e12991806b60d3abb7e6c5afcf11a3ca9fa1f50f7ee"
+        },
+        {
+          "path": "src/Bosak.XPath.Runtime/Vm/EvaluationContext.cs",
+          "sha256": "ec2847fd0fdb5dc627ab7388732f8c0c03295485e0964c6bb950b34345aab5f6"
+        },
+        {
+          "path": "src/Bosak.XPath.Standard/Functions/FunctionLibrary.cs",
+          "sha256": "4af2760bf9d69c8552ad4a808ed746120b28e3a95eb2f5ce091ba4107cf10ee0"
+        },
+        {
+          "path": "src/Bosak.XPath.Standard/Json/XdmJsonSerializer.cs",
+          "sha256": "3dec7a76dc51e31f81e5ec2d3590025784e581411c3c790cd271112b0b515956"
+        },
+        {
+          "path": "src/Bosak.XPath.Standard/Functions/XdmSerializer.cs",
+          "sha256": "21fc6ebd4ac3f56340fcd575775db90c0154b6dcb877f4647d09d0b0d60915c3"
+        },
+        {
+          "path": "src/Bosak.XPath.Api/CompileOptions.cs",
+          "sha256": "5d0f992155004935d9ae971eacfda5e7e23af423c890dbe238bb0656d9d37a65"
+        },
+        {
+          "path": "src/Bosak.XPath.Api/XPath31Expression.cs",
+          "sha256": "3214a568d94f1d87e2af4f92a3b550dc2ab8a68120054b7febd65122543abc41"
+        },
+        {
+          "path": "src/Bosak.XQuery/Api/XQueryCompiler.cs",
+          "sha256": "771ab66399b0752a60cf3520c4127d5034b102745b8ea47631ec8444e4f7f233"
+        },
+        {
+          "path": "src/Bosak.XPath.Providers/XDocument/XdmSchemaAnnotator.cs",
+          "sha256": "ec8aa31acd70ce841d25ff2ee9a9c352ba33e60f81393eebc5599524f81540c5"
+        },
+        {
+          "path": "src/Bosak.Xslt/Api/XsltCompiler.cs",
+          "sha256": "5da9f528ce80fed32dae2cd432e387e7a53975ebd3b0442a1f566bfd1084f0bb"
+        },
+        {
+          "path": "tests/Bosak.XPath.Api.Tests/RecordTypeTests.cs",
+          "sha256": "2a17ffe9437356bfb1d2038ccd89b1a7314ab39104ccf675c2418fb0f1a05174"
+        },
+        {
+          "path": "docs/conformance/k04-schema-session-prototype/API-PROPOSAL.md",
+          "sha256": "5ed87de696ca5c47bb80972c7f412f6843d578296081b57f7763c9fa9b353f69"
+        }
+      ]
+    },
+    {
+      "name": "XmlDb",
+      "path": "D:/Development/Bosal.XmlDb",
+      "revision": "4598346e324a4385381aa31a68d565bcdee9c479",
+      "status": "",
+      "reviewedFiles": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "2e4f34057e5d123e743138ce886d02568156ebe8248e8071ab96936b75cd0225"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Xdm/PersistentXdmNode.cs",
+          "sha256": "ade4e0c6255d89442d02c4b1a5b2ed756983ab38c5829763dd60b29418f9e590"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Xdm/Bosak.XmlDb.Xdm.csproj",
+          "sha256": "357bff44834dd357c2d0dd090120df73dd686d329d74b24fba2b58cd3f08cc5c"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Core/StorageNode.cs",
+          "sha256": "82d292ba36af5064df43b7f6eb59a40785bed1bc1446d5c75e61fd2d25a08493"
+        },
+        {
+          "path": "src/Bosak.XmlDb.Storage/ImmutableXmlSnapshot.cs",
+          "sha256": "8124f1852a15b18da9eb82fd9cf32128a82afc03a9d165155e944f2e95d4fe5b"
+        },
+        {
+          "path": "docs/AGENT_HANDOVER.md",
+          "sha256": "795888b9d3a6a6693337fdd10202665d11640c81f2bdc1a642b0123590a26f1f"
+        },
+        {
+          "path": "docs/ADR-002-immutable-format-and-snapshot.md",
+          "sha256": "1984137118b012b7be2c40540e668217d8ec83055a8193cec348e8d572def2d5"
+        },
+        {
+          "path": "docs/ADR-003-pinned-bosak-dependency.md",
+          "sha256": "5628935cf775313cb2fec0d59d9c1d3cc5dabefdeafe741a759e2642389dc373"
+        },
+        {
+          "path": "docs/implementation/M2_XDM40_COMPATIBILITY_ASSESSMENT.md",
+          "sha256": "05b191e66f8f6dbf946bb148f5e07f6eb398eedcfecc0135e6d63f59b4534e7b"
+        },
+        {
+          "path": "docs/implementation/BINARY_FORMAT_V1.md",
+          "sha256": "73ef2112fe4d6071165109649360d56ca4fd4ef5172b5e3e1529763852598134"
+        }
+      ]
+    },
+    {
+      "name": "Schema",
+      "path": "D:/Development/Bosak.Schema",
+      "revision": "fa0da3e2d9972706a5a86616ef285af4daf5037b",
+      "status": "",
+      "reviewedFiles": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "59eb66d9816e8d6d436094c94ef64e11464769c87897b3417bd458173be9a2d6"
+        },
+        {
+          "path": "src/Bosak.Schema/Bosak.Schema.csproj",
+          "sha256": "3145d906466fb2cbb4c00718710ed1cc5afbaf314865f06260b67f2bcf20f646"
+        },
+        {
+          "path": "src/Bosak.Schema/SchemaServices.cs",
+          "sha256": "ecf565da87d5ef06bb0f0f95d26335784a88d29b8a8e845a971b84d5bb589a00"
+        },
+        {
+          "path": "src/Bosak.Schema/SchemaAwareXslt.cs",
+          "sha256": "51da6c35357eeba67b0b3a4ed0a12af28fbafaf4886910d64b76c8ae06ea3acc"
+        },
+        {
+          "path": "src/Bosak.Schema/Model/CompiledSchema.cs",
+          "sha256": "273aee5a8b9bdebf68e52462996951f6c87ac563d0f921eaa7735fa795982235"
+        },
+        {
+          "path": "src/Bosak.Schema/Model/ElementDeclaration.cs",
+          "sha256": "83b60b518b4ee033ce5092623bd19a6edc355708ac0b7d102ff665c4b83fb150"
+        },
+        {
+          "path": "src/Bosak.Schema/Model/XsdLanguageVersion.cs",
+          "sha256": "dd4a5ffd4fb06a7e2ab7b3393a0d1264aad9dbd90b3da358c81cafcb9dc77911"
+        },
+        {
+          "path": "src/Bosak.Schema/Compilation/SchemaCompiler.cs",
+          "sha256": "9e32d52d41484e13c1ded8eea6b6f190f59cfdbbc69115aa1c3e434f53ed7434"
+        },
+        {
+          "path": "src/Bosak.Schema/Compilation/SchemaCompileOptions.cs",
+          "sha256": "bccaa3061053bc14580c304b01f06c930445999820ab307bb0447bcea7cb874c"
+        },
+        {
+          "path": "src/Bosak.Schema/Validation/XsdValidationService.cs",
+          "sha256": "2ce71480ca20e6b0541505f2cd321cb5f9cadcfebad3a44bcf46f56feaec8a04"
+        },
+        {
+          "path": "docs/AGENT_HANDOVER.md",
+          "sha256": "6817a9a1ab26ebb0abf04108d2436a810ccbeb472adbe0db0457672fdf22a9eb"
+        },
+        {
+          "path": "docs/ADR-006-xsd11-engine-seam-compatibility.md",
+          "sha256": "61b304da73ccaefaca8af8ce2b565cf954fe2e7ef51e57448bbeb730b00929a7"
+        }
+      ]
+    },
+    {
+      "name": "Braid",
+      "path": "D:/Development/Bosak.Braid",
+      "revision": "0f1d949e758645f7944f617f2b4613e49161a195",
+      "status": "",
+      "reviewedFiles": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "40526fbbafb7765c8e753f7db72fff435f00dc19fe3499fcab36503dd21632f3"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "926d6f34a4561990d19ff1181fffa1e5cec8c5c1f20252be509999aef3d0f344"
+        },
+        {
+          "path": "eng/Bosak.Dependency.props",
+          "sha256": "70d7f31e049da218c2468ef056ccd8648f4fd188745a0cf98e23f037bdce28d6"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/Bosak.Braid.Infrastructure.csproj",
+          "sha256": "ae20a99c207b7247ed74fc45163623a8da968ef689b34c9395830312b196eddf"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+          "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/BosakPreviewExecutor.cs",
+          "sha256": "aa066b21d267ba63ecc05d0bfbf9226f35675e2d17f4ffff375fc21bf502b9d2"
+        },
+        {
+          "path": "src/Bosak.Braid.Infrastructure/PreviewWorkerProtocol.cs",
+          "sha256": "dac931c02191ee1d58972ff8775311e85eec6c49526aa3d5a2fddada91581c2b"
+        },
+        {
+          "path": "src/Bosak.Braid.Application/Testing/PreviewRunConfiguration.cs",
+          "sha256": "d404e35739a173ef73951b4b018a6f1eeacb01113b762ad37be3c063a1ad48a3"
+        },
+        {
+          "path": "src/Bosak.Braid.Application/Testing/RunEvidence.cs",
+          "sha256": "ccd326afeffa125f14f7c52e4f50c9c02a5265f492b4eb2ac46cdc4a856f2da6"
+        },
+        {
+          "path": "src/Bosak.Braid.Application/SourceGraphProjection.cs",
+          "sha256": "b5c774d119ee1af936f3470fa848f89c89ed4a6c763606f9e14aef8c753d19e3"
+        },
+        {
+          "path": "docs/AGENT_HANDOVER.md",
+          "sha256": "bf12b99f6f60e0154d07f5cffc57d606319848c8b0f8df9d605dd842dfe1d143"
+        },
+        {
+          "path": "docs/RESTART_CHECKPOINT.md",
+          "sha256": "f74e2fef818afcd46465ea6b0e46de34aa15ce438a323db9f769e8e099604c0c"
+        },
+        {
+          "path": "docs/SOURCE_GRAPH.md",
+          "sha256": "a2d27462d1b5b212bb7cf641f2256b73e98dfbed556524521f167574ebf832d6"
+        },
+        {
+          "path": "docs/RUN_PROVENANCE.md",
+          "sha256": "ba6935dd495a748ed11c85b2e489998cffc93c465896b5d63fe14348986a44cd"
+        }
+      ]
+    },
+    {
+      "name": "Braid pinned engine checkout",
+      "path": "D:/Development/Bosak.Braid/.dependencies/bosak-6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+      "revision": "6a3372fc3b91e733b71a426cf40f26feaaeb3bcb",
+      "status": ""
+    }
+  ]
+}

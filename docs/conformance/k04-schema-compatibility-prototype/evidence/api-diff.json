@@ -1,0 +1,74 @@
+{
+  "comparison": "Compiled neutral proposals only; namespace-normalized, never a product ABI change",
+  "previousTypes": 24,
+  "revisedTypes": 32,
+  "addedTypes": [
+    "Proposed.ISchemaCompatibilityAuthority",
+    "Proposed.ISchemaCompatibilityView",
+    "Proposed.QueryHostLanguage",
+    "Proposed.QuerySemanticProfile",
+    "Proposed.SchemaCompatibilityRequest",
+    "Proposed.SchemaLanguageVersion",
+    "Proposed.SchemaSourceIdentity",
+    "Proposed.SchemaUniverseIdentity"
+  ],
+  "removedTypes": [],
+  "changedTypes": [
+    {
+      "type": "Proposed.ISchemaSession",
+      "addedMembers": [
+        "Proposed.QuerySemanticProfile QueryProfile",
+        "Proposed.QuerySemanticProfile get_QueryProfile()"
+      ],
+      "removedMembers": []
+    },
+    {
+      "type": "Proposed.SchemaCompilationRequest",
+      "addedMembers": [
+        "Proposed.QuerySemanticProfile QueryProfile",
+        "Proposed.QuerySemanticProfile get_QueryProfile()",
+        "Proposed.SchemaLanguageVersion SchemaLanguage",
+        "Proposed.SchemaLanguageVersion get_SchemaLanguage()",
+        "Void .ctor(System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaResource], System.Uri, Proposed.QuerySemanticProfile, Proposed.SchemaLanguageVersion, System.String, System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaNamespaceBinding], System.String)",
+        "Void Deconstruct(System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaResource] ByRef, System.Uri ByRef, Proposed.QuerySemanticProfile ByRef, Proposed.SchemaLanguageVersion ByRef, System.String ByRef, System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaNamespaceBinding] ByRef, System.String ByRef)",
+        "Void set_QueryProfile(Proposed.QuerySemanticProfile)",
+        "Void set_SchemaLanguage(Proposed.SchemaLanguageVersion)"
+      ],
+      "removedMembers": [
+        "System.String Language",
+        "System.String get_Language()",
+        "Void .ctor(System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaResource], System.Uri, System.String, System.String, System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaNamespaceBinding], System.String)",
+        "Void Deconstruct(System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaResource] ByRef, System.Uri ByRef, System.String ByRef, System.String ByRef, System.Collections.Immutable.ImmutableArray`1[Proposed.SchemaNamespaceBinding] ByRef, System.String ByRef)",
+        "Void set_Language(System.String)"
+      ]
+    },
+    {
+      "type": "Proposed.SchemaIdentityIssuer",
+      "addedMembers": [
+        "Proposed.SchemaIdentityIssuer Create(Proposed.SchemaUniverseIdentity)"
+      ],
+      "removedMembers": [
+        "Proposed.SchemaIdentityIssuer Create(System.String)"
+      ]
+    },
+    {
+      "type": "Proposed.SchemaSessionIdentity",
+      "addedMembers": [
+        "Proposed.SchemaUniverseIdentity Universe",
+        "Proposed.SchemaUniverseIdentity get_Universe()"
+      ],
+      "removedMembers": []
+    },
+    {
+      "type": "Proposed.SchemaValueAnnotation",
+      "addedMembers": [
+        "Proposed.SchemaSourceIdentity SourceIdentity",
+        "Proposed.SchemaSourceIdentity get_SourceIdentity()",
+        "Void .ctor(Proposed.ISchemaSession, Proposed.SchemaTypeIdentity, Proposed.SchemaSourceIdentity)"
+      ],
+      "removedMembers": [
+        "Void .ctor(Proposed.ISchemaSession, Proposed.SchemaTypeIdentity)"
+      ]
+    }
+  ]
+}

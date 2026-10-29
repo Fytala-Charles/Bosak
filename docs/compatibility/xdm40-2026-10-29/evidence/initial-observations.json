@@ -1,0 +1,442 @@
+{
+  "Kind": "Bounded observations; not conformance or consumer acceptance",
+  "Observations": [
+    {
+      "Id": "numeric-eq",
+      "Source": "xs:double('1.1') eq xs:decimal('1.1')",
+      "Profile": "XPath31",
+      "Result": "true",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "numeric-atomic-equal",
+      "Source": "atomic-equal(xs:double('1.1'), xs:decimal('1.1'))",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}atomic-equal is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "numeric-map-keys",
+      "Source": "map:size(map{xs:double('1.1'):1, xs:decimal('1.1'):2})",
+      "Profile": "XPath31",
+      "Result": "2",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "duration-order",
+      "Source": "xs:duration('P1M') lt xs:duration('P1000D')",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPTY0004"
+    },
+    {
+      "Id": "binary-atomic-equal",
+      "Source": "atomic-equal(xs:hexBinary('01'), xs:base64Binary('AQ=='))",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}atomic-equal is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "binary-map-keys",
+      "Source": "map:size(map{xs:hexBinary('01'):1, xs:base64Binary('AQ=='):2})",
+      "Profile": "XPath31",
+      "Result": "2",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "map-replace-order",
+      "Source": "string-join(map:keys(map:put(map{'a':1,'b':2}, 'a', 3)), ',')",
+      "Profile": "XPath31",
+      "Result": "a,b",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "map-reinsert-order",
+      "Source": "string-join(map:keys(map:put(map:remove(map{'a':1,'b':2}, 'a'), 'a', 3)), ',')",
+      "Profile": "XPath31",
+      "Result": "a,b",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "map-json-order",
+      "Source": "serialize(map{'b':2,'a':1}, map{'method':'json'})",
+      "Profile": "XPath31",
+      "Result": "{\"b\":2,\"a\":1}",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "simple-record-match",
+      "Source": "map{'a':1} instance of record(a as xs:integer)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "XPathParseException: Parse error at position -1: XPST0003: A record type ('record(...)') requires XPath 4.0."
+    },
+    {
+      "Id": "simple-record-extra",
+      "Source": "map{'a':1,'b':2} instance of record(a as xs:integer)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "XPathParseException: Parse error at position -1: XPST0003: A record type ('record(...)') requires XPath 4.0."
+    },
+    {
+      "Id": "simple-record-wrong-type",
+      "Source": "map{'a':'x'} instance of record(a as xs:integer)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "XPathParseException: Parse error at position -1: XPST0003: A record type ('record(...)') requires XPath 4.0."
+    },
+    {
+      "Id": "simple-record-cast",
+      "Source": "(map{'a':1} cast as record(a)) instance of record(*)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "XPathParseException: Parse error at position 29: XPST0003: A record type ('record(...)') requires XPath 4.0."
+    },
+    {
+      "Id": "jnode-root-identity",
+      "Source": "let $j := jtree(map{'a':1}) return $j is $j",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "jnode-child-identity",
+      "Source": "let $j := jtree(map{'a':1}) return ($j/child::*) is ($j/child::*)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "jnode-order",
+      "Source": "let $j := jtree(map{'a':1,'b':2}) return ($j/child::*)[1] << ($j/child::*)[2]",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "jnode-key",
+      "Source": "jkey((jtree(map{'a':1})/child::*)[1])",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "jnode-value",
+      "Source": "jvalue((jtree(map{'a':1})/child::*)[1])",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "jnode-parent",
+      "Source": "count(jtree(map{'a':1})/child::*/parent::*)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPST0017: Function {http://www.w3.org/2005/xpath-functions}jtree is defined in XPath 4.0 and is not available when targeting XPath 31; set CompileOptions.Compatibility to XPathCompatibility.XPath40."
+    },
+    {
+      "Id": "xml11-control",
+      "Source": "string-to-codepoints(codepoints-to-string(1))",
+      "Profile": "XPath31",
+      "Result": "(sequence)",
+      "Kind": "Sequence",
+      "Error": null
+    },
+    {
+      "Id": "null-character",
+      "Source": "string-to-codepoints(codepoints-to-string(0))",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FOCH0001"
+    },
+    {
+      "Id": "surrogate-character",
+      "Source": "codepoints-to-string(55296)",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FOCH0001"
+    },
+    {
+      "Id": "year-zero",
+      "Source": "year-from-date(xs:date('0000-01-01'))",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FODT0001: Year 0 is outside the range supported by DateTimeOffset."
+    },
+    {
+      "Id": "plus-inf",
+      "Source": "xs:double('+INF')",
+      "Profile": "XPath31",
+      "Result": "INF",
+      "Kind": "Double",
+      "Error": null
+    },
+    {
+      "Id": "extended-year",
+      "Source": "year-from-date(xs:date('10000-01-01'))",
+      "Profile": "XPath31",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FODT0001: Year 10000 is outside the range supported by DateTimeOffset."
+    },
+    {
+      "Id": "numeric-eq",
+      "Source": "xs:double('1.1') eq xs:decimal('1.1')",
+      "Profile": "XPath40",
+      "Result": "true",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "numeric-atomic-equal",
+      "Source": "atomic-equal(xs:double('1.1'), xs:decimal('1.1'))",
+      "Profile": "XPath40",
+      "Result": "false",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "numeric-map-keys",
+      "Source": "map:size(map{xs:double('1.1'):1, xs:decimal('1.1'):2})",
+      "Profile": "XPath40",
+      "Result": "2",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "duration-order",
+      "Source": "xs:duration('P1M') lt xs:duration('P1000D')",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPTY0004"
+    },
+    {
+      "Id": "binary-atomic-equal",
+      "Source": "atomic-equal(xs:hexBinary('01'), xs:base64Binary('AQ=='))",
+      "Profile": "XPath40",
+      "Result": "true",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "binary-map-keys",
+      "Source": "map:size(map{xs:hexBinary('01'):1, xs:base64Binary('AQ=='):2})",
+      "Profile": "XPath40",
+      "Result": "2",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "map-replace-order",
+      "Source": "string-join(map:keys(map:put(map{'a':1,'b':2}, 'a', 3)), ',')",
+      "Profile": "XPath40",
+      "Result": "a,b",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "map-reinsert-order",
+      "Source": "string-join(map:keys(map:put(map:remove(map{'a':1,'b':2}, 'a'), 'a', 3)), ',')",
+      "Profile": "XPath40",
+      "Result": "a,b",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "map-json-order",
+      "Source": "serialize(map{'b':2,'a':1}, map{'method':'json'})",
+      "Profile": "XPath40",
+      "Result": "{\"b\":2,\"a\":1}",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "simple-record-match",
+      "Source": "map{'a':1} instance of record(a as xs:integer)",
+      "Profile": "XPath40",
+      "Result": "false",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "simple-record-extra",
+      "Source": "map{'a':1,'b':2} instance of record(a as xs:integer)",
+      "Profile": "XPath40",
+      "Result": "false",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "simple-record-wrong-type",
+      "Source": "map{'a':'x'} instance of record(a as xs:integer)",
+      "Profile": "XPath40",
+      "Result": "false",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "simple-record-cast",
+      "Source": "(map{'a':1} cast as record(a)) instance of record(*)",
+      "Profile": "XPath40",
+      "Result": "true",
+      "Kind": "Boolean",
+      "Error": null
+    },
+    {
+      "Id": "jnode-root-identity",
+      "Source": "let $j := jtree(map{'a':1}) return $j is $j",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPTY0004: Node comparison operator 'is' requires single node operands."
+    },
+    {
+      "Id": "jnode-child-identity",
+      "Source": "let $j := jtree(map{'a':1}) return ($j/child::*) is ($j/child::*)",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPTY0004: Node comparison operator 'is' requires single node operands."
+    },
+    {
+      "Id": "jnode-order",
+      "Source": "let $j := jtree(map{'a':1,'b':2}) return ($j/child::*)[1] << ($j/child::*)[2]",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: XPTY0004: Node comparison operators '<<' and '>>' require single node operands."
+    },
+    {
+      "Id": "jnode-key",
+      "Source": "jkey((jtree(map{'a':1})/child::*)[1])",
+      "Profile": "XPath40",
+      "Result": "a",
+      "Kind": "String",
+      "Error": null
+    },
+    {
+      "Id": "jnode-value",
+      "Source": "jvalue((jtree(map{'a':1})/child::*)[1])",
+      "Profile": "XPath40",
+      "Result": "1",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "jnode-parent",
+      "Source": "count(jtree(map{'a':1})/child::*/parent::*)",
+      "Profile": "XPath40",
+      "Result": "1",
+      "Kind": "Integer",
+      "Error": null
+    },
+    {
+      "Id": "xml11-control",
+      "Source": "string-to-codepoints(codepoints-to-string(1))",
+      "Profile": "XPath40",
+      "Result": "(sequence)",
+      "Kind": "Sequence",
+      "Error": null
+    },
+    {
+      "Id": "null-character",
+      "Source": "string-to-codepoints(codepoints-to-string(0))",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FOCH0001"
+    },
+    {
+      "Id": "surrogate-character",
+      "Source": "codepoints-to-string(55296)",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FOCH0001"
+    },
+    {
+      "Id": "year-zero",
+      "Source": "year-from-date(xs:date('0000-01-01'))",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FODT0001: Year 0 is outside the range supported by DateTimeOffset."
+    },
+    {
+      "Id": "plus-inf",
+      "Source": "xs:double('+INF')",
+      "Profile": "XPath40",
+      "Result": "INF",
+      "Kind": "Double",
+      "Error": null
+    },
+    {
+      "Id": "extended-year",
+      "Source": "year-from-date(xs:date('10000-01-01'))",
+      "Profile": "XPath40",
+      "Result": null,
+      "Kind": null,
+      "Error": "InvalidOperationException: FODT0001: Year 10000 is outside the range supported by DateTimeOffset."
+    }
+  ],
+  "Assemblies": [
+    {
+      "Identity": "Bosak.XPath.Api, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Api.dll",
+      "Sha256": "7EB6B7C37F0AB970414172BF1E032EB070954BF19E153449D9C486140ADE6068"
+    },
+    {
+      "Identity": "Bosak.XPath.Compiler, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Compiler.dll",
+      "Sha256": "8816D7EE6DAEF99FF94AD4AF3549CE0F5B46BEDF7E8EC9EC690DDDE338BEFDEE"
+    },
+    {
+      "Identity": "Bosak.XPath.Core, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Core.dll",
+      "Sha256": "E5329CC3F7CAFB462C29EFF9B500B9ED1A8564D40DD22B1B2CEB4676DA39B6D8"
+    },
+    {
+      "Identity": "Bosak.XPath.Parser, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Parser.dll",
+      "Sha256": "29296A8014CF6C2118DC48812ADEBEDFD55AF9C92BAEC366C70B9D89B10CF692"
+    },
+    {
+      "Identity": "Bosak.XPath.Providers, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Providers.dll",
+      "Sha256": "C957609860E87EF6049A91BBBC44AE52CB46AB1C3E225A01DA32B0191734877A"
+    },
+    {
+      "Identity": "Bosak.XPath.Runtime, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Runtime.dll",
+      "Sha256": "C89E63E5F1603EDF7690AD6B949813ECAFC35FFA51F088FC62131EA1D6232E2E"
+    },
+    {
+      "Identity": "Bosak.XPath.Standard, Version=1.33.1.0, Culture=neutral, PublicKeyToken=null",
+      "Path": "D:\\Development\\Bosak\\.guard-tmp\\xdm40-review-probe\\bin\\Release\\net10.0\\Bosak.XPath.Standard.dll",
+      "Sha256": "DF0C40C6D7FD61A1B8166CF48F79ED0F27B4FC5CC3F49F2AE62F1A2806D56D68"
+    }
+  ]
+}

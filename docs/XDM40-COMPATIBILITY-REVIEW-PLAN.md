@@ -1,5 +1,11 @@
 # XDM 4.0 compatibility review before the C45 production candidate
 
+**Schema licensing/path update — 29 October 2026:** [Apache publication](SCHEMA-APACHE-PUBLICATION-2026-10-29.md) is complete. The active open schema checkout is `D:/Development/Bosak.Schema.Public`; the old `Bosak.Schema` directory is a locked private licensing checkout. Reassess the minimal API before C45; the older proprietary-provider boundary/path assumptions below are historical.
+
+**Revised prototype complete — 29 October 2026:** [C44-R2 results and pending decision](conformance/k04-schema-compatibility-prototype/README.md). The compatibility review and isolated revision are complete. Next is owner disposition of the exact revised API/guarded C45 scope; production implementation remains unapproved. Preserve the historical plans/receipts below.
+
+**Review completed — 29 October 2026:** [Results and revised next slice](compatibility/xdm40-2026-10-29/README.md). The cross-system source review and immutable draft pin are complete; real consumer runtime/ABI acceptance remains unqualified. Next revise the isolated compatibility prototype, especially compatible-schema handoff and explicit profile/version identities, before owner acceptance of C45. The checkpoint/plan below is preserved history; it no longer describes the review as future work.
+
 29 October 2026. Latest completed slice: **C44**, commit **affc228a**. The owner responded to the C45 approval request by asking for an XDM 4.0 / dependent-system compatibility review. **That response was not approval. C45 production implementation and permanent API acceptance remain pending.** The current task is documentation/checkpoint/push for a host restart, not implementation authorization.
 
 ## Next authorized direction

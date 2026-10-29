@@ -1,0 +1,32 @@
+{
+  "recordedUtc": "2026-10-29T08:33:42.202397+00:00",
+  "date": "2026-10-29",
+  "baseCommit": "4e523082dea931d9377f34672ff63c57eb5dbd7b",
+  "kind": "Prototype-only semantic scope recorded before new source generation; no product adoption or API acceptance",
+  "revision": "3e9f3bddd38f39f8953750306f0c574a2fbd0387",
+  "xdmSource": {
+    "path": "specifications/xpath-datamodel-40/src/xpath-datamodel.xml",
+    "sha256": "0eea1a07c21e23c151020575f81fa55c92749e76ba59f4980f19950ae6e0d32f",
+    "gitBlob": "e4ce06699f4105f35053cceb60098134f66a0d38",
+    "url": "https://github.com/qt4cg/qtspecs/blob/3e9f3bddd38f39f8953750306f0c574a2fbd0387/specifications/xpath-datamodel-40/src/xpath-datamodel.xml"
+  },
+  "sections": [
+    "4.1.1 XSD versions",
+    "4.1.4 Schema Consistency",
+    "4.1.5 Representation of Types",
+    "7.4.3 PSVI mapping",
+    "7.6.13 type-name",
+    "7.6.14 typed-value"
+  ],
+  "adoptsForExperiment": [
+    "Different immutable session tokens may represent compatible component universes.",
+    "Retain original assessment provenance/PSVI when checking against a compatible target; do not revalidate.",
+    "Separate query/XDM profile, XSD version, component authority/universe and host source/snapshot binding."
+  ],
+  "intentionalLimits": [
+    "Finite fake component descriptors and synthetic union validity constraints only; not an XSD parser, complete XSD component validator or Bosak.Schema backend.",
+    "No real engine annotation carrier replacement, production registration, API acceptance, consumer ABI certification, licensing operation or sibling write.",
+    "Unsupported provider/version/profile coverage refuses explicitly; bounded compatibility does not certify all compatible XSD schemas."
+  ],
+  "preservedFiles": 141
+}

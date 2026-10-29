@@ -1,0 +1,273 @@
+[
+  {
+    "mode": "none",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "none"
+    ],
+    "exitCode": 0,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.26398840000001655,
+    "log": "prototype-none.log",
+    "logSha256": "e6146b4c058dd6a2d520d363878adf98ede8240f8d98f3f088a750c9d1558003",
+    "passed": 123,
+    "failed": 0,
+    "failedControls": []
+  },
+  {
+    "mode": "token-only",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "token-only"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.26364879999982804,
+    "log": "prototype-token-only.log",
+    "logSha256": "eb1394be68ad6994815737b34c1dce90aad454684d81e16280e52831c5f50269",
+    "passed": 114,
+    "failed": 9,
+    "failedControls": [
+      "same-closure different-token bridge succeeds",
+      "compatible subset-to-superset",
+      "compatible superset-to-other-superset",
+      "semantic compatibility tolerates different opaque component keys",
+      "same QName changed definition refuses",
+      "transitively changed anonymous definition refuses",
+      "same declaration QName changed nillability refuses",
+      "individually valid fake graphs with invalid union refuse",
+      "cross-host schema handoff is supported with target profile"
+    ]
+  },
+  {
+    "mode": "qname",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "qname"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.26345889999993233,
+    "log": "prototype-qname.log",
+    "logSha256": "38dee1ab6c6c151676cd84e67f306d6523c59432d7eb7c14e1db3df290eb4b27",
+    "passed": 120,
+    "failed": 3,
+    "failedControls": [
+      "same QName changed definition refuses",
+      "transitively changed anonymous definition refuses",
+      "same declaration QName changed nillability refuses"
+    ]
+  },
+  {
+    "mode": "fingerprint",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "fingerprint"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.16767219999928784,
+    "log": "prototype-fingerprint.log",
+    "logSha256": "88e9bd0134cb6d4bc69ad661d7337623183d49c667634a33ef449d4581a9ea52",
+    "passed": 121,
+    "failed": 2,
+    "failedControls": [
+      "equal full fingerprints never admit unregistered provider",
+      "foreign target provider refuses"
+    ]
+  },
+  {
+    "mode": "profile",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "profile"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.1674964000003456,
+    "log": "prototype-profile.log",
+    "logSha256": "6590caac1e80c9dab80fd0d89fd44a3d18b11b463839800394a41768243a5636",
+    "passed": 119,
+    "failed": 4,
+    "failedControls": [
+      "query language changes execution key without changing XSD universe",
+      "wrong consuming profile refuses at view admission",
+      "profile change cannot reuse captured atomic binding",
+      "query static context changes executable key only"
+    ]
+  },
+  {
+    "mode": "schema-version",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "schema-version"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.16739099999995233,
+    "log": "prototype-schema-version.log",
+    "logSha256": "d2041acea5b558bcf75afe82720ee318ed7e36540f77dd4243c25f6d02ea650e",
+    "passed": 121,
+    "failed": 2,
+    "failedControls": [
+      "XSD version changes universe identity",
+      "unsupported mixed schema versions are coverage refusal"
+    ]
+  },
+  {
+    "mode": "root-only",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "root-only"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.1712948000003962,
+    "log": "prototype-root-only.log",
+    "logSha256": "0910e7f6a4cc14e9250642f6dc9935058764ac80b1a0bf75bb2f29fe9b6e5828",
+    "passed": 120,
+    "failed": 3,
+    "failedControls": [
+      "source and target universes differ",
+      "root-only digest is insufficient for closure identity",
+      "resource input order does not change universe"
+    ]
+  },
+  {
+    "mode": "storage-id",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "storage-id"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17113160000008065,
+    "log": "prototype-storage-id.log",
+    "logSha256": "2f5b7418000d2348811d5a5dd8b6356f36193636fa15bf9903506b1685ea28a2",
+    "passed": 121,
+    "failed": 2,
+    "failedControls": [
+      "storage/source ID cannot authenticate a schema annotation",
+      "foreign declaration in owned annotation refuses"
+    ]
+  },
+  {
+    "mode": "revalidate",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "revalidate"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17097319999993488,
+    "log": "prototype-revalidate.log",
+    "logSha256": "1c1f8b5bb421d046e0b5929fb5b0f8d645cfefa31fc7b00aaa471222c61adf1a",
+    "passed": 118,
+    "failed": 5,
+    "failedControls": [
+      "original annotation matches both multi-heads",
+      "original source-only type matches target declared element",
+      "handoff performs no reassessment",
+      "original PSVI remains usable despite target reassessment failure",
+      "nilled nillable member accepted"
+    ]
+  },
+  {
+    "mode": "union",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "union"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17841709999993327,
+    "log": "prototype-union.log",
+    "logSha256": "f66cd26dbba6f2f105ce435da490ca27b43f3c6649b60321f03dba95f520499b",
+    "passed": 122,
+    "failed": 1,
+    "failedControls": [
+      "individually valid fake graphs with invalid union refuse"
+    ]
+  },
+  {
+    "mode": "rewrite",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "rewrite"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17685590000019147,
+    "log": "prototype-rewrite.log",
+    "logSha256": "942210570249fe389b8012f43a22e92a7ccbef48a1c3022ed84a9a2f2c6148a1",
+    "passed": 120,
+    "failed": 3,
+    "failedControls": [
+      "atomic handoff retains actual source type/session",
+      "copied atom binds in compatible target without owner rewrite",
+      "parallel immutable handoff does not change original provenance"
+    ]
+  },
+  {
+    "mode": "strip",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "strip"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17828039999949397,
+    "log": "prototype-strip.log",
+    "logSha256": "e78a7b28ddcc4adfc8fbb8c34199936603a45fa84d5c0c152d8604f2fdf88ddf",
+    "passed": 121,
+    "failed": 2,
+    "failedControls": [
+      "strip copy removes every descendant and attribute annotation",
+      "stripped tree atomization cannot regain authority"
+    ]
+  },
+  {
+    "mode": "fallback",
+    "command": [
+      "dotnet",
+      "D:\\Development\\Bosak\\.guard-tmp\\k04-schema-compatibility-prototype\\bin\\Release\\net10.0\\C44R2.Prototype.dll",
+      "fallback"
+    ],
+    "exitCode": 2,
+    "timeout": false,
+    "watchdogSeconds": 45,
+    "wallSeconds": 0.17022760000054404,
+    "log": "prototype-fallback.log",
+    "logSha256": "ecf546d29cdde4a3cd5fe591e0d8635f2b3c704c6a7717500517ac8514b2c692",
+    "passed": 121,
+    "failed": 2,
+    "failedControls": [
+      "owned Unsupported does not fall back",
+      "owned NotApplicable is ownership loss"
+    ]
+  }
+]

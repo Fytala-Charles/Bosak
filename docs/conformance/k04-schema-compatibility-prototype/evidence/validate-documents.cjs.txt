@@ -1,0 +1,42 @@
+const fs=require('fs'),path=require('path'),crypto=require('crypto'),cp=require('child_process');
+const md=require('C:/Users/charl/AppData/Local/npm-cache/_npx/28f98e99224dac41/node_modules/markdown-it')({html:true});
+const root=process.cwd(),dossier='docs/conformance/k04-schema-compatibility-prototype',evidence=path.join(root,dossier,'evidence');
+const hash=b=>crypto.createHash('sha256').update(b).digest('hex');
+const old=JSON.parse(fs.readFileSync(path.join(evidence,'previous-identities.json'),'utf8'));
+for(const [f,h] of Object.entries(old))if(hash(fs.readFileSync(path.join(root,f)))!==h)throw Error('Previous artifact changed '+f);
+const source=JSON.parse(fs.readFileSync(path.join(evidence,'source-and-binary-identities.json'),'utf8'));
+for(const b of source.unchangedProductAssemblies)if(hash(fs.readFileSync(b.path))!==b.sha256)throw Error('Product binary changed');
+for(const b of source.executedBinaries)if(hash(fs.readFileSync(b.path))!==b.sha256.toLowerCase())throw Error('Executed binary changed');
+if(cp.execFileSync('git',['diff','--name-only','--','src','tests'],{encoding:'utf8'}).trim())throw Error('Production/test diff');
+const receipts=JSON.parse(fs.readFileSync(path.join(evidence,'prototype-receipts.json'),'utf8'));
+if(receipts.length!==13)throw Error('Run count');
+for(const r of receipts){
+ if(r.timeout||r.exitCode!==(r.mode==='none'?0:2))throw Error('Run qualification');
+ const bytes=fs.readFileSync(path.join(evidence,r.log));if(hash(bytes)!==r.logSha256)throw Error('Raw receipt hash');
+ const result=JSON.parse(bytes.toString('utf8'));
+ if(result.tests.length!==123||result.passed+result.failed!==123||new Set(result.tests.map(t=>t.name)).size!==123)throw Error('Control inventory');
+ if(result.tests.filter(t=>!t.passed).length!==result.failed)throw Error('Control accounting');
+}
+const api=JSON.parse(fs.readFileSync(path.join(evidence,'api-surface.json'),'utf8'));
+const delta=JSON.parse(fs.readFileSync(path.join(evidence,'api-diff.json'),'utf8'));
+if(api.exportedTypes.length!==32||delta.addedTypes.length!==8||delta.changedTypes.length!==5||delta.removedTypes.length)throw Error('Compiled proposal inventory');
+const files=['README.md','docs/ARCHITECTURE.md','docs/FEATURE_REQUESTS.md','docs/INTEGRATION.md','docs/AGENT_HANDOVER.md','docs/DOCUMENTATION_RENDERER_TEST.md','docs/RESTART-2026-10-29.md','docs/XDM40-COMPATIBILITY-REVIEW-PLAN.md',...['README.md','API-PROPOSAL.md','QUALIFICATION.md','OWNER-DECISION.md'].map(f=>dossier+'/'+f)];
+const css=path.join(root,'assets/css/fytala-markdown.css'),out=path.join(root,'.guard-tmp/c44r2-compatibility-render');fs.mkdirSync(out,{recursive:true});let localLinks=0;const pages=[];
+for(const f of files){
+ const text=fs.readFileSync(path.join(root,f),'utf8'),html=md.render(text);if(!html.includes('<h'))throw Error('Missing headings');
+ const scope=f.startsWith(dossier)?text:text.split('\n').filter(l=>l.includes('k04-schema-compatibility-prototype')).join('\n');
+ for(const m of scope.matchAll(/\]\(([^)]+)\)/g)){
+  if(/^(https?:|#)/.test(m[1]))continue;
+  const target=path.resolve(path.dirname(path.join(root,f)),decodeURIComponent(m[1].split('#')[0]));
+  if(!fs.existsSync(target))throw Error('Missing link '+f+' -> '+m[1]);localLinks++;
+ }
+ if(f.startsWith(dossier)&&text.split('\n').some(l=>/[\t ]+$/.test(l.replace(/\r$/,''))))throw Error('New Markdown whitespace');
+ const output=path.join(out,f.replaceAll('/','_')+'.html');
+ fs.writeFileSync(output,`<!doctype html><meta charset="utf-8"><base href="file:///${path.dirname(path.join(root,f)).replaceAll('\\','/')}/"><link rel="stylesheet" href="file:///${css.replaceAll('\\','/')}"><main>${html}</main>`);
+ pages.push({source:f,sourceSha256:hash(fs.readFileSync(path.join(root,f))),html:path.relative(root,output).replaceAll('\\','/'),htmlSha256:hash(fs.readFileSync(output))});
+}
+for(const f of fs.readdirSync(evidence).filter(f=>f.endsWith('.json')))JSON.parse(fs.readFileSync(path.join(evidence,f),'utf8'));
+cp.execFileSync('git',['diff','--check'],{encoding:'utf8'});
+const receipt={kind:'HTML render only; no screenshot/PDF acceptance',date:'2026-10-29',priorFilesPreserved:Object.keys(old).length,productBinariesUnchanged:source.unchangedProductAssemblies.length,correctControls:123,mutationModes:12,finalProcesses:13,timeoutCount:0,proposalTypes:32,localLinksChecked:localLinks,cssSha256:hash(fs.readFileSync(css)),pages};
+fs.writeFileSync(path.join(evidence,'documentation-receipt.json'),JSON.stringify(receipt,null,2)+'\n');
+console.log(`Validated ${Object.keys(old).length} prior files, 13 final processes, compiled 32-type proposal, ${localLinks} local links; rendered ${pages.length} pages.`);

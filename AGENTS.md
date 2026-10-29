@@ -107,6 +107,7 @@ UCA `alternate=blanked` maps to `CompareOptions.IgnoreSymbols`. Due to .NET `IsP
 Public-facing Markdown follows the Fytala branding contract in `docs/DOCUMENTATION_STYLE_GUIDE.md` (kit version recorded in `.fytala-docs.json`; canonical assets under `assets/`, renderer settings in `.vscode/settings.json` and `.crossnote/`). Verify rendered output with `docs/DOCUMENTATION_RENDERER_TEST.md`.
 
 **Rules:**
+- Keep `README.md` focused on the product, quick start, ecosystem/license boundaries and documentation links. Do not prepend implementation checkpoints, test-count logs, repository IDs or local workspace details. Put current engineering detail in `docs/IMPLEMENTATION_STATUS.md`, dated summaries in `docs/DEVELOPMENT_HISTORY.md`, and original receipts in their request-specific dossiers. Keep `ROADMAP.md` focused on current direction and upcoming work.
 - Canonical docs (`README.md`, `docs/ARCHITECTURE.md`, `docs/FEATURE_REQUESTS.md`, `docs/INTEGRATION.md`) use the branded banner header with meaningful `alt` text; internal handover notes may use a compact heading.
 - Mermaid diagrams embed the Fytala `classDef` palette (`current` / `platform` / `external` / `planned`) and use anchors + `fytala-figure-caption` captions when referenceable.
 - Do not hand-edit kit-managed assets (`assets/css`, `assets/logos`, `assets/images/brand-swatches`, `.crossnote`); sync them from the Prime docs-kit and keep SHA-256 hashes matching its manifest.
@@ -191,3 +192,7 @@ The owner-approved [legacy adoption policy](docs/xpath40-catalog/LEGACY-ADOPTION
 ## Upstream Test Contribution Base (Mandatory)
 
 Prepare every upstream test correction or addition against the current upstream default branch. Fetch upstream before creating the contribution branch and again immediately before submission. Base the contribution on the refreshed default branch (rebase if it has advanced), record the exact base revision, and re-check the final diff against current upstream. Do not submit patches based only on an older contribution branch. This avoids the application/merge conflicts Michael Kay reported in qt4cg/xslt40-test issue #28. Preserve original submission and execution receipts; record corrections separately.
+
+## Schema Repository and Licensing Boundary (29 October 2026)
+
+The active Apache-2.0 schema engine is https://github.com/Fytala-Charles/Bosak.Schema at `D:/Development/Bosak.Schema.Public`. The original private repository/history is now Bosak.Licensing at `D:/Development/Bosak.Licensing`. The original locked `D:/Development/Bosak.Schema` directory remains a private licensing checkout, not the active public schema source. Never copy its credential, billing, deployment material or private history into the public repository. Licensing no longer requires a proprietary schema plug-in seam, but dependency direction, provenance/PSVI, compatibility and lifetime correctness still apply. C45/public core API acceptance remains pending. Bosak.Folio remains proprietary.
