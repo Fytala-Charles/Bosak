@@ -1,4 +1,4 @@
-Current development entry point: [Reviewed whole-document bridge checkpoint](schema-document-bridge/api-review/README.md). Earlier candidate notices below are historical. Core source base `a2ade8fd`; local checkpoint delivery identities are recorded in the review dossier.
+Current development entry point: [Optional decimal scope delivery](schema-optional-children/delivery/README.md). Scope is prepared; implementation remains next. Delivery identities and remote targets are recorded in that checkpoint.
 
 Current development entry point: [Native Schema assessment checkpoint](#native-schema-assessment-checkpoint--29-october-2026). The earlier integration, Apache publication and C44 checkpoints remain historical context.
 
@@ -18503,3 +18503,19 @@ Post-review verification: **24,209 core tests pass in one complete solution run*
 The user authorized local checkpoint commits by requesting continuation of the review/commit recommendations. Delivery revision: `git log -1 --format=%H -- docs/schema-document-bridge/api-review/README.md`; the associated Schema feature commit is recorded in that dossier's CHECKPOINT.json. What was built: original-state whole-document bridge, reviewed exception-safe attachment, two new regression cases, full-document example and synchronized guides. Next: a separately scoped/adopted optional-decimal-child slice. No push, merge, tag or publication.
 
 Schema local delivery: `766eff7a77ee08e9c38cf479994e94eaf232d242` (`feature/bounded-document-assessment`), verified clean after commit. Core delivery resolver: `git log -1 --format=%H -- docs/schema-document-bridge/api-review/README.md`. No push or publication.
+
+## Optional decimal children: scope prepared — 29 October 2026
+
+The [pre-implementation adoption/scope checkpoint](schema-optional-children/README.md) pins the next bounded native Schema slice: optional local decimals, maximum occurrence one, ordered matching, present-instance state and assertion effective Boolean conversion. Optional support is not implemented; no current API, version, REQ completion, consumer pin or gate change. Fresh Schema baseline: 204 passes; 12 isolated diagnostic observations. Core 24,209-pass and exact gate results are inherited from source-identical `a163ff11`, not rerun. Next: implement the separately recorded plan in the Schema feature worktree. General sessions and full XSD 1.1 remain pending.
+
+Current core HEAD `a163ff11895038ceb2b718ecfba77383384a3b35`; Schema HEAD `766eff7a77ee08e9c38cf479994e94eaf232d242`. What was built in this step: exact normative selection, bounded implementation/acceptance plan, source-index audit and isolated baseline diagnostics. Product source remains unchanged; the original scope capture preceded the authorized delivery below. Earlier sealed assessment/bridge evidence is preserved.
+
+Scope refinement: a thirteenth isolated observation exposes ignorable-whitespace removal being refused for an empty element-only assessed root. Supporting all-optional-absent documents therefore needs a bounded provider binding correction. The future implementation proposes core patch 1.34.1 plus fresh complete core tests and exact conformance gates; current versions and production source stay unchanged. Both the initial twelve and extended thirteen-observation receipts are preserved in the optional-child dossier; they overlap.
+
+## Optional decimal scope delivery — 29 October 2026
+
+Current delivery: [synchronized scope checkpoint](schema-optional-children/delivery/README.md). The user requested commit and push of the documentation in both repositories. Optional children remain planned, with 13 diagnostic observations and 204 fresh Schema baseline passes; current Schema 0.5/core 1.34.0 and all product source/pins are unchanged. The future implementation targets Schema 0.6 and the bounded core 1.34.1 whitespace fix, requiring fresh full core/gate qualification. Earlier uncommitted notices describe capture time, not this delivery. No REQ completion, merge or release is inferred.
+
+What was built: synchronized scope/adoption/canonical guides, verified original evidence and paired remote checkpoint preparation. Core delivery resolver: `git log -1 --format=%H -- docs/schema-optional-children/delivery/README.md`.
+
+Schema scope delivery is committed and remote-verified at `33a9039a9fc605f8f7192bfcec88ea559c5c0e19` on `origin/feature/bounded-document-assessment`; its working tree is clean. Core delivery target remains `origin/checkpoint/restart-2026-10-29` (draft PR #467). Resolve the core delivery with `git log -1 --format=%H -- docs/schema-optional-children/delivery/README.md`. No merge or release.

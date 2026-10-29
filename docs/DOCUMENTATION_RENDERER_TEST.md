@@ -649,3 +649,11 @@ Current bridge/canonical pages are checked separately from the sealed assessment
 ## Bounded bridge API review — 29 October 2026
 
 Current canonical/guide/review pages receive a separate HTML/local-destination check with unchanged Fytala CSS. Original sealed documentation-check receipts are preserved. New render and strict Schema documentation receipts belong to `docs/schema-document-bridge/api-review/evidence`. No screenshot or hosted-CI claim.
+
+## Optional decimal child scope — 29 October 2026
+
+Current scope, adoption, plan and owning/core canonical pages receive HTML/local-destination checks with unchanged Fytala CSS. Receipts are separate under `docs/schema-optional-children/evidence`. This documents a proposed slice; it is not screenshot, runtime feature or hosted-CI qualification.
+
+## Optional decimal scope remote checkpoint — 29 October 2026
+
+Current core/Schema canonical pages and both delivery entry points receive a separate HTML/local-destination check; the strict Schema docs checker is rerun. Original scope and earlier sealed evidence remain separately verifiable. Receipts are under `docs/schema-optional-children/delivery/evidence`. No screenshot or new runtime qualification is claimed.

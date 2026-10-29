@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-29",
+  "priorDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28
+  },
+  "scopeOriginalFiles": 20,
+  "scopeREADMEOriginalPreserved": true,
+  "runtimeReceiptsUnchanged": true,
+  "productionSourceUnchanged": true,
+  "owningSnapshotsMatch": true
+}

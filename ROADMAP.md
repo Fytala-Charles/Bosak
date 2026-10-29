@@ -49,3 +49,9 @@ Historical launch, release, test and pricing statements remain preserved as date
 The bounded [whole-document assessment bridge candidate](docs/schema-document-bridge/README.md) is under local qualification; broader schema coverage and consumer acceptance remain future work.
 
 The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.
+
+The next bounded native Schema slice is [optional decimal children](docs/schema-optional-children/README.md). Its specification adoption and verification plan are prepared; implementation and the proposed Schema 0.6 development line remain future work.
+
+Scope refinement: a thirteenth isolated observation exposes ignorable-whitespace removal being refused for an empty element-only assessed root. Supporting all-optional-absent documents therefore needs a bounded provider binding correction. The future implementation proposes core patch 1.34.1 plus fresh complete core tests and exact conformance gates; current versions and production source stay unchanged. Both the initial twelve and extended thirteen-observation receipts are preserved in the optional-child dossier; they overlap.
+
+The [optional-child scope delivery](docs/schema-optional-children/delivery/README.md) records the paired review/backup branches. Optional support and the proposed version changes remain future implementation work.

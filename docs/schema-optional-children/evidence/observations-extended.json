@@ -1,0 +1,96 @@
+[
+  {
+    "id": "required-baseline",
+    "supported": true,
+    "outcome": "Valid",
+    "states": 3
+  },
+  {
+    "id": "optional-current-refusal",
+    "lexical": "0",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "optional-current-refusal",
+    "lexical": "00",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "optional-current-refusal",
+    "lexical": " 0 ",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "optional-current-refusal",
+    "lexical": "\u002B0",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "optional-current-refusal",
+    "lexical": "-0",
+    "supported": false,
+    "outcome": "Unsupported",
+    "hasDocument": false
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "shipped le amount",
+    "kind": "Undefined",
+    "effectiveBoolean": false,
+    "booleanPayload": "InvalidOperationException",
+    "expected": false
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "shipped ne amount",
+    "kind": "Undefined",
+    "effectiveBoolean": false,
+    "booleanPayload": "InvalidOperationException",
+    "expected": false
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "shipped eq shipped",
+    "kind": "Undefined",
+    "effectiveBoolean": false,
+    "booleanPayload": "InvalidOperationException",
+    "expected": false
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "shipped le amount or amount gt 0",
+    "kind": "Boolean",
+    "effectiveBoolean": true,
+    "booleanPayload": "True",
+    "expected": true
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "shipped le amount and amount gt 0",
+    "kind": "Boolean",
+    "effectiveBoolean": false,
+    "booleanPayload": "False",
+    "expected": false
+  },
+  {
+    "id": "empty-comparison-control",
+    "expression": "amount gt 0",
+    "kind": "Boolean",
+    "effectiveBoolean": true,
+    "booleanPayload": "True",
+    "expected": true
+  },
+  {
+    "id": "empty-element-only-root-whitespace",
+    "currentRefusal": true,
+    "proposedBehavior": "Retain original root assessment across ignorable whitespace removal"
+  }
+]
