@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-29",
+  "consumerHead": "0f1d949e758645f7944f617f2b4613e49161a195",
+  "consumerStatus": [],
+  "coreHead": "ad48cf60c1ddbd9a55aace152f837f3d3289c6c7",
+  "schemaHead": "691183c2eb3ee46668509fd0086b508491d2eac3",
+  "method": "Read-only adoption contract/composition inspection",
+  "files": [
+    {
+      "path": "src/Bosak.Braid.Application/ISourceInspector.cs",
+      "sha256": "c056718a34813df36972456d6b813ee20e9815f30db4f3c7e380c60023909aa9"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/SourceAuthoringCapabilities.cs",
+      "sha256": "183ae30a2c80826e2cdf8b628c623c5c007c3fe20d01499795e3bbc07040e197"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/IResourceReader.cs",
+      "sha256": "4075450840f46a10b665ad49b785f752a5f40b2256cf29049888819eb2eb3428"
+    },
+    {
+      "path": "src/Bosak.Braid.Application/RestrictedExportSession.cs",
+      "sha256": "f32bfecdedfb712df1ea5532fb3e5333353f9790c3b05a3c7be88d57dd377d2c"
+    },
+    {
+      "path": "src/Bosak.Braid.Infrastructure/BosakSourceInspector.cs",
+      "sha256": "5678c192a12588b9f3e9b480398a1bff74b8cc7735902f07bf9e6cd357fbf748"
+    },
+    {
+      "path": "src/Bosak.Braid.Desktop/Program.cs",
+      "sha256": "66f4253b54bb15cc6e57b14c9292e1be702325ea65cc11b7ac5c0e5ec9d86097"
+    },
+    {
+      "path": "src/Bosak.Braid.Workbench/BraidApp.cs",
+      "sha256": "26fe030f495e3704bb3a63d41be253e04632b2d0e8733ebb1c0624f42cde0bc2"
+    },
+    {
+      "path": "eng/Bosak.Dependency.props",
+      "sha256": "70d7f31e049da218c2468ef056ccd8648f4fd188745a0cf98e23f037bdce28d6"
+    }
+  ]
+}

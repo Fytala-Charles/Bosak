@@ -195,3 +195,7 @@ The [bounded presence assertion candidate](docs/schema-presence-implementation/R
 [Deterministic consumer facade lifecycle proof](docs/braid-lifecycle-proof/README.md).
 
 [Facade lifecycle contract and proof review](docs/braid-lifecycle-review/README.md).
+
+[Finite consumer read-only session adoption proposal](docs/braid-readonly-adoption/README.md).
+
+[Read-only consumer adoption proposal review](docs/braid-readonly-adoption-review/README.md).

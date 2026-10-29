@@ -1,0 +1,66 @@
+{
+  "date": "2026-10-29",
+  "scope": "Finite inspection-only consumer adoption proposal and compiled draft contract; no implementation",
+  "files": [
+    {
+      "path": ".gitattributes",
+      "bytes": 115,
+      "sha256": "3cd4e6f7f6c9f56bec192d2d9b7c741ac58d908567bd3f7f8352bf54ee51678f"
+    },
+    {
+      "path": "evidence/compiled-contract-identities.json",
+      "bytes": 457,
+      "sha256": "f52e91ac6ef31db0291b2ef2c8b57c4dc20e808194540fdb21ad3995f78d756c"
+    },
+    {
+      "path": "evidence/consumer-source-identities.json",
+      "bytes": 1582,
+      "sha256": "185c8a325c6e69d63550d0023f7c10932be26ba557663a95bbe4e6cde23cbf2e"
+    },
+    {
+      "path": "evidence/contract-build.txt",
+      "bytes": 526,
+      "sha256": "238d067e2c3d9acd39fe4b7300dbca03031fe539ba71b70281aecb53cb053ca9"
+    },
+    {
+      "path": "evidence/contract-xml-documentation.xml",
+      "bytes": 21503,
+      "sha256": "6ec4ca4f0e35a8898a79573ca7a9db7d11b0b06970be24355e9e95dc29e11ec0"
+    },
+    {
+      "path": "evidence/documentation-checks.json",
+      "bytes": 4260,
+      "sha256": "b44fdcfeb4f21ca60da5b2cb0119e6ce7e9fd78663a121496dc27276df04f0c0"
+    },
+    {
+      "path": "evidence/DraftContracts.cs.txt",
+      "bytes": 10809,
+      "sha256": "0aeabd474d149691ab6e6de1e647f0ce1e07f2b3da50e546f8a085cdcaad4a72"
+    },
+    {
+      "path": "evidence/preservation-check.json",
+      "bytes": 1523,
+      "sha256": "60c587034f894ad6098f0caaa3edff8ec9a8f73df094dfcac6d09b627709a5a6"
+    },
+    {
+      "path": "evidence/Proposal.csproj.txt",
+      "bytes": 741,
+      "sha256": "6f98cb19c01c14ba974865688b469d03e49d9c5337fe2099ed1117a8cdbadb13"
+    },
+    {
+      "path": "evidence/schema-docs-strict.txt",
+      "bytes": 2365,
+      "sha256": "130bc8137d95ff554eadb91e488401f20e47e2c45510bb98c688fbc3a6db638e"
+    },
+    {
+      "path": "README.md",
+      "bytes": 13137,
+      "sha256": "5962a5397e654ee2a20b39a0098f35aa9a4344134a26dc83095f7c5cee9ca60f"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 485,
+      "sha256": "c93ae952b8ee91f3b8d6f7c8555f7d4e12e0c469a39207d901173f2a828cfbb1"
+    }
+  ]
+}
