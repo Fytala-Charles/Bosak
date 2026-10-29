@@ -669,3 +669,11 @@ Current canonical and review pages receive a separate HTML/local-destination che
 ## Bounded repeated decimal scope — 29 October 2026
 
 Current core/Schema canonical and new adoption/plan pages receive separate HTML/local-destination checks and the strict Schema docs checker. Source-identical qualification and sealed receipt preservation are verified; no fresh full engine/gate, screenshot or hosted-CI result is claimed. New receipts belong to `docs/schema-repeated-children/evidence`.
+
+## Bounded repetition implementation — 29 October 2026
+
+Current canonical and owning repetition/assessment guide pages receive HTML/local-destination checks with unchanged Fytala CSS plus strict Schema documentation checks. Raw runtime, source-preservation and documentation receipts are kept in `docs/schema-repeated-implementation/evidence`. No fresh full-core/gate, screenshot or hosted-CI result is claimed for the Schema-only candidate.
+
+## Repetition review checkpoint — 29 October 2026
+
+Current core/Schema canonical and review pages receive separate HTML/local-link and strict Schema documentation checks. Tested-source and original sealed evidence hashes are verified. New receipts are in `docs/schema-repetition-review/evidence`; no screenshot or fresh full-core/gate claim.

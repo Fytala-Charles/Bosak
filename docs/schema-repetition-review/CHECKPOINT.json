@@ -1,0 +1,20 @@
+{
+  "date": "2026-10-29",
+  "authorization": "Continue review and commit/push recommendations, then separately scope fn:count assertions",
+  "core": {
+    "base": "9e4d4d82a27270ec0fa72c3f3f406513a0358d6f",
+    "target": "origin/checkpoint/restart-2026-10-29",
+    "deliveryResolver": "git log -1 --format=%H -- docs/schema-repetition-review/README.md"
+  },
+  "schema": {
+    "base": "77c740ca5c86f9a98afbeacbe8949b0076da7abd",
+    "target": "origin/feature/bounded-document-assessment",
+    "deliveryResolver": "git log -1 --format=%H -- docs/REPEATED-DECIMAL-REVIEW.md",
+    "commit": "a462022a852575f84f0cc504f86771deaa118e0e",
+    "remoteVerified": true,
+    "workingTreeClean": true
+  },
+  "merge": false,
+  "tag": false,
+  "publication": false
+}

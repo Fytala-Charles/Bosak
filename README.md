@@ -144,4 +144,6 @@ The unpublished [optional decimal assessment candidate](docs/schema-optional-imp
 
 The [optional assessment review checkpoint](docs/schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.
 
-The next [bounded repeated-decimal scope](docs/schema-repeated-children/README.md) defines finite occurrence, assertion-cardinality and copy/projection boundaries before implementation.
+The unpublished [bounded repeated-decimal candidate](docs/schema-repeated-implementation/README.md) supports finite repetitions with original occurrence state and explicit cardinality/projection behavior.
+
+The [bounded repetition review checkpoint](docs/schema-repetition-review/README.md) records current implementation review and paired delivery identity.

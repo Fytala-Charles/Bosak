@@ -1,0 +1,12 @@
+{
+  "method": "OptionalDecimalAssessmentTests.OccurrenceCoverage_IsFinite",
+  "minimum": "0",
+  "maximum": "2",
+  "beforeSupported": false,
+  "afterSupported": true,
+  "afterProfile": "decimal-sequence-assertions-v3",
+  "reason": "Exactly the formerly refused repeated capability adopted by this slice",
+  "originalSourceSha256": "3dc3e43467afff66af141bfa39349ae720e2d40e97f00dd0bb814be227bd0e62",
+  "currentSourceSha256": "dc2bc1ee47acc4d30aaf1340c2d503cdf5ed35a4c6458c598a4d2eead1d75bc6",
+  "recordedBeforeProductionEdits": true
+}
