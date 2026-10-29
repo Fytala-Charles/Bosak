@@ -1,0 +1,207 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "Probe/1.0.0": {
+        "dependencies": {
+          "Bosak.XPath.Api": "1.26.2",
+          "Bosak.XPath.Providers": "1.26.2",
+          "Bosak.XmlDb.Xdm": "1.0.0"
+        },
+        "runtime": {
+          "Probe.dll": {}
+        }
+      },
+      "Bosak.XPath.Api/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Compiler": "1.26.2",
+          "Bosak.XPath.Core": "1.26.2",
+          "Bosak.XPath.Parser": "1.26.2",
+          "Bosak.XPath.Runtime": "1.26.2",
+          "Bosak.XPath.Standard": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Api.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Compiler/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Core": "1.26.2",
+          "Bosak.XPath.Parser": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Compiler.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Core/1.26.2": {
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Core.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Parser/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Core": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Parser.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Providers/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Core": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Providers.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Runtime/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Compiler": "1.26.2",
+          "Bosak.XPath.Core": "1.26.2",
+          "Bosak.XPath.Providers": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Runtime.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XPath.Standard/1.26.2": {
+        "dependencies": {
+          "Bosak.XPath.Core": "1.26.2",
+          "Bosak.XPath.Providers": "1.26.2",
+          "Bosak.XPath.Runtime": "1.26.2"
+        },
+        "runtime": {
+          "lib/net10.0/Bosak.XPath.Standard.dll": {
+            "assemblyVersion": "1.26.2.0",
+            "fileVersion": "1.26.2.0"
+          }
+        }
+      },
+      "Bosak.XmlDb.Core/1.0.0": {
+        "runtime": {
+          "Bosak.XmlDb.Core.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Bosak.XmlDb.Storage/1.0.0": {
+        "dependencies": {
+          "Bosak.XmlDb.Core": "1.0.0"
+        },
+        "runtime": {
+          "Bosak.XmlDb.Storage.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "Bosak.XmlDb.Xdm/1.0.0": {
+        "dependencies": {
+          "Bosak.XPath.Core": "1.26.2",
+          "Bosak.XmlDb.Core": "1.0.0",
+          "Bosak.XmlDb.Storage": "1.0.0"
+        },
+        "runtime": {
+          "Bosak.XmlDb.Xdm.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Probe/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Bosak.XPath.Api/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4M0uR1Ayw7xvaljx2SSWWVTFL+PCEyR0zC7miucW2+Q3HOjU1z3gL5JHjpUiioSaHyQ+B0L3vU2Imnzq/DB6hQ==",
+      "path": "bosak.xpath.api/1.26.2",
+      "hashPath": "bosak.xpath.api.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Compiler/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5pFNGMSlgfLFtIU6Bx2KPMFjv75PFc7pNtHtMuQwOLfqZ8R8GctQNoisFUJIraFBmRzYBKUAChwJ3CZA2I6ijg==",
+      "path": "bosak.xpath.compiler/1.26.2",
+      "hashPath": "bosak.xpath.compiler.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Core/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-u+6W0zbYaFVP2scOdlzPJfzh9LW3vAGi1M73J6kS3auXN+XJuidm8+UidNW6HZvu0a2PnxMu8VK3NpHDYoPN2A==",
+      "path": "bosak.xpath.core/1.26.2",
+      "hashPath": "bosak.xpath.core.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Parser/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-VHvx/l7uLRcRVYnYuHFknDVL50GfluUIN527PncjozhgRRIBpyxDNeeTpAxp9AS1dfQP5yeUYbn27DPLeohwiQ==",
+      "path": "bosak.xpath.parser/1.26.2",
+      "hashPath": "bosak.xpath.parser.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Providers/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0j69tKO7Or0CN4R2UESZdmZ1aWHSQcZcgfsZAtLB/GnyNYfWuTPakZlzFEEYylzjMN63wNX7uR0lT6t9IQ35iQ==",
+      "path": "bosak.xpath.providers/1.26.2",
+      "hashPath": "bosak.xpath.providers.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Runtime/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WP1QajUtT8S9Afw2Qp4P80csF36kuChxNseBkmV/UVjaaJrXGd962r9qQkn4pCjWSDPg0vh8HHJrmr6zw2QLAg==",
+      "path": "bosak.xpath.runtime/1.26.2",
+      "hashPath": "bosak.xpath.runtime.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XPath.Standard/1.26.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-369MJP1KC98hRknasMNSVDGxh2yHycRO5A6lU0B5Lca6Fwn9SVVJ/LSSPlUuS1lH+NhlyszCLQuDlsWmaWG7nw==",
+      "path": "bosak.xpath.standard/1.26.2",
+      "hashPath": "bosak.xpath.standard.1.26.2.nupkg.sha512"
+    },
+    "Bosak.XmlDb.Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Bosak.XmlDb.Storage/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Bosak.XmlDb.Xdm/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

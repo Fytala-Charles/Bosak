@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="b45b6dee-4943-44f5-937e-cc20d97acd97" name="charl@CHARLES 2026-10-29 19:12:03" runUser="CHARLES\charl" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2026-10-29T19:12:03.4371603+01:00" queuing="2026-10-29T19:12:03.4371605+01:00" start="2026-10-29T19:12:01.9178834+01:00" finish="2026-10-29T19:12:03.4404618+01:00" />
+  <TestSettings name="default" id="4d828c4b-8323-4bf4-a525-76097da13d6e">
+    <Deployment runDeploymentRoot="charl_CHARLES_2026-10-29_19_12_03" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="51b819e5-9c04-474e-8e61-a322dc8b66ef" testId="03195bf7-5763-7aca-386a-9ef7688af8b5" testName="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)" computerName="CHARLES" duration="00:00:00.0031689" startTime="2026-10-29T19:12:03.3561191+01:00" endTime="2026-10-29T19:12:03.3561192+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="51b819e5-9c04-474e-8e61-a322dc8b66ef" />
+    <UnitTestResult executionId="f16de046-ab86-4b20-920c-a5c8ef3099e8" testId="6154efbb-fb29-8330-11ad-bdce082324fd" testName="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)" computerName="CHARLES" duration="00:00:00.5400220" startTime="2026-10-29T19:12:03.3528191+01:00" endTime="2026-10-29T19:12:03.3528347+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f16de046-ab86-4b20-920c-a5c8ef3099e8" />
+    <UnitTestResult executionId="906d5fe5-dcfe-4bd4-b279-34b77b518935" testId="476a66c0-c1fe-e379-2583-08da383264c2" testName="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)" computerName="CHARLES" duration="00:00:00.0019331" startTime="2026-10-29T19:12:03.3582887+01:00" endTime="2026-10-29T19:12:03.3582888+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="906d5fe5-dcfe-4bd4-b279-34b77b518935" />
+    <UnitTestResult executionId="62aba373-5aa0-4061-b690-609b7487f156" testId="44775268-c444-4c3a-bd81-de1e5bc6b97b" testName="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)" computerName="CHARLES" duration="00:00:00.0018329" startTime="2026-10-29T19:12:03.3603268+01:00" endTime="2026-10-29T19:12:03.3603269+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="62aba373-5aa0-4061-b690-609b7487f156" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1)" storage="d:\development\bosak\.guard-tmp\braid-candidate\tests\bosak.braid.infrastructure.tests\bin\release\net10.0\bosak.braid.infrastructure.tests.dll" id="03195bf7-5763-7aca-386a-9ef7688af8b5">
+      <Execution id="51b819e5-9c04-474e-8e61-a322dc8b66ef" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\braid-candidate\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests" name="ReadableCandidate_EncodingAndRepeat_ExactEvidence" />
+    </UnitTest>
+    <UnitTest name="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2)" storage="d:\development\bosak\.guard-tmp\braid-candidate\tests\bosak.braid.infrastructure.tests\bin\release\net10.0\bosak.braid.infrastructure.tests.dll" id="44775268-c444-4c3a-bd81-de1e5bc6b97b">
+      <Execution id="62aba373-5aa0-4061-b690-609b7487f156" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\braid-candidate\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests" name="ReadableCandidate_EncodingAndRepeat_ExactEvidence" />
+    </UnitTest>
+    <UnitTest name="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0)" storage="d:\development\bosak\.guard-tmp\braid-candidate\tests\bosak.braid.infrastructure.tests\bin\release\net10.0\bosak.braid.infrastructure.tests.dll" id="6154efbb-fb29-8330-11ad-bdce082324fd">
+      <Execution id="f16de046-ab86-4b20-920c-a5c8ef3099e8" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\braid-candidate\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests" name="ReadableCandidate_EncodingAndRepeat_ExactEvidence" />
+    </UnitTest>
+    <UnitTest name="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3)" storage="d:\development\bosak\.guard-tmp\braid-candidate\tests\bosak.braid.infrastructure.tests\bin\release\net10.0\bosak.braid.infrastructure.tests.dll" id="476a66c0-c1fe-e379-2583-08da383264c2">
+      <Execution id="906d5fe5-dcfe-4bd4-b279-34b77b518935" />
+      <TestMethod codeBase="D:\Development\Bosak\.guard-tmp\braid-candidate\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests" name="ReadableCandidate_EncodingAndRepeat_ExactEvidence" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="03195bf7-5763-7aca-386a-9ef7688af8b5" executionId="51b819e5-9c04-474e-8e61-a322dc8b66ef" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6154efbb-fb29-8330-11ad-bdce082324fd" executionId="f16de046-ab86-4b20-920c-a5c8ef3099e8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="476a66c0-c1fe-e379-2583-08da383264c2" executionId="906d5fe5-dcfe-4bd4-b279-34b77b518935" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="44775268-c444-4c3a-bd81-de1e5bc6b97b" executionId="62aba373-5aa0-4061-b690-609b7487f156" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="4" executed="4" passed="4" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.8.2+699d445a1a (64-bit .NET 10.0.11)&#xD;
+[xUnit.net 00:00:00.41]   Discovering: Bosak.Braid.Infrastructure.Tests&#xD;
+[xUnit.net 00:00:00.53]   Discovered:  Bosak.Braid.Infrastructure.Tests&#xD;
+[xUnit.net 00:00:00.53]   Starting:    Bosak.Braid.Infrastructure.Tests&#xD;
+[xUnit.net 00:00:01.11]   Finished:    Bosak.Braid.Infrastructure.Tests&#xD;
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

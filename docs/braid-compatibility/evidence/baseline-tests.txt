@@ -1,0 +1,110 @@
+  Determining projects to restore...
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Standard\Bosak.XPath.Standard.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Compiler\Bosak.XPath.Compiler.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Runtime\Bosak.XPath.Runtime.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XQuery\Bosak.XQuery.csproj (in 80 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Parser\Bosak.XPath.Parser.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.Xslt\Bosak.Xslt.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Core\Bosak.XPath.Core.csproj (in 79 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Providers\Bosak.XPath.Providers.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Api\Bosak.XPath.Api.csproj (in 78 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Core\Bosak.Braid.Core.csproj (in 209 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Application\Bosak.Braid.Application.csproj (in 209 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Infrastructure\Bosak.Braid.Infrastructure.csproj (in 210 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Workbench\Bosak.Braid.Workbench.csproj (in 218 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Core.Tests\Bosak.Braid.Core.Tests.csproj (in 225 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Application.Tests\Bosak.Braid.Application.Tests.csproj (in 225 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\Bosak.Braid.Infrastructure.Tests.csproj (in 225 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Workbench.Tests\Bosak.Braid.Workbench.Tests.csproj (in 226 ms).
+  Restored D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Desktop\Bosak.Braid.Desktop.csproj (in 248 ms).
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Bosak.Braid.Core -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Core\bin\Release\net10.0\Bosak.Braid.Core.dll
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Bosak.Braid.Core.Tests -> D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Core.Tests\bin\Release\net10.0\Bosak.Braid.Core.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Core.Tests\bin\Release\net10.0\Bosak.Braid.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+  Bosak.Braid.Application -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Application\bin\Release\net10.0\Bosak.Braid.Application.dll
+A total of 1 test files matched the specified pattern.
+  Bosak.Braid.Application.Tests -> D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Application.Tests\bin\Release\net10.0\Bosak.Braid.Application.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Application.Tests\bin\Release\net10.0\Bosak.Braid.Application.Tests.dll (.NETCoreApp,Version=v10.0)
+  Bosak.XPath.Core -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Core\bin\Debug\net10.0\Bosak.XPath.Core.dll
+A total of 1 test files matched the specified pattern.
+  Bosak.XPath.Parser -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Parser\bin\Debug\net10.0\Bosak.XPath.Parser.dll
+Results File: D:\Development\Bosak\.guard-tmp\braid-baseline-results\charl_CHARLES_2026-10-29_19_09_17_net10.0.trx
+
+Passed!  - Failed:     0, Passed:    27, Skipped:     0, Total:    27, Duration: 119 ms - Bosak.Braid.Core.Tests.dll (net10.0)
+  Bosak.XPath.Compiler -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Compiler\bin\Debug\net10.0\Bosak.XPath.Compiler.dll
+  Bosak.Braid.Workbench -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Workbench\bin\Release\net10.0\Bosak.Braid.Workbench.dll
+Results File: D:\Development\Bosak\.guard-tmp\braid-baseline-results\charl_CHARLES_2026-10-29_19_09_18_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   514, Skipped:     0, Total:   514, Duration: 194 ms - Bosak.Braid.Application.Tests.dll (net10.0)
+  Bosak.XPath.Providers -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Providers\bin\Debug\net10.0\Bosak.XPath.Providers.dll
+  Bosak.XPath.Runtime -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Runtime\bin\Debug\net10.0\Bosak.XPath.Runtime.dll
+  Bosak.XPath.Standard -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Standard\bin\Debug\net10.0\Bosak.XPath.Standard.dll
+  Bosak.XPath.Api -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XPath.Api\bin\Debug\net10.0\Bosak.XPath.Api.dll
+  Bosak.XQuery -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.XQuery\bin\Debug\net10.0\Bosak.XQuery.dll
+  Bosak.Xslt -> D:\Development\Bosak\.guard-tmp\braid-engine-baseline\src\Bosak.Xslt\bin\Debug\net10.0\Bosak.Xslt.dll
+  Bosak.Braid.Infrastructure -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Infrastructure\bin\Release\net10.0\Bosak.Braid.Infrastructure.dll
+  Isolated qualification: committed-source identities verified externally; original dependency guard unchanged in source archive.
+  Bosak.Braid.Desktop -> D:\Development\Bosak\.guard-tmp\braid-baseline\src\Bosak.Braid.Desktop\bin\Release\net10.0\Bosak.Braid.Desktop.dll
+  Bosak.Braid.Workbench.Tests -> D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Workbench.Tests\bin\Release\net10.0\Bosak.Braid.Workbench.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Workbench.Tests\bin\Release\net10.0\Bosak.Braid.Workbench.Tests.dll (.NETCoreApp,Version=v10.0)
+  Bosak.Braid.Infrastructure.Tests -> D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll
+Test run for D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\bin\Release\net10.0\Bosak.Braid.Infrastructure.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:01.59]     Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0) [FAIL]
+[xUnit.net 00:00:01.59]     Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1) [FAIL]
+[xUnit.net 00:00:01.59]     Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3) [FAIL]
+[xUnit.net 00:00:01.59]     Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2) [FAIL]
+  Failed Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 0) [268 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+                  ↓ (pos 7)
+Expected: "1.26.2+6a3372fc3b91e733b71a426cf40f26feaa"···
+Actual:   "1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0"···
+                  ↑ (pos 7)
+  Stack Trace:
+     at Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(Int32 variant) in D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\ReadableInsertionIntegrationTests.cs:line 64
+--- End of stack trace from previous location ---
+  Failed Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 1) [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+                  ↓ (pos 7)
+Expected: "1.26.2+6a3372fc3b91e733b71a426cf40f26feaa"···
+Actual:   "1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0"···
+                  ↑ (pos 7)
+  Stack Trace:
+     at Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(Int32 variant) in D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\ReadableInsertionIntegrationTests.cs:line 64
+--- End of stack trace from previous location ---
+  Failed Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 3) [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+                  ↓ (pos 7)
+Expected: "1.26.2+6a3372fc3b91e733b71a426cf40f26feaa"···
+Actual:   "1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0"···
+                  ↑ (pos 7)
+  Stack Trace:
+     at Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(Int32 variant) in D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\ReadableInsertionIntegrationTests.cs:line 64
+--- End of stack trace from previous location ---
+  Failed Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(variant: 2) [< 1 ms]
+  Error Message:
+   Assert.Equal() Failure: Strings differ
+                  ↓ (pos 7)
+Expected: "1.26.2+6a3372fc3b91e733b71a426cf40f26feaa"···
+Actual:   "1.26.2+2e33d3b7c02eb20a1bfe757a73bb78ebb0"···
+                  ↑ (pos 7)
+  Stack Trace:
+     at Bosak.Braid.Infrastructure.Tests.ValueOfInsertionIntegrationTests.ReadableCandidate_EncodingAndRepeat_ExactEvidence(Int32 variant) in D:\Development\Bosak\.guard-tmp\braid-baseline\tests\Bosak.Braid.Infrastructure.Tests\ReadableInsertionIntegrationTests.cs:line 64
+--- End of stack trace from previous location ---
+Results File: D:\Development\Bosak\.guard-tmp\braid-baseline-results\charl_CHARLES_2026-10-29_19_09_32_net10.0.trx
+
+Passed!  - Failed:     0, Passed:   370, Skipped:     0, Total:   370, Duration: 26 s - Bosak.Braid.Workbench.Tests.dll (net10.0)
+Results File: D:\Development\Bosak\.guard-tmp\braid-baseline-results\charl_CHARLES_2026-10-29_19_09_28_net10.0.trx
+
+Failed!  - Failed:     4, Passed:   961, Skipped:     0, Total:   965, Duration: 1 m 55 s - Bosak.Braid.Infrastructure.Tests.dll (net10.0)

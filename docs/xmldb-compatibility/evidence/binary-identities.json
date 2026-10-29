@@ -1,0 +1,26 @@
+{
+  "baseline": {
+    "Bosak.XmlDb.Core.dll": "0b015b24799325e081f56140aa6c0fbaea79f1e0d4d000aee2105f08e0d0de18",
+    "Bosak.XmlDb.Storage.dll": "fc123f90fa6139a698ee4d259220f9293351eeb9fdf3fee2fd00a2492549bc40",
+    "Bosak.XmlDb.Xdm.dll": "5d5b2b28dae2ac77202a0e1512fdcaa630eaea97f3b88050f8d6150636b88934",
+    "Bosak.XPath.Api.dll": "06c7c35aa33caea04ad947ec7e71db4fb11f5e338a5fcaa818b706e81066b383",
+    "Bosak.XPath.Compiler.dll": "eebecb1dbf6192bf6d0ab36cc4fa930886b6d170dc40665c745e83fc36ffcd91",
+    "Bosak.XPath.Core.dll": "8bcf77c48470f36e1539f153c0221a39bb0a2106e8d0823eb39ce5e8f0680fa4",
+    "Bosak.XPath.Parser.dll": "99d6923317d5acf317349547f19e9a448e799df046c55b735408eaa08a9e0d4a",
+    "Bosak.XPath.Providers.dll": "a2c2a2f0b94d857bf3dab2ac1e0342e72278a6f07360ee58f806984aaac8fffb",
+    "Bosak.XPath.Runtime.dll": "55f73283bd8a6ace02ba06f7b74cc04488bbf24a46ada60b41c17ffb4384ad03",
+    "Bosak.XPath.Standard.dll": "35cdd7c37404695e031ca25813394ebff711edfd7df340f473c7d06d7ef4701e"
+  },
+  "candidate": {
+    "Bosak.XmlDb.Core.dll": "2af2b12f663f7ea02c99d50fe8b8c39e321e1bfceb9804c43b82fb0e705ab1c0",
+    "Bosak.XmlDb.Storage.dll": "5c7086c90c0fa1b657324939b141452ece2dd48b2d39277b523c0f96626ea634",
+    "Bosak.XmlDb.Xdm.dll": "39d43e36a28572fc458d2ba79729a69ee81e583c0737059beae29182a53fe203",
+    "Bosak.XPath.Api.dll": "63a4eb2599f72673fd931b12b2e345340d3e0b2f47bec4418e9cddc21b470fa7",
+    "Bosak.XPath.Compiler.dll": "285d8dbaa2a3fb8647793712ac27bfc44c532eec0b694d6ab40ee500b9093028",
+    "Bosak.XPath.Core.dll": "5d806074c7f66bf438667c5398b04cd13df5b6def358b2c1bebb0bf81aea3816",
+    "Bosak.XPath.Parser.dll": "836abeb13412c323e2050a6fef855df193e595c910b4d657a2bf7b87b849942c",
+    "Bosak.XPath.Providers.dll": "e08d3d8672968424e187dd43724958e5928facc8c1d539471b2fe61656e06b0c",
+    "Bosak.XPath.Runtime.dll": "4ed5be3f0cdd07b7cbbd78853205a630b10d3a286c58c6c6444ffc2e545a6606",
+    "Bosak.XPath.Standard.dll": "1d460f9b5f2cad75bd893290d13034a5160d5c0a53818cc58c339ed43802c184"
+  }
+}

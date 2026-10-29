@@ -155,3 +155,11 @@ The unpublished [count assertion candidate](docs/schema-count-implementation/REA
 The [bounded presence assertion candidate](docs/schema-presence-implementation/README.md) adds exists/empty predicates while preserving count and typed-copy behavior.
 
 [Presence assertion implementation review](docs/schema-presence-review/README.md).
+
+[Consumer compatibility and native Schema priorities](docs/schema-consumer-priorities/README.md).
+
+[Isolated persistent-provider compatibility qualification](docs/xmldb-compatibility/README.md).
+
+[Isolated authoring/preview source compatibility qualification](docs/braid-compatibility/README.md).
+
+[Consumer qualification review](docs/consumer-qualification-review/README.md).
