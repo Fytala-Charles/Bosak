@@ -437,6 +437,7 @@
 //                      | Charles Korthout | 2.208 | 28-10-2026     | Resolve pending XQuery initial focus at semantic context-load instructions (1.30.0).     |
 //                      | Charles Korthout | 2.209 | 28-10-2026     | Pass constructor-local namespace-copy modes to provider node-content cloning (1.31.0). |
 //                      | Charles Korthout | 2.210 | 28-10-2026     | Carry construction mode and original attribute metadata through provider hooks (1.32.0). |
+//                      | Charles Korthout | 2.211 | 29-10-2026     | Share actual schema-element membership across node matching and sequence subtyping.       |
 // ===========================================================================================================================================================
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
@@ -6166,46 +6167,95 @@ internal static class VmEngine
         var targetDecl = context.GetSchemaElement(targetNs, targetLocal)
             ?? throw new InvalidOperationException($"XPST0008: Schema element declaration Q{{{targetNs}}}{targetLocal} is not defined.");
 
-        var nodeDeclName = node.SchemaElementDeclaration;
-        if (nodeDeclName is null)
+        if (node.SchemaElementDeclaration is null)
             return false;
 
-        XmlSchemaElement? actualDecl = context.GetSchemaElement(nodeDeclName.Value.NamespaceUri, nodeDeclName.Value.LocalName);
-        if (actualDecl is null)
+        // XPath 3.1 2.5.5.4 uses the global declaration for the node's name N,
+        // including when its governing validation declaration is local.
+        var candidateDecl = context.GetSchemaElement(node.NamespaceUri, node.LocalName);
+        if (candidateDecl is null || !IsActualSubstitutionMember(candidateDecl, targetDecl, context))
+            return false;
+        if (node.IsNilled && !candidateDecl.IsNillable)
             return false;
 
-        if (!IsSameQName(nodeDeclName.Value, targetNs, targetLocal))
-        {
-            var currentDecl = actualDecl;
-            while (currentDecl != null)
-            {
-                var sg = currentDecl.SubstitutionGroup;
-                if (sg is null || sg.IsEmpty)
-                    return false;
-                if (sg.Namespace == targetNs && sg.Name == targetLocal)
-                    break;
-                currentDecl = context.GetSchemaElement(sg.Namespace, sg.Name);
-            }
-            if (currentDecl is null)
-                return false;
-        }
-
-        bool isNilled = node.IsNilled;
-        if (isNilled)
-            return actualDecl.IsNillable;
-
-        // XmlSchemaElement.SchemaType is null for type-referenced declarations; the
-        // post-compilation ElementSchemaType carries the effective type (REQ-105).
-        var targetType = targetDecl.ElementSchemaType ?? targetDecl.SchemaType;
-        if (targetType is null)
+        var candidateType = candidateDecl.ElementSchemaType ?? candidateDecl.SchemaType;
+        if (candidateType is null)
             return true;
 
-        // The annotation names the node's type; an anonymous type has no name, in which
-        // case the governing declaration's own type is the annotation (validation-0501).
+        // Retain the existing anonymous-type fallback. Named annotations must derive
+        // from declaration N's type, rather than the potentially broader head type.
         var actualType = ResolveSchemaTypeAnnotation(context, node.SchemaTypeAnnotation)
-            ?? actualDecl.ElementSchemaType ?? actualDecl.SchemaType;
-        return actualType is not null
-            && XmlSchemaType.IsDerivedFrom(actualType, targetType, XmlSchemaDerivationMethod.Empty);
+            ?? candidateType;
+        return XmlSchemaType.IsDerivedFrom(actualType, candidateType, XmlSchemaDerivationMethod.Empty);
+    }
+
+    /// <summary>Tests actual membership in a compiled single-affiliation substitution group.</summary>
+    private static bool IsActualSubstitutionMember(XmlSchemaElement candidate, XmlSchemaElement head, EvaluationContext context)
+    {
+        if (candidate.IsAbstract)
+            return false;
+        if (ReferenceEquals(candidate, head))
+            return true;
+        if ((head.BlockResolved & XmlSchemaDerivationMethod.Substitution) != 0)
+            return false;
+
+        // Affiliation is transitive; an intermediate element's block applies to
+        // its own group, not automatically to the group of a different head.
+        var current = candidate;
+        int remaining = context.SchemaSet!.GlobalElements.Count;
+        while (remaining-- > 0)
+        {
+            var affiliation = current.SubstitutionGroup;
+            if (affiliation.IsEmpty)
+                return false;
+            current = context.GetSchemaElement(affiliation.Namespace, affiliation.Name);
+            if (current is null)
+                return false;
+            if (ReferenceEquals(current, head))
+                break;
+        }
+        if (!ReferenceEquals(current, head))
+            return false;
+
+        var candidateType = candidate.ElementSchemaType;
+        var headType = head.ElementSchemaType;
+        if (candidateType is null || headType is null ||
+            !XmlSchemaType.IsDerivedFrom(candidateType, headType, head.BlockResolved))
+            return false;
+
+        // XSD 1.0 3.3.6: derivation methods must also avoid prohibited
+        // substitutions on the head and intermediate complex type definitions.
+        var methods = XmlSchemaDerivationMethod.Empty;
+        var prohibited = head.BlockResolved;
+        if (headType is XmlSchemaComplexType headComplex)
+            prohibited |= headComplex.BlockResolved;
+        for (var type = candidateType; !ReferenceEquals(type, headType);)
+        {
+            methods |= type.DerivedBy;
+            var baseType = type.BaseXmlSchemaType;
+            if (baseType is null || ReferenceEquals(baseType, type))
+                break;
+            if (baseType is XmlSchemaComplexType complex)
+                prohibited |= complex.BlockResolved;
+            type = baseType;
+        }
+        return (methods & prohibited) == 0;
+    }
+
+    /// <summary>Compares schema-element types by actual member-set containment.</summary>
+    private static bool IsSchemaElementSubtype(string actual, string test, EvaluationContext context)
+    {
+        var (actualNs, actualLocal) = ResolveTypeQName(actual[15..^1].Trim(), context);
+        var (testNs, testLocal) = ResolveTypeQName(test[15..^1].Trim(), context);
+        var actualHead = context.GetSchemaElement(actualNs, actualLocal);
+        var testHead = context.GetSchemaElement(testNs, testLocal);
+        if (actualHead is null || testHead is null || context.SchemaSet is null)
+            return false;
+        foreach (XmlSchemaElement candidate in context.SchemaSet.GlobalElements.Values)
+            if (IsActualSubstitutionMember(candidate, actualHead, context) &&
+                !IsActualSubstitutionMember(candidate, testHead, context))
+                return false;
+        return true;
     }
 
     /// <summary>
@@ -14944,6 +14994,10 @@ internal static class VmEngine
 
         if (actualFamily || testFamily)
             return IsFunctionFamilySubtype(actual, test, context);
+
+        if (context is not null && actual.StartsWith("schema-element(", StringComparison.Ordinal) &&
+            test.StartsWith("schema-element(", StringComparison.Ordinal) && actual.EndsWith(')') && test.EndsWith(')'))
+            return IsSchemaElementSubtype(actual, test, context);
 
         // User-defined schema simple types (atomic restrictions, unions, and lists) can
         // be related even when their lexical forms differ (e.g. Q{ns}local vs p:local).

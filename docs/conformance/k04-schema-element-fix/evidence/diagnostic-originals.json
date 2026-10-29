@@ -1,0 +1,314 @@
+[
+  {
+    "Suite": "qt3",
+    "Name": "K2-MatchesFunc-16a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-210",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-231",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-232",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-422",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-423",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-424",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-505",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCastable-6",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastableExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCastable-7",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastableExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-cast-gYear-002",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.derived.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-cast-gYear-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.derived.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-cast-gYearMonth-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.derived.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-codepoints-to-string-002",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\codepoints-to-string.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-codepoints-to-string-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\codepoints-to-string.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-codepoints-to-string-004",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\codepoints-to-string.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "fn-matches-50",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00056",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00086",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00102a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-001",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-002",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-004",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-005",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-006",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-007",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-008",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-009",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-010",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-011",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-030",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-031",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-032",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "xs-double-004",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\xs\\double.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "xs-double-005",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\xs\\double.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "xs-float-004",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\xs\\float.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-020",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-021",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-022",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-023",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-024",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "substitution-025",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-MatchesFunc-16",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-231a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "K2-SeqExprCast-232a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "cbcl-cast-gYear-003a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\CastExpr.derived.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00056a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00086a",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "re00102",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\fn\\matches.re.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "xs-double-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\xs\\double.xml"
+  },
+  {
+    "Suite": "qt3",
+    "Name": "xs-float-003",
+    "SuiteRoot": "D:\\Development\\Bosak\\tests\\qt3tests",
+    "SetFile": "D:\\Development\\Bosak\\tests\\qt3tests\\xs\\float.xml"
+  }
+]

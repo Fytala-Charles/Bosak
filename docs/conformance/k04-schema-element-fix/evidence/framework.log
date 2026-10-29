@@ -1,0 +1,26 @@
+{
+  "framework": ".NET 10.0.11",
+  "substitutionGroupPropertyType": "System.Xml.XmlQualifiedName",
+  "schemas": [
+    {
+      "name": "substitution.xsd",
+      "file": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport\\substitution.xsd",
+      "stage": "Complete",
+      "compiled": true,
+      "schemaCount": 1,
+      "globalElementCount": 9,
+      "errorType": null,
+      "message": null
+    },
+    {
+      "name": "substitution11.xsd",
+      "file": "D:\\Development\\Bosak\\tests\\qt3tests\\prod\\SchemaImport\\substitution11.xsd",
+      "stage": "Add",
+      "compiled": false,
+      "schemaCount": 0,
+      "globalElementCount": 0,
+      "errorType": "System.Xml.Schema.XmlSchemaException",
+      "message": "The value for the \u0027substitutionGroup\u0027 attribute is invalid - \u0027s:H1 s:H2\u0027 is an invalid value for the \u0027substitutionGroup\u0027 attribute."
+    }
+  ]
+}
