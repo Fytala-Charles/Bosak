@@ -1,4 +1,4 @@
-Current development entry point: [Optional decimal scope delivery](schema-optional-children/delivery/README.md). Scope is prepared; implementation remains next. Delivery identities and remote targets are recorded in that checkpoint.
+Current development entry point: [Reviewed optional implementation checkpoint](schema-optional-review/README.md). The paired delivery supersedes the original uncommitted implementation capture.
 
 Current development entry point: [Native Schema assessment checkpoint](#native-schema-assessment-checkpoint--29-october-2026). The earlier integration, Apache publication and C44 checkpoints remain historical context.
 
@@ -18519,3 +18519,17 @@ Current delivery: [synchronized scope checkpoint](schema-optional-children/deliv
 What was built: synchronized scope/adoption/canonical guides, verified original evidence and paired remote checkpoint preparation. Core delivery resolver: `git log -1 --format=%H -- docs/schema-optional-children/delivery/README.md`.
 
 Schema scope delivery is committed and remote-verified at `33a9039a9fc605f8f7192bfcec88ea559c5c0e19` on `origin/feature/bounded-document-assessment`; its working tree is clean. Core delivery target remains `origin/checkpoint/restart-2026-10-29` (draft PR #467). Resolve the core delivery with `git log -1 --format=%H -- docs/schema-optional-children/delivery/README.md`. No merge or release.
+
+## Optional decimal implementation candidate — 29 October 2026
+
+The [bounded implementation](schema-optional-implementation/README.md) supersedes the earlier optional-scope next-action notices. Schema 0.6 adds local minimum-zero decimal particles, ordered matching, effective Boolean assertion conversion and present-only original state. Required-only v1 remains; optional schemas use v2. Core 1.34.1 corrects whitespace binding for empty element-only roots, retaining real-content/decimal edit refusal. Current Schema tests: 260 passes, 56 new cases; core adds five provider cases. Current candidate dependency references change only in the feature worktree; product pins, gates/fixtures and broader REQ acceptance remain unchanged. Full qualification is recorded separately in the new dossier; earlier sealed evidence remains unchanged. No commit/push/tag/publication in this step.
+
+Fresh final qualification: **24,214 complete core tests pass** (including 8,196 XSLT and 212 provider cases), **260 complete Schema tests pass** (56 new optional cases), normal QT3 **31,397/0/424**, qt4 **8,941/0/1,918**, 230 gated sets and 11 experimental passes. Exact skip names/reasons match the sealed integration checkpoint. Core build has zero errors and five warnings in unchanged Standard test/XSLT conformance sources; no new warning source is introduced. The optional-gap whole-document example and strict Schema documentation check pass. Original 45-case before evidence is 9 passed/36 failed; all 45 now pass alongside eleven added boundary cases. Five new core cases cover the root binding correction.
+
+Source bases/unchanged HEADs: core `6b362a15f6fb62eebc36f82e803e35faf42cecd4`, Schema `33a9039a9fc605f8f7192bfcec88ea559c5c0e19` on `feature/bounded-document-assessment`. What was built: internal occurrence particles, ordered present-child matching/state, assertion EBV, safe absent projections, empty-root shape normalization, 56 new Schema/five core cases and a gapped-document example. Source identities and raw qualification are in `docs/schema-optional-implementation`; earlier sealed dossiers remain byte-identical. Both trees have uncommitted candidate changes; no new remote update. Next: review this bounded slice and checkpoint it before selecting broader coverage. General API/session acceptance remains pending.
+
+## Optional decimal review checkpoint — 29 October 2026
+
+Current delivery: [reviewed optional implementation](schema-optional-review/README.md). Review found no further production defect; all changed source hashes match the qualified 24,214-core/260-Schema candidate and exact unchanged gates. Schema 0.6/core 1.34.1 remain unpublished. User-authorized checkpoint commits/pushes use the existing core checkpoint and Schema feature branches. Earlier uncommitted implementation notices are capture-time history. Next: separately scope bounded repeated decimal children; no repetition, full schema/session acceptance, consumer adoption or release is inferred.
+
+Schema optional implementation delivery: `773fd69faa9ff7a5bb27f1c4f8469f3024efc043`, remote-verified on `origin/feature/bounded-document-assessment` with a clean feature tree. Core review delivery resolver: `git log -1 --format=%H -- docs/schema-optional-review/README.md`; remote target `origin/checkpoint/restart-2026-10-29`. No merge or release.

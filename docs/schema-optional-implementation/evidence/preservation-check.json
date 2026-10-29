@@ -1,0 +1,12 @@
+{
+  "date": "2026-10-29",
+  "previousDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28
+  },
+  "normalRunnersAndFixturesUnchanged": true,
+  "exactSkipMappingComparisonPassed": true
+}

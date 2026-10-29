@@ -13,6 +13,7 @@
 //                      |==================|=======|================|=========================================================================================
 //                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
 //                      | Charles Korthout | 0.2   | 29-10-2026     | Verify failed attachment leaves original binding and fresh-node state intact             |
+//                      | Charles Korthout | 0.3   | 29-10-2026     | Cover empty element-only root normalization and retained mutation refusal (1.34.1)        |
 //                      |==================|=======|================|=========================================================================================
 // ===========================================================================================================================================================
 
@@ -25,6 +26,48 @@ namespace Bosak.XPath.Providers.Tests;
 /// <summary>Checks optional provider ownership and mutation refusal without coupling core to Schema.</summary>
 public sealed class XdmElementAssessmentTests
 {
+    /// <summary>Element-only whitespace and empty-element lexical forms do not change original root state.</summary>
+    [Fact]
+    public void EmptyElementOnlyRoot_WhitespaceRemovalRetainsBinding()
+    {
+        var root = XElement.Parse("<root>  </root>", LoadOptions.PreserveWhitespace);
+        var assessment = XdmElementAssessment.AnonymousElementOnly(new object(), new object());
+        assessment.AttachTo(root);
+        root.RemoveNodes();
+        Assert.Same(assessment, XdmElementAssessment.Get(root));
+        root.Value = "";
+        Assert.Same(assessment, XdmElementAssessment.Get(root));
+        root.Add(new XText("\t \n"));
+        Assert.Same(assessment, XdmElementAssessment.Get(root));
+        Assert.True(new XDocumentNode(root).HasNoTypedValue);
+    }
+
+    /// <summary>Ignoring element-only whitespace must not admit actual content mutations.</summary>
+    /// <param name="content">An inserted node or text value.</param>
+    [Theory]
+    [InlineData("text")]
+    [InlineData("child")]
+    [InlineData("comment")]
+    public void EmptyElementOnlyRoot_ActualMutationStillRefuses(string content)
+    {
+        var root = new XElement("root");
+        XdmElementAssessment.AnonymousElementOnly(new object(), new object()).AttachTo(root);
+        if (content == "child") root.Add(new XElement("n", 1));
+        else if (content == "comment") root.Add(new XComment("added"));
+        else root.Value = "added";
+        Assert.Throws<NotSupportedException>(() => XdmElementAssessment.Get(root));
+    }
+
+    /// <summary>Decimal leaf bindings retain lexical mutation checks even when values compare equally.</summary>
+    [Fact]
+    public void DecimalLeaf_WhitespaceEditStillRefuses()
+    {
+        var leaf = XElement.Parse("<n>2</n>");
+        XdmElementAssessment.Decimal(new object(), new object(), 2m).AttachTo(leaf);
+        leaf.Value = " 2 ";
+        Assert.Throws<NotSupportedException>(() => new XDocumentNode(leaf).TypedValue);
+    }
+
     /// <summary>A failed replacement preserves the original binding and its stale-content checks.</summary>
     [Fact]
     public void FailedReplacement_RetainsOriginalBinding()

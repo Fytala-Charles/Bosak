@@ -55,3 +55,7 @@ The next bounded native Schema slice is [optional decimal children](docs/schema-
 Scope refinement: a thirteenth isolated observation exposes ignorable-whitespace removal being refused for an empty element-only assessed root. Supporting all-optional-absent documents therefore needs a bounded provider binding correction. The future implementation proposes core patch 1.34.1 plus fresh complete core tests and exact conformance gates; current versions and production source stay unchanged. Both the initial twelve and extended thirteen-observation receipts are preserved in the optional-child dossier; they overlap.
 
 The [optional-child scope delivery](docs/schema-optional-children/delivery/README.md) records the paired review/backup branches. Optional support and the proposed version changes remain future implementation work.
+
+The bounded [optional decimal implementation](docs/schema-optional-implementation/README.md) is now a locally qualified candidate (Schema 0.6/core 1.34.1). Further structural coverage, broader schema/session acceptance and product adoption remain future work.
+
+The [optional assessment implementation](docs/schema-optional-review/README.md) is reviewed for checkpoint delivery. Bounded repeated-child coverage is the next scope; general schema/session acceptance and product adoption remain future work.

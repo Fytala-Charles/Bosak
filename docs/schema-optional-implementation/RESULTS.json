@@ -1,0 +1,160 @@
+{
+  "date": "2026-10-29",
+  "coreBase": "6b362a15f6fb62eebc36f82e803e35faf42cecd4",
+  "schemaBase": "33a9039a9fc605f8f7192bfcec88ea559c5c0e19",
+  "coreCandidate": "1.34.1",
+  "schemaDevelopmentLine": "0.6",
+  "uncommitted": true,
+  "build": {
+    "errors": 0,
+    "warnings": 5,
+    "note": "Warnings arise in unchanged Standard tests and XSLT conformance sources."
+  },
+  "tests": {
+    "corePassed": 24214,
+    "schemaPassed": 260,
+    "newProviderCases": 5,
+    "newOptionalCases": 56,
+    "failed": 0
+  },
+  "originalRegressionCohort": {
+    "total": 45,
+    "beforePassed": 9,
+    "beforeFailed": 36,
+    "afterPassed": 45,
+    "additionalBoundaryCases": 11
+  },
+  "gates": {
+    "qt3": [
+      31397,
+      0,
+      424
+    ],
+    "qt4": [
+      8941,
+      0,
+      1918
+    ],
+    "gatedSets": 230,
+    "experimentalPasses": 11,
+    "exactSkipMappings": {
+      "qt3": {
+        "unchanged": true,
+        "baseline": "docs/schema-integration/evidence/qt3-skips.txt",
+        "sha256": "05085148d6ebd07364f58a346fcaba116f76124518f337e43f8aeb116ba7a187"
+      },
+      "qt4": {
+        "unchanged": true,
+        "baseline": "docs/schema-integration/evidence/qt4-skips.txt",
+        "sha256": "a3be90df39aebb32e358d1515fa21a8ec50a39ea70b240468cb26bb73a8ea54a"
+      }
+    }
+  },
+  "receipts": [
+    {
+      "group": "core",
+      "passed": 202,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_46_net10.0.trx",
+      "sha256": "cb530f00b9ed12110afca973a87a98124613fcea409c5619a7afa4d70527b531"
+    },
+    {
+      "group": "core",
+      "passed": 66,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0.trx",
+      "sha256": "ddff78b65e31c8dec748a3a85b3c20239a595e23c0c0abb498c532df24813fe9"
+    },
+    {
+      "group": "core",
+      "passed": 132,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[1].trx",
+      "sha256": "3c86dd99616a4d67ebd925a1190790bb7a658dbe4e922cdde9e6a6f866a63501"
+    },
+    {
+      "group": "core",
+      "passed": 269,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[2].trx",
+      "sha256": "3a4b7e74456c805898c81a98f57d6e4f7165990fa639959bae844d5b94e41e20"
+    },
+    {
+      "group": "core",
+      "passed": 489,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[3].trx",
+      "sha256": "cec4e5d59f31bfba083b4fce10c475d2e75d417968e6c5df3a839e86fd4d13b7"
+    },
+    {
+      "group": "core",
+      "passed": 804,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[4].trx",
+      "sha256": "e01f162c07c56244266fffdd95cb66b10fc3dfd28ec56e5e377ae9362a8f31b1"
+    },
+    {
+      "group": "core",
+      "passed": 47,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[5].trx",
+      "sha256": "3509b05702e840269d9cb6e47dea12732790623a83cd80c7cdb681c706bfb140"
+    },
+    {
+      "group": "core",
+      "passed": 212,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_47_net10.0[6].trx",
+      "sha256": "2fdb37a2aac96866b580a75505f645df3e10562bd51e20e94991a9a056b766df"
+    },
+    {
+      "group": "core",
+      "passed": 13797,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_48_net10.0.trx",
+      "sha256": "65b20330ff1ff69842b5cba51e8468ae39f91fcc8e61fc607c900e6f3813bc71"
+    },
+    {
+      "group": "core",
+      "passed": 8196,
+      "failed": 0,
+      "receipt": "evidence/core-charl_CHARLES_2026-10-29_15_45_49_net10.0.trx",
+      "sha256": "44591d1fcb5a4da0056179db2e5f83a5ea75cf7dc554fee2c767a49b0540e63b"
+    },
+    {
+      "group": "schema",
+      "passed": 260,
+      "failed": 0,
+      "receipt": "evidence/schema-charl_CHARLES_2026-10-29_15_51_14_net10.0.trx",
+      "sha256": "3666be481b6612b9112efebc77a41d0e4d83fdb0df79c23aaf06ec0585e0f826"
+    },
+    {
+      "group": "before45",
+      "passed": 9,
+      "failed": 36,
+      "receipt": "evidence/before45-charl_CHARLES_2026-10-29_15_42_27_net10.0.trx",
+      "sha256": "21069f743bcfd6d0fdd42831b7e2a24f2328a81c54718d6ee243de9c4b8c8982"
+    }
+  ],
+  "preservedDossiers": {
+    "schema-integration": 39,
+    "schema-assessment": 23,
+    "schema-document-bridge": 28,
+    "schema-document-bridge/api-review": 28,
+    "schema-optional-children": 28
+  },
+  "example": {
+    "profile": "decimal-sequence-assertions-v2",
+    "laterDeclarationRetained": true,
+    "typedDecimal": true,
+    "total": 15,
+    "rootIdentity": true,
+    "preserve": true,
+    "strip": true
+  },
+  "publicInterfaceChanges": false,
+  "requiredOnlyV1Retained": true,
+  "signedOccurrencesUnsupported": true,
+  "productConsumerPinsChanged": false,
+  "publication": false
+}

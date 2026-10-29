@@ -14,6 +14,7 @@
 //                      | Charles Korthout | 0.1   | 29-10-2026     | Creation (REQ-009 bounded document assessment, 0.5 development line)                      |
 //                      | Charles Korthout | 0.2   | 29-10-2026     | Retain previous binding on failed attachment and clarify trusted-host contract           |
 //                      |==================|=======|================|=========================================================================================
+//                      | Charles Korthout | 0.3   | 29-10-2026     | Normalize empty element-only root whitespace without relaxing decimal bindings (1.34.1)  |
 // ===========================================================================================================================================================
 
 using System.Xml.Linq;
@@ -62,7 +63,7 @@ public sealed class XdmElementAssessment
     public void AttachTo(XElement element)
     {
         ArgumentNullException.ThrowIfNull(element);
-        var binding = new Binding(this, Shape(element));
+        var binding = new Binding(this, Shape(element, HasNoTypedValue));
         element.RemoveAnnotations<Binding>();
         element.AddAnnotation(binding);
     }
@@ -77,7 +78,7 @@ public sealed class XdmElementAssessment
         if (binding is null) return null;
         if (element.Document?.DocumentType is not null || element.Document?.Declaration?.Version is not (null or "1.0"))
             throw new NotSupportedException("BSK-XSD-016: Changed document version or DTD cannot reuse the original assessment.");
-        if (binding.Shape != Shape(element))
+        if (binding.Shape != Shape(element, binding.Assessment.HasNoTypedValue))
             throw new NotSupportedException("BSK-XSD-016: Edited XML cannot reuse its original assessment; strip or reassess explicitly.");
         return binding.Assessment;
     }
@@ -90,7 +91,7 @@ public sealed class XdmElementAssessment
         if (assessment is not null)
             target.AddAnnotation(source.Annotation<Binding>()!);
     }
-    private static string Shape(XElement element)
+    private static string Shape(XElement element, bool elementOnly)
     {
         if (element.DescendantNodes().Take(257).Count() > 256)
             throw new NotSupportedException("BSK-XSD-016: Assessed XML exceeds the bridge's finite node bound.");
@@ -106,8 +107,11 @@ public sealed class XdmElementAssessment
         }
         var copy = new XElement(element);
         copy.DescendantsAndSelf().Attributes().Where(a => a.IsNamespaceDeclaration).Remove();
-        foreach (var parent in copy.DescendantsAndSelf().Where(e => e.HasElements))
+        foreach (var parent in copy.DescendantsAndSelf().Where(e => e.HasElements || elementOnly && ReferenceEquals(e, copy)))
             parent.Nodes().OfType<XText>().Where(t => t.Value.All(c => c is ' ' or '\t' or '\r' or '\n')).Remove();
+        // LINQ XML can retain an explicit empty-string content marker after removing whitespace.
+        // Both lexical empty-element forms represent the same assessed element-only content.
+        if (elementOnly && !copy.Nodes().Any()) copy.RemoveNodes();
         var value = copy.ToString(SaveOptions.DisableFormatting);
         if (value.Length > 65536) throw new NotSupportedException("BSK-XSD-016: Assessed XML exceeds the bridge's finite content bound.");
         return value;

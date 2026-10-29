@@ -657,3 +657,11 @@ Current scope, adoption, plan and owning/core canonical pages receive HTML/local
 ## Optional decimal scope remote checkpoint — 29 October 2026
 
 Current core/Schema canonical pages and both delivery entry points receive a separate HTML/local-destination check; the strict Schema docs checker is rerun. Original scope and earlier sealed evidence remain separately verifiable. Receipts are under `docs/schema-optional-children/delivery/evidence`. No screenshot or new runtime qualification is claimed.
+
+## Optional decimal implementation — 29 October 2026
+
+Current core/Schema canonical pages and the new implementation guide/dossier receive separate HTML/local-destination checks with unchanged Fytala CSS. Strict owning Schema docs checks also run. New receipts are in `docs/schema-optional-implementation/evidence`; original scope/bridge documentation receipts remain unchanged. No screenshot or hosted CI claim.
+
+## Optional implementation review delivery — 29 October 2026
+
+Current canonical and review pages receive a separate HTML/local-destination check and strict Schema docs check. Tested source identities are verified unchanged; earlier sealed dossier bytes are preserved. Review receipts live under `docs/schema-optional-review/evidence`. No screenshot or new full-engine test claim.

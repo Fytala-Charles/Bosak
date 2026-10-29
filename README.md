@@ -139,3 +139,7 @@ Use [Discussions](https://github.com/Fytala-Charles/Bosak/discussions) for quest
 The unpublished [native whole-document assessment candidate](docs/schema-document-bridge/README.md) documents the optional Schema/provider integration and local source-build commands.
 
 The [bounded bridge API review checkpoint](docs/schema-document-bridge/api-review/README.md) records current local qualification and the next structural-coverage boundary.
+
+The unpublished [optional decimal assessment candidate](docs/schema-optional-implementation/README.md) extends the finite Schema profile while preserving original assessed state through engine copies.
+
+The [optional assessment review checkpoint](docs/schema-optional-review/README.md) records the bounded implementation review and paired delivery identity.

@@ -1,0 +1,16 @@
+{
+  "warnings": [
+    "D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\FormatIntegerVariationTests.cs(64,54): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\Bosak.XPath.Standard.Tests.csproj]",
+    "D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\FormatIntegerVariationTests.cs(83,79): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\Bosak.XPath.Standard.Tests.csproj]",
+    "D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\FormatIntegerRadixTests.cs(152,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\Bosak.XPath.Standard.Tests.csproj]",
+    "D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\ParseIntegerTests.cs(167,105): warning CS8625: Cannot convert null literal to non-nullable reference type. [D:\\Development\\Bosak\\tests\\Bosak.XPath.Standard.Tests\\Bosak.XPath.Standard.Tests.csproj]",
+    "D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\Program.cs(1868,33): warning CS8604: Possible null reference argument for parameter 'value' in 'bool string.Contains(string value, StringComparison comparisonType)'. [D:\\Development\\Bosak\\tests\\Bosak.Xslt.Conformance\\Bosak.Xslt.Conformance.csproj]"
+  ],
+  "unchangedSourceFiles": {
+    "tests/Bosak.XPath.Standard.Tests/FormatIntegerVariationTests.cs": "5f19152c3ab15ee4d988ce6b2e932cdae64f1c1cf78b528d56965a65b2b8197d",
+    "tests/Bosak.XPath.Standard.Tests/FormatIntegerRadixTests.cs": "f1c3ee77edc27a123a9eb0ca1564227f4c806d5e4edcfe3d72c38cac357d5900",
+    "tests/Bosak.XPath.Standard.Tests/ParseIntegerTests.cs": "c4a4c2b2352abcffba99c1df04b66da695bc17fa8da796ff0a174581d0d94d83",
+    "tests/Bosak.Xslt.Conformance/Program.cs": "2bca1d0e55428d4af535e1d083e9b77f43e03d19317420cf5847c6825a5452a0"
+  },
+  "errors": 0
+}

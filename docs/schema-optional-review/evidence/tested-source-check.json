@@ -1,0 +1,18 @@
+{
+  "date": "2026-10-29",
+  "sourceFiles": 11,
+  "allMatchTestedImplementation": true,
+  "identities": {
+    "core/src/Bosak.XPath.Providers/XDocument/XdmElementAssessment.cs": "293e5202d6caa6620e2a573ef1776b0663d7e6c294c91a963ea145f3014c6b13",
+    "core/src/Directory.Build.props": "fff68d162b9a5c63cdf273d056ad608abece494ffbb30074f980bc1e5a58c972",
+    "core/tests/Bosak.XPath.Providers.Tests/XdmElementAssessmentTests.cs": "85c8b2f5558c52ae58076bd70c955b5b6eb2bc13774698843477d5417b3a23ff",
+    "schema/examples/Bosak.Schema.Assessment.Example/Program.cs": "2de5df871ab21f9ce02041eaf4d185415b28b8b3b16bb591f3dc464c6d810521",
+    "schema/src/Bosak.Schema/Assessment/AssessedDocument.cs": "459a026e81dbc79789a8202d6339bff8a436a0a48a8fb735a0a42b2515e158b7",
+    "schema/src/Bosak.Schema/Assessment/AssessmentProfileParser.cs": "810c1c9e31a01bbbbd0557364e7f85dae3492fba35d598f0997c4df6ba5997e5",
+    "schema/src/Bosak.Schema/Assessment/SchemaDocumentAssessment.cs": "effc0e63b0f470bba1ce022ab05b3aeb84f08d90e97acb329301ab401321d3d7",
+    "schema/src/Bosak.Schema/Assessment/XsdDocumentAssessor.cs": "15cb7122c82ec40309198c3f78a173225eb3b3d0e864739bba61a89bc911abb4",
+    "schema/src/Bosak.Schema/Bosak.Schema.csproj": "4b46886b2a16aae32f25530f80439e8dd63f88767cab5bcbfc1c9674a3c8dafd",
+    "schema/tests/Bosak.Schema.Tests/Bosak.Schema.Tests.csproj": "7fce28751fd10032b5c13ee9c51dc95f7042ea427de70dea19bc5d6bbdfe96aa",
+    "schema/tests/Bosak.Schema.Tests/Xsd11/OptionalDecimalAssessmentTests.cs": "3dc3e43467afff66af141bfa39349ae720e2d40e97f00dd0bb814be227bd0e62"
+  }
+}
